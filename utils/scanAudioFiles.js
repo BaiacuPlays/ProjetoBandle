@@ -1,5 +1,8 @@
 const fs = require('fs');
 const path = require('path');
+const mm = require('music-metadata');
+
+console.log('Iniciando scanAudioFiles.js');
 
 // Listas reais de títulos (normalizados, sem acento, minúsculo)
 const minecraftTitles = [
@@ -26,73 +29,135 @@ function normalize(str) {
     .trim();
 }
 
+async function extractInfoFromFile(filePath) {
+  try {
+    console.log('Lendo metadados de:', filePath);
+    const metadata = await mm.parseFile(filePath);
+    const { common } = metadata;
+    
+    // Extract track number from filename if not in metadata
+    const fileName = path.parse(filePath).name;
+    const trackMatch = fileName.match(/^(\d+)/);
+    const trackNumber = common.track?.no || (trackMatch ? parseInt(trackMatch[1]) : 0);
+    
+    // Clean up title from filename if not in metadata
+    let title = common.title;
+    if (!title) {
+      title = fileName.replace(/^\d+[ .-]+/, '').trim();
+    }
+    
+    return {
+      trackNumber,
+      title,
+      artist: common.artist || 'Unknown',
+      year: common.year || 2023,
+      album: common.album || 'Unknown',
+      game: common.albumartist || 'Unknown',
+      genre: common.genre?.[0] || 'Videogame'
+    };
+  } catch (error) {
+    console.error(`Erro ao ler metadados de ${filePath}:`, error);
+    // Fallback to filename if metadata reading fails
+    const fileName = path.parse(filePath).name;
+    const trackMatch = fileName.match(/^(\d+)/);
+    const trackNumber = trackMatch ? parseInt(trackMatch[1]) : 0;
+    const title = fileName.replace(/^\d+[ .-]+/, '').trim();
+    
+    return {
+      trackNumber,
+      title,
+      artist: 'Unknown',
+      year: 2023,
+      album: 'Unknown',
+      game: 'Unknown',
+      genre: 'Videogame'
+    };
+  }
+}
+
 function extractInfoFromFilename(filename) {
   // Remove extensão
   const nameWithoutExt = filename.replace(/\.mp3$/i, '');
-  // Extrai título (remove número e separador se houver)
-  let title = nameWithoutExt.replace(/^\d+[ .-]+/, '').trim();
-  const normTitle = normalize(title);
-
-  // DEBUG: mostrar como está sendo normalizado
-  console.log(`Arquivo: ${filename} | Título extraído: ${title} | Normalizado: ${normTitle}`);
-
-  // Identifica o jogo
-  let game = 'Unknown', artist = 'Unknown', year = 2023, album = 'Unknown';
-  if (minecraftTitles.some(t => normTitle.includes(normalize(t)))) {
-    game = 'Minecraft';
-    artist = 'C418';
-    year = 2011;
-    album = 'Minecraft - Volume Alpha';
-  } else if (mario64Titles.some(t => normTitle.includes(normalize(t)))) {
-    game = 'Super Mario 64';
-    artist = 'Koji Kondo';
-    year = 1996;
-    album = 'Super Mario 64 Soundtrack';
+  
+  // Extrai informações do nome do arquivo
+  // Formato: "XX - Título - Jogo - Artista"
+  const parts = nameWithoutExt.split(' - ');
+  
+  if (parts.length !== 4) {
+    console.log(`Formato inválido para ${filename}`);
+    return {
+      trackNumber: 0,
+      title: nameWithoutExt,
+      artist: 'Unknown',
+      year: 2023,
+      album: 'Unknown',
+      game: 'Unknown',
+      genre: 'Videogame'
+    };
   }
 
-  // DEBUG: mostrar classificação
-  console.log(`Classificação: ${game}, Artista: ${artist}, Álbum: ${album}, Ano: ${year}`);
-
-  // Extrai número da faixa se houver
-  const match = filename.match(/^(\d+)/);
-  const trackNumber = match ? parseInt(match[1]) : 0;
+  const [trackNumber, title, game, artist] = parts;
+  
+  // Extrai o ano baseado no jogo
+  let year = 2023;
+  if (game.includes('Sonic the Hedgehog')) {
+    year = game.includes('2') ? 1992 : game.includes('3') ? 1994 : 1991;
+  } else if (game.includes('Mario 64')) {
+    year = 1996;
+  } else if (game.includes('Minecraft')) {
+    year = 2011;
+  } else if (game.includes('Donkey Kong Country')) {
+    year = game.includes('2') ? 1995 : 1994;
+  } else if (game.includes('Mega Man X')) {
+    year = 1993;
+  } else if (game.includes('Super Smash Bros')) {
+    year = 2008;
+  }
 
   return {
-    trackNumber,
+    trackNumber: parseInt(trackNumber) || 0,
     title,
-    game,
     artist,
     year,
-    album
+    album: `${game} Soundtrack`,
+    game,
+    genre: 'Game Soundtrack'
   };
 }
 
 function scanAudioFiles() {
-  const audioDir = path.join(process.cwd(), 'public', 'audio');
-  const files = fs.readdirSync(audioDir);
+  try {
+    const audioDir = path.join(process.cwd(), 'public', 'audio');
+    console.log('Diretório de áudio:', audioDir);
+    const files = fs.readdirSync(audioDir);
+    console.log('Arquivos encontrados:', files);
 
-  const musicData = files
-    .filter(file => file.toLowerCase().endsWith('.mp3'))
-    .map(file => {
-      const info = extractInfoFromFilename(file);
-      return {
-        id: info.trackNumber || 0,
-        title: info.title,
-        artist: info.artist,
-        audioUrl: `/audio/${file}`,
-        game: info.game,
-        year: info.year,
-        genre: info.game === 'Unknown' ? 'Videogame' : 'Game Soundtrack',
-        album: info.album
-      };
-    })
-    .sort((a, b) => a.id - b.id);
+    const musicData = files
+      .filter(file => file.toLowerCase().endsWith('.mp3'))
+      .map(file => {
+        const info = extractInfoFromFilename(file);
+        return {
+          id: info.trackNumber || 0,
+          title: info.title,
+          artist: info.artist,
+          audioUrl: `/audio/${file}`,
+          game: info.game,
+          year: info.year,
+          genre: info.genre,
+          album: info.album
+        };
+      })
+      .sort((a, b) => a.id - b.id);
 
-  // Save to JSON file
-  const outputPath = path.join(process.cwd(), 'data', 'music.json');
-  fs.writeFileSync(outputPath, JSON.stringify(musicData, null, 2));
-  console.log(`Found ${musicData.length} music files`);
-  console.log(`Data saved to ${outputPath}`);
+    // Save to JSON file
+    const outputPath = path.join(process.cwd(), 'data', 'music.json');
+    fs.writeFileSync(outputPath, JSON.stringify(musicData, null, 2));
+    console.log(`Found ${musicData.length} music files`);
+    console.log(`Data saved to ${outputPath}`);
+  } catch (error) {
+    console.error('Erro ao escanear arquivos de áudio:', error);
+  }
 }
 
+// Run the script
 scanAudioFiles(); 

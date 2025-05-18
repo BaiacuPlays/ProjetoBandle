@@ -1,577 +1,7 @@
 [
   {
     "id": 0,
-    "title": "09a Dire, Dire Docks",
-    "artist": "Unknown",
-    "audioUrl": "/audio/09a Dire, Dire Docks.mp3",
-    "game": "Unknown",
-    "year": 2023,
-    "genre": "Videogame",
-    "album": "Unknown"
-  },
-  {
-    "id": 0,
-    "title": "09b Dire, Dire Docks (in water)",
-    "artist": "Unknown",
-    "audioUrl": "/audio/09b Dire, Dire Docks (in water).mp3",
-    "game": "Unknown",
-    "year": 2023,
-    "genre": "Videogame",
-    "album": "Unknown"
-  },
-  {
-    "id": 0,
-    "title": "09c Dire, Dire Docks (underwater cave)",
-    "artist": "Unknown",
-    "audioUrl": "/audio/09c Dire, Dire Docks (underwater cave).mp3",
-    "game": "Unknown",
-    "year": 2023,
-    "genre": "Videogame",
-    "album": "Unknown"
-  },
-  {
-    "id": 0,
-    "title": "14a Cave Dungeon",
-    "artist": "Unknown",
-    "audioUrl": "/audio/14a Cave Dungeon.mp3",
-    "game": "Unknown",
-    "year": 2023,
-    "genre": "Videogame",
-    "album": "Unknown"
-  },
-  {
-    "id": 0,
-    "title": "14b Cave Dungeon (Hazy Maze)",
-    "artist": "Unknown",
-    "audioUrl": "/audio/14b Cave Dungeon (Hazy Maze).mp3",
-    "game": "Unknown",
-    "year": 2023,
-    "genre": "Videogame",
-    "album": "Unknown"
-  },
-  {
-    "id": 0,
-    "title": "14c Cave Dungeon (both variations)",
-    "artist": "Unknown",
-    "audioUrl": "/audio/14c Cave Dungeon (both variations).mp3",
-    "game": "Unknown",
-    "year": 2023,
-    "genre": "Videogame",
-    "album": "Unknown"
-  },
-  {
-    "id": 1,
-    "title": "Key",
-    "artist": "C418",
-    "audioUrl": "/audio/01. Key.mp3",
-    "game": "Minecraft",
-    "year": 2011,
-    "genre": "Game Soundtrack",
-    "album": "Minecraft - Volume Alpha"
-  },
-  {
-    "id": 2,
-    "title": "Title Theme",
-    "artist": "Koji Kondo",
-    "audioUrl": "/audio/02 Title Theme.mp3",
-    "game": "Super Mario 64",
-    "year": 1996,
-    "genre": "Game Soundtrack",
-    "album": "Super Mario 64 Soundtrack"
-  },
-  {
-    "id": 2,
-    "title": "Door",
-    "artist": "C418",
-    "audioUrl": "/audio/02. Door.mp3",
-    "game": "Minecraft",
-    "year": 2011,
-    "genre": "Game Soundtrack",
-    "album": "Minecraft - Volume Alpha"
-  },
-  {
-    "id": 3,
-    "title": "Peach's Message",
-    "artist": "Koji Kondo",
-    "audioUrl": "/audio/03 Peach's Message.mp3",
-    "game": "Super Mario 64",
-    "year": 1996,
-    "genre": "Game Soundtrack",
-    "album": "Super Mario 64 Soundtrack"
-  },
-  {
-    "id": 3,
-    "title": "Subwoofer Lullaby",
-    "artist": "Koji Kondo",
-    "audioUrl": "/audio/03. Subwoofer Lullaby.mp3",
-    "game": "Super Mario 64",
-    "year": 1996,
-    "genre": "Game Soundtrack",
-    "album": "Super Mario 64 Soundtrack"
-  },
-  {
-    "id": 4,
-    "title": "Opening",
-    "artist": "Unknown",
-    "audioUrl": "/audio/04 Opening.mp3",
-    "game": "Unknown",
-    "year": 2023,
-    "genre": "Videogame",
-    "album": "Unknown"
-  },
-  {
-    "id": 4,
-    "title": "Death",
-    "artist": "C418",
-    "audioUrl": "/audio/04. Death.mp3",
-    "game": "Minecraft",
-    "year": 2011,
-    "genre": "Game Soundtrack",
-    "album": "Minecraft - Volume Alpha"
-  },
-  {
-    "id": 5,
-    "title": "Main Theme",
-    "artist": "Koji Kondo",
-    "audioUrl": "/audio/05 Main Theme.mp3",
-    "game": "Super Mario 64",
-    "year": 1996,
-    "genre": "Game Soundtrack",
-    "album": "Super Mario 64 Soundtrack"
-  },
-  {
-    "id": 5,
-    "title": "Living Mice",
-    "artist": "C418",
-    "audioUrl": "/audio/05. Living Mice.mp3",
-    "game": "Minecraft",
-    "year": 2011,
-    "genre": "Game Soundtrack",
-    "album": "Minecraft - Volume Alpha"
-  },
-  {
-    "id": 6,
-    "title": "Slider",
-    "artist": "Koji Kondo",
-    "audioUrl": "/audio/06 Slider.mp3",
-    "game": "Super Mario 64",
-    "year": 1996,
-    "genre": "Game Soundtrack",
-    "album": "Super Mario 64 Soundtrack"
-  },
-  {
-    "id": 6,
-    "title": "Moog City",
-    "artist": "C418",
-    "audioUrl": "/audio/06. Moog City.mp3",
-    "game": "Minecraft",
-    "year": 2011,
-    "genre": "Game Soundtrack",
-    "album": "Minecraft - Volume Alpha"
-  },
-  {
-    "id": 7,
-    "title": "Inside the Castle Walls",
-    "artist": "Koji Kondo",
-    "audioUrl": "/audio/07 Inside the Castle Walls.mp3",
-    "game": "Super Mario 64",
-    "year": 1996,
-    "genre": "Game Soundtrack",
-    "album": "Super Mario 64 Soundtrack"
-  },
-  {
-    "id": 7,
-    "title": "Haggstrom",
-    "artist": "C418",
-    "audioUrl": "/audio/07. Haggstrom.mp3",
-    "game": "Minecraft",
-    "year": 2011,
-    "genre": "Game Soundtrack",
-    "album": "Minecraft - Volume Alpha"
-  },
-  {
-    "id": 8,
-    "title": "Looping Steps",
-    "artist": "Unknown",
-    "audioUrl": "/audio/08 Looping Steps.mp3",
-    "game": "Unknown",
-    "year": 2023,
-    "genre": "Videogame",
-    "album": "Unknown"
-  },
-  {
-    "id": 8,
-    "title": "Minecraft",
-    "artist": "C418",
-    "audioUrl": "/audio/08. Minecraft.mp3",
-    "game": "Minecraft",
-    "year": 2011,
-    "genre": "Game Soundtrack",
-    "album": "Minecraft - Volume Alpha"
-  },
-  {
-    "id": 9,
-    "title": "Oxygène",
-    "artist": "C418",
-    "audioUrl": "/audio/09. Oxygène.mp3",
-    "game": "Minecraft",
-    "year": 2011,
-    "genre": "Game Soundtrack",
-    "album": "Minecraft - Volume Alpha"
-  },
-  {
-    "id": 10,
-    "title": "Lethal Lava Land",
-    "artist": "Unknown",
-    "audioUrl": "/audio/10 Lethal Lava Land.mp3",
-    "game": "Unknown",
-    "year": 2023,
-    "genre": "Videogame",
-    "album": "Unknown"
-  },
-  {
-    "id": 10,
-    "title": "Équinoxe",
-    "artist": "C418",
-    "audioUrl": "/audio/10. Équinoxe.mp3",
-    "game": "Minecraft",
-    "year": 2011,
-    "genre": "Game Soundtrack",
-    "album": "Minecraft - Volume Alpha"
-  },
-  {
-    "id": 11,
-    "title": "Snow Mountain",
-    "artist": "Unknown",
-    "audioUrl": "/audio/11 Snow Mountain.mp3",
-    "game": "Unknown",
-    "year": 2023,
-    "genre": "Videogame",
-    "album": "Unknown"
-  },
-  {
-    "id": 11,
-    "title": "Mice On Venus",
-    "artist": "C418",
-    "audioUrl": "/audio/11. Mice On Venus.mp3",
-    "game": "Minecraft",
-    "year": 2011,
-    "genre": "Game Soundtrack",
-    "album": "Minecraft - Volume Alpha"
-  },
-  {
-    "id": 12,
-    "title": "Haunted House",
-    "artist": "Unknown",
-    "audioUrl": "/audio/12 Haunted House.mp3",
-    "game": "Unknown",
-    "year": 2023,
-    "genre": "Videogame",
-    "album": "Unknown"
-  },
-  {
-    "id": 12,
-    "title": "Dry Hands",
-    "artist": "C418",
-    "audioUrl": "/audio/12. Dry Hands.mp3",
-    "game": "Minecraft",
-    "year": 2011,
-    "genre": "Game Soundtrack",
-    "album": "Minecraft - Volume Alpha"
-  },
-  {
-    "id": 13,
-    "title": "Merry-Go-Round",
-    "artist": "Unknown",
-    "audioUrl": "/audio/13 Merry-Go-Round.mp3",
-    "game": "Unknown",
-    "year": 2023,
-    "genre": "Videogame",
-    "album": "Unknown"
-  },
-  {
-    "id": 13,
-    "title": "Wet Hands",
-    "artist": "C418",
-    "audioUrl": "/audio/13. Wet Hands.mp3",
-    "game": "Minecraft",
-    "year": 2011,
-    "genre": "Game Soundtrack",
-    "album": "Minecraft - Volume Alpha"
-  },
-  {
-    "id": 14,
-    "title": "Clark",
-    "artist": "C418",
-    "audioUrl": "/audio/14. Clark.mp3",
-    "game": "Minecraft",
-    "year": 2011,
-    "genre": "Game Soundtrack",
-    "album": "Minecraft - Volume Alpha"
-  },
-  {
-    "id": 15,
-    "title": "Piranha Plant's Lullaby",
-    "artist": "Koji Kondo",
-    "audioUrl": "/audio/15 Piranha Plant's Lullaby.mp3",
-    "game": "Super Mario 64",
-    "year": 1996,
-    "genre": "Game Soundtrack",
-    "album": "Super Mario 64 Soundtrack"
-  },
-  {
-    "id": 15,
-    "title": "Chris",
-    "artist": "C418",
-    "audioUrl": "/audio/15. Chris.mp3",
-    "game": "Minecraft",
-    "year": 2011,
-    "genre": "Game Soundtrack",
-    "album": "Minecraft - Volume Alpha"
-  },
-  {
-    "id": 16,
-    "title": "Powerful Mario",
-    "artist": "Koji Kondo",
-    "audioUrl": "/audio/16 Powerful Mario.mp3",
-    "game": "Super Mario 64",
-    "year": 1996,
-    "genre": "Game Soundtrack",
-    "album": "Super Mario 64 Soundtrack"
-  },
-  {
-    "id": 16,
-    "title": "Thirteen",
-    "artist": "C418",
-    "audioUrl": "/audio/16. Thirteen.mp3",
-    "game": "Minecraft",
-    "year": 2011,
-    "genre": "Game Soundtrack",
-    "album": "Minecraft - Volume Alpha"
-  },
-  {
-    "id": 17,
-    "title": "Metallic Mario",
-    "artist": "Koji Kondo",
-    "audioUrl": "/audio/17 Metallic Mario.mp3",
-    "game": "Super Mario 64",
-    "year": 1996,
-    "genre": "Game Soundtrack",
-    "album": "Super Mario 64 Soundtrack"
-  },
-  {
-    "id": 17,
-    "title": "Excuse",
-    "artist": "C418",
-    "audioUrl": "/audio/17. Excuse.mp3",
-    "game": "Minecraft",
-    "year": 2011,
-    "genre": "Game Soundtrack",
-    "album": "Minecraft - Volume Alpha"
-  },
-  {
-    "id": 18,
-    "title": "File Select",
-    "artist": "Unknown",
-    "audioUrl": "/audio/18 File Select.mp3",
-    "game": "Unknown",
-    "year": 2023,
-    "genre": "Videogame",
-    "album": "Unknown"
-  },
-  {
-    "id": 18,
-    "title": "Sweden",
-    "artist": "C418",
-    "audioUrl": "/audio/18. Sweden.mp3",
-    "game": "Minecraft",
-    "year": 2011,
-    "genre": "Game Soundtrack",
-    "album": "Minecraft - Volume Alpha"
-  },
-  {
-    "id": 19,
-    "title": "Correct Solution",
-    "artist": "Koji Kondo",
-    "audioUrl": "/audio/19 Correct Solution.mp3",
-    "game": "Super Mario 64",
-    "year": 1996,
-    "genre": "Game Soundtrack",
-    "album": "Super Mario 64 Soundtrack"
-  },
-  {
-    "id": 19,
-    "title": "Cat",
-    "artist": "C418",
-    "audioUrl": "/audio/19. Cat.mp3",
-    "game": "Minecraft",
-    "year": 2011,
-    "genre": "Game Soundtrack",
-    "album": "Minecraft - Volume Alpha"
-  },
-  {
-    "id": 20,
-    "title": "Toad's Message",
-    "artist": "Koji Kondo",
-    "audioUrl": "/audio/20 Toad's Message.mp3",
-    "game": "Super Mario 64",
-    "year": 1996,
-    "genre": "Game Soundtrack",
-    "album": "Super Mario 64 Soundtrack"
-  },
-  {
-    "id": 20,
-    "title": "Dog",
-    "artist": "C418",
-    "audioUrl": "/audio/20. Dog.mp3",
-    "game": "Minecraft",
-    "year": 2011,
-    "genre": "Game Soundtrack",
-    "album": "Minecraft - Volume Alpha"
-  },
-  {
-    "id": 21,
-    "title": "Power Star",
-    "artist": "Koji Kondo",
-    "audioUrl": "/audio/21 Power Star.mp3",
-    "game": "Super Mario 64",
-    "year": 1996,
-    "genre": "Game Soundtrack",
-    "album": "Super Mario 64 Soundtrack"
-  },
-  {
-    "id": 21,
-    "title": "Danny",
-    "artist": "C418",
-    "audioUrl": "/audio/21. Danny.mp3",
-    "game": "Minecraft",
-    "year": 2011,
-    "genre": "Game Soundtrack",
-    "album": "Minecraft - Volume Alpha"
-  },
-  {
-    "id": 22,
-    "title": "Race Fanfare",
-    "artist": "Koji Kondo",
-    "audioUrl": "/audio/22 Race Fanfare.mp3",
-    "game": "Super Mario 64",
-    "year": 1996,
-    "genre": "Game Soundtrack",
-    "album": "Super Mario 64 Soundtrack"
-  },
-  {
-    "id": 22,
-    "title": "Beginning",
-    "artist": "C418",
-    "audioUrl": "/audio/22. Beginning.mp3",
-    "game": "Minecraft",
-    "year": 2011,
-    "genre": "Game Soundtrack",
-    "album": "Minecraft - Volume Alpha"
-  },
-  {
-    "id": 23,
-    "title": "Star Catch Fanfare",
-    "artist": "C418",
-    "audioUrl": "/audio/23 Star Catch Fanfare.mp3",
-    "game": "Minecraft",
-    "year": 2011,
-    "genre": "Game Soundtrack",
-    "album": "Minecraft - Volume Alpha"
-  },
-  {
-    "id": 23,
-    "title": "Droopy Likes Ricochet",
-    "artist": "C418",
-    "audioUrl": "/audio/23. Droopy Likes Ricochet.mp3",
-    "game": "Minecraft",
-    "year": 2011,
-    "genre": "Game Soundtrack",
-    "album": "Minecraft - Volume Alpha"
-  },
-  {
-    "id": 24,
-    "title": "Game Start",
-    "artist": "Koji Kondo",
-    "audioUrl": "/audio/24 Game Start.mp3",
-    "game": "Super Mario 64",
-    "year": 1996,
-    "genre": "Game Soundtrack",
-    "album": "Super Mario 64 Soundtrack"
-  },
-  {
-    "id": 24,
-    "title": "Droopy Likes Your Face",
-    "artist": "C418",
-    "audioUrl": "/audio/24. Droopy Likes Your Face.mp3",
-    "game": "Minecraft",
-    "year": 2011,
-    "genre": "Game Soundtrack",
-    "album": "Minecraft - Volume Alpha"
-  },
-  {
-    "id": 25,
-    "title": "Course Clear",
-    "artist": "Unknown",
-    "audioUrl": "/audio/25 Course Clear.mp3",
-    "game": "Unknown",
-    "year": 2023,
-    "genre": "Videogame",
-    "album": "Unknown"
-  },
-  {
-    "id": 27,
-    "title": "Stage Boss",
-    "artist": "Koji Kondo",
-    "audioUrl": "/audio/27 Stage Boss.mp3",
-    "game": "Super Mario 64",
-    "year": 1996,
-    "genre": "Game Soundtrack",
-    "album": "Super Mario 64 Soundtrack"
-  },
-  {
-    "id": 28,
-    "title": "Koopa's Message",
-    "artist": "Koji Kondo",
-    "audioUrl": "/audio/28 Koopa's Message.mp3",
-    "game": "Super Mario 64",
-    "year": 1996,
-    "genre": "Game Soundtrack",
-    "album": "Super Mario 64 Soundtrack"
-  },
-  {
-    "id": 29,
-    "title": "Koopa's Road",
-    "artist": "Koji Kondo",
-    "audioUrl": "/audio/29 Koopa's Road.mp3",
-    "game": "Super Mario 64",
-    "year": 1996,
-    "genre": "Game Soundtrack",
-    "album": "Super Mario 64 Soundtrack"
-  },
-  {
-    "id": 30,
-    "title": "Koopa's Theme",
-    "artist": "Koji Kondo",
-    "audioUrl": "/audio/30 Koopa's Theme.mp3",
-    "game": "Super Mario 64",
-    "year": 1996,
-    "genre": "Game Soundtrack",
-    "album": "Super Mario 64 Soundtrack"
-  },
-  {
-    "id": 31,
-    "title": "Koopa Clear",
-    "artist": "Koji Kondo",
-    "audioUrl": "/audio/31 Koopa Clear.mp3",
-    "game": "Super Mario 64",
-    "year": 1996,
-    "genre": "Game Soundtrack",
-    "album": "Super Mario 64 Soundtrack"
-  },
-  {
-    "id": 32,
-    "title": "Beícoli - Where We Dream",
+    "title": "032 - Beícoli - Where We Dream",
     "artist": "Unknown",
     "audioUrl": "/audio/032 - Beícoli - Where We Dream.mp3",
     "game": "Unknown",
@@ -580,53 +10,653 @@
     "album": "Unknown"
   },
   {
-    "id": 32,
-    "title": "Ultimate Koopa",
+    "id": 1,
+    "title": "K. Rool Returns",
+    "artist": "David Wise",
+    "audioUrl": "/audio/01 - K. Rool Returns - Donkey Kong Country 2 - David Wise.mp3",
+    "game": "Donkey Kong Country 2",
+    "year": 1995,
+    "genre": "Game Soundtrack",
+    "album": "Donkey Kong Country 2 Soundtrack"
+  },
+  {
+    "id": 1,
+    "title": "Main Theme",
+    "artist": "Nobuo Uematsu",
+    "audioUrl": "/audio/01 - Main Theme - Super Smash Bros. Brawl - Nobuo Uematsu.mp3",
+    "game": "Super Smash Bros. Brawl",
+    "year": 2008,
+    "genre": "Game Soundtrack",
+    "album": "Super Smash Bros. Brawl Soundtrack"
+  },
+  {
+    "id": 1,
+    "title": "Title Screen",
+    "artist": "David Wise",
+    "audioUrl": "/audio/01 - Title Screen - Donkey Kong Country - David Wise.mp3",
+    "game": "Donkey Kong Country",
+    "year": 1994,
+    "genre": "Game Soundtrack",
+    "album": "Donkey Kong Country Soundtrack"
+  },
+  {
+    "id": 1,
+    "title": "Title Theme",
+    "artist": "Masato Nakamura",
+    "audioUrl": "/audio/01 - Title Theme - Sonic the Hedgehog - Masato Nakamura.mp3",
+    "game": "Sonic the Hedgehog",
+    "year": 1991,
+    "genre": "Game Soundtrack",
+    "album": "Sonic the Hedgehog Soundtrack"
+  },
+  {
+    "id": 1,
+    "title": "Title Theme",
+    "artist": "Masato Nakamura",
+    "audioUrl": "/audio/01 - Title Theme - Sonic the Hedgehog 2 - Masato Nakamura.mp3",
+    "game": "Sonic the Hedgehog 2",
+    "year": 1992,
+    "genre": "Game Soundtrack",
+    "album": "Sonic the Hedgehog 2 Soundtrack"
+  },
+  {
+    "id": 2,
+    "title": "Green Hill Zone",
+    "artist": "Masato Nakamura",
+    "audioUrl": "/audio/02 - Green Hill Zone - Sonic the Hedgehog - Masato Nakamura.mp3",
+    "game": "Sonic the Hedgehog",
+    "year": 1991,
+    "genre": "Game Soundtrack",
+    "album": "Sonic the Hedgehog Soundtrack"
+  },
+  {
+    "id": 2,
+    "title": "Intro Stage",
+    "artist": "Setsuo Yamamoto",
+    "audioUrl": "/audio/02 - Intro Stage - Mega Man X - Setsuo Yamamoto.mp3",
+    "game": "Mega Man X",
+    "year": 1993,
+    "genre": "Game Soundtrack",
+    "album": "Mega Man X Soundtrack"
+  },
+  {
+    "id": 2,
+    "title": "Simian Segue",
+    "artist": "David Wise",
+    "audioUrl": "/audio/02 - Simian Segue - Donkey Kong Country - David Wise.mp3",
+    "game": "Donkey Kong Country",
+    "year": 1994,
+    "genre": "Game Soundtrack",
+    "album": "Donkey Kong Country Soundtrack"
+  },
+  {
+    "id": 2,
+    "title": "Title Theme",
     "artist": "Koji Kondo",
-    "audioUrl": "/audio/32 Ultimate Koopa.mp3",
+    "audioUrl": "/audio/02 - Title Theme - Super Mario 64 - Koji Kondo.mp3",
     "game": "Super Mario 64",
     "year": 1996,
     "genre": "Game Soundtrack",
     "album": "Super Mario 64 Soundtrack"
   },
   {
-    "id": 33,
-    "title": "Ultimate Koopa Clear",
+    "id": 2,
+    "title": "Welcome to Crocodile Isle",
+    "artist": "David Wise",
+    "audioUrl": "/audio/02 - Welcome to Crocodile Isle - Donkey Kong Country 2 - David Wise.mp3",
+    "game": "Donkey Kong Country 2",
+    "year": 1995,
+    "genre": "Game Soundtrack",
+    "album": "Donkey Kong Country 2 Soundtrack"
+  },
+  {
+    "id": 3,
+    "title": "Angel Island Zone Act 1",
+    "artist": "Michael Jackson & Sega Sound Team",
+    "audioUrl": "/audio/03 - Angel Island Zone Act 1 - Sonic the Hedgehog 3 - Michael Jackson & Sega Sound Team.mp3",
+    "game": "Sonic the Hedgehog 3",
+    "year": 1994,
+    "genre": "Game Soundtrack",
+    "album": "Sonic the Hedgehog 3 Soundtrack"
+  },
+  {
+    "id": 3,
+    "title": "DK Island Swing",
+    "artist": "David Wise",
+    "audioUrl": "/audio/03 - DK Island Swing - Donkey Kong Country - David Wise.mp3",
+    "game": "Donkey Kong Country",
+    "year": 1994,
+    "genre": "Game Soundtrack",
+    "album": "Donkey Kong Country Soundtrack"
+  },
+  {
+    "id": 3,
+    "title": "Emerald Hill Zone",
+    "artist": "Masato Nakamura",
+    "audioUrl": "/audio/03 - Emerald Hill Zone - Sonic the Hedgehog 2 - Masato Nakamura.mp3",
+    "game": "Sonic the Hedgehog 2",
+    "year": 1992,
+    "genre": "Game Soundtrack",
+    "album": "Sonic the Hedgehog 2 Soundtrack"
+  },
+  {
+    "id": 3,
+    "title": "Klomp's Romp",
+    "artist": "David Wise",
+    "audioUrl": "/audio/03 - Klomp's Romp - Donkey Kong Country 2 - David Wise.mp3",
+    "game": "Donkey Kong Country 2",
+    "year": 1995,
+    "genre": "Game Soundtrack",
+    "album": "Donkey Kong Country 2 Soundtrack"
+  },
+  {
+    "id": 3,
+    "title": "Marble Zone",
+    "artist": "Masato Nakamura",
+    "audioUrl": "/audio/03 - Marble Zone - Sonic the Hedgehog - Masato Nakamura.mp3",
+    "game": "Sonic the Hedgehog",
+    "year": 1991,
+    "genre": "Game Soundtrack",
+    "album": "Sonic the Hedgehog Soundtrack"
+  },
+  {
+    "id": 3,
+    "title": "Peach's Message",
     "artist": "Koji Kondo",
-    "audioUrl": "/audio/33 Ultimate Koopa Clear.mp3",
+    "audioUrl": "/audio/03 - Peach's Message - Super Mario 64 - Koji Kondo.mp3",
     "game": "Super Mario 64",
     "year": 1996,
     "genre": "Game Soundtrack",
     "album": "Super Mario 64 Soundtrack"
   },
   {
-    "id": 34,
-    "title": "Ending Demo",
-    "artist": "Unknown",
-    "audioUrl": "/audio/34 Ending Demo.mp3",
-    "game": "Unknown",
-    "year": 2023,
-    "genre": "Videogame",
-    "album": "Unknown"
+    "id": 3,
+    "title": "Subwoofer Lullaby",
+    "artist": "C418",
+    "audioUrl": "/audio/03 - Subwoofer Lullaby - Minecraft - C418.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft Soundtrack"
   },
   {
-    "id": 35,
-    "title": "Staff Roll",
+    "id": 4,
+    "title": "Cranky's Theme",
+    "artist": "David Wise",
+    "audioUrl": "/audio/04 - Cranky's Theme - Donkey Kong Country - David Wise.mp3",
+    "game": "Donkey Kong Country",
+    "year": 1994,
+    "genre": "Game Soundtrack",
+    "album": "Donkey Kong Country Soundtrack"
+  },
+  {
+    "id": 4,
+    "title": "Lockjaw's Saga",
+    "artist": "David Wise",
+    "audioUrl": "/audio/04 - Lockjaw's Saga - Donkey Kong Country 2 - David Wise.mp3",
+    "game": "Donkey Kong Country 2",
+    "year": 1995,
+    "genre": "Game Soundtrack",
+    "album": "Donkey Kong Country 2 Soundtrack"
+  },
+  {
+    "id": 4,
+    "title": "Opening",
     "artist": "Koji Kondo",
-    "audioUrl": "/audio/35 Staff Roll.mp3",
+    "audioUrl": "/audio/04 - Opening - Super Mario 64 - Koji Kondo.mp3",
     "game": "Super Mario 64",
     "year": 1996,
     "genre": "Game Soundtrack",
     "album": "Super Mario 64 Soundtrack"
   },
   {
-    "id": 91,
-    "title": "Lakitu's Message",
+    "id": 4,
+    "title": "Spring Yard Zone",
+    "artist": "Masato Nakamura",
+    "audioUrl": "/audio/04 - Spring Yard Zone - Sonic the Hedgehog - Masato Nakamura.mp3",
+    "game": "Sonic the Hedgehog",
+    "year": 1991,
+    "genre": "Game Soundtrack",
+    "album": "Sonic the Hedgehog Soundtrack"
+  },
+  {
+    "id": 5,
+    "title": "Cave Dweller Concert",
+    "artist": "David Wise",
+    "audioUrl": "/audio/05 - Cave Dweller Concert - Donkey Kong Country - David Wise.mp3",
+    "game": "Donkey Kong Country",
+    "year": 1994,
+    "genre": "Game Soundtrack",
+    "album": "Donkey Kong Country Soundtrack"
+  },
+  {
+    "id": 5,
+    "title": "Chemical Plant Zone",
+    "artist": "Masato Nakamura",
+    "audioUrl": "/audio/05 - Chemical Plant Zone - Sonic the Hedgehog 2 - Masato Nakamura.mp3",
+    "game": "Sonic the Hedgehog 2",
+    "year": 1992,
+    "genre": "Game Soundtrack",
+    "album": "Sonic the Hedgehog 2 Soundtrack"
+  },
+  {
+    "id": 5,
+    "title": "Labyrinth Zone",
+    "artist": "Masato Nakamura",
+    "audioUrl": "/audio/05 - Labyrinth Zone - Sonic the Hedgehog - Masato Nakamura.mp3",
+    "game": "Sonic the Hedgehog",
+    "year": 1991,
+    "genre": "Game Soundtrack",
+    "album": "Sonic the Hedgehog Soundtrack"
+  },
+  {
+    "id": 5,
+    "title": "Living Mice",
+    "artist": "C418",
+    "audioUrl": "/audio/05 - Living Mice - Minecraft - C418.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft Soundtrack"
+  },
+  {
+    "id": 5,
+    "title": "Main Theme",
     "artist": "Koji Kondo",
-    "audioUrl": "/audio/91  Lakitu's Message.mp3",
+    "audioUrl": "/audio/05 - Main Theme - Super Mario 64 - Koji Kondo.mp3",
     "game": "Super Mario 64",
     "year": 1996,
     "genre": "Game Soundtrack",
     "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 6,
+    "title": "Bonus Room Blitz",
+    "artist": "David Wise",
+    "audioUrl": "/audio/06 - Bonus Room Blitz - Donkey Kong Country - David Wise.mp3",
+    "game": "Donkey Kong Country",
+    "year": 1994,
+    "genre": "Game Soundtrack",
+    "album": "Donkey Kong Country Soundtrack"
+  },
+  {
+    "id": 6,
+    "title": "Moog City",
+    "artist": "C418",
+    "audioUrl": "/audio/06 - Moog City - Minecraft - C418.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft Soundtrack"
+  },
+  {
+    "id": 6,
+    "title": "Slider",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/06 - Slider - Super Mario 64 - Koji Kondo.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 6,
+    "title": "Star Light Zone",
+    "artist": "Masato Nakamura",
+    "audioUrl": "/audio/06 - Star Light Zone - Sonic the Hedgehog - Masato Nakamura.mp3",
+    "game": "Sonic the Hedgehog",
+    "year": 1991,
+    "genre": "Game Soundtrack",
+    "album": "Sonic the Hedgehog Soundtrack"
+  },
+  {
+    "id": 7,
+    "title": "Aquatic Ambiance",
+    "artist": "David Wise",
+    "audioUrl": "/audio/07 - Aquatic Ambiance - Donkey Kong Country - David Wise.mp3",
+    "game": "Donkey Kong Country",
+    "year": 1994,
+    "genre": "Game Soundtrack",
+    "album": "Donkey Kong Country Soundtrack"
+  },
+  {
+    "id": 7,
+    "title": "Aquatic Ruin Zone",
+    "artist": "Masato Nakamura",
+    "audioUrl": "/audio/07 - Aquatic Ruin Zone - Sonic the Hedgehog 2 - Masato Nakamura.mp3",
+    "game": "Sonic the Hedgehog 2",
+    "year": 1992,
+    "genre": "Game Soundtrack",
+    "album": "Sonic the Hedgehog 2 Soundtrack"
+  },
+  {
+    "id": 7,
+    "title": "Haggstrom",
+    "artist": "C418",
+    "audioUrl": "/audio/07 - Haggstrom - Minecraft - C418.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft Soundtrack"
+  },
+  {
+    "id": 7,
+    "title": "Inside the Castle Walls",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/07 - Inside the Castle Walls - Super Mario 64 - Koji Kondo.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 7,
+    "title": "Scrap Brain Zone",
+    "artist": "Masato Nakamura",
+    "audioUrl": "/audio/07 - Scrap Brain Zone - Sonic the Hedgehog - Masato Nakamura.mp3",
+    "game": "Sonic the Hedgehog",
+    "year": 1991,
+    "genre": "Game Soundtrack",
+    "album": "Sonic the Hedgehog Soundtrack"
+  },
+  {
+    "id": 8,
+    "title": "Casino Night Zone",
+    "artist": "Masato Nakamura",
+    "audioUrl": "/audio/08 - Casino Night Zone - Sonic the Hedgehog 2 - Masato Nakamura.mp3",
+    "game": "Sonic the Hedgehog 2",
+    "year": 1992,
+    "genre": "Game Soundtrack",
+    "album": "Sonic the Hedgehog 2 Soundtrack"
+  },
+  {
+    "id": 8,
+    "title": "Minecraft",
+    "artist": "C418",
+    "audioUrl": "/audio/08 - Minecraft - Minecraft - C418.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft Soundtrack"
+  },
+  {
+    "id": 9,
+    "title": "Armored Armadillo",
+    "artist": "Setsuo Yamamoto",
+    "audioUrl": "/audio/09 - Armored Armadillo - Mega Man X - Setsuo Yamamoto.mp3",
+    "game": "Mega Man X",
+    "year": 1993,
+    "genre": "Game Soundtrack",
+    "album": "Mega Man X Soundtrack"
+  },
+  {
+    "id": 9,
+    "title": "Dire, Dire Docks",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/09 - Dire, Dire Docks - Super Mario 64 - Koji Kondo.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 9,
+    "title": "Hill Top Zone",
+    "artist": "Masato Nakamura",
+    "audioUrl": "/audio/09 - Hill Top Zone - Sonic the Hedgehog 2 - Masato Nakamura.mp3",
+    "game": "Sonic the Hedgehog 2",
+    "year": 1992,
+    "genre": "Game Soundtrack",
+    "album": "Sonic the Hedgehog 2 Soundtrack"
+  },
+  {
+    "id": 10,
+    "title": "Boomer Kuwanger",
+    "artist": "Setsuo Yamamoto",
+    "audioUrl": "/audio/10 - Boomer Kuwanger - Mega Man X - Setsuo Yamamoto.mp3",
+    "game": "Mega Man X",
+    "year": 1993,
+    "genre": "Game Soundtrack",
+    "album": "Mega Man X Soundtrack"
+  },
+  {
+    "id": 10,
+    "title": "Forest Interlude",
+    "artist": "David Wise",
+    "audioUrl": "/audio/10 - Forest Interlude - Donkey Kong Country 2 - David Wise.mp3",
+    "game": "Donkey Kong Country 2",
+    "year": 1995,
+    "genre": "Game Soundtrack",
+    "album": "Donkey Kong Country 2 Soundtrack"
+  },
+  {
+    "id": 10,
+    "title": "Lethal Lava Land",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/10 - Lethal Lava Land - Super Mario 64 - Koji Kondo.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 10,
+    "title": "Mystic Cave Zone",
+    "artist": "Masato Nakamura",
+    "audioUrl": "/audio/10 - Mystic Cave Zone - Sonic the Hedgehog 2 - Masato Nakamura.mp3",
+    "game": "Sonic the Hedgehog 2",
+    "year": 1992,
+    "genre": "Game Soundtrack",
+    "album": "Sonic the Hedgehog 2 Soundtrack"
+  },
+  {
+    "id": 11,
+    "title": "Chill Penguin",
+    "artist": "Setsuo Yamamoto",
+    "audioUrl": "/audio/11 - Chill Penguin - Mega Man X - Setsuo Yamamoto.mp3",
+    "game": "Mega Man X",
+    "year": 1993,
+    "genre": "Game Soundtrack",
+    "album": "Mega Man X Soundtrack"
+  },
+  {
+    "id": 11,
+    "title": "IceCap Zone Act 1",
+    "artist": "Michael Jackson & Sega Sound Team",
+    "audioUrl": "/audio/11 - IceCap Zone Act 1 - Sonic the Hedgehog 3 - Michael Jackson & Sega Sound Team.mp3",
+    "game": "Sonic the Hedgehog 3",
+    "year": 1994,
+    "genre": "Game Soundtrack",
+    "album": "Sonic the Hedgehog 3 Soundtrack"
+  },
+  {
+    "id": 11,
+    "title": "Mice On Venus",
+    "artist": "C418",
+    "audioUrl": "/audio/11 - Mice On Venus - Minecraft - C418.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft Soundtrack"
+  },
+  {
+    "id": 11,
+    "title": "Oil Ocean Zone",
+    "artist": "Masato Nakamura",
+    "audioUrl": "/audio/11 - Oil Ocean Zone - Sonic the Hedgehog 2 - Masato Nakamura.mp3",
+    "game": "Sonic the Hedgehog 2",
+    "year": 1992,
+    "genre": "Game Soundtrack",
+    "album": "Sonic the Hedgehog 2 Soundtrack"
+  },
+  {
+    "id": 11,
+    "title": "Snow Mountain",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/11 - Snow Mountain - Super Mario 64 - Koji Kondo.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 12,
+    "title": "Dry Hands",
+    "artist": "C418",
+    "audioUrl": "/audio/12 - Dry Hands - Minecraft - C418.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft Soundtrack"
+  },
+  {
+    "id": 12,
+    "title": "Flame Mammoth",
+    "artist": "Setsuo Yamamoto",
+    "audioUrl": "/audio/12 - Flame Mammoth - Mega Man X - Setsuo Yamamoto.mp3",
+    "game": "Mega Man X",
+    "year": 1993,
+    "genre": "Game Soundtrack",
+    "album": "Mega Man X Soundtrack"
+  },
+  {
+    "id": 12,
+    "title": "Haunted House",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/12 - Haunted House - Super Mario 64 - Koji Kondo.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 12,
+    "title": "Metropolis Zone",
+    "artist": "Masato Nakamura",
+    "audioUrl": "/audio/12 - Metropolis Zone - Sonic the Hedgehog 2 - Masato Nakamura.mp3",
+    "game": "Sonic the Hedgehog 2",
+    "year": 1992,
+    "genre": "Game Soundtrack",
+    "album": "Sonic the Hedgehog 2 Soundtrack"
+  },
+  {
+    "id": 13,
+    "title": "Launch Base Zone Act 1",
+    "artist": "Michael Jackson & Sega Sound Team",
+    "audioUrl": "/audio/13 - Launch Base Zone Act 1 - Sonic the Hedgehog 3 - Michael Jackson & Sega Sound Team.mp3",
+    "game": "Sonic the Hedgehog 3",
+    "year": 1994,
+    "genre": "Game Soundtrack",
+    "album": "Sonic the Hedgehog 3 Soundtrack"
+  },
+  {
+    "id": 13,
+    "title": "Launch Octopus",
+    "artist": "Setsuo Yamamoto",
+    "audioUrl": "/audio/13 - Launch Octopus - Mega Man X - Setsuo Yamamoto.mp3",
+    "game": "Mega Man X",
+    "year": 1993,
+    "genre": "Game Soundtrack",
+    "album": "Mega Man X Soundtrack"
+  },
+  {
+    "id": 13,
+    "title": "Merry-Go-Round",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/13 - Merry-Go-Round - Super Mario 64 - Koji Kondo.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 13,
+    "title": "Wet Hands",
+    "artist": "C418",
+    "audioUrl": "/audio/13 - Wet Hands - Minecraft - C418.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft Soundtrack"
+  },
+  {
+    "id": 14,
+    "title": "Spark Mandrill",
+    "artist": "Setsuo Yamamoto",
+    "audioUrl": "/audio/14 - Spark Mandrill - Mega Man X - Setsuo Yamamoto.mp3",
+    "game": "Mega Man X",
+    "year": 1993,
+    "genre": "Game Soundtrack",
+    "album": "Mega Man X Soundtrack"
+  },
+  {
+    "id": 15,
+    "title": "Death Egg Zone",
+    "artist": "Masato Nakamura",
+    "audioUrl": "/audio/15 - Death Egg Zone - Sonic the Hedgehog 2 - Masato Nakamura.mp3",
+    "game": "Sonic the Hedgehog 2",
+    "year": 1992,
+    "genre": "Game Soundtrack",
+    "album": "Sonic the Hedgehog 2 Soundtrack"
+  },
+  {
+    "id": 15,
+    "title": "Piranha Plant's Lullaby",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/15 - Piranha Plant's Lullaby - Super Mario 64 - Koji Kondo.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 15,
+    "title": "Sting Chameleon",
+    "artist": "Setsuo Yamamoto",
+    "audioUrl": "/audio/15 - Sting Chameleon - Mega Man X - Setsuo Yamamoto.mp3",
+    "game": "Mega Man X",
+    "year": 1993,
+    "genre": "Game Soundtrack",
+    "album": "Mega Man X Soundtrack"
+  },
+  {
+    "id": 16,
+    "title": "Robotnik",
+    "artist": "Masato Nakamura",
+    "audioUrl": "/audio/16 - Robotnik - Sonic the Hedgehog - Masato Nakamura.mp3",
+    "game": "Sonic the Hedgehog",
+    "year": 1991,
+    "genre": "Game Soundtrack",
+    "album": "Sonic the Hedgehog Soundtrack"
+  },
+  {
+    "id": 16,
+    "title": "Storm Eagle",
+    "artist": "Setsuo Yamamoto",
+    "audioUrl": "/audio/16 - Storm Eagle - Mega Man X - Setsuo Yamamoto.mp3",
+    "game": "Mega Man X",
+    "year": 1993,
+    "genre": "Game Soundtrack",
+    "album": "Mega Man X Soundtrack"
+  },
+  {
+    "id": 17,
+    "title": "Stickerbrush Symphony",
+    "artist": "David Wise",
+    "audioUrl": "/audio/17 - Stickerbrush Symphony - Donkey Kong Country 2 - David Wise.mp3",
+    "game": "Donkey Kong Country 2",
+    "year": 1995,
+    "genre": "Game Soundtrack",
+    "album": "Donkey Kong Country 2 Soundtrack"
+  },
+  {
+    "id": 18,
+    "title": "Sweden",
+    "artist": "C418",
+    "audioUrl": "/audio/18 - Sweden - Minecraft - C418.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft Soundtrack"
   }
 ]

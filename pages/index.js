@@ -28,6 +28,7 @@ export default function Home() {
   const audioRef = useRef(null);
   const progressRef = useRef(null);
   const [activeHint, setActiveHint] = useState(0);
+  const inputRef = useRef(null);
 
   // Timer para novo jogo (simula 24h)
   useEffect(() => {
@@ -176,17 +177,94 @@ export default function Home() {
     }
   };
 
-  // Autocomplete
+  const normalize = str => str
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // Remove acentos
+    .toLowerCase() // Converte para minúsculo
+    .replace(/[^a-z0-9]/g, ''); // Remove tudo que não for letra ou número
+
+  const getPriority = (song, value) => {
+    const nTitle = normalize(song.title);
+    const nGame = normalize(song.game);
+    const nArtist = normalize(song.artist);
+    const nValue = normalize(value);
+
+    // Se o valor buscado está contido no nome do jogo, prioriza músicas desse jogo
+    if (nGame.includes(nValue)) return 1;
+    if (nTitle.includes(nValue)) return 2;
+    if (nArtist.includes(nValue)) return 3;
+    return 4;
+  };
+
+  const filterSuggestions = (value) => {
+    if (value.length > 0) {
+      const nValue = normalize(value);
+      
+      // Verifica se existe algum jogo que contenha o termo buscado
+      const matchingGames = [...new Set(songs.map(song => {
+        const nGame = normalize(song.game);
+        console.log('Jogo normalizado:', song.game, '->', nGame);
+        return { original: song.game, normalized: nGame };
+      }))].filter(game => game.normalized.includes(nValue)).map(game => game.original);
+      
+      console.log('Jogos encontrados:', matchingGames);
+      
+      const suggestions = songs
+        .filter(song => {
+          const nTitle = normalize(song.title);
+          const nGame = normalize(song.game);
+          const nArtist = normalize(song.artist);
+
+          // Se existe algum jogo que corresponda à busca, filtra apenas músicas desse(s) jogo(s)
+          if (matchingGames.length > 0) {
+            return matchingGames.includes(song.game);
+          }
+
+          // Se não corresponde a nenhum jogo, mantém o filtro normal
+          return nTitle.includes(nValue) ||
+                 nGame.includes(nValue) ||
+                 nArtist.includes(nValue);
+        })
+        .sort((a, b) => {
+          const pa = getPriority(a, value);
+          const pb = getPriority(b, value);
+          if (pa !== pb) return pa - pb;
+          // Dentro da prioridade, ordena por nome do jogo e título
+          const gameCmp = normalize(a.game).localeCompare(normalize(b.game));
+          if (gameCmp !== 0) return gameCmp;
+          return normalize(a.title).localeCompare(normalize(b.title));
+        });
+      
+      setFilteredSuggestions(suggestions);
+      setShowSuggestions(suggestions.length > 0);
+    }
+    return [];
+  };
+
   const handleInputChange = (e) => {
     const value = e.target.value;
     setGuess(value);
+    
     if (value.length > 0) {
-      const suggestions = songs.filter(song =>
-        song.title.toLowerCase().includes(value.toLowerCase())
-      );
+      const nValue = normalize(value);
+      
+      // Filtra as músicas diretamente, sem criar uma lista de jogos primeiro
+      const suggestions = songs
+        .filter(song => {
+          const nGame = normalize(song.game);
+          return nGame.includes(nValue);
+        })
+        .sort((a, b) => {
+          // Ordena por nome do jogo e título
+          const gameCmp = normalize(a.game).localeCompare(normalize(b.game));
+          if (gameCmp !== 0) return gameCmp;
+          return normalize(a.title).localeCompare(normalize(b.title));
+        });
+      
       setFilteredSuggestions(suggestions);
-      setShowSuggestions(true);
+      setShowSuggestions(suggestions.length > 0);
     } else {
+      setFilteredSuggestions([]);
       setShowSuggestions(false);
     }
   };
@@ -366,13 +444,13 @@ export default function Home() {
         </div>
         <form onSubmit={handleGuess} className={styles.guessFormModern} autoComplete="off">
           <input
+            ref={inputRef}
             type="text"
             value={guess}
             onChange={handleInputChange}
             placeholder="Digite o nome da música..."
             disabled={gameOver || audioError}
             className={styles.guessInputModern}
-            onFocus={() => guess.length > 0 && setShowSuggestions(true)}
             onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
           />
           <button
@@ -390,7 +468,7 @@ export default function Home() {
                   className={styles.suggestionItemModern}
                   onMouseDown={() => handleSuggestionClick(suggestion)}
                 >
-                  {suggestion.artist} - {suggestion.title}
+                  {suggestion.game} - {suggestion.title}
                 </li>
               ))}
             </ul>
