@@ -1,0 +1,1019 @@
+.container {
+  min-height: 100vh;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  color: white;
+}
+
+.title {
+  font-size: 4rem;
+  margin-bottom: 2rem;
+  color: #1DB954;
+  text-shadow: 0 0 10px rgba(29, 185, 84, 0.5);
+}
+
+.gameArea {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-radius: 1rem;
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.playButton {
+  background: #1DB954;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 2rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 300px;
+}
+
+.playButton:hover {
+  background: #1ed760;
+  transform: scale(1.05);
+}
+
+.playButton:disabled {
+  background: #666;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.attempts {
+  font-size: 1.2rem;
+  color: #1DB954;
+}
+
+.audioControls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.stopButton {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 2rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.stopButton:hover {
+  background: #ff8787;
+  transform: scale(1.05);
+}
+
+.stopButton:disabled {
+  background: #666;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.volumeSlider {
+  width: 120px;
+  accent-color: #1DB954;
+  margin-left: 1rem;
+}
+
+.suggestionsList {
+  position: absolute;
+  background: #222;
+  border: 1px solid #1DB954;
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+  list-style: none;
+  padding: 0;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+
+.suggestionItem {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  color: #fff;
+  transition: background 0.2s;
+}
+
+.suggestionItem:hover {
+  background: #1DB954;
+  color: #222;
+}
+
+.guessForm {
+  position: relative;
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+}
+
+.guessInput {
+  flex: 1;
+  padding: 1rem;
+  border: 2px solid #1DB954;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1rem;
+}
+
+.guessInput:focus {
+  outline: none;
+  border-color: #1ed760;
+}
+
+.guessButton {
+  background: #1DB954;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.guessButton:hover {
+  background: #1ed760;
+}
+
+.guessButton:disabled {
+  background: #666;
+  cursor: not-allowed;
+}
+
+.message {
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  width: 100%;
+}
+
+.message.error {
+  background: rgba(255, 0, 0, 0.2);
+  border: 1px solid rgba(255, 0, 0, 0.5);
+  color: #ff6b6b;
+}
+
+.newGameButton {
+  background: #1DB954;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 2rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.newGameButton:hover {
+  background: #1ed760;
+  transform: scale(1.05);
+}
+
+.instructions {
+  margin-top: 2rem;
+  text-align: center;
+  max-width: 600px;
+}
+
+.instructions h2 {
+  color: #1DB954;
+  margin-bottom: 1rem;
+}
+
+.instructions p {
+  margin: 0.5rem 0;
+  color: #ccc;
+}
+
+.loading {
+  font-size: 1.5rem;
+  color: #1DB954;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+.nextClipButton {
+  background: #1DB954;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 2rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+}
+
+.nextClipButton:hover {
+  background: #1ed760;
+  transform: scale(1.05);
+}
+
+.hintBox {
+  background: rgba(255,255,255,0.08);
+  border-left: 4px solid #1DB954;
+  padding: 1rem;
+  margin-top: 1rem;
+  border-radius: 0.5rem;
+  color: #fff;
+  font-size: 1.1rem;
+  max-width: 500px;
+  text-align: left;
+}
+
+.darkBg {
+  min-height: 100vh;
+  background: #181c22;
+  color: #fff;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.topBar {
+  width: 100%;
+  background: #23272f;
+  padding: 1rem 0.5rem 0.5rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.titleBar {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+.songInfoBar {
+  display: flex;
+  gap: 2.5rem;
+  background: #181c22;
+  border-radius: 0.5rem;
+  padding: 0.5rem 2rem;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.infoLabel {
+  font-size: 0.85rem;
+  color: #aaa;
+}
+
+.infoValue {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.gameAreaModern {
+  width: 100%;
+  max-width: 520px;
+  margin: 2rem auto 0 auto;
+  background: #23272f;
+  border-radius: 1rem;
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.clipList {
+  width: 100%;
+  margin: 0 0 1.5rem 0;
+  padding: 0;
+  list-style: none;
+}
+
+.clipItem, .clipItemActive, .clipItemHint {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #23272f;
+  border-radius: 1.5rem;
+  margin-bottom: 0.7rem;
+  padding: 0.7rem 1.2rem;
+  font-size: 1.1rem;
+  color: #bbb;
+  border: 2px solid transparent;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+
+.clipItemActive {
+  background: #23272f;
+  color: #1DB954;
+  border: 2px solid #1DB954;
+  font-weight: bold;
+}
+
+.clipNumber {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #888;
+  min-width: 1.5rem;
+  text-align: center;
+}
+
+.clipName {
+  flex: 1;
+  color: #bbb;
+}
+
+.clipNameActive {
+  flex: 1;
+  color: #1DB954;
+  font-weight: bold;
+}
+
+.clipIcon {
+  font-size: 1.3rem;
+  margin-left: auto;
+}
+
+.clipItemHint {
+  background: #23272f;
+  color: #fff;
+  border: 2px dashed #1DB954;
+  font-style: italic;
+  opacity: 0.85;
+}
+
+.clipNameHint {
+  flex: 1;
+  color: #fff;
+}
+
+.hintButton {
+  background: #1DB954;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 2.2rem;
+  height: 2.2rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  transition: background 0.2s;
+}
+
+.hintButton:disabled {
+  background: #444;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.hintBoxModern {
+  background: #1a1e24;
+  border-left: 4px solid #1DB954;
+  padding: 1rem;
+  margin: 1rem 0 1.5rem 0;
+  border-radius: 0.5rem;
+  color: #fff;
+  font-size: 1.1rem;
+  max-width: 500px;
+  text-align: left;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.guessFormModern {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.guessInputModern {
+  padding: 1rem;
+  border: 2px solid #1DB954;
+  border-radius: 0.7rem;
+  background: #181c22;
+  color: #fff;
+  font-size: 1.1rem;
+  margin-bottom: 0.7rem;
+  width: 100%;
+  transition: border 0.2s;
+}
+
+.guessInputModern:focus {
+  outline: none;
+  border-color: #1ed760;
+}
+
+.guessButtonModern {
+  background: #1DB954;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 0.7rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.guessButtonModern:disabled {
+  background: #444;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.suggestionsListModern {
+  position: absolute;
+  background: #23272f;
+  border: 1px solid #1DB954;
+  border-radius: 0.5rem;
+  margin-top: 2.6rem;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 100;
+  list-style: none;
+  padding: 0;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+
+.suggestionItemModern {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  color: #fff;
+  transition: background 0.2s;
+}
+
+.suggestionItemModern:hover {
+  background: #1DB954;
+  color: #222;
+}
+
+.messageModern {
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.newGameButtonModern {
+  background: #1DB954;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 2rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.newGameButtonModern:hover {
+  background: #1ed760;
+  transform: scale(1.05);
+}
+
+.audioControlsModern {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  width: 100%;
+  margin: 2rem 0 0 0;
+  background: transparent;
+}
+
+.playButtonModern, .stopButtonModern, .nextClipButtonModern {
+  background: #23272f;
+  color: #fff;
+  border: 2px solid #1DB954;
+  border-radius: 50%;
+  width: 3.2rem;
+  height: 3.2rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, border 0.2s, color 0.2s;
+}
+
+.playButtonModern:hover, .stopButtonModern:hover, .nextClipButtonModern:hover {
+  background: #1DB954;
+  color: #23272f;
+  border-color: #1ed760;
+}
+
+.playButtonModern:disabled, .stopButtonModern:disabled, .nextClipButtonModern:disabled {
+  background: #444;
+  color: #aaa;
+  border-color: #444;
+  cursor: not-allowed;
+}
+
+.nextClipButtonModern {
+  border-radius: 1.5rem;
+  width: auto;
+  padding: 0 1.5rem;
+  font-size: 1.1rem;
+  height: 3.2rem;
+}
+
+.volumeSliderModern {
+  width: 120px;
+  accent-color: #1DB954;
+  margin-left: 1rem;
+  background: transparent;
+}
+
+.attemptsInfo {
+  background: #1a1e24;
+  color: #1DB954;
+  padding: 1rem;
+  border-radius: 0.7rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  border: 2px solid #1DB954;
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .gameAreaModern {
+    padding: 1rem 0.2rem;
+  }
+  .songInfoBar {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem 0.5rem;
+  }
+  .audioControlsModern {
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+}
+
+.audioModernBox {
+  width: 100%;
+  background: #23273a;
+  border-radius: 12px;
+  padding: 1.2rem 1.2rem 1.5rem 1.2rem;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.audioModernBox audio {
+  width: 100%;
+  background: transparent;
+  border-radius: 10px;
+  outline: none;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+/* Customização avançada do player nativo */
+.audioModernBox audio::-webkit-media-controls-panel {
+  background: #23273a !important;
+  border-radius: 10px;
+}
+.audioModernBox audio::-webkit-media-controls-enclosure {
+  background: #23273a !important;
+  border-radius: 10px;
+}
+/* Botão play/pause e volume brancos */
+.audioModernBox audio::-webkit-media-controls-play-button,
+.audioModernBox audio::-webkit-media-controls-mute-button,
+.audioModernBox audio::-webkit-media-controls-volume-slider,
+.audioModernBox audio::-webkit-media-controls-volume-control-container {
+  filter: invert(1) brightness(2) !important;
+  background: none !important;
+}
+/* Remover três pontinhos (menu) */
+.audioModernBox audio::-webkit-media-controls-overflow-button {
+  display: none !important;
+}
+/* Tempo sem brilho branco */
+.audioModernBox audio::-webkit-media-controls-current-time-display,
+.audioModernBox audio::-webkit-media-controls-time-remaining-display {
+  color: #fff !important;
+  text-shadow: none !important;
+  background: none !important;
+  font-weight: 400 !important;
+}
+
+.audioPlayerModern {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-top: 0.5rem;
+  background: none;
+  padding: 0;
+  gap: 0.5rem;
+}
+
+.audioTime {
+  color: #bbb;
+  font-size: 1rem;
+  min-width: 44px;
+  text-align: right;
+  margin-right: 0.7rem;
+  flex-shrink: 0;
+}
+
+.audioSeekbar {
+  flex: 1 1 auto;
+  accent-color: #1DB954;
+  height: 4px;
+  margin: 0;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.audioPlayBtn {
+  background: #fff;
+  color: #23272f;
+  border: none;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  margin-left: 0.5rem;
+  flex-shrink: 0;
+}
+.audioPlayBtn:disabled {
+  background: #eee;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.audioVolume {
+  width: 80px;
+  accent-color: #1DB954;
+  background: transparent;
+  margin-left: 0.7rem;
+  flex-shrink: 0;
+}
+
+.attemptsRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.2rem 0 1.2rem 0;
+  justify-content: center;
+}
+
+.attemptButton.attemptInactive {
+  background-color: #31364d !important;
+  color: #bbb;
+}
+.attemptButton.attemptActive {
+  background-color: #1DB954 !important;
+  color: #fff;
+}
+
+.attemptButton {
+  border: none;
+  background: none;
+  box-shadow: none;
+  outline: none;
+  padding: 0.4rem 0.9rem;
+  margin: 0 4px;
+  font: inherit;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.2rem;
+  min-height: 2.2rem;
+  cursor: pointer;
+  transition: none;
+}
+
+.attemptButton:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+.skipBtn {
+  background: #1DB954;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  padding: 0.4rem 1.1rem;
+  margin-left: 0.7rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.skipBtn:disabled {
+  background: #444;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.historyBox {
+  width: 100%;
+  margin: 1.2rem 0 0.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.historyItem {
+  background: #181c22;
+  border: 1px solid #23273a;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 1.05rem;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.historySkipped {
+  color: #ff6b6b;
+  font-weight: bold;
+}
+.historyFail {
+  color: #ff6b6b;
+}
+.historySuccess {
+  color: #1DB954;
+  font-weight: bold;
+}
+
+.timerBox {
+  margin-top: 1.5rem;
+  text-align: center;
+  color: #bbb;
+  font-size: 1.1rem;
+}
+.timer {
+  color: #1DB954;
+  font-weight: bold;
+  margin-left: 0.3rem;
+}
+
+.customAudioPlayer {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  background: #23273a;
+  border-radius: 10px;
+  padding: 1.1rem 1.2rem;
+  gap: 0.5rem;
+  box-sizing: border-box;
+  justify-content: center;
+}
+.audioPlayerRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+  gap: 1.1rem;
+}
+.audioVolumeRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 0.7rem;
+  gap: 0.5rem;
+}
+.audioSeekbarCustom,
+.audioVolumeCustom {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  background: transparent;
+  height: 4px;
+  outline: none;
+  margin: 0;
+  padding: 0;
+}
+.audioSeekbarCustom::-webkit-slider-runnable-track,
+.audioVolumeCustom::-webkit-slider-runnable-track {
+  height: 4px;
+  background: #1DB954;
+  border-radius: 2px;
+}
+.audioSeekbarCustom::-webkit-slider-thumb,
+.audioVolumeCustom::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #1DB954;
+  box-shadow: 0 2px 8px rgba(29,185,84,0.10);
+  cursor: pointer;
+  transition: background 0.2s, border 0.2s;
+  margin-top: -6px;
+}
+.audioSeekbarCustom:focus::-webkit-slider-thumb,
+.audioVolumeCustom:focus::-webkit-slider-thumb {
+  border: 2px solid #1ed760;
+}
+.audioSeekbarCustom::-ms-fill-lower,
+.audioVolumeCustom::-ms-fill-lower {
+  background: #1DB954;
+}
+.audioSeekbarCustom::-ms-fill-upper,
+.audioVolumeCustom::-ms-fill-upper {
+  background: #1DB954;
+}
+.audioSeekbarCustom:focus,
+.audioVolumeCustom:focus {
+  outline: none;
+}
+/* Firefox */
+.audioSeekbarCustom::-moz-range-thumb,
+.audioVolumeCustom::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #1DB954;
+  box-shadow: 0 2px 8px rgba(29,185,84,0.10);
+  cursor: pointer;
+  transition: background 0.2s, border 0.2s;
+}
+.audioSeekbarCustom::-moz-range-track,
+.audioVolumeCustom::-moz-range-track {
+  height: 4px;
+  background: #1DB954;
+  border-radius: 2px;
+}
+/* Remove border in Firefox */
+.audioSeekbarCustom,
+.audioVolumeCustom {
+  border: none;
+}
+/* IE */
+.audioSeekbarCustom::-ms-thumb,
+.audioVolumeCustom::-ms-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #1DB954;
+  box-shadow: 0 2px 8px rgba(29,185,84,0.10);
+  cursor: pointer;
+  transition: background 0.2s, border 0.2s;
+}
+.audioSeekbarCustom::-ms-fill-lower,
+.audioVolumeCustom::-ms-fill-lower {
+  background: #1DB954;
+}
+.audioSeekbarCustom::-ms-fill-upper,
+.audioVolumeCustom::-ms-fill-upper {
+  background: #1DB954;
+}
+.audioPlayBtnCustom {
+  background: #5a5a5a !important;
+  color: #fff !important;
+  border: none;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  margin: 0 0.5rem;
+}
+.audioPlayBtnCustom:disabled {
+  background: #222 !important;
+  color: #aaa !important;
+  cursor: not-allowed;
+}
+.audioVolumeCustom {
+  width: 70px;
+  accent-color: #1DB954;
+  background: transparent;
+  margin-left: 0.5rem;
+  margin-right: 0.2rem;
+}
+.customAudioPlayer .audioTime {
+  color: #eee;
+  font-size: 1rem;
+  min-width: 44px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  text-shadow: none;
+  background: none;
+  font-weight: 400;
+  margin: 0 0.5rem;
+}
+.customAudioPlayer .audioTime:last-child {
+  margin-left: 0.7rem;
+}
+.customAudioPlayer svg {
+  color: #fff;
+  min-width: 20px;
+  min-height: 20px;
+}
+@media (max-width: 600px) {
+  .customAudioPlayer {
+    flex-direction: column;
+    gap: 0.7rem;
+    padding: 0.7rem 0.5rem;
+  }
+  .audioPlayerRow, .audioVolumeRow {
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+  .audioSeekbarCustom {
+    width: 100%;
+    margin: 0.5rem 0;
+    max-width: 100%;
+  }
+  .audioVolumeCustom {
+    width: 100px;
+  }
+}
+
+.attemptsRow button {
+  border: none;
+  background: none;
+  box-shadow: none;
+  outline: none;
+  margin: 0 4px;
+  font: inherit;
+  cursor: pointer;
+  transition: none;
+}
+
+.attemptsRow button:disabled {
+  cursor: default;
+  opacity: 1;
+} 

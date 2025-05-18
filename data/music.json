@@ -1,0 +1,632 @@
+[
+  {
+    "id": 0,
+    "title": "09a Dire, Dire Docks",
+    "artist": "Unknown",
+    "audioUrl": "/audio/09a Dire, Dire Docks.mp3",
+    "game": "Unknown",
+    "year": 2023,
+    "genre": "Videogame",
+    "album": "Unknown"
+  },
+  {
+    "id": 0,
+    "title": "09b Dire, Dire Docks (in water)",
+    "artist": "Unknown",
+    "audioUrl": "/audio/09b Dire, Dire Docks (in water).mp3",
+    "game": "Unknown",
+    "year": 2023,
+    "genre": "Videogame",
+    "album": "Unknown"
+  },
+  {
+    "id": 0,
+    "title": "09c Dire, Dire Docks (underwater cave)",
+    "artist": "Unknown",
+    "audioUrl": "/audio/09c Dire, Dire Docks (underwater cave).mp3",
+    "game": "Unknown",
+    "year": 2023,
+    "genre": "Videogame",
+    "album": "Unknown"
+  },
+  {
+    "id": 0,
+    "title": "14a Cave Dungeon",
+    "artist": "Unknown",
+    "audioUrl": "/audio/14a Cave Dungeon.mp3",
+    "game": "Unknown",
+    "year": 2023,
+    "genre": "Videogame",
+    "album": "Unknown"
+  },
+  {
+    "id": 0,
+    "title": "14b Cave Dungeon (Hazy Maze)",
+    "artist": "Unknown",
+    "audioUrl": "/audio/14b Cave Dungeon (Hazy Maze).mp3",
+    "game": "Unknown",
+    "year": 2023,
+    "genre": "Videogame",
+    "album": "Unknown"
+  },
+  {
+    "id": 0,
+    "title": "14c Cave Dungeon (both variations)",
+    "artist": "Unknown",
+    "audioUrl": "/audio/14c Cave Dungeon (both variations).mp3",
+    "game": "Unknown",
+    "year": 2023,
+    "genre": "Videogame",
+    "album": "Unknown"
+  },
+  {
+    "id": 1,
+    "title": "Key",
+    "artist": "C418",
+    "audioUrl": "/audio/01. Key.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft - Volume Alpha"
+  },
+  {
+    "id": 2,
+    "title": "Title Theme",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/02 Title Theme.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 2,
+    "title": "Door",
+    "artist": "C418",
+    "audioUrl": "/audio/02. Door.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft - Volume Alpha"
+  },
+  {
+    "id": 3,
+    "title": "Peach's Message",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/03 Peach's Message.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 3,
+    "title": "Subwoofer Lullaby",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/03. Subwoofer Lullaby.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 4,
+    "title": "Opening",
+    "artist": "Unknown",
+    "audioUrl": "/audio/04 Opening.mp3",
+    "game": "Unknown",
+    "year": 2023,
+    "genre": "Videogame",
+    "album": "Unknown"
+  },
+  {
+    "id": 4,
+    "title": "Death",
+    "artist": "C418",
+    "audioUrl": "/audio/04. Death.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft - Volume Alpha"
+  },
+  {
+    "id": 5,
+    "title": "Main Theme",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/05 Main Theme.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 5,
+    "title": "Living Mice",
+    "artist": "C418",
+    "audioUrl": "/audio/05. Living Mice.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft - Volume Alpha"
+  },
+  {
+    "id": 6,
+    "title": "Slider",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/06 Slider.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 6,
+    "title": "Moog City",
+    "artist": "C418",
+    "audioUrl": "/audio/06. Moog City.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft - Volume Alpha"
+  },
+  {
+    "id": 7,
+    "title": "Inside the Castle Walls",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/07 Inside the Castle Walls.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 7,
+    "title": "Haggstrom",
+    "artist": "C418",
+    "audioUrl": "/audio/07. Haggstrom.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft - Volume Alpha"
+  },
+  {
+    "id": 8,
+    "title": "Looping Steps",
+    "artist": "Unknown",
+    "audioUrl": "/audio/08 Looping Steps.mp3",
+    "game": "Unknown",
+    "year": 2023,
+    "genre": "Videogame",
+    "album": "Unknown"
+  },
+  {
+    "id": 8,
+    "title": "Minecraft",
+    "artist": "C418",
+    "audioUrl": "/audio/08. Minecraft.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft - Volume Alpha"
+  },
+  {
+    "id": 9,
+    "title": "Oxygène",
+    "artist": "C418",
+    "audioUrl": "/audio/09. Oxygène.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft - Volume Alpha"
+  },
+  {
+    "id": 10,
+    "title": "Lethal Lava Land",
+    "artist": "Unknown",
+    "audioUrl": "/audio/10 Lethal Lava Land.mp3",
+    "game": "Unknown",
+    "year": 2023,
+    "genre": "Videogame",
+    "album": "Unknown"
+  },
+  {
+    "id": 10,
+    "title": "Équinoxe",
+    "artist": "C418",
+    "audioUrl": "/audio/10. Équinoxe.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft - Volume Alpha"
+  },
+  {
+    "id": 11,
+    "title": "Snow Mountain",
+    "artist": "Unknown",
+    "audioUrl": "/audio/11 Snow Mountain.mp3",
+    "game": "Unknown",
+    "year": 2023,
+    "genre": "Videogame",
+    "album": "Unknown"
+  },
+  {
+    "id": 11,
+    "title": "Mice On Venus",
+    "artist": "C418",
+    "audioUrl": "/audio/11. Mice On Venus.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft - Volume Alpha"
+  },
+  {
+    "id": 12,
+    "title": "Haunted House",
+    "artist": "Unknown",
+    "audioUrl": "/audio/12 Haunted House.mp3",
+    "game": "Unknown",
+    "year": 2023,
+    "genre": "Videogame",
+    "album": "Unknown"
+  },
+  {
+    "id": 12,
+    "title": "Dry Hands",
+    "artist": "C418",
+    "audioUrl": "/audio/12. Dry Hands.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft - Volume Alpha"
+  },
+  {
+    "id": 13,
+    "title": "Merry-Go-Round",
+    "artist": "Unknown",
+    "audioUrl": "/audio/13 Merry-Go-Round.mp3",
+    "game": "Unknown",
+    "year": 2023,
+    "genre": "Videogame",
+    "album": "Unknown"
+  },
+  {
+    "id": 13,
+    "title": "Wet Hands",
+    "artist": "C418",
+    "audioUrl": "/audio/13. Wet Hands.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft - Volume Alpha"
+  },
+  {
+    "id": 14,
+    "title": "Clark",
+    "artist": "C418",
+    "audioUrl": "/audio/14. Clark.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft - Volume Alpha"
+  },
+  {
+    "id": 15,
+    "title": "Piranha Plant's Lullaby",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/15 Piranha Plant's Lullaby.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 15,
+    "title": "Chris",
+    "artist": "C418",
+    "audioUrl": "/audio/15. Chris.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft - Volume Alpha"
+  },
+  {
+    "id": 16,
+    "title": "Powerful Mario",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/16 Powerful Mario.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 16,
+    "title": "Thirteen",
+    "artist": "C418",
+    "audioUrl": "/audio/16. Thirteen.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft - Volume Alpha"
+  },
+  {
+    "id": 17,
+    "title": "Metallic Mario",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/17 Metallic Mario.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 17,
+    "title": "Excuse",
+    "artist": "C418",
+    "audioUrl": "/audio/17. Excuse.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft - Volume Alpha"
+  },
+  {
+    "id": 18,
+    "title": "File Select",
+    "artist": "Unknown",
+    "audioUrl": "/audio/18 File Select.mp3",
+    "game": "Unknown",
+    "year": 2023,
+    "genre": "Videogame",
+    "album": "Unknown"
+  },
+  {
+    "id": 18,
+    "title": "Sweden",
+    "artist": "C418",
+    "audioUrl": "/audio/18. Sweden.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft - Volume Alpha"
+  },
+  {
+    "id": 19,
+    "title": "Correct Solution",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/19 Correct Solution.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 19,
+    "title": "Cat",
+    "artist": "C418",
+    "audioUrl": "/audio/19. Cat.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft - Volume Alpha"
+  },
+  {
+    "id": 20,
+    "title": "Toad's Message",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/20 Toad's Message.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 20,
+    "title": "Dog",
+    "artist": "C418",
+    "audioUrl": "/audio/20. Dog.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft - Volume Alpha"
+  },
+  {
+    "id": 21,
+    "title": "Power Star",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/21 Power Star.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 21,
+    "title": "Danny",
+    "artist": "C418",
+    "audioUrl": "/audio/21. Danny.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft - Volume Alpha"
+  },
+  {
+    "id": 22,
+    "title": "Race Fanfare",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/22 Race Fanfare.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 22,
+    "title": "Beginning",
+    "artist": "C418",
+    "audioUrl": "/audio/22. Beginning.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft - Volume Alpha"
+  },
+  {
+    "id": 23,
+    "title": "Star Catch Fanfare",
+    "artist": "C418",
+    "audioUrl": "/audio/23 Star Catch Fanfare.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft - Volume Alpha"
+  },
+  {
+    "id": 23,
+    "title": "Droopy Likes Ricochet",
+    "artist": "C418",
+    "audioUrl": "/audio/23. Droopy Likes Ricochet.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft - Volume Alpha"
+  },
+  {
+    "id": 24,
+    "title": "Game Start",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/24 Game Start.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 24,
+    "title": "Droopy Likes Your Face",
+    "artist": "C418",
+    "audioUrl": "/audio/24. Droopy Likes Your Face.mp3",
+    "game": "Minecraft",
+    "year": 2011,
+    "genre": "Game Soundtrack",
+    "album": "Minecraft - Volume Alpha"
+  },
+  {
+    "id": 25,
+    "title": "Course Clear",
+    "artist": "Unknown",
+    "audioUrl": "/audio/25 Course Clear.mp3",
+    "game": "Unknown",
+    "year": 2023,
+    "genre": "Videogame",
+    "album": "Unknown"
+  },
+  {
+    "id": 27,
+    "title": "Stage Boss",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/27 Stage Boss.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 28,
+    "title": "Koopa's Message",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/28 Koopa's Message.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 29,
+    "title": "Koopa's Road",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/29 Koopa's Road.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 30,
+    "title": "Koopa's Theme",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/30 Koopa's Theme.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 31,
+    "title": "Koopa Clear",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/31 Koopa Clear.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 32,
+    "title": "Beícoli - Where We Dream",
+    "artist": "Unknown",
+    "audioUrl": "/audio/032 - Beícoli - Where We Dream.mp3",
+    "game": "Unknown",
+    "year": 2023,
+    "genre": "Videogame",
+    "album": "Unknown"
+  },
+  {
+    "id": 32,
+    "title": "Ultimate Koopa",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/32 Ultimate Koopa.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 33,
+    "title": "Ultimate Koopa Clear",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/33 Ultimate Koopa Clear.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 34,
+    "title": "Ending Demo",
+    "artist": "Unknown",
+    "audioUrl": "/audio/34 Ending Demo.mp3",
+    "game": "Unknown",
+    "year": 2023,
+    "genre": "Videogame",
+    "album": "Unknown"
+  },
+  {
+    "id": 35,
+    "title": "Staff Roll",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/35 Staff Roll.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  },
+  {
+    "id": 91,
+    "title": "Lakitu's Message",
+    "artist": "Koji Kondo",
+    "audioUrl": "/audio/91  Lakitu's Message.mp3",
+    "game": "Super Mario 64",
+    "year": 1996,
+    "genre": "Game Soundtrack",
+    "album": "Super Mario 64 Soundtrack"
+  }
+]
