@@ -1,0 +1,326 @@
+{
+  "name": "New Super Mario Bros. Wii Original Sound Version",
+  "release_date": "2009-11-11",
+  "catalog": "",
+  "publisher": "",
+  "composers": [],
+  "arrangers": [],
+  "performers": [
+    "Various Artists"
+  ],
+  "cover_art": "",
+  "discs": [
+    [
+      {
+        "number": "1",
+        "name": "Channel Menu",
+        "duration": "8836"
+      },
+      {
+        "number": "2",
+        "name": "New Super Mario Bros. Wii",
+        "duration": "99946"
+      },
+      {
+        "number": "3",
+        "name": "Main Menu",
+        "duration": "96267"
+      },
+      {
+        "number": "4",
+        "name": "Opening",
+        "duration": "56680"
+      },
+      {
+        "number": "5",
+        "name": "World 1 [Grass World]",
+        "duration": "66130"
+      },
+      {
+        "number": "6",
+        "name": "Overworld BGM",
+        "duration": "178125"
+      },
+      {
+        "number": "7",
+        "name": "Course Clear",
+        "duration": "4005"
+      },
+      {
+        "number": "8",
+        "name": "World 2 [Desert World]",
+        "duration": "145464"
+      },
+      {
+        "number": "9",
+        "name": "Desert BGM",
+        "duration": "127271"
+      },
+      {
+        "number": "10",
+        "name": "World 3 [Snow World]",
+        "duration": "59470"
+      },
+      {
+        "number": "11",
+        "name": "Snow Overworld BGM",
+        "duration": "178127"
+      },
+      {
+        "number": "12",
+        "name": "World 4 [Ocean World]",
+        "duration": "112936"
+      },
+      {
+        "number": "13",
+        "name": "Beach BGM",
+        "duration": "106986"
+      },
+      {
+        "number": "14",
+        "name": "Underwater BGM",
+        "duration": "98653"
+      },
+      {
+        "number": "15",
+        "name": "Tower BGM",
+        "duration": "110462"
+      },
+      {
+        "number": "16",
+        "name": "Tower Boss Battle",
+        "duration": "97442"
+      },
+      {
+        "number": "17",
+        "name": "Course Clear [Tower]",
+        "duration": "5864"
+      },
+      {
+        "number": "18",
+        "name": "World 5 [Forest World]",
+        "duration": "87622"
+      },
+      {
+        "number": "19",
+        "name": "Jungle BGM",
+        "duration": "130002"
+      },
+      {
+        "number": "20",
+        "name": "Ghost House BGM",
+        "duration": "156817"
+      },
+      {
+        "number": "21",
+        "name": "Mini-Game",
+        "duration": "102960"
+      },
+      {
+        "number": "22",
+        "name": "Lose [Mini-Game]",
+        "duration": "2940"
+      },
+      {
+        "number": "23",
+        "name": "Win [Mini-Game]",
+        "duration": "2080"
+      },
+      {
+        "number": "24",
+        "name": "Peach's Castle BGM",
+        "duration": "135619"
+      },
+      {
+        "number": "25",
+        "name": "Enemy Course [Multiplayer]",
+        "duration": "90713"
+      },
+      {
+        "number": "26",
+        "name": "Lose [Multiplayer]",
+        "duration": "2832"
+      },
+      {
+        "number": "27",
+        "name": "All Bubbled Up... [Multiplayer]",
+        "duration": "2412"
+      },
+      {
+        "number": "28",
+        "name": "Failure [Multiplayer]",
+        "duration": "4043"
+      },
+      {
+        "number": "29",
+        "name": "Results [Multiplayer]",
+        "duration": "46524"
+      },
+      {
+        "number": "30",
+        "name": "Invincibility BGM",
+        "duration": "20144"
+      },
+      {
+        "number": "31",
+        "name": "World 6 [Rocky World]",
+        "duration": "90439"
+      },
+      {
+        "number": "32",
+        "name": "Underground BGM",
+        "duration": "130106"
+      },
+      {
+        "number": "33",
+        "name": "Airship BGM",
+        "duration": "196522"
+      },
+      {
+        "number": "34",
+        "name": "Airship Boss Room BGM",
+        "duration": "165069"
+      },
+      {
+        "number": "35",
+        "name": "Airship Boss Battle",
+        "duration": "88923"
+      },
+      {
+        "number": "36",
+        "name": "Course Clear [Airship]",
+        "duration": "7813"
+      },
+      {
+        "number": "37",
+        "name": "World 7 [Sky World]",
+        "duration": "131363"
+      },
+      {
+        "number": "38",
+        "name": "Athletic BGM",
+        "duration": "164280"
+      },
+      {
+        "number": "39",
+        "name": "Course Clear [Retro]",
+        "duration": "7360"
+      },
+      {
+        "number": "40",
+        "name": "World 8 [Lava World]",
+        "duration": "125869"
+      },
+      {
+        "number": "41",
+        "name": "Volcano Overworld BGM",
+        "duration": "182094"
+      },
+      {
+        "number": "42",
+        "name": "Volcano Underground BGM",
+        "duration": "99827"
+      },
+      {
+        "number": "43",
+        "name": "Bowser's Castle Appears",
+        "duration": "14187"
+      },
+      {
+        "number": "44",
+        "name": "Castle BGM",
+        "duration": "163986"
+      },
+      {
+        "number": "45",
+        "name": "Castle Boss Battle",
+        "duration": "153592"
+      },
+      {
+        "number": "46",
+        "name": "Course Clear [Castle]",
+        "duration": "5872"
+      },
+      {
+        "number": "47",
+        "name": "Castle Boss Room BGM",
+        "duration": "36692"
+      },
+      {
+        "number": "48",
+        "name": "Bowser Boss Battle 1",
+        "duration": "127038"
+      },
+      {
+        "number": "49",
+        "name": "The Princess...?",
+        "duration": "8486"
+      },
+      {
+        "number": "50",
+        "name": "Bowser Boss Battle 2",
+        "duration": "91599"
+      },
+      {
+        "number": "51",
+        "name": "Course Clear [Bowser's Castle]",
+        "duration": "13312"
+      },
+      {
+        "number": "52",
+        "name": "Ending 1",
+        "duration": "63373"
+      },
+      {
+        "number": "53",
+        "name": "Ending 2",
+        "duration": "66217"
+      },
+      {
+        "number": "54",
+        "name": "Staff Roll",
+        "duration": "213414"
+      },
+      {
+        "number": "55",
+        "name": "World 9 [Special World]",
+        "duration": "90102"
+      },
+      {
+        "number": "56",
+        "name": "Bonus Screen BGM",
+        "duration": "71119"
+      },
+      {
+        "number": "57",
+        "name": "P-Switch BGM",
+        "duration": "40517"
+      },
+      {
+        "number": "58",
+        "name": "Star Coin Collected",
+        "duration": "2394"
+      },
+      {
+        "number": "59",
+        "name": "All Star Coins Collected",
+        "duration": "3741"
+      },
+      {
+        "number": "60",
+        "name": "All 5 Stars Collected",
+        "duration": "3333"
+      },
+      {
+        "number": "61",
+        "name": "Lose Life",
+        "duration": "2592"
+      },
+      {
+        "number": "62",
+        "name": "Game Over",
+        "duration": "7632"
+      }
+    ]
+  ]
+}

@@ -1,0 +1,201 @@
+{
+  "name": "Mario Kart 64 Original Soundtrack",
+  "release_date": "",
+  "catalog": "",
+  "publisher": "",
+  "composers": [],
+  "arrangers": [],
+  "performers": [
+    "永田権太"
+  ],
+  "cover_art": "",
+  "discs": [
+    [
+      {
+        "number": "1",
+        "name": "オープニング・タイトル",
+        "duration": "60533"
+      },
+      {
+        "number": "2",
+        "name": "サーキット&ワリオスタジアム",
+        "duration": "168760"
+      },
+      {
+        "number": "3",
+        "name": "モ〜モ〜ファーム&ヨッシーバレー",
+        "duration": "126240"
+      },
+      {
+        "number": "4",
+        "name": "ノコノコビーチ",
+        "duration": "126466"
+      },
+      {
+        "number": "5",
+        "name": "カラカラさばく",
+        "duration": "157866"
+      },
+      {
+        "number": "6",
+        "name": "キノピオハイウェイ",
+        "duration": "180066"
+      },
+      {
+        "number": "7",
+        "name": "スノー&シャーベットランド",
+        "duration": "142600"
+      },
+      {
+        "number": "8",
+        "name": "チョコマウンテン",
+        "duration": "192026"
+      },
+      {
+        "number": "9",
+        "name": "クッパキャッスル",
+        "duration": "170373"
+      },
+      {
+        "number": "10",
+        "name": "ドンキージャングルパーク",
+        "duration": "86533"
+      },
+      {
+        "number": "11",
+        "name": "ヒュ〜ドロいけ",
+        "duration": "110426"
+      },
+      {
+        "number": "12",
+        "name": "レインボーロード",
+        "duration": "302733"
+      },
+      {
+        "number": "13",
+        "name": "バトルステージ",
+        "duration": "188333"
+      },
+      {
+        "number": "14",
+        "name": "ゲームセレクト",
+        "duration": "64066"
+      },
+      {
+        "number": "15",
+        "name": "リザルト (1位〜4位)",
+        "duration": "210200"
+      },
+      {
+        "number": "16",
+        "name": "リザルト (5位〜8位)",
+        "duration": "42400"
+      },
+      {
+        "number": "17",
+        "name": "リザルト (VS&バトル)",
+        "duration": "72333"
+      },
+      {
+        "number": "18",
+        "name": "スター無敵",
+        "duration": "36906"
+      },
+      {
+        "number": "19",
+        "name": "表彰式 (1位〜3位)",
+        "duration": "99093"
+      },
+      {
+        "number": "20",
+        "name": "表彰式 (4位〜8位)",
+        "duration": "51800"
+      },
+      {
+        "number": "21",
+        "name": "スタッフロール",
+        "duration": "167133"
+      },
+      {
+        "number": "22",
+        "name": "スタートグリッドファンファーレ (GP&VS)",
+        "duration": "9040"
+      },
+      {
+        "number": "23",
+        "name": "スタートグリッドファンファーレ (TA&バトル)",
+        "duration": "5026"
+      },
+      {
+        "number": "24",
+        "name": "ファイナルラップファンファーレ",
+        "duration": "6133"
+      },
+      {
+        "number": "25",
+        "name": "ゴールインファンファーレ (1位)",
+        "duration": "8666"
+      },
+      {
+        "number": "26",
+        "name": "ゴールインファンファーレ (2位〜4位)",
+        "duration": "7600"
+      },
+      {
+        "number": "27",
+        "name": "ゴールインファンファーレ (5位〜8位)",
+        "duration": "7800"
+      },
+      {
+        "number": "28",
+        "name": "ゲームオーバー",
+        "duration": "11040"
+      },
+      {
+        "number": "29",
+        "name": "マリオのセリフ",
+        "duration": "34360"
+      },
+      {
+        "number": "30",
+        "name": "ルイージのセリフ",
+        "duration": "23600"
+      },
+      {
+        "number": "31",
+        "name": "ヨッシーのセリフ",
+        "duration": "17866"
+      },
+      {
+        "number": "32",
+        "name": "キノピオのセリフ",
+        "duration": "26440"
+      },
+      {
+        "number": "33",
+        "name": "ドンキーのセリフ",
+        "duration": "19800"
+      },
+      {
+        "number": "34",
+        "name": "ワリオのセリフ",
+        "duration": "23493"
+      },
+      {
+        "number": "35",
+        "name": "ピーチのセリフ",
+        "duration": "24973"
+      },
+      {
+        "number": "36",
+        "name": "クッパのセリフ",
+        "duration": "22666"
+      },
+      {
+        "number": "37",
+        "name": "スペシャルSE集",
+        "duration": "122600"
+      }
+    ]
+  ]
+}

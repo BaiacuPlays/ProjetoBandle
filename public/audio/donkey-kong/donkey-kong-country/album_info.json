@@ -1,0 +1,151 @@
+{
+  "name": "Donkey Kong Country",
+  "release_date": "1995-02-25",
+  "catalog": "",
+  "publisher": "",
+  "composers": [],
+  "arrangers": [],
+  "performers": [
+    "David Wise"
+  ],
+  "cover_art": "",
+  "discs": [
+    [
+      {
+        "number": "1",
+        "name": "Theme",
+        "duration": "10573"
+      },
+      {
+        "number": "2",
+        "name": "Simian Segue",
+        "duration": "120466"
+      },
+      {
+        "number": "3",
+        "name": "DK Island Swing",
+        "duration": "153333"
+      },
+      {
+        "number": "4",
+        "name": "Cranky's Theme",
+        "duration": "118066"
+      },
+      {
+        "number": "5",
+        "name": "Jungle Groove",
+        "duration": "317853"
+      },
+      {
+        "number": "6",
+        "name": "Cave Dweller Concert",
+        "duration": "358053"
+      },
+      {
+        "number": "7",
+        "name": "Bonus Room Blitz",
+        "duration": "62560"
+      },
+      {
+        "number": "8",
+        "name": "Aquatic Ambiance",
+        "duration": "208866"
+      },
+      {
+        "number": "9",
+        "name": "Candy's Love Song",
+        "duration": "132093"
+      },
+      {
+        "number": "10",
+        "name": "Bad Boss Boogie",
+        "duration": "149280"
+      },
+      {
+        "number": "11",
+        "name": "Mine Cart Madness",
+        "duration": "191320"
+      },
+      {
+        "number": "12",
+        "name": "Life in the Mines",
+        "duration": "273653"
+      },
+      {
+        "number": "13",
+        "name": "Voices of the Temple",
+        "duration": "185360"
+      },
+      {
+        "number": "14",
+        "name": "Forest Frenzy",
+        "duration": "127346"
+      },
+      {
+        "number": "15",
+        "name": "Treetop Rock",
+        "duration": "177733"
+      },
+      {
+        "number": "16",
+        "name": "Funky's Fugue",
+        "duration": "130400"
+      },
+      {
+        "number": "17",
+        "name": "Misty Menace",
+        "duration": "267666"
+      },
+      {
+        "number": "18",
+        "name": "Northern Hemispheres",
+        "duration": "250933"
+      },
+      {
+        "number": "19",
+        "name": "Ice Cave Chant",
+        "duration": "204200"
+      },
+      {
+        "number": "20",
+        "name": "Fear Factory",
+        "duration": "240893"
+      },
+      {
+        "number": "21",
+        "name": "Gang-Plank Galleon",
+        "duration": "191866"
+      },
+      {
+        "number": "22",
+        "name": "The Credits Concerto",
+        "duration": "116160"
+      },
+      {
+        "number": "23",
+        "name": "Game Over",
+        "duration": "24573"
+      },
+      {
+        "number": "24",
+        "name": "Level Goal",
+        "duration": "7573"
+      },
+      {
+        "number": "25",
+        "name": "Bonus Win",
+        "duration": "10573"
+      },
+      {
+        "number": "26",
+        "name": "Bonus Lose",
+        "duration": "10573"
+      },
+      {
+        "number": "27",
+        "name": "Lost Life",
+        "duration": "5027"
+      }
+    ]
+  ]
+}

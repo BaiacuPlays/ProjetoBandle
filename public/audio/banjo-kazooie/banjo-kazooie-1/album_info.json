@@ -1,0 +1,227 @@
+{
+  "name": "Banjo-Kazooie: Original Soundtrack",
+  "release_date": "2019-11-26",
+  "catalog": "",
+  "publisher": "",
+  "composers": [],
+  "arrangers": [],
+  "performers": [
+    "Grant Kirkhope"
+  ],
+  "cover_art": "",
+  "discs": [
+    [
+      {
+        "number": "A1",
+        "name": "Nintendo & Rare Logo",
+        "duration": ""
+      },
+      {
+        "number": "A2",
+        "name": "Main Title",
+        "duration": ""
+      },
+      {
+        "number": "A3",
+        "name": "Game Selection 3",
+        "duration": ""
+      },
+      {
+        "number": "A4",
+        "name": "Overture",
+        "duration": ""
+      },
+      {
+        "number": "A5",
+        "name": "Spiral Mountain",
+        "duration": ""
+      },
+      {
+        "number": "A6",
+        "name": "Spiral Mountain - Bridge to Gruntilda's Lair",
+        "duration": ""
+      },
+      {
+        "number": "A7",
+        "name": "Grunty's Beauty Steal Machine",
+        "duration": ""
+      },
+      {
+        "number": "A8",
+        "name": "Gruntilda's Lair",
+        "duration": ""
+      },
+      {
+        "number": "B1",
+        "name": "Gruntilda's Lair - Mumbo's Mountain",
+        "duration": ""
+      },
+      {
+        "number": "B2",
+        "name": "Mumbo's Mountain",
+        "duration": ""
+      },
+      {
+        "number": "B3",
+        "name": "Mumbo's Hut",
+        "duration": ""
+      },
+      {
+        "number": "B4",
+        "name": "Mumbo's Mountain - Inside Ticker's Tower",
+        "duration": ""
+      },
+      {
+        "number": "B5",
+        "name": "Brentilda's Theme",
+        "duration": ""
+      }
+    ],
+    [
+      {
+        "number": "C1",
+        "name": "Gruntilda's Lair - Treasure Trove Cove",
+        "duration": ""
+      },
+      {
+        "number": "C2",
+        "name": "Treasure Trove Cove",
+        "duration": ""
+      },
+      {
+        "number": "C3",
+        "name": "Treasure Trove Cove - Nipper Battle",
+        "duration": ""
+      },
+      {
+        "number": "C4",
+        "name": "Gruntilda's Lair - Clanker's Cavern",
+        "duration": ""
+      },
+      {
+        "number": "C5",
+        "name": "Wading Boots",
+        "duration": ""
+      },
+      {
+        "number": "C6",
+        "name": "Turbo Trainers",
+        "duration": ""
+      },
+      {
+        "number": "D1",
+        "name": "Clanker's Cavern",
+        "duration": ""
+      },
+      {
+        "number": "D2",
+        "name": "Clanker's Cavern - Inside Clanker",
+        "duration": ""
+      },
+      {
+        "number": "D3",
+        "name": "Gruntilda's Lair - Bubblegloop Swamp",
+        "duration": ""
+      },
+      {
+        "number": "D4",
+        "name": "Bubblegloop Swamp",
+        "duration": ""
+      }
+    ],
+    [
+      {
+        "number": "E1",
+        "name": "Gruntilda's Lair - Freezeezy Peak",
+        "duration": ""
+      },
+      {
+        "number": "E2",
+        "name": "Freezeezy Peak",
+        "duration": ""
+      },
+      {
+        "number": "E3",
+        "name": "Gruntilda's Lair - Gobi's Valley",
+        "duration": ""
+      },
+      {
+        "number": "E4",
+        "name": "Gobi's Valley",
+        "duration": ""
+      },
+      {
+        "number": "F1",
+        "name": "Gruntilda's Lair - Mad Monster Mansion",
+        "duration": ""
+      },
+      {
+        "number": "F2",
+        "name": "Mad Monster Mansion",
+        "duration": ""
+      },
+      {
+        "number": "F3",
+        "name": "Gruntilda's Lair - Rusty Bucket Bay",
+        "duration": ""
+      },
+      {
+        "number": "F4",
+        "name": "Rusty Bucket Bay",
+        "duration": ""
+      }
+    ],
+    [
+      {
+        "number": "G1",
+        "name": "Gruntilda's Lair - Click Clock Wood",
+        "duration": ""
+      },
+      {
+        "number": "G2",
+        "name": "Click Clock Wood - Spring",
+        "duration": ""
+      },
+      {
+        "number": "G3",
+        "name": "Grunty's Furnace Fun",
+        "duration": ""
+      },
+      {
+        "number": "G4",
+        "name": "Tooty's Theme",
+        "duration": ""
+      },
+      {
+        "number": "G5",
+        "name": "Mumbo's Barbeque",
+        "duration": ""
+      },
+      {
+        "number": "H1",
+        "name": "Top of the Lair",
+        "duration": ""
+      },
+      {
+        "number": "H2",
+        "name": "Final Battle",
+        "duration": ""
+      },
+      {
+        "number": "H3",
+        "name": "End Credits",
+        "duration": ""
+      },
+      {
+        "number": "H4",
+        "name": "On Vacation",
+        "duration": ""
+      },
+      {
+        "number": "H5",
+        "name": "The End",
+        "duration": ""
+      }
+    ]
+  ]
+}

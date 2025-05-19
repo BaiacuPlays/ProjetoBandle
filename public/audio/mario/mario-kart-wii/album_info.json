@@ -1,0 +1,232 @@
+{
+  "name": "Mario Kart Wii Platinum Soundtrack",
+  "release_date": "2011-12",
+  "catalog": "",
+  "publisher": "",
+  "composers": [],
+  "arrangers": [],
+  "performers": [
+    "太田あすか",
+    "永松亮"
+  ],
+  "cover_art": "",
+  "discs": [
+    [
+      {
+        "number": "1",
+        "name": "オープニングムービー",
+        "duration": "71200"
+      },
+      {
+        "number": "2",
+        "name": "タイトル",
+        "duration": "68146"
+      },
+      {
+        "number": "3",
+        "name": "オプション／ライセンス管理",
+        "duration": "35373"
+      },
+      {
+        "number": "4",
+        "name": "メインメニュー",
+        "duration": "148053"
+      },
+      {
+        "number": "5",
+        "name": "コースインファンファーレ",
+        "duration": "15360"
+      },
+      {
+        "number": "6",
+        "name": "ルイージサーキット／マリオサーキット",
+        "duration": "130346"
+      },
+      {
+        "number": "7",
+        "name": "モーモーカントリー",
+        "duration": "131760"
+      },
+      {
+        "number": "8",
+        "name": "キノコキャノン",
+        "duration": "117373"
+      },
+      {
+        "number": "9",
+        "name": "キノピオファクトリー",
+        "duration": "153826"
+      },
+      {
+        "number": "10",
+        "name": "ココナッツモール",
+        "duration": "137293"
+      },
+      {
+        "number": "11",
+        "name": "DKスノーボードクロス",
+        "duration": "133000"
+      },
+      {
+        "number": "12",
+        "name": "ワリオこうざん",
+        "duration": "137853"
+      },
+      {
+        "number": "13",
+        "name": "デイジーサーキット",
+        "duration": "133293"
+      },
+      {
+        "number": "14",
+        "name": "ノコノコみさき",
+        "duration": "126280"
+      },
+      {
+        "number": "15",
+        "name": "メイプルツリーハウス",
+        "duration": "142160"
+      },
+      {
+        "number": "16",
+        "name": "グラグラ火山",
+        "duration": "157360"
+      },
+      {
+        "number": "17",
+        "name": "カラカラいせき",
+        "duration": "138440"
+      },
+      {
+        "number": "18",
+        "name": "ムーンリッジ&ハイウェイ",
+        "duration": "123986"
+      },
+      {
+        "number": "19",
+        "name": "クッパキャッスル",
+        "duration": "164760"
+      },
+      {
+        "number": "20",
+        "name": "レインボーロード",
+        "duration": "167880"
+      },
+      {
+        "number": "21",
+        "name": "一位ゴールファンファーレ(グランプリ・VS)",
+        "duration": "7066"
+      },
+      {
+        "number": "22",
+        "name": "上位ゴールファンファーレ(グランプリ・VS)",
+        "duration": "7893"
+      },
+      {
+        "number": "23",
+        "name": "上位ゴールリザルト(グランプリ・VS)",
+        "duration": "53826"
+      },
+      {
+        "number": "24",
+        "name": "下位ゴールファンファーレ(グランプリ・VS)",
+        "duration": "9000"
+      },
+      {
+        "number": "25",
+        "name": "下位ゴールリザルト",
+        "duration": "43026"
+      },
+      {
+        "number": "26",
+        "name": "ブロック広場",
+        "duration": "120293"
+      },
+      {
+        "number": "27",
+        "name": "アクアリゾート",
+        "duration": "140906"
+      },
+      {
+        "number": "28",
+        "name": "ファンキースタジアム",
+        "duration": "108400"
+      },
+      {
+        "number": "29",
+        "name": "ワンワンルーレット",
+        "duration": "140186"
+      },
+      {
+        "number": "30",
+        "name": "ドッスンさばく",
+        "duration": "132426"
+      },
+      {
+        "number": "31",
+        "name": "チーム内一位(バトル)／新記録更新(タイムアタック)ファンファーレ",
+        "duration": "5760"
+      },
+      {
+        "number": "32",
+        "name": "チーム勝利(バトル)／ランクイン(タイムアタック)ファンファーレ",
+        "duration": "5840"
+      },
+      {
+        "number": "33",
+        "name": "引き分けファンファーレ",
+        "duration": "5693"
+      },
+      {
+        "number": "34",
+        "name": "チーム勝利(バトル)／ランクイン(タイムアタック)リザルト",
+        "duration": "26560"
+      },
+      {
+        "number": "35",
+        "name": "チーム敗北(バトル)／ランク外(タイムアタック)ファンファーレ",
+        "duration": "6426"
+      },
+      {
+        "number": "36",
+        "name": "チーム敗北(バトル)／ランク外(タイムアタック)リザルト",
+        "duration": "48440"
+      },
+      {
+        "number": "37",
+        "name": "マリオカートチャンネル メニュー",
+        "duration": "46760"
+      },
+      {
+        "number": "38",
+        "name": "ランキング",
+        "duration": "60093"
+      },
+      {
+        "number": "39",
+        "name": "Wi-Fiメニュー",
+        "duration": "157133"
+      },
+      {
+        "number": "40",
+        "name": "Wi-Fi観戦中／ゴーストリプレイ",
+        "duration": "54480"
+      },
+      {
+        "number": "41",
+        "name": "ウィニングラン～廟彰式",
+        "duration": "88000"
+      },
+      {
+        "number": "42",
+        "name": "スタッフロールA",
+        "duration": "107760"
+      },
+      {
+        "number": "43",
+        "name": "スタッフロールB",
+        "duration": "139533"
+      }
+    ]
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "name": "Pokemon Diamond & Pearl Remix Tape",
+  "release_date": "2018-07-21",
+  "catalog": "",
+  "publisher": "",
+  "composers": [],
+  "arrangers": [],
+  "performers": [
+    "Bknapp"
+  ],
+  "cover_art": "",
+  "discs": [
+    [
+      {
+        "number": "1",
+        "name": "Lake",
+        "duration": "114000"
+      },
+      {
+        "number": "2",
+        "name": "Route 216",
+        "duration": "85188"
+      },
+      {
+        "number": "3",
+        "name": "Snowpoint City",
+        "duration": "139149"
+      },
+      {
+        "number": "4",
+        "name": "Jubilife City",
+        "duration": "135211"
+      },
+      {
+        "number": "5",
+        "name": "Eterna Forest",
+        "duration": "134211"
+      }
+    ]
+  ]
+}

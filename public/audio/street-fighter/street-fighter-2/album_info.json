@@ -1,0 +1,1448 @@
+{
+  "name": "Street Fighter 6 Original Soundtrack",
+  "release_date": "2023-07-28",
+  "catalog": "",
+  "publisher": "",
+  "composers": [],
+  "arrangers": [],
+  "performers": [
+    "Capcom Sound Team"
+  ],
+  "cover_art": "",
+  "discs": [
+    [
+      {
+        "number": "1",
+        "name": "Not On The Sidelines - Street Fighter 6 Main Theme",
+        "duration": "210000"
+      },
+      {
+        "number": "2",
+        "name": "Title Screen",
+        "duration": "7000"
+      },
+      {
+        "number": "3",
+        "name": "Reinvent the Game - Variation A",
+        "duration": "117000"
+      },
+      {
+        "number": "4",
+        "name": "New Challenger",
+        "duration": "10000"
+      },
+      {
+        "number": "5",
+        "name": "Taking Aim - Luke's Theme",
+        "duration": "179000"
+      },
+      {
+        "number": "6",
+        "name": "Mr. Top Player - Jamie's Theme",
+        "duration": "204000"
+      },
+      {
+        "number": "7",
+        "name": "Walk With Grace - Manon's Theme",
+        "duration": "194000"
+      },
+      {
+        "number": "8",
+        "name": "Ninjastar Pop - Kimberly's Theme",
+        "duration": "195000"
+      },
+      {
+        "number": "9",
+        "name": "Bushin Ninjastar Cypher - Kimberly's Super Art",
+        "duration": "159000"
+      },
+      {
+        "number": "10",
+        "name": "Pankration - Marisa's Theme",
+        "duration": "222000"
+      },
+      {
+        "number": "11",
+        "name": "Diosa Del Sol - Lily's Theme",
+        "duration": "231000"
+      },
+      {
+        "number": "12",
+        "name": "The Plunderer - JP's Theme",
+        "duration": "190000"
+      },
+      {
+        "number": "13",
+        "name": "ÅrachniD** - Juri's Theme",
+        "duration": "214000"
+      },
+      {
+        "number": "14",
+        "name": "All Right! - Dee Jay's Theme",
+        "duration": "233000"
+      },
+      {
+        "number": "15",
+        "name": "OverTrip - Cammy's Theme",
+        "duration": "183000"
+      },
+      {
+        "number": "16",
+        "name": "Viator - Ryu's Theme",
+        "duration": "237000"
+      },
+      {
+        "number": "17",
+        "name": "Kumadori - E. Honda's Theme",
+        "duration": "201000"
+      },
+      {
+        "number": "18",
+        "name": "zilra zilra - Blanka's Theme",
+        "duration": "257000"
+      },
+      {
+        "number": "19",
+        "name": "Sharpened Sonic - Guile's Theme",
+        "duration": "157000"
+      },
+      {
+        "number": "20",
+        "name": "Spirit Of The Flame - Ken's Theme",
+        "duration": "192000"
+      },
+      {
+        "number": "21",
+        "name": "Not A Little Girl - Chun-Li's Theme",
+        "duration": "229000"
+      },
+      {
+        "number": "22",
+        "name": "R.E.D. - Zangief's Theme",
+        "duration": "257000"
+      },
+      {
+        "number": "23",
+        "name": "The Great Sunlight - Dhalsim's Theme",
+        "duration": "172000"
+      },
+      {
+        "number": "24",
+        "name": "Result",
+        "duration": "90000"
+      }
+    ],
+    [
+      {
+        "number": "1",
+        "name": "Metro City Downtown - Stage Battle",
+        "duration": "289000"
+      },
+      {
+        "number": "2",
+        "name": "Carrier Byron Taylor - Stage Battle",
+        "duration": "198000"
+      },
+      {
+        "number": "3",
+        "name": "Thunderfoot Settlement - Stage Battle",
+        "duration": "220000"
+      },
+      {
+        "number": "4",
+        "name": "Barmaley Steelworks - Stage Battle",
+        "duration": "224000"
+      },
+      {
+        "number": "5",
+        "name": "Bathers Beach - Stage Battle",
+        "duration": "231000"
+      },
+      {
+        "number": "6",
+        "name": "Ranger's Hut - Stage Battle",
+        "duration": "210000"
+      },
+      {
+        "number": "7",
+        "name": "King Street - Stage Battle",
+        "duration": "192000"
+      },
+      {
+        "number": "8",
+        "name": "Fête Foraine - Stage Battle",
+        "duration": "184000"
+      },
+      {
+        "number": "9",
+        "name": "Colosseo - Stage Battle",
+        "duration": "209000"
+      },
+      {
+        "number": "10",
+        "name": "Genbu Temple - Stage Battle",
+        "duration": "198000"
+      },
+      {
+        "number": "11",
+        "name": "Tian Hong Yuan - Stage Battle",
+        "duration": "234000"
+      },
+      {
+        "number": "12",
+        "name": "Dhalsimer Temple - Stage Battle",
+        "duration": "222000"
+      },
+      {
+        "number": "13",
+        "name": "Old Town Market - Stage Battle",
+        "duration": "221000"
+      },
+      {
+        "number": "14",
+        "name": "Suval'hal Arena - Stage Battle",
+        "duration": "220000"
+      },
+      {
+        "number": "15",
+        "name": "The Macho Ring - Stage Battle",
+        "duration": "218000"
+      },
+      {
+        "number": "16",
+        "name": "Training Room - Stage Battle",
+        "duration": "232000"
+      },
+      {
+        "number": "17",
+        "name": "Down & Out - Extreme Battle",
+        "duration": "75000"
+      },
+      {
+        "number": "18",
+        "name": "Back & Forth - Extreme Battle",
+        "duration": "83000"
+      },
+      {
+        "number": "19",
+        "name": "Rules & Regulations - Extreme Battle",
+        "duration": "105000"
+      },
+      {
+        "number": "20",
+        "name": "Heaven & Hell - Extreme Battle",
+        "duration": "93000"
+      },
+      {
+        "number": "21",
+        "name": "Smash & Grab - Extreme Battle",
+        "duration": "83000"
+      },
+      {
+        "number": "22",
+        "name": "Normal Match Rules - Extreme Battle",
+        "duration": "133000"
+      },
+      {
+        "number": "23",
+        "name": "Fighting Ground - Menu",
+        "duration": "135000"
+      },
+      {
+        "number": "24",
+        "name": "Fighting Ground - Menu (Composure Remix)",
+        "duration": "91000"
+      },
+      {
+        "number": "25",
+        "name": "Fighting Ground - Menu (Burning Remix)",
+        "duration": "70000"
+      }
+    ],
+    [
+      {
+        "number": "1",
+        "name": "World Tour - Menu",
+        "duration": "74000"
+      },
+      {
+        "number": "2",
+        "name": "World Tour - Menu (Hit The Streets Remix)",
+        "duration": "60000"
+      },
+      {
+        "number": "3",
+        "name": "Body Shop",
+        "duration": "143000"
+      },
+      {
+        "number": "4",
+        "name": "World Tour - Tutorial",
+        "duration": "124000"
+      },
+      {
+        "number": "5",
+        "name": "Restaurant",
+        "duration": "51000"
+      },
+      {
+        "number": "6",
+        "name": "Apparel",
+        "duration": "82000"
+      },
+      {
+        "number": "7",
+        "name": "One and Only",
+        "duration": "149000"
+      },
+      {
+        "number": "8",
+        "name": "Becoming a Student",
+        "duration": "7000"
+      },
+      {
+        "number": "9",
+        "name": "All Over the World",
+        "duration": "261000"
+      },
+      {
+        "number": "10",
+        "name": "My Digs",
+        "duration": "77000"
+      },
+      {
+        "number": "11",
+        "name": "Seeking Strength - Bosch's Theme",
+        "duration": "99000"
+      },
+      {
+        "number": "12",
+        "name": "Metro City - Street Battle",
+        "duration": "180000"
+      },
+      {
+        "number": "13",
+        "name": "Metro City Hong Hu Lu Remix - Street Battle",
+        "duration": "137000"
+      },
+      {
+        "number": "14",
+        "name": "I'm Serious - World Tour Face Off",
+        "duration": "162000"
+      },
+      {
+        "number": "15",
+        "name": "Subway - Street Battle",
+        "duration": "119000"
+      },
+      {
+        "number": "16",
+        "name": "Nihilistic Moment - Carlos Miyamoto's Theme",
+        "duration": "210000"
+      },
+      {
+        "number": "17",
+        "name": "The Challenger - World Tour Face Off",
+        "duration": "187000"
+      },
+      {
+        "number": "18",
+        "name": "SiRN Building - Street Battle",
+        "duration": "106000"
+      },
+      {
+        "number": "19",
+        "name": "Mad Gear Battle - Loser's Remix",
+        "duration": "105000"
+      },
+      {
+        "number": "20",
+        "name": "Mad Gear Battle - Thrasher Damnd's Theme",
+        "duration": "152000"
+      },
+      {
+        "number": "21",
+        "name": "Old Nayshall - Street Battle",
+        "duration": "110000"
+      },
+      {
+        "number": "22",
+        "name": "The Lowlands - Street Battle",
+        "duration": "155000"
+      },
+      {
+        "number": "23",
+        "name": "Tournament Battle In The Lowlands",
+        "duration": "273000"
+      },
+      {
+        "number": "24",
+        "name": "Twisted Strength - Cardboard Combatant's Theme",
+        "duration": "196000"
+      },
+      {
+        "number": "25",
+        "name": "Just You Try - Rudra's Theme",
+        "duration": "160000"
+      },
+      {
+        "number": "26",
+        "name": "Mount Vashal - Street Battle",
+        "duration": "150000"
+      },
+      {
+        "number": "27",
+        "name": "Colliding Forces - Bosch's Theme",
+        "duration": "223000"
+      }
+    ],
+    [
+      {
+        "number": "1",
+        "name": "Battle Hub - Menu",
+        "duration": "100000"
+      },
+      {
+        "number": "2",
+        "name": "Battle Hub",
+        "duration": "513000"
+      },
+      {
+        "number": "3",
+        "name": "Battle Hub - Chill Remix",
+        "duration": "106000"
+      },
+      {
+        "number": "4",
+        "name": "Battle Hub Tournament",
+        "duration": "32000"
+      },
+      {
+        "number": "5",
+        "name": "Battle Hub Tournament - Win",
+        "duration": "7000"
+      },
+      {
+        "number": "6",
+        "name": "Battle Hub Tournament - Loss",
+        "duration": "7000"
+      },
+      {
+        "number": "7",
+        "name": "Battle Hub Tournament - Victory",
+        "duration": "10000"
+      },
+      {
+        "number": "8",
+        "name": "Battle Hub - Stage Battle",
+        "duration": "234000"
+      },
+      {
+        "number": "9",
+        "name": "Battle Hub - Collab Start Up",
+        "duration": "17000"
+      },
+      {
+        "number": "10",
+        "name": "Metro City (Day)",
+        "duration": "98000"
+      },
+      {
+        "number": "11",
+        "name": "Metro City (Night)",
+        "duration": "157000"
+      },
+      {
+        "number": "12",
+        "name": "Downtown - Metro City",
+        "duration": "141000"
+      },
+      {
+        "number": "13",
+        "name": "Hong Hu Lu Chinatown - Metro City",
+        "duration": "151000"
+      },
+      {
+        "number": "14",
+        "name": "Buckler Security Services - Metro City",
+        "duration": "76000"
+      },
+      {
+        "number": "15",
+        "name": "Subway - Metro City",
+        "duration": "83000"
+      },
+      {
+        "number": "16",
+        "name": "West Metro City",
+        "duration": "184000"
+      },
+      {
+        "number": "17",
+        "name": "The Macho Ring - Metro City",
+        "duration": "85000"
+      },
+      {
+        "number": "18",
+        "name": "Chanko House Edomon - Metro City",
+        "duration": "95000"
+      },
+      {
+        "number": "19",
+        "name": "Sodom's Truck - Metro City",
+        "duration": "87000"
+      },
+      {
+        "number": "20",
+        "name": "SiRN Building Lower Floors - Metro City",
+        "duration": "155000"
+      },
+      {
+        "number": "21",
+        "name": "SiRN Building Upper Floors - Metro City",
+        "duration": "124000"
+      },
+      {
+        "number": "22",
+        "name": "Crows' Nest - Metro City",
+        "duration": "116000"
+      },
+      {
+        "number": "23",
+        "name": "Red Steel Factory - Metro City",
+        "duration": "65000"
+      },
+      {
+        "number": "24",
+        "name": "Old Nayshall (Day)",
+        "duration": "119000"
+      },
+      {
+        "number": "25",
+        "name": "Old Nayshall (Night)",
+        "duration": "101000"
+      },
+      {
+        "number": "26",
+        "name": "The Lowlands - Old Nayshall",
+        "duration": "79000"
+      },
+      {
+        "number": "27",
+        "name": "Mount Vashal (Day)",
+        "duration": "78000"
+      },
+      {
+        "number": "28",
+        "name": "Mount Vashal (Night)",
+        "duration": "80000"
+      },
+      {
+        "number": "29",
+        "name": "Suval'hal Arena - Prep Area",
+        "duration": "140000"
+      },
+      {
+        "number": "30",
+        "name": "Colosseo - Italy",
+        "duration": "83000"
+      },
+      {
+        "number": "31",
+        "name": "King Street - United Kingdom",
+        "duration": "120000"
+      },
+      {
+        "number": "32",
+        "name": "Ranger's Hut - Brazil",
+        "duration": "78000"
+      },
+      {
+        "number": "33",
+        "name": "Bathers Beach - Jamaica",
+        "duration": "77000"
+      },
+      {
+        "number": "34",
+        "name": "Genbu Temple - Japan",
+        "duration": "92000"
+      },
+      {
+        "number": "35",
+        "name": "Carrier Byron Taylor - USA",
+        "duration": "59000"
+      },
+      {
+        "number": "36",
+        "name": "Thunderfoot Settlement - Mexico",
+        "duration": "85000"
+      },
+      {
+        "number": "37",
+        "name": "Fête Foraine - France",
+        "duration": "79000"
+      },
+      {
+        "number": "38",
+        "name": "Barmaley Steelworks - Russia",
+        "duration": "95000"
+      },
+      {
+        "number": "39",
+        "name": "Dhalsimer Temple - India",
+        "duration": "115000"
+      },
+      {
+        "number": "40",
+        "name": "Gallery",
+        "duration": "143000"
+      }
+    ],
+    [
+      {
+        "number": "1",
+        "name": "My Very First Cross Counter",
+        "duration": "96000"
+      },
+      {
+        "number": "2",
+        "name": "Metropolis Metro City",
+        "duration": "81000"
+      },
+      {
+        "number": "3",
+        "name": "Great Students",
+        "duration": "64000"
+      },
+      {
+        "number": "4",
+        "name": "Parting With Bosch",
+        "duration": "82000"
+      },
+      {
+        "number": "5",
+        "name": "Chun-Li of Chinatown",
+        "duration": "76000"
+      },
+      {
+        "number": "6",
+        "name": "Kung Fu Fighting",
+        "duration": "54000"
+      },
+      {
+        "number": "7",
+        "name": "Enter Mad Gear",
+        "duration": "36000"
+      },
+      {
+        "number": "8",
+        "name": "Are You With Him!?",
+        "duration": "95000"
+      },
+      {
+        "number": "9",
+        "name": "MA-RI-SA! MA-RI-SA!",
+        "duration": "84000"
+      },
+      {
+        "number": "10",
+        "name": "A Lion's Courage",
+        "duration": "73000"
+      },
+      {
+        "number": "11",
+        "name": "Damnd if You Do, Damnd if You Don't",
+        "duration": "59000"
+      },
+      {
+        "number": "12",
+        "name": "Juri the Collector",
+        "duration": "129000"
+      },
+      {
+        "number": "13",
+        "name": "That Which Was Entrusted",
+        "duration": "82000"
+      },
+      {
+        "number": "14",
+        "name": "The Enigmatic Blanka-chan",
+        "duration": "77000"
+      },
+      {
+        "number": "15",
+        "name": "Think Like A Sprite",
+        "duration": "41000"
+      },
+      {
+        "number": "16",
+        "name": "Dee Jay Brings the Jams",
+        "duration": "80000"
+      },
+      {
+        "number": "17",
+        "name": "Into the Groove",
+        "duration": "75000"
+      },
+      {
+        "number": "18",
+        "name": "Mike Haggar Memorial Stadium",
+        "duration": "73000"
+      },
+      {
+        "number": "19",
+        "name": "The Mysterious Woman",
+        "duration": "71000"
+      },
+      {
+        "number": "20",
+        "name": "Channel Eternity Opening Slate (English version)",
+        "duration": "9000"
+      },
+      {
+        "number": "21",
+        "name": "Channel Eternity Opening Slate (Japanese version)",
+        "duration": "9000"
+      },
+      {
+        "number": "22",
+        "name": "The Novice League",
+        "duration": "88000"
+      },
+      {
+        "number": "23",
+        "name": "Channel Eternity End Slate",
+        "duration": "21000"
+      },
+      {
+        "number": "24",
+        "name": "Interview With a Champion",
+        "duration": "89000"
+      },
+      {
+        "number": "25",
+        "name": "The Drunken Boxer in the Alley",
+        "duration": "70000"
+      },
+      {
+        "number": "26",
+        "name": "Safety First",
+        "duration": "36000"
+      },
+      {
+        "number": "27",
+        "name": "The Hottest Construction Site in Town",
+        "duration": "76000"
+      },
+      {
+        "number": "28",
+        "name": "Edomon Enters the Ring",
+        "duration": "62000"
+      },
+      {
+        "number": "29",
+        "name": "Easier Than Your Morning Warm-Up",
+        "duration": "65000"
+      },
+      {
+        "number": "30",
+        "name": "The Dragon Beneath the Blossoms",
+        "duration": "67000"
+      },
+      {
+        "number": "31",
+        "name": "The Pursuit of Strength",
+        "duration": "72000"
+      },
+      {
+        "number": "32",
+        "name": "An Unshakable Inkling",
+        "duration": "34000"
+      },
+      {
+        "number": "33",
+        "name": "The Incredible Intruding Ninjastar",
+        "duration": "44000"
+      },
+      {
+        "number": "34",
+        "name": "The Man on the Flight Deck",
+        "duration": "68000"
+      },
+      {
+        "number": "35",
+        "name": "Altercation Aboard a Warship",
+        "duration": "42000"
+      },
+      {
+        "number": "36",
+        "name": "For the Sake of Another",
+        "duration": "30000"
+      },
+      {
+        "number": "37",
+        "name": "A Game of Cranes",
+        "duration": "36000"
+      },
+      {
+        "number": "38",
+        "name": "Taking Out the Trash",
+        "duration": "37000"
+      },
+      {
+        "number": "39",
+        "name": "The Emerging Nation of Nayshall",
+        "duration": "64000"
+      },
+      {
+        "number": "40",
+        "name": "A Chance Meeting in Old Nayshall",
+        "duration": "44000"
+      },
+      {
+        "number": "41",
+        "name": "We Got a Live One, Boss!",
+        "duration": "93000"
+      },
+      {
+        "number": "42",
+        "name": "The Fighter-Hunter of Mount Vashal",
+        "duration": "56000"
+      },
+      {
+        "number": "43",
+        "name": "Champion of the Outlaws",
+        "duration": "80000"
+      },
+      {
+        "number": "44",
+        "name": "Rooftop Reunion",
+        "duration": "17000"
+      },
+      {
+        "number": "45",
+        "name": "Parting Under the Stars",
+        "duration": "130000"
+      },
+      {
+        "number": "46",
+        "name": "Secret of the Champion Belt",
+        "duration": "108000"
+      },
+      {
+        "number": "47",
+        "name": "The True Value of a Champion's Belt",
+        "duration": "108000"
+      },
+      {
+        "number": "48",
+        "name": "The Suval'hal Martial Arts Tournament",
+        "duration": "129000"
+      },
+      {
+        "number": "49",
+        "name": "Fated Finals",
+        "duration": "64000"
+      },
+      {
+        "number": "50",
+        "name": "With a Bang",
+        "duration": "150000"
+      },
+      {
+        "number": "51",
+        "name": "Unrest",
+        "duration": "45000"
+      },
+      {
+        "number": "52",
+        "name": "A Conflict Without Meaning",
+        "duration": "48000"
+      },
+      {
+        "number": "53",
+        "name": "Congratulations",
+        "duration": "98000"
+      },
+      {
+        "number": "54",
+        "name": "World Tour - End Credits",
+        "duration": "246000"
+      },
+      {
+        "number": "55",
+        "name": "The Meaning of Strength",
+        "duration": "110000"
+      }
+    ],
+    [
+      {
+        "number": "1",
+        "name": "Bushinryu Style",
+        "duration": "66000"
+      },
+      {
+        "number": "2",
+        "name": "Ballerina of the Runway",
+        "duration": "73000"
+      },
+      {
+        "number": "3",
+        "name": "The Lady Likes to Throw",
+        "duration": "86000"
+      },
+      {
+        "number": "4",
+        "name": "A Stiff Introduction",
+        "duration": "103000"
+      },
+      {
+        "number": "5",
+        "name": "Singing Wolf's Words",
+        "duration": "90000"
+      },
+      {
+        "number": "6",
+        "name": "The Call of the Spirits",
+        "duration": "79000"
+      },
+      {
+        "number": "7",
+        "name": "A Vessel for Psycho Power",
+        "duration": "84000"
+      },
+      {
+        "number": "8",
+        "name": "A Wannabe, Eh?",
+        "duration": "53000"
+      },
+      {
+        "number": "9",
+        "name": "Surveillance State",
+        "duration": "52000"
+      },
+      {
+        "number": "10",
+        "name": "Precision Offense",
+        "duration": "45000"
+      },
+      {
+        "number": "11",
+        "name": "Iron King of the Furnace",
+        "duration": "59000"
+      },
+      {
+        "number": "12",
+        "name": "Muscles That Never Quit",
+        "duration": "70000"
+      },
+      {
+        "number": "13",
+        "name": "A Temple Most Arcane",
+        "duration": "74000"
+      },
+      {
+        "number": "14",
+        "name": "The Mysteries of Yoga",
+        "duration": "71000"
+      },
+      {
+        "number": "15",
+        "name": "Luke Style - Mastery",
+        "duration": "16000"
+      },
+      {
+        "number": "16",
+        "name": "Jamie Style - Mastery",
+        "duration": "19000"
+      },
+      {
+        "number": "17",
+        "name": "Manon Style - Mastery",
+        "duration": "18000"
+      },
+      {
+        "number": "18",
+        "name": "Kimberly Style - Mastery",
+        "duration": "18000"
+      },
+      {
+        "number": "19",
+        "name": "Marisa Style - Mastery",
+        "duration": "23000"
+      },
+      {
+        "number": "20",
+        "name": "Lily Style - Mastery",
+        "duration": "19000"
+      },
+      {
+        "number": "21",
+        "name": "JP Style - Mastery",
+        "duration": "18000"
+      },
+      {
+        "number": "22",
+        "name": "Juri Style - Mastery",
+        "duration": "20000"
+      },
+      {
+        "number": "23",
+        "name": "Dee Jay Style - Mastery",
+        "duration": "16000"
+      },
+      {
+        "number": "24",
+        "name": "Cammy Style - Mastery",
+        "duration": "18000"
+      },
+      {
+        "number": "25",
+        "name": "Ryu Style - Mastery",
+        "duration": "20000"
+      },
+      {
+        "number": "26",
+        "name": "E. Honda Style - Mastery",
+        "duration": "19000"
+      },
+      {
+        "number": "27",
+        "name": "Blanka Style - Mastery",
+        "duration": "20000"
+      },
+      {
+        "number": "28",
+        "name": "Guile Style - Mastery",
+        "duration": "18000"
+      },
+      {
+        "number": "29",
+        "name": "Ken Style - Mastery",
+        "duration": "17000"
+      },
+      {
+        "number": "30",
+        "name": "Chun-Li Style - Mastery",
+        "duration": "18000"
+      },
+      {
+        "number": "31",
+        "name": "Zangief Style - Mastery",
+        "duration": "20000"
+      },
+      {
+        "number": "32",
+        "name": "Dhalsim Style - Mastery",
+        "duration": "18000"
+      },
+      {
+        "number": "33",
+        "name": "Flashy Dance",
+        "duration": "40000"
+      },
+      {
+        "number": "34",
+        "name": "Pop Dance",
+        "duration": "38000"
+      },
+      {
+        "number": "35",
+        "name": "Street Dance",
+        "duration": "42000"
+      },
+      {
+        "number": "36",
+        "name": "Merry Dance",
+        "duration": "37000"
+      },
+      {
+        "number": "37",
+        "name": "Uninhibited Dance",
+        "duration": "41000"
+      },
+      {
+        "number": "38",
+        "name": "Kenpo Dance",
+        "duration": "37000"
+      },
+      {
+        "number": "39",
+        "name": "Graceful Dance",
+        "duration": "22000"
+      },
+      {
+        "number": "40",
+        "name": "God Hand Dance",
+        "duration": "20000"
+      },
+      {
+        "number": "41",
+        "name": "HADO-PIZZA",
+        "duration": "63000"
+      },
+      {
+        "number": "42",
+        "name": "Kung Fu Target",
+        "duration": "67000"
+      },
+      {
+        "number": "43",
+        "name": "KA☆RA☆TE",
+        "duration": "78000"
+      },
+      {
+        "number": "44",
+        "name": "Scrap Heap II",
+        "duration": "78000"
+      },
+      {
+        "number": "45",
+        "name": "Scrap Heap II (Retro Remix)",
+        "duration": "72000"
+      },
+      {
+        "number": "46",
+        "name": "Ball Block Blitz",
+        "duration": "62000"
+      },
+      {
+        "number": "47",
+        "name": "Pas de Deux - Manon's Critical Art (English version)",
+        "duration": "14000"
+      },
+      {
+        "number": "48",
+        "name": "Pas de Deux - Manon's Critical Art (Japanese version)",
+        "duration": "14000"
+      },
+      {
+        "number": "49",
+        "name": "Reinvent the Game (Variation B)",
+        "duration": "117000"
+      },
+      {
+        "number": "50",
+        "name": "Reinvent the Game (Variation C)",
+        "duration": "117000"
+      },
+      {
+        "number": "51",
+        "name": "Not On The Sidelines (MV version)",
+        "duration": "146000"
+      },
+      {
+        "number": "52",
+        "name": "Reinvent the Game (Instrumental)",
+        "duration": "117000"
+      },
+      {
+        "number": "53",
+        "name": "Not On The Sidelines (Instrumental)",
+        "duration": "210000"
+      },
+      {
+        "number": "54",
+        "name": "Bushin Ninjastar Cypher (Instrumental)",
+        "duration": "88000"
+      },
+      {
+        "number": "55",
+        "name": "World Tour - Menu (Hit The Streets Remix) (Instrumental)",
+        "duration": "60000"
+      },
+      {
+        "number": "56",
+        "name": "All Over the World (Instrumental)",
+        "duration": "132000"
+      }
+    ],
+    [
+      {
+        "number": "1",
+        "name": "Arcade Stage Transition",
+        "duration": "12000"
+      },
+      {
+        "number": "2",
+        "name": "Arcade Mode - Game Over",
+        "duration": "53000"
+      },
+      {
+        "number": "3",
+        "name": "Luke - Delinquent Turned Fighter - 1",
+        "duration": "42000"
+      },
+      {
+        "number": "4",
+        "name": "Luke - Delinquent Turned Fighter - 2",
+        "duration": "91000"
+      },
+      {
+        "number": "5",
+        "name": "Luke - Delinquent Turned Fighter - 3",
+        "duration": "32000"
+      },
+      {
+        "number": "6",
+        "name": "Jamie - Peacekeeper - 1",
+        "duration": "103000"
+      },
+      {
+        "number": "7",
+        "name": "Jamie - Peacekeeper - 2",
+        "duration": "62000"
+      },
+      {
+        "number": "8",
+        "name": "Jamie - Peacekeeper - 3",
+        "duration": "105000"
+      },
+      {
+        "number": "9",
+        "name": "Manon - Because I'm Strong - 1",
+        "duration": "57000"
+      },
+      {
+        "number": "10",
+        "name": "Manon - Because I'm Strong - 2",
+        "duration": "53000"
+      },
+      {
+        "number": "11",
+        "name": "Manon - Because I'm Strong - 3",
+        "duration": "49000"
+      },
+      {
+        "number": "12",
+        "name": "Kimberly - Chasing the Truth - 1",
+        "duration": "103000"
+      },
+      {
+        "number": "13",
+        "name": "Kimberly - Chasing the Truth - 2",
+        "duration": "58000"
+      },
+      {
+        "number": "14",
+        "name": "Kimberly - Chasing the Truth - 3",
+        "duration": "111000"
+      },
+      {
+        "number": "15",
+        "name": "Marisa - All of the Might - 1",
+        "duration": "82000"
+      },
+      {
+        "number": "16",
+        "name": "Marisa - All of the Might - 2",
+        "duration": "57000"
+      },
+      {
+        "number": "17",
+        "name": "Marisa - All of the Might - 3",
+        "duration": "74000"
+      },
+      {
+        "number": "18",
+        "name": "Lily - That's the Spirit - 1",
+        "duration": "48000"
+      },
+      {
+        "number": "19",
+        "name": "Lily - That's the Spirit - 2",
+        "duration": "67000"
+      },
+      {
+        "number": "20",
+        "name": "Lily - That's the Spirit - 3",
+        "duration": "45000"
+      },
+      {
+        "number": "21",
+        "name": "JP - Nayshall's Suval'hal Tournament - 1",
+        "duration": "55000"
+      },
+      {
+        "number": "22",
+        "name": "JP - Nayshall's Suval'hal Tournament - 2",
+        "duration": "61000"
+      },
+      {
+        "number": "23",
+        "name": "JP - Nayshall's Suval'hal Tournament - 3",
+        "duration": "86000"
+      },
+      {
+        "number": "24",
+        "name": "Juri - Occupational Burnout - 1",
+        "duration": "45000"
+      },
+      {
+        "number": "25",
+        "name": "Juri - Occupational Burnout - 2",
+        "duration": "67000"
+      },
+      {
+        "number": "26",
+        "name": "Juri - Occupational Burnout - 3",
+        "duration": "91000"
+      },
+      {
+        "number": "27",
+        "name": "Dee Jay - Inspiration Strikes - 1",
+        "duration": "53000"
+      },
+      {
+        "number": "28",
+        "name": "Dee Jay - Inspiration Strikes - 2",
+        "duration": "52000"
+      },
+      {
+        "number": "29",
+        "name": "Dee Jay - Inspiration Strikes - 3",
+        "duration": "48000"
+      },
+      {
+        "number": "30",
+        "name": "Cammy - The Investigation Continues - 1",
+        "duration": "53000"
+      },
+      {
+        "number": "31",
+        "name": "Cammy - The Investigation Continues - 2",
+        "duration": "96000"
+      },
+      {
+        "number": "32",
+        "name": "Cammy - The Investigation Continues - 3",
+        "duration": "63000"
+      },
+      {
+        "number": "33",
+        "name": "Ryu - The Path - 1",
+        "duration": "56000"
+      },
+      {
+        "number": "34",
+        "name": "Ryu - The Path - 2",
+        "duration": "59000"
+      },
+      {
+        "number": "35",
+        "name": "Ryu - The Path - 3",
+        "duration": "53000"
+      },
+      {
+        "number": "36",
+        "name": "E. Honda - Chanko House Edomon - 1",
+        "duration": "73000"
+      },
+      {
+        "number": "37",
+        "name": "E. Honda - Chanko House Edomon - 2",
+        "duration": "82000"
+      },
+      {
+        "number": "38",
+        "name": "E. Honda - Chanko House Edomon - 3",
+        "duration": "94000"
+      },
+      {
+        "number": "39",
+        "name": "Blanka - Real-life Cryptid - 1",
+        "duration": "70000"
+      },
+      {
+        "number": "40",
+        "name": "Blanka - Real-life Cryptid - 2",
+        "duration": "56000"
+      },
+      {
+        "number": "41",
+        "name": "Blanka - Real-life Cryptid - 3",
+        "duration": "101000"
+      },
+      {
+        "number": "42",
+        "name": "Guile - In-laws - 1",
+        "duration": "103000"
+      },
+      {
+        "number": "43",
+        "name": "Guile - In-laws - 2",
+        "duration": "66000"
+      },
+      {
+        "number": "44",
+        "name": "Guile - In-laws - 3",
+        "duration": "86000"
+      },
+      {
+        "number": "45",
+        "name": "Ken - Questions Without Answers - 1",
+        "duration": "122000"
+      },
+      {
+        "number": "46",
+        "name": "Ken - Questions Without Answers - 2",
+        "duration": "43000"
+      },
+      {
+        "number": "47",
+        "name": "Ken - Questions Without Answers - 3",
+        "duration": "48000"
+      },
+      {
+        "number": "48",
+        "name": "Chun-Li - An Agent's Day Off - 1",
+        "duration": "96000"
+      },
+      {
+        "number": "49",
+        "name": "Chun-Li - An Agent's Day Off - 2",
+        "duration": "90000"
+      },
+      {
+        "number": "50",
+        "name": "Chun-Li - An Agent's Day Off - 3",
+        "duration": "57000"
+      },
+      {
+        "number": "51",
+        "name": "Zangief - The Ultimate Tag Partner - 1",
+        "duration": "86000"
+      },
+      {
+        "number": "52",
+        "name": "Zangief - The Ultimate Tag Partner - 2",
+        "duration": "58000"
+      },
+      {
+        "number": "53",
+        "name": "Zangief - The Ultimate Tag Partner - 3",
+        "duration": "75000"
+      },
+      {
+        "number": "54",
+        "name": "Dhalsim - An Omen - 1",
+        "duration": "92000"
+      },
+      {
+        "number": "55",
+        "name": "Dhalsim - An Omen - 2",
+        "duration": "129000"
+      },
+      {
+        "number": "56",
+        "name": "Dhalsim - An Omen - 3",
+        "duration": "90000"
+      },
+      {
+        "number": "57",
+        "name": "Fighting Ground - End Credits",
+        "duration": "331000"
+      }
+    ]
+  ]
+}
