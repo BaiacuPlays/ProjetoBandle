@@ -8,12 +8,3 @@ export function shuffleArray(array) {
     }
     return newArray;
 }
-
-export function getRandomCharacters(sourceArray, count) {
-    if (!Array.isArray(sourceArray) || sourceArray.length === 0) {
-        console.warn('Array de origem inválido ou vazio');
-        return [];
-    }
-    const numToPick = Math.min(count, sourceArray.length);
-    return shuffleArray(sourceArray).slice(0, numToPick);
-}

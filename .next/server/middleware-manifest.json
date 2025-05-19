@@ -1,0 +1,27 @@
+{
+  "sortedMiddleware": [],
+  "middleware": {},
+  "functions": {
+    "/api/lobby": {
+      "files": [
+        "prerender-manifest.js",
+        "server/edge-runtime-webpack.js",
+        "server/pages/api/lobby.js"
+      ],
+      "name": "pages/api/lobby",
+      "page": "/api/lobby",
+      "matchers": [
+        {
+          "regexp": "^/api/lobby$",
+          "originalSource": "/api/lobby"
+        }
+      ],
+      "wasm": [],
+      "assets": [],
+      "regions": [
+        "gru1"
+      ]
+    }
+  },
+  "version": 2
+}
