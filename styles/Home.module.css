@@ -727,6 +727,18 @@
   background-color: #1DB954 !important;
   color: #fff;
 }
+.attemptButton.attemptFail {
+  background-color: #e74c3c !important;
+  color: #fff;
+}
+.attemptButton.attemptSuccess {
+  background-color: #27ae60 !important;
+  color: #fff;
+}
+.attemptButton.attemptGame {
+  background-color: #ffd700 !important;
+  color: #222;
+}
 
 .attemptButton {
   border: none;

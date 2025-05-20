@@ -345,7 +345,7 @@ export default function Home() {
   }
 
   useEffect(() => {
-    setCurrentClipDuration(activeHint * 0.3 + 0.3);
+    setCurrentClipDuration(0.3 + activeHint * 0.2);
     if (audioRef.current) {
       audioRef.current.currentTime = startTime;
       audioRef.current.pause();
@@ -521,18 +521,38 @@ export default function Home() {
           </div>
         </div>
         <div className={styles.attemptsRow}>
-          {[...Array(MAX_ATTEMPTS)].map((_, idx) => (
-            <button
-              key={idx}
-              type="button"
-              className={styles.attemptButton + ' ' + styles.attemptInactive}
-              disabled={idx > attempts}
-              onClick={() => idx <= attempts && setActiveHint(idx)}
-              tabIndex={idx > attempts ? -1 : 0}
-            >
-              {idx + 1}
-            </button>
-          ))}
+          {[...Array(MAX_ATTEMPTS)].map((_, idx) => {
+            let statusClass = styles.attemptInactive;
+            if (history[idx]) {
+              if (history[idx].type === 'success') {
+                statusClass = styles.attemptSuccess;
+              } else if (history[idx].type === 'fail') {
+                // Checa se o jogo está correto
+                const isFromCorrectGame = history[idx]?.type === 'fail' &&
+                  currentSong?.game &&
+                  songs.find(s => s.title === history[idx].value)?.game === currentSong.game;
+                if (isFromCorrectGame) {
+                  statusClass = styles.attemptGame;
+                } else {
+                  statusClass = styles.attemptFail;
+                }
+              } else if (history[idx].type === 'skipped') {
+                statusClass = styles.attemptInactive;
+              }
+            }
+            return (
+              <button
+                key={idx}
+                type="button"
+                className={styles.attemptButton + ' ' + statusClass}
+                disabled={idx > attempts}
+                onClick={() => idx <= attempts && setActiveHint(idx)}
+                tabIndex={idx > attempts ? -1 : 0}
+              >
+                {idx + 1}
+              </button>
+            );
+          })}
           <button
             type="button"
             className={styles.attemptButton + ' ' + styles.attemptInactive}
