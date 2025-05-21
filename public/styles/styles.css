@@ -5,7 +5,7 @@
   }
 
 body {
-  background-image: url('../fundo.png'); /* <--- OLHE COM ATENÇÃO AQUI E NAS PROXIMAS LINHAS */
+  background-image: url('/fundo.png'); /* <--- OLHE COM ATENÇÃO AQUI E NAS PROXIMAS LINHAS */
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
