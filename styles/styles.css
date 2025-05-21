@@ -5,7 +5,10 @@
   }
 
 body {
-  background: #1a1a1a;
+  background-image: url('../fundo.png'); /* Caminho relativo para a imagem */
+  background-size: cover; /* Para cobrir toda a área sem distorcer */
+  background-repeat: no-repeat; /* Para a imagem não se repetir */
+  background-position: center center; /* Para centralizar a imagem */
   color: #fff;
   font-family: 'Segoe UI', Arial, sans-serif;
   margin: 0;
