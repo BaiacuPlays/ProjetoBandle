@@ -3824,5 +3824,295 @@
     "year": 2017,
     "genre": "Game Soundtrack",
     "console": "Multi-platform"
-  }
+  },
+  {
+    "id": 322,
+    "title": "Opening",
+    "artist": "Tsukasa Saitoh; ",
+    "composer": "Tsukasa Saitoh; ",
+    "game": "Elden Ring",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14 Lights, Camera, Action! (Studiopolis Zone Act 1).mp3",
+    "year": 2018,
+    "genre": "Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 323,
+    "title": "Elden Ring",
+    "artist": "Tsukasa Saitoh; ",
+    "composer": "Tsukasa Saitoh; ",
+    "game": "Elden Ring",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14 Lights, Camera, Action! (Studiopolis Zone Act 1).mp3",
+    "year": 2018,
+    "genre": "Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 325,
+    "title": "Prologue",
+    "artist": "Masami Ueda ",
+    "composer": "Masami Ueda ",
+    "game": "Okami",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14 Lights, Camera, Action! (Studiopolis Zone Act 1).mp3",
+    "year": 2006,
+    "genre": "Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 326,
+    "title": "Title",
+    "artist": "Masami Ueda ",
+    "composer": "Masami Ueda ",
+    "game": "Okami",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14 Lights, Camera, Action! (Studiopolis Zone Act 1).mp3",
+    "year": 2006,
+    "genre": "Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 327,
+    "title": "Issun's Theme",
+    "artist": "Masami Ueda ",
+    "composer": "Masami Ueda ",
+    "game": "Okami",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14 Lights, Camera, Action! (Studiopolis Zone Act 1).mp3",
+    "year": 2006,
+    "genre": "Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 328,
+    "title": "Title",
+    "artist": "Alec Holowka;  ",
+    "composer": "Alec Holowka;  ",
+    "game": "Night in the Woods",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14 Lights, Camera, Action! (Studiopolis Zone Act 1).mp3",
+    "year": 2017,
+    "genre": "Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 329,
+    "title": "Die Anywhere Else",
+    "artist": "Alec Holowka;  ",
+    "composer": "Alec Holowka;  ",
+    "game": "Night in the Woods",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14 Lights, Camera, Action! (Studiopolis Zone Act 1).mp3",
+    "year": 2017,
+    "genre": "Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 330,
+    "title": "Weird Autumn",
+    "artist": "Alec Holowka;  ",
+    "composer": "Alec Holowka;  ",
+    "game": "Night in the Woods",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14 Lights, Camera, Action! (Studiopolis Zone Act 1).mp3",
+    "year": 2017,
+    "genre": "Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 331,
+    "title": "Possum Springs",
+    "artist": "Alec Holowka;  ",
+    "composer": "Alec Holowka;  ",
+    "game": "Night in the Woods",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14 Lights, Camera, Action! (Studiopolis Zone Act 1).mp3",
+    "year": 2017,
+    "genre": "Game Soundtrack",
+    "console": "Multi-platform"
+  },
+   {
+    "id": 332,
+    "title": "Portam Ad Inferno",
+    "artist": "Petri Alanko & Martin Stig Andersen;  ",
+    "composer": "Petri Alanko & Martin Stig Andersen;  ",
+    "game": "Control",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14 Lights, Camera, Action! (Studiopolis Zone Act 1).mp3",
+    "year": 2019,
+    "genre": "Game Soundtrack",
+    "console": "Multi-platform"
+  },
+   {
+    "id": 333,
+    "title": "Counterfeit",
+    "artist": "Petri Alanko & Martin Stig Andersen;  ",
+    "composer": "Petri Alanko & Martin Stig Andersen;  ",
+    "game": "Control",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14 Lights, Camera, Action! (Studiopolis Zone Act 1).mp3",
+    "year": 2019,
+    "genre": "Game Soundtrack",
+    "console": "Multi-platform"
+  },
+   {
+    "id": 334,
+    "title": "Et Ratio Principalis",
+    "artist": "Petri Alanko & Martin Stig Andersen;  ",
+    "composer": "Petri Alanko & Martin Stig Andersen;  ",
+    "game": "Control",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14 Lights, Camera, Action! (Studiopolis Zone Act 1).mp3",
+    "year": 2019,
+    "genre": "Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 335,
+    "title": "Let Mom Sleep",
+    "artist": "Hideki Naganuma;  ",
+    "composer": "Hideki Naganuma;  ",
+    "game": "Jet Set Radio",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14 Lights, Camera, Action! (Studiopolis Zone Act 1).mp3",
+    "year": 2000,
+    "genre": "Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 336,
+    "title": "Humming the Bassline",
+    "artist": "Hideki Naganuma;  ",
+    "composer": "Hideki Naganuma;  ",
+    "game": "Jet Set Radio",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14 Lights, Camera, Action! (Studiopolis Zone Act 1).mp3",
+    "year": 2000,
+    "genre": "Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 337,
+    "title": "That's Enough",
+    "artist": "Hideki Naganuma;  ",
+    "composer": "Hideki Naganuma;  ",
+    "game": "Jet Set Radio",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14 Lights, Camera, Action! (Studiopolis Zone Act 1).mp3",
+    "year": 2000,
+    "genre": "Game Soundtrack",
+    "console": "Dreamcast"
+  },
+   {
+    "id": 338,
+    "title": "And I Begin to Wonder",
+    "artist": "Kanako Kakino;  ",
+    "composer": "Kanako Kakino;  ",
+    "game": "Klonoa: Door to Phantomile",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14 Lights, Camera, Action! (Studiopolis Zone Act 1).mp3",
+    "year": 1997,
+    "genre": "Game Soundtrack",
+    "console": "PS1"
+  },
+   {
+    "id": 339,
+    "title": "The Windmill Song",
+    "artist": "Kanako Kakino;  ",
+    "composer": "Kanako Kakino;  ",
+    "game": "Klonoa: Door to Phantomile",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14 Lights, Camera, Action! (Studiopolis Zone Act 1).mp3",
+    "year": 1997,
+    "genre": "Game Soundtrack",
+    "console": "PS1"
+  },
+   {
+    "id": 340,
+    "title": "Inquisitive Waltz",
+    "artist": "Kanako Kakino;  ",
+    "composer": "Kanako Kakino;  ",
+    "game": "Klonoa: Door to Phantomile",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14 Lights, Camera, Action! (Studiopolis Zone Act 1).mp3",
+    "year": 1997,
+    "genre": "Game Soundtrack",
+    "console": "PS1"
+  },
+   {
+    "id": 341,
+    "title": "Farewell",
+    "artist": "Kanako Kakino;  ",
+    "composer": "Kanako Kakino;  ",
+    "game": "Klonoa: Door to Phantomile",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14 Lights, Camera, Action! (Studiopolis Zone Act 1).mp3",
+    "year": 1997,
+    "genre": "Game Soundtrack",
+    "console": "PS1"
+  },
+  {
+    "id": 342,
+    "title": "Beach Buds",
+    "artist": "Mark Sparling;  ",
+    "composer": "Mark Sparling;  ",
+    "game": "A Short Hike",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14 Lights, Camera, Action! (Studiopolis Zone Act 1).mp3",
+    "year": 2019,
+    "genre": "Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 343,
+    "title": "See You At The Top",
+    "artist": "Mark Sparling;  ",
+    "composer": "Mark Sparling;  ",
+    "game": "A Short Hike",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14 Lights, Camera, Action! (Studiopolis Zone Act 1).mp3",
+    "year": 2019,
+    "genre": "Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 344,
+    "title": "Somewhere in The Woods",
+    "artist": "Mark Sparling;  ",
+    "composer": "Mark Sparling;  ",
+    "game": "A Short Hike",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14 Lights, Camera, Action! (Studiopolis Zone Act 1).mp3",
+    "year": 2019,
+    "genre": "Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 345,
+    "title": "Title",
+    "artist": "Barry Leitch, Hiroyuki Masuno;  ",
+    "composer": "Barry Leitch, Hiroyuki Masuno;  ",
+    "game": "Top Gear",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14 Lights, Camera, Action! (Studiopolis Zone Act 1).mp3",
+    "year": 1992,
+    "genre": "Game Soundtrack",
+    "console": "Super Nintendo"
+  },
+{
+    "id": 346,
+    "title": "Las Vegas",
+    "artist": "Barry Leitch, Hiroyuki Masuno;  ",
+    "composer": "Barry Leitch, Hiroyuki Masuno;  ",
+    "game": "Top Gear",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14 Lights, Camera, Action! (Studiopolis Zone Act 1).mp3",
+    "year": 1992,
+    "genre": "Game Soundtrack",
+    "console": "Super Nintendo"
+  },
+{
+    "id": 347,
+    "title": "Frankfurt",
+    "artist": "Barry Leitch, Hiroyuki Masuno;  ",
+    "composer": "Barry Leitch, Hiroyuki Masuno;  ",
+    "game": "Top Gear",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14 Lights, Camera, Action! (Studiopolis Zone Act 1).mp3",
+    "year": 1992,
+    "genre": "Game Soundtrack",
+    "console": "Super Nintendo"
+  },
+  {
+    "id": 348,
+    "title": "Bordeaux",
+    "artist": "Barry Leitch, Hiroyuki Masuno;  ",
+    "composer": "Barry Leitch, Hiroyuki Masuno;  ",
+    "game": "Top Gear",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14 Lights, Camera, Action! (Studiopolis Zone Act 1).mp3",
+    "year": 1992,
+    "genre": "Game Soundtrack",
+    "console": "Super Nintendo"
+  },
+
+
+ 
+  
 ]
