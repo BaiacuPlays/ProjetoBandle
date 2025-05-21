@@ -15,15 +15,30 @@ export const songs = musicData.map((song, index) => ({
 }));
 
 // Lista de músicas disponíveis (que têm arquivo de áudio)
-const availableSongs = songs.filter(song => {
-  // Verifica se o arquivo existe fazendo uma requisição HEAD
-  return fetch(song.audioUrl, { method: 'HEAD' })
-    .then(response => response.ok)
-    .catch(() => false);
-});
+const checkSongAvailability = async (song) => {
+  try {
+    const response = await fetch(song.audioUrl, { method: 'HEAD' });
+    return response.ok;
+  } catch {
+    return false;
+  }
+};
 
 export const getRandomSong = async () => {
-  // Se não houver músicas disponíveis, retorna a primeira da lista
+  // Check availability of all songs in parallel
+  const availabilityChecks = await Promise.all(
+    songs.map(async (song) => ({
+      song,
+      isAvailable: await checkSongAvailability(song)
+    }))
+  );
+  
+  // Filter available songs
+  const availableSongs = availabilityChecks
+    .filter(({ isAvailable }) => isAvailable)
+    .map(({ song }) => song);
+  
+  // If no songs are available, return the first song
   if (availableSongs.length === 0) {
     return songs[0];
   }

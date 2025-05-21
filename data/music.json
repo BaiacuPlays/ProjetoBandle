@@ -529,7 +529,7 @@
   },
   {
     "id": 44,
-    "title": ". The Whisper",
+    "title": " The Whisper",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -541,7 +541,7 @@
   },
   {
     "id": 45,
-    "title": ". Bloody Sunset",
+    "title": " Bloody Sunset",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -553,7 +553,7 @@
   },
   {
     "id": 46,
-    "title": ". Playing In The Sun",
+    "title": " Playing In The Sun",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -565,7 +565,7 @@
   },
   {
     "id": 47,
-    "title": ". Heartbeat From The Last Century",
+    "title": " Heartbeat From The Last Century",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -577,7 +577,7 @@
   },
   {
     "id": 48,
-    "title": ". Trust Them",
+    "title": " Trust Them",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -589,7 +589,7 @@
   },
   {
     "id": 49,
-    "title": ". Lullaby Of The Dead",
+    "title": " Lullaby Of The Dead",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -601,7 +601,7 @@
   },
   {
     "id": 50,
-    "title": ". The Hero",
+    "title": " The Hero",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -613,7 +613,7 @@
   },
   {
     "id": 51,
-    "title": ". The Last Tear",
+    "title": " The Last Tear",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -625,7 +625,7 @@
   },
   {
     "id": 52,
-    "title": ". Visions Of Red",
+    "title": " Visions Of Red",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -637,7 +637,7 @@
   },
   {
     "id": 53,
-    "title": ". My Destiny",
+    "title": " My Destiny",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -649,7 +649,7 @@
   },
   {
     "id": 54,
-    "title": ". Heartglaze Hope",
+    "title": " Heartglaze Hope",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -661,7 +661,7 @@
   },
   {
     "id": 55,
-    "title": ". Coming Home",
+    "title": " Coming Home",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -673,7 +673,7 @@
   },
   {
     "id": 56,
-    "title": ". Blue Limbo",
+    "title": " Blue Limbo",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -685,7 +685,7 @@
   },
   {
     "id": 57,
-    "title": ". The End Of The Road",
+    "title": " The End Of The Road",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -697,7 +697,7 @@
   },
   {
     "id": 58,
-    "title": ". The Final Hour",
+    "title": " The Final Hour",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -709,7 +709,7 @@
   },
   {
     "id": 59,
-    "title": ". Overthinker",
+    "title": " Overthinker",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -721,7 +721,7 @@
   },
   {
     "id": 60,
-    "title": ". Mother",
+    "title": " Mother",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -733,7 +733,7 @@
   },
   {
     "id": 61,
-    "title": ". Lonely Mountain",
+    "title": " Lonely Mountain",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -745,7 +745,7 @@
   },
   {
     "id": 62,
-    "title": ". Recurring Dream",
+    "title": " Recurring Dream",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -757,7 +757,7 @@
   },
   {
     "id": 63,
-    "title": ". Through The Wind",
+    "title": " Through The Wind",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -769,7 +769,7 @@
   },
   {
     "id": 64,
-    "title": ". I'm Not Gone",
+    "title": " I'm Not Gone",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -2248,7 +2248,7 @@
     "composer": "Junichi Masuda",
     "game": "Smash Bros",
     "context": "Audio - Smash Bros",
-    "audioUrl": "/audio/smash-bros/04 Main Menu.mp3",
+    "audioUrl": "/audio/smash-bros/smash-bros-64/04 Main Menu.mp3",
     "year": 1999,
     "genre": "Game Soundtrack",
     "console": "Nintendo 64"
@@ -2260,7 +2260,7 @@
     "composer": "Junichi Masuda",
     "game": "Smash Bros",
     "context": "Audio - Smash Bros",
-    "audioUrl": "/audio/smash-bros/05 Character Select.mp3",
+    "audioUrl": "/audio/smash-bros/smash-bros-64/05 Character Select.mp3",
     "year": 1999,
     "genre": "Game Soundtrack",
     "console": "Nintendo 64"
@@ -2524,7 +2524,7 @@
     "composer": "Various Artists",
     "game": "Smash Bros Brawl",
     "context": "Audio - Smash Bros",
-    "audioUrl": "/audio/smash-bros/01 - Main Theme - Super Smash Bros. Brawl - Various Artists.mp3",
+    "audioUrl": "/audio/smash-bros/smash-bros-brawl/01 - Main Theme - Super Smash Bros. Brawl - Various Artists.mp3",
     "year": 2008,
     "genre": "Game Soundtrack",
     "console": "Wii"
@@ -2536,7 +2536,7 @@
     "composer": "Various Artists",
     "game": "Smash Bros",
     "context": "Audio - Smash Bros",
-    "audioUrl": "/audio/smash-bros/01 Intro.mp3",
+    "audioUrl": "/audio/smash-bros/smash-bros-64/01 Intro.mp3",
     "year": 1999,
     "genre": "Game Soundtrack",
     "console": "Nintendo 64"
@@ -3677,7 +3677,8 @@
     "artist": "Tomoya Ohtani",
     "composer": "Tomoya Ohtani",
     "game": "Sonic Colors",
-    "audioUrl": "/audio/sonic/Sonic outras/01-03_tropical_resort-act_1/03 Tropical Resort Act 1.mp3",
+    "context": "Audio - Sonic/Sonic outras",
+    "audioUrl": "/audio/sonic/Sonic outras/01-03_tropical_resort-act_1/03-tropical-resort-act-1.mp3",
     "year": 2010,
     "genre": "Game Soundtrack",
     "console": "Wii"
@@ -3688,7 +3689,8 @@
     "artist": "Tomoya Ohtani",
     "composer": "Tomoya Ohtani",
     "game": "Sonic Generations",
-    "audioUrl": "/audio/sonic/Sonic outras/01-19_crisis_city-act_2/19 Crisis City Act 2.mp3",
+    "context": "Audio - Sonic/Sonic outras",
+    "audioUrl": "/audio/sonic/Sonic outras/01-19_crisis_city-act_2/19-crisis-city-act-2.mp3",
     "year": 2011,
     "genre": "Game Soundtrack",
     "console": "Multi-platform"
@@ -3696,10 +3698,11 @@
   {
     "id": 310,
     "title": "Endless Possibilities",
-    "artist": "Jaret Reddick",
+    "artist": "Tomoya Ohtani",
     "composer": "Tomoya Ohtani",
     "game": "Sonic Unleashed",
-    "audioUrl": "/audio/sonic/Sonic outras/01-endless_possibilities/01 Endless Possibilities.mp3",
+    "context": "Audio - Sonic/Sonic outras",
+    "audioUrl": "/audio/sonic/Sonic outras/01-endless_possibilities/01-endless-possibilities.mp3",
     "year": 2008,
     "genre": "Game Soundtrack",
     "console": "Multi-platform"
@@ -3718,21 +3721,23 @@
   {
     "id": 312,
     "title": "Right There, Ride On",
-    "artist": "Crush 40",
-    "composer": "Crush 40",
-    "game": "Sonic Riders: Zero Gravity",
-    "audioUrl": "/audio/sonic/Sonic outras/01RightThereRideOn/01 Right There, Ride On.mp3",
-    "year": 2008,
+    "artist": "Tomoya Ohtani",
+    "composer": "Tomoya Ohtani",
+    "game": "Sonic Colors",
+    "context": "Audio - Sonic/Sonic outras",
+    "audioUrl": "/audio/sonic/Sonic outras/01RightThereRideOn/01-right-there-ride-on.mp3",
+    "year": 2010,
     "genre": "Game Soundtrack",
-    "console": "Multi-platform"
+    "console": "Wii"
   },
   {
     "id": 313,
-    "title": "Fist Bump",
-    "artist": "Douglas Robb",
+    "title": "Fist Bump (Main Theme of Sonic Forces)",
+    "artist": "Tomoya Ohtani",
     "composer": "Tomoya Ohtani",
     "game": "Sonic Forces",
-    "audioUrl": "/audio/sonic/Sonic outras/01_Fist_Bump_Main_Theme_Of_Sonic_Forces/01 Fist Bump (Main Theme of Sonic Forces).mp3",
+    "context": "Audio - Sonic/Sonic outras",
+    "audioUrl": "/audio/sonic/Sonic outras/01_Fist_Bump_Main_Theme_Of_Sonic_Forces/01-fist-bump-main-theme-of-sonic-forces.mp3",
     "year": 2017,
     "genre": "Game Soundtrack",
     "console": "Multi-platform"
@@ -3740,13 +3745,14 @@
   {
     "id": 314,
     "title": "Un-Gravitify",
-    "artist": "Cashell",
+    "artist": "Tomoya Ohtani",
     "composer": "Tomoya Ohtani",
     "game": "Sonic Riders: Zero Gravity",
-    "audioUrl": "/audio/sonic/Sonic outras/01_un-gravitify/01 Un-Gravitify.mp3",
+    "context": "Audio - Sonic/Sonic outras",
+    "audioUrl": "/audio/sonic/Sonic outras/01_un-gravitify/01-un-gravitify.mp3",
     "year": 2008,
     "genre": "Game Soundtrack",
-    "console": "Multi-platform"
+    "console": "PS2"
   },
   {
     "id": 315,
@@ -3754,7 +3760,8 @@
     "artist": "Tomoya Ohtani",
     "composer": "Tomoya Ohtani",
     "game": "Sonic Colors",
-    "audioUrl": "/audio/sonic/Sonic outras/02-03_starlight_carnival-act_1/03 Starlight Carnival Act 1.mp3",
+    "context": "Audio - Sonic/Sonic outras",
+    "audioUrl": "/audio/sonic/Sonic outras/02-03_starlight_carnival-act_1/03-starlight-carnival-act-1.mp3",
     "year": 2010,
     "genre": "Game Soundtrack",
     "console": "Wii"
@@ -3765,7 +3772,8 @@
     "artist": "Tomoya Ohtani",
     "composer": "Tomoya Ohtani",
     "game": "Sonic Colors",
-    "audioUrl": "/audio/sonic/Sonic outras/02-12_planet_wisp-act_1/12 Planet Wisp Act 1.mp3",
+    "context": "Audio - Sonic/Sonic outras",
+    "audioUrl": "/audio/sonic/Sonic outras/02-12_planet_wisp-act_1/12-planet-wisp-act-1.mp3",
     "year": 2010,
     "genre": "Game Soundtrack",
     "console": "Wii"
@@ -3773,13 +3781,14 @@
   {
     "id": 317,
     "title": "Back 2 Back",
-    "artist": "Zebrahead",
-    "composer": "Zebrahead",
-    "game": "Sonic Riders: Zero Gravity",
-    "audioUrl": "/audio/sonic/Sonic outras/02Back2Back/02 Back 2 Back.mp3",
-    "year": 2008,
+    "artist": "Tomoya Ohtani",
+    "composer": "Tomoya Ohtani",
+    "game": "Sonic Colors",
+    "context": "Audio - Sonic/Sonic outras",
+    "audioUrl": "/audio/sonic/Sonic outras/02Back2Back/02-back-2-back.mp3",
+    "year": 2010,
     "genre": "Game Soundtrack",
-    "console": "Multi-platform"
+    "console": "Wii"
   },
   {
     "id": 318,
@@ -3787,7 +3796,8 @@
     "artist": "Tomoya Ohtani",
     "composer": "Tomoya Ohtani",
     "game": "Sonic Unleashed",
-    "audioUrl": "/audio/sonic/Sonic outras/07-apotos_day/07 Apotos Day.mp3",
+    "context": "Audio - Sonic/Sonic outras",
+    "audioUrl": "/audio/sonic/Sonic outras/07-apotos_day/07-apotos-day.mp3",
     "year": 2008,
     "genre": "Game Soundtrack",
     "console": "Multi-platform"
@@ -3798,7 +3808,8 @@
     "artist": "Tomoya Ohtani",
     "composer": "Tomoya Ohtani",
     "game": "Sonic Unleashed",
-    "audioUrl": "/audio/sonic/Sonic outras/08-apotos_windmill_isle_day/08 Apotos Windmill Isle Day.mp3",
+    "context": "Audio - Sonic/Sonic outras",
+    "audioUrl": "/audio/sonic/Sonic outras/08-apotos_windmill_isle_day/08-apotos-windmill-isle-day.mp3",
     "year": 2008,
     "genre": "Game Soundtrack",
     "console": "Multi-platform"
@@ -3808,11 +3819,12 @@
     "title": "Opening Movie",
     "artist": "Tomoya Ohtani",
     "composer": "Tomoya Ohtani",
-    "game": "Sonic Unleashed",
-    "audioUrl": "/audio/sonic/Sonic outras/1-01_Opening_Movie/01 Opening Movie.mp3",
-    "year": 2008,
+    "game": "Sonic Colors",
+    "context": "Audio - Sonic/Sonic outras",
+    "audioUrl": "/audio/sonic/Sonic outras/1-01_Opening_Movie/01-opening-movie.mp3",
+    "year": 2010,
     "genre": "Game Soundtrack",
-    "console": "Multi-platform"
+    "console": "Wii"
   },
   {
     "id": 321,
@@ -3820,7 +3832,8 @@
     "artist": "Tomoya Ohtani",
     "composer": "Tomoya Ohtani",
     "game": "Sonic Mania",
-    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14 Lights, Camera, Action! (Studiopolis Zone Act 1).mp3",
+    "context": "Audio - Sonic/Sonic outras",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14-lights-camera-action-studiopolis-zone-act-1.mp3",
     "year": 2017,
     "genre": "Game Soundtrack",
     "console": "Multi-platform"

@@ -233,9 +233,11 @@ export default function Home() {
     const nArtist = normalize(song.artist);
     const nValue = normalize(value);
 
-    // Se o valor buscado está contido no nome do jogo, prioriza músicas desse jogo
-    if (nGame.includes(nValue)) return 1;
-    if (nTitle.includes(nValue)) return 2;
+    // Se o valor buscado está contido no título da música, prioriza
+    if (nTitle.includes(nValue)) return 1;
+    // Se o valor buscado está contido no nome do jogo, prioriza em segundo lugar
+    if (nGame.includes(nValue)) return 2;
+    // Se o valor buscado está contido no nome do artista, prioriza em terceiro lugar
     if (nArtist.includes(nValue)) return 3;
     return 4;
   };
@@ -244,14 +246,8 @@ export default function Home() {
     if (value.length > 0) {
       const nValue = normalize(value);
       
-      // Verifica se existe algum jogo que contenha o termo buscado
-      const matchingGames = [...new Set(songs.map(song => {
-        const nGame = normalize(song.game);
-        console.log('Jogo normalizado:', song.game, '->', nGame);
-        return { original: song.game, normalized: nGame };
-      }))].filter(game => game.normalized.includes(nValue)).map(game => game.original);
-      
-      console.log('Jogos encontrados:', matchingGames);
+      // Divide o valor de busca em palavras
+      const searchWords = nValue.split(/\s+/).filter(word => word.length > 0);
       
       const suggestions = songs
         .filter(song => {
@@ -259,15 +255,15 @@ export default function Home() {
           const nGame = normalize(song.game);
           const nArtist = normalize(song.artist);
 
-          // Se existe algum jogo que corresponda à busca, filtra apenas músicas desse(s) jogo(s)
-          if (matchingGames.length > 0) {
-            return matchingGames.includes(song.game);
-          }
-
-          // Se não corresponde a nenhum jogo, mantém o filtro normal
-          return nTitle.includes(nValue) ||
-                 nGame.includes(nValue) ||
-                 nArtist.includes(nValue);
+          // Verifica se pelo menos uma palavra da busca está presente em algum dos campos
+          // Ignora apenas palavras com uma única letra
+          return searchWords.some(word => 
+            (word.length > 1 && (
+              nTitle.includes(word) ||
+              nGame.includes(word) ||
+              nArtist.includes(word)
+            ))
+          );
         })
         .sort((a, b) => {
           const pa = getPriority(a, value);
@@ -281,6 +277,9 @@ export default function Home() {
       
       setFilteredSuggestions(suggestions);
       setShowSuggestions(suggestions.length > 0);
+    } else {
+      setFilteredSuggestions([]);
+      setShowSuggestions(false);
     }
     return [];
   };
@@ -288,29 +287,7 @@ export default function Home() {
   const handleInputChange = (e) => {
     const value = e.target.value;
     setGuess(value);
-    
-    if (value.length > 0) {
-      const nValue = normalize(value);
-      
-      // Filtra as músicas diretamente, sem criar uma lista de jogos primeiro
-      const suggestions = songs
-        .filter(song => {
-          const nGame = normalize(song.game);
-          return nGame.includes(nValue);
-        })
-        .sort((a, b) => {
-          // Ordena por nome do jogo e título
-          const gameCmp = normalize(a.game).localeCompare(normalize(b.game));
-          if (gameCmp !== 0) return gameCmp;
-          return normalize(a.title).localeCompare(normalize(b.title));
-        });
-      
-      setFilteredSuggestions(suggestions);
-      setShowSuggestions(suggestions.length > 0);
-    } else {
-      setFilteredSuggestions([]);
-      setShowSuggestions(false);
-    }
+    filterSuggestions(value);
   };
 
   const handleSuggestionClick = (suggestion) => {
@@ -537,7 +514,7 @@ export default function Home() {
                   statusClass = styles.attemptFail;
                 }
               } else if (history[idx].type === 'skipped') {
-                statusClass = styles.attemptInactive;
+                statusClass = styles.attemptFail;
               }
             }
             return (
@@ -588,7 +565,7 @@ export default function Home() {
                   className={styles.suggestionItemModern}
                   onMouseDown={() => handleSuggestionClick(suggestion)}
                 >
-                  {suggestion.game} - {suggestion.title}
+                  {suggestion.title} - {suggestion.game}
                 </li>
               ))}
             </ul>
