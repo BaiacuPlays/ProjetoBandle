@@ -5,7 +5,10 @@
   }
 
 body {
-  background: #1a1a1a;
+  background-image: url('/fundo.png'); /* <--- OLHE COM ATENÇÃO AQUI E NAS PROXIMAS LINHAS */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
   color: #fff;
   font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
   margin: 0;
