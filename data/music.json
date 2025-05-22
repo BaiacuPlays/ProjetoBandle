@@ -2524,7 +2524,7 @@
     "composer": "Various Artists",
     "game": "Smash Bros Brawl",
     "context": "Audio - Smash Bros",
-    "audioUrl": "/audio/smash-bros/smash-bros-brawl/01 - Main Theme - Super Smash Bros. Brawl - Various Artists.mp3",
+    "audioUrl": "/audio/smash-bros/smash-bros-brawl/01 - Main Theme - Super Smash Bros. Brawl.mp3",
     "year": 2008,
     "genre": "Game Soundtrack",
     "console": "Wii"
@@ -3567,7 +3567,7 @@
     "artist": "Crush 40",
     "composer": "Crush 40",
     "game": "Sonic and the Black Knight",
-    "audioUrl": "/audio/sonic/Sonic outras/vocal-01_knight_of_the_wind/01 Knight of the Wind.mp3",
+    "audioUrl": "/audio/sonic/Sonic outras/vocal-01_knight_of_the_wind/01-knight-of-the-wind.mp3",
     "year": 2009,
     "genre": "Game Soundtrack",
     "console": "Wii"
@@ -3578,7 +3578,7 @@
     "artist": "Crush 40",
     "composer": "Crush 40",
     "game": "Sonic Adventure 2",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/08 Live And Learn.mp3",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/08-live-and-learn.mp3",
     "year": 2001,
     "genre": "Game Soundtrack",
     "console": "Dreamcast"
@@ -3589,18 +3589,7 @@
     "artist": "Tabitha Fair, Todd Cooper, Kaz Silver",
     "composer": "Kenichi Tokoi",
     "game": "Sonic Adventure 2",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/05 Fly in the Freedom.mp3",
-    "year": 2001,
-    "genre": "Game Soundtrack",
-    "console": "Dreamcast"
-  },
-  {
-    "id": 301,
-    "title": "Fly in the Freedom (Instrumental)",
-    "artist": "Tabitha Fair, Todd Cooper, Kaz Silver",
-    "composer": "Kenichi Tokoi",
-    "game": "Sonic Adventure 2",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/96 Fly in the Freedom (Instrumental).mp3",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/05-fly-in-the-freedom.mp3",
     "year": 2001,
     "genre": "Game Soundtrack",
     "console": "Dreamcast"
@@ -3611,29 +3600,7 @@
     "artist": "Everett Bradley",
     "composer": "Jun Senoue",
     "game": "Sonic Adventure 2",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/06 Throw it All Away.mp3",
-    "year": 2001,
-    "genre": "Game Soundtrack",
-    "console": "Dreamcast"
-  },
-  {
-    "id": 303,
-    "title": "Throw it All Away (Instrumental)",
-    "artist": "Everett Bradley",
-    "composer": "Jun Senoue",
-    "game": "Sonic Adventure 2",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/97 Throw it All Away (Instrumental).mp3",
-    "year": 2001,
-    "genre": "Game Soundtrack",
-    "console": "Dreamcast"
-  },
-  {
-    "id": 304,
-    "title": "E.G.G.M.A.N. (Instrumental)",
-    "artist": "Paul Shortino",
-    "composer": "Jun Senoue",
-    "game": "Sonic Adventure 2",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/98 E.G.G.M.A.N. (Instrumental).mp3",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/06-throw-it-all-away.mp3",
     "year": 2001,
     "genre": "Game Soundtrack",
     "console": "Dreamcast"
@@ -3644,7 +3611,7 @@
     "artist": "Magna-Fi",
     "composer": "Magna-Fi",
     "game": "Shadow The Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/lost-all_hail_shadow/All Hail Shadow [Magna-Fi] - Shadow The Hedgehog.mp3",
+    "audioUrl": "/audio/sonic/Sonic outras/lost-all_hail_shadow/all-hail-shadow-magna-fi-shadow-the-hedgehog.mp3",
     "year": 2005,
     "genre": "Game Soundtrack",
     "console": "Multi-platform"
@@ -3655,7 +3622,7 @@
     "artist": "Crush 40",
     "composer": "Crush 40",
     "game": "Shadow The Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/lost-i_am/I Am... All Of Me [Crush 40] - Shadow The Hedgehog.mp3",
+    "audioUrl": "/audio/sonic/Sonic outras/lost-i_am/i-am...-all-of-me-crush-40-shadow-the-hedgehog.mp3",
     "year": 2005,
     "genre": "Game Soundtrack",
     "console": "Multi-platform"
@@ -3666,7 +3633,7 @@
     "artist": "Cash Cash",
     "composer": "Cash Cash",
     "game": "Sonic Colors",
-    "audioUrl": "/audio/sonic/Sonic outras/01-01_reach_for_the_stars-opening_theme-/01 Reach for the Stars (Opening Theme).mp3",
+    "audioUrl": "/audio/sonic/Sonic outras/01-01_reach_for_the_stars-opening_theme/01-reach-for-the-stars-opening-theme-.mp3",
     "year": 2010,
     "genre": "Game Soundtrack",
     "console": "Wii"
@@ -3713,7 +3680,7 @@
     "artist": "Tomoya Ohtani",
     "composer": "Tomoya Ohtani",
     "game": "Sonic Unleashed",
-    "audioUrl": "/audio/sonic/Sonic outras/01-title_theme/01 Title Theme.mp3",
+    "audioUrl": "/audio/sonic/Sonic outras/01-title_theme/01.-title-theme.mp3",
     "year": 2008,
     "genre": "Game Soundtrack",
     "console": "Multi-platform"
@@ -3725,7 +3692,7 @@
     "composer": "Tomoya Ohtani",
     "game": "Sonic Colors",
     "context": "Audio - Sonic/Sonic outras",
-    "audioUrl": "/audio/sonic/Sonic outras/01RightThereRideOn/01-right-there-ride-on.mp3",
+    "audioUrl": "/audio/sonic/Sonic outras/01RightThereRideOn/01rightthererideon.mp3",
     "year": 2010,
     "genre": "Game Soundtrack",
     "console": "Wii"
@@ -3737,7 +3704,7 @@
     "composer": "Tomoya Ohtani",
     "game": "Sonic Forces",
     "context": "Audio - Sonic/Sonic outras",
-    "audioUrl": "/audio/sonic/Sonic outras/01_Fist_Bump_Main_Theme_Of_Sonic_Forces/01-fist-bump-main-theme-of-sonic-forces.mp3",
+    "audioUrl": "/audio/sonic/Sonic outras/01_Fist_Bump_Main_Theme_Of_Sonic_Forces/01-fist-bump-main-theme-of-sonic-forces-.mp3",
     "year": 2017,
     "genre": "Game Soundtrack",
     "console": "Multi-platform"
@@ -3749,7 +3716,7 @@
     "composer": "Tomoya Ohtani",
     "game": "Sonic Riders: Zero Gravity",
     "context": "Audio - Sonic/Sonic outras",
-    "audioUrl": "/audio/sonic/Sonic outras/01_un-gravitify/01-un-gravitify.mp3",
+    "audioUrl": "/audio/sonic/Sonic outras/01_un-gravitify/01_un-gravitify.mp3",
     "year": 2008,
     "genre": "Game Soundtrack",
     "console": "PS2"
@@ -3785,7 +3752,7 @@
     "composer": "Tomoya Ohtani",
     "game": "Sonic Colors",
     "context": "Audio - Sonic/Sonic outras",
-    "audioUrl": "/audio/sonic/Sonic outras/02Back2Back/02-back-2-back.mp3",
+    "audioUrl": "/audio/sonic/Sonic outras/02back2back/02back2back.mp3",
     "year": 2010,
     "genre": "Game Soundtrack",
     "console": "Wii"
@@ -3821,7 +3788,7 @@
     "composer": "Tomoya Ohtani",
     "game": "Sonic Colors",
     "context": "Audio - Sonic/Sonic outras",
-    "audioUrl": "/audio/sonic/Sonic outras/1-01_Opening_Movie/01-opening-movie.mp3",
+    "audioUrl": "/audio/sonic/Sonic outras/1-01_Opening_Movie/1-01-opening-movie.mp3",
     "year": 2010,
     "genre": "Game Soundtrack",
     "console": "Wii"
@@ -3833,7 +3800,7 @@
     "composer": "Tomoya Ohtani",
     "game": "Sonic Mania",
     "context": "Audio - Sonic/Sonic outras",
-    "audioUrl": "/audio/sonic/Sonic outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14-lights-camera-action-studiopolis-zone-act-1.mp3",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_lights_camera_action_studiopolis_zone_act_1/1-14-lights-camera-action-studiopolis-zone-act-1-.mp3",
     "year": 2017,
     "genre": "Game Soundtrack",
     "console": "Multi-platform"
@@ -4108,7 +4075,7 @@
     "artist": "Barry Leitch, Hiroyuki Masuno;  ",
     "composer": "Barry Leitch, Hiroyuki Masuno;  ",
     "game": "Top Gear",
-    "audioUrl": "/audio/05 Frankfurt.mp3",   
+    "audioUrl": "/audio/05 Frankfurt.mp3",
     "year": 1992,
     "genre": "Game Soundtrack",
     "console": "Super Nintendo"
@@ -4119,7 +4086,7 @@
     "artist": "Barry Leitch, Hiroyuki Masuno;  ",
     "composer": "Barry Leitch, Hiroyuki Masuno;  ",
     "game": "Top Gear",
-    "audioUrl": "/audio/04 Bordeaux.mp3",   
+    "audioUrl": "/audio/04 Bordeaux.mp3",
     "year": 1992,
     "genre": "Game Soundtrack",
     "console": "Super Nintendo"
@@ -4130,7 +4097,7 @@
     "artist": "Koji Kondo, Toru Minegishi",
     "composer": "Koji Kondo, Toru Minegishi",
     "game": "The Legend of Zelda: Majora's Mask",
-    "audioUrl": "/audio/Clock Town, First Day.mp3",
+    "audioUrl": "/audio/outros/1-08. Clock Town, First Day.mp3",
     "year": 2000,
     "genre": "Game Soundtrack",
     "console": "Nintendo 64"
@@ -4141,7 +4108,7 @@
     "artist": "Koji Kondo, Toru Minegishi",
     "composer": "Koji Kondo, Toru Minegishi",
     "game": "The Legend of Zelda: Majora's Mask",
-    "audioUrl": "/audio/Song of Healing.mp3",
+    "audioUrl": "/audio/outros/1-29. Song of Healing.mp3",
     "year": 2000,
     "genre": "Game Soundtrack",
     "console": "Nintendo 64"
@@ -4152,7 +4119,7 @@
     "artist": "Koji Kondo, Toru Minegishi",
     "composer": "Koji Kondo, Toru Minegishi",
     "game": "The Legend of Zelda: Majora's Mask",
-    "audioUrl": "/audio/Astral Observatory.mp3",
+    "audioUrl": "/audio/outros/1-25. Astral Observatory.mp3",
     "year": 2000,
     "genre": "Game Soundtrack",
     "console": "Nintendo 64"
@@ -4163,7 +4130,7 @@
     "artist": "Koji Kondo, Toru Minegishi",
     "composer": "Koji Kondo, Toru Minegishi",
     "game": "The Legend of Zelda: Majora's Mask",
-    "audioUrl": "/audio/Deku Palace.mp3",
+    "audioUrl": "/audio/outros/1-45. Deku Palace.mp3",
     "year": 2000,
     "genre": "Game Soundtrack",
     "console": "Nintendo 64"
@@ -4174,7 +4141,7 @@
     "artist": "Koji Kondo, Toru Minegishi",
     "composer": "Koji Kondo, Toru Minegishi",
     "game": "The Legend of Zelda: Majora's Mask",
-    "audioUrl": "/audio/Woodfall Temple.mp3",
+    "audioUrl": "/audio/outros/1-51. Woodfall Temple.mp3",
     "year": 2000,
     "genre": "Game Soundtrack",
     "console": "Nintendo 64"
@@ -4185,7 +4152,7 @@
     "artist": "Koji Kondo, Toru Minegishi",
     "composer": "Koji Kondo, Toru Minegishi",
     "game": "The Legend of Zelda: Majora's Mask",
-    "audioUrl": "/audio/The End_Credits.mp3",
+    "audioUrl": "/audio/outros/2-53. The End-Credits.mp3",
     "year": 2000,
     "genre": "Game Soundtrack",
     "console": "Nintendo 64"
@@ -4196,29 +4163,29 @@
     "artist": "Kelly Bailey",
     "composer": "Kelly Bailey",
     "game": "Half-Life 2",
-    "audioUrl": "/audio/You're Not Supposed to Be Here.mp3",
+    "audioUrl": "/audio/outros/24. You're Not Supposed to Be Here.mp3",
     "year": 2004,
     "genre": "Game Soundtrack",
     "console": "PC"
   },
   {
     "id": 356,
-    "title": "Hard Fought (Long)",
+    "title": "Hard Fought",
     "artist": "Kelly Bailey",
     "composer": "Kelly Bailey",
     "game": "Half-Life 2",
-    "audioUrl": "/audio/Hard Fought (Long).mp3",
+    "audioUrl": "/audio/outros/26. Hard Fought.mp3",
     "year": 2004,
     "genre": "Game Soundtrack",
     "console": "PC"
   },
  {
     "id": 357,
-    "title": "Objection! 2001",
+    "title": "Objection!",
     "artist": "Masakazu Sugimori",
     "composer": "Masakazu Sugimori",
     "game": "Phoenix Wright: Ace Attorney",
-    "audioUrl": "/audio/Objection! 2001.mp3",
+    "audioUrl": "/audio/outros/06. Phoenix Wright - Objection! 2001.mp3",
     "year": 2001,
     "genre": "Game Soundtrack",
     "console": "Game Boy Advance"
@@ -4229,40 +4196,40 @@
     "artist": "Masakazu Sugimori",
     "composer": "Masakazu Sugimori",
     "game": "Phoenix Wright: Ace Attorney",
-    "audioUrl": "/audio/Pursuit ~ Cornered.mp3",
+    "audioUrl": "/audio/outros/08. Pursuit - Corner the Culprit.mp3",
     "year": 2001,
     "genre": "Game Soundtrack",
     "console": "Game Boy Advance"
   },
   {
     "id": 359,
-    "title": "Investigation ~ Core 2001",
+    "title": "Investigation",
     "artist": "Masakazu Sugimori",
     "composer": "Masakazu Sugimori",
     "game": "Phoenix Wright: Ace Attorney",
-    "audioUrl": "/audio/Investigation ~ Core 2001.mp3",
+    "audioUrl": "/audio/outros/13. Initial Investigation 2001.mp3",
     "year": 2001,
     "genre": "Game Soundtrack",
     "console": "Game Boy Advance"
   },
   {
     "id": 360,
-    "title": "Trial Theme ~ Allegro 2001",
+    "title": "Trial Theme",
     "artist": "Masakazu Sugimori",
     "composer": "Masakazu Sugimori",
     "game": "Phoenix Wright: Ace Attorney",
-    "audioUrl": "/audio/Trial Theme ~ Allegro 2001.mp3",
+    "audioUrl": "/audio/outros/1-04. Ace Attorney - Trial.mp3",
     "year": 2001,
     "genre": "Game Soundtrack",
     "console": "Game Boy Advance"
   },
   {
     "id": 361,
-    "title": "Announce the Truth 2001",
+    "title": "Announce the Truth",
     "artist": "Masakazu Sugimori",
     "composer": "Masakazu Sugimori",
     "game": "Phoenix Wright: Ace Attorney",
-    "audioUrl": "/audio/Announce the Truth 2001.mp3",
+    "audioUrl": "/audio/outros/09. The Truth Revealed 2001.mp3",
     "year": 2001,
     "genre": "Game Soundtrack",
     "console": "Game Boy Advance"
@@ -4273,7 +4240,7 @@
     "artist": "Masakazu Sugimori",
     "composer": "Masakazu Sugimori",
     "game": "Phoenix Wright: Ace Attorney",
-    "audioUrl": "/audio/Detention Center ~ Elegy of the Security Guard.mp3",
+    "audioUrl": "/audio/outros/15. Detention Center - The Security Guards' Elegy.mp3",
     "year": 2001,
     "genre": "Game Soundtrack",
     "console": "Game Boy Advance"
@@ -4284,7 +4251,7 @@
     "artist": "Masakazu Sugimori",
     "composer": "Masakazu Sugimori",
     "game": "Phoenix Wright: Ace Attorney",
-    "audioUrl": "/audio/Turnabout Sisters Theme.mp3",
+    "audioUrl": "/audio/outros/14. Maya Fey - Turnabout Sisters 2001.mp3",
     "year": 2001,
     "genre": "Game Soundtrack",
     "console": "Game Boy Advance"
@@ -4295,7 +4262,7 @@
   "artist": "Noriyuki Iwadare",
   "composer": "Noriyuki Iwadare",
   "game": "Phoenix Wright: Ace Attorney - Trials and Tribulations",
-  "audioUrl": "/audio/Fragrancy of Black Coffee.mp3",
+  "audioUrl": "/audio/outros/3-11. Godot ~ The Fragrance Of Dark Coffee.mp3",
   "year": 2004,
   "genre": "Game Soundtrack",
   "console": "Game Boy Advance"
@@ -4306,7 +4273,7 @@
     "artist": "zts",
     "composer": "zts",
     "game": "Umineko no Naku Koro ni",
-    "audioUrl": "/audio/goldenslaughterer.mp3",
+    "audioUrl": "/audio/outros/26. goldenslaughterer.mp3",
     "year": 2007,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4317,7 +4284,7 @@
     "artist": "zts",
     "composer": "zts",
     "game": "Umineko no Naku Koro ni",
-    "audioUrl": "/audio/worldenddominator.mp3",
+    "audioUrl": "/audio/outros/59. worldenddominator.mp3",
     "year": 2007,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4328,7 +4295,7 @@
     "artist": "xaki",
     "composer": "xaki",
     "game": "Umineko no Naku Koro ni",
-    "audioUrl": "/audio/Dread of the Grave.mp3",
+    "audioUrl": "/audio/outros/74. Dread of the grave -More fear-.mp3",
     "year": 2007,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4339,18 +4306,18 @@
     "artist": "zts",
     "composer": "zts",
     "game": "Umineko no Naku Koro ni",
-    "audioUrl": "/audio/Mirage Coordinator.mp3",
+    "audioUrl": "/audio/outros/86. miragecoordinator.mp3",
     "year": 2007,
     "genre": "Game Soundtrack",
     "console": "PC"
   },
   {
     "id": 369,
-    "title": "Rondo -Revolution-",
+    "title": "HANE",
     "artist": "Jimang",
     "composer": "Jimang",
     "game": "Umineko no Naku Koro ni",
-    "audioUrl": "/audio/Rondo -Revolution-.mp3",
+    "audioUrl": "/audio/outros/05. HANE.mp3",
     "year": 2007,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4361,7 +4328,7 @@
     "artist": "Hakita",
     "composer": "Hakita",
     "game": "Ultrakill",
-    "audioUrl": "/audio/Versus.mp3",
+    "audioUrl": "/audio/outros/Versus2Outro.wav",
     "year": 2020,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4372,29 +4339,29 @@
     "artist": "Hakita",
     "composer": "Hakita",
     "game": "Ultrakill",
-    "audioUrl": "/audio/The Cyber Grind.mp3",
+    "audioUrl": "/audio/outros/The Cyber Grind - Final Version 1 (seamless loop without intro).wav",
     "year": 2020,
     "genre": "Game Soundtrack",
     "console": "PC"
   },
   {
     "id": 372,
-    "title": "Stygian Abyss",
+    "title": "ULTRACHURCH",
     "artist": "Hakita",
     "composer": "Hakita",
     "game": "Ultrakill",
-    "audioUrl": "/audio/Stygian Abyss.mp3",
+    "audioUrl": "/audio/outros/ULTRACHURCH (Loop).wav",
     "year": 2020,
     "genre": "Game Soundtrack",
     "console": "PC"
   },
   {
     "id": 373,
-    "title": "Infernal Massacre",
+    "title": "The Fire Is Gone ",
     "artist": "Keygen Church",
     "composer": "Keygen Church",
     "game": "Ultrakill",
-    "audioUrl": "/audio/Infernal Massacre.mp3",
+    "audioUrl": "/audio/outros/The Fire Is Gone (Christmas).wav",
     "year": 2020,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4405,7 +4372,7 @@
     "artist": "Keygen Church",
     "composer": "Keygen Church",
     "game": "Ultrakill",
-    "audioUrl": "/audio/Order.mp3",
+    "audioUrl": "/audio/outros/orderintroextended.wav",
     "year": 2020,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4415,53 +4382,53 @@
     "title": "Clair Obscur Main Theme",
     "artist": "Lorien Testard",
     "composer": "Lorien Testard",
-    "game": "Clair Obscur",
-    "audioUrl": "/audio/Clair Obscur Main Theme.mp3",
-    "year": 2023,
+    "game": "Clair Obscur: Expedition 33",
+    "audioUrl": "/audio/outros/Clair Obscur Main Theme.mp3",
+    "year": 2025,
     "genre": "Game Soundtrack",
     "console": "PC"
   },
   {
     "id": 376,
-    "title": "Dreamscape",
+    "title": "Alicia",
     "artist": "Lorien Testard",
     "composer": "Lorien Testard",
-    "game": "Clair Obscur",
-    "audioUrl": "/audio/Dreamscape.mp3",
-    "year": 2023,
+    "game": "Clair Obscur: Expedition 33",
+    "audioUrl": "/audio/outros/01. Alicia.mp3",
+    "year": 2025,
     "genre": "Game Soundtrack",
     "console": "PC"
   },
   {
     "id": 377,
-    "title": "The Painter's Waltz",
+    "title": "Clair-Obscur",
     "artist": "Lorien Testard",
     "composer": "Lorien Testard",
-    "game": "Clair Obscur",
-    "audioUrl": "/audio/The Painter's Waltz.mp3",
-    "year": 2023,
+    "game": "Clair Obscur: Expedition 33",
+    "audioUrl": "/audio/outros/02. Clair-Obscur.mp3",
+    "year": 2025,
     "genre": "Game Soundtrack",
     "console": "PC"
   },
   {
     "id": 378,
-    "title": "Fragmented Memories",
+    "title": "Renoir",
     "artist": "Lorien Testard",
     "composer": "Lorien Testard",
-    "game": "Clair Obscur",
-    "audioUrl": "/audio/Fragmented Memories.mp3",
-    "year": 2023,
+    "game": "Clair Obscur: Expedition 33",
+    "audioUrl": "/audio/outros/01. Renoir.mp3",
+    "year": 2025,
     "genre": "Game Soundtrack",
     "console": "PC"
   },
   {
     "id": 379,
-    "title": "Twilight Reverie",
+    "title": "Our Drafts Unite",
     "artist": "Lorien Testard",
     "composer": "Lorien Testard",
-    "game": "Clair Obscur",
-    "audioUrl": "/audio/Twilight Reverie.mp3",
-    "year": 2023,
+    "game": "Clair Obscur: Expedition 33",
+    "audioUrl": "/audio/outros/02. Our Drafts Unite.mp3",
+    "year": 2025,
     "genre": "Game Soundtrack",
     "console": "PC"
   },
@@ -4471,7 +4438,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Undertale",
-    "audioUrl": "/audio/Once Upon a Time.mp3",
+    "audioUrl": "/audio/undertale/Undertale OST - 001 Once Upon a Time.mp3",
     "year": 2015,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4482,7 +4449,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Undertale",
-    "audioUrl": "/audio/Your Best Friend.mp3",
+    "audioUrl": "/audio/undertale/Undertale OST - 003 Your Best Friend.mp3",
     "year": 2015,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4493,7 +4460,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Undertale",
-    "audioUrl": "/audio/Ruins.mp3",
+    "audioUrl": "/audio/undertale/Undertale OST - 005 Ruins.mp3",
     "year": 2015,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4504,7 +4471,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Undertale",
-    "audioUrl": "/audio/Enemy Approaching.mp3",
+    "audioUrl": "/audio/undertale/Undertale OST - 009 Enemy Approaching.mp3",
     "year": 2015,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4515,7 +4482,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Undertale",
-    "audioUrl": "/audio/Heartache.mp3",
+    "audioUrl": "/audio/undertale/Undertale OST - 014 Heartache.mp3",
     "year": 2015,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4526,7 +4493,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Undertale",
-    "audioUrl": "/audio/Sans..mp3",
+    "audioUrl": "/audio/undertale/Undertale OST - 015 Sans..mp3",
     "year": 2015,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4537,7 +4504,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Undertale",
-    "audioUrl": "/audio/Snowy.mp3",
+    "audioUrl": "/audio/undertale/Undertale OST - 017 Snowy.mp3",
     "year": 2015,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4548,7 +4515,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Undertale",
-    "audioUrl": "/audio/Bonetrousle.mp3",
+    "audioUrl": "/audio/undertale/Undertale OST - 024 Bonetrousle.mp3",
     "year": 2015,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4559,7 +4526,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Undertale",
-    "audioUrl": "/audio/Waterfall.mp3",
+    "audioUrl": "/audio/undertale/Undertale OST - 031 Waterfall.mp3",
     "year": 2015,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4570,7 +4537,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Undertale",
-    "audioUrl": "/audio/Memory.mp3",
+    "audioUrl": "/audio/undertale/Undertale OST - 034 Memory.mp3",
     "year": 2015,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4581,7 +4548,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Undertale",
-    "audioUrl": "/audio/Spider Dance.mp3",
+    "audioUrl": "/audio/undertale/Undertale OST - 059 Spider Dance.mp3",
     "year": 2015,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4592,7 +4559,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Undertale",
-    "audioUrl": "/audio/Death by Glamour.mp3",
+    "audioUrl": "/audio/undertale/Undertale OST - 068 Death by Glamour.mp3",
     "year": 2015,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4603,7 +4570,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Undertale",
-    "audioUrl": "/audio/CORE.mp3",
+    "audioUrl": "/audio/undertale/Undertale OST - 065 CORE.mp3",
     "year": 2015,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4614,7 +4581,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Undertale",
-    "audioUrl": "/audio/Undertale.mp3",
+    "audioUrl": "/audio/undertale/Undertale OST - 071 Undertale.mp3",
     "year": 2015,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4625,18 +4592,18 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Undertale",
-    "audioUrl": "/audio/Battle Against a True Hero.mp3",
+    "audioUrl": "/audio/undertale/Undertale OST - 098 Battle Against a True Hero.mp3",
     "year": 2015,
     "genre": "Game Soundtrack",
     "console": "PC"
   },
   {
     "id": 395,
-    "title": "Final Power",
+    "title": "It's Raining Somewhere Else",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Undertale",
-    "audioUrl": "/audio/Final Power.mp3",
+    "audioUrl": "/audio/undertale/Undertale OST - 063 It's Raining Somewhere Else.mp3",
     "year": 2015,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4647,7 +4614,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Undertale",
-    "audioUrl": "/audio/Megalovania.mp3",
+    "audioUrl": "/audio/undertale/Undertale OST - 100 Megalovania.mp3",
     "year": 2015,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4658,7 +4625,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Undertale",
-    "audioUrl": "/audio/An Ending.mp3",
+    "audioUrl": "/audio/undertale/Undertale OST - 081 An Ending.mp3",
     "year": 2015,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4669,7 +4636,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Undertale",
-    "audioUrl": "/audio/Hopes and Dreams.mp3",
+    "audioUrl": "/audio/undertale/Undertale OST - 087 Hopes and Dreams.mp3",
     "year": 2015,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4680,7 +4647,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Undertale",
-    "audioUrl": "/audio/Save the World.mp3",
+    "audioUrl": "/audio/undertale/Undertale OST - 089 SAVE the World.mp3",
     "year": 2015,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4691,7 +4658,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Undertale",
-    "audioUrl": "/audio/Respite.mp3",
+    "audioUrl": "/audio/undertale/Undertale OST - 094 Respite.mp3",
     "year": 2015,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4702,7 +4669,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Deltarune",
-    "audioUrl": "/audio/The Beginning.mp3",
+    "audioUrl": "/audio/deltarune/The Beginning.mp3",
     "year": 2018,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4713,7 +4680,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Deltarune",
-    "audioUrl": "/audio/School.mp3",
+    "audioUrl": "/audio/deltarune/School.mp3",
     "year": 2018,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4724,7 +4691,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Deltarune",
-    "audioUrl": "/audio/Susie.mp3",
+    "audioUrl": "/audio/deltarune/Susie.mp3",
     "year": 2018,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -5560,7 +5527,7 @@
     "artist": "Kan Gao",
     "composer": "Kan Gao",
     "game": "Finding Paradise",
-    "audioUrl": "/audio/The World Is Not Enough.mp3",
+    "audioUrl": "/audio/outros/The World Is Not Enough.mp3",
     "year": 2017,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -5571,7 +5538,7 @@
     "artist": "Kan Gao",
     "composer": "Kan Gao",
     "game": "Finding Paradise",
-    "audioUrl": "/audio/The Road Home.mp3",
+    "audioUrl": "/audio/outros/The Road Home.mp3",
     "year": 2017,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -5582,9 +5549,9 @@
     "artist": "Koji Kondo, Toru Minegishi",
     "composer": "Koji Kondo, Toru Minegishi",
     "game": "The Legend of Zelda: Majora's Mask",
-    "audioUrl": "/audio/Title Theme.mp3",
+    "audioUrl": "/audio/outros/1-01. Title Theme.mp3",
     "year": 2000,
     "genre": "Game Soundtrack",
     "console": "Nintendo 64"
-  },
+  }
 ]

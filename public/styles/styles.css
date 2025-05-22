@@ -17,6 +17,9 @@ body {
   transform-origin: top left;
   transition: transform 0.3s ease;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -55,8 +58,8 @@ header {
 }
 
 main {
-  display: none;
-  flex-direction: row;
+  display: flex;
+  flex-direction: column;
   gap: 2.5rem;
   padding: 1.5rem;
   align-items: flex-start;
@@ -64,6 +67,7 @@ main {
   margin: 0 auto;
   opacity: 0;
   transition: opacity 0.3s ease;
+  flex: 1;
 }
 
 main.visible {
@@ -192,153 +196,11 @@ main.visible {
 }
 
 .psp-waves {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 110vw;
-  height: 100vh;
-  z-index: -1;
-  overflow: hidden;
-  pointer-events: none;
-  opacity: 1;
-  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-body:not(.game-active) .psp-waves {
-  display: block !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
+  display: none;
 }
 
 .wave {
-  position: absolute;
-  width: 200%;
-  height: 70vh;
-  bottom: 0;
-  left: -50%;
-  animation: waveMove 28s linear infinite;
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff' d='M0,192C120,192,240,192,360,197.3C480,203,600,213,720,208C840,203,960,181,1080,176C1200,171,1320,181,1440,181.3L1440,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
-  mask-size: cover;
-  mask-repeat: no-repeat;
-  mask-position: center;
-  transform-origin: bottom center;
-  will-change: transform;
-  opacity: 1 !important;
-}
-
-.wave:nth-child(1) {
-  animation-duration: 28s;
-  animation-delay: 0s;
-  opacity: 1 !important;
-}
-
-.wave:nth-child(2) {
-  animation-duration: 22s;
-  animation-delay: -5s;
-  opacity: 0.8 !important;
-}
-
-.wave:nth-child(3) {
-  animation-duration: 16s;
-  animation-delay: -10s;
-  opacity: 0.6 !important;
-}
-
-/* Ajustes para o tema escuro */
-body.dark .psp-waves {
-  background: #1a1a1a;
-}
-
-body.dark .wave {
-  background: linear-gradient(
-    90deg,
-    rgba(255,255,255,0) 0%,
-    rgba(255,255,255,0.18) 20%,
-    rgba(255,255,255,0.22) 50%,
-    rgba(255,255,255,0.18) 80%,
-    rgba(255,255,255,0) 100%
-  );
-  filter: brightness(1.2) blur(6px);
-}
-
-/* Ajustes para o tema claro */
-body.light .psp-waves {
-  background: #ffffff;
-}
-
-body.light .wave {
-  background: linear-gradient(
-    90deg,
-    rgba(167, 167, 167, 0) 0%,
-    rgba(160,160,160,0.10) 20%,
-    rgba(160,160,160,0.13) 50%,
-    rgba(160,160,160,0.10) 80%,
-    rgba(160,160,160,0) 100%
-  );
-  filter: blur(4px) brightness(1);
-}
-
-/* Ajustes para o tema azul */
-body.blue .psp-waves {
-  background: #1a1f2e;
-}
-
-body.blue .wave {
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(224, 231, 255, 0.1) 25%,
-    rgba(224, 231, 255, 0.15) 50%,
-    rgba(224, 231, 255, 0.1) 75%,
-    transparent 100%
-  );
-}
-
-/* Ajustes para o tema verde */
-body.green .psp-waves {
-  background: #1a2e1a;
-}
-
-body.green .wave {
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(224, 255, 224, 0.1) 25%,
-    rgba(224, 255, 224, 0.15) 50%,
-    rgba(224, 255, 224, 0.1) 76%,
-    transparent 100%
-  );
-}
-
-/* Ajustes para o tema roxo */
-body.purple .psp-waves {
-  background: #2e1a2e;
-}
-
-body.purple .wave {
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 224, 255, 0.1) 25%,
-    rgba(255, 224, 255, 0.15) 50%,
-    rgba(255, 224, 255, 0.1) 75%,
-    transparent 100%
-  );
-}
-
-@keyframes waveMove {
-  0% {
-    transform: translateX(-50%) scale(1);
-    --wave-debug: 'Wave animation at 0%';
-  }
-  50% {
-    transform: translateX(0%) scale(1.1);
-    --wave-debug: 'Wave animation at 50%';
-  }
-  100% {
-    transform: translateX(-50%) scale(1);
-    --wave-debug: 'Wave animation at 100%';
-  }
+  display: none;
 }
 
 /* Ajustes para o tema claro */
@@ -1259,152 +1121,7 @@ body.purple #categoryButton {
   white-space: nowrap;
 }
 
-/* Tema Azul */
-body.blue {
-    background: #1a1f2e;
-    color: #e0e7ff;
-}
 
-body.blue .header {
-    background: #2a3447;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-body.blue .menu-button {
-    background-color: #3a4b6e;
-    color: #e0e7ff;
-    border: 2px solid #4a5b8e;
-}
-
-body.blue .menu-button::after {
-    background: rgba(224, 231, 255, 0.2);
-}
-
-body.blue .menu-button:hover {
-    background: #4a5b8e;
-}
-
-body.blue .character {
-    background: #2a3447;
-    border: 1px solid #3a4b6e;
-}
-
-body.blue .character:hover {
-    border-color: #4a5b8e;
-    box-shadow: 0 4px 15px rgba(74, 91, 142, 0.3);
-}
-
-body.blue .customization-menu {
-    background: #2a3447;
-    border: 1px solid #3a4b6e;
-}
-
-body.blue select {
-    background: #3a4b6e;
-    color: #e0e7ff;
-}
-
-body.blue select:hover {
-    background: #4a5b8e;
-}
-
-/* Tema Verde */
-body.green {
-    background: #1a2e1a;
-    color: #e0ffe0;
-}
-
-body.green .header {
-    background: #2a472a;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-body.green .menu-button {
-    background-color: #3a6e3a;
-    color: #e0ffe0;
-    border: 2px solid #4a8e4a;
-}
-
-body.green .menu-button::after {
-    background: rgba(224, 255, 224, 0.2);
-}
-
-body.green .menu-button:hover {
-    background: #4a8e4a;
-}
-
-body.green .character {
-    background: #2a472a;
-    border: 1px solid #3a6e3a;
-}
-
-body.green .character:hover {
-    border-color: #4a8e4a;
-    box-shadow: 0 4px 15px rgba(74, 142, 74, 0.3);
-}
-
-body.green .customization-menu {
-    background: #2a472a;
-    border: 1px solid #3a6e3a;
-}
-
-body.green select {
-    background: #3a6e3a;
-    color: #e0ffe0;
-}
-
-body.green select:hover {
-    background: #4a8e4a;
-}
-
-/* Tema Roxo */
-body.purple {
-    background: #2e1a2e;
-    color: #ffe0ff;
-}
-
-body.purple .header {
-    background: #472a47;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-body.purple .menu-button {
-    background-color: #6e3a6e;
-    color: #ffe0ff;
-    border: 2px solid #8e4a8e;
-}
-
-body.purple .menu-button::after {
-    background: rgba(255, 224, 255, 0.2);
-}
-
-body.purple .menu-button:hover {
-    background: #8e4a8e;
-}
-
-body.purple .character {
-    background: #472a47;
-    border: 1px solid #6e3a6e;
-}
-
-body.purple .character:hover {
-    border-color: #8e4a8e;
-    box-shadow: 0 4px 15px rgba(142, 74, 142, 0.3);
-}
-
-body.purple .customization-menu {
-    background: #472a47;
-    border: 1px solid #6e3a6e;
-}
-
-body.purple select {
-    background: #6e3a6e;
-    color: #ffe0ff;
-}
-
-body.purple select:hover {
-    background: #8e4a8e;
-}
 
 /* Ajustes comuns para todos os temas */
 body.blue .point-counter,
@@ -1613,266 +1330,78 @@ body.game-active .psp-waves {
   display: none !important;
 }
 
-#lobbyMenu {
+#lobbyMenu,
+#lobbyForm,
+#lobbyStatus,
+#lobbyPlayers,
+.lobby-actions,
+.button-group {
+  display: none;
+}
+
+footer {
+  margin-top: auto;
+  padding: 1.5rem;
+  background-color: rgba(42, 42, 42, 0.9);
+  text-align: center;
+  width: 100%;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.footer-icons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 10px 0;
+}
+
+.footer-icons a {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background-color: #444;
+  border-radius: 50%;
+  display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.5rem;
-  transition: opacity 0.5s ease;
-  opacity: 1;
-  padding: 2rem;
-  border-radius: 15px;
-  background: #2a2a2a;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  border: 2px solid #3a3a3a;
-  width: 400px;
-  max-width: 90%;
+  transition: background-color 0.3s ease;
 }
 
-#lobbyMenu.hidden {
-  opacity: 0;
-  pointer-events: none;
+.footer-icons a:hover {
+  background-color: #666;
 }
 
-#lobbyMenu h2 {
-  color: #e0e0e0;
-  font-size: 1.8em;
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
-#lobbyForm {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  width: 100%;
-}
-
-#lobbyForm label {
-  color: #e0e0e0;
-  font-size: 1.1em;
-  display: block;
-  margin-bottom: 0.5rem;
-}
-
-#lobbyForm input {
-  width: 100%;
-  padding: 12px;
-  border-radius: 8px;
-  background: #3a3a3a;
+.footer-icons a i {
   color: #fff;
-  border: 2px solid #4a4a4a;
-  font-size: 1em;
-  transition: all 0.3s ease;
+  font-size: 20px;
 }
 
-#lobbyForm input:focus {
-  outline: none;
-  border-color: #5a5a5a;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+.footer .social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
 }
 
-#lobbyForm button {
-  background-color: #2a2a2a;
+.footer .social-icons a {
+  color: #e0e0e0;
+  transition: color 0.3s ease;
+}
+
+.footer .social-icons a:hover {
   color: #fff;
-  border: 2px solid #3a3a3a;
-  padding: 12px 24px;
-  border-radius: 12px;
-  font-size: 1em;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  width: 100%;
-  font-weight: 500;
-  position: relative;
-  overflow: hidden;
 }
 
-#lobbyForm button::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  transition: width 0.6s ease, height 0.6s ease;
+.footer .social-icons a img {
+  width: 24px;
+  height: 24px;
 }
 
-#lobbyForm button:hover::after {
-  width: 300px;
-  height: 300px;
-}
-
-#lobbyForm button:active {
-  transform: scale(0.95);
-}
-
-#lobbyStatus {
-  color: #e0e0e0;
-  text-align: center;
-  margin: 1rem 0;
-  min-height: 24px;
-}
-
-#lobbyPlayers {
-  color: #e0e0e0;
-  text-align: center;
-  margin: 1rem 0;
-  min-height: 24px;
-}
-
-/* Ajustes para o tema claro */
-body.light #lobbyMenu {
-  background: #f7f7f7;
-  border: 2px solid #d0d0d0;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-}
-
-body.light #lobbyMenu h2 {
+/* Ajuste para o tema claro */
+body.light footer {
+  background: rgba(245, 245, 245, 0.9);
   color: #333;
-}
-
-body.light #lobbyForm label {
-  color: #333;
-}
-
-body.light #lobbyForm input {
-  background: #f5f5f5;
-  color: #333;
-  border: 2px solid #e0e0e0;
-}
-
-body.light #lobbyForm input:focus {
-  border-color: #d0d0d0;
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
-}
-
-body.light #lobbyForm button {
-  background-color: #f7f7f7;
-  color: #333;
-  border: 2px solid #d0d0d0;
-}
-
-body.light #lobbyForm button::after {
-  background: rgba(0, 0, 0, 0.1);
-}
-
-body.light #lobbyStatus,
-body.light #lobbyPlayers {
-  color: #333;
-}
-
-/* Ajustes para o tema azul */
-body.blue #lobbyMenu {
-  background: #2a3447;
-  border: 2px solid #3a4b6e;
-}
-
-body.blue #lobbyForm input {
-  background: #3a4b6e;
-  border: 2px solid #4a5b8e;
-}
-
-body.blue #lobbyForm button {
-  background-color: #3a4b6e;
-  border: 2px solid #4a5b8e;
-}
-
-/* Ajustes para o tema verde */
-body.green #lobbyMenu {
-  background: #2a472a;
-  border: 2px solid #3a6e3a;
-}
-
-body.green #lobbyForm input {
-  background: #3a6e3a;
-  border: 2px solid #4a8e4a;
-}
-
-body.green #lobbyForm button {
-  background-color: #3a6e3a;
-  border: 2px solid #4a8e4a;
-}
-
-/* Ajustes para o tema roxo */
-body.purple #lobbyMenu {
-  background: #472a47;
-  border: 2px solid #6e3a6e;
-}
-
-body.purple #lobbyForm input {
-  background: #6e3a6e;
-  border: 2px solid #8e4a8e;
-}
-
-body.purple #lobbyForm button {
-  background-color: #6e3a6e;
-  border: 2px solid #8e4a8e;
-}
-
-.button-group {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.button-group button {
-  flex: 1;
-}
-
-.lobby-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  width: 100%;
-  margin-top: 1rem;
-}
-
-.lobby-actions .menu-button {
-  width: 100%;
-}
-
-/* Ajustes para o tema claro */
-body.light .button-group button {
-  background-color: #f7f7f7;
-  color: #333;
-  border: 2px solid #d0d0d0;
-}
-
-body.light .button-group button:hover {
-  background-color: #eaeaea;
-  border-color: #bdbdbd;
-}
-
-/* Ajustes para o tema azul */
-body.blue .button-group button {
-  background-color: #3a4b6e;
-  border: 2px solid #4a5b8e;
-}
-
-body.blue .button-group button:hover {
-  background-color: #4a5b8e;
-}
-
-/* Ajustes para o tema verde */
-body.green .button-group button {
-  background-color: #3a6e3a;
-  border: 2px solid #4a8e4a;
-}
-
-body.green .button-group button:hover {
-  background-color: #4a8e4a;
-}
-
-/* Ajustes para o tema roxo */
-body.purple .button-group button {
-  background-color: #6e3a6e;
-  border: 2px solid #8e4a8e;
-}
-
-body.purple .button-group button:hover {
-  background-color: #8e4a8e;
+  border-top: 2px solid #e0e0e0;
 }

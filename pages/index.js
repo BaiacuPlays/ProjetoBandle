@@ -3,6 +3,7 @@ import { songs, getRandomSong } from '../data/songs';
 import styles from '../styles/Home.module.css';
 import { FaPlay, FaPause, FaVolumeUp, FaFastForward, FaQuestionCircle } from 'react-icons/fa';
 import MusicInfoFetcher from '../components/MusicInfoFetcher';
+import Footer from '../components/Footer';
 
 const MAX_ATTEMPTS = 6;
 const GAME_INTERVAL = 24 * 60 * 60 * 1000; // 24h em ms
@@ -355,263 +356,259 @@ export default function Home() {
   }
 
   return (
-    <div className={styles.darkBg}>
-      <div className={styles.topBar}>
-        <div className={styles.titleBarContainer}>
-          <span className={styles.titleBar}>Adivinhe a música tocada pela banda</span>
-          <button 
-            className={styles.helpButton}
-            onClick={() => setShowInstructions(true)}
-            aria-label="Ajuda"
-          >
-            <FaQuestionCircle size={24} />
-          </button>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <div className={styles.darkBg} style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div className={styles.topBar}>
+          <div className={styles.titleBarContainer}>
+            <span className={styles.titleBar}>Adivinhe a música tocada pela banda</span>
+            <button
+              className={styles.helpButton}
+              onClick={() => setShowInstructions(true)}
+              aria-label="Ajuda"
+            >
+              <FaQuestionCircle size={24} />
+            </button>
+          </div>
+          {getProgressiveHint(currentSong, activeHint) && !gameOver && (
+            <div className={styles.hintBoxModern} style={{ marginTop: 12, marginBottom: 0, maxWidth: 420, textAlign: 'center' }}>
+              <strong>Dica:</strong> {getProgressiveHint(currentSong, activeHint)}
+            </div>
+          )}
         </div>
-        {getProgressiveHint(currentSong, activeHint) && !gameOver && (
-          <div className={styles.hintBoxModern} style={{ marginTop: 12, marginBottom: 0, maxWidth: 420, textAlign: 'center' }}>
-            <strong>Dica:</strong> {getProgressiveHint(currentSong, activeHint)}
+
+        {showInstructions && (
+          <div className={styles.modalOverlay}>
+            <div className={styles.modal}>
+              <button
+                className={styles.closeButton}
+                onClick={() => setShowInstructions(false)}
+              >
+                ×
+              </button>
+              <h2>Como Jogar</h2>
+              <div className={styles.modalContent}>
+                <p>1. Clique play para ouvir um trecho da música.</p>
+                <p>2. Procure pela música que você acha que o trecho pertence.</p>
+                <p>3. Clique skip para passar para o próximo trecho.</p>
+                <p>4. Se você errar, revelaremos um trecho adicional da música para ajudar.</p>
+                <p>5. Você tem 6 tentativas no total.</p>
+                <div className={styles.legendBox}>
+                  <div className={styles.legendItem}>
+                    <span className={styles.legendCorrect}>✅</span> = Correto
+                  </div>
+                  <div className={styles.legendItem}>
+                    <span className={styles.legendIncorrect}>❌</span> = Incorreto
+                  </div>
+                  <div className={styles.legendItem}>
+                    <span className={styles.legendFromGame}>▲</span> = Música errada, mas do jogo correto
+                  </div>
+                </div>
+                <p className={styles.goodLuck}>Boa Sorte!</p>
+              </div>
+            </div>
           </div>
         )}
-      </div>
 
-      {showInstructions && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modal}>
-            <button 
-              className={styles.closeButton}
-              onClick={() => setShowInstructions(false)}
-            >
-              ×
-            </button>
-            <h2>Como Jogar</h2>
-            <div className={styles.modalContent}>
-              <p>1. Clique play para ouvir um trecho da música.</p>
-              <p>2. Procure pela música que você acha que o trecho pertence.</p>
-              <p>3. Clique skip para passar para o próximo trecho.</p>
-              <p>4. Se você errar, revelaremos um trecho adicional da música para ajudar.</p>
-              <p>5. Você tem 6 tentativas no total.</p>
-              <div className={styles.legendBox}>
-                <div className={styles.legendItem}>
-                  <span className={styles.legendCorrect}>✅</span> = Correto
-                </div>
-                <div className={styles.legendItem}>
-                  <span className={styles.legendIncorrect}>❌</span> = Incorreto
-                </div>
-                <div className={styles.legendItem}>
-                  <span className={styles.legendFromGame}>▲</span> = Música errada, mas do jogo correto
-                </div>
-              </div>
-              <p className={styles.goodLuck}>Boa Sorte!</p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <div className={styles.gameAreaModern}>
-        <div className={styles.audioModernBox}>
-          <div className={styles.customAudioPlayer}>
-            <div className={styles.audioPlayerRow}>
-              <span className={styles.audioTime}>{
-                new Date(audioProgress * 1000).toISOString().substr(14, 5)
-              }</span>
-              <input
-                type="range"
-                min={0}
-                max={currentClipDuration}
-                step={0.01}
-                value={audioProgress}
-                onChange={e => {
-                  let value = Number(e.target.value);
-                  if (!isPlaying) {
-                    value = 0;
-                    if (audioRef.current) {
-                      audioRef.current.currentTime = startTime;
+        <div className={styles.gameAreaModern}>
+          <div className={styles.audioModernBox}>
+            <div className={styles.customAudioPlayer}>
+              <div className={styles.audioPlayerRow}>
+                <span className={styles.audioTime}>{new Date(audioProgress * 1000).toISOString().substr(14, 5)}</span>
+                <input
+                  type="range"
+                  min={0}
+                  max={currentClipDuration}
+                  step={0.01}
+                  value={audioProgress}
+                  onChange={e => {
+                    let value = Number(e.target.value);
+                    if (!isPlaying) {
+                      value = 0;
+                      if (audioRef.current) {
+                        audioRef.current.currentTime = startTime;
+                      }
+                      setAudioProgress(0);
+                      return;
                     }
-                    setAudioProgress(0);
-                    return;
-                  }
-                  if (value > currentClipDuration) value = currentClipDuration;
-                  if (audioRef.current) {
-                    audioRef.current.currentTime = startTime + value;
-                    setAudioProgress(value);
-                  }
-                }}
-                className={styles.audioSeekbarCustom}
-                disabled={gameOver || audioError || !audioDuration}
-              />
-              <span className={styles.audioTime} style={{ marginLeft: 10 }}>
-                {audioDuration
-                  ? new Date(currentClipDuration * 1000).toISOString().substr(14, 5)
-                  : '00:00'}
-              </span>
+                    if (value > currentClipDuration) value = currentClipDuration;
+                    if (audioRef.current) {
+                      audioRef.current.currentTime = startTime + value;
+                      setAudioProgress(value);
+                    }
+                  } }
+                  className={styles.audioSeekbarCustom}
+                  disabled={gameOver || audioError || !audioDuration} />
+                <span className={styles.audioTime} style={{ marginLeft: 10 }}>
+                  {audioDuration
+                    ? new Date(currentClipDuration * 1000).toISOString().substr(14, 5)
+                    : '00:00'}
+                </span>
+              </div>
+              <div className={styles.audioVolumeRow}>
+                <button
+                  className={styles.audioPlayBtnCustom}
+                  onClick={() => {
+                    if (!audioRef.current) return;
+
+                    const currentTime = audioRef.current.currentTime - startTime;
+                    if (currentTime >= currentClipDuration) {
+                      // Se já passou do limite, volta para o início do trecho
+                      audioRef.current.currentTime = startTime;
+                      setAudioProgress(0);
+                    }
+
+                    if (isPlaying) {
+                      audioRef.current.pause();
+                    } else {
+                      audioRef.current.play();
+                    }
+                  } }
+                  disabled={audioError || !audioDuration}
+                >
+                  {isPlaying ? (
+                    <FaPause color="#fff" size={20} />
+                  ) : (
+                    <FaPlay color="#fff" size={20} />
+                  )}
+                </button>
+                <FaVolumeUp color="#fff" style={{ marginRight: 8 }} />
+                <input
+                  type="range"
+                  min={0}
+                  max={1}
+                  step={0.01}
+                  value={volume}
+                  onChange={e => setVolume(Number(e.target.value))}
+                  className={styles.audioVolumeCustom}
+                  disabled={audioError} />
+              </div>
+              <audio
+                ref={audioRef}
+                src={currentSong?.audioUrl}
+                style={{ display: 'none' }}
+                onEnded={handleAudioEnded}
+                onError={() => {
+                  setAudioError(true);
+                  setMessage('Erro ao carregar o áudio. Verifique se o arquivo existe.');
+                } }
+                onLoadedMetadata={handleLoadedMetadata} />
             </div>
-            <div className={styles.audioVolumeRow}>
-              <button
-                className={styles.audioPlayBtnCustom}
-                onClick={() => {
-                  if (!audioRef.current) return;
-                  
-                  const currentTime = audioRef.current.currentTime - startTime;
-                  if (currentTime >= currentClipDuration) {
-                    // Se já passou do limite, volta para o início do trecho
-                    audioRef.current.currentTime = startTime;
-                    setAudioProgress(0);
-                  }
-                  
-                  if (isPlaying) {
-                    audioRef.current.pause();
-                  } else {
-                    audioRef.current.play();
-                  }
-                }}
-                disabled={audioError || !audioDuration}
-              >
-                {isPlaying ? (
-                  <FaPause color="#fff" size={20} />
-                ) : (
-                  <FaPlay color="#fff" size={20} />
-                )}
-              </button>
-              <FaVolumeUp color="#fff" style={{ marginRight: 8 }} />
-              <input
-                type="range"
-                min={0}
-                max={1}
-                step={0.01}
-                value={volume}
-                onChange={e => setVolume(Number(e.target.value))}
-                className={styles.audioVolumeCustom}
-                disabled={audioError}
-              />
-            </div>
-            <audio
-              ref={audioRef}
-              src={currentSong?.audioUrl}
-              style={{ display: 'none' }}
-              onEnded={handleAudioEnded}
-              onError={() => {
-                setAudioError(true);
-                setMessage('Erro ao carregar o áudio. Verifique se o arquivo existe.');
-              }}
-              onLoadedMetadata={handleLoadedMetadata}
-            />
           </div>
-        </div>
-        <div className={styles.attemptsRow}>
-          {[...Array(MAX_ATTEMPTS)].map((_, idx) => {
-            let statusClass = styles.attemptInactive;
-            if (history[idx]) {
-              if (history[idx].type === 'success') {
-                statusClass = styles.attemptSuccess;
-              } else if (history[idx].type === 'fail') {
-                // Checa se o jogo está correto
-                const isFromCorrectGame = history[idx]?.type === 'fail' &&
-                  currentSong?.game &&
-                  songs.find(s => s.title === history[idx].value)?.game === currentSong.game;
-                if (isFromCorrectGame) {
-                  statusClass = styles.attemptGame;
-                } else {
+          <div className={styles.attemptsRow}>
+            {[...Array(MAX_ATTEMPTS)].map((_, idx) => {
+              let statusClass = styles.attemptInactive;
+              if (history[idx]) {
+                if (history[idx].type === 'success') {
+                  statusClass = styles.attemptSuccess;
+                } else if (history[idx].type === 'fail') {
+                  // Checa se o jogo está correto
+                  const isFromCorrectGame = history[idx]?.type === 'fail' &&
+                    currentSong?.game &&
+                    songs.find(s => s.title === history[idx].value)?.game === currentSong.game;
+                  if (isFromCorrectGame) {
+                    statusClass = styles.attemptGame;
+                  } else {
+                    statusClass = styles.attemptFail;
+                  }
+                } else if (history[idx].type === 'skipped') {
                   statusClass = styles.attemptFail;
                 }
-              } else if (history[idx].type === 'skipped') {
-                statusClass = styles.attemptFail;
               }
-            }
-            return (
-              <button
-                key={idx}
-                type="button"
-                className={styles.attemptButton + ' ' + statusClass}
-                disabled={idx > attempts}
-                onClick={() => idx <= attempts && setActiveHint(idx)}
-                tabIndex={idx > attempts ? -1 : 0}
-              >
-                {idx + 1}
-              </button>
-            );
-          })}
-          <button
-            type="button"
-            className={styles.attemptButton + ' ' + styles.attemptInactive}
-            onClick={handleSkip}
-            disabled={gameOver || audioError || attempts >= MAX_ATTEMPTS}
-          >
-            Skip <FaFastForward style={{ marginLeft: 4, fontSize: '1em', verticalAlign: 'middle' }} />
-          </button>
-        </div>
-        <form onSubmit={handleGuess} className={styles.guessFormModern} autoComplete="off">
-          <input
-            ref={inputRef}
-            type="text"
-            value={guess}
-            onChange={handleInputChange}
-            placeholder="Digite o nome da música..."
-            disabled={gameOver || audioError}
-            className={styles.guessInputModern}
-            onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-          />
-          <button
-            type="submit"
-            disabled={gameOver || audioError}
-            className={`${styles.guessButtonModern} ${isShaking ? styles.shake : ''}`}
-          >
-            Adivinhar
-          </button>
-          {showSuggestions && filteredSuggestions.length > 0 && (
-            <ul className={styles.suggestionsListModern}>
-              {filteredSuggestions.map(suggestion => (
-                <li
-                  key={suggestion.id}
-                  className={styles.suggestionItemModern}
-                  onMouseDown={() => handleSuggestionClick(suggestion)}
+              return (
+                <button
+                  key={idx}
+                  type="button"
+                  className={styles.attemptButton + ' ' + statusClass}
+                  disabled={idx > attempts}
+                  onClick={() => idx <= attempts && setActiveHint(idx)}
+                  tabIndex={idx > attempts ? -1 : 0}
                 >
-                  {suggestion.title} - {suggestion.game}
-                </li>
-              ))}
-            </ul>
-          )}
-        </form>
-        <div className={styles.historyBox}>
-          {history.map((item, idx) => {
-            const isFromCorrectGame = item?.type === 'fail' && 
-              currentSong?.game && 
-              songs.find(s => s.title === item.value)?.game === currentSong.game;
-            return (
-              <div key={idx} className={styles.historyItem}>
-                {item?.type === 'skipped' && <span className={styles.historySkipped}>❌ Skipped!</span>}
-                {item?.type === 'fail' && (
-                  <span className={isFromCorrectGame ? styles.historyFailButCorrectGame : styles.historyFail}>
-                    {isFromCorrectGame ? '▲' : '❌'} {item.value}
-                  </span>
-                )}
-                {item?.type === 'success' && <span className={styles.historySuccess}>✅ {item.value}</span>}
-              </div>
-            );
-          })}
-        </div>
-        {message && (
-          <div className={`${styles.messageModern} ${audioError ? styles.error : ''}`}>
-            {message}
+                  {idx + 1}
+                </button>
+              );
+            })}
+            <button
+              type="button"
+              className={styles.attemptButton + ' ' + styles.attemptInactive}
+              onClick={handleSkip}
+              disabled={gameOver || audioError || attempts >= MAX_ATTEMPTS}
+            >
+              Skip <FaFastForward style={{ marginLeft: 4, fontSize: '1em', verticalAlign: 'middle' }} />
+            </button>
           </div>
-        )}
-        {gameOver && (
-          <button
-            className={styles.newGameButtonModern}
-            onClick={startNewGame}
-          >
-            Jogar Novamente
-          </button>
-        )}
-        <div className={styles.timerBox}>
-          Novo jogo em: <span className={styles.timer}>{formatTimer(timer)}</span>
+          <form onSubmit={handleGuess} className={styles.guessFormModern} autoComplete="off">
+            <input
+              ref={inputRef}
+              type="text"
+              value={guess}
+              onChange={handleInputChange}
+              placeholder="Digite o nome da música..."
+              disabled={gameOver || audioError}
+              className={styles.guessInputModern}
+              onBlur={() => setTimeout(() => setShowSuggestions(false), 200)} />
+            <button
+              type="submit"
+              disabled={gameOver || audioError}
+              className={`${styles.guessButtonModern} ${isShaking ? styles.shake : ''}`}
+            >
+              Adivinhar
+            </button>
+            {showSuggestions && filteredSuggestions.length > 0 && (
+              <ul className={styles.suggestionsListModern}>
+                {filteredSuggestions.map(suggestion => (
+                  <li
+                    key={suggestion.id}
+                    className={styles.suggestionItemModern}
+                    onMouseDown={() => handleSuggestionClick(suggestion)}
+                  >
+                    {suggestion.title} - {suggestion.game}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </form>
+          <div className={styles.historyBox}>
+            {history.map((item, idx) => {
+              const isFromCorrectGame = item?.type === 'fail' &&
+                currentSong?.game &&
+                songs.find(s => s.title === item.value)?.game === currentSong.game;
+              return (
+                <div key={idx} className={styles.historyItem}>
+                  {item?.type === 'skipped' && <span className={styles.historySkipped}>❌ Skipped!</span>}
+                  {item?.type === 'fail' && (
+                    <span className={isFromCorrectGame ? styles.historyFailButCorrectGame : styles.historyFail}>
+                      {isFromCorrectGame ? '▲' : '❌'} {item.value}
+                    </span>
+                  )}
+                  {item?.type === 'success' && <span className={styles.historySuccess}>✅ {item.value}</span>}
+                </div>
+              );
+            })}
+          </div>
+          {message && (
+            <div className={`${styles.messageModern} ${audioError ? styles.error : ''}`}>
+              {message}
+            </div>
+          )}
+          {gameOver && (
+            <button
+              className={styles.newGameButtonModern}
+              onClick={startNewGame}
+            >
+              Jogar Novamente
+            </button>
+          )}
+          <div className={styles.timerBox}>
+            Novo jogo em: <span className={styles.timer}>{formatTimer(timer)}</span>
+          </div>
         </div>
+        {currentSong && (
+          <MusicInfoFetcher
+            song={currentSong}
+            onInfoLoaded={handleMusicInfoLoaded} />
+        )}
       </div>
-      {currentSong && (
-        <MusicInfoFetcher 
-          song={currentSong} 
-          onInfoLoaded={handleMusicInfoLoaded} 
-        />
-      )}
+      <Footer />
     </div>
   );
-} 
+};
