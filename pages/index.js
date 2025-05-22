@@ -96,7 +96,7 @@ export default function Home() {
 
     const updateProgress = () => {
       const currentTime = audio.currentTime - startTime;
-      if (!gameOver && currentTime >= currentClipDuration) {
+      if (!gameOver && currentTime >= 15) { // Limita a 15 segundos
         audio.pause();
         setIsPlaying(false);
         // Reset para o início do trecho quando atingir o limite
@@ -110,7 +110,7 @@ export default function Home() {
     const updatePlay = () => {
       // Verifica se já atingiu o limite antes de permitir o play
       const currentTime = audio.currentTime - startTime;
-      if (!gameOver && currentTime >= currentClipDuration) {
+      if (!gameOver && currentTime >= 15) { // Limita a 15 segundos
         audio.pause();
         setIsPlaying(false);
         // Reset para o início do trecho
@@ -132,7 +132,7 @@ export default function Home() {
       audio.removeEventListener('pause', updatePlay);
       audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
     };
-  }, [audioRef.current, currentClipDuration, startTime, gameOver]);
+  }, [audioRef.current, startTime, gameOver]);
 
   // Atualiza volume
   useEffect(() => {
@@ -548,7 +548,7 @@ export default function Home() {
               onBlur={() => setTimeout(() => setShowSuggestions(false), 200)} />
             <button
               type="submit"
-              disabled={gameOver || audioError}
+              disabled={gameOver || audioError || !guess.trim()}
               className={`${styles.guessButtonModern} ${isShaking ? styles.shake : ''}`}
             >
               Adivinhar

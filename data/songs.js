@@ -24,6 +24,9 @@ const checkSongAvailability = async (song) => {
   }
 };
 
+// Histórico de músicas recentes (últimas 20)
+let recentSongs = [];
+
 export const getRandomSong = async () => {
   // Check availability of all songs in parallel
   const availabilityChecks = await Promise.all(
@@ -34,15 +37,35 @@ export const getRandomSong = async () => {
   );
   
   // Filter available songs
-  const availableSongs = availabilityChecks
+  let availableSongs = availabilityChecks
     .filter(({ isAvailable }) => isAvailable)
     .map(({ song }) => song);
   
-  // If no songs are available, return the first song
+  // Remove as músicas que estão no histórico recente
+  availableSongs = availableSongs.filter(song => !recentSongs.includes(song.id));
+  
+  // Se não houver músicas disponíveis fora do histórico, limpa o histórico
+  if (availableSongs.length === 0) {
+    recentSongs = [];
+    availableSongs = availabilityChecks
+      .filter(({ isAvailable }) => isAvailable)
+      .map(({ song }) => song);
+  }
+  
+  // Se ainda não houver músicas disponíveis, retorna a primeira música
   if (availableSongs.length === 0) {
     return songs[0];
   }
   
   const randomIndex = Math.floor(Math.random() * availableSongs.length);
-  return availableSongs[randomIndex];
+  const selectedSong = availableSongs[randomIndex];
+  
+  // Adiciona a música selecionada ao histórico
+  recentSongs.push(selectedSong.id);
+  // Mantém apenas as últimas 20 músicas no histórico
+  if (recentSongs.length > 20) {
+    recentSongs.shift();
+  }
+  
+  return selectedSong;
 }; 
