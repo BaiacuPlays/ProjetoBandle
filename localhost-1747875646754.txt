@@ -1,0 +1,3440 @@
+main.js:1242 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+websocket.js:46 [HMR] connected
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/outros/1-02.%20Clock%20Town,%20First%20Day.mp3 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/outros/ULTRACHURCH%20(Loop).mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/outros/The%20Fire%20Is%20Gone%20(Christmas).mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/undertale/Undertale%20OST%20-%20002%20Your%20Best%20Friend.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/undertale/Undertale%20OST%20-%20063%20Death%20by%20Glamour.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/The%20Beginning.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/School.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Susie.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/The%20Door.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Lancer.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Rudinrangers.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Rude%20Buster.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Field%20of%20Hopes%20and%20Dreams.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Scarlet%20Forest.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Chaos%20King.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/The%20World%20Revolving.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Don't%20Forget.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Cyber%20World.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Spamton.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/NOW'S%20YOUR%20CHANCE%20TO%20BE%20A%20BIG%20SHOT.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Big%20Shot.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/The%20Dark%20Truth.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Hometown%20(Reprise).mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Main%20Theme.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/The%20Power.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Weeping%20Dawn.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Nine%20Blades.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Down%20by%20the%20River.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Enigma%20do%20Medo%20Main%20Theme.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/The%20Haunted%20School.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Cursed%20Doll.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Dark%20Corridors.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/The%20Chase.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Silent%20Fear.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/I%20Prefer%20My%20Pizza%2090%%20Grease.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Cryptic%20Encounter.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Fading%20Hope.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Final%20Revelation.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Take%20A%20Load%20Off.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Fresh...ish%E2%80%A6%20.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/High%20Fructose%20Headache.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/I%20Think%20My%20Dad%20Shops%20Here%E2%80%A6%20.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Just%20Leave%20Me%20Alone.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Cram%20It%20Wad.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Respite.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/It%20Means%20Everything.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/See%20You%20Tomorrow.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/A%20Home%20For%20Flowers%20(Empty).mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Help%20Me.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Arachnophobia.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/To%20the%20Moon%20-%20Main%20Theme.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Between%20a%20Squirrel%20and%20a%20Tree.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Spiral%20of%20Secrets.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/For%20River%20-%20Piano%20(Sarah%20&%20Tommy's%20Version).mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Bestest%20Detectives%20in%20the%20World.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Too%20Bad%20So%20Sad.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Teddy.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Uncharted%20Realms.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Having%20Lived.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Born%20a%20Stranger.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Moonwisher.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/For%20River%20-%20Piano%20(Johnny's%20Version).mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Lament%20of%20a%20Stranger.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Everything's%20Alright%20(Music%20Box).mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Moongazer.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Anya%20by%20the%20Stars.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Take%20Me%20Anywhere.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Warning%20(AKA%20best%20track%20ever).mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Beta-B.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/World's%20Smallest%20Ferris%20Wheel.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Once%20Upon%20a%20Memory.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Once%20Upon%20a%20Memory%20(Piano).mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Everything's%20Alright.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Everything's%20Alright%20(Reprise).mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Tomorrow.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Launch.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Finding%20Paradise%20-%20Main%20Theme.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/The%20Way%20He%20Looks%20at%20Me.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Who%20We%20Are.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Here%20and%20There.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Song%20of%20Life.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Memory%20Dive.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Time%20Lapse.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/The%20World%20Is%20Not%20Enough.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/The%20Road%20Home.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/outros/1-02.%20Clock%20Town,%20First%20Day.mp3 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/outros/ULTRACHURCH%20(Loop).mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/outros/The%20Fire%20Is%20Gone%20(Christmas).mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/undertale/Undertale%20OST%20-%20002%20Your%20Best%20Friend.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/undertale/Undertale%20OST%20-%20063%20Death%20by%20Glamour.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/The%20Beginning.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/School.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Susie.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/The%20Door.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Lancer.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Rudinrangers.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Rude%20Buster.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Field%20of%20Hopes%20and%20Dreams.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Scarlet%20Forest.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Chaos%20King.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/The%20World%20Revolving.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Don't%20Forget.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Cyber%20World.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Spamton.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/NOW'S%20YOUR%20CHANCE%20TO%20BE%20A%20BIG%20SHOT.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Big%20Shot.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/The%20Dark%20Truth.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Hometown%20(Reprise).mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Main%20Theme.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/The%20Power.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Weeping%20Dawn.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Nine%20Blades.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Down%20by%20the%20River.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Enigma%20do%20Medo%20Main%20Theme.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/The%20Haunted%20School.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Cursed%20Doll.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Dark%20Corridors.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/The%20Chase.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Silent%20Fear.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Cryptic%20Encounter.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Fading%20Hope.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Final%20Revelation.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Take%20A%20Load%20Off.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/I%20Prefer%20My%20Pizza%2090%%20Grease.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Fresh...ish%E2%80%A6%20.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/High%20Fructose%20Headache.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/I%20Think%20My%20Dad%20Shops%20Here%E2%80%A6%20.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Just%20Leave%20Me%20Alone.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Cram%20It%20Wad.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Respite.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/It%20Means%20Everything.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/See%20You%20Tomorrow.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/A%20Home%20For%20Flowers%20(Empty).mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Help%20Me.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Arachnophobia.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/To%20the%20Moon%20-%20Main%20Theme.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Between%20a%20Squirrel%20and%20a%20Tree.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Spiral%20of%20Secrets.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/For%20River%20-%20Piano%20(Sarah%20&%20Tommy's%20Version).mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Bestest%20Detectives%20in%20the%20World.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Too%20Bad%20So%20Sad.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Teddy.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Uncharted%20Realms.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Having%20Lived.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Moonwisher.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Born%20a%20Stranger.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/For%20River%20-%20Piano%20(Johnny's%20Version).mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Lament%20of%20a%20Stranger.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Everything's%20Alright%20(Music%20Box).mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Moongazer.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Anya%20by%20the%20Stars.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Take%20Me%20Anywhere.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Warning%20(AKA%20best%20track%20ever).mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Beta-B.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/World's%20Smallest%20Ferris%20Wheel.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Once%20Upon%20a%20Memory.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Once%20Upon%20a%20Memory%20(Piano).mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Everything's%20Alright.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Everything's%20Alright%20(Reprise).mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Tomorrow.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Launch.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Finding%20Paradise%20-%20Main%20Theme.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Who%20We%20Are.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/The%20Way%20He%20Looks%20at%20Me.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Here%20and%20There.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Song%20of%20Life.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Memory%20Dive.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/Time%20Lapse.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/The%20World%20Is%20Not%20Enough.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
+           HEAD http://localhost:3000/audio/The%20Road%20Home.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+favicon.ico:1 
+            
+            
+           GET http://localhost:3000/favicon.ico 404 (Not Found)
+MusicInfoFetcher.js:11 
+            
+            
+           GET http://localhost:3000/api/music-info/?title=%20Minecraft%20Minecraft%20C418&game=Minecraft 404 (Not Found)
+fetchMusicInfo @ MusicInfoFetcher.js:11
+eval @ MusicInfoFetcher.js:36
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+MusicInfoFetcher.js:28 Erro ao buscar informações: Error: Erro ao buscar informações da música
+    at fetchMusicInfo (MusicInfoFetcher.js:13:17)
+console.error @ client.js:26
+window.console.error @ setup-hydration-warning.js:18
+fetchMusicInfo @ MusicInfoFetcher.js:28
+await in fetchMusicInfo
+eval @ MusicInfoFetcher.js:36
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+MusicInfoFetcher.js:11 
+            
+            
+           GET http://localhost:3000/api/music-info/?title=%20Float%20Islands&game=Kirby%20Super%20Star 404 (Not Found)
+fetchMusicInfo @ MusicInfoFetcher.js:11
+eval @ MusicInfoFetcher.js:36
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+MusicInfoFetcher.js:28 Erro ao buscar informações: Error: Erro ao buscar informações da música
+    at fetchMusicInfo (MusicInfoFetcher.js:13:17)
+console.error @ client.js:26
+window.console.error @ setup-hydration-warning.js:18
+fetchMusicInfo @ MusicInfoFetcher.js:28
+await in fetchMusicInfo
+eval @ MusicInfoFetcher.js:36
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+MusicInfoFetcher.js:11 
+            
+            
+           GET http://localhost:3000/api/music-info/?title=%20Float%20Islands&game=Kirby%20Super%20Star 404 (Not Found)
+fetchMusicInfo @ MusicInfoFetcher.js:11
+eval @ MusicInfoFetcher.js:36
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+MusicInfoFetcher.js:28 Erro ao buscar informações: Error: Erro ao buscar informações da música
+    at fetchMusicInfo (MusicInfoFetcher.js:13:17)
+console.error @ client.js:26
+window.console.error @ setup-hydration-warning.js:18
+fetchMusicInfo @ MusicInfoFetcher.js:28
+await in fetchMusicInfo
+eval @ MusicInfoFetcher.js:36
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
