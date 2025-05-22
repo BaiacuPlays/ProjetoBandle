@@ -360,7 +360,7 @@ export default function Home() {
       <div className={styles.darkBg} style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div className={styles.topBar}>
           <div className={styles.titleBarContainer}>
-            <span className={styles.titleBar}>Adivinhe a música tocada pela banda</span>
+            <span className={styles.titleBar}>Insira a logo aqui</span>
             <button
               className={styles.helpButton}
               onClick={() => setShowInstructions(true)}
@@ -392,6 +392,7 @@ export default function Home() {
                 <p>3. Clique skip para passar para o próximo trecho.</p>
                 <p>4. Se você errar, revelaremos um trecho adicional da música para ajudar.</p>
                 <p>5. Você tem 6 tentativas no total.</p>
+                <p>Aviso: Após dar play na musica, ela pode demorar um pouco para carregar, é normal</p>
                 <div className={styles.legendBox}>
                   <div className={styles.legendItem}>
                     <span className={styles.legendCorrect}>✅</span> = Correto
