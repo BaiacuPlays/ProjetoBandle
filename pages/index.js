@@ -360,7 +360,7 @@ export default function Home() {
       <div className={styles.darkBg} style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div className={styles.topBar}>
           <div className={styles.titleBarContainer}>
-            <span className={styles.titleBar}>Adivinhe a música tocada pela banda</span>
+            <span className={styles.titleBar}>Insira a logo aqui</span>
             <button
               className={styles.helpButton}
               onClick={() => setShowInstructions(true)}
