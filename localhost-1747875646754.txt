@@ -3,87 +3,7 @@ websocket.js:46 [HMR] connected
 songs.js:20 
             
             
-           HEAD http://localhost:3000/audio/sonic/Sonic%20outras/01-01_reach_for_the_stars-opening_theme-/01-reach-for-the-stars-opening-theme.mp3 net::ERR_ABORTED 404 (Not Found)
-checkSongAvailability @ songs.js:20
-eval @ songs.js:32
-getRandomSong @ songs.js:30
-loadSong @ index.js:58
-eval @ index.js:76
-commitHookEffectListMount @ react-dom.development.js:23145
-commitPassiveMountOnFiber @ react-dom.development.js:24921
-commitPassiveMountEffects_complete @ react-dom.development.js:24886
-commitPassiveMountEffects_begin @ react-dom.development.js:24873
-commitPassiveMountEffects @ react-dom.development.js:24861
-flushPassiveEffectsImpl @ react-dom.development.js:27034
-flushPassiveEffects @ react-dom.development.js:26979
-eval @ react-dom.development.js:26764
-workLoop @ scheduler.development.js:266
-flushWork @ scheduler.development.js:239
-performWorkUntilDeadline @ scheduler.development.js:533
-songs.js:20 
-            
-            
-           HEAD http://localhost:3000/audio/sonic/Sonic%20outras/02Back2Back/02-back-2-back.mp3 net::ERR_ABORTED 404 (Not Found)
-checkSongAvailability @ songs.js:20
-eval @ songs.js:32
-getRandomSong @ songs.js:30
-loadSong @ index.js:58
-eval @ index.js:76
-commitHookEffectListMount @ react-dom.development.js:23145
-commitPassiveMountOnFiber @ react-dom.development.js:24921
-commitPassiveMountEffects_complete @ react-dom.development.js:24886
-commitPassiveMountEffects_begin @ react-dom.development.js:24873
-commitPassiveMountEffects @ react-dom.development.js:24861
-flushPassiveEffectsImpl @ react-dom.development.js:27034
-flushPassiveEffects @ react-dom.development.js:26979
-eval @ react-dom.development.js:26764
-workLoop @ scheduler.development.js:266
-flushWork @ scheduler.development.js:239
-performWorkUntilDeadline @ scheduler.development.js:533
-songs.js:20 
-            
-            
-           HEAD http://localhost:3000/audio/sonic/Sonic%20outras/1-01_Opening_Movie/01-opening-movie.mp3 net::ERR_ABORTED 404 (Not Found)
-checkSongAvailability @ songs.js:20
-eval @ songs.js:32
-getRandomSong @ songs.js:30
-loadSong @ index.js:58
-eval @ index.js:76
-commitHookEffectListMount @ react-dom.development.js:23145
-commitPassiveMountOnFiber @ react-dom.development.js:24921
-commitPassiveMountEffects_complete @ react-dom.development.js:24886
-commitPassiveMountEffects_begin @ react-dom.development.js:24873
-commitPassiveMountEffects @ react-dom.development.js:24861
-flushPassiveEffectsImpl @ react-dom.development.js:27034
-flushPassiveEffects @ react-dom.development.js:26979
-eval @ react-dom.development.js:26764
-workLoop @ scheduler.development.js:266
-flushWork @ scheduler.development.js:239
-performWorkUntilDeadline @ scheduler.development.js:533
-songs.js:20 
-            
-            
-           HEAD http://localhost:3000/audio/sonic/Sonic%20outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14-lights-camera-action-studiopolis-zone-act-1.mp3 net::ERR_ABORTED 404 (Not Found)
-checkSongAvailability @ songs.js:20
-eval @ songs.js:32
-getRandomSong @ songs.js:30
-loadSong @ index.js:58
-eval @ index.js:76
-commitHookEffectListMount @ react-dom.development.js:23145
-commitPassiveMountOnFiber @ react-dom.development.js:24921
-commitPassiveMountEffects_complete @ react-dom.development.js:24886
-commitPassiveMountEffects_begin @ react-dom.development.js:24873
-commitPassiveMountEffects @ react-dom.development.js:24861
-flushPassiveEffectsImpl @ react-dom.development.js:27034
-flushPassiveEffects @ react-dom.development.js:26979
-eval @ react-dom.development.js:26764
-workLoop @ scheduler.development.js:266
-flushWork @ scheduler.development.js:239
-performWorkUntilDeadline @ scheduler.development.js:533
-songs.js:20 
-            
-            
-           HEAD http://localhost:3000/audio/outros/1-02.%20Clock%20Town,%20First%20Day.mp3 net::ERR_ABORTED 404 (Not Found)
+           HEAD http://localhost:3000/audio/outros/1-02.%20Clock%20Town,%20First%20Day.mp3 404 (Not Found)
 checkSongAvailability @ songs.js:20
 eval @ songs.js:32
 getRandomSong @ songs.js:30
@@ -763,6 +683,26 @@ performWorkUntilDeadline @ scheduler.development.js:533
 songs.js:20 
             
             
+           HEAD http://localhost:3000/audio/I%20Prefer%20My%20Pizza%2090%%20Grease.mp3 net::ERR_ABORTED 404 (Not Found)
+checkSongAvailability @ songs.js:20
+eval @ songs.js:32
+getRandomSong @ songs.js:30
+loadSong @ index.js:58
+eval @ index.js:76
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533
+songs.js:20 
+            
+            
            HEAD http://localhost:3000/audio/Cryptic%20Encounter.mp3 net::ERR_ABORTED 404 (Not Found)
 checkSongAvailability @ songs.js:20
 eval @ songs.js:32
@@ -824,26 +764,6 @@ songs.js:20
             
             
            HEAD http://localhost:3000/audio/Take%20A%20Load%20Off.mp3 net::ERR_ABORTED 404 (Not Found)
-checkSongAvailability @ songs.js:20
-eval @ songs.js:32
-getRandomSong @ songs.js:30
-loadSong @ index.js:58
-eval @ index.js:76
-commitHookEffectListMount @ react-dom.development.js:23145
-commitPassiveMountOnFiber @ react-dom.development.js:24921
-commitPassiveMountEffects_complete @ react-dom.development.js:24886
-commitPassiveMountEffects_begin @ react-dom.development.js:24873
-commitPassiveMountEffects @ react-dom.development.js:24861
-flushPassiveEffectsImpl @ react-dom.development.js:27034
-flushPassiveEffects @ react-dom.development.js:26979
-eval @ react-dom.development.js:26764
-workLoop @ scheduler.development.js:266
-flushWork @ scheduler.development.js:239
-performWorkUntilDeadline @ scheduler.development.js:533
-songs.js:20 
-            
-            
-           HEAD http://localhost:3000/audio/I%20Prefer%20My%20Pizza%2090%%20Grease.mp3 net::ERR_ABORTED 404 (Not Found)
 checkSongAvailability @ songs.js:20
 eval @ songs.js:32
 getRandomSong @ songs.js:30
@@ -1263,7 +1183,7 @@ performWorkUntilDeadline @ scheduler.development.js:533
 songs.js:20 
             
             
-           HEAD http://localhost:3000/audio/Moonwisher.mp3 net::ERR_ABORTED 404 (Not Found)
+           HEAD http://localhost:3000/audio/Born%20a%20Stranger.mp3 net::ERR_ABORTED 404 (Not Found)
 checkSongAvailability @ songs.js:20
 eval @ songs.js:32
 getRandomSong @ songs.js:30
@@ -1283,7 +1203,7 @@ performWorkUntilDeadline @ scheduler.development.js:533
 songs.js:20 
             
             
-           HEAD http://localhost:3000/audio/Born%20a%20Stranger.mp3 net::ERR_ABORTED 404 (Not Found)
+           HEAD http://localhost:3000/audio/Moonwisher.mp3 net::ERR_ABORTED 404 (Not Found)
 checkSongAvailability @ songs.js:20
 eval @ songs.js:32
 getRandomSong @ songs.js:30
@@ -1783,83 +1703,7 @@ performWorkUntilDeadline @ scheduler.development.js:533
 songs.js:20 
             
             
-           HEAD http://localhost:3000/audio/sonic/Sonic%20outras/01-01_reach_for_the_stars-opening_theme-/01-reach-for-the-stars-opening-theme.mp3 net::ERR_ABORTED 404 (Not Found)
-checkSongAvailability @ songs.js:20
-eval @ songs.js:32
-getRandomSong @ songs.js:30
-loadSong @ index.js:58
-eval @ index.js:76
-commitHookEffectListMount @ react-dom.development.js:23145
-invokePassiveEffectMountInDEV @ react-dom.development.js:25149
-invokeEffectsInDev @ react-dom.development.js:27346
-commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
-flushPassiveEffectsImpl @ react-dom.development.js:27051
-flushPassiveEffects @ react-dom.development.js:26979
-eval @ react-dom.development.js:26764
-workLoop @ scheduler.development.js:266
-flushWork @ scheduler.development.js:239
-performWorkUntilDeadline @ scheduler.development.js:533
-songs.js:20 
-            
-            
-           HEAD http://localhost:3000/audio/sonic/Sonic%20outras/02Back2Back/02-back-2-back.mp3 net::ERR_ABORTED 404 (Not Found)
-checkSongAvailability @ songs.js:20
-eval @ songs.js:32
-getRandomSong @ songs.js:30
-loadSong @ index.js:58
-eval @ index.js:76
-commitHookEffectListMount @ react-dom.development.js:23145
-invokePassiveEffectMountInDEV @ react-dom.development.js:25149
-invokeEffectsInDev @ react-dom.development.js:27346
-commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
-flushPassiveEffectsImpl @ react-dom.development.js:27051
-flushPassiveEffects @ react-dom.development.js:26979
-eval @ react-dom.development.js:26764
-workLoop @ scheduler.development.js:266
-flushWork @ scheduler.development.js:239
-performWorkUntilDeadline @ scheduler.development.js:533
-songs.js:20 
-            
-            
-           HEAD http://localhost:3000/audio/sonic/Sonic%20outras/1-01_Opening_Movie/01-opening-movie.mp3 net::ERR_ABORTED 404 (Not Found)
-checkSongAvailability @ songs.js:20
-eval @ songs.js:32
-getRandomSong @ songs.js:30
-loadSong @ index.js:58
-eval @ index.js:76
-commitHookEffectListMount @ react-dom.development.js:23145
-invokePassiveEffectMountInDEV @ react-dom.development.js:25149
-invokeEffectsInDev @ react-dom.development.js:27346
-commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
-flushPassiveEffectsImpl @ react-dom.development.js:27051
-flushPassiveEffects @ react-dom.development.js:26979
-eval @ react-dom.development.js:26764
-workLoop @ scheduler.development.js:266
-flushWork @ scheduler.development.js:239
-performWorkUntilDeadline @ scheduler.development.js:533
-songs.js:20 
-            
-            
-           HEAD http://localhost:3000/audio/sonic/Sonic%20outras/1-14_Lights_Camera_Action_Studiopolis_Zone_Act_1/14-lights-camera-action-studiopolis-zone-act-1.mp3 net::ERR_ABORTED 404 (Not Found)
-checkSongAvailability @ songs.js:20
-eval @ songs.js:32
-getRandomSong @ songs.js:30
-loadSong @ index.js:58
-eval @ index.js:76
-commitHookEffectListMount @ react-dom.development.js:23145
-invokePassiveEffectMountInDEV @ react-dom.development.js:25149
-invokeEffectsInDev @ react-dom.development.js:27346
-commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
-flushPassiveEffectsImpl @ react-dom.development.js:27051
-flushPassiveEffects @ react-dom.development.js:26979
-eval @ react-dom.development.js:26764
-workLoop @ scheduler.development.js:266
-flushWork @ scheduler.development.js:239
-performWorkUntilDeadline @ scheduler.development.js:533
-songs.js:20 
-            
-            
-           HEAD http://localhost:3000/audio/outros/1-02.%20Clock%20Town,%20First%20Day.mp3 net::ERR_ABORTED 404 (Not Found)
+           HEAD http://localhost:3000/audio/outros/1-02.%20Clock%20Town,%20First%20Day.mp3 404 (Not Found)
 checkSongAvailability @ songs.js:20
 eval @ songs.js:32
 getRandomSong @ songs.js:30
@@ -2562,7 +2406,7 @@ performWorkUntilDeadline @ scheduler.development.js:533
 songs.js:20 
             
             
-           HEAD http://localhost:3000/audio/I%20Prefer%20My%20Pizza%2090%%20Grease.mp3 net::ERR_ABORTED 404 (Not Found)
+           HEAD http://localhost:3000/audio/Take%20A%20Load%20Off.mp3 net::ERR_ABORTED 404 (Not Found)
 checkSongAvailability @ songs.js:20
 eval @ songs.js:32
 getRandomSong @ songs.js:30
@@ -2581,7 +2425,7 @@ performWorkUntilDeadline @ scheduler.development.js:533
 songs.js:20 
             
             
-           HEAD http://localhost:3000/audio/Take%20A%20Load%20Off.mp3 net::ERR_ABORTED 404 (Not Found)
+           HEAD http://localhost:3000/audio/I%20Prefer%20My%20Pizza%2090%%20Grease.mp3 net::ERR_ABORTED 404 (Not Found)
 checkSongAvailability @ songs.js:20
 eval @ songs.js:32
 getRandomSong @ songs.js:30
@@ -3322,7 +3166,7 @@ performWorkUntilDeadline @ scheduler.development.js:533
 songs.js:20 
             
             
-           HEAD http://localhost:3000/audio/The%20Way%20He%20Looks%20at%20Me.mp3 net::ERR_ABORTED 404 (Not Found)
+           HEAD http://localhost:3000/audio/Who%20We%20Are.mp3 net::ERR_ABORTED 404 (Not Found)
 checkSongAvailability @ songs.js:20
 eval @ songs.js:32
 getRandomSong @ songs.js:30
@@ -3341,7 +3185,7 @@ performWorkUntilDeadline @ scheduler.development.js:533
 songs.js:20 
             
             
-           HEAD http://localhost:3000/audio/Who%20We%20Are.mp3 net::ERR_ABORTED 404 (Not Found)
+           HEAD http://localhost:3000/audio/The%20Way%20He%20Looks%20at%20Me.mp3 net::ERR_ABORTED 404 (Not Found)
 checkSongAvailability @ songs.js:20
 eval @ songs.js:32
 getRandomSong @ songs.js:30
@@ -3471,10 +3315,14 @@ eval @ react-dom.development.js:26764
 workLoop @ scheduler.development.js:266
 flushWork @ scheduler.development.js:239
 performWorkUntilDeadline @ scheduler.development.js:533
+favicon.ico:1 
+            
+            
+           GET http://localhost:3000/favicon.ico 404 (Not Found)
 MusicInfoFetcher.js:11 
             
             
-           GET http://localhost:3000/api/music-info/?title=Throw%20it%20All%20Away&game=Sonic%20Adventure%202 404 (Not Found)
+           GET http://localhost:3000/api/music-info/?title=%20Minecraft%20Minecraft%20C418&game=Minecraft 404 (Not Found)
 fetchMusicInfo @ MusicInfoFetcher.js:11
 eval @ MusicInfoFetcher.js:36
 commitHookEffectListMount @ react-dom.development.js:23145
@@ -3509,7 +3357,7 @@ performWorkUntilDeadline @ scheduler.development.js:533
 MusicInfoFetcher.js:11 
             
             
-           GET http://localhost:3000/api/music-info/?title=%20Hyrule%20Castle%20Courtyard&game=The%20Legend%20of%20Zelda%3A%20Ocarina%20of%20Time 404 (Not Found)
+           GET http://localhost:3000/api/music-info/?title=%20Float%20Islands&game=Kirby%20Super%20Star 404 (Not Found)
 fetchMusicInfo @ MusicInfoFetcher.js:11
 eval @ MusicInfoFetcher.js:36
 commitHookEffectListMount @ react-dom.development.js:23145
@@ -3541,10 +3389,26 @@ eval @ react-dom.development.js:26764
 workLoop @ scheduler.development.js:266
 flushWork @ scheduler.development.js:239
 performWorkUntilDeadline @ scheduler.development.js:533
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
 MusicInfoFetcher.js:11 
             
             
-           GET http://localhost:3000/api/music-info/?title=%20Hyrule%20Castle%20Courtyard&game=The%20Legend%20of%20Zelda%3A%20Ocarina%20of%20Time 404 (Not Found)
+           GET http://localhost:3000/api/music-info/?title=%20Float%20Islands&game=Kirby%20Super%20Star 404 (Not Found)
 fetchMusicInfo @ MusicInfoFetcher.js:11
 eval @ MusicInfoFetcher.js:36
 commitHookEffectListMount @ react-dom.development.js:23145
@@ -3574,49 +3438,3 @@ eval @ react-dom.development.js:26764
 workLoop @ scheduler.development.js:266
 flushWork @ scheduler.development.js:239
 performWorkUntilDeadline @ scheduler.development.js:533
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
-Unchecked runtime.lastError: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
