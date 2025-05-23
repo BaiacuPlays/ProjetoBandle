@@ -482,7 +482,7 @@ export default function Home() {
       <div className={styles.darkBg} style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div className={styles.topBar}>
           <div className={styles.titleBarContainer}>
-            <img src="/logo.png" alt="Logo" className={styles.logo} />
+            <img src="/Logo.png" alt="Logo" className={styles.logo} />
             <button
               className={styles.helpButton}
               onClick={() => setShowInstructions(true)}
