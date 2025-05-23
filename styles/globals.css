@@ -10,4 +10,4 @@ body::before {
   background: rgba(0,0,0,0.2); /* ajuste a opacidade se quiser mais escuro */
   z-index: 0;
   pointer-events: none;
-} 
+}

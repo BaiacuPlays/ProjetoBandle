@@ -6,9 +6,11 @@
 
 body {
   background-image: url('/fundo.png'); /* <--- OLHE COM ATENÇÃO AQUI E NAS PROXIMAS LINHAS */
-  background-size: cover;
+  background-size: auto 100vh; /* Altura igual à altura da viewport */
   background-repeat: no-repeat;
-  background-position: center center;
+  background-position: top center; /* Alinhado ao topo e centralizado horizontalmente */
+  background-attachment: fixed; /* Fixado durante a rolagem */
+  background-color: #1a1a1a; /* Cor de fundo para preencher espaços vazios */
   color: #fff;
   font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
   margin: 0;
@@ -273,14 +275,14 @@ body.dark {
   color: #fff;
 }
 
-body.light header, 
+body.light header,
 body.light header * {
   color: #333 !important;
   background: transparent !important;
   opacity: 1 !important;
   visibility: visible !important;
   z-index: 100 !important;
-  
+
 }
 
 body.dark header {
@@ -367,7 +369,7 @@ body.light #customizationMenu {
   display: none;
   opacity: 1;
   transition: opacity 0.3s ease;
-  
+
   h2{
     color: white;
   }
@@ -721,7 +723,7 @@ body.purple .scroll-indicator.bottom {
     padding: 1rem;
     gap: 1.5rem;
   }
-  
+
   .character-grid {
     grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
@@ -734,7 +736,7 @@ body.purple .scroll-indicator.bottom {
     align-items: center;
     padding: 1rem;
   }
-  
+
   header {
     position: relative;
     top: 0;
@@ -742,7 +744,7 @@ body.purple .scroll-indicator.bottom {
     max-width: 600px;
     margin-bottom: 1rem;
   }
-  
+
   .character-grid {
     grid-template-columns: repeat(3, 1fr);
     width: 100%;
