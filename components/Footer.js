@@ -11,7 +11,8 @@ const Footer = () => {
       <div className="footer-content">
         <p>© 2025 Ludomusic - Todos os direitos reservados</p>
         <p>Desenvolvido com ❤️ para a comunidade gamer</p>
-        <p>Background feito por @Azzy_JP</p>
+        <p>Background feito por <a href='https://x.com/Azzy_JP'>@Azzy_JP</a></p>
+        <p>Logo feita por <a href='https://x.com/IvanBaroni_'>@IvanBaroni_</a></p>
          <p>Este site utiliza trechos de áudio com fins de entretenimento. <br/> Todos os direitos sobre as músicas pertencem aos seus respectivos detentores.</p>
         <p><a href="/termos-de-uso">Termos de Uso</a> | <a href="/politica-de-privacidade">Política de Privacidade</a> | <a href="/remocao-de-conteudo">Remoção de Conteúdo</a></p>
         <div className="social-icons">

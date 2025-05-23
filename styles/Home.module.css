@@ -276,7 +276,6 @@
 
 .topBar {
   width: 100%;
-  background: #23272f;
   padding: 1rem 0.5rem 0.5rem 0.5rem;
   display: flex;
   flex-direction: column;
@@ -1047,9 +1046,13 @@
   width: 100%;
 }
 
+.titleBarContainer img{
+  height: 20%;
+  width: 20%;
+}
+
 .helpButton {
-  position: absolute;
-  right: 1rem;
+  right: 5rem;
   background: none;
   border: none;
   color: #fff;
