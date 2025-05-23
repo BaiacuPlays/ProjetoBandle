@@ -131,6 +131,11 @@ export default function Home() {
       const randomStart = getRandomStartTime(duration);
       setStartTime(randomStart);
       audioRef.current.currentTime = randomStart;
+      // Limpa o estado de erro quando o áudio carrega com sucesso
+      setAudioError(false);
+      if (message === 'Erro ao carregar o áudio. Verifique se o arquivo existe.') {
+        setMessage('');
+      }
     }
   };
 
@@ -238,7 +243,7 @@ export default function Home() {
   const handleGuess = (e) => {
     e.preventDefault();
     if (gameOver) return;
-    
+
     // Check if there's no guess selected
     if (!guess.trim()) {
       setIsShaking(true);
@@ -249,14 +254,14 @@ export default function Home() {
     // Verifica se a música existe na lista
     const normalizedGuess = normalize(guess);
     const songExists = songs.some(song => normalize(song.title) === normalizedGuess);
-    
+
     if (!songExists) {
       setMessage('Por favor, selecione uma música da lista de sugestões.');
       setIsShaking(true);
       setTimeout(() => setIsShaking(false), 500);
       return;
     }
-    
+
     submitGuess(guess);
   };
 
@@ -345,10 +350,10 @@ export default function Home() {
   const filterSuggestions = (value) => {
     if (value.length > 0) {
       const nValue = normalize(value);
-      
+
       // Divide o valor de busca em palavras
       const searchWords = nValue.split(/\s+/).filter(word => word.length > 0);
-      
+
       const suggestions = songs
         .filter(song => {
           const nTitle = normalize(song.title);
@@ -357,7 +362,7 @@ export default function Home() {
 
           // Verifica se pelo menos uma palavra da busca está presente em algum dos campos
           // Ignora apenas palavras com uma única letra
-          return searchWords.some(word => 
+          return searchWords.some(word =>
             (word.length > 1 && (
               nTitle.includes(word) ||
               nGame.includes(word) ||
@@ -374,7 +379,7 @@ export default function Home() {
           if (gameCmp !== 0) return gameCmp;
           return normalize(a.title).localeCompare(normalize(b.title));
         });
-      
+
       setFilteredSuggestions(suggestions);
       setShowSuggestions(suggestions.length > 0);
     } else {
@@ -445,6 +450,17 @@ export default function Home() {
   const handleMusicInfoLoaded = (updatedSong) => {
     setCurrentSong(updatedSong);
   };
+
+  // Limpa erros de áudio quando a música muda
+  useEffect(() => {
+    if (currentSong?.audioUrl) {
+      // Reseta o estado de erro quando uma nova música é carregada
+      setAudioError(false);
+      if (message === 'Erro ao carregar o áudio. Verifique se o arquivo existe.') {
+        setMessage('');
+      }
+    }
+  }, [currentSong?.audioUrl, message]);
 
   // Persistência do estado de jogo terminado
   useEffect(() => {
@@ -615,7 +631,13 @@ export default function Home() {
                 onError={() => {
                   setAudioError(true);
                   setMessage('Erro ao carregar o áudio. Verifique se o arquivo existe.');
-                } }
+                }}
+                onCanPlay={() => {
+                  setAudioError(false);
+                  if (message === 'Erro ao carregar o áudio. Verifique se o arquivo existe.') {
+                    setMessage('');
+                  }
+                }}
                 onLoadedMetadata={handleLoadedMetadata} />
             </div>
           </div>
