@@ -1041,9 +1041,10 @@
 .titleBarContainer {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   position: relative;
   width: 100%;
+  padding: 0 1rem;
 }
 
 .titleBarContainer img{
@@ -1051,18 +1052,32 @@
   width: 20%;
 }
 
-.helpButton {
-  right: 5rem;
+.menuButton, .helpButton {
   background: none;
   border: none;
   color: #fff;
   cursor: pointer;
   padding: 0.5rem;
-  transition: color 0.2s;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.helpButton:hover {
+.menuButton {
+  background-color: rgba(29, 185, 84, 0.15);
+  border-radius: 50%;
+  padding: 0.6rem;
+  margin-left: 0.5rem;
+}
+
+.menuButton:hover, .helpButton:hover {
   color: #1DB954;
+  transform: scale(1.1);
+}
+
+.menuButton:hover {
+  background-color: rgba(29, 185, 84, 0.25);
 }
 
 .modalOverlay {
@@ -1169,4 +1184,4 @@
 
 .shake {
   animation: shakeAnimation 0.4s ease-in-out;
-} 
+}

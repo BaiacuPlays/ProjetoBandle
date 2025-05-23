@@ -1,0 +1,159 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.main {
+  flex: 1;
+  padding: 2rem 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 80px;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+.title {
+  font-size: 2.5rem;
+  color: #1DB954;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 10px rgba(29, 185, 84, 0.3);
+}
+
+.content {
+  background: rgba(35, 39, 47, 0.9);
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+}
+
+.section {
+  margin-bottom: 2rem;
+}
+
+.section h2 {
+  color: #1DB954;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(29, 185, 84, 0.3);
+  padding-bottom: 0.5rem;
+}
+
+.section p {
+  margin: 1rem 0;
+  line-height: 1.6;
+  color: #e0e0e0;
+}
+
+.section ul, .section ol {
+  margin: 1rem 0 1rem 2rem;
+  line-height: 1.6;
+  color: #e0e0e0;
+}
+
+.section li {
+  margin-bottom: 0.5rem;
+}
+
+.link {
+  color: #1DB954;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.link:hover {
+  color: #1ed760;
+  text-decoration: underline;
+}
+
+.emailHighlight {
+  background: rgba(29, 185, 84, 0.1);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
+.backLink {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.button {
+  display: inline-block;
+  background: #1DB954;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.button:hover {
+  background: #1ed760;
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .main {
+    padding: 1.5rem 1rem;
+  }
+  
+  .content {
+    padding: 1.5rem;
+  }
+  
+  .title {
+    font-size: 2rem;
+  }
+  
+  .section h2 {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .main {
+    padding: 1rem 0.5rem;
+  }
+  
+  .content {
+    padding: 1rem;
+  }
+  
+  .title {
+    font-size: 1.8rem;
+  }
+  
+  .logo {
+    height: 60px;
+  }
+  
+  .section h2 {
+    font-size: 1.2rem;
+  }
+  
+  .button {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}

@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
-import { songs, getRandomSong } from '../data/songs';
+import { songs } from '../data/songs';
 import styles from '../styles/Home.module.css';
-import { FaPlay, FaPause, FaVolumeUp, FaFastForward, FaQuestionCircle } from 'react-icons/fa';
+import { FaPlay, FaPause, FaVolumeUp, FaFastForward, FaQuestionCircle, FaBars } from 'react-icons/fa';
 import MusicInfoFetcher from '../components/MusicInfoFetcher';
 import Footer from '../components/Footer';
+import GameMenu from '../components/GameMenu';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const MAX_ATTEMPTS = 6;
 const GAME_INTERVAL = 24 * 60 * 60 * 1000; // 24h em ms
@@ -11,6 +13,7 @@ const GAME_INTERVAL = 24 * 60 * 60 * 1000; // 24h em ms
 const TIMEZONE_API = 'http://worldtimeapi.org/api/timezone/America/Sao_Paulo';
 
 export default function Home() {
+  const { t, language, isClient } = useLanguage();
   const [currentSong, setCurrentSong] = useState(null);
   const [guess, setGuess] = useState('');
   const [message, setMessage] = useState('');
@@ -29,14 +32,13 @@ export default function Home() {
   const [audioDuration, setAudioDuration] = useState(0);
   const [startTime, setStartTime] = useState(0); // Novo estado para armazenar o tempo inicial
   const [timer, setTimer] = useState(null);
-  const [gameStartTime, setGameStartTime] = useState(Date.now());
   const audioRef = useRef(null);
-  const progressRef = useRef(null);
   const [activeHint, setActiveHint] = useState(0);
   const inputRef = useRef(null);
   const [showInstructions, setShowInstructions] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
   const [currentDay, setCurrentDay] = useState(null);
+  const [showMenu, setShowMenu] = useState(false);
 
   // Tempos máximos de reprodução por tentativa
   const maxClipDurations = [0.6, 1.2, 2.0, 3.0, 3.5, 4.2];
@@ -48,11 +50,17 @@ export default function Home() {
   const fadeOutStepTime = fadeOutDuration / fadeOutSteps;
   const originalVolumeRef = useRef(volume);
 
-  // Função para gerar um tempo aleatório dentro da duração da música
-  const getRandomStartTime = (duration) => {
+  // Função para gerar um tempo determinístico dentro da duração da música com base no dia
+  const getDeterministicStartTime = (duration, day) => {
     // Deixa uma margem de 10 segundos no final da música
     const maxStart = Math.max(0, duration - 10);
-    return Math.random() * maxStart;
+
+    // Usa o dia como semente para gerar um número determinístico entre 0 e 1
+    // Multiplicamos o dia por um número primo para melhor distribuição
+    const seed = (day * 31) % 997; // Usando números primos para melhor distribuição
+    const deterministicRandom = (seed / 997); // Valor entre 0 e 1
+
+    return deterministicRandom * maxStart;
   };
 
   // Função para buscar data/hora de São Paulo
@@ -72,10 +80,7 @@ export default function Home() {
     }
   };
 
-  // Função para selecionar a música do minuto
-  const getMusicOfTheMinute = (songs, minuteOfDay) => {
-    return songs[minuteOfDay % songs.length];
-  };
+
 
   // Carregar música do minuto ao montar
   useEffect(() => {
@@ -124,13 +129,38 @@ export default function Home() {
 
   // Atualiza duração do áudio ao carregar
   const handleLoadedMetadata = () => {
-    if (audioRef.current) {
+    if (audioRef.current && currentDay !== null) {
       const duration = audioRef.current.duration || 0;
       setAudioDuration(duration);
-      // Define um ponto de início aleatório quando a música carrega
-      const randomStart = getRandomStartTime(duration);
-      setStartTime(randomStart);
-      audioRef.current.currentTime = randomStart;
+
+      // Verifica se já existe um tempo de início salvo para o dia atual
+      const savedStartTimeKey = `bandle_start_time_day_${currentDay}`;
+      let startTimeToUse;
+
+      const savedStartTime = localStorage.getItem(savedStartTimeKey);
+      if (savedStartTime) {
+        // Usa o tempo salvo se existir
+        startTimeToUse = parseFloat(savedStartTime);
+      } else {
+        // Gera um novo tempo determinístico baseado no dia e salva no localStorage
+        startTimeToUse = getDeterministicStartTime(duration, currentDay);
+        localStorage.setItem(savedStartTimeKey, startTimeToUse.toString());
+      }
+
+      setStartTime(startTimeToUse);
+      audioRef.current.currentTime = startTimeToUse;
+
+      // Aplicar configurações de som
+      const savedSettings = localStorage.getItem('bandle_settings');
+      if (savedSettings) {
+        try {
+          const settings = JSON.parse(savedSettings);
+          audioRef.current.muted = !settings.sound;
+        } catch (error) {
+          console.error('Erro ao aplicar configurações de som:', error);
+        }
+      }
+
       // Limpa o estado de erro quando o áudio carrega com sucesso
       setAudioError(false);
       if (message === 'Erro ao carregar o áudio. Verifique se o arquivo existe.') {
@@ -256,7 +286,7 @@ export default function Home() {
     const songExists = songs.some(song => normalize(song.title) === normalizedGuess);
 
     if (!songExists) {
-      setMessage('Por favor, selecione uma música da lista de sugestões.');
+      setMessage(t('select_from_list'));
       setIsShaking(true);
       setTimeout(() => setIsShaking(false), 500);
       return;
@@ -272,15 +302,15 @@ export default function Home() {
     setGuess('');
     let result = null;
     if (selectedGuess.toLowerCase() === currentSong.title.toLowerCase()) {
-      setMessage('Parabéns! Você acertou!');
+      setMessage(t('congratulations'));
       setGameOver(true);
       result = { type: 'success', value: selectedGuess };
     } else if (newAttempts >= MAX_ATTEMPTS) {
-      setMessage(`Game Over! A música era ${currentSong.title} - ${currentSong.artist}`);
+      setMessage(`${t('game_over')} ${currentSong.title} - ${currentSong.artist}`);
       setGameOver(true);
       result = { type: 'fail', value: selectedGuess };
     } else {
-      setMessage('Tente novamente!');
+      setMessage(t('try_again'));
       setShowHint(true);
       result = { type: 'fail', value: selectedGuess };
     }
@@ -293,38 +323,14 @@ export default function Home() {
     setAttempts(a => a + 1);
     setShowHint(true);
     setHistory(prev => [...prev, { type: 'skipped' }]);
-    setMessage('Pulado! Próxima dica liberada.');
+    setMessage(t('skipped'));
     if (attempts + 1 >= MAX_ATTEMPTS) {
-      setMessage(`Game Over! A música era ${currentSong.title} - ${currentSong.artist}`);
+      setMessage(`${t('game_over')} ${currentSong.title} - ${currentSong.artist}`);
       setGameOver(true);
     }
   };
 
-  // Novo jogo
-  const startNewGame = async () => {
-    setIsLoading(true);
-    try {
-      const song = await getRandomSong();
-      setCurrentSong(song);
-      setGuess('');
-      setMessage('');
-      setGameOver(false);
-      setAttempts(0);
-      setAudioError(false);
-      setShowSuggestions(false);
-      setCurrentClipDuration(0.3);
-      setShowHint(false);
-      setHistory([]);
-      setAudioProgress(0);
-      setStartTime(0); // Reseta o tempo inicial
-      setGameStartTime(Date.now());
-    } catch (error) {
-      setAudioError(true);
-      setMessage('Erro ao carregar a música.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+
 
   const normalize = str => str
     .normalize('NFD')
@@ -471,9 +477,32 @@ export default function Home() {
     }
   }, [gameOver, currentDay, history, message]);
 
+  // Limpa dados antigos do localStorage
+  const cleanupOldLocalStorageData = (currentDay) => {
+    // Mantém apenas os dados do dia atual e do dia anterior
+    const keysToKeep = [
+      `bandle_start_time_day_${currentDay}`,
+      `bandle_start_time_day_${currentDay - 1}`,
+      'bandle_gameover_day',
+      'bandle_gameover_history',
+      'bandle_gameover_message'
+    ];
+
+    // Procura por chaves antigas relacionadas ao bandle
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('bandle_') && !keysToKeep.includes(key)) {
+        localStorage.removeItem(key);
+      }
+    }
+  };
+
   // Ao carregar, verifica se o usuário já terminou o desafio do dia
   useEffect(() => {
     if (currentDay !== null) {
+      // Limpa dados antigos
+      cleanupOldLocalStorageData(currentDay);
+
       const savedDay = localStorage.getItem('bandle_gameover_day');
       if (savedDay && Number(savedDay) === currentDay) {
         setGameOver(true);
@@ -485,10 +514,107 @@ export default function Home() {
     }
   }, [currentDay]);
 
+  // Aplicar configurações salvas ao carregar e escutar mudanças
+  useEffect(() => {
+    // Função para aplicar as configurações
+    const applySettings = () => {
+      const savedSettings = localStorage.getItem('bandle_settings');
+      if (savedSettings) {
+        try {
+          const settings = JSON.parse(savedSettings);
+          console.log('Aplicando configurações no componente principal:', settings);
+
+          // Aplicar modo daltônico
+          if (settings.daltonicMode) {
+            document.body.classList.add('daltonism');
+          } else {
+            document.body.classList.remove('daltonism');
+          }
+
+          // Aplicar configuração de som
+          if (audioRef.current) {
+            audioRef.current.muted = !settings.sound;
+          }
+
+          // Aplicar configuração de animações
+          if (!settings.animations) {
+            document.body.classList.add('no-animations');
+          } else {
+            document.body.classList.remove('no-animations');
+          }
+
+          // Aplicar idioma
+          if (settings.language) {
+            document.documentElement.lang = settings.language;
+          }
+        } catch (error) {
+          console.error('Erro ao aplicar configurações:', error);
+        }
+      }
+    };
+
+    // Aplicar configurações iniciais
+    applySettings();
+
+    // Escutar eventos de mudança de configurações
+    const handleSettingsChanged = (event) => {
+      console.log('Evento de mudança de configurações recebido:', event.detail);
+
+      // Aplicar todas as configurações novamente
+      if (event.detail) {
+        // Aplicar modo daltônico
+        if (event.detail.daltonicMode) {
+          document.body.classList.add('daltonism');
+        } else {
+          document.body.classList.remove('daltonism');
+        }
+
+        // Aplicar configuração de som
+        if (audioRef.current) {
+          audioRef.current.muted = !event.detail.sound;
+
+          // Garantir que o volume seja restaurado quando o som for ativado
+          if (event.detail.sound && audioRef.current.volume === 0) {
+            audioRef.current.volume = 0.7; // Volume padrão
+          }
+        }
+
+        // Aplicar configuração de animações
+        if (!event.detail.animations) {
+          document.body.classList.add('no-animations');
+        } else {
+          document.body.classList.remove('no-animations');
+        }
+
+        // Aplicar idioma
+        if (event.detail.language) {
+          document.documentElement.lang = event.detail.language;
+        }
+      }
+    };
+
+    // Adicionar listener para o evento personalizado
+    document.addEventListener('bandleSettingsChanged', handleSettingsChanged);
+
+    // Adicionar listener para mudanças no localStorage
+    window.addEventListener('storage', applySettings);
+
+    // Limpar listeners ao desmontar
+    return () => {
+      document.removeEventListener('bandleSettingsChanged', handleSettingsChanged);
+      window.removeEventListener('storage', applySettings);
+    };
+  }, []);
+
+  // Já estamos usando isClient do contexto de idioma
+
   if (isLoading) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Carregando...</div>
+        <div className={styles.loading}>
+          {/* Usar texto fixo no servidor e tradução apenas no cliente */}
+          {isClient ? t('loading') : 'Carregando...'}
+        </div>
       </div>
     );
   }
@@ -498,6 +624,13 @@ export default function Home() {
       <div className={styles.darkBg} style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div className={styles.topBar}>
           <div className={styles.titleBarContainer}>
+            <button
+              className={styles.menuButton}
+              onClick={() => setShowMenu(true)}
+              aria-label="Menu"
+            >
+              <FaBars size={24} />
+            </button>
             <img src="/Logo.png" alt="Logo" className={styles.logo} />
             <button
               className={styles.helpButton}
@@ -552,7 +685,7 @@ export default function Home() {
           <div className={styles.audioModernBox}>
             <div className={styles.customAudioPlayer}>
               <div className={styles.audioPlayerRow}>
-                <span className={styles.audioTime}>{new Date(audioProgress * 1000).toISOString().substr(14, 5)}</span>
+                <span className={styles.audioTime}>{new Date(audioProgress * 1000).toISOString().substring(14, 19)}</span>
                 <input
                   type="range"
                   min={0}
@@ -581,7 +714,7 @@ export default function Home() {
                   {audioDuration
                     ? new Date(
                         (maxClipDurations[attempts] ?? maxClipDurations[maxClipDurations.length - 1]) * 1000
-                      ).toISOString().substr(14, 5)
+                      ).toISOString().substring(14, 19)
                     : '00:00'}
                 </span>
               </div>
@@ -627,6 +760,7 @@ export default function Home() {
                 ref={audioRef}
                 src={currentSong?.audioUrl}
                 style={{ display: 'none' }}
+                onLoadedMetadata={handleLoadedMetadata}
                 onEnded={handleAudioEnded}
                 onError={() => {
                   setAudioError(true);
@@ -637,8 +771,7 @@ export default function Home() {
                   if (message === 'Erro ao carregar o áudio. Verifique se o arquivo existe.') {
                     setMessage('');
                   }
-                }}
-                onLoadedMetadata={handleLoadedMetadata} />
+                }} />
             </div>
           </div>
           <div className={styles.attemptsRow}>
@@ -680,7 +813,7 @@ export default function Home() {
               onClick={handleSkip}
               disabled={gameOver || audioError || attempts >= MAX_ATTEMPTS}
             >
-              Skip <FaFastForward style={{ marginLeft: 4, fontSize: '1em', verticalAlign: 'middle' }} />
+              {isClient ? t('skip') : 'Skip'} <FaFastForward style={{ marginLeft: 4, fontSize: '1em', verticalAlign: 'middle' }} />
             </button>
           </div>
           <form onSubmit={handleGuess} className={styles.guessFormModern} autoComplete="off">
@@ -689,7 +822,7 @@ export default function Home() {
               type="text"
               value={guess}
               onChange={handleInputChange}
-              placeholder="Digite o nome da música..."
+              placeholder={isClient ? t('song_input_placeholder') : 'Digite o nome da música...'}
               disabled={gameOver || audioError}
               className={styles.guessInputModern}
               onBlur={() => setTimeout(() => setShowSuggestions(false), 200)} />
@@ -698,7 +831,7 @@ export default function Home() {
               disabled={gameOver || audioError || !guess.trim()}
               className={`${styles.guessButtonModern} ${isShaking ? styles.shake : ''}`}
             >
-              Adivinhar
+              {isClient ? t('guess') : 'Adivinhar'}
             </button>
             {showSuggestions && filteredSuggestions.length > 0 && (
               <ul className={styles.suggestionsListModern}>
@@ -746,6 +879,12 @@ export default function Home() {
             song={currentSong}
             onInfoLoaded={handleMusicInfoLoaded} />
         )}
+
+        {/* Menu do jogo */}
+        <GameMenu
+          isOpen={showMenu}
+          onClose={() => setShowMenu(false)}
+        />
       </div>
       <Footer />
     </div>
