@@ -24,6 +24,7 @@ body {
 }
 
 .footer {
+  margin-top: 20px;
   background-color: rgba(42, 42, 42, 0.9);
   text-align: center;
   width: 100%;

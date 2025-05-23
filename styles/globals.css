@@ -1,0 +1,13 @@
+body {
+  background: url('/fundo.png') center center/cover no-repeat fixed;
+  min-height: 100vh;
+  position: relative;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.2); /* ajuste a opacidade se quiser mais escuro */
+  z-index: 0;
+  pointer-events: none;
+} 

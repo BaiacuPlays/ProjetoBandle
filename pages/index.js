@@ -8,6 +8,8 @@ import Footer from '../components/Footer';
 const MAX_ATTEMPTS = 6;
 const GAME_INTERVAL = 24 * 60 * 60 * 1000; // 24h em ms
 
+const TIMEZONE_API = 'http://worldtimeapi.org/api/timezone/America/Sao_Paulo';
+
 export default function Home() {
   const [currentSong, setCurrentSong] = useState(null);
   const [guess, setGuess] = useState('');
@@ -26,7 +28,7 @@ export default function Home() {
   const [audioProgress, setAudioProgress] = useState(0);
   const [audioDuration, setAudioDuration] = useState(0);
   const [startTime, setStartTime] = useState(0); // Novo estado para armazenar o tempo inicial
-  const [timer, setTimer] = useState(GAME_INTERVAL);
+  const [timer, setTimer] = useState(null);
   const [gameStartTime, setGameStartTime] = useState(Date.now());
   const audioRef = useRef(null);
   const progressRef = useRef(null);
@@ -34,6 +36,17 @@ export default function Home() {
   const inputRef = useRef(null);
   const [showInstructions, setShowInstructions] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
+  const [currentDay, setCurrentDay] = useState(null);
+
+  // Tempos máximos de reprodução por tentativa
+  const maxClipDurations = [0.6, 1.2, 2.0, 3.0, 3.5, 4.2];
+
+  // Limite máximo de reprodução em segundos
+  const MAX_PLAY_TIME = 15;
+  const fadeOutDuration = 1; // segundos
+  const fadeOutSteps = 10;
+  const fadeOutStepTime = fadeOutDuration / fadeOutSteps;
+  const originalVolumeRef = useRef(volume);
 
   // Função para gerar um tempo aleatório dentro da duração da música
   const getRandomStartTime = (duration) => {
@@ -42,40 +55,72 @@ export default function Home() {
     return Math.random() * maxStart;
   };
 
-  // Timer para novo jogo (simula 24h)
+  // Função para buscar data/hora de São Paulo
+  const fetchSaoPauloTime = async () => {
+    try {
+      const res = await fetch(TIMEZONE_API);
+      if (!res.ok) throw new Error('API error');
+      const data = await res.json();
+      return data;
+    } catch (e) {
+      // Fallback: usar data local do navegador
+      const now = new Date();
+      return {
+        datetime: now.toISOString(),
+        fallback: true
+      };
+    }
+  };
+
+  // Função para selecionar a música do minuto
+  const getMusicOfTheMinute = (songs, minuteOfDay) => {
+    return songs[minuteOfDay % songs.length];
+  };
+
+  // Carregar música do minuto ao montar
   useEffect(() => {
+    const loadMusicOfTheDay = async () => {
+      setIsLoading(true);
+      let timeData;
+      try {
+        timeData = await fetchSaoPauloTime();
+      } catch (e) {
+        timeData = {
+          datetime: new Date().toISOString(),
+          fallback: true
+        };
+      }
+      const now = new Date(timeData.datetime);
+      // Calcular o dia do ano
+      const start = new Date(now.getFullYear(), 0, 0);
+      const diff = now - start + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
+      const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+      setCurrentDay(dayOfYear);
+      // Seleciona a música do dia de forma determinística e fixa
+      const song = songs[dayOfYear % songs.length];
+      setCurrentSong(song);
+      // Calcular tempo até a próxima meia-noite
+      const nextMidnight = new Date(now);
+      nextMidnight.setHours(24, 0, 0, 0);
+      setTimer(nextMidnight - now);
+      setIsLoading(false);
+    };
+    loadMusicOfTheDay();
+  }, []);
+
+  // Atualizar timer a cada segundo
+  useEffect(() => {
+    if (timer === null) return;
     const interval = setInterval(() => {
-      const elapsed = Date.now() - gameStartTime;
-      setTimer(GAME_INTERVAL - (elapsed % GAME_INTERVAL));
+      setTimer(prev => {
+        if (prev > 1000) return prev - 1000;
+        // Quando zerar, recarrega a música do dia
+        window.location.reload();
+        return 0;
+      });
     }, 1000);
     return () => clearInterval(interval);
-  }, [gameStartTime]);
-
-  // Carregar música
-  useEffect(() => {
-    const loadSong = async () => {
-      setIsLoading(true);
-      try {
-        const song = await getRandomSong();
-        setCurrentSong(song);
-        setAudioError(false);
-        setCurrentClipDuration(0.3);
-        setShowHint(false);
-        setHistory([]);
-        setAttempts(0);
-        setGameOver(false);
-        setGuess('');
-        setGameStartTime(Date.now());
-        setAudioProgress(0);
-      } catch (error) {
-        setAudioError(true);
-        setMessage('Erro ao carregar a música.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    loadSong();
-  }, []);
+  }, [timer]);
 
   // Atualiza duração do áudio ao carregar
   const handleLoadedMetadata = () => {
@@ -94,28 +139,69 @@ export default function Home() {
     const audio = audioRef.current;
     if (!audio) return;
 
+    // Tempo máximo para a tentativa atual
+    const maxDuration = gameOver
+      ? MAX_PLAY_TIME
+      : maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1];
+
+    let fadeOutTimeout = null;
+    let fadeOutInterval = null;
+
     const updateProgress = () => {
       const currentTime = audio.currentTime - startTime;
-      if (!gameOver && currentTime >= 15) { // Limita a 15 segundos
+      if (!gameOver && currentTime >= maxDuration) {
         audio.pause();
         setIsPlaying(false);
-        // Reset para o início do trecho quando atingir o limite
         audio.currentTime = startTime;
         setAudioProgress(0);
+      } else if (gameOver && currentTime >= MAX_PLAY_TIME) {
+        // FADE OUT após 15s se o jogo acabou
+        if (!fadeOutInterval) {
+          let step = 0;
+          originalVolumeRef.current = audio.volume;
+          fadeOutInterval = setInterval(() => {
+            step++;
+            audio.volume = originalVolumeRef.current * (1 - step / fadeOutSteps);
+            if (step >= fadeOutSteps) {
+              clearInterval(fadeOutInterval);
+              audio.pause();
+              setIsPlaying(false);
+              audio.currentTime = startTime;
+              setAudioProgress(0);
+              audio.volume = originalVolumeRef.current;
+            }
+          }, fadeOutStepTime * 1000);
+        }
       } else {
         setAudioProgress(currentTime);
       }
     };
 
     const updatePlay = () => {
-      // Verifica se já atingiu o limite antes de permitir o play
       const currentTime = audio.currentTime - startTime;
-      if (!gameOver && currentTime >= 15) { // Limita a 15 segundos
+      if (!gameOver && currentTime >= maxDuration) {
         audio.pause();
         setIsPlaying(false);
-        // Reset para o início do trecho
         audio.currentTime = startTime;
         setAudioProgress(0);
+      } else if (gameOver && currentTime >= MAX_PLAY_TIME) {
+        // FADE OUT após 15s se o jogo acabou
+        if (!fadeOutInterval) {
+          let step = 0;
+          originalVolumeRef.current = audio.volume;
+          fadeOutInterval = setInterval(() => {
+            step++;
+            audio.volume = originalVolumeRef.current * (1 - step / fadeOutSteps);
+            if (step >= fadeOutSteps) {
+              clearInterval(fadeOutInterval);
+              audio.pause();
+              setIsPlaying(false);
+              audio.currentTime = startTime;
+              setAudioProgress(0);
+              audio.volume = originalVolumeRef.current;
+            }
+          }, fadeOutStepTime * 1000);
+        }
       } else {
         setIsPlaying(!audio.paused);
       }
@@ -131,8 +217,10 @@ export default function Home() {
       audio.removeEventListener('play', updatePlay);
       audio.removeEventListener('pause', updatePlay);
       audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      if (fadeOutInterval) clearInterval(fadeOutInterval);
+      if (fadeOutTimeout) clearTimeout(fadeOutTimeout);
     };
-  }, [audioRef.current, startTime, gameOver]);
+  }, [audioRef.current, startTime, gameOver, attempts]);
 
   // Atualiza volume
   useEffect(() => {
@@ -155,6 +243,17 @@ export default function Home() {
     if (!guess.trim()) {
       setIsShaking(true);
       setTimeout(() => setIsShaking(false), 500); // Remove shake after animation ends
+      return;
+    }
+
+    // Verifica se a música existe na lista
+    const normalizedGuess = normalize(guess);
+    const songExists = songs.some(song => normalize(song.title) === normalizedGuess);
+    
+    if (!songExists) {
+      setMessage('Por favor, selecione uma música da lista de sugestões.');
+      setIsShaking(true);
+      setTimeout(() => setIsShaking(false), 500);
       return;
     }
     
@@ -347,6 +446,29 @@ export default function Home() {
     setCurrentSong(updatedSong);
   };
 
+  // Persistência do estado de jogo terminado
+  useEffect(() => {
+    if (gameOver && currentDay !== null) {
+      localStorage.setItem('bandle_gameover_day', currentDay);
+      localStorage.setItem('bandle_gameover_history', JSON.stringify(history));
+      localStorage.setItem('bandle_gameover_message', message);
+    }
+  }, [gameOver, currentDay, history, message]);
+
+  // Ao carregar, verifica se o usuário já terminou o desafio do dia
+  useEffect(() => {
+    if (currentDay !== null) {
+      const savedDay = localStorage.getItem('bandle_gameover_day');
+      if (savedDay && Number(savedDay) === currentDay) {
+        setGameOver(true);
+        const savedHistory = localStorage.getItem('bandle_gameover_history');
+        if (savedHistory) setHistory(JSON.parse(savedHistory));
+        const savedMessage = localStorage.getItem('bandle_gameover_message');
+        if (savedMessage) setMessage(savedMessage);
+      }
+    }
+  }, [currentDay]);
+
   if (isLoading) {
     return (
       <div className={styles.container}>
@@ -418,7 +540,7 @@ export default function Home() {
                 <input
                   type="range"
                   min={0}
-                  max={currentClipDuration}
+                  max={maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1]}
                   step={0.01}
                   value={audioProgress}
                   onChange={e => {
@@ -431,7 +553,7 @@ export default function Home() {
                       setAudioProgress(0);
                       return;
                     }
-                    if (value > currentClipDuration) value = currentClipDuration;
+                    if (value > maxClipDurations[attempts] || value > maxClipDurations[maxClipDurations.length - 1]) value = maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1];
                     if (audioRef.current) {
                       audioRef.current.currentTime = startTime + value;
                       setAudioProgress(value);
@@ -441,7 +563,9 @@ export default function Home() {
                   disabled={gameOver || audioError || !audioDuration} />
                 <span className={styles.audioTime} style={{ marginLeft: 10 }}>
                   {audioDuration
-                    ? new Date(currentClipDuration * 1000).toISOString().substr(14, 5)
+                    ? new Date(
+                        (maxClipDurations[attempts] ?? maxClipDurations[maxClipDurations.length - 1]) * 1000
+                      ).toISOString().substr(14, 5)
                     : '00:00'}
                 </span>
               </div>
@@ -452,7 +576,7 @@ export default function Home() {
                     if (!audioRef.current) return;
 
                     const currentTime = audioRef.current.currentTime - startTime;
-                    if (currentTime >= currentClipDuration) {
+                    if (currentTime >= maxClipDurations[attempts] || currentTime >= maxClipDurations[maxClipDurations.length - 1]) {
                       // Se já passou do limite, volta para o início do trecho
                       audioRef.current.currentTime = startTime;
                       setAudioProgress(0);
@@ -590,14 +714,6 @@ export default function Home() {
             <div className={`${styles.messageModern} ${audioError ? styles.error : ''}`}>
               {message}
             </div>
-          )}
-          {gameOver && (
-            <button
-              className={styles.newGameButtonModern}
-              onClick={startNewGame}
-            >
-              Jogar Novamente
-            </button>
           )}
           <div className={styles.timerBox}>
             Novo jogo em: <span className={styles.timer}>{formatTimer(timer)}</span>

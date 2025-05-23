@@ -1,20 +1,14 @@
 .container {
   min-height: 100vh;
   min-height: 100dvh; /* Para dispositivos móveis */
-  width: 100vw;
-  width: 100dvw; /* Para dispositivos móveis */
+  width: 100%;
   padding: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
   color: white;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  overflow-y: auto;
+  position: relative;
   box-sizing: border-box;
 }
 
@@ -270,11 +264,14 @@
 
 .darkBg {
   min-height: 100vh;
+  width: 100%;
   color: #fff;
   font-family: 'Segoe UI', Arial, sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  box-sizing: border-box;
 }
 
 .topBar {
