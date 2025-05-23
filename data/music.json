@@ -4669,7 +4669,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Deltarune",
-    "audioUrl": "/audio/deltarune/The Beginning.mp3",
+    "audioUrl": "/audio/deltarune/02 - Beginning.mp3",
     "year": 2018,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4680,7 +4680,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Deltarune",
-    "audioUrl": "/audio/deltarune/School.mp3",
+    "audioUrl": "/audio/deltarune/03 - School.mp3",
     "year": 2018,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4691,7 +4691,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Deltarune",
-    "audioUrl": "/audio/deltarune/Susie.mp3",
+    "audioUrl": "/audio/deltarune/04 - Susie.mp3",
     "year": 2018,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4702,7 +4702,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Deltarune",
-    "audioUrl": "/audio/The Door.mp3",
+    "audioUrl": "/audio/deltarune/05 - The Door.mp3",
     "year": 2018,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4713,18 +4713,18 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Deltarune",
-    "audioUrl": "/audio/Lancer.mp3",
+    "audioUrl": "/audio/deltarune/09 - Lancer.mp3",
     "year": 2018,
     "genre": "Game Soundtrack",
     "console": "PC"
   },
   {
     "id": 406,
-    "title": "Rudinrangers",
+    "title": "Hip Shop",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Deltarune",
-    "audioUrl": "/audio/Rudinrangers.mp3",
+    "audioUrl": "/audio/deltarune/28 - Hip Shop.mp3",
     "year": 2018,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4735,7 +4735,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Deltarune",
-    "audioUrl": "/audio/Rude Buster.mp3",
+    "audioUrl": "/audio/deltarune/10 - Rude Buster.mp3",
     "year": 2018,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4746,7 +4746,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Deltarune",
-    "audioUrl": "/audio/Field of Hopes and Dreams.mp3",
+    "audioUrl": "/audio/deltarune/13 - Field of Hopes and Dreams.mp3",
     "year": 2018,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4757,7 +4757,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Deltarune",
-    "audioUrl": "/audio/Scarlet Forest.mp3",
+    "audioUrl": "/audio/deltarune/19 - Scarlet Forest.mp3",
     "year": 2018,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4768,7 +4768,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Deltarune",
-    "audioUrl": "/audio/Chaos King.mp3",
+    "audioUrl": "/audio/deltarune30 - Chaos King.mp3",
     "year": 2018,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4779,7 +4779,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Deltarune",
-    "audioUrl": "/audio/The World Revolving.mp3",
+    "audioUrl": "/audio/deltarune/33 - THE WORLD REVOLVING.mp3",
     "year": 2018,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4790,7 +4790,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Deltarune",
-    "audioUrl": "/audio/Don't Forget.mp3",
+    "audioUrl": "/audio/deltarune/39 - Don_t Forget.mp3",
     "year": 2018,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4801,7 +4801,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Deltarune",
-    "audioUrl": "/audio/Cyber World.mp3",
+    "audioUrl": "/audio/deltarune/A CYBER'S WORLD.mp3",
     "year": 2021,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4812,7 +4812,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Deltarune",
-    "audioUrl": "/audio/Spamton.mp3",
+    "audioUrl": "/audio/deltarune/Spamton.mp3",
     "year": 2021,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4823,7 +4823,7 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Deltarune",
-    "audioUrl": "/audio/NOW'S YOUR CHANCE TO BE A BIG SHOT.mp3",
+    "audioUrl": "/audio/deltarune/NOW'S YOUR CHANCE TO BE A.mp3",
     "year": 2021,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4834,29 +4834,29 @@
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Deltarune",
-    "audioUrl": "/audio/Big Shot.mp3",
+    "audioUrl": "/audio/deltarune/BIG SHOT.mp3",
     "year": 2021,
     "genre": "Game Soundtrack",
     "console": "PC"
   },
   {
     "id": 417,
-    "title": "The Dark Truth",
+    "title": "Atack of the Killer Queen",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Deltarune",
-    "audioUrl": "/audio/The Dark Truth.mp3",
+    "audioUrl": "/audio/deltarune/Attack of the Killer Queen.mp3",
     "year": 2021,
     "genre": "Game Soundtrack",
     "console": "PC"
   },
   {
     "id": 418,
-    "title": "Hometown (Reprise)",
+    "title": "You Can Always Come Home",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Deltarune",
-    "audioUrl": "/audio/Hometown (Reprise).mp3",
+    "audioUrl": "/audio/deltarune/You Can Always Come Home.mp3",
     "year": 2018,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4867,7 +4867,7 @@
     "artist": "Borislav Slavov",
     "composer": "Borislav Slavov",
     "game": "Baldur's Gate 3",
-    "audioUrl": "/audio/Main Theme.mp3",
+    "audioUrl": "/audio/outros/01. Main Theme.mp3",
     "year": 2023,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4878,7 +4878,7 @@
     "artist": "Borislav Slavov",
     "composer": "Borislav Slavov",
     "game": "Baldur's Gate 3",
-    "audioUrl": "/audio/The Power.mp3",
+    "audioUrl": "/audio/outros/20. The Power (Choral Version).mp3",
     "year": 2023,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4889,7 +4889,7 @@
     "artist": "Borislav Slavov",
     "composer": "Borislav Slavov",
     "game": "Baldur's Gate 3",
-    "audioUrl": "/audio/Weeping Dawn.mp3",
+    "audioUrl": "/audio/outros/09. Weeping Dawn.mp3",
     "year": 2023,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4900,7 +4900,7 @@
     "artist": "Borislav Slavov",
     "composer": "Borislav Slavov",
     "game": "Baldur's Gate 3",
-    "audioUrl": "/audio/Nine Blades.mp3",
+    "audioUrl": "/audio/outros/05. Nine Blades.mp3",
     "year": 2023,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -4911,7 +4911,7 @@
     "artist": "Borislav Slavov",
     "composer": "Borislav Slavov",
     "game": "Baldur's Gate 3",
-    "audioUrl": "/audio/Down by the River.mp3",
+    "audioUrl": "/audio/outros/39. Down by the River.mp3",
     "year": 2023,
     "genre": "Game Soundtrack",
     "console": "PC"
@@ -5021,7 +5021,7 @@
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
     "game": "OMORI",
-    "audioUrl": "/audio/Take A Load Off.mp3",
+    "audioUrl": "/audio/omori/52. Take A Load Off.mp3",
     "year": 2020,
     "genre": "Game Soundtrack",
     "console": "PC, Switch, PS4, Xbox"
@@ -5032,7 +5032,7 @@
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
     "game": "OMORI",
-    "audioUrl": "/audio/I Prefer My Pizza 90% Grease.mp3",
+    "audioUrl": "/audio/omori/53. I Prefer My Pizza 90% Grease.mp3",
     "year": 2020,
     "genre": "Game Soundtrack",
     "console": "PC, Switch, PS4, Xbox"
@@ -5043,7 +5043,7 @@
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
     "game": "OMORI",
-    "audioUrl": "/audio/Fresh...ish… .mp3",
+    "audioUrl": "/audio/omori/54. Fresh...ish....mp3",
     "year": 2020,
     "genre": "Game Soundtrack",
     "console": "PC, Switch, PS4, Xbox"
@@ -5054,7 +5054,7 @@
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
     "game": "OMORI",
-    "audioUrl": "/audio/High Fructose Headache.mp3",
+    "audioUrl": "/audio/omori/55. High Fructose Headache.mp3",
     "year": 2020,
     "genre": "Game Soundtrack",
     "console": "PC, Switch, PS4, Xbox"
@@ -5065,7 +5065,7 @@
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
     "game": "OMORI",
-    "audioUrl": "/audio/I Think My Dad Shops Here… .mp3",
+    "audioUrl": "/audio/omori/56. I Think My Dad Shops Here....mp3",
     "year": 2020,
     "genre": "Game Soundtrack",
     "console": "PC, Switch, PS4, Xbox"
@@ -5076,7 +5076,7 @@
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
     "game": "OMORI",
-    "audioUrl": "/audio/Just Leave Me Alone.mp3",
+    "audioUrl": "/audio/omori/57. Just Leave Me Alone.mp3",
     "year": 2020,
     "genre": "Game Soundtrack",
     "console": "PC, Switch, PS4, Xbox"
@@ -5087,7 +5087,7 @@
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
     "game": "OMORI",
-    "audioUrl": "/audio/Cram It Wad.mp3",
+    "audioUrl": "/audio/omori/58. Cram It Wad.mp3",
     "year": 2020,
     "genre": "Game Soundtrack",
     "console": "PC, Switch, PS4, Xbox"
@@ -5098,7 +5098,7 @@
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
     "game": "OMORI",
-    "audioUrl": "/audio/Respite.mp3",
+    "audioUrl": "/audio/omori/59. Respite.mp3",
     "year": 2020,
     "genre": "Game Soundtrack",
     "console": "PC, Switch, PS4, Xbox"
@@ -5109,7 +5109,7 @@
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
     "game": "OMORI",
-    "audioUrl": "/audio/It Means Everything.mp3",
+    "audioUrl": "/audio/omori/60. It Means Everything..mp3",
     "year": 2020,
     "genre": "Game Soundtrack",
     "console": "PC, Switch, PS4, Xbox"
@@ -5120,7 +5120,7 @@
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
     "game": "OMORI",
-    "audioUrl": "/audio/See You Tomorrow.mp3",
+    "audioUrl": "/audio/omori/61. See You Tomorrow.mp3",
     "year": 2020,
     "genre": "Game Soundtrack",
     "console": "PC, Switch, PS4, Xbox"
@@ -5131,7 +5131,7 @@
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
     "game": "OMORI",
-    "audioUrl": "/audio/A Home For Flowers (Empty).mp3",
+    "audioUrl": "/audio/omori/62. A Home For Flowers (Empty).mp3",
     "year": 2020,
     "genre": "Game Soundtrack",
     "console": "PC, Switch, PS4, Xbox"
@@ -5142,7 +5142,7 @@
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
     "game": "OMORI",
-    "audioUrl": "/audio/Help Me.mp3",
+    "audioUrl": "/audio/omori/63. Help Me.mp3",
     "year": 2020,
     "genre": "Game Soundtrack",
     "console": "PC, Switch, PS4, Xbox"
@@ -5153,7 +5153,7 @@
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
     "game": "OMORI",
-    "audioUrl": "/audio/Arachnophobia.mp3",
+    "audioUrl": "/audio/omori/64. Arachnophobia.mp3",
     "year": 2020,
     "genre": "Game Soundtrack",
     "console": "PC, Switch, PS4, Xbox"
@@ -5193,7 +5193,7 @@
   },
   {
     "id": 449,
-    "title": "For River - Piano (Sarah & Tommy's Version)",
+    "title": "For River",
     "artist": "Kan Gao",
     "composer": "Kan Gao",
     "game": "To The Moon",
@@ -5303,7 +5303,7 @@
   },
   {
     "id": 459,
-    "title": "Everything's Alright (Music Box)",
+    "title": "Everything's Alright",
     "artist": "Kan Gao",
     "composer": "Kan Gao",
     "game": "To The Moon",
