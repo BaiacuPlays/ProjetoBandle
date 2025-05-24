@@ -1,8 +1,9 @@
 {
-  "/_error": "pages/_error.js",
   "/_app": "pages/_app.js",
+  "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
+  "/": "pages/index.js",
   "/multiplayer": "pages/multiplayer.js",
-  "/api/lobby": "pages/api/lobby.js",
-  "/": "pages/index.js"
+  "/api/music-info": "pages/api/music-info.js",
+  "/api/lobby": "pages/api/lobby.js"
 }

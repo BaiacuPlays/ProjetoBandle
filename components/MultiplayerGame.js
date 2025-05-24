@@ -26,7 +26,6 @@ const MultiplayerGame = ({ onBackToLobby }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioProgress, setAudioProgress] = useState(0);
   const [volume, setVolume] = useState(1);
-  const [attempts, setAttempts] = useState(0);
   const [isShaking, setIsShaking] = useState(false);
   const [startTime, setStartTime] = useState(0);
 
@@ -41,8 +40,6 @@ const MultiplayerGame = ({ onBackToLobby }) => {
   const myAttempts = gameState?.attempts?.[nickname] || 0;
   const maxClipDurations = [0.6, 1.2, 2.0, 3.0, 3.5, 4.2];
 
-
-
   // Função para gerar tempo determinístico
   const getDeterministicStartTime = (duration, songId) => {
     const maxStart = Math.max(0, duration - 10);
@@ -50,13 +47,6 @@ const MultiplayerGame = ({ onBackToLobby }) => {
     const deterministicRandom = (seed / 997);
     return deterministicRandom * maxStart;
   };
-
-  // Atualizar tentativas quando o estado do lobby muda
-  useEffect(() => {
-    if (gameState?.attempts?.[nickname] !== undefined) {
-      setAttempts(gameState.attempts[nickname]);
-    }
-  }, [gameState?.attempts, nickname]);
 
   // Configurar áudio quando a música muda
   useEffect(() => {
@@ -171,7 +161,8 @@ const MultiplayerGame = ({ onBackToLobby }) => {
           const gameCmp = normalize(a.game).localeCompare(normalize(b.game));
           if (gameCmp !== 0) return gameCmp;
           return normalize(a.title).localeCompare(normalize(b.title));
-        });
+        })
+        .slice(0, 50); // Limitar a 50 sugestões para performance
 
       setFilteredSuggestions(suggestions);
       setShowSuggestions(suggestions.length > 0);
@@ -192,6 +183,11 @@ const MultiplayerGame = ({ onBackToLobby }) => {
     // IGUAL AO JOGO NORMAL - só filtra se já tem texto
     if (guess.trim()) {
       filterSuggestions(guess);
+    } else {
+      // Se não tem texto, mostrar algumas sugestões aleatórias
+      const randomSuggestions = songs.slice(0, 10);
+      setFilteredSuggestions(randomSuggestions);
+      setShowSuggestions(true);
     }
   };
 
@@ -216,6 +212,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
       actions.setError(isClient ? t('select_from_list') : 'Selecione uma música da lista');
       setIsShaking(true);
       setTimeout(() => setIsShaking(false), 500);
+      setTimeout(() => actions.setError(''), 3000); // Limpar erro após 3 segundos
       return;
     }
 
@@ -232,18 +229,24 @@ const MultiplayerGame = ({ onBackToLobby }) => {
           console.log('🎮 GAME - Acertou, mas chegou tarde!');
           // Mostrar mensagem de que chegou tarde
           actions.setError(result.message || 'Alguém já havia acertado primeiro!');
-          setTimeout(() => actions.setError(''), 3000);
+          setTimeout(() => actions.setError(''), 4000);
         } else {
           console.log('🎮 GAME - Acertou a música!');
+          // Limpar qualquer erro anterior
+          actions.setError('');
         }
       } else if (result.gameCorrect) {
         console.log('🎮 GAME - Acertou o jogo mas não a música!');
-        // Pode adicionar feedback visual aqui se quiser
+        // Feedback visual para jogo correto
+        actions.setError('Jogo correto! Tente adivinhar a música específica.');
+        setTimeout(() => actions.setError(''), 3000);
       }
     } else {
-      console.log('🎮 GAME - Erro na tentativa:', result.error);
+      console.log('🎮 GAME - Tentativa não aceita:', result.error);
       setIsShaking(true);
       setTimeout(() => setIsShaking(false), 500);
+      // NUNCA mostrar erros de tentativas - deixar o jogo fluir naturalmente
+      // Os erros importantes já são tratados pelo contexto
     }
   };
 

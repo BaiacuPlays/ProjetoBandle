@@ -11,8 +11,7 @@ const MultiplayerLobby = ({ onGameStart }) => {
     playerNickname: nickname,
     lobbyData,
     isLoading,
-    error,
-    isConnected
+    error
   } = state;
 
   const [formData, setFormData] = useState({
@@ -40,14 +39,17 @@ const MultiplayerLobby = ({ onGameStart }) => {
     e.preventDefault();
     if (!formData.nickname.trim()) {
       actions.setError(isClient ? t('nickname_required') : 'Nickname é obrigatório');
+      setTimeout(() => actions.setError(''), 3000);
       return;
     }
 
     try {
       await actions.createRoom(formData.nickname.trim());
       setMode('waiting');
+      actions.setError(''); // Limpar qualquer erro anterior
     } catch (err) {
       // Erro já foi tratado no contexto
+      setTimeout(() => actions.setError(''), 5000);
     }
   };
 
@@ -55,18 +57,22 @@ const MultiplayerLobby = ({ onGameStart }) => {
     e.preventDefault();
     if (!formData.nickname.trim()) {
       actions.setError(isClient ? t('nickname_required') : 'Nickname é obrigatório');
+      setTimeout(() => actions.setError(''), 3000);
       return;
     }
     if (!formData.roomCode.trim()) {
       actions.setError(isClient ? t('room_code_required') : 'Código da sala é obrigatório');
+      setTimeout(() => actions.setError(''), 3000);
       return;
     }
 
     try {
       await actions.joinRoom(formData.roomCode.trim().toUpperCase(), formData.nickname.trim());
       setMode('waiting');
+      actions.setError(''); // Limpar qualquer erro anterior
     } catch (err) {
       // Erro já foi tratado no contexto
+      setTimeout(() => actions.setError(''), 5000);
     }
   };
 

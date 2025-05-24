@@ -56,44 +56,74 @@ export function MultiplayerProvider({ children }) {
 
   // Polling para atualizar o estado da sala
   useEffect(() => {
-    console.log('🔄 CONTEXT - useEffect polling:', {
-      roomCode: state.roomCode,
-      isConnected: state.isConnected
-    });
-
     if (!state.roomCode || !state.isConnected) {
-      console.log('🔄 CONTEXT - Polling não iniciado - faltam dados');
       return;
     }
 
+    let isActive = true;
+    let consecutiveErrors = 0;
+    const maxErrors = 5;
+
     const pollLobby = async () => {
-      console.log('🔄 CONTEXT - Fazendo polling para sala:', state.roomCode);
+      if (!isActive) return;
+
       try {
-        const response = await fetch(`/api/lobby?roomCode=${state.roomCode}`);
+        const response = await fetch(`/api/lobby?roomCode=${state.roomCode}`, {
+          method: 'GET',
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache'
+          }
+        });
+
+        if (!isActive) return;
+
         if (response.ok) {
           const data = await response.json();
-          console.log('🔄 CONTEXT - Dados recebidos:', data);
-          dispatch({ type: ACTIONS.SET_LOBBY_DATA, payload: data });
+          if (isActive) {
+            // Verificar se a sala foi encontrada
+            if (data.roomNotFound) {
+              consecutiveErrors++;
+              if (consecutiveErrors >= maxErrors) {
+                dispatch({ type: ACTIONS.SET_ERROR, payload: 'Conexão perdida com a sala' });
+              }
+            } else {
+              dispatch({ type: ACTIONS.SET_LOBBY_DATA, payload: data });
+              consecutiveErrors = 0;
+
+              // Limpar erro se havia um
+              if (state.error) {
+                dispatch({ type: ACTIONS.SET_ERROR, payload: '' });
+              }
+            }
+          }
         } else {
-          const errorData = await response.json();
-          console.log('🔄 CONTEXT - Erro na resposta:', errorData);
-          dispatch({ type: ACTIONS.SET_ERROR, payload: errorData.error || 'Erro ao buscar dados da sala' });
+          consecutiveErrors++;
+          // Só mostrar erro se for muito persistente
+          if (consecutiveErrors >= maxErrors * 2) {
+            if (isActive) {
+              dispatch({ type: ACTIONS.SET_ERROR, payload: 'Problemas de conexão com o servidor' });
+            }
+          }
         }
       } catch (err) {
-        console.log('🔄 CONTEXT - Erro de conexão:', err);
-        dispatch({ type: ACTIONS.SET_ERROR, payload: 'Erro de conexão' });
+        consecutiveErrors++;
+        // Ignorar erros de rede temporários
+        if (consecutiveErrors >= maxErrors && isActive) {
+          dispatch({ type: ACTIONS.SET_ERROR, payload: 'Problemas de conexão' });
+        }
       }
     };
 
-    // Poll inicial
-    console.log('🔄 CONTEXT - Iniciando polling...');
-    pollLobby();
+    // Poll inicial após um pequeno delay
+    const initialTimeout = setTimeout(pollLobby, 500);
 
-    // Poll a cada 2 segundos
-    const interval = setInterval(pollLobby, 2000);
+    // Poll a cada 4 segundos
+    const interval = setInterval(pollLobby, 4000);
 
     return () => {
-      console.log('🔄 CONTEXT - Parando polling');
+      isActive = false;
+      clearTimeout(initialTimeout);
       clearInterval(interval);
     };
   }, [state.roomCode, state.isConnected]);
@@ -260,11 +290,11 @@ export function MultiplayerProvider({ children }) {
             message: data.message
           };
         } else {
-          dispatch({ type: ACTIONS.SET_ERROR, payload: data.error || 'Erro ao fazer tentativa' });
+          // NUNCA mostrar erros de tentativas no contexto - deixar para o componente decidir
           return { success: false, error: data.error };
         }
       } catch (err) {
-        dispatch({ type: ACTIONS.SET_ERROR, payload: 'Erro de conexão' });
+        // Só mostrar erro de conexão se for crítico
         return { success: false, error: 'Erro de conexão' };
       }
     },

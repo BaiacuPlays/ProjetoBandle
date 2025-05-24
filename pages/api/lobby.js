@@ -476,7 +476,26 @@ export default async function handler(req, res) {
       }
       const lobby = await kv.get(`lobby:${roomCode}`);
       if (!lobby) {
-        return res.status(404).json({ error: 'Sala não encontrada.' });
+        // Retornar dados vazios em vez de erro para evitar spam no console
+        return res.status(200).json({
+          players: [],
+          host: null,
+          gameStarted: false,
+          roomNotFound: true,
+          gameState: {
+            currentRound: 0,
+            totalRounds: 10,
+            songs: [],
+            scores: {},
+            currentSong: null,
+            roundStartTime: null,
+            roundWinner: null,
+            gameFinished: false,
+            attempts: {},
+            guesses: {}
+          },
+          currentSong: null
+        });
       }
 
       // Se o jogo foi iniciado, buscar a música atual
