@@ -1,18 +1,18 @@
 // Configuração da API externa
 const API_CONFIG = {
   // URL do backend externo (será configurado depois)
-  BASE_URL: process.env.NEXT_PUBLIC_API_URL || 'https://bandle-api.railway.app',
-  
+  BASE_URL: process.env.NEXT_PUBLIC_API_URL || 'https://projetobandle-production.up.railway.app',
+
   // Endpoints
   ENDPOINTS: {
     LOBBY: '/api/lobby',
     MUSIC_INFO: '/api/music-info',
     TIMEZONE: '/api/timezone'
   },
-  
+
   // Configurações de timeout
   TIMEOUT: 10000,
-  
+
   // Configurações de retry
   RETRY_ATTEMPTS: 3,
   RETRY_DELAY: 1000
@@ -21,12 +21,12 @@ const API_CONFIG = {
 // Função helper para fazer requests com retry
 export const apiRequest = async (endpoint, options = {}) => {
   const url = `${API_CONFIG.BASE_URL}${endpoint}`;
-  
+
   for (let attempt = 1; attempt <= API_CONFIG.RETRY_ATTEMPTS; attempt++) {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), API_CONFIG.TIMEOUT);
-      
+
       const response = await fetch(url, {
         ...options,
         signal: controller.signal,
@@ -35,21 +35,21 @@ export const apiRequest = async (endpoint, options = {}) => {
           ...options.headers
         }
       });
-      
+
       clearTimeout(timeoutId);
-      
+
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
-      
+
       return response;
     } catch (error) {
       console.warn(`API request attempt ${attempt} failed:`, error.message);
-      
+
       if (attempt === API_CONFIG.RETRY_ATTEMPTS) {
         throw error;
       }
-      
+
       // Wait before retry
       await new Promise(resolve => setTimeout(resolve, API_CONFIG.RETRY_DELAY * attempt));
     }
@@ -65,7 +65,7 @@ export const fetchTimezone = async () => {
     return data;
   } catch (error) {
     console.warn('API externa falhou, usando fallback local:', error.message);
-    
+
     // Fallback: usar data local do navegador
     const now = new Date();
     return {
@@ -82,13 +82,13 @@ export const fetchMusicInfo = async (title, game) => {
       title: title,
       game: game
     });
-    
+
     const response = await apiRequest(`${API_CONFIG.ENDPOINTS.MUSIC_INFO}?${params}`);
     const data = await response.json();
     return data;
   } catch (error) {
     console.warn('Erro ao buscar informações da música:', error.message);
-    
+
     // Retorna dados padrão em caso de erro
     return {
       artist: 'Unknown Artist',
