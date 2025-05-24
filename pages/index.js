@@ -39,6 +39,8 @@ export default function Home() {
   const [isShaking, setIsShaking] = useState(false);
   const [currentDay, setCurrentDay] = useState(null);
   const [showMenu, setShowMenu] = useState(false);
+  const [secretCode, setSecretCode] = useState('');
+  const [showSacabambapis, setShowSacabambapis] = useState(false);
 
   // Tempos máximos de reprodução por tentativa
   const maxClipDurations = [0.6, 1.2, 2.0, 3.0, 3.5, 4.2];
@@ -101,8 +103,33 @@ export default function Home() {
       const diff = now - start + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
       const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
       setCurrentDay(dayOfYear);
-      // Seleciona a música do dia de forma determinística e fixa
-      const song = songs[dayOfYear % songs.length];
+
+      // Verificar se já existe uma música salva para o dia atual
+      const savedSongKey = `bandle_daily_song_day_${dayOfYear}`;
+      let song;
+
+      const savedSongId = localStorage.getItem(savedSongKey);
+      if (savedSongId) {
+        // Usa a música já salva para o dia
+        song = songs.find(s => s.id === parseInt(savedSongId)) || songs[0];
+      } else {
+        // Gera uma nova música aleatória e salva para o dia
+        const randomIndex = Math.floor(Math.random() * songs.length);
+        song = songs[randomIndex];
+        localStorage.setItem(savedSongKey, song.id.toString());
+
+        // Limpa músicas de dias anteriores (mantém apenas os últimos 3 dias)
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key && key.startsWith('bandle_daily_song_day_')) {
+            const dayFromKey = parseInt(key.replace('bandle_daily_song_day_', ''));
+            if (dayFromKey < dayOfYear - 2) {
+              localStorage.removeItem(key);
+            }
+          }
+        }
+      }
+
       setCurrentSong(song);
       // Calcular tempo até a próxima meia-noite
       const nextMidnight = new Date(now);
@@ -468,6 +495,47 @@ export default function Home() {
     }
   }, [currentSong?.audioUrl, message]);
 
+  // Listener para código secreto
+  useEffect(() => {
+    const handleKeyPress = (e) => {
+      // Só funciona se não estiver digitando no input
+      if (e.target.tagName === 'INPUT') return;
+
+      const newCode = secretCode + e.key.toLowerCase();
+      setSecretCode(newCode);
+
+      // Verifica se o código secreto foi digitado
+      if (newCode.includes('sacabambapis')) {
+        console.log('🎉 Código secreto ativado!');
+
+        // Mostrar efeito visual
+        setShowSacabambapis(true);
+
+        // Tocar som do vine boom
+        const vineAudio = new Audio('/vine.mp3');
+        vineAudio.volume = 0.7;
+        vineAudio.play().catch(e => console.log('Erro ao tocar vine boom:', e));
+
+        // Após 2 segundos, remove a música salva e recarrega
+        setTimeout(() => {
+          if (currentDay !== null) {
+            const savedSongKey = `bandle_daily_song_day_${currentDay}`;
+            localStorage.removeItem(savedSongKey);
+          }
+          window.location.reload();
+        }, 2000);
+      }
+
+      // Limpa o código se ficar muito longo
+      if (newCode.length > 20) {
+        setSecretCode('');
+      }
+    };
+
+    document.addEventListener('keypress', handleKeyPress);
+    return () => document.removeEventListener('keypress', handleKeyPress);
+  }, [secretCode, currentDay]);
+
   // Função para salvar o estado completo do jogo
   const saveGameState = (gameState) => {
     if (currentDay !== null && typeof window !== 'undefined') {
@@ -517,15 +585,21 @@ export default function Home() {
 
   // Limpa dados antigos do localStorage
   const cleanupOldLocalStorageData = (currentDay) => {
-    // Mantém apenas os dados do dia atual e do dia anterior
+    // Mantém apenas os dados do dia atual e dos 2 dias anteriores
     const keysToKeep = [
       `bandle_start_time_day_${currentDay}`,
       `bandle_start_time_day_${currentDay - 1}`,
+      `bandle_start_time_day_${currentDay - 2}`,
       `bandle_game_state_day_${currentDay}`,
       `bandle_game_state_day_${currentDay - 1}`,
+      `bandle_game_state_day_${currentDay - 2}`,
+      `bandle_daily_song_day_${currentDay}`,
+      `bandle_daily_song_day_${currentDay - 1}`,
+      `bandle_daily_song_day_${currentDay - 2}`,
       'bandle_gameover_day',
       'bandle_gameover_history',
-      'bandle_gameover_message'
+      'bandle_gameover_message',
+      'bandle_settings'
     ];
 
     // Procura por chaves antigas relacionadas ao bandle
@@ -968,6 +1042,17 @@ export default function Home() {
           isOpen={showMenu}
           onClose={() => setShowMenu(false)}
         />
+
+        {/* Efeito visual do sacabambapis */}
+        {showSacabambapis && (
+          <div className={styles.sacabambapis}>
+            <img
+              src="/sacabambapis.png"
+              alt="Sacabambapis"
+              className={styles.sacabambapisImage}
+            />
+          </div>
+        )}
       </div>
       <Footer />
     </div>

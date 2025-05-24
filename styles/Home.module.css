@@ -1185,3 +1185,64 @@
 .shake {
   animation: shakeAnimation 0.4s ease-in-out;
 }
+
+/* Efeito visual do sacabambapis */
+.sacabambapis {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: sacabambapisAppear 2s ease-out;
+}
+
+.sacabambapisImage {
+  max-width: 80vw;
+  max-height: 80vh;
+  object-fit: contain;
+  animation: sacabambapisZoom 2s ease-out;
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5));
+}
+
+@keyframes sacabambapisAppear {
+  0% {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  10% {
+    opacity: 1;
+    backdrop-filter: blur(10px);
+  }
+  90% {
+    opacity: 1;
+    backdrop-filter: blur(10px);
+  }
+  100% {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+}
+
+@keyframes sacabambapisZoom {
+  0% {
+    transform: scale(0) rotate(-180deg);
+    opacity: 0;
+  }
+  20% {
+    transform: scale(1.2) rotate(0deg);
+    opacity: 1;
+  }
+  80% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8) rotate(0deg);
+    opacity: 0;
+  }
+}
