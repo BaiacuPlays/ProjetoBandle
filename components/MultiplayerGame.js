@@ -40,6 +40,21 @@ const MultiplayerGame = ({ onBackToLobby }) => {
   const myAttempts = gameState?.attempts?.[nickname] || 0;
   const maxClipDurations = [0.6, 1.2, 2.0, 3.0, 3.5, 4.2];
 
+  // Determinar qual música tocar
+  let songToPlay = currentSong;
+  if (!songToPlay && gameState?.songs && gameState.songs.length > 0) {
+    const currentRoundIndex = (gameState.currentRound || 1) - 1;
+    songToPlay = gameState.songs[currentRoundIndex];
+  }
+
+  // Garantir que temos uma música válida para tocar
+  if (!songToPlay && gameState?.currentSong) {
+    // Tentar encontrar a música pelo título na lista de músicas
+    songToPlay = songs.find(song =>
+      song.title.trim().toLowerCase() === gameState.currentSong.trim().toLowerCase()
+    );
+  }
+
   // Função para gerar tempo determinístico
   const getDeterministicStartTime = (duration, songId) => {
     const maxStart = Math.max(0, duration - 10);
@@ -129,6 +144,50 @@ const MultiplayerGame = ({ onBackToLobby }) => {
     };
   }, [startTime, myAttempts, roundWinner]);
 
+  // Reset do estado do áudio e interface quando a rodada muda
+  useEffect(() => {
+    console.log('🎵 ROUND CHANGE - Rodada mudou:', gameState?.currentRound);
+
+    if (audioRef.current) {
+      // Pausar o áudio
+      audioRef.current.pause();
+      setIsPlaying(false);
+
+      // Resetar progresso
+      setAudioProgress(0);
+
+      // Resetar posição do áudio para o início
+      if (startTime !== undefined) {
+        audioRef.current.currentTime = startTime;
+      }
+
+      console.log('🎵 ROUND CHANGE - Estado do áudio resetado');
+    }
+
+    // Resetar estado da interface
+    setGuess('');
+    setShowSuggestions(false);
+    setFilteredSuggestions([]);
+    setIsShaking(false);
+
+    console.log('🎮 ROUND CHANGE - Interface resetada');
+  }, [gameState?.currentRound, startTime]);
+
+  // Garantir que o áudio seja configurado corretamente quando a URL muda
+  useEffect(() => {
+    if (audioRef.current && songToPlay?.audioUrl) {
+      console.log('🎵 AUDIO URL - Nova URL de áudio:', songToPlay.audioUrl);
+
+      // Pausar qualquer reprodução anterior
+      audioRef.current.pause();
+      setIsPlaying(false);
+      setAudioProgress(0);
+
+      // Forçar o carregamento da nova música
+      audioRef.current.load();
+    }
+  }, [songToPlay?.audioUrl]);
+
   // Normalizar string para comparação - IGUAL AO JOGO NORMAL
   const normalize = str => str
     .normalize('NFD')
@@ -155,10 +214,17 @@ const MultiplayerGame = ({ onBackToLobby }) => {
   // Filtrar sugestões - EXATAMENTE IGUAL AO JOGO NORMAL
   const filterSuggestions = (value) => {
     if (value.length > 0) {
-      const nValue = normalize(value);
+      // Divide o valor de busca em palavras, mas como normalize remove espaços,
+      // vamos dividir antes de normalizar para manter a lógica correta
+      const originalWords = value.trim().split(/\s+/).filter(word => word.length > 0);
+      const searchWords = originalWords.map(word => normalize(word)).filter(word => word.length > 1);
 
-      // Divide o valor de busca em palavras
-      const searchWords = nValue.split(/\s+/).filter(word => word.length > 0);
+      // Se não há palavras válidas (apenas palavras de 1 letra), não mostrar sugestões
+      if (searchWords.length === 0) {
+        setFilteredSuggestions([]);
+        setShowSuggestions(false);
+        return [];
+      }
 
       const suggestions = songs
         .filter(song => {
@@ -167,13 +233,10 @@ const MultiplayerGame = ({ onBackToLobby }) => {
           const nArtist = normalize(song.artist);
 
           // Verifica se pelo menos uma palavra da busca está presente em algum dos campos
-          // Ignora apenas palavras com uma única letra
           return searchWords.some(word =>
-            (word.length > 1 && (
-              nTitle.includes(word) ||
-              nGame.includes(word) ||
-              nArtist.includes(word)
-            ))
+            nTitle.includes(word) ||
+            nGame.includes(word) ||
+            nArtist.includes(word)
           );
         })
         .sort((a, b) => {
@@ -307,22 +370,41 @@ const MultiplayerGame = ({ onBackToLobby }) => {
   };
 
   const handlePlayPause = () => {
-    if (!audioRef.current) return;
+    if (!audioRef.current) {
+      console.log('🎵 PLAY - Áudio ref não disponível');
+      return;
+    }
+
+    console.log('🎵 PLAY - Tentando play/pause, isPlaying:', isPlaying);
 
     const currentTime = audioRef.current.currentTime - startTime;
     const maxDuration = roundWinner
       ? 15
       : maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1];
 
+    // Se o tempo atual excedeu o máximo permitido, resetar para o início
     if (currentTime >= maxDuration) {
       audioRef.current.currentTime = startTime;
       setAudioProgress(0);
+      console.log('🎵 PLAY - Resetando para o início devido ao tempo limite');
     }
 
     if (isPlaying) {
       audioRef.current.pause();
+      console.log('🎵 PLAY - Pausando áudio');
     } else {
-      audioRef.current.play();
+      // Garantir que o áudio está na posição correta antes de tocar
+      if (audioRef.current.currentTime < startTime || audioRef.current.currentTime > startTime + maxDuration) {
+        audioRef.current.currentTime = startTime;
+        setAudioProgress(0);
+        console.log('🎵 PLAY - Ajustando posição antes de tocar');
+      }
+
+      audioRef.current.play().then(() => {
+        console.log('🎵 PLAY - Áudio iniciado com sucesso');
+      }).catch(error => {
+        console.error('🎵 PLAY - Erro ao iniciar áudio:', error);
+      });
     }
   };
 
@@ -361,21 +443,6 @@ const MultiplayerGame = ({ onBackToLobby }) => {
   }
 
   console.log('🎮 GAME - Condições atendidas, renderizando jogo');
-
-  // Se não temos currentSong, mas temos gameState, tentar pegar da lista de músicas
-  let songToPlay = currentSong;
-  if (!songToPlay && gameState.songs && gameState.songs.length > 0) {
-    const currentRoundIndex = (gameState.currentRound || 1) - 1;
-    songToPlay = gameState.songs[currentRoundIndex];
-  }
-
-  // Garantir que temos uma música válida para tocar
-  if (!songToPlay && gameState?.currentSong) {
-    // Tentar encontrar a música pelo título na lista de músicas
-    songToPlay = songs.find(song =>
-      song.title.trim().toLowerCase() === gameState.currentSong.trim().toLowerCase()
-    );
-  }
 
   return (
     <div className={styles.container}>
@@ -520,28 +587,49 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                 {[...Array(6)].map((_, idx) => {
                   let buttonClass = gameStyles.attemptInactive;
 
+                  // Debug: Log do estado das tentativas
+                  if (idx === 0) {
+                    console.log('🎨 DEBUG - Estado das tentativas:', {
+                      nickname: nickname,
+                      myAttempts: myAttempts,
+                      guesses: gameState?.guesses?.[nickname],
+                      roundWinner: roundWinner
+                    });
+                  }
+
                   if (idx < myAttempts) {
                     // Verificar o histórico de tentativas para determinar a cor
                     const myGuesses = gameState?.guesses?.[nickname] || [];
                     const attemptGuess = myGuesses[idx];
 
+                    console.log('🎨 COLOR - Tentativa', idx + 1, ':', attemptGuess);
+
                     if (attemptGuess) {
                       if (attemptGuess.correct && !attemptGuess.tooLate) {
                         // Acertou a música e foi o primeiro - VERDE
                         buttonClass = gameStyles.attemptSuccess;
-                      } else if (attemptGuess.gameCorrect) {
+                        console.log('🎨 COLOR - Verde (acertou)');
+                      } else if (attemptGuess.gameCorrect && !attemptGuess.correct) {
                         // Acertou o jogo mas não a música - AMARELO
                         buttonClass = gameStyles.attemptGame;
+                        console.log('🎨 COLOR - Amarelo (jogo correto)');
+                      } else if (attemptGuess.type === 'skipped') {
+                        // Skip - VERMELHO
+                        buttonClass = gameStyles.attemptFail;
+                        console.log('🎨 COLOR - Vermelho (skip)');
                       } else {
                         // Errou ou chegou tarde - VERMELHO
                         buttonClass = gameStyles.attemptFail;
+                        console.log('🎨 COLOR - Vermelho (erro/tarde)');
                       }
                     } else {
                       // Fallback para lógica anterior se não tiver histórico
                       if (roundWinner === nickname && idx === myAttempts - 1) {
                         buttonClass = gameStyles.attemptSuccess;
+                        console.log('🎨 COLOR - Verde (fallback - vencedor)');
                       } else {
                         buttonClass = gameStyles.attemptFail;
+                        console.log('🎨 COLOR - Vermelho (fallback)');
                       }
                     }
                   }

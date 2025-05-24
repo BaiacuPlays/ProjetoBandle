@@ -382,10 +382,17 @@ export default function Home() {
 
   const filterSuggestions = (value) => {
     if (value.length > 0) {
-      const nValue = normalize(value);
+      // Divide o valor de busca em palavras, mas como normalize remove espaços,
+      // vamos dividir antes de normalizar para manter a lógica correta
+      const originalWords = value.trim().split(/\s+/).filter(word => word.length > 0);
+      const searchWords = originalWords.map(word => normalize(word)).filter(word => word.length > 1);
 
-      // Divide o valor de busca em palavras
-      const searchWords = nValue.split(/\s+/).filter(word => word.length > 0);
+      // Se não há palavras válidas (apenas palavras de 1 letra), não mostrar sugestões
+      if (searchWords.length === 0) {
+        setFilteredSuggestions([]);
+        setShowSuggestions(false);
+        return [];
+      }
 
       const suggestions = songs
         .filter(song => {
@@ -394,13 +401,10 @@ export default function Home() {
           const nArtist = normalize(song.artist);
 
           // Verifica se pelo menos uma palavra da busca está presente em algum dos campos
-          // Ignora apenas palavras com uma única letra
           return searchWords.some(word =>
-            (word.length > 1 && (
-              nTitle.includes(word) ||
-              nGame.includes(word) ||
-              nArtist.includes(word)
-            ))
+            nTitle.includes(word) ||
+            nGame.includes(word) ||
+            nArtist.includes(word)
           );
         })
         .sort((a, b) => {

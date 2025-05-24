@@ -306,7 +306,9 @@ export default async function handler(req, res) {
           guessedSong: guessedSong?.title,
           guessedGame: guessedSong?.game,
           isCorrect: isCorrect,
-          isFromCorrectGame: isFromCorrectGame
+          isFromCorrectGame: isFromCorrectGame,
+          nickname: nickname,
+          currentAttempts: lobby.gameState.attempts[nickname]
         });
 
         let correct = false;
@@ -334,11 +336,20 @@ export default async function handler(req, res) {
         if (!lobby.gameState.guesses[nickname]) {
           lobby.gameState.guesses[nickname] = [];
         }
-        lobby.gameState.guesses[nickname].push({
+        const attemptData = {
           guess: guess,
-          correct: isCorrect,
-          gameCorrect: isFromCorrectGame,
-          attempt: lobby.gameState.attempts[nickname]
+          correct: correct,
+          gameCorrect: gameCorrect,
+          attempt: lobby.gameState.attempts[nickname],
+          tooLate: false // Não chegou tarde se chegou até aqui
+        };
+
+        lobby.gameState.guesses[nickname].push(attemptData);
+
+        console.log('🎮 API - Tentativa salva:', {
+          nickname: nickname,
+          attemptData: attemptData,
+          totalGuesses: lobby.gameState.guesses[nickname].length
         });
 
         // Verificar se todos os jogadores esgotaram suas tentativas
@@ -405,8 +416,10 @@ export default async function handler(req, res) {
         lobby.gameState.guesses[nickname].push({
           guess: 'SKIP',
           correct: false,
+          gameCorrect: false,
           attempt: lobby.gameState.attempts[nickname],
-          type: 'skipped'
+          type: 'skipped',
+          tooLate: false
         });
 
         // Verificar se todos os jogadores esgotaram suas tentativas após o skip
@@ -453,8 +466,9 @@ export default async function handler(req, res) {
           lobby.gameState.roundWinner = null;
           lobby.gameState.roundStartTime = Date.now();
 
-          // Resetar tentativas para a nova rodada
+          // Resetar tentativas e histórico para a nova rodada
           lobby.gameState.attempts = {};
+          lobby.gameState.guesses = {};
 
           // Atualizar música atual
           const currentRoundIndex = lobby.gameState.currentRound - 1;
