@@ -477,6 +477,12 @@ const MultiplayerGame = ({ onBackToLobby }) => {
             <div style={{ textAlign: 'center' }}>
               <h2>{isClient ? t('final_scores') : 'Pontuação Final'}</h2>
 
+              {/* Explicação do sistema de pontuação */}
+              <div className={styles.pointsExplanation}>
+                <p>Sistema de Pontuação:</p>
+                <p>6 pontos (sem dicas) • 5 pontos (1 dica) • 4 pontos (2 dicas) • 3 pontos (3 dicas) • 2 pontos (4 dicas) • 1 ponto (5 dicas)</p>
+              </div>
+
               <div style={{ margin: '30px 0' }}>
                 {finalScores.map((item, index) => (
                   <div key={item.player} className={styles.scoreItem} style={{
@@ -580,6 +586,19 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                     onError={() => actions.setError('Erro ao carregar áudio')}
                   />
                 </div>
+              </div>
+
+              {/* Informação de pontuação */}
+              <div className={gameStyles.pointsInfo}>
+                <span className={gameStyles.pointsText}>
+                  {myAttempts === 0 ? '6 pontos' :
+                   myAttempts === 1 ? '5 pontos' :
+                   myAttempts === 2 ? '4 pontos' :
+                   myAttempts === 3 ? '3 pontos' :
+                   myAttempts === 4 ? '2 pontos' :
+                   myAttempts === 5 ? '1 ponto' : '0 pontos'}
+                  {myAttempts < 6 && ' se acertar agora'}
+                </span>
               </div>
 
               {/* Tentativas */}
@@ -707,6 +726,13 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                   }
                   <br />
                   <strong>{songToPlay?.game} - {songToPlay?.title}</strong>
+
+                  {/* Mostrar pontos ganhos se o jogador atual ganhou */}
+                  {roundWinner === nickname && (
+                    <div className={styles.pointsEarned}>
+                      +{Math.max(0, 6 - myAttempts + 1)} pontos!
+                    </div>
+                  )}
                 </div>
               )}
 

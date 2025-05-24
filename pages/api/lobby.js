@@ -324,8 +324,20 @@ export default async function handler(req, res) {
             lobby.gameState.roundWinner = nickname;
             lobby.gameState.roundWinTime = Date.now(); // Timestamp do acerto
 
-            // Sistema de pontuação simples - cada acerto = 1 ponto
-            lobby.gameState.scores[nickname] = (lobby.gameState.scores[nickname] || 0) + 1;
+            // Sistema de pontuação baseado em dicas utilizadas
+            // 6 pontos iniciais - número de tentativas usadas = pontos ganhos
+            // Acertou na 1ª tentativa = 6 pontos, 2ª tentativa = 5 pontos, etc.
+            const attemptsUsed = lobby.gameState.attempts[nickname];
+            const pointsEarned = Math.max(0, 6 - attemptsUsed + 1); // +1 porque a tentativa atual ainda não foi contada
+
+            console.log('🏆 PONTOS - Calculando pontuação:', {
+              nickname: nickname,
+              attemptsUsed: attemptsUsed,
+              pointsEarned: pointsEarned,
+              currentScore: lobby.gameState.scores[nickname] || 0
+            });
+
+            lobby.gameState.scores[nickname] = (lobby.gameState.scores[nickname] || 0) + pointsEarned;
           }
         } else if (isFromCorrectGame) {
           // Jogador acertou o jogo mas não a música

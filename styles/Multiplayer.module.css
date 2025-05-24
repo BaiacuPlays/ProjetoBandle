@@ -247,6 +247,54 @@
   border: 2px solid #4ecdc4;
 }
 
+/* Informação de pontuação */
+.pointsInfo {
+  text-align: center;
+  margin: 15px 0 10px 0;
+}
+
+.pointsText {
+  background: rgba(78, 205, 196, 0.2);
+  color: #4ecdc4;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  border: 1px solid rgba(78, 205, 196, 0.3);
+}
+
+.pointsExplanation {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 15px;
+  margin: 20px auto;
+  max-width: 600px;
+  font-size: 0.9rem;
+}
+
+.pointsExplanation p {
+  margin: 5px 0;
+  color: #ccc;
+}
+
+.pointsExplanation p:first-child {
+  font-weight: bold;
+  color: #4ecdc4;
+}
+
+.pointsEarned {
+  background: rgba(76, 175, 80, 0.3);
+  color: #4caf50;
+  padding: 8px 16px;
+  border-radius: 15px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-top: 10px;
+  display: inline-block;
+  border: 1px solid rgba(76, 175, 80, 0.5);
+}
+
 /* Mensagens */
 .message {
   padding: 15px;
