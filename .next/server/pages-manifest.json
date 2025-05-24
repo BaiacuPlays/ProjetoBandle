@@ -1,8 +1,8 @@
 {
-  "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
+  "/_app": "pages/_app.js",
   "/_document": "pages/_document.js",
-  "/privacy-policy": "pages/privacy-policy.js",
-  "/api/music-info": "pages/api/music-info.js",
+  "/multiplayer": "pages/multiplayer.js",
+  "/api/lobby": "pages/api/lobby.js",
   "/": "pages/index.js"
 }

@@ -39,16 +39,8 @@ const nextConfig = {
       ],
     };
   },
-  // Configuração para exportação estática
-  output: 'standalone',
   // Configuração para servir arquivos estáticos
-  trailingSlash: true,
-  // Desabilitar a geração de páginas dinâmicas
-  exportPathMap: async function () {
-    return {
-      '/': { page: '/' },
-    };
-  },
+  trailingSlash: false,
 }
 
 module.exports = nextConfig;

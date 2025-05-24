@@ -11,8 +11,13 @@ export function useLanguage() {
 
 // Provedor do contexto
 export function LanguageProvider({ children }) {
-  // Tentar carregar o idioma do localStorage imediatamente
+  // Tentar carregar o idioma do localStorage apenas no cliente
   const getSavedLanguage = () => {
+    // Verificar se estamos no cliente (browser)
+    if (typeof window === 'undefined') {
+      return 'pt-BR'; // Idioma padrão para SSR
+    }
+
     try {
       const savedSettings = localStorage.getItem('bandle_settings');
       if (savedSettings) {
@@ -28,7 +33,7 @@ export function LanguageProvider({ children }) {
     return 'pt-BR'; // Idioma padrão
   };
 
-  const [language, setLanguage] = useState(getSavedLanguage());
+  const [language, setLanguage] = useState('pt-BR'); // Inicializar com padrão
 
   // Aplicar o idioma ao montar o componente
   useEffect(() => {
@@ -55,9 +60,14 @@ export function LanguageProvider({ children }) {
   // Estado para controlar se estamos no cliente
   const [isClient, setIsClient] = useState(false);
 
-  // Detectar quando estamos no cliente
+  // Detectar quando estamos no cliente e carregar idioma salvo
   useEffect(() => {
     setIsClient(true);
+    // Carregar idioma salvo quando estivermos no cliente
+    const savedLanguage = getSavedLanguage();
+    if (savedLanguage !== language) {
+      setLanguage(savedLanguage);
+    }
   }, []);
 
   // Função para traduzir textos

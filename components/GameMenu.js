@@ -4,13 +4,16 @@ import {
   faQuestionCircle,
   faCog,
   faBug,
-  faPaperPlane
+  faPaperPlane,
+  faUsers
 } from '@fortawesome/free-solid-svg-icons';
 import styles from '../styles/GameMenu.module.css';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useRouter } from 'next/router';
 
 const GameMenu = ({ isOpen, onClose }) => {
   const { t, language, changeLanguage, isClient } = useLanguage();
+  const router = useRouter();
   const [expandedSections, setExpandedSections] = useState({
     howToPlay: false,
     settings: false,
@@ -245,6 +248,21 @@ const GameMenu = ({ isOpen, onClose }) => {
     <div className={styles.menuOverlay}>
       <div className={styles.menuContainer}>
         <button className={styles.closeButton} onClick={onClose}>×</button>
+
+        {/* Multiplayer */}
+        <div className={styles.menuSection}>
+          <button
+            className={styles.menuSectionHeader}
+            onClick={() => {
+              onClose();
+              router.push('/multiplayer');
+            }}
+            style={{ justifyContent: 'center' }}
+          >
+            <FontAwesomeIcon icon={faUsers} className={styles.menuIcon} />
+            <span>{isClient ? t('multiplayer') : 'Multiplayer'}</span>
+          </button>
+        </div>
 
         {/* Como jogar */}
         <div className={styles.menuSection}>

@@ -468,14 +468,52 @@ export default function Home() {
     }
   }, [currentSong?.audioUrl, message]);
 
-  // Persistência do estado de jogo terminado
-  useEffect(() => {
-    if (gameOver && currentDay !== null) {
-      localStorage.setItem('bandle_gameover_day', currentDay);
-      localStorage.setItem('bandle_gameover_history', JSON.stringify(history));
-      localStorage.setItem('bandle_gameover_message', message);
+  // Função para salvar o estado completo do jogo
+  const saveGameState = (gameState) => {
+    if (currentDay !== null && typeof window !== 'undefined') {
+      const stateToSave = {
+        day: currentDay,
+        attempts: gameState.attempts,
+        history: gameState.history,
+        message: gameState.message,
+        gameOver: gameState.gameOver,
+        showHint: gameState.showHint,
+        activeHint: gameState.activeHint,
+        currentClipDuration: gameState.currentClipDuration,
+        timestamp: Date.now()
+      };
+
+      console.log('🎮 Salvando estado do jogo:', stateToSave);
+      localStorage.setItem(`bandle_game_state_day_${currentDay}`, JSON.stringify(stateToSave));
+
+      // Manter compatibilidade com o sistema antigo para jogos terminados
+      if (gameState.gameOver) {
+        localStorage.setItem('bandle_gameover_day', currentDay);
+        localStorage.setItem('bandle_gameover_history', JSON.stringify(gameState.history));
+        localStorage.setItem('bandle_gameover_message', gameState.message);
+      }
     }
-  }, [gameOver, currentDay, history, message]);
+  };
+
+  // Estado para controlar se já carregou o estado salvo
+  const [hasLoadedSavedState, setHasLoadedSavedState] = useState(false);
+
+  // Persistência do estado do jogo (salva sempre que houver mudanças importantes)
+  useEffect(() => {
+    // Só salva se já carregou o estado inicial para evitar sobrescrever dados salvos
+    if (currentDay !== null && hasLoadedSavedState) {
+      const gameState = {
+        attempts,
+        history,
+        message,
+        gameOver,
+        showHint,
+        activeHint,
+        currentClipDuration
+      };
+      saveGameState(gameState);
+    }
+  }, [attempts, history, message, gameOver, showHint, activeHint, currentClipDuration, currentDay, hasLoadedSavedState]);
 
   // Limpa dados antigos do localStorage
   const cleanupOldLocalStorageData = (currentDay) => {
@@ -483,6 +521,8 @@ export default function Home() {
     const keysToKeep = [
       `bandle_start_time_day_${currentDay}`,
       `bandle_start_time_day_${currentDay - 1}`,
+      `bandle_game_state_day_${currentDay}`,
+      `bandle_game_state_day_${currentDay - 1}`,
       'bandle_gameover_day',
       'bandle_gameover_history',
       'bandle_gameover_message'
@@ -497,20 +537,63 @@ export default function Home() {
     }
   };
 
-  // Ao carregar, verifica se o usuário já terminou o desafio do dia
+  // Ao carregar, verifica se há estado salvo do jogo para o dia atual
   useEffect(() => {
     if (currentDay !== null) {
       // Limpa dados antigos
       cleanupOldLocalStorageData(currentDay);
 
-      const savedDay = localStorage.getItem('bandle_gameover_day');
-      if (savedDay && Number(savedDay) === currentDay) {
-        setGameOver(true);
-        const savedHistory = localStorage.getItem('bandle_gameover_history');
-        if (savedHistory) setHistory(JSON.parse(savedHistory));
-        const savedMessage = localStorage.getItem('bandle_gameover_message');
-        if (savedMessage) setMessage(savedMessage);
+      // Função para carregar o estado salvo (definida localmente para evitar dependências)
+      const loadSavedGameState = () => {
+        console.log('🔍 Tentando carregar estado do jogo para o dia:', currentDay);
+        const savedState = localStorage.getItem(`bandle_game_state_day_${currentDay}`);
+        console.log('📦 Estado salvo encontrado:', savedState);
+
+        if (savedState) {
+          try {
+            const parsedState = JSON.parse(savedState);
+            console.log('📋 Estado parseado:', parsedState);
+
+            if (parsedState.day === currentDay) {
+              console.log('✅ Carregando estado do jogo...');
+              setAttempts(parsedState.attempts || 0);
+              setHistory(parsedState.history || []);
+              setMessage(parsedState.message || '');
+              setGameOver(parsedState.gameOver || false);
+              setShowHint(parsedState.showHint || false);
+              setActiveHint(parsedState.activeHint || 0);
+              setCurrentClipDuration(parsedState.currentClipDuration || 0.3);
+              console.log('🎯 Estado carregado com sucesso!');
+              return true; // Estado carregado com sucesso
+            } else {
+              console.log('❌ Dia não confere:', parsedState.day, 'vs', currentDay);
+            }
+          } catch (error) {
+            console.error('❌ Erro ao carregar estado do jogo:', error);
+          }
+        } else {
+          console.log('📭 Nenhum estado salvo encontrado');
+        }
+        return false; // Nenhum estado carregado
+      };
+
+      // Tenta carregar o estado completo do jogo primeiro
+      const stateLoaded = loadSavedGameState();
+
+      // Se não conseguiu carregar o estado completo, verifica o sistema antigo (compatibilidade)
+      if (!stateLoaded) {
+        const savedDay = localStorage.getItem('bandle_gameover_day');
+        if (savedDay && Number(savedDay) === currentDay) {
+          setGameOver(true);
+          const savedHistory = localStorage.getItem('bandle_gameover_history');
+          if (savedHistory) setHistory(JSON.parse(savedHistory));
+          const savedMessage = localStorage.getItem('bandle_gameover_message');
+          if (savedMessage) setMessage(savedMessage);
+        }
       }
+
+      // Marca que já tentou carregar o estado (independente de ter encontrado ou não)
+      setHasLoadedSavedState(true);
     }
   }, [currentDay]);
 
