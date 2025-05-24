@@ -39,6 +39,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
   const roundFinished = gameState?.roundFinished || false;
   const gameFinished = gameState?.gameFinished;
   const myAttempts = gameState?.attempts?.[nickname] || 0;
+  // Tempos de duração iguais ao single player
   const maxClipDurations = [0.6, 1.2, 2.0, 3.0, 3.5, 4.2];
 
   // Verificar se o jogador atual é um dos vencedores
@@ -118,13 +119,13 @@ const MultiplayerGame = ({ onBackToLobby }) => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const maxDuration = hasWinners
-      ? 15 // Se alguém já ganhou, pode tocar mais tempo
+    const maxDuration = iAmWinner || hasWinners
+      ? 15 // Se eu ganhei ou alguém já ganhou, pode tocar mais tempo
       : maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1];
 
     const updateProgress = () => {
       const currentTime = audio.currentTime - startTime;
-      if (!hasWinners && currentTime >= maxDuration) {
+      if (!iAmWinner && !hasWinners && currentTime >= maxDuration) {
         audio.pause();
         setIsPlaying(false);
         audio.currentTime = startTime;
@@ -147,7 +148,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
       audio.removeEventListener('play', updatePlay);
       audio.removeEventListener('pause', updatePlay);
     };
-  }, [startTime, myAttempts, hasWinners]);
+  }, [startTime, myAttempts, hasWinners, iAmWinner]);
 
   // Reset do estado do áudio e interface quando a rodada muda
   useEffect(() => {
@@ -405,7 +406,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
     console.log('🎵 PLAY - Tentando play/pause, isPlaying:', isPlaying);
 
     const currentTime = audioRef.current.currentTime - startTime;
-    const maxDuration = hasWinners
+    const maxDuration = iAmWinner || hasWinners
       ? 15
       : maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1];
 
@@ -568,7 +569,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                     <input
                       type="range"
                       min={0}
-                      max={hasWinners ? 15 : (maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1])}
+                      max={iAmWinner || hasWinners ? 15 : (maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1])}
                       step={0.01}
                       value={audioProgress}
                       onChange={e => {
@@ -582,7 +583,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                       disabled={!songToPlay}
                     />
                     <span className={gameStyles.audioTime}>
-                      {new Date((hasWinners ? 15 : (maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1])) * 1000).toISOString().substring(14, 19)}
+                      {new Date((iAmWinner || hasWinners ? 15 : (maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1])) * 1000).toISOString().substring(14, 19)}
                     </span>
                   </div>
                   <div className={gameStyles.audioVolumeRow}>
@@ -712,7 +713,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
               </div>
 
               {/* Formulário de tentativa */}
-              {!roundFinished ? (
+              {!roundFinished && !iAmWinner ? (
                 <>
                   <form onSubmit={handleGuess} className={gameStyles.guessFormModern} autoComplete="off">
                     <input
@@ -748,6 +749,48 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                     )}
                   </form>
                 </>
+              ) : iAmWinner && !roundFinished ? (
+                /* Jogador acertou mas está esperando outros */
+                <div className={`${styles.message} ${styles.messageSuccess}`}>
+                  <div style={{ fontSize: '1.2rem', marginBottom: '10px' }}>
+                    🎉 Parabéns! Você acertou!
+                  </div>
+                  <div style={{ fontSize: '1rem', marginBottom: '15px' }}>
+                    <strong>{songToPlay?.game} - {songToPlay?.title}</strong>
+                  </div>
+                  <div className={styles.pointsEarned}>
+                    +{Math.max(0, 6 - myAttempts + 1)} pontos!
+                  </div>
+                  <div style={{ marginTop: '15px', fontSize: '0.9rem', opacity: 0.8 }}>
+                    Aguardando outros jogadores terminarem suas tentativas...
+                  </div>
+
+                  {/* Status dos outros jogadores */}
+                  <div style={{ marginTop: '15px', fontSize: '0.8rem', opacity: 0.7 }}>
+                    <div style={{ marginBottom: '5px' }}>Status dos jogadores:</div>
+                    {lobbyData?.players?.map(player => {
+                      const playerAttempts = gameState?.attempts?.[player] || 0;
+                      const playerWon = roundWinners.includes(player);
+                      const playerFinished = playerWon || playerAttempts >= 6;
+
+                      return (
+                        <div key={player} style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          marginBottom: '2px',
+                          color: playerWon ? '#4caf50' : playerFinished ? '#ff9800' : '#ccc'
+                        }}>
+                          <span>{player}:</span>
+                          <span>
+                            {playerWon ? '✅ Acertou' :
+                             playerFinished ? '❌ Terminou' :
+                             `${playerAttempts}/6 tentativas`}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               ) : (
                 <div className={`${styles.message} ${
                   roundWinners.includes('NONE') ? styles.messageWarning : styles.messageSuccess
