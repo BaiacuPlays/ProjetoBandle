@@ -50,7 +50,22 @@ const MultiplayerGame = ({ onBackToLobby }) => {
 
   // Configurar áudio quando a música muda
   useEffect(() => {
-    const songToUse = currentSong || (gameState?.songs && gameState.songs.length > 0 ? gameState.songs[(gameState.currentRound || 1) - 1] : null);
+    let songToUse = currentSong;
+
+    // Se não temos currentSong, tentar obter da lista de músicas do gameState
+    if (!songToUse && gameState?.songs && gameState.songs.length > 0) {
+      const currentRoundIndex = (gameState.currentRound || 1) - 1;
+      songToUse = gameState.songs[currentRoundIndex];
+    }
+
+    // Se ainda não temos música, tentar buscar pelo título no gameState
+    if (!songToUse && gameState?.currentSong) {
+      songToUse = songs.find(song =>
+        song.title.trim().toLowerCase() === gameState.currentSong.trim().toLowerCase()
+      );
+    }
+
+    console.log('🎵 AUDIO - Configurando áudio para:', songToUse?.title);
 
     if (songToUse && audioRef.current) {
       const handleLoadedMetadata = () => {
@@ -59,16 +74,24 @@ const MultiplayerGame = ({ onBackToLobby }) => {
         setStartTime(startTimeToUse);
         audioRef.current.currentTime = startTimeToUse;
         setAudioProgress(0);
+        console.log('🎵 AUDIO - Metadata carregada, startTime:', startTimeToUse);
+      };
+
+      const handleError = () => {
+        console.error('🎵 AUDIO - Erro ao carregar áudio:', songToUse.audioUrl);
       };
 
       audioRef.current.addEventListener('loadedmetadata', handleLoadedMetadata);
+      audioRef.current.addEventListener('error', handleError);
+
       return () => {
         if (audioRef.current) {
           audioRef.current.removeEventListener('loadedmetadata', handleLoadedMetadata);
+          audioRef.current.removeEventListener('error', handleError);
         }
       };
     }
-  }, [currentSong, gameState?.songs, gameState?.currentRound]);
+  }, [currentSong, gameState?.songs, gameState?.currentRound, gameState?.currentSong]);
 
   // Controle de progresso do áudio
   useEffect(() => {
@@ -346,6 +369,14 @@ const MultiplayerGame = ({ onBackToLobby }) => {
     songToPlay = gameState.songs[currentRoundIndex];
   }
 
+  // Garantir que temos uma música válida para tocar
+  if (!songToPlay && gameState?.currentSong) {
+    // Tentar encontrar a música pelo título na lista de músicas
+    songToPlay = songs.find(song =>
+      song.title.trim().toLowerCase() === gameState.currentSong.trim().toLowerCase()
+    );
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.content}>
@@ -495,14 +526,14 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                     const attemptGuess = myGuesses[idx];
 
                     if (attemptGuess) {
-                      if (attemptGuess.correct) {
-                        // Acertou a música - VERDE
+                      if (attemptGuess.correct && !attemptGuess.tooLate) {
+                        // Acertou a música e foi o primeiro - VERDE
                         buttonClass = gameStyles.attemptSuccess;
                       } else if (attemptGuess.gameCorrect) {
                         // Acertou o jogo mas não a música - AMARELO
                         buttonClass = gameStyles.attemptGame;
                       } else {
-                        // Errou - VERMELHO
+                        // Errou ou chegou tarde - VERMELHO
                         buttonClass = gameStyles.attemptFail;
                       }
                     } else {
@@ -569,7 +600,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                             className={gameStyles.suggestionItemModern}
                             onMouseDown={() => handleSuggestionClick(suggestion)}
                           >
-                            {suggestion.title} - {suggestion.game}
+                            {suggestion.game} - {suggestion.title}
                           </li>
                         ))}
                       </ul>
@@ -587,7 +618,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                       : `${roundWinner} ${isClient ? t('player_guessed_correctly') : 'acertou a música!'}`
                   }
                   <br />
-                  <strong>{songToPlay?.title} - {songToPlay?.artist}</strong>
+                  <strong>{songToPlay?.game} - {songToPlay?.title}</strong>
                 </div>
               )}
 

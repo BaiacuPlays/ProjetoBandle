@@ -253,7 +253,7 @@ export default async function handler(req, res) {
         const currentRoundIndex = (lobby.gameState.currentRound || 1) - 1;
         const currentSong = lobby.gameState.songs[currentRoundIndex];
 
-        const normalizeString = (str) => str.trim().toLowerCase();
+        const normalizeString = (str) => str.trim().toLowerCase().replace(/\s+/g, ' ');
         const isCorrect = normalizeString(guess) === normalizeString(currentSong.title);
 
         // PROTEÇÃO CONTRA RACE CONDITION: Se acertou, verificar novamente se não há vencedor
@@ -298,6 +298,16 @@ export default async function handler(req, res) {
         // Verificar se acertou o jogo (mas não a música)
         const guessedSong = songs.find(song => normalizeString(song.title) === normalizeString(guess));
         const isFromCorrectGame = guessedSong && normalizeString(guessedSong.game) === normalizeString(currentSong.game);
+
+        console.log('🎮 API - Verificação de tentativa:', {
+          guess: guess,
+          currentSong: currentSong.title,
+          currentGame: currentSong.game,
+          guessedSong: guessedSong?.title,
+          guessedGame: guessedSong?.game,
+          isCorrect: isCorrect,
+          isFromCorrectGame: isFromCorrectGame
+        });
 
         let correct = false;
         let winner = null;
@@ -500,24 +510,33 @@ export default async function handler(req, res) {
 
       // Se o jogo foi iniciado, buscar a música atual
       let currentSong = null;
-      if (lobby.gameStarted && lobby.gameState && lobby.gameState.currentSong) {
-        // Primeiro, tentar buscar pelo título exato
-        currentSong = songs.find(song => song.title === lobby.gameState.currentSong);
-
-        // Se não encontrar, tentar buscar pelo título normalizado
-        if (!currentSong) {
-          const normalizeTitle = (title) => title.trim().toLowerCase();
-          const targetTitle = normalizeTitle(lobby.gameState.currentSong);
-          currentSong = songs.find(song => normalizeTitle(song.title) === targetTitle);
-        }
-
-        // Se ainda não encontrar, pegar a primeira música da lista de músicas do jogo
-        if (!currentSong && lobby.gameState.songs && lobby.gameState.songs.length > 0) {
+      if (lobby.gameStarted && lobby.gameState) {
+        // Primeiro, tentar pegar da lista de músicas do jogo pela rodada atual
+        if (lobby.gameState.songs && lobby.gameState.songs.length > 0) {
           const currentRoundIndex = (lobby.gameState.currentRound || 1) - 1;
           if (lobby.gameState.songs[currentRoundIndex]) {
             currentSong = lobby.gameState.songs[currentRoundIndex];
           }
         }
+
+        // Se não encontrar e temos currentSong no gameState, tentar buscar
+        if (!currentSong && lobby.gameState.currentSong) {
+          // Primeiro, tentar buscar pelo título exato
+          currentSong = songs.find(song => song.title === lobby.gameState.currentSong);
+
+          // Se não encontrar, tentar buscar pelo título normalizado
+          if (!currentSong) {
+            const normalizeTitle = (title) => title.trim().toLowerCase();
+            const targetTitle = normalizeTitle(lobby.gameState.currentSong);
+            currentSong = songs.find(song => normalizeTitle(song.title) === targetTitle);
+          }
+        }
+
+        console.log('🎵 API - Música atual encontrada:', {
+          currentRound: lobby.gameState.currentRound,
+          currentSongTitle: currentSong?.title,
+          gameStateCurrentSong: lobby.gameState.currentSong
+        });
       }
 
       const response = {

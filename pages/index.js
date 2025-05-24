@@ -333,7 +333,7 @@ export default function Home() {
       setGameOver(true);
       result = { type: 'success', value: selectedGuess };
     } else if (newAttempts >= MAX_ATTEMPTS) {
-      setMessage(`${t('game_over')} ${currentSong.title} - ${currentSong.artist}`);
+      setMessage(`${t('game_over')} ${currentSong.game} - ${currentSong.title}`);
       setGameOver(true);
       result = { type: 'fail', value: selectedGuess };
     } else {
@@ -352,7 +352,7 @@ export default function Home() {
     setHistory(prev => [...prev, { type: 'skipped' }]);
     setMessage(t('skipped'));
     if (attempts + 1 >= MAX_ATTEMPTS) {
-      setMessage(`${t('game_over')} ${currentSong.title} - ${currentSong.artist}`);
+      setMessage(`${t('game_over')} ${currentSong.game} - ${currentSong.title}`);
       setGameOver(true);
     }
   };
@@ -998,7 +998,7 @@ export default function Home() {
                     className={styles.suggestionItemModern}
                     onMouseDown={() => handleSuggestionClick(suggestion)}
                   >
-                    {suggestion.title} - {suggestion.game}
+                    {suggestion.game} - {suggestion.title}
                   </li>
                 ))}
               </ul>

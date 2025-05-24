@@ -4,6 +4,8 @@ import musicData from './music.json';
 export const songs = musicData.map((song, index) => ({
   ...song,
   id: song.id || index + 1,
+  // Normalizar título removendo espaços extras
+  title: song.title.trim(),
   clips: [
     { name: "Intro", icon: "🎹", startTime: 0, duration: 5 },
     { name: "Meio", icon: "🎶", startTime: 30, duration: 5 },
@@ -11,7 +13,7 @@ export const songs = musicData.map((song, index) => ({
   ],
   views: "1M+",
   difficulty: "Médio",
-  hint: `${song.title} - ${song.artist} (${song.game}, ${song.year})`
+  hint: `${song.title.trim()} - ${song.artist} (${song.game}, ${song.year})`
 }));
 
 // Lista de músicas disponíveis (que têm arquivo de áudio)
@@ -35,15 +37,15 @@ export const getRandomSong = async () => {
       isAvailable: await checkSongAvailability(song)
     }))
   );
-  
+
   // Filter available songs
   let availableSongs = availabilityChecks
     .filter(({ isAvailable }) => isAvailable)
     .map(({ song }) => song);
-  
+
   // Remove as músicas que estão no histórico recente
   availableSongs = availableSongs.filter(song => !recentSongs.includes(song.id));
-  
+
   // Se não houver músicas disponíveis fora do histórico, limpa o histórico
   if (availableSongs.length === 0) {
     recentSongs = [];
@@ -51,21 +53,21 @@ export const getRandomSong = async () => {
       .filter(({ isAvailable }) => isAvailable)
       .map(({ song }) => song);
   }
-  
+
   // Se ainda não houver músicas disponíveis, retorna a primeira música
   if (availableSongs.length === 0) {
     return songs[0];
   }
-  
+
   const randomIndex = Math.floor(Math.random() * availableSongs.length);
   const selectedSong = availableSongs[randomIndex];
-  
+
   // Adiciona a música selecionada ao histórico
   recentSongs.push(selectedSong.id);
   // Mantém apenas as últimas 20 músicas no histórico
   if (recentSongs.length > 20) {
     recentSongs.shift();
   }
-  
+
   return selectedSong;
-}; 
+};
