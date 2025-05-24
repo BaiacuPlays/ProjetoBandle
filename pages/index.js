@@ -6,11 +6,10 @@ import MusicInfoFetcher from '../components/MusicInfoFetcher';
 import Footer from '../components/Footer';
 import GameMenu from '../components/GameMenu';
 import { useLanguage } from '../contexts/LanguageContext';
+import { fetchTimezone } from '../config/api';
 
 const MAX_ATTEMPTS = 6;
 const GAME_INTERVAL = 24 * 60 * 60 * 1000; // 24h em ms
-
-const TIMEZONE_API = 'http://worldtimeapi.org/api/timezone/America/Sao_Paulo';
 
 export default function Home() {
   const { t, language, isClient } = useLanguage();
@@ -65,23 +64,6 @@ export default function Home() {
     return deterministicRandom * maxStart;
   };
 
-  // Função para buscar data/hora de São Paulo
-  const fetchSaoPauloTime = async () => {
-    try {
-      const res = await fetch(TIMEZONE_API);
-      if (!res.ok) throw new Error('API error');
-      const data = await res.json();
-      return data;
-    } catch (e) {
-      // Fallback: usar data local do navegador
-      const now = new Date();
-      return {
-        datetime: now.toISOString(),
-        fallback: true
-      };
-    }
-  };
-
 
 
   // Carregar música do minuto ao montar
@@ -90,7 +72,7 @@ export default function Home() {
       setIsLoading(true);
       let timeData;
       try {
-        timeData = await fetchSaoPauloTime();
+        timeData = await fetchTimezone();
       } catch (e) {
         timeData = {
           datetime: new Date().toISOString(),

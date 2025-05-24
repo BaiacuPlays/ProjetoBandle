@@ -5,7 +5,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "export": "BUILD_STATIC=true next build",
+    "build:static": "BUILD_STATIC=true next build",
+    "build:hostinger": "npm run export && node scripts/build-for-hostinger.js",
+    "prepare:deploy": "npm run build:hostinger"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",

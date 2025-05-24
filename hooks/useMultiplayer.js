@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import * as multiplayerApi from '../utils/multiplayerApi';
 
 export const useMultiplayer = () => {
   const [roomCode, setRoomCode] = useState('');
@@ -19,16 +20,17 @@ export const useMultiplayer = () => {
     const pollLobby = async () => {
       console.log('🔄 HOOK - Fazendo polling para sala:', roomCode);
       try {
-        const response = await fetch(`/api/lobby?roomCode=${roomCode}`);
-        if (response.ok) {
-          const data = await response.json();
-          console.log('🔄 HOOK - Dados recebidos:', data);
-          setLobbyData(data);
-        } else {
-          const errorData = await response.json();
-          console.log('🔄 HOOK - Erro na resposta:', errorData);
-          setError(errorData.error || 'Erro ao buscar dados da sala');
+        const data = await multiplayerApi.getLobbyData(roomCode);
+        console.log('🔄 HOOK - Dados recebidos:', data);
+
+        if (data.roomNotFound) {
+          console.log('🔄 HOOK - Sala não encontrada, desconectando');
+          setIsConnected(false);
+          setError('Sala não encontrada');
+          return;
         }
+
+        setLobbyData(data);
       } catch (err) {
         console.log('🔄 HOOK - Erro de conexão:', err);
         setError('Erro de conexão');
@@ -54,24 +56,16 @@ export const useMultiplayer = () => {
     setError('');
 
     try {
-      const response = await fetch('/api/lobby', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ nickname: playerNickname }),
-      });
+      const result = await multiplayerApi.createRoom(playerNickname);
 
-      const data = await response.json();
-
-      if (response.ok) {
-        setRoomCode(data.roomCode);
+      if (result.success) {
+        setRoomCode(result.roomCode);
         setNickname(playerNickname);
         setIsConnected(true);
-        return { success: true, roomCode: data.roomCode };
+        return { success: true, roomCode: result.roomCode };
       } else {
-        setError(data.error || 'Erro ao criar sala');
-        return { success: false, error: data.error };
+        setError(result.error || 'Erro ao criar sala');
+        return { success: false, error: result.error };
       }
     } catch (err) {
       setError('Erro de conexão');
@@ -87,24 +81,16 @@ export const useMultiplayer = () => {
     setError('');
 
     try {
-      const response = await fetch('/api/lobby', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ nickname: playerNickname, roomCode: code }),
-      });
+      const result = await multiplayerApi.joinRoom(playerNickname, code);
 
-      const data = await response.json();
-
-      if (response.ok) {
+      if (result.success) {
         setRoomCode(code);
         setNickname(playerNickname);
         setIsConnected(true);
         return { success: true };
       } else {
-        setError(data.error || 'Erro ao entrar na sala');
-        return { success: false, error: data.error };
+        setError(result.error || 'Erro ao entrar na sala');
+        return { success: false, error: result.error };
       }
     } catch (err) {
       setError('Erro de conexão');
@@ -119,20 +105,8 @@ export const useMultiplayer = () => {
     if (!roomCode || !nickname) return { success: false, error: 'Dados inválidos' };
 
     try {
-      const response = await fetch('/api/lobby', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          roomCode,
-          action: 'start',
-          nickname
-        }),
-      });
-
-      const data = await response.json();
-      return { success: response.ok, error: data.error };
+      const result = await multiplayerApi.startGame(roomCode, nickname);
+      return { success: result.success, error: result.error };
     } catch (err) {
       return { success: false, error: 'Erro de conexão' };
     }
@@ -143,26 +117,13 @@ export const useMultiplayer = () => {
     if (!roomCode || !nickname) return { success: false, error: 'Dados inválidos' };
 
     try {
-      const response = await fetch('/api/lobby', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          roomCode,
-          action: 'guess',
-          nickname,
-          guess
-        }),
-      });
-
-      const data = await response.json();
+      const result = await multiplayerApi.makeGuess(roomCode, nickname, guess);
       return {
-        success: response.ok,
-        error: data.error,
-        correct: data.correct,
-        winner: data.winner,
-        attempts: data.attempts
+        success: result.success,
+        error: result.error,
+        correct: result.data?.correct,
+        winner: result.data?.winner,
+        attempts: result.data?.attempts
       };
     } catch (err) {
       return { success: false, error: 'Erro de conexão' };
@@ -174,20 +135,8 @@ export const useMultiplayer = () => {
     if (!roomCode || !nickname) return { success: false, error: 'Dados inválidos' };
 
     try {
-      const response = await fetch('/api/lobby', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          roomCode,
-          action: 'next_round',
-          nickname
-        }),
-      });
-
-      const data = await response.json();
-      return { success: response.ok, error: data.error };
+      const result = await multiplayerApi.nextRound(roomCode, nickname);
+      return { success: result.success, error: result.error };
     } catch (err) {
       return { success: false, error: 'Erro de conexão' };
     }
@@ -198,28 +147,16 @@ export const useMultiplayer = () => {
     if (!roomCode || !nickname) return { success: false, error: 'Dados inválidos' };
 
     try {
-      const response = await fetch('/api/lobby', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          roomCode,
-          action: 'leave_game',
-          nickname
-        }),
-      });
+      const result = await multiplayerApi.leaveRoom(roomCode, nickname);
 
-      const data = await response.json();
-
-      if (response.ok) {
+      if (result.success) {
         setRoomCode('');
         setNickname('');
         setLobbyData(null);
         setIsConnected(false);
       }
 
-      return { success: response.ok, error: data.error };
+      return { success: result.success, error: result.error };
     } catch (err) {
       return { success: false, error: 'Erro de conexão' };
     }
@@ -230,20 +167,8 @@ export const useMultiplayer = () => {
     if (!roomCode || !nickname) return { success: false, error: 'Dados inválidos' };
 
     try {
-      const response = await fetch('/api/lobby', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          roomCode,
-          action: 'reset_game',
-          nickname
-        }),
-      });
-
-      const data = await response.json();
-      return { success: response.ok, error: data.error };
+      const result = await multiplayerApi.resetGame(roomCode, nickname);
+      return { success: result.success, error: result.error };
     } catch (err) {
       return { success: false, error: 'Erro de conexão' };
     }

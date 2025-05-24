@@ -1,19 +1,16 @@
 import { useEffect, useState } from 'react';
+import { fetchMusicInfo } from '../config/api';
 
 export default function MusicInfoFetcher({ song, onInfoLoaded }) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function fetchMusicInfo() {
+    async function fetchInfo() {
       try {
-        // Busca informações da música no MusicBrainz
-        const response = await fetch(`/api/music-info?title=${encodeURIComponent(song.title)}&game=${encodeURIComponent(song.game)}`);
-        if (!response.ok) {
-          throw new Error('Erro ao buscar informações da música');
-        }
-        const musicInfo = await response.json();
-        
+        // Busca informações da música usando a API externa
+        const musicInfo = await fetchMusicInfo(song.title, song.game);
+
         // Atualiza as informações da música
         const updatedSong = {
           ...song,
@@ -22,18 +19,20 @@ export default function MusicInfoFetcher({ song, onInfoLoaded }) {
           album: musicInfo.album || song.album,
           console: musicInfo.console || song.console
         };
-        
+
         onInfoLoaded(updatedSong);
       } catch (err) {
         console.error('Erro ao buscar informações:', err);
         setError(err.message);
+        // Em caso de erro, usa a música original
+        onInfoLoaded(song);
       } finally {
         setIsLoading(false);
       }
     }
 
     if (song) {
-      fetchMusicInfo();
+      fetchInfo();
     }
   }, [song]);
 
@@ -46,4 +45,4 @@ export default function MusicInfoFetcher({ song, onInfoLoaded }) {
   }
 
   return null; // Este componente não renderiza nada, apenas busca informações
-} 
+}
