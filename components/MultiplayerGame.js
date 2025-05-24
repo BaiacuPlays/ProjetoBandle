@@ -44,7 +44,6 @@ const MultiplayerGame = ({ onBackToLobby }) => {
 
   // Verificar se o jogador atual é um dos vencedores
   const iAmWinner = roundWinners.includes(nickname);
-  const hasWinners = roundWinners.length > 0 && !roundWinners.includes('NONE');
 
   // Determinar qual música tocar
   let songToPlay = currentSong;
@@ -119,13 +118,21 @@ const MultiplayerGame = ({ onBackToLobby }) => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const maxDuration = iAmWinner || hasWinners
-      ? 15 // Se eu ganhei ou alguém já ganhou, pode tocar mais tempo
+    const maxDuration = iAmWinner
+      ? 15 // Se EU ganhei, posso tocar mais tempo
       : maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1];
 
     const updateProgress = () => {
       const currentTime = audio.currentTime - startTime;
-      if (!iAmWinner && !hasWinners && currentTime >= maxDuration) {
+
+      // Sempre parar após 15 segundos, independente do status
+      if (currentTime >= 15) {
+        audio.pause();
+        setIsPlaying(false);
+        audio.currentTime = startTime;
+        setAudioProgress(0);
+      } else if (!iAmWinner && currentTime >= maxDuration) {
+        // Parar baseado nas tentativas apenas se EU não ganhei
         audio.pause();
         setIsPlaying(false);
         audio.currentTime = startTime;
@@ -148,7 +155,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
       audio.removeEventListener('play', updatePlay);
       audio.removeEventListener('pause', updatePlay);
     };
-  }, [startTime, myAttempts, hasWinners, iAmWinner]);
+  }, [startTime, myAttempts, iAmWinner]);
 
   // Reset do estado do áudio e interface quando a rodada muda
   useEffect(() => {
@@ -406,12 +413,13 @@ const MultiplayerGame = ({ onBackToLobby }) => {
     console.log('🎵 PLAY - Tentando play/pause, isPlaying:', isPlaying);
 
     const currentTime = audioRef.current.currentTime - startTime;
-    const maxDuration = iAmWinner || hasWinners
+    const maxDuration = iAmWinner
       ? 15
       : maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1];
 
     // Se o tempo atual excedeu o máximo permitido, resetar para o início
-    if (currentTime >= maxDuration) {
+    // Sempre respeitar limite absoluto de 15 segundos
+    if (currentTime >= 15 || (!iAmWinner && currentTime >= maxDuration)) {
       audioRef.current.currentTime = startTime;
       setAudioProgress(0);
       console.log('🎵 PLAY - Resetando para o início devido ao tempo limite');
@@ -569,21 +577,23 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                     <input
                       type="range"
                       min={0}
-                      max={iAmWinner || hasWinners ? 15 : (maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1])}
+                      max={Math.min(15, iAmWinner ? 15 : (maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1]))}
                       step={0.01}
                       value={audioProgress}
                       onChange={e => {
                         if (audioRef.current && isPlaying) {
                           const value = Number(e.target.value);
-                          audioRef.current.currentTime = startTime + value;
-                          setAudioProgress(value);
+                          // Garantir que não exceda 15 segundos
+                          const clampedValue = Math.min(value, 15);
+                          audioRef.current.currentTime = startTime + clampedValue;
+                          setAudioProgress(clampedValue);
                         }
                       }}
                       className={gameStyles.audioSeekbarCustom}
                       disabled={!songToPlay}
                     />
                     <span className={gameStyles.audioTime}>
-                      {new Date((iAmWinner || hasWinners ? 15 : (maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1])) * 1000).toISOString().substring(14, 19)}
+                      {new Date(Math.min(15, iAmWinner ? 15 : (maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1])) * 1000).toISOString().substring(14, 19)}
                     </span>
                   </div>
                   <div className={gameStyles.audioVolumeRow}>
@@ -688,12 +698,23 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                     }
                   }
 
+                  // Tooltip com a tentativa feita
+                  const myGuesses = gameState?.guesses?.[nickname] || [];
+                  const attemptGuess = myGuesses[idx];
+                  const tooltipText = attemptGuess
+                    ? attemptGuess.type === 'skipped'
+                      ? 'Pulou'
+                      : attemptGuess.guess
+                    : '';
+
                   return (
                     <button
                       key={idx}
                       type="button"
                       className={`${gameStyles.attemptButton} ${buttonClass}`}
                       disabled
+                      title={tooltipText}
+                      style={{ cursor: tooltipText ? 'help' : 'default' }}
                     >
                       {idx + 1}
                     </button>
@@ -705,7 +726,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                   type="button"
                   className={`${gameStyles.attemptButton} ${gameStyles.attemptInactive}`}
                   onClick={handleSkip}
-                  disabled={roundFinished || myAttempts >= 6}
+                  disabled={roundFinished || myAttempts >= 6 || iAmWinner}
                   style={{ marginLeft: '10px' }}
                 >
                   {isClient ? t('skip') : 'Pular'} <FaFastForward style={{ marginLeft: 4, fontSize: '1em', verticalAlign: 'middle' }} />
@@ -765,6 +786,71 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                     Aguardando outros jogadores terminarem suas tentativas...
                   </div>
 
+                  {/* Histórico de tentativas do jogador */}
+                  <div style={{ marginTop: '20px', fontSize: '0.85rem' }}>
+                    <div style={{ marginBottom: '10px', fontWeight: 'bold', color: '#4ecdc4' }}>
+                      Suas tentativas:
+                    </div>
+                    <div style={{
+                      background: 'rgba(255, 255, 255, 0.05)',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      borderRadius: '8px',
+                      padding: '10px',
+                      maxHeight: '120px',
+                      overflowY: 'auto'
+                    }}>
+                      {gameState?.guesses?.[nickname]?.length > 0 ? (
+                        gameState.guesses[nickname].map((guessData, index) => (
+                          <div key={index} style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            marginBottom: '5px',
+                            padding: '4px 8px',
+                            borderRadius: '4px',
+                            background: guessData.correct
+                              ? 'rgba(76, 175, 80, 0.2)'
+                              : guessData.gameCorrect
+                                ? 'rgba(255, 193, 7, 0.2)'
+                                : guessData.type === 'skipped'
+                                  ? 'rgba(158, 158, 158, 0.2)'
+                                  : 'rgba(244, 67, 54, 0.2)',
+                            border: `1px solid ${
+                              guessData.correct
+                                ? 'rgba(76, 175, 80, 0.4)'
+                                : guessData.gameCorrect
+                                  ? 'rgba(255, 193, 7, 0.4)'
+                                  : guessData.type === 'skipped'
+                                    ? 'rgba(158, 158, 158, 0.4)'
+                                    : 'rgba(244, 67, 54, 0.4)'
+                            }`
+                          }}>
+                            <span style={{
+                              color: guessData.correct
+                                ? '#4caf50'
+                                : guessData.gameCorrect
+                                  ? '#ffc107'
+                                  : guessData.type === 'skipped'
+                                    ? '#9e9e9e'
+                                    : '#f44336'
+                            }}>
+                              {guessData.type === 'skipped' ? '⏭️ Pulou' : guessData.guess}
+                            </span>
+                            <span style={{ fontSize: '0.75rem', opacity: 0.8 }}>
+                              {guessData.correct ? '✅' :
+                               guessData.gameCorrect ? '🎮' :
+                               guessData.type === 'skipped' ? '⏭️' : '❌'}
+                            </span>
+                          </div>
+                        ))
+                      ) : (
+                        <div style={{ textAlign: 'center', opacity: 0.6 }}>
+                          Nenhuma tentativa ainda
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
                   {/* Status dos outros jogadores */}
                   <div style={{ marginTop: '15px', fontSize: '0.8rem', opacity: 0.7 }}>
                     <div style={{ marginBottom: '5px' }}>Status dos jogadores:</div>
@@ -812,6 +898,59 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                   {iAmWinner && (
                     <div className={styles.pointsEarned}>
                       +{Math.max(0, 6 - myAttempts + 1)} pontos!
+                    </div>
+                  )}
+
+                  {/* Histórico de tentativas na tela final */}
+                  {gameState?.guesses?.[nickname]?.length > 0 && (
+                    <div style={{ marginTop: '20px', fontSize: '0.85rem' }}>
+                      <div style={{ marginBottom: '10px', fontWeight: 'bold', color: '#4ecdc4' }}>
+                        Suas tentativas nesta rodada:
+                      </div>
+                      <div style={{
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        borderRadius: '8px',
+                        padding: '10px',
+                        maxHeight: '100px',
+                        overflowY: 'auto'
+                      }}>
+                        {gameState.guesses[nickname].map((guessData, index) => (
+                          <div key={index} style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            marginBottom: '4px',
+                            padding: '3px 6px',
+                            borderRadius: '3px',
+                            background: guessData.correct
+                              ? 'rgba(76, 175, 80, 0.2)'
+                              : guessData.gameCorrect
+                                ? 'rgba(255, 193, 7, 0.2)'
+                                : guessData.type === 'skipped'
+                                  ? 'rgba(158, 158, 158, 0.2)'
+                                  : 'rgba(244, 67, 54, 0.2)',
+                            fontSize: '0.8rem'
+                          }}>
+                            <span style={{
+                              color: guessData.correct
+                                ? '#4caf50'
+                                : guessData.gameCorrect
+                                  ? '#ffc107'
+                                  : guessData.type === 'skipped'
+                                    ? '#9e9e9e'
+                                    : '#f44336'
+                            }}>
+                              {index + 1}. {guessData.type === 'skipped' ? 'Pulou' : guessData.guess}
+                            </span>
+                            <span style={{ fontSize: '0.7rem' }}>
+                              {guessData.correct ? '✅' :
+                               guessData.gameCorrect ? '🎮' :
+                               guessData.type === 'skipped' ? '⏭️' : '❌'}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
