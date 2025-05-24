@@ -295,6 +295,20 @@
   border: 1px solid rgba(76, 175, 80, 0.5);
 }
 
+/* Caixa de dicas */
+.hintBox {
+  background: rgba(255, 193, 7, 0.2);
+  border: 2px solid #ffc107;
+  color: #ffc107;
+  padding: 12px 20px;
+  border-radius: 10px;
+  margin: 20px auto;
+  max-width: 500px;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
 /* Mensagens */
 .message {
   padding: 15px;

@@ -197,7 +197,8 @@ export default async function handler(req, res) {
           scores: scores,
           currentSong: selectedSongs[0]?.title || null,
           roundStartTime: Date.now(),
-          roundWinner: null,
+          roundWinners: [], // Array de vencedores em vez de um único
+          roundFinished: false, // Flag para indicar se a rodada terminou
           gameFinished: false,
           attempts: {},
           guesses: {}
@@ -256,40 +257,9 @@ export default async function handler(req, res) {
         const normalizeString = (str) => str.trim().toLowerCase().replace(/\s+/g, ' ');
         const isCorrect = normalizeString(guess) === normalizeString(currentSong.title);
 
-        // PROTEÇÃO CONTRA RACE CONDITION: Se acertou, verificar novamente se não há vencedor
-        if (isCorrect && lobby.gameState.roundWinner) {
-          // Alguém já ganhou enquanto processávamos - tratar como tentativa normal
-          lobby.gameState.attempts[nickname]++;
-
-          // Salvar tentativa (mas não como vencedora)
-          if (!lobby.gameState.guesses[nickname]) {
-            lobby.gameState.guesses[nickname] = [];
-          }
-          lobby.gameState.guesses[nickname].push({
-            guess: guess,
-            correct: true, // Era correto, mas chegou tarde
-            gameCorrect: false,
-            attempt: lobby.gameState.attempts[nickname],
-            tooLate: true // Flag para indicar que chegou tarde
-          });
-
-          await kv.set(`lobby:${roomCode}`, lobby);
-
-          return res.status(200).json({
-            success: true,
-            correct: true,
-            gameCorrect: false,
-            winner: null, // Não é o vencedor
-            attempts: lobby.gameState.attempts[nickname],
-            tooLate: true, // Informar que chegou tarde
-            message: `${lobby.gameState.roundWinner} já havia acertado primeiro!`,
-            lobbyData: {
-              players: lobby.players,
-              host: lobby.host,
-              gameStarted: lobby.gameStarted,
-              gameState: lobby.gameState
-            }
-          });
+        // Verificar se a rodada já terminou
+        if (lobby.gameState.roundFinished) {
+          return res.status(400).json({ error: 'Esta rodada já terminou.' });
         }
 
         // Incrementar tentativas APÓS verificações
@@ -316,29 +286,29 @@ export default async function handler(req, res) {
         let gameCorrect = false;
 
         if (isCorrect) {
-          // ÚLTIMA VERIFICAÇÃO: Garantir que ainda não há vencedor
-          if (!lobby.gameState.roundWinner) {
-            // Jogador acertou a música e é o primeiro!
-            correct = true;
-            winner = nickname;
-            lobby.gameState.roundWinner = nickname;
-            lobby.gameState.roundWinTime = Date.now(); // Timestamp do acerto
+          // Jogador acertou a música!
+          correct = true;
+          winner = nickname;
 
-            // Sistema de pontuação baseado em dicas utilizadas
-            // 6 pontos iniciais - número de tentativas usadas = pontos ganhos
-            // Acertou na 1ª tentativa = 6 pontos, 2ª tentativa = 5 pontos, etc.
-            const attemptsUsed = lobby.gameState.attempts[nickname];
-            const pointsEarned = Math.max(0, 6 - attemptsUsed + 1); // +1 porque a tentativa atual ainda não foi contada
-
-            console.log('🏆 PONTOS - Calculando pontuação:', {
-              nickname: nickname,
-              attemptsUsed: attemptsUsed,
-              pointsEarned: pointsEarned,
-              currentScore: lobby.gameState.scores[nickname] || 0
-            });
-
-            lobby.gameState.scores[nickname] = (lobby.gameState.scores[nickname] || 0) + pointsEarned;
+          // Adicionar aos vencedores se ainda não estiver
+          if (!lobby.gameState.roundWinners.includes(nickname)) {
+            lobby.gameState.roundWinners.push(nickname);
           }
+
+          // Sistema de pontuação baseado em dicas utilizadas
+          // 6 pontos iniciais - número de tentativas usadas = pontos ganhos
+          // Acertou na 1ª tentativa = 6 pontos, 2ª tentativa = 5 pontos, etc.
+          const attemptsUsed = lobby.gameState.attempts[nickname];
+          const pointsEarned = Math.max(0, 6 - attemptsUsed + 1); // +1 porque a tentativa atual ainda não foi contada
+
+          console.log('🏆 PONTOS - Calculando pontuação:', {
+            nickname: nickname,
+            attemptsUsed: attemptsUsed,
+            pointsEarned: pointsEarned,
+            currentScore: lobby.gameState.scores[nickname] || 0
+          });
+
+          lobby.gameState.scores[nickname] = (lobby.gameState.scores[nickname] || 0) + pointsEarned;
         } else if (isFromCorrectGame) {
           // Jogador acertou o jogo mas não a música
           gameCorrect = true;
@@ -364,14 +334,23 @@ export default async function handler(req, res) {
           totalGuesses: lobby.gameState.guesses[nickname].length
         });
 
-        // Verificar se todos os jogadores esgotaram suas tentativas
+        // Verificar se todos os jogadores esgotaram suas tentativas OU todos acertaram
         const allPlayersExhausted = lobby.players.every(player =>
           (lobby.gameState.attempts[player] || 0) >= 6
         );
 
-        // Se todos esgotaram tentativas e ninguém ganhou, marcar como "rodada sem vencedor"
-        if (allPlayersExhausted && !lobby.gameState.roundWinner) {
-          lobby.gameState.roundWinner = 'NONE'; // Marca que a rodada acabou sem vencedor
+        const allPlayersWon = lobby.players.every(player =>
+          lobby.gameState.roundWinners.includes(player)
+        );
+
+        // Determinar se a rodada deve terminar
+        if (allPlayersExhausted || allPlayersWon) {
+          lobby.gameState.roundFinished = true;
+
+          // Se ninguém acertou, marcar como rodada sem vencedor
+          if (lobby.gameState.roundWinners.length === 0) {
+            lobby.gameState.roundWinners = ['NONE'];
+          }
         }
 
         await kv.set(`lobby:${roomCode}`, lobby);
@@ -403,9 +382,9 @@ export default async function handler(req, res) {
           return res.status(400).json({ error: 'Jogo não foi iniciado.' });
         }
 
-        // Verificar se a rodada já tem um vencedor
-        if (lobby.gameState.roundWinner) {
-          return res.status(400).json({ error: 'Esta rodada já foi vencida.' });
+        // Verificar se a rodada já terminou
+        if (lobby.gameState.roundFinished) {
+          return res.status(400).json({ error: 'Esta rodada já terminou.' });
         }
 
         // Inicializar tentativas do jogador se não existir
@@ -434,14 +413,23 @@ export default async function handler(req, res) {
           tooLate: false
         });
 
-        // Verificar se todos os jogadores esgotaram suas tentativas após o skip
+        // Verificar se todos os jogadores esgotaram suas tentativas OU todos acertaram após o skip
         const allPlayersExhausted = lobby.players.every(player =>
           (lobby.gameState.attempts[player] || 0) >= 6
         );
 
-        // Se todos esgotaram tentativas e ninguém ganhou, marcar como "rodada sem vencedor"
-        if (allPlayersExhausted && !lobby.gameState.roundWinner) {
-          lobby.gameState.roundWinner = 'NONE'; // Marca que a rodada acabou sem vencedor
+        const allPlayersWon = lobby.players.every(player =>
+          lobby.gameState.roundWinners.includes(player)
+        );
+
+        // Determinar se a rodada deve terminar
+        if (allPlayersExhausted || allPlayersWon) {
+          lobby.gameState.roundFinished = true;
+
+          // Se ninguém acertou, marcar como rodada sem vencedor
+          if (lobby.gameState.roundWinners.length === 0) {
+            lobby.gameState.roundWinners = ['NONE'];
+          }
         }
 
         await kv.set(`lobby:${roomCode}`, lobby);
@@ -475,7 +463,8 @@ export default async function handler(req, res) {
         } else {
           // Avançar para próxima rodada
           lobby.gameState.currentRound++;
-          lobby.gameState.roundWinner = null;
+          lobby.gameState.roundWinners = []; // Resetar vencedores
+          lobby.gameState.roundFinished = false; // Resetar flag de rodada terminada
           lobby.gameState.roundStartTime = Date.now();
 
           // Resetar tentativas e histórico para a nova rodada
@@ -525,7 +514,8 @@ export default async function handler(req, res) {
             scores: {},
             currentSong: null,
             roundStartTime: null,
-            roundWinner: null,
+            roundWinners: [],
+            roundFinished: false,
             gameFinished: false,
             attempts: {},
             guesses: {}
@@ -576,7 +566,8 @@ export default async function handler(req, res) {
           scores: {},
           currentSong: null,
           roundStartTime: null,
-          roundWinner: null,
+          roundWinners: [],
+          roundFinished: false,
           gameFinished: false,
           attempts: {},
           guesses: {}

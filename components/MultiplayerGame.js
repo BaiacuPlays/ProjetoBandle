@@ -35,10 +35,15 @@ const MultiplayerGame = ({ onBackToLobby }) => {
   const gameState = lobbyData?.gameState;
   const currentSong = lobbyData?.currentSong;
   const isHost = lobbyData?.host === nickname;
-  const roundWinner = gameState?.roundWinner;
+  const roundWinners = gameState?.roundWinners || [];
+  const roundFinished = gameState?.roundFinished || false;
   const gameFinished = gameState?.gameFinished;
   const myAttempts = gameState?.attempts?.[nickname] || 0;
   const maxClipDurations = [0.6, 1.2, 2.0, 3.0, 3.5, 4.2];
+
+  // Verificar se o jogador atual é um dos vencedores
+  const iAmWinner = roundWinners.includes(nickname);
+  const hasWinners = roundWinners.length > 0 && !roundWinners.includes('NONE');
 
   // Determinar qual música tocar
   let songToPlay = currentSong;
@@ -113,13 +118,13 @@ const MultiplayerGame = ({ onBackToLobby }) => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const maxDuration = roundWinner
+    const maxDuration = hasWinners
       ? 15 // Se alguém já ganhou, pode tocar mais tempo
       : maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1];
 
     const updateProgress = () => {
       const currentTime = audio.currentTime - startTime;
-      if (!roundWinner && currentTime >= maxDuration) {
+      if (!hasWinners && currentTime >= maxDuration) {
         audio.pause();
         setIsPlaying(false);
         audio.currentTime = startTime;
@@ -142,7 +147,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
       audio.removeEventListener('play', updatePlay);
       audio.removeEventListener('pause', updatePlay);
     };
-  }, [startTime, myAttempts, roundWinner]);
+  }, [startTime, myAttempts, hasWinners]);
 
   // Reset do estado do áudio e interface quando a rodada muda
   useEffect(() => {
@@ -284,7 +289,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
 
   const handleGuess = async (e) => {
     e.preventDefault();
-    if (roundWinner || !guess.trim()) {
+    if (roundFinished || !guess.trim()) {
       setIsShaking(true);
       setTimeout(() => setIsShaking(false), 500);
       return;
@@ -358,6 +363,28 @@ const MultiplayerGame = ({ onBackToLobby }) => {
     }
   };
 
+  // Função para gerar dicas progressivas - IGUAL AO JOGO NORMAL
+  const getProgressiveHint = (song, hintIdx) => {
+    if (!song) return null;
+    if (hintIdx === 0) return null;
+    if (hintIdx === 1) {
+      // Tentar obter duração real do áudio, senão usar padrão
+      if (audioRef.current && audioRef.current.duration) {
+        const duration = audioRef.current.duration;
+        const min = Math.floor(duration / 60) || 0;
+        const sec = Math.floor(duration % 60) || 0;
+        const formatted = `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+        return `Duração: ${formatted}`;
+      }
+      return `Duração: ~3:00`; // Fallback
+    }
+    if (hintIdx === 2) return `Ano de lançamento: ${song.year}`;
+    if (hintIdx === 3) return `Artista: ${song.artist}`;
+    if (hintIdx === 4) return `Console: ${song.console || 'Desconhecido'}`;
+    if (hintIdx >= 5) return `Franquia: ${song.game}`;
+    return null;
+  };
+
   const handleLeaveGame = async () => {
     actions.reset();
     onBackToLobby();
@@ -378,7 +405,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
     console.log('🎵 PLAY - Tentando play/pause, isPlaying:', isPlaying);
 
     const currentTime = audioRef.current.currentTime - startTime;
-    const maxDuration = roundWinner
+    const maxDuration = hasWinners
       ? 15
       : maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1];
 
@@ -472,6 +499,13 @@ const MultiplayerGame = ({ onBackToLobby }) => {
             </div>
           </div>
 
+          {/* Dicas progressivas - IGUAL AO JOGO NORMAL */}
+          {getProgressiveHint(songToPlay, myAttempts) && !gameFinished && !roundFinished && (
+            <div className={styles.hintBox}>
+              <strong>Dica:</strong> {getProgressiveHint(songToPlay, myAttempts)}
+            </div>
+          )}
+
           {gameFinished ? (
             /* Tela de fim de jogo */
             <div style={{ textAlign: 'center' }}>
@@ -534,7 +568,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                     <input
                       type="range"
                       min={0}
-                      max={roundWinner ? 15 : (maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1])}
+                      max={hasWinners ? 15 : (maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1])}
                       step={0.01}
                       value={audioProgress}
                       onChange={e => {
@@ -548,7 +582,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                       disabled={!songToPlay}
                     />
                     <span className={gameStyles.audioTime}>
-                      {new Date((roundWinner ? 15 : (maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1])) * 1000).toISOString().substring(14, 19)}
+                      {new Date((hasWinners ? 15 : (maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1])) * 1000).toISOString().substring(14, 19)}
                     </span>
                   </div>
                   <div className={gameStyles.audioVolumeRow}>
@@ -612,7 +646,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                       nickname: nickname,
                       myAttempts: myAttempts,
                       guesses: gameState?.guesses?.[nickname],
-                      roundWinner: roundWinner
+                      roundWinners: roundWinners
                     });
                   }
 
@@ -643,7 +677,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                       }
                     } else {
                       // Fallback para lógica anterior se não tiver histórico
-                      if (roundWinner === nickname && idx === myAttempts - 1) {
+                      if (iAmWinner && idx === myAttempts - 1) {
                         buttonClass = gameStyles.attemptSuccess;
                         console.log('🎨 COLOR - Verde (fallback - vencedor)');
                       } else {
@@ -670,7 +704,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                   type="button"
                   className={`${gameStyles.attemptButton} ${gameStyles.attemptInactive}`}
                   onClick={handleSkip}
-                  disabled={roundWinner || myAttempts >= 6}
+                  disabled={roundFinished || myAttempts >= 6}
                   style={{ marginLeft: '10px' }}
                 >
                   {isClient ? t('skip') : 'Pular'} <FaFastForward style={{ marginLeft: 4, fontSize: '1em', verticalAlign: 'middle' }} />
@@ -678,7 +712,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
               </div>
 
               {/* Formulário de tentativa */}
-              {!roundWinner ? (
+              {!roundFinished ? (
                 <>
                   <form onSubmit={handleGuess} className={gameStyles.guessFormModern} autoComplete="off">
                     <input
@@ -716,19 +750,23 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                 </>
               ) : (
                 <div className={`${styles.message} ${
-                  roundWinner === 'NONE' ? styles.messageWarning : styles.messageSuccess
+                  roundWinners.includes('NONE') ? styles.messageWarning : styles.messageSuccess
                 }`}>
-                  {roundWinner === 'NONE'
+                  {roundWinners.includes('NONE')
                     ? (isClient ? t('no_one_guessed') : 'Ninguém acertou a música!')
-                    : roundWinner === nickname
-                      ? (isClient ? t('congratulations') : 'Parabéns! Você acertou!')
-                      : `${roundWinner} ${isClient ? t('player_guessed_correctly') : 'acertou a música!'}`
+                    : roundWinners.length === 1
+                      ? roundWinners[0] === nickname
+                        ? (isClient ? t('congratulations') : 'Parabéns! Você acertou!')
+                        : `${roundWinners[0]} ${isClient ? t('player_guessed_correctly') : 'acertou a música!'}`
+                      : roundWinners.length === lobbyData.players.length
+                        ? (isClient ? 'Todos acertaram!' : 'Todos acertaram!')
+                        : `${roundWinners.length} jogadores acertaram: ${roundWinners.join(', ')}`
                   }
                   <br />
                   <strong>{songToPlay?.game} - {songToPlay?.title}</strong>
 
                   {/* Mostrar pontos ganhos se o jogador atual ganhou */}
-                  {roundWinner === nickname && (
+                  {iAmWinner && (
                     <div className={styles.pointsEarned}>
                       +{Math.max(0, 6 - myAttempts + 1)} pontos!
                     </div>
@@ -737,7 +775,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
               )}
 
               {/* Botão próxima rodada (apenas para host) */}
-              {roundWinner && isHost && (
+              {roundFinished && isHost && (
                 <div style={{ textAlign: 'center', marginTop: '20px' }}>
                   <button
                     className={styles.primaryButton}
@@ -749,14 +787,14 @@ const MultiplayerGame = ({ onBackToLobby }) => {
               )}
 
               {/* Mensagens de status */}
-              {roundWinner && !isHost && (
+              {roundFinished && !isHost && (
                 <div className={`${styles.message} ${styles.messageInfo}`}>
                   Aguardando anfitrião avançar para a próxima rodada...
                 </div>
               )}
 
               {/* Mensagem apenas quando o jogador esgotou tentativas MAS a rodada ainda não acabou */}
-              {myAttempts >= 6 && !roundWinner && (
+              {myAttempts >= 6 && !roundFinished && (
                 <div className={`${styles.message} ${styles.messageWarning}`}>
                   Você esgotou suas tentativas para esta rodada. Aguardando outros jogadores...
                 </div>
