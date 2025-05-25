@@ -170,9 +170,17 @@ export default function Home() {
 
   // Atualiza duração do áudio ao carregar
   const handleLoadedMetadata = () => {
+    console.log('🎵 METADATA CARREGADA:', {
+      audioRef: !!audioRef.current,
+      currentDay,
+      duration: audioRef.current?.duration
+    });
+
     if (audioRef.current && currentDay !== null) {
       const duration = audioRef.current.duration || 0;
       setAudioDuration(duration);
+
+      console.log('🎵 DURAÇÃO DEFINIDA:', duration);
 
       // Verifica se já existe um tempo de início salvo para o dia atual
       const savedStartTimeKey = `bandle_start_time_day_${currentDay}`;
@@ -190,6 +198,8 @@ export default function Home() {
 
       setStartTime(startTimeToUse);
       audioRef.current.currentTime = startTimeToUse;
+
+      console.log('🎵 TEMPO DE INÍCIO DEFINIDO:', startTimeToUse);
 
       // Aplicar configurações de som
       const savedSettings = localStorage.getItem('bandle_settings');
@@ -783,6 +793,19 @@ export default function Home() {
 
   // Já estamos usando isClient do contexto de idioma
 
+  // Log de debug para verificar o estado
+  console.log('🔍 ESTADO ATUAL:', {
+    isLoading,
+    audioError,
+    audioDuration,
+    currentSong: currentSong?.title,
+    audioUrl: currentSong?.audioUrl,
+    isPlaying,
+    startTime,
+    attempts,
+    buttonDisabled: audioError || !audioDuration
+  });
+
   if (isLoading) {
     return (
       <div className={styles.container}>
@@ -897,7 +920,27 @@ export default function Home() {
                 <button
                   className={styles.audioPlayBtnCustom}
                   onClick={() => {
-                    if (!audioRef.current) return;
+                    console.log('🎵 BOTÃO PLAY CLICADO:', {
+                      audioRef: !!audioRef.current,
+                      audioError,
+                      audioDuration,
+                      currentSong,
+                      isPlaying,
+                      startTime,
+                      attempts
+                    });
+
+                    if (!audioRef.current) {
+                      console.error('❌ audioRef.current é null');
+                      return;
+                    }
+
+                    // Se não há duração mas há URL, tentar forçar carregamento
+                    if (!audioDuration && currentSong?.audioUrl) {
+                      console.log('🔄 Forçando carregamento do áudio...');
+                      audioRef.current.load();
+                      return;
+                    }
 
                     const currentTime = audioRef.current.currentTime - startTime;
                     if (currentTime >= maxClipDurations[attempts] || currentTime >= maxClipDurations[maxClipDurations.length - 1]) {
@@ -907,12 +950,20 @@ export default function Home() {
                     }
 
                     if (isPlaying) {
+                      console.log('⏸️ Pausando áudio');
                       audioRef.current.pause();
                     } else {
-                      audioRef.current.play();
+                      console.log('▶️ Reproduzindo áudio');
+                      audioRef.current.play().catch(error => {
+                        console.error('❌ Erro ao reproduzir áudio:', error);
+                      });
                     }
                   } }
-                  disabled={audioError || !audioDuration}
+                  disabled={audioError || (!audioDuration && !currentSong?.audioUrl)}
+                  style={{
+                    opacity: (audioError || !audioDuration) ? 0.5 : 1,
+                    cursor: (audioError || !audioDuration) ? 'not-allowed' : 'pointer'
+                  }}
                 >
                   {isPlaying ? (
                     <FaPause color="#fff" size={20} />
@@ -942,16 +993,36 @@ export default function Home() {
                     currentSong: currentSong,
                     audioUrl: currentSong?.audioUrl,
                     error: e,
-                    audioElement: audioRef.current
+                    audioElement: audioRef.current,
+                    networkState: audioRef.current?.networkState,
+                    readyState: audioRef.current?.readyState
                   });
                   setAudioError(true);
-                  setMessage('Erro ao carregar o áudio. Verifique se o arquivo existe.');
+                  setMessage('Erro ao carregar o áudio. Tentando novamente...');
+
+                  // Tentar recarregar o áudio após um pequeno delay
+                  setTimeout(() => {
+                    if (audioRef.current && currentSong?.audioUrl) {
+                      console.log('🔄 Tentando recarregar áudio...');
+                      audioRef.current.load();
+                    }
+                  }, 1000);
                 }}
                 onCanPlay={() => {
+                  console.log('✅ ÁUDIO PODE SER REPRODUZIDO');
                   setAudioError(false);
-                  if (message === 'Erro ao carregar o áudio. Verifique se o arquivo existe.') {
+                  if (message === 'Erro ao carregar o áudio. Tentando novamente...' || message === 'Erro ao carregar o áudio. Verifique se o arquivo existe.') {
                     setMessage('');
                   }
+                }}
+                onLoadStart={() => {
+                  console.log('🔄 INICIANDO CARREGAMENTO DO ÁUDIO');
+                }}
+                onLoadedData={() => {
+                  console.log('📊 DADOS DO ÁUDIO CARREGADOS');
+                }}
+                onCanPlayThrough={() => {
+                  console.log('🎵 ÁUDIO TOTALMENTE CARREGADO');
                 }} />
             </div>
           </div>
