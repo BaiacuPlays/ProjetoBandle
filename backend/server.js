@@ -45,7 +45,19 @@ app.get('/', (req, res) => {
 
 // Rota de health check
 app.get('/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() });
+  console.log('🏥 Health check solicitado');
+  res.status(200).json({
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    port: PORT,
+    env: process.env.NODE_ENV || 'development'
+  });
+});
+
+// Rota adicional de health check
+app.get('/healthz', (req, res) => {
+  console.log('🏥 Healthz check solicitado');
+  res.status(200).send('OK');
 });
 
 // Middleware de erro
@@ -55,7 +67,9 @@ app.use((err, req, res, next) => {
 });
 
 // Iniciar servidor
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Servidor rodando na porta ${PORT}`);
   console.log(`📍 URL: http://localhost:${PORT}`);
+  console.log(`🌍 Ambiente: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`⚡ Railway PORT: ${process.env.PORT || 'não definida'}`);
 });
