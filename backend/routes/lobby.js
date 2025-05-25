@@ -252,15 +252,14 @@ router.patch('/', async (req, res) => {
         tooLate: false
       });
 
-      const allPlayersExhausted = lobby.players.every(player =>
-        (lobby.gameState.attempts[player] || 0) >= 6
-      );
+      // Verificar se todos os jogadores terminaram (esgotaram tentativas OU acertaram)
+      const allPlayersFinished = lobby.players.every(player => {
+        const playerAttempts = lobby.gameState.attempts[player] || 0;
+        const playerWon = lobby.gameState.roundWinners.includes(player);
+        return playerAttempts >= 6 || playerWon;
+      });
 
-      const allPlayersWon = lobby.players.every(player =>
-        lobby.gameState.roundWinners.includes(player)
-      );
-
-      if (allPlayersExhausted || allPlayersWon) {
+      if (allPlayersFinished) {
         lobby.gameState.roundFinished = true;
         if (lobby.gameState.roundWinners.length === 0) {
           lobby.gameState.roundWinners = ['NONE'];
@@ -275,7 +274,7 @@ router.patch('/', async (req, res) => {
         gameCorrect,
         winner,
         attempts: lobby.gameState.attempts[nickname],
-        allExhausted: allPlayersExhausted,
+        roundFinished: lobby.gameState.roundFinished,
         lobbyData: {
           players: lobby.players,
           host: lobby.host,
