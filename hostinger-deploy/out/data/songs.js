@@ -1,11 +1,19 @@
 import musicData from './music.json';
 
+// Função para normalizar caminhos de arquivo (converter \ para /)
+const normalizePath = (path) => {
+  if (!path) return path;
+  return path.replace(/\\/g, '/');
+};
+
 // Adiciona informações específicas do jogo para cada música
 export const songs = musicData.map((song, index) => ({
   ...song,
   id: song.id || index + 1,
   // Normalizar título removendo espaços extras
   title: song.title.trim(),
+  // Normalizar caminho do áudio
+  audioUrl: normalizePath(song.audioUrl),
   clips: [
     { name: "Intro", icon: "🎹", startTime: 0, duration: 5 },
     { name: "Meio", icon: "🎶", startTime: 30, duration: 5 },

@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import songs from '../data/music.json';
+import { useState, useEffect, useRef } from 'react';
+import { songs } from '../data/songs';
 
 export default function Diagnostico() {
   const [testResults, setTestResults] = useState([]);
@@ -22,13 +22,13 @@ export default function Diagnostico() {
       try {
         // Testar URL original
         const originalResponse = await fetch(song.audioUrl, { method: 'HEAD' });
-        
+
         // Testar URL codificada
         const encodedUrl = song.audioUrl.split('/').map((part, index) => {
           if (index === 0 && part === '') return part;
           return encodeURIComponent(part);
         }).join('/');
-        
+
         const encodedResponse = await fetch(encodedUrl, { method: 'HEAD' });
 
         results.push({
@@ -73,16 +73,16 @@ export default function Diagnostico() {
   const failCount = testResults.filter(r => !r.success).length;
 
   return (
-    <div style={{ 
-      padding: '20px', 
+    <div style={{
+      padding: '20px',
       fontFamily: 'Arial, sans-serif',
       maxWidth: '1200px',
       margin: '0 auto'
     }}>
       <h1>Diagnóstico de Arquivos de Áudio</h1>
-      
+
       <div style={{ marginBottom: '20px' }}>
-        <button 
+        <button
           onClick={testAudioFiles}
           disabled={isLoading}
           style={{
@@ -112,8 +112,8 @@ export default function Diagnostico() {
         <div>
           <h2>Resultados Detalhados</h2>
           <div style={{ overflowX: 'auto' }}>
-            <table style={{ 
-              width: '100%', 
+            <table style={{
+              width: '100%',
               borderCollapse: 'collapse',
               fontSize: '12px'
             }}>
@@ -130,14 +130,14 @@ export default function Diagnostico() {
               </thead>
               <tbody>
                 {testResults.map((result, index) => (
-                  <tr key={index} style={{ 
-                    backgroundColor: result.success ? '#d4edda' : '#f8d7da' 
+                  <tr key={index} style={{
+                    backgroundColor: result.success ? '#d4edda' : '#f8d7da'
                   }}>
                     <td style={{ border: '1px solid #ddd', padding: '8px' }}>{result.id}</td>
                     <td style={{ border: '1px solid #ddd', padding: '8px' }}>{result.title}</td>
                     <td style={{ border: '1px solid #ddd', padding: '8px' }}>{result.game}</td>
-                    <td style={{ 
-                      border: '1px solid #ddd', 
+                    <td style={{
+                      border: '1px solid #ddd',
                       padding: '8px',
                       maxWidth: '200px',
                       overflow: 'hidden',
