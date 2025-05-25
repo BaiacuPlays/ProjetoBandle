@@ -1,7 +1,7 @@
 // Configuração da API externa
 const API_CONFIG = {
   // URL do backend externo (será configurado depois)
-  BASE_URL: process.env.NEXT_PUBLIC_API_URL || 'https://projetobandle-production.up.railway.app',
+  BASE_URL: process.env.NEXT_PUBLIC_API_URL || 'https://bandle-api.railway.app',
 
   // Endpoints
   ENDPOINTS: {
