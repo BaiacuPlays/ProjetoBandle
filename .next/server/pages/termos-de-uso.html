@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width"/><title>Termos de Uso | Bandle</title><meta name="description" content="Termos de uso do Bandle - jogo de adivinhação de músicas de videogames"/><meta name="next-head-count" content="4"/><script>
+              try {
+                // Verificar primeiro o localStorage
+                const savedSettings = localStorage.getItem('bandle_settings');
+                let language = null;
+
+                if (savedSettings) {
+                  const parsedSettings = JSON.parse(savedSettings);
+                  if (parsedSettings.language) {
+                    language = parsedSettings.language;
+                  }
+                }
+
+                // Verificar cookie como fallback
+                if (!language) {
+                  const cookies = document.cookie.split(';');
+                  for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.startsWith('bandle_language=')) {
+                      language = cookie.substring('bandle_language='.length);
+                      break;
+                    }
+                  }
+                }
+
+                // Aplicar o idioma
+                if (language) {
+                  document.documentElement.lang = language;
+                  console.log('Idioma aplicado pelo _document.js:', language);
+
+                  // Se o idioma veio do cookie, mas não está no localStorage, salvá-lo
+                  if (!savedSettings || !JSON.parse(savedSettings).language) {
+                    const defaultSettings = {
+                      daltonicMode: false,
+                      sound: true,
+                      animations: true,
+                      language: language
+                    };
+                    localStorage.setItem('bandle_settings', JSON.stringify(defaultSettings));
+                    console.log('Configurações salvas do cookie para localStorage:', defaultSettings);
+                  } else if (savedSettings) {
+                    // Se já existe configurações no localStorage, atualizar o idioma
+                    try {
+                      const settings = JSON.parse(savedSettings);
+                      if (settings.language !== language) {
+                        settings.language = language;
+                        localStorage.setItem('bandle_settings', JSON.stringify(settings));
+                        console.log('Idioma atualizado no localStorage:', settings);
+                      }
+                    } catch (e) {
+                      console.error('Erro ao atualizar idioma no localStorage:', e);
+                    }
+                  }
+                }
+              } catch (e) {
+                console.error('Erro ao aplicar idioma em _document.js:', e);
+              }
+            </script><link rel="preload" href="/_next/static/css/4e6a4b73d69e3198.css" as="style" crossorigin=""/><link rel="stylesheet" href="/_next/static/css/4e6a4b73d69e3198.css" crossorigin="" data-n-g=""/><link rel="preload" href="/_next/static/css/6708684d148889d0.css" as="style" crossorigin=""/><link rel="stylesheet" href="/_next/static/css/6708684d148889d0.css" crossorigin="" data-n-p=""/><noscript data-n-css=""></noscript><script defer="" crossorigin="" nomodule="" src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js"></script><script src="/_next/static/chunks/webpack-8fa1640cc84ba8fe.js" defer="" crossorigin=""></script><script src="/_next/static/chunks/framework-5429a50ba5373c56.js" defer="" crossorigin=""></script><script src="/_next/static/chunks/main-2986573b5c54252e.js" defer="" crossorigin=""></script><script src="/_next/static/chunks/pages/_app-e04d40ed14b9396d.js" defer="" crossorigin=""></script><script src="/_next/static/chunks/603-254e7c3120731bc3.js" defer="" crossorigin=""></script><script src="/_next/static/chunks/996-923ee8e3cff567be.js" defer="" crossorigin=""></script><script src="/_next/static/chunks/pages/termos-de-uso-6ed97c2a06f766b8.js" defer="" crossorigin=""></script><script src="/_next/static/EDCCvfttx9BXBr7mCmY5W/_buildManifest.js" defer="" crossorigin=""></script><script src="/_next/static/EDCCvfttx9BXBr7mCmY5W/_ssgManifest.js" defer="" crossorigin=""></script></head><body><div id="__next"><div class="Legal_container__lJUYp"><main class="Legal_main__YTwZE"><div class="Legal_header__kzxxN"><a href="/"><img src="/Logo.png" alt="Logo Bandle" class="Legal_logo__lFQCE"/></a><h1 class="Legal_title__df__P">Termos de Uso</h1></div><div class="Legal_content__61Oqv"><section class="Legal_section__kPnuz"><h2>1. Aceitação dos Termos</h2><p>Ao acessar e utilizar o site Bandle, você concorda em cumprir e estar vinculado a estes Termos de Uso. Se você não concordar com qualquer parte destes termos, não poderá acessar ou utilizar nosso serviço.</p></section><section class="Legal_section__kPnuz"><h2>2. Descrição do Serviço</h2><p>O Bandle é um jogo de adivinhação de músicas de videogames que permite aos usuários ouvir trechos de músicas e tentar identificá-las. O serviço é fornecido &quot;como está&quot; e &quot;conforme disponível&quot;, sem garantias de qualquer tipo.</p></section><section class="Legal_section__kPnuz"><h2>3. Uso do Serviço</h2><p>Você concorda em usar o Bandle apenas para fins legais e de acordo com estes Termos. Você não deve:</p><ul><li>Violar quaisquer leis aplicáveis ou regulamentos</li><li>Tentar acessar áreas restritas do site</li><li>Interferir ou interromper a integridade ou o desempenho do serviço</li><li>Tentar contornar medidas de segurança ou autenticação</li><li>Coletar ou armazenar dados pessoais de outros usuários</li><li>Distribuir vírus, worms, ou outro código malicioso</li></ul></section><section class="Legal_section__kPnuz"><h2>4. Propriedade Intelectual</h2><p>O conteúdo do Bandle, incluindo mas não limitado a textos, gráficos, logotipos, ícones, imagens, clipes de áudio, downloads digitais e compilações de dados, é propriedade do Bandle ou de seus licenciadores e está protegido por leis de direitos autorais e propriedade intelectual.</p><p>Os trechos de áudio utilizados no jogo são propriedade de seus respectivos detentores de direitos autorais e são utilizados para fins de entretenimento e educacionais sob o princípio de uso justo (fair use).</p></section><section class="Legal_section__kPnuz"><h2>5. Limitação de Responsabilidade</h2><p>Em nenhuma circunstância o Bandle, seus diretores, funcionários, parceiros ou agentes serão responsáveis por quaisquer danos diretos, indiretos, incidentais, especiais, consequenciais ou punitivos, incluindo, sem limitação, perda de lucros, dados, uso, boa vontade ou outras perdas intangíveis, resultantes de:</p><ul><li>Seu acesso ou uso ou incapacidade de acessar ou usar o serviço</li><li>Qualquer conduta ou conteúdo de terceiros no serviço</li><li>Acesso não autorizado, uso ou alteração de suas transmissões ou conteúdo</li></ul></section><section class="Legal_section__kPnuz"><h2>6. Modificações dos Termos</h2><p>Reservamo-nos o direito de modificar ou substituir estes termos a qualquer momento. Se uma revisão for material, tentaremos fornecer um aviso com pelo menos 30 dias de antecedência antes que quaisquer novos termos entrem em vigor.</p><p>O que constitui uma alteração material será determinado a nosso critério. Ao continuar a acessar ou usar nosso serviço após essas revisões se tornarem efetivas, você concorda em estar vinculado aos termos revisados.</p></section><section class="Legal_section__kPnuz"><h2>7. Lei Aplicável</h2><p>Estes termos serão regidos e interpretados de acordo com as leis do Brasil, sem considerar suas disposições sobre conflitos de leis.</p><p>Nossa falha em fazer valer qualquer direito ou disposição destes Termos não será considerada uma renúncia a esses direitos. Se qualquer disposição destes Termos for considerada inválida ou inexequível por um tribunal, as disposições restantes destes Termos permanecerão em vigor.</p></section><section class="Legal_section__kPnuz"><h2>8. Contato</h2><p>Se você tiver alguma dúvida sobre estes Termos, entre em contato conosco pelo e-mail:<a href="mailto:andreibonatto8@gmail.com" class="Legal_link__eQoPe"> andreibonatto8@gmail.com</a></p></section><div class="Legal_backLink__zrh8a"><a class="Legal_button__N9iJY" href="/">Voltar para a página inicial</a></div></div></main><footer class="footer"><div class="footer-content"><p>© 2025 Ludomusic - Todos os direitos reservados</p><p>Desenvolvido com ❤️ para a comunidade gamer</p><p>Background feito por<!-- --> <a href="https://x.com/Azzy_JP">@Azzy_JP</a></p><p>Logo feita por<!-- --> <a href="https://x.com/IvanBaroni_">@IvanBaroni_</a></p><p>Este site utiliza trechos de áudio com fins de entretenimento. Todos os direitos sobre as músicas pertencem aos seus respectivos detentores.</p><p><a href="/termos-de-uso">Termos de Uso</a> |<a href="/politica-de-privacidade">Política de Privacidade</a> |<a href="/remocao-de-conteudo">Remoção de Conteúdo</a></p></div></footer></div></div><script id="__NEXT_DATA__" type="application/json" crossorigin="">{"props":{"pageProps":{}},"page":"/termos-de-uso","query":{},"buildId":"EDCCvfttx9BXBr7mCmY5W","nextExport":true,"autoExport":true,"isFallback":false,"scriptLoader":[]}</script></body></html>
