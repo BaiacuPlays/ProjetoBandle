@@ -112,15 +112,20 @@ export default function Home() {
         }
       }
 
+      // Codifica o URL para lidar com espaços e caracteres especiais
+      const encodedAudioUrl = song.audioUrl.split('/').map(part => encodeURIComponent(part)).join('/');
+      const songWithEncodedUrl = { ...song, audioUrl: encodedAudioUrl };
+
       console.log('🎵 MÚSICA CARREGADA:', {
         id: song.id,
         title: song.title,
         game: song.game,
-        audioUrl: song.audioUrl,
-        fullPath: window.location.origin + song.audioUrl
+        originalUrl: song.audioUrl,
+        encodedUrl: encodedAudioUrl,
+        fullPath: window.location.origin + encodedAudioUrl
       });
 
-      setCurrentSong(song);
+      setCurrentSong(songWithEncodedUrl);
       // Calcular tempo até a próxima meia-noite
       const nextMidnight = new Date(now);
       nextMidnight.setHours(24, 0, 0, 0);
