@@ -1,0 +1,196 @@
+{
+  "name": "Super Mario 64 Original Soundtrack",
+  "release_date": "1996-11",
+  "catalog": "",
+  "publisher": "",
+  "composers": [],
+  "arrangers": [],
+  "performers": [
+    "近藤浩治"
+  ],
+  "cover_art": "",
+  "discs": [
+    [
+      {
+        "number": "1",
+        "name": "\"It's me, Mario!\"",
+        "duration": "4000"
+      },
+      {
+        "number": "2",
+        "name": "Title Theme",
+        "duration": "211160"
+      },
+      {
+        "number": "3",
+        "name": "Peach's Message",
+        "duration": "8840"
+      },
+      {
+        "number": "4",
+        "name": "Opening",
+        "duration": "34733"
+      },
+      {
+        "number": "5",
+        "name": "Super Mario 64 Main Theme",
+        "duration": "142293"
+      },
+      {
+        "number": "6",
+        "name": "Slider",
+        "duration": "169533"
+      },
+      {
+        "number": "7",
+        "name": "Castle",
+        "duration": "120000"
+      },
+      {
+        "number": "8",
+        "name": "Looping Steps",
+        "duration": "27733"
+      },
+      {
+        "number": "9",
+        "name": "Water",
+        "duration": "186200"
+      },
+      {
+        "number": "10",
+        "name": "Fire Bubble",
+        "duration": "163840"
+      },
+      {
+        "number": "11",
+        "name": "Snow Mountain",
+        "duration": "178426"
+      },
+      {
+        "number": "12",
+        "name": "Haunted House",
+        "duration": "186240"
+      },
+      {
+        "number": "13",
+        "name": "Merry-Go-Round",
+        "duration": "61293"
+      },
+      {
+        "number": "14",
+        "name": "Cave Dungeon",
+        "duration": "225906"
+      },
+      {
+        "number": "15",
+        "name": "Pakkun Flower's Lullaby",
+        "duration": "139133"
+      },
+      {
+        "number": "16",
+        "name": "Powerful Mario",
+        "duration": "54733"
+      },
+      {
+        "number": "17",
+        "name": "Metallic Mario",
+        "duration": "54626"
+      },
+      {
+        "number": "18",
+        "name": "File Select",
+        "duration": "44266"
+      },
+      {
+        "number": "19",
+        "name": "Correct Solution",
+        "duration": "5573"
+      },
+      {
+        "number": "20",
+        "name": "Kinopio's Message",
+        "duration": "5893"
+      },
+      {
+        "number": "21",
+        "name": "Power Star",
+        "duration": "8506"
+      },
+      {
+        "number": "22",
+        "name": "Race Fanfare",
+        "duration": "5893"
+      },
+      {
+        "number": "23",
+        "name": "Star Catch Fanfare",
+        "duration": "5333"
+      },
+      {
+        "number": "24",
+        "name": "Game Start",
+        "duration": "4866"
+      },
+      {
+        "number": "25",
+        "name": "Course Clear",
+        "duration": "6733"
+      },
+      {
+        "number": "26",
+        "name": "Game Over",
+        "duration": "17173"
+      },
+      {
+        "number": "27",
+        "name": "Stage Boss",
+        "duration": "81293"
+      },
+      {
+        "number": "28",
+        "name": "Koopa's Message",
+        "duration": "5840"
+      },
+      {
+        "number": "29",
+        "name": "Koopa's Road",
+        "duration": "131133"
+      },
+      {
+        "number": "30",
+        "name": "Koopa's Theme",
+        "duration": "149933"
+      },
+      {
+        "number": "31",
+        "name": "Koopa Clear",
+        "duration": "5893"
+      },
+      {
+        "number": "32",
+        "name": "Ultimate Koopa",
+        "duration": "171466"
+      },
+      {
+        "number": "33",
+        "name": "Ultimate Koopa Clear",
+        "duration": "28400"
+      },
+      {
+        "number": "34",
+        "name": "Ending Demo",
+        "duration": "76733"
+      },
+      {
+        "number": "35",
+        "name": "Staff Roll",
+        "duration": "207000"
+      },
+      {
+        "number": "36",
+        "name": "Pakkun Flower's Lullaby",
+        "duration": "143040"
+      }
+    ]
+  ]
+}

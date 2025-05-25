@@ -1,0 +1,371 @@
+{
+  "name": "Sonic Advance 2 Original Soundtrack",
+  "release_date": "2002-12-18",
+  "catalog": "",
+  "publisher": "",
+  "composers": ["Masato Nakamura"],
+  "arrangers": [],
+  "performers": [
+    "SEGA"
+  ],
+  "cover_art": "",
+  "discs": [
+    [
+      {
+        "number": "1",
+        "name": "Opening ~ Title",
+        "duration": "21989"
+      },
+      {
+        "number": "2",
+        "name": "Character Select",
+        "duration": "74001"
+      },
+      {
+        "number": "3",
+        "name": "Zone Select 1",
+        "duration": "43003"
+      },
+      {
+        "number": "4",
+        "name": "Leaf Forest Act 1",
+        "duration": "147005"
+      },
+      {
+        "number": "5",
+        "name": "Leaf Forest Act 2",
+        "duration": "150000"
+      },
+      {
+        "number": "6",
+        "name": "Hot Crater Act 1",
+        "duration": "121022"
+      },
+      {
+        "number": "7",
+        "name": "Hot Crater Act 2",
+        "duration": "130008"
+      },
+      {
+        "number": "8",
+        "name": "Music Plant Act 1",
+        "duration": "125016"
+      },
+      {
+        "number": "9",
+        "name": "Music Plant Act 2",
+        "duration": "138019"
+      },
+      {
+        "number": "10",
+        "name": "Ice Paradise Act 1",
+        "duration": "162005"
+      },
+      {
+        "number": "11",
+        "name": "Ice Paradise Act 2",
+        "duration": "231015"
+      },
+      {
+        "number": "12",
+        "name": "Sky Canyon Act 1",
+        "duration": "151022"
+      },
+      {
+        "number": "13",
+        "name": "Sky Canyon Act 2",
+        "duration": "132005"
+      },
+      {
+        "number": "14",
+        "name": "Techno Base Act 1",
+        "duration": "191007"
+      },
+      {
+        "number": "15",
+        "name": "Techno Base Act 2",
+        "duration": "187013"
+      },
+      {
+        "number": "16",
+        "name": "Egg Utopia Act 1",
+        "duration": "177005"
+      },
+      {
+        "number": "17",
+        "name": "Egg Utopia Act 2",
+        "duration": "142013"
+      },
+      {
+        "number": "18",
+        "name": "Final Zone XX",
+        "duration": "155016"
+      },
+      {
+        "number": "19",
+        "name": "Boss",
+        "duration": "153019"
+      },
+      {
+        "number": "20",
+        "name": "Boss -pinch-",
+        "duration": "64017"
+      },
+      {
+        "number": "21",
+        "name": "Knuckles Boss",
+        "duration": "149002"
+      },
+      {
+        "number": "22",
+        "name": "7 Boss",
+        "duration": "115008"
+      },
+      {
+        "number": "23",
+        "name": "7 Boss -pinch-",
+        "duration": "93019"
+      },
+      {
+        "number": "24",
+        "name": "Final Boss",
+        "duration": "153019"
+      },
+      {
+        "number": "25",
+        "name": "Final Boss -pinch-",
+        "duration": "106022"
+      },
+      {
+        "number": "26",
+        "name": "Act Clear",
+        "duration": "3970"
+      },
+      {
+        "number": "27",
+        "name": "Boss Clear",
+        "duration": "4852"
+      },
+      {
+        "number": "28",
+        "name": "Final Clear",
+        "duration": "7383"
+      },
+      {
+        "number": "29",
+        "name": "Game Over",
+        "duration": "6919"
+      },
+      {
+        "number": "30",
+        "name": "Unrival",
+        "duration": "41006"
+      },
+      {
+        "number": "31",
+        "name": "Drown",
+        "duration": "10402"
+      },
+      {
+        "number": "32",
+        "name": "1-Up",
+        "duration": "4040"
+      },
+      {
+        "number": "33",
+        "name": "Demo 1",
+        "duration": "86006"
+      },
+      {
+        "number": "34",
+        "name": "Demo 2",
+        "duration": "93019"
+      },
+      {
+        "number": "35",
+        "name": "Zone Select 2",
+        "duration": "104002"
+      },
+      {
+        "number": "36",
+        "name": "Special Stage -intro-",
+        "duration": "2739"
+      },
+      {
+        "number": "37",
+        "name": "Special Stage",
+        "duration": "141014"
+      },
+      {
+        "number": "38",
+        "name": "Special Stage -pinch-",
+        "duration": "33018"
+      },
+      {
+        "number": "39",
+        "name": "Achievement",
+        "duration": "1904"
+      },
+      {
+        "number": "40",
+        "name": "Special Clear",
+        "duration": "4806"
+      },
+      {
+        "number": "41",
+        "name": "Special Result 1",
+        "duration": "52012"
+      },
+      {
+        "number": "42",
+        "name": "Special Result 2",
+        "duration": "3645"
+      },
+      {
+        "number": "43",
+        "name": "Special Result 3",
+        "duration": "21014"
+      },
+      {
+        "number": "44",
+        "name": "Final Ending",
+        "duration": "29930"
+      },
+      {
+        "number": "45",
+        "name": "Staff Roll",
+        "duration": "110596"
+      },
+      {
+        "number": "46",
+        "name": "Message",
+        "duration": "7918"
+      },
+      {
+        "number": "47",
+        "name": "Time Attack 1",
+        "duration": "77020"
+      },
+      {
+        "number": "48",
+        "name": "Time Attack 2",
+        "duration": "2577"
+      },
+      {
+        "number": "49",
+        "name": "Time Attack 3",
+        "duration": "5990"
+      },
+      {
+        "number": "50",
+        "name": "Options",
+        "duration": "168019"
+      },
+      {
+        "number": "51",
+        "name": "VS Wait",
+        "duration": "58003"
+      },
+      {
+        "number": "52",
+        "name": "VS 1",
+        "duration": "67012"
+      },
+      {
+        "number": "53",
+        "name": "VS 2",
+        "duration": "92020"
+      },
+      {
+        "number": "54",
+        "name": "VS 3",
+        "duration": "6826"
+      },
+      {
+        "number": "55",
+        "name": "VS 4",
+        "duration": "93019"
+      },
+      {
+        "number": "56",
+        "name": "VS End",
+        "duration": "3436"
+      },
+      {
+        "number": "57",
+        "name": "Zone Select 3",
+        "duration": "59001"
+      },
+      {
+        "number": "58",
+        "name": "Extra Demo 1",
+        "duration": "92020"
+      },
+      {
+        "number": "59",
+        "name": "Extra Demo 2",
+        "duration": "120000"
+      },
+      {
+        "number": "60",
+        "name": "Extra Zone",
+        "duration": "112013"
+      },
+      {
+        "number": "61",
+        "name": "Extra Clear",
+        "duration": "7430"
+      },
+      {
+        "number": "62",
+        "name": "Extra Ending",
+        "duration": "34597"
+      },
+      {
+        "number": "63",
+        "name": "Unknown Jingle 1",
+        "duration": "8219"
+      },
+      {
+        "number": "64",
+        "name": "Unknown Jingle 2",
+        "duration": "5967"
+      },
+      {
+        "number": "65",
+        "name": "Unknown Jingle 3",
+        "duration": "2670"
+      },
+      {
+        "number": "66",
+        "name": "Unknown Jingle 4",
+        "duration": "1555"
+      },
+      {
+        "number": "67",
+        "name": "Unknown Jingle 5",
+        "duration": "1602"
+      },
+      {
+        "number": "68",
+        "name": "Unknown Jingle 6",
+        "duration": "1114"
+      },
+      {
+        "number": "69",
+        "name": "Unknown Jingle 7",
+        "duration": "3599"
+      },
+      {
+        "number": "70",
+        "name": "Unknown Jingle 8",
+        "duration": "6942"
+      },
+      {
+        "number": "71",
+        "name": "Unknown Jingle 9",
+        "duration": "5619"
+      }
+    ]
+  ]
+}

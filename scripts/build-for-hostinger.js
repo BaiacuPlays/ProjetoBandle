@@ -6,12 +6,12 @@ console.log('🚀 Preparando build para Hostinger...');
 // Função para copiar arquivos recursivamente
 function copyRecursive(src, dest) {
   const stats = fs.statSync(src);
-  
+
   if (stats.isDirectory()) {
     if (!fs.existsSync(dest)) {
       fs.mkdirSync(dest, { recursive: true });
     }
-    
+
     const files = fs.readdirSync(src);
     files.forEach(file => {
       copyRecursive(path.join(src, file), path.join(dest, file));
@@ -34,8 +34,18 @@ console.log('📁 Copiando arquivos estáticos...');
 if (fs.existsSync('./out')) {
   copyRecursive('./out', outputDir);
   console.log('✅ Arquivos do Next.js copiados');
+} else if (fs.existsSync('./.next')) {
+  // Fallback para build normal do Next.js
+  console.log('⚠️  Usando build padrão do Next.js (não estático)');
+  copyRecursive('./.next/static', path.join(outputDir, '_next/static'));
+
+  // Copiar páginas HTML se existirem
+  if (fs.existsSync('./.next/server/pages')) {
+    copyRecursive('./.next/server/pages', path.join(outputDir, 'pages'));
+  }
+  console.log('✅ Arquivos do Next.js copiados');
 } else {
-  console.log('❌ Pasta ./out não encontrada. Execute "npm run export" primeiro.');
+  console.log('❌ Nenhuma pasta de build encontrada. Execute "npm run export" primeiro.');
   process.exit(1);
 }
 
@@ -51,7 +61,7 @@ const publicFiles = ['vine.mp3', 'sacabambapis.png', 'Logo.png', 'fundo.png'];
 publicFiles.forEach(file => {
   const srcPath = path.join('./public', file);
   const destPath = path.join(outputDir, file);
-  
+
   if (fs.existsSync(srcPath)) {
     fs.copyFileSync(srcPath, destPath);
     console.log(`✅ ${file} copiado`);

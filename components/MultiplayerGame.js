@@ -43,22 +43,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
   const gameFinished = gameState?.gameFinished;
   const myAttempts = gameState?.attempts?.[nickname] || 0;
 
-  // DEBUG: Log para verificar estado da rodada
-  console.log('🔍 DEBUG - Estado da rodada:', {
-    roundFinished,
-    isHost,
-    roundWinners,
-    myAttempts,
-    gameState: gameState ? 'exists' : 'null'
-  });
 
-  // DEBUG: Log para verificar host
-  console.log('🔍 HOST DEBUG:', {
-    nickname,
-    lobbyHost: lobbyData?.host,
-    isHost,
-    shouldShowButton: roundFinished && isHost
-  });
   // Tempos de duração iguais ao single player
   const maxClipDurations = [0.6, 1.2, 2.0, 3.0, 3.5, 4.2];
 
@@ -681,56 +666,35 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                 {[...Array(6)].map((_, idx) => {
                   let buttonClass = gameStyles.attemptInactive;
 
-                  // Debug: Log do estado das tentativas
-                  if (idx === 0) {
-                    console.log('🎨 DEBUG - Estado das tentativas:', {
-                      nickname: nickname,
-                      myAttempts: myAttempts,
-                      guesses: gameState?.guesses?.[nickname],
-                      roundWinners: roundWinners
-                    });
-                  }
+                  // Obter histórico de tentativas
+                  const myGuesses = gameState?.guesses?.[nickname] || [];
+                  const attemptGuess = myGuesses[idx];
 
-                  if (idx < myAttempts) {
-                    // Verificar o histórico de tentativas para determinar a cor
-                    const myGuesses = gameState?.guesses?.[nickname] || [];
-                    const attemptGuess = myGuesses[idx];
-
-                    console.log('🎨 COLOR - Tentativa', idx + 1, ':', attemptGuess);
-
-                    if (attemptGuess) {
-                      if (attemptGuess.correct && !attemptGuess.tooLate) {
-                        // Acertou a música e foi o primeiro - VERDE
-                        buttonClass = gameStyles.attemptSuccess;
-                        console.log('🎨 COLOR - Verde (acertou)');
-                      } else if (attemptGuess.gameCorrect && !attemptGuess.correct) {
-                        // Acertou o jogo mas não a música - AMARELO
-                        buttonClass = gameStyles.attemptGame;
-                        console.log('🎨 COLOR - Amarelo (jogo correto)');
-                      } else if (attemptGuess.type === 'skipped') {
-                        // Skip - VERMELHO
-                        buttonClass = gameStyles.attemptFail;
-                        console.log('🎨 COLOR - Vermelho (skip)');
-                      } else {
-                        // Errou ou chegou tarde - VERMELHO
-                        buttonClass = gameStyles.attemptFail;
-                        console.log('🎨 COLOR - Vermelho (erro/tarde)');
-                      }
+                  // Usar o histórico de tentativas como fonte principal
+                  if (attemptGuess) {
+                    if (attemptGuess.correct && !attemptGuess.tooLate) {
+                      // Acertou a música e foi o primeiro - VERDE
+                      buttonClass = gameStyles.attemptSuccess;
+                    } else if (attemptGuess.gameCorrect && !attemptGuess.correct) {
+                      // Acertou o jogo mas não a música - AMARELO
+                      buttonClass = gameStyles.attemptGame;
+                    } else if (attemptGuess.type === 'skipped') {
+                      // Skip - VERMELHO
+                      buttonClass = gameStyles.attemptFail;
                     } else {
-                      // Fallback para lógica anterior se não tiver histórico
-                      if (iAmWinner && idx === myAttempts - 1) {
-                        buttonClass = gameStyles.attemptSuccess;
-                        console.log('🎨 COLOR - Verde (fallback - vencedor)');
-                      } else {
-                        buttonClass = gameStyles.attemptFail;
-                        console.log('🎨 COLOR - Vermelho (fallback)');
-                      }
+                      // Errou ou chegou tarde - VERMELHO
+                      buttonClass = gameStyles.attemptFail;
+                    }
+                  } else if (idx < myAttempts) {
+                    // Fallback: se não temos histórico mas sabemos que houve tentativa
+                    if (iAmWinner && idx === myAttempts - 1) {
+                      buttonClass = gameStyles.attemptSuccess;
+                    } else {
+                      buttonClass = gameStyles.attemptFail;
                     }
                   }
 
                   // Tooltip com a tentativa feita
-                  const myGuesses = gameState?.guesses?.[nickname] || [];
-                  const attemptGuess = myGuesses[idx];
                   const tooltipText = attemptGuess
                     ? attemptGuess.type === 'skipped'
                       ? 'Pulou'

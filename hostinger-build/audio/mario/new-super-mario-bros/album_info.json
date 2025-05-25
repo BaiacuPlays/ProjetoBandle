@@ -1,0 +1,26 @@
+{
+  "name": "Super Mario Bros. Original Soundtrack",
+  "release_date": "1986-03-31",
+  "catalog": "",
+  "publisher": "",
+  "composers": [],
+  "arrangers": [],
+  "performers": [
+    "近藤浩治"
+  ],
+  "cover_art": "",
+  "discs": [
+    [
+      {
+        "number": "1",
+        "name": "オリジナル・ヴァージョン",
+        "duration": "162000"
+      },
+      {
+        "number": "2",
+        "name": "オーケストラ・ヴァーション",
+        "duration": "252000"
+      }
+    ]
+  ]
+}

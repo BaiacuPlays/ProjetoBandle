@@ -6,8 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "export": "BUILD_STATIC=true next build",
-    "build:static": "BUILD_STATIC=true next build",
+    "export": "set BUILD_STATIC=true && next build",
+    "build:static": "set BUILD_STATIC=true && next build",
     "build:hostinger": "npm run export && node scripts/build-for-hostinger.js",
     "prepare:deploy": "npm run build:hostinger"
   },

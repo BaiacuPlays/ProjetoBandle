@@ -1,0 +1,451 @@
+{
+  "name": "Sonic Advance 3 Original Soundtrack",
+  "release_date": "2004-06-06",
+  "catalog": "",
+  "publisher": "",
+  "composers": [],
+  "arrangers": [],
+  "performers": [
+    "SEGA"
+  ],
+  "cover_art": "",
+  "discs": [
+    [
+      {
+        "number": "1",
+        "name": "Opening",
+        "duration": "35317"
+      },
+      {
+        "number": "2",
+        "name": "Title Screen Jingle",
+        "duration": "8382"
+      },
+      {
+        "number": "3",
+        "name": "Main Menu",
+        "duration": "102005"
+      },
+      {
+        "number": "4",
+        "name": "Character Select",
+        "duration": "109017"
+      },
+      {
+        "number": "5",
+        "name": "Sonic Factory",
+        "duration": "146007"
+      },
+      {
+        "number": "6",
+        "name": "Options",
+        "duration": "82012"
+      },
+      {
+        "number": "7",
+        "name": "Chao Playground",
+        "duration": "65015"
+      },
+      {
+        "number": "8",
+        "name": "Start Demo",
+        "duration": "60000"
+      },
+      {
+        "number": "9",
+        "name": "Route 99 Map",
+        "duration": "84009"
+      },
+      {
+        "number": "10",
+        "name": "Sunset Hill Map",
+        "duration": "81014"
+      },
+      {
+        "number": "11",
+        "name": "Ocean Base Map",
+        "duration": "90000"
+      },
+      {
+        "number": "12",
+        "name": "Toy Kingdom Map",
+        "duration": "60000"
+      },
+      {
+        "number": "13",
+        "name": "Twinkle Snow Map",
+        "duration": "71006"
+      },
+      {
+        "number": "14",
+        "name": "Cyber Track Map",
+        "duration": "129010"
+      },
+      {
+        "number": "15",
+        "name": "Chaos Angel Map",
+        "duration": "117005"
+      },
+      {
+        "number": "16",
+        "name": "FinalZone Map",
+        "duration": "125016"
+      },
+      {
+        "number": "17",
+        "name": "Intact Music 1",
+        "duration": "158011"
+      },
+      {
+        "number": "18",
+        "name": "Route 99 Act 1",
+        "duration": "163004"
+      },
+      {
+        "number": "19",
+        "name": "Route 99 Act 2",
+        "duration": "154017"
+      },
+      {
+        "number": "20",
+        "name": "Route 99 Act 3",
+        "duration": "149002"
+      },
+      {
+        "number": "21",
+        "name": "Sunset Hill Act 1",
+        "duration": "132005"
+      },
+      {
+        "number": "22",
+        "name": "Sunset Hill Act 2",
+        "duration": "107020"
+      },
+      {
+        "number": "23",
+        "name": "Sunset Hill Act 3",
+        "duration": "192005"
+      },
+      {
+        "number": "24",
+        "name": "Ocean Base Act 1",
+        "duration": "199018"
+      },
+      {
+        "number": "25",
+        "name": "Ocean Base Act 2",
+        "duration": "183019"
+      },
+      {
+        "number": "26",
+        "name": "Ocean Base Act 3",
+        "duration": "146007"
+      },
+      {
+        "number": "27",
+        "name": "Toy Kingdom Act 1",
+        "duration": "167021"
+      },
+      {
+        "number": "28",
+        "name": "Toy Kindom Act 2",
+        "duration": "160008"
+      },
+      {
+        "number": "29",
+        "name": "Toy Kingdom Act 3",
+        "duration": "217013"
+      },
+      {
+        "number": "30",
+        "name": "Twinkle Snow Act 1",
+        "duration": "170016"
+      },
+      {
+        "number": "31",
+        "name": "Twinkle Snow Act 2",
+        "duration": "143011"
+      },
+      {
+        "number": "32",
+        "name": "Twinkle Snow Act 3",
+        "duration": "123019"
+      },
+      {
+        "number": "33",
+        "name": "Cyber Track Act 1",
+        "duration": "235009"
+      },
+      {
+        "number": "34",
+        "name": "Cyber Track Act 2",
+        "duration": "216015"
+      },
+      {
+        "number": "35",
+        "name": "Cyber Track Act 3",
+        "duration": "214018"
+      },
+      {
+        "number": "36",
+        "name": "Chaos Angel Act 1",
+        "duration": "240999"
+      },
+      {
+        "number": "37",
+        "name": "Chaos Angel Act 2",
+        "duration": "193004"
+      },
+      {
+        "number": "38",
+        "name": "Chaos Angel Act 3",
+        "duration": "201015"
+      },
+      {
+        "number": "39",
+        "name": "Eggman Attacks!",
+        "duration": "147005"
+      },
+      {
+        "number": "40",
+        "name": "Eggman Attacks! -pinch-",
+        "duration": "133003"
+      },
+      {
+        "number": "41",
+        "name": "Chaos Angel Boss",
+        "duration": "222005"
+      },
+      {
+        "number": "42",
+        "name": "Chaos Angel Boss -pinch-",
+        "duration": "82012"
+      },
+      {
+        "number": "43",
+        "name": "Final-Boss",
+        "duration": "287021"
+      },
+      {
+        "number": "44",
+        "name": "Final-Boss -pinch-",
+        "duration": "122020"
+      },
+      {
+        "number": "45",
+        "name": "EX Boss",
+        "duration": "201015"
+      },
+      {
+        "number": "46",
+        "name": "EX Boss -pinch-",
+        "duration": "24009"
+      },
+      {
+        "number": "47",
+        "name": "Intact Music 2",
+        "duration": "121022"
+      },
+      {
+        "number": "48",
+        "name": "Demo",
+        "duration": "74001"
+      },
+      {
+        "number": "49",
+        "name": "EX Demo 1",
+        "duration": "137020"
+      },
+      {
+        "number": "50",
+        "name": "EX Demo 2",
+        "duration": "132005"
+      },
+      {
+        "number": "51",
+        "name": "Ending A",
+        "duration": "132005"
+      },
+      {
+        "number": "52",
+        "name": "Ending B",
+        "duration": "203012"
+      },
+      {
+        "number": "53",
+        "name": "Staff Roll",
+        "duration": "232872"
+      },
+      {
+        "number": "54",
+        "name": "Special Stage",
+        "duration": "159010"
+      },
+      {
+        "number": "55",
+        "name": "Special Stage Result 1",
+        "duration": "31021"
+      },
+      {
+        "number": "56",
+        "name": "Special Stage Result 2",
+        "duration": "31021"
+      },
+      {
+        "number": "57",
+        "name": "Time Attack",
+        "duration": "90000"
+      },
+      {
+        "number": "58",
+        "name": "Time Attack Retry",
+        "duration": "57004"
+      },
+      {
+        "number": "59",
+        "name": "Invincible!",
+        "duration": "42004"
+      },
+      {
+        "number": "60",
+        "name": "Drowning!",
+        "duration": "10402"
+      },
+      {
+        "number": "61",
+        "name": "Mini-Game",
+        "duration": "203012"
+      },
+      {
+        "number": "62",
+        "name": "Get Chaos Emerald! (jingle)",
+        "duration": "3645"
+      },
+      {
+        "number": "63",
+        "name": "Game Over",
+        "duration": "6896"
+      },
+      {
+        "number": "64",
+        "name": "1-UP",
+        "duration": "4040"
+      },
+      {
+        "number": "65",
+        "name": "Clear! (1)",
+        "duration": "5572"
+      },
+      {
+        "number": "66",
+        "name": "Clear! (2)",
+        "duration": "3970"
+      },
+      {
+        "number": "67",
+        "name": "Boss Clear! (1)",
+        "duration": "25007"
+      },
+      {
+        "number": "68",
+        "name": "Boss Clear! (2)",
+        "duration": "25007"
+      },
+      {
+        "number": "69",
+        "name": "Final Clear",
+        "duration": "6199"
+      },
+      {
+        "number": "70",
+        "name": "Extra Clear",
+        "duration": "7430"
+      },
+      {
+        "number": "71",
+        "name": "Message",
+        "duration": "7918"
+      },
+      {
+        "number": "72",
+        "name": "Special Stage Clear",
+        "duration": "5085"
+      },
+      {
+        "number": "73",
+        "name": "Time Attack Clear 1",
+        "duration": "2554"
+      },
+      {
+        "number": "74",
+        "name": "Time Attack Clear 2",
+        "duration": "5990"
+      },
+      {
+        "number": "75",
+        "name": "VS-BGM 1",
+        "duration": "69009"
+      },
+      {
+        "number": "76",
+        "name": "VS-BGM 2",
+        "duration": "87005"
+      },
+      {
+        "number": "77",
+        "name": "VS-BGM 3",
+        "duration": "37012"
+      },
+      {
+        "number": "78",
+        "name": "VS-BGM 4",
+        "duration": "6826"
+      },
+      {
+        "number": "79",
+        "name": "VS-BGM 5",
+        "duration": "3413"
+      },
+      {
+        "number": "80",
+        "name": "VS-BGM 6",
+        "duration": "67012"
+      },
+      {
+        "number": "81",
+        "name": "VS-BGM 7",
+        "duration": "110016"
+      },
+      {
+        "number": "82",
+        "name": "VS-BGM 8",
+        "duration": "6826"
+      },
+      {
+        "number": "83",
+        "name": "VS-BGM 9",
+        "duration": "93019"
+      },
+      {
+        "number": "84",
+        "name": "VS-SUCCESS",
+        "duration": "1602"
+      },
+      {
+        "number": "85",
+        "name": "VS-MISS",
+        "duration": "1114"
+      },
+      {
+        "number": "86",
+        "name": "Options (alternate)",
+        "duration": "82012"
+      },
+      {
+        "number": "87",
+        "name": "Ending A (alternate)",
+        "duration": "366550"
+      }
+    ]
+  ]
+}
