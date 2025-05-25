@@ -22,7 +22,7 @@ export default function MusicInfoFetcher({ song, onInfoLoaded }) {
 
         onInfoLoaded(updatedSong);
       } catch (err) {
-
+        console.warn('Erro ao buscar informações da música:', err.message);
         setError(err.message);
         // Em caso de erro, usa a música original
         onInfoLoaded(song);
@@ -31,10 +31,10 @@ export default function MusicInfoFetcher({ song, onInfoLoaded }) {
       }
     }
 
-    if (song) {
+    if (song && song.title && song.game) {
       fetchInfo();
     }
-  }, [song]);
+  }, [song?.title, song?.game, onInfoLoaded]);
 
   if (error) {
     return null; // Não mostra nada se houver erro, usa as informações do music.json

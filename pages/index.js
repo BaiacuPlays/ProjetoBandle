@@ -1017,11 +1017,12 @@ export default function Home() {
             Novo jogo em: <span className={styles.timer}>{formatTimer(timer)}</span>
           </div>
         </div>
-        {currentSong && (
+        {/* MusicInfoFetcher temporariamente desabilitado para evitar loop infinito */}
+        {/* {currentSong && (
           <MusicInfoFetcher
             song={currentSong}
             onInfoLoaded={handleMusicInfoLoaded} />
-        )}
+        )} */}
 
         {/* Menu do jogo */}
         <GameMenu
