@@ -139,9 +139,25 @@ export default function Home() {
             ok: response.ok,
             headers: Object.fromEntries(response.headers.entries())
           });
+
+          if (!response.ok) {
+            console.error('❌ ARQUIVO NÃO ENCONTRADO:', encodedAudioUrl);
+            // Tentar com URL não codificada
+            return fetch(song.audioUrl, { method: 'HEAD' });
+          }
+          return response;
+        })
+        .then(response => {
+          if (response && !response.ok) {
+            console.error('❌ ARQUIVO NÃO ENCONTRADO (URL original):', song.audioUrl);
+            setAudioError(true);
+            setMessage('Erro ao carregar o áudio. Verifique se o arquivo existe.');
+          }
         })
         .catch(error => {
           console.error('❌ ERRO NO TESTE DE ARQUIVO:', error);
+          setAudioError(true);
+          setMessage('Erro ao carregar o áudio. Verifique se o arquivo existe.');
         });
 
       setCurrentSong(songWithEncodedUrl);
@@ -289,16 +305,24 @@ export default function Home() {
       }
     };
 
+    const handleAudioError = (e) => {
+      console.error('❌ ERRO NO ELEMENTO DE ÁUDIO:', e);
+      setAudioError(true);
+      setMessage('Erro ao carregar o áudio. Tentando novamente...');
+    };
+
     audio.addEventListener('timeupdate', updateProgress);
     audio.addEventListener('play', updatePlay);
     audio.addEventListener('pause', updatePlay);
     audio.addEventListener('loadedmetadata', handleLoadedMetadata);
+    audio.addEventListener('error', handleAudioError);
 
     return () => {
       audio.removeEventListener('timeupdate', updateProgress);
       audio.removeEventListener('play', updatePlay);
       audio.removeEventListener('pause', updatePlay);
       audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      audio.removeEventListener('error', handleAudioError);
       if (fadeOutInterval) clearInterval(fadeOutInterval);
       if (fadeOutTimeout) clearTimeout(fadeOutTimeout);
     };
