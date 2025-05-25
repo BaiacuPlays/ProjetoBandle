@@ -1,4 +1,5 @@
 const express = require('express');
+const fetch = require('node-fetch');
 const router = express.Router();
 
 // Função para limpar HTML
@@ -15,9 +16,6 @@ router.get('/', async (req, res) => {
   }
 
   try {
-    // Importar fetch dinamicamente (para compatibilidade com Node.js)
-    const fetch = (await import('node-fetch')).default;
-    
     // Search for albums on VGMdb
     const query = encodeURIComponent(`${game} ${title}`);
     const searchResponse = await fetch(
@@ -36,10 +34,10 @@ router.get('/', async (req, res) => {
     }
 
     const searchHtml = await searchResponse.text();
-    
+
     // Extract album URLs from search results
     const albumMatches = searchHtml.match(/href="(\/album\/\d+)"/g);
-    
+
     if (!albumMatches || albumMatches.length === 0) {
       return res.json({
         artist: 'Unknown Artist',
@@ -56,7 +54,7 @@ router.get('/', async (req, res) => {
     // Get the first album URL
     const albumPath = albumMatches[0].match(/href="([^"]+)"/)[1];
     const albumUrl = `https://vgmdb.net${albumPath}`;
-    
+
     // Fetch album details
     const albumResponse = await fetch(albumUrl, {
       headers: {
@@ -71,13 +69,13 @@ router.get('/', async (req, res) => {
     }
 
     const albumHtml = await albumResponse.text();
-    
+
     // Extract information from HTML with more specific selectors
     const titleMatch = albumHtml.match(/<h1[^>]*>([^<]+)<\/h1>/);
     const artistMatch = albumHtml.match(/Composer<\/b><\/td>\s*<td[^>]*>([^<]+)/);
     const yearMatch = albumHtml.match(/Release Date<\/b><\/td>\s*<td[^>]*>(\d{4})-/);
     const platformMatch = albumHtml.match(/Platform<\/b><\/td>\s*<td[^>]*>([^<]+)<\/td>/);
-    
+
     const musicInfo = {
       artist: artistMatch ? cleanHtml(artistMatch[1]) : 'Unknown Artist',
       year: yearMatch ? yearMatch[1] : 'Unknown Year',
@@ -92,7 +90,7 @@ router.get('/', async (req, res) => {
     return res.json(musicInfo);
   } catch (error) {
     console.error('Erro ao buscar informações da música:', error);
-    
+
     // Retorna dados padrão em caso de erro
     return res.json({
       artist: 'Unknown Artist',
