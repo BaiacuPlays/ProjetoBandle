@@ -80,12 +80,30 @@ export default async function handler(req, res) {
   console.log('🔄 API - Método:', req.method);
   console.log('🔄 API - Headers:', req.headers);
   console.log('🔄 API - Body raw:', req.body);
-  // Configurar CORS
+
+  // 🚨 CONFIGURAÇÃO CORS REFORÇADA
+  const origin = req.headers.origin;
+  const allowedOrigins = [
+    'https://ludomusic.xyz',
+    'https://www.ludomusic.xyz',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'https://bandle-git-main-baiacuplays-projects.vercel.app',
+    'https://bandle-baiacuplays-projects.vercel.app'
+  ];
+
+  if (allowedOrigins.includes(origin) || !origin) {
+    res.setHeader('Access-Control-Allow-Origin', origin || '*');
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  }
+
   res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT,HEAD');
+  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization, Cache-Control, Pragma');
+  res.setHeader('Access-Control-Max-Age', '86400');
   res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Vary', 'Origin');
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();

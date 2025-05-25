@@ -4,6 +4,34 @@ import fetch from 'node-fetch';
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 export default async function handler(req, res) {
+  // 🚨 CONFIGURAÇÃO CORS REFORÇADA
+  const origin = req.headers.origin;
+  const allowedOrigins = [
+    'https://ludomusic.xyz',
+    'https://www.ludomusic.xyz',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'https://bandle-git-main-baiacuplays-projects.vercel.app',
+    'https://bandle-baiacuplays-projects.vercel.app'
+  ];
+
+  if (allowedOrigins.includes(origin) || !origin) {
+    res.setHeader('Access-Control-Allow-Origin', origin || '*');
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  }
+
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST,PUT,DELETE,HEAD');
+  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization, Cache-Control, Pragma');
+  res.setHeader('Access-Control-Max-Age', '86400');
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Vary', 'Origin');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   const { title, game } = req.query;
 
   if (!title || !game) {
@@ -29,11 +57,11 @@ export default async function handler(req, res) {
     }
 
     const searchHtml = await searchResponse.text();
-    
+
     // Look for the first album link in results
     const albumUrlMatch = searchHtml.match(/href="(\/album\/\d+)"/);
     if (!albumUrlMatch) {
-      return res.status(404).json({ 
+      return res.status(404).json({
         error: 'No results found',
         searchQuery: `${game} ${title}`
       });
@@ -57,13 +85,13 @@ export default async function handler(req, res) {
     }
 
     const albumHtml = await albumResponse.text();
-    
+
     // Extract information from HTML with more specific selectors
     const titleMatch = albumHtml.match(/<h1[^>]*>([^<]+)<\/h1>/);
     const artistMatch = albumHtml.match(/Composer<\/b><\/td>\s*<td[^>]*>([^<]+)/);
     const yearMatch = albumHtml.match(/Release Date<\/b><\/td>\s*<td[^>]*>(\d{4})-/);
     const platformMatch = albumHtml.match(/Platform<\/b><\/td>\s*<td[^>]*>([^<]+)<\/td>/);
-    
+
     const musicInfo = {
       artist: artistMatch ? cleanHtml(artistMatch[1]) : 'Unknown Artist',
       year: yearMatch ? yearMatch[1] : 'Unknown Year',
@@ -86,7 +114,7 @@ export default async function handler(req, res) {
     res.status(200).json(musicInfo);
   } catch (error) {
     console.error('Error fetching from VGMdb:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Failed to fetch music info',
       message: error.message
     });
@@ -100,4 +128,4 @@ function cleanHtml(html) {
     .replace(/&[^;]+;/g, '')  // Remove HTML entities
     .replace(/\s+/g, ' ')     // Normalize whitespace
     .trim();
-} 
+}
