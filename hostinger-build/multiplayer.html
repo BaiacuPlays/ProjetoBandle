@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bandle - Multiplayer</title>
+    <link rel="icon" href="/Logo.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            width: 80px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .multiplayer-area {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            max-width: 300px;
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            text-align: center;
+        }
+        
+        input[type="text"]::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .btn {
+            background: #4ecdc4;
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+        
+        .btn:hover {
+            background: #45b7aa;
+            transform: translateY(-2px);
+        }
+        
+        .btn.secondary {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        
+        .message.info {
+            background: rgba(33, 150, 243, 0.3);
+            border: 2px solid #2196f3;
+        }
+        
+        .message.error {
+            background: rgba(244, 67, 54, 0.3);
+            border: 2px solid #f44336;
+        }
+        
+        .message.warning {
+            background: rgba(255, 193, 7, 0.3);
+            border: 2px solid #ffc107;
+        }
+        
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .feature-list {
+            text-align: left;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+        
+        .feature-list li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .feature-list li:before {
+            content: "🎮";
+            position: absolute;
+            left: 0;
+        }
+        
+        @media (max-width: 768px) {
+            .btn {
+                padding: 12px 20px;
+                margin: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="/Logo.png" alt="Bandle Logo" class="logo">
+            <h1>Bandle - Multiplayer</h1>
+        </div>
+        
+        <div class="multiplayer-area">
+            <div id="lobbySection">
+                <h2>Criar ou Entrar em uma Sala</h2>
+                
+                <div class="form-group">
+                    <label for="nickname">Seu Apelido:</label>
+                    <input type="text" id="nickname" placeholder="Digite seu apelido" maxlength="20">
+                </div>
+                
+                <div style="margin: 30px 0;">
+                    <button class="btn" onclick="createRoom()">Criar Sala</button>
+                    <button class="btn secondary" onclick="showJoinRoom()">Entrar em Sala</button>
+                </div>
+                
+                <div id="joinRoomSection" style="display: none;">
+                    <div class="form-group">
+                        <label for="roomCode">Código da Sala:</label>
+                        <input type="text" id="roomCode" placeholder="Digite o código da sala" maxlength="6">
+                    </div>
+                    <button class="btn" onclick="joinRoom()">Entrar</button>
+                </div>
+                
+                <div class="message info">
+                    <h3>Funcionalidades do Multiplayer:</h3>
+                    <ul class="feature-list">
+                        <li>Até 10 jogadores por sala</li>
+                        <li>10 rodadas por partida</li>
+                        <li>Mesma música para todos</li>
+                        <li>Sistema de pontuação</li>
+                        <li>Salas privadas com código</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="gameSection" style="display: none;">
+                <h2>Sala: <span id="currentRoomCode"></span></h2>
+                <p>Aguardando outros jogadores...</p>
+                
+                <div id="playersList"></div>
+                
+                <button class="btn secondary" onclick="leaveRoom()">Sair da Sala</button>
+            </div>
+            
+            <div id="message"></div>
+        </div>
+        
+        <a href="/index.html" class="back-btn">← Voltar ao Menu</a>
+    </div>
+
+    <script>
+        let currentRoom = null;
+        let playerNickname = null;
+        
+        function showMessage(text, type = 'info') {
+            const messageDiv = document.getElementById('message');
+            messageDiv.innerHTML = text;
+            messageDiv.className = `message ${type}`;
+        }
+        
+        function createRoom() {
+            const nickname = document.getElementById('nickname').value.trim();
+            
+            if (!nickname) {
+                showMessage('Por favor, digite seu apelido!', 'error');
+                return;
+            }
+            
+            if (nickname.length < 2) {
+                showMessage('O apelido deve ter pelo menos 2 caracteres!', 'error');
+                return;
+            }
+            
+            playerNickname = nickname;
+            
+            // Simular criação de sala (sem backend real)
+            const roomCode = generateRoomCode();
+            currentRoom = {
+                code: roomCode,
+                host: nickname,
+                players: [nickname],
+                status: 'waiting'
+            };
+            
+            showGameSection();
+            showMessage(`Sala criada com sucesso! Código: ${roomCode}`, 'info');
+        }
+        
+        function showJoinRoom() {
+            document.getElementById('joinRoomSection').style.display = 'block';
+        }
+        
+        function joinRoom() {
+            const nickname = document.getElementById('nickname').value.trim();
+            const roomCode = document.getElementById('roomCode').value.trim().toUpperCase();
+            
+            if (!nickname) {
+                showMessage('Por favor, digite seu apelido!', 'error');
+                return;
+            }
+            
+            if (!roomCode) {
+                showMessage('Por favor, digite o código da sala!', 'error');
+                return;
+            }
+            
+            if (roomCode.length !== 6) {
+                showMessage('O código da sala deve ter 6 caracteres!', 'error');
+                return;
+            }
+            
+            playerNickname = nickname;
+            
+            // Simular entrada na sala (sem backend real)
+            showMessage('Funcionalidade multiplayer requer configuração de backend. Por enquanto, jogue no modo solo!', 'warning');
+        }
+        
+        function showGameSection() {
+            document.getElementById('lobbySection').style.display = 'none';
+            document.getElementById('gameSection').style.display = 'block';
+            document.getElementById('currentRoomCode').textContent = currentRoom.code;
+            
+            updatePlayersList();
+        }
+        
+        function updatePlayersList() {
+            const playersDiv = document.getElementById('playersList');
+            playersDiv.innerHTML = `
+                <h3>Jogadores na Sala:</h3>
+                <div style="margin: 15px 0;">
+                    ${currentRoom.players.map(player => `
+                        <div style="background: rgba(255,255,255,0.1); padding: 10px; margin: 5px; border-radius: 5px;">
+                            ${player} ${player === currentRoom.host ? '(Host)' : ''}
+                        </div>
+                    `).join('')}
+                </div>
+                <p style="margin-top: 20px; opacity: 0.8;">
+                    Aguardando mais jogadores... (${currentRoom.players.length}/10)
+                </p>
+            `;
+        }
+        
+        function leaveRoom() {
+            currentRoom = null;
+            playerNickname = null;
+            
+            document.getElementById('lobbySection').style.display = 'block';
+            document.getElementById('gameSection').style.display = 'none';
+            document.getElementById('joinRoomSection').style.display = 'none';
+            
+            // Limpar campos
+            document.getElementById('nickname').value = '';
+            document.getElementById('roomCode').value = '';
+            
+            showMessage('Você saiu da sala.', 'info');
+        }
+        
+        function generateRoomCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let result = '';
+            for (let i = 0; i < 6; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+        
+        // Event listeners
+        document.getElementById('nickname').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                createRoom();
+            }
+        });
+        
+        document.getElementById('roomCode').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                joinRoom();
+            }
+        });
+        
+        // Mostrar aviso inicial
+        window.addEventListener('load', function() {
+            showMessage('⚠️ Para funcionalidade completa do multiplayer, é necessário configurar um backend. Por enquanto, você pode testar a interface!', 'warning');
+        });
+    </script>
+</body>
+</html>

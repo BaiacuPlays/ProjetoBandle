@@ -1,0 +1,39 @@
+# Arquivos de áudio (muito grandes)
+/public/audio/
+/audio/
+
+# Builds locais
+/.next/
+/hostinger-build/
+/out/
+
+# Node modules
+/node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Arquivos temporários
+.DS_Store
+Thumbs.db
+
+# Arquivos de desenvolvimento
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Documentação
+README*.md
+GUIA*.md
+DEPLOY*.md
+
+# Railway específico
+railway-backend/
+railway.json
+Dockerfile
+
+# Outros
+.git/
+.gitignore

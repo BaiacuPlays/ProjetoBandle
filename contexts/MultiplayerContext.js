@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, useCallback } from 'react';
 import { apiRequest } from '../config/api';
 
 // Estado inicial
@@ -153,13 +153,10 @@ export function MultiplayerProvider({ children }) {
 
         if (response.ok) {
           const data = await response.json();
-          console.log('🔄 CONTEXT - Resposta createRoom:', data);
-
           dispatch({ type: ACTIONS.SET_ROOM_CODE, payload: data.roomCode });
           dispatch({ type: ACTIONS.SET_PLAYER_NICKNAME, payload: playerNickname });
           dispatch({ type: ACTIONS.SET_CONNECTED, payload: true });
 
-          // Buscar dados completos da sala
           const lobbyResponse = await apiRequest(`/api/lobby?roomCode=${data.roomCode}`);
           if (lobbyResponse.ok) {
             const lobbyData = await lobbyResponse.json();
@@ -169,12 +166,10 @@ export function MultiplayerProvider({ children }) {
           return data;
         } else {
           const errorData = await response.json();
-          console.log('🔄 CONTEXT - Erro createRoom:', errorData);
           dispatch({ type: ACTIONS.SET_ERROR, payload: errorData.error || 'Erro ao criar sala' });
           throw new Error(errorData.error);
         }
       } catch (err) {
-        console.log('🔄 CONTEXT - Erro de conexão createRoom:', err);
         dispatch({ type: ACTIONS.SET_ERROR, payload: 'Erro de conexão' });
         throw err;
       } finally {
@@ -184,26 +179,17 @@ export function MultiplayerProvider({ children }) {
 
     // Entrar na sala
     joinRoom: async (roomCode, playerNickname) => {
-      console.log('🔄 CONTEXT - joinRoom chamado:', { roomCode, playerNickname });
       dispatch({ type: ACTIONS.SET_LOADING, payload: true });
       dispatch({ type: ACTIONS.SET_ERROR, payload: '' });
 
       try {
-        const requestBody = { roomCode, nickname: playerNickname };
-        console.log('🔄 CONTEXT - Request body:', requestBody);
-        console.log('🔄 CONTEXT - Request body JSON:', JSON.stringify(requestBody));
-
         const response = await apiRequest('/api/lobby', {
           method: 'PUT',
-          body: JSON.stringify(requestBody)
+          body: JSON.stringify({ roomCode, nickname: playerNickname })
         });
-
-        console.log('🔄 CONTEXT - Response status:', response.status);
-        console.log('🔄 CONTEXT - Response ok:', response.ok);
 
         if (response.ok) {
           const data = await response.json();
-          console.log('🔄 CONTEXT - Response data:', data);
           dispatch({ type: ACTIONS.SET_ROOM_CODE, payload: roomCode });
           dispatch({ type: ACTIONS.SET_PLAYER_NICKNAME, payload: playerNickname });
           dispatch({ type: ACTIONS.SET_LOBBY_DATA, payload: data });
@@ -211,12 +197,10 @@ export function MultiplayerProvider({ children }) {
           return data;
         } else {
           const errorData = await response.json();
-          console.log('🔄 CONTEXT - Error data:', errorData);
           dispatch({ type: ACTIONS.SET_ERROR, payload: errorData.error || 'Erro ao entrar na sala' });
           throw new Error(errorData.error);
         }
       } catch (err) {
-        console.log('🔄 CONTEXT - Catch error:', err);
         dispatch({ type: ACTIONS.SET_ERROR, payload: 'Erro de conexão' });
         throw err;
       } finally {
@@ -355,6 +339,44 @@ export function MultiplayerProvider({ children }) {
       } catch (err) {
         dispatch({ type: ACTIONS.SET_ERROR, payload: 'Erro de conexão' });
         return { success: false, error: 'Erro de conexão' };
+      }
+    },
+
+    // Resetar jogo (apenas host)
+    resetGame: async () => {
+      if (!state.roomCode || !state.playerNickname) return { success: false, error: 'Dados inválidos' };
+
+      dispatch({ type: ACTIONS.SET_LOADING, payload: true });
+      dispatch({ type: ACTIONS.SET_ERROR, payload: '' });
+
+      try {
+        const response = await apiRequest('/api/lobby', {
+          method: 'PATCH',
+          body: JSON.stringify({
+            roomCode: state.roomCode,
+            action: 'reset',
+            nickname: state.playerNickname
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          if (data.lobbyData) {
+            dispatch({ type: ACTIONS.SET_LOBBY_DATA, payload: data.lobbyData });
+          }
+          // Voltar para a tela de lobby
+          dispatch({ type: ACTIONS.SET_CURRENT_SCREEN, payload: 'lobby' });
+          return { success: true };
+        } else {
+          dispatch({ type: ACTIONS.SET_ERROR, payload: data.error || 'Erro ao resetar jogo' });
+          return { success: false, error: data.error };
+        }
+      } catch (err) {
+        dispatch({ type: ACTIONS.SET_ERROR, payload: 'Erro de conexão' });
+        return { success: false, error: 'Erro de conexão' };
+      } finally {
+        dispatch({ type: ACTIONS.SET_LOADING, payload: false });
       }
     }
   };

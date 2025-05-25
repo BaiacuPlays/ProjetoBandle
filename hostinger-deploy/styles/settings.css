@@ -1,0 +1,104 @@
+/* Estilos para o modo daltônico */
+body.daltonism .attemptSuccess {
+  background-color: #0074D9 !important; /* Azul para sucesso */
+  color: white !important;
+}
+
+body.daltonism .attemptFail {
+  background-color: #FF851B !important; /* Laranja para falha */
+  color: white !important;
+}
+
+body.daltonism .attemptGame {
+  background-color: #2ECC40 !important; /* Verde para jogo correto */
+  color: white !important;
+}
+
+body.daltonism .attemptInactive {
+  background-color: #AAAAAA !important; /* Cinza para inativo */
+  color: white !important;
+}
+
+/* Padrões de cores mais distintos para daltônicos */
+body.daltonism .legendCorrect {
+  background-color: #0074D9 !important;
+}
+
+body.daltonism .legendGame {
+  background-color: #2ECC40 !important;
+}
+
+body.daltonism .legendWrong {
+  background-color: #FF851B !important;
+}
+
+/* Cores para os botões e elementos de interface */
+body.daltonism button[type="submit"],
+body.daltonism .guessButtonModern {
+  background-color: #0074D9 !important;
+}
+
+body.daltonism .progressBar {
+  background-color: #0074D9 !important;
+}
+
+body.daltonism .playButton {
+  background-color: #2ECC40 !important;
+}
+
+body.daltonism .skipButton {
+  background-color: #FF851B !important;
+}
+
+/* Cores para o menu */
+body.daltonism .menuSectionHeader {
+  color: #0074D9 !important;
+}
+
+body.daltonism .expandIcon {
+  color: #0074D9 !important;
+}
+
+body.daltonism input:checked + .slider {
+  background-color: #0074D9 !important;
+}
+
+body.daltonism .toggleSwitch:hover .slider {
+  border-color: #0074D9 !important;
+}
+
+body.daltonism .menuLink,
+body.daltonism .actionButton,
+body.daltonism .submitButton {
+  background-color: #0074D9 !important;
+}
+
+/* Desativar animações */
+body.no-animations * {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+}
+
+body.no-animations .wave {
+  display: none !important;
+}
+
+body.no-animations .shake {
+  animation: none !important;
+}
+
+body.no-animations button:hover,
+body.no-animations a:hover {
+  transform: none !important;
+}
+
+/* Ajustes para o seletor de idioma */
+.selectInput {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+  background-size: 1em;
+  padding-right: 2.5rem;
+}

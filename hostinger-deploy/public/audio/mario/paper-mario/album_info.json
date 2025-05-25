@@ -1,0 +1,876 @@
+{
+  "name": "Paper Mario",
+  "release_date": "2000-08-11",
+  "catalog": "",
+  "publisher": "",
+  "composers": ["Yuka Tsujiyoko"],
+  "arrangers": [],
+  "performers": [
+    "辻横由佳"
+  ],
+  "cover_art": "",
+  "discs": [
+    [
+      {
+        "number": "1",
+        "name": "Story of the Stolen Spirits",
+        "duration": "122000"
+      },
+      {
+        "number": "2",
+        "name": "Main Title",
+        "duration": "192000"
+      },
+      {
+        "number": "3",
+        "name": "File Select",
+        "duration": "89000"
+      },
+      {
+        "number": "4",
+        "name": "Mail Call!",
+        "duration": "11000"
+      },
+      {
+        "number": "5",
+        "name": "Princess in Distress",
+        "duration": "82000"
+      },
+      {
+        "number": "6",
+        "name": "A Party at Peach's Castle",
+        "duration": "175000"
+      },
+      {
+        "number": "7",
+        "name": "Bowser Takes Peach's Castle",
+        "duration": "72000"
+      },
+      {
+        "number": "8",
+        "name": "Angry Bowser",
+        "duration": "234000"
+      },
+      {
+        "number": "9",
+        "name": "Prologue",
+        "duration": "22000"
+      },
+      {
+        "number": "10",
+        "name": "Mario's Theme",
+        "duration": "104000"
+      },
+      {
+        "number": "11",
+        "name": "The Star Spirits' Plea",
+        "duration": "47000"
+      },
+      {
+        "number": "12",
+        "name": "Goomba Village",
+        "duration": "82000"
+      },
+      {
+        "number": "13",
+        "name": "Kammy Koopa",
+        "duration": "48000"
+      },
+      {
+        "number": "14",
+        "name": "March Ahead",
+        "duration": "61000"
+      },
+      {
+        "number": "15",
+        "name": "New Boots - Hammer Obtained!",
+        "duration": "5000"
+      },
+      {
+        "number": "16",
+        "name": "Jr. Troopa's Theme",
+        "duration": "54000"
+      },
+      {
+        "number": "17",
+        "name": "Jr. Troopa Battle",
+        "duration": "44000"
+      },
+      {
+        "number": "18",
+        "name": "Battle Fanfare",
+        "duration": "66000"
+      },
+      {
+        "number": "19",
+        "name": "Battle Fanfare (First Strike)",
+        "duration": "68000"
+      },
+      {
+        "number": "20",
+        "name": "Battle Fanfare (Enemy First Strike)",
+        "duration": "68000"
+      },
+      {
+        "number": "21",
+        "name": "Battle Victory",
+        "duration": "4000"
+      },
+      {
+        "number": "22",
+        "name": "Level Up!",
+        "duration": "37000"
+      },
+      {
+        "number": "23",
+        "name": "New Party Member",
+        "duration": "48000"
+      },
+      {
+        "number": "24",
+        "name": "Good Night...",
+        "duration": "7000"
+      },
+      {
+        "number": "25",
+        "name": "Enemy Encounter",
+        "duration": "63000"
+      },
+      {
+        "number": "26",
+        "name": "Hey You!",
+        "duration": "73000"
+      },
+      {
+        "number": "27",
+        "name": "The Goomba Bros.",
+        "duration": "36000"
+      },
+      {
+        "number": "28",
+        "name": "Gates of Goomba Castle",
+        "duration": "77000"
+      },
+      {
+        "number": "29",
+        "name": "The Goomba King's Decree",
+        "duration": "62000"
+      },
+      {
+        "number": "30",
+        "name": "Toad Town",
+        "duration": "143000"
+      },
+      {
+        "number": "31",
+        "name": "Toad Town - Merlon's Hut",
+        "duration": "143000"
+      },
+      {
+        "number": "32",
+        "name": "Merlon's Crystal Ball",
+        "duration": "15000"
+      },
+      {
+        "number": "33",
+        "name": "Toad Town - Minh T.'s Flower Garden",
+        "duration": "143000"
+      },
+      {
+        "number": "34",
+        "name": "Toad Town - Russ T.'s Library",
+        "duration": "143000"
+      },
+      {
+        "number": "35",
+        "name": "Mario Bros.' Home",
+        "duration": "106000"
+      },
+      {
+        "number": "36",
+        "name": "Shooting Star Summit",
+        "duration": "158000"
+      },
+      {
+        "number": "37",
+        "name": "Merluvlee's Crystal Ball",
+        "duration": "15000"
+      },
+      {
+        "number": "38",
+        "name": "The Star Spirits' Request",
+        "duration": "274000"
+      },
+      {
+        "number": "39",
+        "name": "Twink's Theme",
+        "duration": "48000"
+      },
+      {
+        "number": "40",
+        "name": "Plea of the Princess",
+        "duration": "126000"
+      },
+      {
+        "number": "41",
+        "name": "Pleasant Path's Hills",
+        "duration": "18000"
+      },
+      {
+        "number": "42",
+        "name": "Fuzzys Stole My Shell",
+        "duration": "74000"
+      },
+      {
+        "number": "43",
+        "name": "Fuzzys' Mini-Game",
+        "duration": "63000"
+      },
+      {
+        "number": "44",
+        "name": "Koopa Village",
+        "duration": "96000"
+      },
+      {
+        "number": "45",
+        "name": "Beach Tunes",
+        "duration": "108000"
+      },
+      {
+        "number": "46",
+        "name": "Golden Oldies",
+        "duration": "62000"
+      },
+      {
+        "number": "47",
+        "name": "Koopa Bros. Fortress",
+        "duration": "133000"
+      },
+      {
+        "number": "48",
+        "name": "Koopa Bros. Tricks",
+        "duration": "40000"
+      },
+      {
+        "number": "49",
+        "name": "Bill Blaster! Go Faster!",
+        "duration": "73000"
+      },
+      {
+        "number": "50",
+        "name": "Koopa Bros. Keep Cool",
+        "duration": "92000"
+      },
+      {
+        "number": "51",
+        "name": "Trojan Bowser",
+        "duration": "67000"
+      },
+      {
+        "number": "52",
+        "name": "Attack of the Koopa Bros",
+        "duration": "140000"
+      },
+      {
+        "number": "53",
+        "name": "A Kingdom in Chaos",
+        "duration": "103000"
+      },
+      {
+        "number": "54",
+        "name": "Toad Town - Rowf's Badge Shop",
+        "duration": "143000"
+      },
+      {
+        "number": "55",
+        "name": "Toad Town - Tace T.'s Kitchen",
+        "duration": "143000"
+      },
+      {
+        "number": "56",
+        "name": "Toad Town - The Dojo",
+        "duration": "143000"
+      },
+      {
+        "number": "57",
+        "name": "Battling the Master",
+        "duration": "61000"
+      },
+      {
+        "number": "58",
+        "name": "Toad Town - Sewer Entrance",
+        "duration": "143000"
+      },
+      {
+        "number": "59",
+        "name": "Toad Town Sewers",
+        "duration": "144000"
+      },
+      {
+        "number": "60",
+        "name": "Blooper Appears",
+        "duration": "41000"
+      },
+      {
+        "number": "61",
+        "name": "K64 Train Ride",
+        "duration": "55000"
+      },
+      {
+        "number": "62",
+        "name": "Mt. Rugged",
+        "duration": "76000"
+      },
+      {
+        "number": "63",
+        "name": "Dry Dry Desert Trek",
+        "duration": "125000"
+      },
+      {
+        "number": "64",
+        "name": "Mysterious Dry Dry Outpost",
+        "duration": "72000"
+      },
+      {
+        "number": "65",
+        "name": "Moustafa",
+        "duration": "59000"
+      },
+      {
+        "number": "66",
+        "name": "Dry Dry Ruins Revealed",
+        "duration": "32000"
+      },
+      {
+        "number": "67",
+        "name": "Tutankoopa's Warnings",
+        "duration": "49000"
+      },
+      {
+        "number": "68",
+        "name": "Dry Dry Ruins Quest",
+        "duration": "139000"
+      },
+      {
+        "number": "69",
+        "name": "Tutankoopa's Threats",
+        "duration": "58000"
+      },
+      {
+        "number": "70",
+        "name": "Tutankoopa Appears",
+        "duration": "53000"
+      },
+      {
+        "number": "71",
+        "name": "Chomp Attack",
+        "duration": "49000"
+      },
+      {
+        "number": "72",
+        "name": "Hang in There, Peach!",
+        "duration": "161000"
+      },
+      {
+        "number": "73",
+        "name": "Stealthy Snoop",
+        "duration": "92000"
+      },
+      {
+        "number": "74",
+        "name": "Caught!",
+        "duration": "6000"
+      },
+      {
+        "number": "75",
+        "name": "Forever Forest",
+        "duration": "120000"
+      },
+      {
+        "number": "76",
+        "name": "Approach to the Mansion",
+        "duration": "118000"
+      },
+      {
+        "number": "77",
+        "name": "Boos' Dance",
+        "duration": "63000"
+      },
+      {
+        "number": "78",
+        "name": "Boo's Record Player",
+        "duration": "96000"
+      },
+      {
+        "number": "79",
+        "name": "Boo's Mansion",
+        "duration": "79000"
+      },
+      {
+        "number": "80",
+        "name": "Gusty Gulch Adventure",
+        "duration": "141000"
+      },
+      {
+        "number": "81",
+        "name": "Tubba Blubba's Castle",
+        "duration": "127000"
+      },
+      {
+        "number": "82",
+        "name": "Ghost Gulping",
+        "duration": "81000"
+      },
+      {
+        "number": "83",
+        "name": "The Castle Crumbles",
+        "duration": "68000"
+      },
+      {
+        "number": "84",
+        "name": "Tubba's Heart",
+        "duration": "127000"
+      },
+      {
+        "number": "85",
+        "name": "Shy Guy Riot",
+        "duration": "117000"
+      },
+      {
+        "number": "86",
+        "name": "Shy Guy's Toy Box",
+        "duration": "90000"
+      },
+      {
+        "number": "87",
+        "name": "All Aboard!",
+        "duration": "59000"
+      },
+      {
+        "number": "88",
+        "name": "Gourmet Guy's Ecstasy",
+        "duration": "19000"
+      },
+      {
+        "number": "89",
+        "name": "Ghost in the Toy Box",
+        "duration": "44000"
+      },
+      {
+        "number": "90",
+        "name": "General Guy's March",
+        "duration": "38000"
+      },
+      {
+        "number": "91",
+        "name": "Keeping Pace",
+        "duration": "108000"
+      },
+      {
+        "number": "92",
+        "name": "Making a Cake",
+        "duration": "10000"
+      },
+      {
+        "number": "93",
+        "name": "Toad Town - Shy Guys Toy Box",
+        "duration": "143000"
+      },
+      {
+        "number": "94",
+        "name": "Club 64",
+        "duration": "185000"
+      },
+      {
+        "number": "95",
+        "name": "Club Song",
+        "duration": "146000"
+      },
+      {
+        "number": "96",
+        "name": "Pop Diva",
+        "duration": "66000"
+      },
+      {
+        "number": "97",
+        "name": "Whale Encounter",
+        "duration": "92000"
+      },
+      {
+        "number": "98",
+        "name": "Whale Sailing",
+        "duration": "72000"
+      },
+      {
+        "number": "99",
+        "name": "Welcome to Yoshi's Village (Outskirts)",
+        "duration": "193000"
+      },
+      {
+        "number": "100",
+        "name": "Welcome to Yoshi's Village",
+        "duration": "193000"
+      },
+      {
+        "number": "101",
+        "name": "Search for the Fearsome 5",
+        "duration": "153000"
+      },
+      {
+        "number": "102",
+        "name": "Jade Jungle",
+        "duration": "175000"
+      },
+      {
+        "number": "103",
+        "name": "You Rescued the Fearsome 5!",
+        "duration": "5000"
+      },
+      {
+        "number": "104",
+        "name": "Raphael the Raven's Nest",
+        "duration": "144000"
+      },
+      {
+        "number": "105",
+        "name": "Raphael the Raven",
+        "duration": "160000"
+      },
+      {
+        "number": "106",
+        "name": "Hot Times in Mt. Lavalava",
+        "duration": "201000"
+      },
+      {
+        "number": "107",
+        "name": "Lava Piranha Attack",
+        "duration": "63000"
+      },
+      {
+        "number": "108",
+        "name": "Go! Mario! Go!",
+        "duration": "128000"
+      },
+      {
+        "number": "109",
+        "name": "It's Burning! Mario, Get Ready!",
+        "duration": "127000"
+      },
+      {
+        "number": "110",
+        "name": "Escape from Mt. Lavalava",
+        "duration": "147000"
+      },
+      {
+        "number": "111",
+        "name": "Trivia Game Show Opening",
+        "duration": "13000"
+      },
+      {
+        "number": "112",
+        "name": "Trivia Game Show Questions",
+        "duration": "36000"
+      },
+      {
+        "number": "113",
+        "name": "Trivia Game Show Ending",
+        "duration": "7000"
+      },
+      {
+        "number": "114",
+        "name": "Entrance to Flower Fields",
+        "duration": "8000"
+      },
+      {
+        "number": "115",
+        "name": "Clouds Over Flower Fields",
+        "duration": "111000"
+      },
+      {
+        "number": "116",
+        "name": "Petunia Under Attack!",
+        "duration": "95000"
+      },
+      {
+        "number": "117",
+        "name": "Grateful Flower Petunia",
+        "duration": "38000"
+      },
+      {
+        "number": "118",
+        "name": "Grateful Flower Posie",
+        "duration": "45000"
+      },
+      {
+        "number": "119",
+        "name": "Grateful Flower Lily",
+        "duration": "41000"
+      },
+      {
+        "number": "120",
+        "name": "Grateful Flower Rosie",
+        "duration": "40000"
+      },
+      {
+        "number": "121",
+        "name": "Somber Sun",
+        "duration": "135000"
+      },
+      {
+        "number": "122",
+        "name": "Lakilester the Great!",
+        "duration": "132000"
+      },
+      {
+        "number": "123",
+        "name": "Puff Puff Machine",
+        "duration": "61000"
+      },
+      {
+        "number": "124",
+        "name": "The Sun Rises Over Flower Fields",
+        "duration": "78000"
+      },
+      {
+        "number": "125",
+        "name": "Flower Fields Rondo",
+        "duration": "130000"
+      },
+      {
+        "number": "126",
+        "name": "Beaming Sun",
+        "duration": "167000"
+      },
+      {
+        "number": "127",
+        "name": "Climbing the Beanstalk",
+        "duration": "42000"
+      },
+      {
+        "number": "128",
+        "name": "Cloudy Climb",
+        "duration": "36000"
+      },
+      {
+        "number": "129",
+        "name": "Huff N. Puff's Theme",
+        "duration": "89000"
+      },
+      {
+        "number": "130",
+        "name": "Huffin' and Puffin'",
+        "duration": "140000"
+      },
+      {
+        "number": "131",
+        "name": "Cold Reception in Shiver City",
+        "duration": "166000"
+      },
+      {
+        "number": "132",
+        "name": "Murder in Shiver City",
+        "duration": "81000"
+      },
+      {
+        "number": "133",
+        "name": "Detective Mario",
+        "duration": "134000"
+      },
+      {
+        "number": "134",
+        "name": "A Cold Case",
+        "duration": "33000"
+      },
+      {
+        "number": "135",
+        "name": "Herringway and the Mayor",
+        "duration": "51000"
+      },
+      {
+        "number": "136",
+        "name": "Snow Road",
+        "duration": "102000"
+      },
+      {
+        "number": "137",
+        "name": "Monstar Blocks the Road",
+        "duration": "41000"
+      },
+      {
+        "number": "138",
+        "name": "Starborn Valley Trail",
+        "duration": "111000"
+      },
+      {
+        "number": "139",
+        "name": "Over Shiver Mountain",
+        "duration": "123000"
+      },
+      {
+        "number": "140",
+        "name": "Madam Merlar",
+        "duration": "51000"
+      },
+      {
+        "number": "141",
+        "name": "Crystal Palace Crawl",
+        "duration": "195000"
+      },
+      {
+        "number": "142",
+        "name": "The Crystal King",
+        "duration": "101000"
+      },
+      {
+        "number": "143",
+        "name": "Freeze!",
+        "duration": "106000"
+      },
+      {
+        "number": "144",
+        "name": "Star Way Ascent",
+        "duration": "11000"
+      },
+      {
+        "number": "145",
+        "name": "Star Way Descent",
+        "duration": "8000"
+      },
+      {
+        "number": "146",
+        "name": "Star Way",
+        "duration": "44000"
+      },
+      {
+        "number": "147",
+        "name": "A City in the Stars",
+        "duration": "127000"
+      },
+      {
+        "number": "148",
+        "name": "Sanctuary!",
+        "duration": "81000"
+      },
+      {
+        "number": "149",
+        "name": "The Shooting Star",
+        "duration": "66000"
+      },
+      {
+        "number": "150",
+        "name": "Siege on Bowser's Castle (Lower Floors)",
+        "duration": "155000"
+      },
+      {
+        "number": "151",
+        "name": "The Dark Dungeons of Bowser's Castle",
+        "duration": "103000"
+      },
+      {
+        "number": "152",
+        "name": "Siege on Bowser's Castle (Upper Floors)",
+        "duration": "155000"
+      },
+      {
+        "number": "153",
+        "name": "Stolen Peach's Castle",
+        "duration": "140000"
+      },
+      {
+        "number": "154",
+        "name": "Bowser's Rage",
+        "duration": "177000"
+      },
+      {
+        "number": "155",
+        "name": "Wish of the Princess",
+        "duration": "202000"
+      },
+      {
+        "number": "156",
+        "name": "King of the Koopas",
+        "duration": "122000"
+      },
+      {
+        "number": "157",
+        "name": "Seize the Star Rod!",
+        "duration": "19000"
+      },
+      {
+        "number": "158",
+        "name": "Beware! Bowser's Castle!",
+        "duration": "23000"
+      },
+      {
+        "number": "159",
+        "name": "A Return to Peace",
+        "duration": "119000"
+      },
+      {
+        "number": "160",
+        "name": "Goodbye, Twink!",
+        "duration": "106000"
+      },
+      {
+        "number": "161",
+        "name": "Princess Peach Saved!",
+        "duration": "111000"
+      },
+      {
+        "number": "162",
+        "name": "Victory Parade",
+        "duration": "295000"
+      },
+      {
+        "number": "163",
+        "name": "The Celebration Continues",
+        "duration": "181000"
+      },
+      {
+        "number": "164",
+        "name": "Mario and Peach",
+        "duration": "296000"
+      },
+      {
+        "number": "165",
+        "name": "Game Over",
+        "duration": "9000"
+      },
+      {
+        "number": "166",
+        "name": "Nice to Meet You (Unused)",
+        "duration": "55000"
+      },
+      {
+        "number": "167",
+        "name": "Pop Diva (Short Ver.)",
+        "duration": "18000"
+      },
+      {
+        "number": "168",
+        "name": "Story of the Stolen Spirits (Unused Extended Portion)",
+        "duration": "20000"
+      },
+      {
+        "number": "169",
+        "name": "Toad Town - Unknown",
+        "duration": "143000"
+      },
+      {
+        "number": "170",
+        "name": "Unknown Song 1",
+        "duration": "42000"
+      },
+      {
+        "number": "171",
+        "name": "Unknown Song 2",
+        "duration": "118000"
+      },
+      {
+        "number": "172",
+        "name": "Unknown Song 3",
+        "duration": "8000"
+      }
+    ]
+  ]
+}

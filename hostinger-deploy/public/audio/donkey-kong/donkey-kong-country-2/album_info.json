@@ -1,0 +1,213 @@
+{
+  "name": "Donkey Kong Country",
+  "release_date": "2009-01-09",
+  "catalog": "",
+  "publisher": "",
+  "composers": [],
+  "arrangers": [],
+  "performers": [
+    "David Wise",
+    "Eveline Fischer",
+    "Robin Beanland"
+  ],
+  "cover_art": "",
+  "discs": [
+    [
+      {
+        "number": "1",
+        "name": "DK Island Swing",
+        "duration": "343000"
+      },
+      {
+        "number": "2",
+        "name": "Northern Hemispheres",
+        "duration": "236000"
+      },
+      {
+        "number": "3",
+        "name": "Misty Menace",
+        "duration": "235000"
+      },
+      {
+        "number": "4",
+        "name": "Mine Cart Madness",
+        "duration": "189000"
+      },
+      {
+        "number": "5",
+        "name": "Cave Dweller Concert",
+        "duration": "342000"
+      },
+      {
+        "number": "6",
+        "name": "Aquatic Ambiance",
+        "duration": "209000"
+      },
+      {
+        "number": "7",
+        "name": "Voices of the Temple",
+        "duration": "182000"
+      },
+      {
+        "number": "8",
+        "name": "Treetop Rock",
+        "duration": "218000"
+      },
+      {
+        "number": "9",
+        "name": "Fear Factory",
+        "duration": "238000"
+      },
+      {
+        "number": "10",
+        "name": "Ice Cave Chant",
+        "duration": "211000"
+      },
+      {
+        "number": "11",
+        "name": "Life in the Mines",
+        "duration": "278000"
+      },
+      {
+        "number": "12",
+        "name": "Forest Frenzy",
+        "duration": "203000"
+      },
+      {
+        "number": "13",
+        "name": "Bad Boss Boogie",
+        "duration": "146000"
+      },
+      {
+        "number": "14",
+        "name": "Gang-Plank Galleon",
+        "duration": "188000"
+      },
+      {
+        "number": "15",
+        "name": "Simian Segue",
+        "duration": "150000"
+      },
+      {
+        "number": "16",
+        "name": "DK Theme",
+        "duration": "122000"
+      },
+      {
+        "number": "17",
+        "name": "Bonus Winner",
+        "duration": "5000"
+      },
+      {
+        "number": "18",
+        "name": "Life Lost",
+        "duration": "3000"
+      },
+      {
+        "number": "19",
+        "name": "Bonus Loser",
+        "duration": "6000"
+      },
+      {
+        "number": "20",
+        "name": "Bonus Room Blitz",
+        "duration": "64000"
+      },
+      {
+        "number": "21",
+        "name": "Cranky's Theme",
+        "duration": "156000"
+      },
+      {
+        "number": "22",
+        "name": "Candy's Love Song",
+        "duration": "113000"
+      },
+      {
+        "number": "23",
+        "name": "Into the Room",
+        "duration": "13000"
+      },
+      {
+        "number": "24",
+        "name": "Level Complete",
+        "duration": "2000"
+      },
+      {
+        "number": "25",
+        "name": "Game Over",
+        "duration": "20000"
+      },
+      {
+        "number": "26",
+        "name": "The Credits Concerto",
+        "duration": "120000"
+      },
+      {
+        "number": "27",
+        "name": "Candy Dance 1",
+        "duration": "53000"
+      },
+      {
+        "number": "28",
+        "name": "Candy Dance 2",
+        "duration": "38000"
+      },
+      {
+        "number": "29",
+        "name": "Candy Dance 3",
+        "duration": "54000"
+      },
+      {
+        "number": "30",
+        "name": "Candy Dance 4",
+        "duration": "60000"
+      },
+      {
+        "number": "31",
+        "name": "Candy Dance 5",
+        "duration": "42000"
+      },
+      {
+        "number": "32",
+        "name": "Candy Dance 6",
+        "duration": "56000"
+      },
+      {
+        "number": "33",
+        "name": "Funky's Fugue",
+        "duration": "71000"
+      },
+      {
+        "number": "34",
+        "name": "Funky Fishing",
+        "duration": "97000"
+      },
+      {
+        "number": "35",
+        "name": "Story Intro",
+        "duration": "102000"
+      },
+      {
+        "number": "36",
+        "name": "Warp Intro",
+        "duration": "18000"
+      },
+      {
+        "number": "37",
+        "name": "Warp Tune",
+        "duration": "120000"
+      },
+      {
+        "number": "38",
+        "name": "Unknown Song 1",
+        "duration": "343000"
+      },
+      {
+        "number": "39",
+        "name": "Unknown Song 2",
+        "duration": "158000"
+      }
+    ]
+  ]
+}

@@ -11,20 +11,15 @@ export const useMultiplayer = () => {
 
   // Polling para atualizar o estado da sala
   useEffect(() => {
-    console.log('🔄 HOOK - useEffect polling:', { roomCode, isConnected });
     if (!roomCode || !isConnected) {
-      console.log('🔄 HOOK - Polling não iniciado - faltam dados');
       return;
     }
 
     const pollLobby = async () => {
-      console.log('🔄 HOOK - Fazendo polling para sala:', roomCode);
       try {
         const data = await multiplayerApi.getLobbyData(roomCode);
-        console.log('🔄 HOOK - Dados recebidos:', data);
 
         if (data.roomNotFound) {
-          console.log('🔄 HOOK - Sala não encontrada, desconectando');
           setIsConnected(false);
           setError('Sala não encontrada');
           return;
@@ -32,13 +27,11 @@ export const useMultiplayer = () => {
 
         setLobbyData(data);
       } catch (err) {
-        console.log('🔄 HOOK - Erro de conexão:', err);
         setError('Erro de conexão');
       }
     };
 
     // Poll inicial
-    console.log('🔄 HOOK - Iniciando polling...');
     pollLobby();
 
     // Poll a cada 2 segundos
