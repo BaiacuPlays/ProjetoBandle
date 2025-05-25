@@ -7,8 +7,10 @@ const nextConfig = {
   // Excluir arquivos de áudio das funções serverless
   experimental: {
     outputFileTracingExcludes: {
-      '*': ['./public/audio/**/*']
-    }
+      '*': ['./public/audio/**/*'],
+      '/api/**': ['./public/audio/**/*']
+    },
+    outputFileTracingIgnores: ['./public/audio/**/*']
   },
   // Configuração para servir arquivos estáticos
   async headers() {

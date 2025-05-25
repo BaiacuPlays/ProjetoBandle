@@ -4,7 +4,6 @@
       "maxDuration": 10
     }
   },
-  "outputFileTracing": false,
   "headers": [
     {
       "source": "/audio/(.*)",
