@@ -905,9 +905,11 @@ export default function Home() {
                 style={{ display: 'none' }}
                 onLoadedMetadata={handleLoadedMetadata}
                 onEnded={handleAudioEnded}
-                onError={() => {
+                onError={(e) => {
+                  console.error('Erro ao carregar áudio:', e);
+                  console.error('URL do áudio:', currentSong?.audioUrl);
                   setAudioError(true);
-                  setMessage('Erro ao carregar o áudio. Verifique se o arquivo existe.');
+                  setMessage('Erro ao carregar o áudio. Tentando novamente...');
                 }}
                 onCanPlay={() => {
                   setAudioError(false);
