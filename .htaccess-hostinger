@@ -1,0 +1,49 @@
+# Configuração para servir arquivos de áudio
+RewriteEngine On
+
+# Permitir acesso direto aos arquivos de áudio
+<Files "*.mp3">
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type"
+    Header set Cache-Control "public, max-age=3600"
+</Files>
+
+<Files "*.wav">
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type"
+    Header set Cache-Control "public, max-age=3600"
+</Files>
+
+<Files "*.ogg">
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type"
+    Header set Cache-Control "public, max-age=3600"
+</Files>
+
+# Configurar MIME types para áudio
+AddType audio/mpeg .mp3
+AddType audio/wav .wav
+AddType audio/ogg .ogg
+
+# Permitir CORS global
+<IfModule mod_headers.c>
+    Header always set Access-Control-Allow-Origin "*"
+    Header always set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    Header always set Access-Control-Allow-Headers "Content-Type, Range"
+    Header always set Accept-Ranges "bytes"
+</IfModule>
+
+# Habilitar listagem de diretórios
+Options +Indexes
+
+# Permitir override de headers
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Adicionar headers CORS para arquivos de áudio
+    RewriteCond %{REQUEST_FILENAME} \.(mp3|wav|ogg)$ [NC]
+    RewriteRule .* - [E=CORS:1]
+    Header always set Access-Control-Allow-Origin "*" env=CORS
+</IfModule>

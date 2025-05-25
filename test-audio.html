@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Áudio - LudoMusic</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #333;
+            border-radius: 8px;
+        }
+        audio {
+            width: 100%;
+            margin: 10px 0;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success { background: #2d5a2d; }
+        .error { background: #5a2d2d; }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #45a049; }
+    </style>
+</head>
+<body>
+    <h1>🎵 Teste de Áudio - LudoMusic</h1>
+    
+    <div class="test-section">
+        <h2>Teste 1: Acesso Direto aos Arquivos</h2>
+        <p>Testando se os arquivos de áudio estão acessíveis diretamente:</p>
+        
+        <div id="direct-test">
+            <button onclick="testDirectAccess()">Testar Acesso Direto</button>
+            <div id="direct-results"></div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Teste 2: Player de Áudio</h2>
+        <p>Testando reprodução de áudio:</p>
+        
+        <audio controls id="audio-player">
+            <source src="/audio/banjo-kazooie/banjo-kazooie-1/002 Main Title.mp3" type="audio/mpeg">
+            <source src="/audio/01 Title Top Gear.mp3" type="audio/mpeg">
+            Seu navegador não suporta o elemento de áudio.
+        </audio>
+        
+        <div>
+            <button onclick="loadAudio('/audio/banjo-kazooie/banjo-kazooie-1/002 Main Title.mp3')">
+                Carregar Banjo-Kazooie
+            </button>
+            <button onclick="loadAudio('/audio/01 Title Top Gear.mp3')">
+                Carregar Top Gear
+            </button>
+        </div>
+        
+        <div id="player-status"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Teste 3: Listagem de Arquivos</h2>
+        <p>Verificando se conseguimos listar os arquivos:</p>
+        
+        <button onclick="listAudioFiles()">Listar Arquivos de Áudio</button>
+        <div id="file-list"></div>
+    </div>
+
+    <script>
+        // Teste de acesso direto
+        async function testDirectAccess() {
+            const results = document.getElementById('direct-results');
+            results.innerHTML = '<p>Testando...</p>';
+            
+            const testFiles = [
+                '/audio/banjo-kazooie/banjo-kazooie-1/002 Main Title.mp3',
+                '/audio/01 Title Top Gear.mp3',
+                '/audio/banjo-kazooie/banjo-kazooie-1/001 Nintendo Logo.mp3'
+            ];
+            
+            let html = '';
+            
+            for (const file of testFiles) {
+                try {
+                    const response = await fetch(file, { method: 'HEAD' });
+                    const status = response.ok ? 'success' : 'error';
+                    const message = response.ok ? 
+                        `✅ Acessível (${response.status})` : 
+                        `❌ Erro ${response.status}`;
+                    
+                    html += `<div class="status ${status}">
+                        <strong>${file}</strong><br>
+                        ${message}
+                    </div>`;
+                } catch (error) {
+                    html += `<div class="status error">
+                        <strong>${file}</strong><br>
+                        ❌ Erro: ${error.message}
+                    </div>`;
+                }
+            }
+            
+            results.innerHTML = html;
+        }
+        
+        // Carregar áudio no player
+        function loadAudio(src) {
+            const player = document.getElementById('audio-player');
+            const status = document.getElementById('player-status');
+            
+            player.src = src;
+            status.innerHTML = `<div class="status">Carregando: ${src}</div>`;
+            
+            player.addEventListener('loadstart', () => {
+                status.innerHTML = `<div class="status">Iniciando carregamento...</div>`;
+            });
+            
+            player.addEventListener('canplay', () => {
+                status.innerHTML = `<div class="status success">✅ Áudio carregado com sucesso!</div>`;
+            });
+            
+            player.addEventListener('error', (e) => {
+                status.innerHTML = `<div class="status error">❌ Erro ao carregar áudio: ${e.message}</div>`;
+            });
+        }
+        
+        // Listar arquivos de áudio
+        async function listAudioFiles() {
+            const fileList = document.getElementById('file-list');
+            fileList.innerHTML = '<p>Verificando...</p>';
+            
+            try {
+                // Tentar acessar o diretório de áudio
+                const response = await fetch('/audio/');
+                const text = await response.text();
+                
+                if (response.ok) {
+                    fileList.innerHTML = `<div class="status success">
+                        <h4>Conteúdo do diretório /audio/:</h4>
+                        <pre>${text}</pre>
+                    </div>`;
+                } else {
+                    fileList.innerHTML = `<div class="status error">
+                        ❌ Não foi possível listar arquivos (${response.status})
+                    </div>`;
+                }
+            } catch (error) {
+                fileList.innerHTML = `<div class="status error">
+                    ❌ Erro ao listar arquivos: ${error.message}
+                </div>`;
+            }
+        }
+        
+        // Teste automático ao carregar a página
+        window.addEventListener('load', () => {
+            console.log('Página de teste carregada');
+            testDirectAccess();
+        });
+    </script>
+</body>
+</html>

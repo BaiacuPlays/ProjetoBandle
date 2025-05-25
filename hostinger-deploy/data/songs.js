@@ -1,9 +1,20 @@
 import musicData from './music.json';
 
+// URL base para arquivos de áudio na Hostinger
+const AUDIO_BASE_URL = 'https://ludomusic.xyz';
+
 // Função para normalizar caminhos de arquivo (converter \ para /)
 const normalizePath = (path) => {
   if (!path) return path;
   return path.replace(/\\/g, '/');
+};
+
+// Função para converter caminho local para URL da Hostinger
+const getHostingerAudioUrl = (localPath) => {
+  const normalizedPath = normalizePath(localPath);
+  // Remove /audio/ do início se existir e adiciona a URL base
+  const cleanPath = normalizedPath.replace(/^\/audio\//, '');
+  return `${AUDIO_BASE_URL}/audio/${cleanPath}`;
 };
 
 // Adiciona informações específicas do jogo para cada música
@@ -12,8 +23,8 @@ export const songs = musicData.map((song, index) => ({
   id: song.id || index + 1,
   // Normalizar título removendo espaços extras
   title: song.title.trim(),
-  // Normalizar caminho do áudio
-  audioUrl: normalizePath(song.audioUrl),
+  // Converter caminho local para URL da Hostinger
+  audioUrl: getHostingerAudioUrl(song.audioUrl),
   clips: [
     { name: "Intro", icon: "🎹", startTime: 0, duration: 5 },
     { name: "Meio", icon: "🎶", startTime: 30, duration: 5 },

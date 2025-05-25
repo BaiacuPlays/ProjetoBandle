@@ -1,0 +1,25 @@
+# Configuração básica para servir arquivos
+DirectoryIndex index.html index.php
+
+# Permitir acesso a arquivos de áudio
+<Files "*.mp3">
+    Allow from all
+</Files>
+
+<Files "*.wav">
+    Allow from all
+</Files>
+
+<Files "*.html">
+    Allow from all
+</Files>
+
+# MIME types
+AddType audio/mpeg .mp3
+AddType audio/wav .wav
+AddType text/html .html
+
+# CORS para áudio
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+</IfModule>
