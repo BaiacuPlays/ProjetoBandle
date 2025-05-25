@@ -177,13 +177,15 @@ export default function Home() {
 
 
       // Aplicar configurações de som
-      const savedSettings = localStorage.getItem('bandle_settings');
-      if (savedSettings) {
+      if (typeof window !== 'undefined') {
         try {
-          const settings = JSON.parse(savedSettings);
-          audioRef.current.muted = !settings.sound;
+          const savedSettings = localStorage.getItem('bandle_settings');
+          if (savedSettings) {
+            const settings = JSON.parse(savedSettings);
+            audioRef.current.muted = !settings.sound;
+          }
         } catch (error) {
-          console.error('Erro ao aplicar configurações de som:', error);
+          // console.error('Erro ao aplicar configurações de som:', error);
         }
       }
 
@@ -209,66 +211,74 @@ export default function Home() {
     let fadeOutInterval = null;
 
     const updateProgress = () => {
-      if (!audio || audio.paused || audio.ended) return;
+      try {
+        if (!audio || audio.paused || audio.ended || !audio.duration || isNaN(audio.duration)) return;
 
-      const currentTime = audio.currentTime - startTime;
-      if (!gameOver && currentTime >= maxDuration) {
-        audio.pause();
-        setIsPlaying(false);
-        audio.currentTime = startTime;
-        setAudioProgress(0);
-      } else if (gameOver && currentTime >= MAX_PLAY_TIME) {
-        // FADE OUT após 15s se o jogo acabou
-        if (!fadeOutInterval) {
-          let step = 0;
-          originalVolumeRef.current = audio.volume;
-          fadeOutInterval = setInterval(() => {
-            step++;
-            audio.volume = originalVolumeRef.current * (1 - step / fadeOutSteps);
-            if (step >= fadeOutSteps) {
-              clearInterval(fadeOutInterval);
-              audio.pause();
-              setIsPlaying(false);
-              audio.currentTime = startTime;
-              setAudioProgress(0);
-              audio.volume = originalVolumeRef.current;
-            }
-          }, fadeOutStepTime * 1000);
+        const currentTime = audio.currentTime - startTime;
+        if (!gameOver && currentTime >= maxDuration) {
+          audio.pause();
+          setIsPlaying(false);
+          audio.currentTime = startTime;
+          setAudioProgress(0);
+        } else if (gameOver && currentTime >= MAX_PLAY_TIME) {
+          // FADE OUT após 15s se o jogo acabou
+          if (!fadeOutInterval) {
+            let step = 0;
+            originalVolumeRef.current = audio.volume;
+            fadeOutInterval = setInterval(() => {
+              step++;
+              audio.volume = originalVolumeRef.current * (1 - step / fadeOutSteps);
+              if (step >= fadeOutSteps) {
+                clearInterval(fadeOutInterval);
+                audio.pause();
+                setIsPlaying(false);
+                audio.currentTime = startTime;
+                setAudioProgress(0);
+                audio.volume = originalVolumeRef.current;
+              }
+            }, fadeOutStepTime * 1000);
+          }
+        } else {
+          setAudioProgress(Math.max(0, currentTime));
         }
-      } else {
-        setAudioProgress(Math.max(0, currentTime));
+      } catch (error) {
+        // console.error('Erro ao atualizar progresso:', error);
       }
     };
 
     const updatePlay = () => {
-      if (!audio) return;
+      try {
+        if (!audio || !audio.duration || isNaN(audio.duration)) return;
 
-      const currentTime = audio.currentTime - startTime;
-      if (!gameOver && currentTime >= maxDuration) {
-        audio.pause();
-        setIsPlaying(false);
-        audio.currentTime = startTime;
-        setAudioProgress(0);
-      } else if (gameOver && currentTime >= MAX_PLAY_TIME) {
-        // FADE OUT após 15s se o jogo acabou
-        if (!fadeOutInterval) {
-          let step = 0;
-          originalVolumeRef.current = audio.volume;
-          fadeOutInterval = setInterval(() => {
-            step++;
-            audio.volume = originalVolumeRef.current * (1 - step / fadeOutSteps);
-            if (step >= fadeOutSteps) {
-              clearInterval(fadeOutInterval);
-              audio.pause();
-              setIsPlaying(false);
-              audio.currentTime = startTime;
-              setAudioProgress(0);
-              audio.volume = originalVolumeRef.current;
-            }
-          }, fadeOutStepTime * 1000);
+        const currentTime = audio.currentTime - startTime;
+        if (!gameOver && currentTime >= maxDuration) {
+          audio.pause();
+          setIsPlaying(false);
+          audio.currentTime = startTime;
+          setAudioProgress(0);
+        } else if (gameOver && currentTime >= MAX_PLAY_TIME) {
+          // FADE OUT após 15s se o jogo acabou
+          if (!fadeOutInterval) {
+            let step = 0;
+            originalVolumeRef.current = audio.volume;
+            fadeOutInterval = setInterval(() => {
+              step++;
+              audio.volume = originalVolumeRef.current * (1 - step / fadeOutSteps);
+              if (step >= fadeOutSteps) {
+                clearInterval(fadeOutInterval);
+                audio.pause();
+                setIsPlaying(false);
+                audio.currentTime = startTime;
+                setAudioProgress(0);
+                audio.volume = originalVolumeRef.current;
+              }
+            }, fadeOutStepTime * 1000);
+          }
+        } else {
+          setIsPlaying(!audio.paused && !audio.ended);
         }
-      } else {
-        setIsPlaying(!audio.paused && !audio.ended);
+      } catch (error) {
+        // console.error('Erro ao atualizar play:', error);
       }
     };
 
@@ -602,29 +612,35 @@ export default function Home() {
 
   // Limpa dados antigos do localStorage
   const cleanupOldLocalStorageData = (currentDay) => {
-    // Mantém apenas os dados do dia atual e dos 2 dias anteriores
-    const keysToKeep = [
-      `bandle_start_time_day_${currentDay}`,
-      `bandle_start_time_day_${currentDay - 1}`,
-      `bandle_start_time_day_${currentDay - 2}`,
-      `bandle_game_state_day_${currentDay}`,
-      `bandle_game_state_day_${currentDay - 1}`,
-      `bandle_game_state_day_${currentDay - 2}`,
-      `bandle_daily_song_day_${currentDay}`,
-      `bandle_daily_song_day_${currentDay - 1}`,
-      `bandle_daily_song_day_${currentDay - 2}`,
-      'bandle_gameover_day',
-      'bandle_gameover_history',
-      'bandle_gameover_message',
-      'bandle_settings'
-    ];
+    if (typeof window === 'undefined') return; // Verificação SSR
 
-    // Procura por chaves antigas relacionadas ao bandle
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key && key.startsWith('bandle_') && !keysToKeep.includes(key)) {
-        localStorage.removeItem(key);
+    try {
+      // Mantém apenas os dados do dia atual e dos 2 dias anteriores
+      const keysToKeep = [
+        `bandle_start_time_day_${currentDay}`,
+        `bandle_start_time_day_${currentDay - 1}`,
+        `bandle_start_time_day_${currentDay - 2}`,
+        `bandle_game_state_day_${currentDay}`,
+        `bandle_game_state_day_${currentDay - 1}`,
+        `bandle_game_state_day_${currentDay - 2}`,
+        `bandle_daily_song_day_${currentDay}`,
+        `bandle_daily_song_day_${currentDay - 1}`,
+        `bandle_daily_song_day_${currentDay - 2}`,
+        'bandle_gameover_day',
+        'bandle_gameover_history',
+        'bandle_gameover_message',
+        'bandle_settings'
+      ];
+
+      // Procura por chaves antigas relacionadas ao bandle
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('bandle_') && !keysToKeep.includes(key)) {
+          localStorage.removeItem(key);
+        }
       }
+    } catch (error) {
+      // console.error('Erro ao limpar localStorage:', error);
     }
   };
 
@@ -636,17 +652,15 @@ export default function Home() {
 
       // Função para carregar o estado salvo (definida localmente para evitar dependências)
       const loadSavedGameState = () => {
-        console.log('🔍 Tentando carregar estado do jogo para o dia:', currentDay);
-        const savedState = localStorage.getItem(`bandle_game_state_day_${currentDay}`);
-        console.log('📦 Estado salvo encontrado:', savedState);
+        if (typeof window === 'undefined') return false; // Verificação SSR
 
-        if (savedState) {
-          try {
+        try {
+          const savedState = localStorage.getItem(`bandle_game_state_day_${currentDay}`);
+
+          if (savedState) {
             const parsedState = JSON.parse(savedState);
-            console.log('📋 Estado parseado:', parsedState);
 
             if (parsedState.day === currentDay) {
-              console.log('✅ Carregando estado do jogo...');
               setAttempts(parsedState.attempts || 0);
               setHistory(parsedState.history || []);
               setMessage(parsedState.message || '');
@@ -654,16 +668,11 @@ export default function Home() {
               setShowHint(parsedState.showHint || false);
               setActiveHint(parsedState.activeHint || 0);
               setCurrentClipDuration(parsedState.currentClipDuration || 0.3);
-              console.log('🎯 Estado carregado com sucesso!');
               return true; // Estado carregado com sucesso
-            } else {
-              console.log('❌ Dia não confere:', parsedState.day, 'vs', currentDay);
             }
-          } catch (error) {
-            console.error('❌ Erro ao carregar estado do jogo:', error);
           }
-        } else {
-          console.log('📭 Nenhum estado salvo encontrado');
+        } catch (error) {
+          // console.error('❌ Erro ao carregar estado do jogo:', error);
         }
         return false; // Nenhum estado carregado
       };
@@ -692,11 +701,12 @@ export default function Home() {
   useEffect(() => {
     // Função para aplicar as configurações
     const applySettings = () => {
-      const savedSettings = localStorage.getItem('bandle_settings');
-      if (savedSettings) {
-        try {
+      if (typeof window === 'undefined') return; // Verificação SSR
+
+      try {
+        const savedSettings = localStorage.getItem('bandle_settings');
+        if (savedSettings) {
           const settings = JSON.parse(savedSettings);
-          // console.log('Aplicando configurações no componente principal:', settings);
 
           // Aplicar modo daltônico
           if (settings.daltonicMode) {
@@ -721,9 +731,9 @@ export default function Home() {
           if (settings.language) {
             document.documentElement.lang = settings.language;
           }
-        } catch (error) {
-          console.error('Erro ao aplicar configurações:', error);
         }
+      } catch (error) {
+        // console.error('Erro ao aplicar configurações:', error);
       }
     };
 
@@ -732,38 +742,42 @@ export default function Home() {
 
     // Escutar eventos de mudança de configurações
     const handleSettingsChanged = (event) => {
-      console.log('Evento de mudança de configurações recebido:', event.detail);
+      if (typeof window === 'undefined') return; // Verificação SSR
 
-      // Aplicar todas as configurações novamente
-      if (event.detail) {
-        // Aplicar modo daltônico
-        if (event.detail.daltonicMode) {
-          document.body.classList.add('daltonism');
-        } else {
-          document.body.classList.remove('daltonism');
-        }
+      try {
+        // Aplicar todas as configurações novamente
+        if (event.detail) {
+          // Aplicar modo daltônico
+          if (event.detail.daltonicMode) {
+            document.body.classList.add('daltonism');
+          } else {
+            document.body.classList.remove('daltonism');
+          }
 
-        // Aplicar configuração de som
-        if (audioRef.current) {
-          audioRef.current.muted = !event.detail.sound;
+          // Aplicar configuração de som
+          if (audioRef.current) {
+            audioRef.current.muted = !event.detail.sound;
 
-          // Garantir que o volume seja restaurado quando o som for ativado
-          if (event.detail.sound && audioRef.current.volume === 0) {
-            audioRef.current.volume = 0.7; // Volume padrão
+            // Garantir que o volume seja restaurado quando o som for ativado
+            if (event.detail.sound && audioRef.current.volume === 0) {
+              audioRef.current.volume = 0.7; // Volume padrão
+            }
+          }
+
+          // Aplicar configuração de animações
+          if (!event.detail.animations) {
+            document.body.classList.add('no-animations');
+          } else {
+            document.body.classList.remove('no-animations');
+          }
+
+          // Aplicar idioma
+          if (event.detail.language) {
+            document.documentElement.lang = event.detail.language;
           }
         }
-
-        // Aplicar configuração de animações
-        if (!event.detail.animations) {
-          document.body.classList.add('no-animations');
-        } else {
-          document.body.classList.remove('no-animations');
-        }
-
-        // Aplicar idioma
-        if (event.detail.language) {
-          document.documentElement.lang = event.detail.language;
-        }
+      } catch (error) {
+        // console.error('Erro ao aplicar configurações:', error);
       }
     };
 
