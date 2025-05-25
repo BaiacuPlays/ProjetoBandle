@@ -112,53 +112,16 @@ export default function Home() {
         }
       }
 
-      // Codifica o URL para lidar com espaços e caracteres especiais
-      // Não codifica as barras, apenas os nomes dos arquivos/pastas
-      const encodedAudioUrl = song.audioUrl.split('/').map((part, index) => {
-        // Não codifica a primeira parte vazia (antes da primeira /)
-        if (index === 0 && part === '') return part;
-        return encodeURIComponent(part);
-      }).join('/');
-      const songWithEncodedUrl = { ...song, audioUrl: encodedAudioUrl };
+      // Usar URL original sem codificação - mais compatível com Vercel
+      const songWithEncodedUrl = { ...song, audioUrl: song.audioUrl };
 
-      console.log('🎵 MÚSICA CARREGADA:', {
-        id: song.id,
-        title: song.title,
-        game: song.game,
-        originalUrl: song.audioUrl,
-        encodedUrl: encodedAudioUrl,
-        fullPath: window.location.origin + encodedAudioUrl
-      });
-
-      // Teste de conectividade do arquivo
-      fetch(encodedAudioUrl, { method: 'HEAD' })
-        .then(response => {
-          console.log('🔍 TESTE DE ARQUIVO:', {
-            url: encodedAudioUrl,
-            status: response.status,
-            ok: response.ok,
-            headers: Object.fromEntries(response.headers.entries())
-          });
-
-          if (!response.ok) {
-            console.error('❌ ARQUIVO NÃO ENCONTRADO:', encodedAudioUrl);
-            // Tentar com URL não codificada
-            return fetch(song.audioUrl, { method: 'HEAD' });
-          }
-          return response;
-        })
-        .then(response => {
-          if (response && !response.ok) {
-            console.error('❌ ARQUIVO NÃO ENCONTRADO (URL original):', song.audioUrl);
-            setAudioError(true);
-            setMessage('Erro ao carregar o áudio. Verifique se o arquivo existe.');
-          }
-        })
-        .catch(error => {
-          console.error('❌ ERRO NO TESTE DE ARQUIVO:', error);
-          setAudioError(true);
-          setMessage('Erro ao carregar o áudio. Verifique se o arquivo existe.');
-        });
+      // console.log('🎵 MÚSICA CARREGADA:', {
+      //   id: song.id,
+      //   title: song.title,
+      //   game: song.game,
+      //   audioUrl: song.audioUrl,
+      //   fullPath: window.location.origin + song.audioUrl
+      // });
 
       setCurrentSong(songWithEncodedUrl);
       // Calcular tempo até a próxima meia-noite
@@ -246,6 +209,8 @@ export default function Home() {
     let fadeOutInterval = null;
 
     const updateProgress = () => {
+      if (!audio || audio.paused || audio.ended) return;
+
       const currentTime = audio.currentTime - startTime;
       if (!gameOver && currentTime >= maxDuration) {
         audio.pause();
@@ -271,11 +236,13 @@ export default function Home() {
           }, fadeOutStepTime * 1000);
         }
       } else {
-        setAudioProgress(currentTime);
+        setAudioProgress(Math.max(0, currentTime));
       }
     };
 
     const updatePlay = () => {
+      if (!audio) return;
+
       const currentTime = audio.currentTime - startTime;
       if (!gameOver && currentTime >= maxDuration) {
         audio.pause();
@@ -301,12 +268,12 @@ export default function Home() {
           }, fadeOutStepTime * 1000);
         }
       } else {
-        setIsPlaying(!audio.paused);
+        setIsPlaying(!audio.paused && !audio.ended);
       }
     };
 
     const handleAudioError = (e) => {
-      console.error('❌ ERRO NO ELEMENTO DE ÁUDIO:', e);
+      // console.error('❌ ERRO NO ELEMENTO DE ÁUDIO:', e);
       setAudioError(true);
       setMessage('Erro ao carregar o áudio. Tentando novamente...');
     };
@@ -554,7 +521,7 @@ export default function Home() {
 
       // Verifica se o código secreto foi digitado
       if (newCode.includes('sacabambapis')) {
-        console.log('🎉 Código secreto ativado!');
+        // console.log('🎉 Código secreto ativado!');
 
         // Mostrar efeito visual
         setShowSacabambapis(true);
@@ -562,7 +529,9 @@ export default function Home() {
         // Tocar som do vine boom
         const vineAudio = new Audio('/vine.mp3');
         vineAudio.volume = 0.7;
-        vineAudio.play().catch(e => console.log('Erro ao tocar vine boom:', e));
+        vineAudio.play().catch(e => {
+          // console.log('Erro ao tocar vine boom:', e);
+        });
 
         // Após 2 segundos, remove a música salva e recarrega
         setTimeout(() => {
@@ -599,7 +568,7 @@ export default function Home() {
         timestamp: Date.now()
       };
 
-      console.log('🎮 Salvando estado do jogo:', stateToSave);
+      // console.log('🎮 Salvando estado do jogo:', stateToSave);
       localStorage.setItem(`bandle_game_state_day_${currentDay}`, JSON.stringify(stateToSave));
 
       // Manter compatibilidade com o sistema antigo para jogos terminados
@@ -727,7 +696,7 @@ export default function Home() {
       if (savedSettings) {
         try {
           const settings = JSON.parse(savedSettings);
-          console.log('Aplicando configurações no componente principal:', settings);
+          // console.log('Aplicando configurações no componente principal:', settings);
 
           // Aplicar modo daltônico
           if (settings.daltonicMode) {
@@ -950,9 +919,9 @@ export default function Home() {
                       audioRef.current.pause();
                     } else {
                       audioRef.current.play().catch(error => {
-                        console.error('Erro ao reproduzir áudio:', error);
+                        // console.error('Erro ao reproduzir áudio:', error);
                         setAudioError(true);
-                        setMessage('Erro ao reproduzir o áudio. Tente novamente.');
+                        setMessage('Erro ao reproduzir o áudio. Tentando novamente...');
                       });
                     }
                   } }
@@ -986,40 +955,40 @@ export default function Home() {
                 onLoadedMetadata={handleLoadedMetadata}
                 onEnded={handleAudioEnded}
                 onError={(e) => {
-                  console.error('🚨 ERRO DE ÁUDIO:', {
-                    currentSong: currentSong,
-                    audioUrl: currentSong?.audioUrl,
-                    error: e,
-                    audioElement: audioRef.current,
-                    networkState: audioRef.current?.networkState,
-                    readyState: audioRef.current?.readyState
-                  });
+                  // console.error('🚨 ERRO DE ÁUDIO:', {
+                  //   currentSong: currentSong,
+                  //   audioUrl: currentSong?.audioUrl,
+                  //   error: e,
+                  //   audioElement: audioRef.current,
+                  //   networkState: audioRef.current?.networkState,
+                  //   readyState: audioRef.current?.readyState
+                  // });
                   setAudioError(true);
                   setMessage('Erro ao carregar o áudio. Tentando novamente...');
 
                   // Tentar recarregar o áudio após um pequeno delay
                   setTimeout(() => {
                     if (audioRef.current && currentSong?.audioUrl) {
-                      console.log('🔄 Tentando recarregar áudio...');
+                      // console.log('🔄 Tentando recarregar áudio...');
                       audioRef.current.load();
                     }
                   }, 1000);
                 }}
                 onCanPlay={() => {
-                  console.log('✅ ÁUDIO PODE SER REPRODUZIDO');
+                  // console.log('✅ ÁUDIO PODE SER REPRODUZIDO');
                   setAudioError(false);
                   if (message === 'Erro ao carregar o áudio. Tentando novamente...' || message === 'Erro ao carregar o áudio. Verifique se o arquivo existe.') {
                     setMessage('');
                   }
                 }}
                 onLoadStart={() => {
-                  console.log('🔄 INICIANDO CARREGAMENTO DO ÁUDIO');
+                  // console.log('🔄 INICIANDO CARREGAMENTO DO ÁUDIO');
                 }}
                 onLoadedData={() => {
-                  console.log('📊 DADOS DO ÁUDIO CARREGADOS');
+                  // console.log('📊 DADOS DO ÁUDIO CARREGADOS');
                 }}
                 onCanPlayThrough={() => {
-                  console.log('🎵 ÁUDIO TOTALMENTE CARREGADO');
+                  // console.log('🎵 ÁUDIO TOTALMENTE CARREGADO');
                 }} />
             </div>
           </div>
