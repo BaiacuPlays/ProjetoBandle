@@ -4,6 +4,12 @@ const nextConfig = {
   images: {
     unoptimized: true
   },
+  // Excluir arquivos de áudio das funções serverless
+  experimental: {
+    outputFileTracingExcludes: {
+      '*': ['./public/audio/**/*']
+    }
+  },
   // Configuração para servir arquivos estáticos
   async headers() {
     return [

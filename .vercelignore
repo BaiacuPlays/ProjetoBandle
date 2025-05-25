@@ -36,3 +36,6 @@ Dockerfile
 # Outros
 .git/
 .gitignore
+
+# Não incluir áudio nas funções serverless (mas manter para static)
+!public/audio/
