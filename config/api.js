@@ -65,8 +65,7 @@ const LocalStorageAPI = {
 
   // Buscar sala
   getLobby(roomCode) {
-    const data = localStorage.getItem(`lobby:${roomCode}`);
-    if (!data) {
+    if (!roomCode) {
       return {
         players: [],
         host: null,
@@ -89,19 +88,58 @@ const LocalStorageAPI = {
         currentSong: null
       };
     }
-    return JSON.parse(data);
+
+    const data = localStorage.getItem(`lobby:${roomCode}`);
+    if (!data) {
+      console.log('🔍 FALLBACK - Sala não encontrada:', roomCode);
+      return {
+        players: [],
+        host: null,
+        gameStarted: false,
+        roomNotFound: true,
+        gameState: {
+          currentRound: 0,
+          totalRounds: 10,
+          songs: [],
+          scores: {},
+          currentSong: null,
+          roundStartTime: null,
+          roundWinners: [],
+          roundFinished: false,
+          gameFinished: false,
+          attempts: {},
+          guesses: {},
+          isTiebreaker: false
+        },
+        currentSong: null
+      };
+    }
+
+    const lobby = JSON.parse(data);
+    console.log('✅ FALLBACK - Sala encontrada:', roomCode, lobby);
+    return lobby;
   },
 
   // Entrar na sala
   joinRoom(roomCode, nickname) {
+    console.log('🔄 FALLBACK - Tentando entrar na sala:', roomCode, nickname);
+
     const lobby = this.getLobby(roomCode);
     if (lobby.roomNotFound) {
+      console.log('❌ FALLBACK - Sala não encontrada:', roomCode);
       throw new Error('Sala não encontrada');
     }
 
     if (!lobby.players.includes(nickname)) {
       lobby.players.push(nickname);
+      // Inicializar score do novo jogador
+      if (lobby.gameState && lobby.gameState.scores) {
+        lobby.gameState.scores[nickname] = 0;
+      }
       localStorage.setItem(`lobby:${roomCode}`, JSON.stringify(lobby));
+      console.log('✅ FALLBACK - Jogador adicionado à sala:', nickname);
+    } else {
+      console.log('ℹ️ FALLBACK - Jogador já está na sala:', nickname);
     }
 
     return lobby;
