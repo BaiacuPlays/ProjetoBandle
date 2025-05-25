@@ -12,7 +12,7 @@ export const songs = musicData.map((song, index) => ({
   id: song.id || index + 1,
   // Normalizar título removendo espaços extras
   title: song.title.trim(),
-  // Usar caminho local para Vercel
+  // Normalizar caminho do áudio
   audioUrl: normalizePath(song.audioUrl),
   clips: [
     { name: "Intro", icon: "🎹", startTime: 0, duration: 5 },
