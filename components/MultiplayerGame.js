@@ -39,6 +39,15 @@ const MultiplayerGame = ({ onBackToLobby }) => {
   const roundFinished = gameState?.roundFinished || false;
   const gameFinished = gameState?.gameFinished;
   const myAttempts = gameState?.attempts?.[nickname] || 0;
+
+  // DEBUG: Log para verificar estado da rodada
+  console.log('🔍 DEBUG - Estado da rodada:', {
+    roundFinished,
+    isHost,
+    roundWinners,
+    myAttempts,
+    gameState: gameState ? 'exists' : 'null'
+  });
   // Tempos de duração iguais ao single player
   const maxClipDurations = [0.6, 1.2, 2.0, 3.0, 3.5, 4.2];
 

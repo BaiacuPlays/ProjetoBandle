@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import { apiRequest } from '../config/api';
 
 // Estado inicial
 const initialState = {
@@ -68,7 +69,7 @@ export function MultiplayerProvider({ children }) {
       if (!isActive) return;
 
       try {
-        const response = await fetch(`/api/lobby?roomCode=${state.roomCode}`, {
+        const response = await apiRequest(`/api/lobby?roomCode=${state.roomCode}`, {
           method: 'GET',
           headers: {
             'Cache-Control': 'no-cache',
@@ -145,9 +146,8 @@ export function MultiplayerProvider({ children }) {
       dispatch({ type: ACTIONS.SET_ERROR, payload: '' });
 
       try {
-        const response = await fetch('/api/lobby', {
+        const response = await apiRequest('/api/lobby', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ nickname: playerNickname })
         });
 
@@ -160,7 +160,7 @@ export function MultiplayerProvider({ children }) {
           dispatch({ type: ACTIONS.SET_CONNECTED, payload: true });
 
           // Buscar dados completos da sala
-          const lobbyResponse = await fetch(`/api/lobby?roomCode=${data.roomCode}`);
+          const lobbyResponse = await apiRequest(`/api/lobby?roomCode=${data.roomCode}`);
           if (lobbyResponse.ok) {
             const lobbyData = await lobbyResponse.json();
             dispatch({ type: ACTIONS.SET_LOBBY_DATA, payload: lobbyData });
@@ -193,9 +193,8 @@ export function MultiplayerProvider({ children }) {
         console.log('🔄 CONTEXT - Request body:', requestBody);
         console.log('🔄 CONTEXT - Request body JSON:', JSON.stringify(requestBody));
 
-        const response = await fetch('/api/lobby', {
+        const response = await apiRequest('/api/lobby', {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(requestBody)
         });
 
@@ -233,9 +232,8 @@ export function MultiplayerProvider({ children }) {
       dispatch({ type: ACTIONS.SET_ERROR, payload: '' });
 
       try {
-        const response = await fetch('/api/lobby', {
+        const response = await apiRequest('/api/lobby', {
           method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ roomCode: state.roomCode, action: 'start' })
         });
 
@@ -262,9 +260,8 @@ export function MultiplayerProvider({ children }) {
       if (!state.roomCode || !state.playerNickname) return { success: false, error: 'Dados inválidos' };
 
       try {
-        const response = await fetch('/api/lobby', {
+        const response = await apiRequest('/api/lobby', {
           method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             roomCode: state.roomCode,
             action: 'guess',
@@ -304,12 +301,11 @@ export function MultiplayerProvider({ children }) {
       if (!state.roomCode) return { success: false, error: 'Dados inválidos' };
 
       try {
-        const response = await fetch('/api/lobby', {
+        const response = await apiRequest('/api/lobby', {
           method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             roomCode: state.roomCode,
-            action: 'nextRound',
+            action: 'next_round',
             nickname: state.playerNickname
           })
         });
@@ -336,9 +332,8 @@ export function MultiplayerProvider({ children }) {
       if (!state.roomCode || !state.playerNickname) return { success: false, error: 'Dados inválidos' };
 
       try {
-        const response = await fetch('/api/lobby', {
+        const response = await apiRequest('/api/lobby', {
           method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             roomCode: state.roomCode,
             action: 'skip',
