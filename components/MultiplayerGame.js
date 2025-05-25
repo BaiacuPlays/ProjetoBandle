@@ -23,6 +23,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
   const [guess, setGuess] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioProgress, setAudioProgress] = useState(0);
   const [volume, setVolume] = useState(1);
@@ -306,7 +307,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
 
   const handleGuess = async (e) => {
     e.preventDefault();
-    if (roundFinished || !guess.trim()) {
+    if (roundFinished || !guess.trim() || isLoading || isSubmitting) {
       setIsShaking(true);
       setTimeout(() => setIsShaking(false), 500);
       return;
@@ -324,8 +325,10 @@ const MultiplayerGame = ({ onBackToLobby }) => {
       return;
     }
 
+    setIsSubmitting(true);
     console.log('🎮 GAME - Fazendo tentativa:', guess);
     const result = await actions.makeGuess(guess.trim());
+    setIsSubmitting(false);
 
     if (result.success) {
       console.log('🎮 GAME - Tentativa enviada com sucesso:', result);
@@ -759,10 +762,10 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                     />
                     <button
                       type="submit"
-                      disabled={myAttempts >= 6 || !guess.trim()}
+                      disabled={myAttempts >= 6 || !guess.trim() || isSubmitting}
                       className={`${gameStyles.guessButtonModern} ${isShaking ? gameStyles.shake : ''}`}
                     >
-                      {isClient ? t('guess') : 'Adivinhar'}
+                      {isSubmitting ? 'Enviando...' : (isClient ? t('guess') : 'Adivinhar')}
                     </button>
                     {showSuggestions && filteredSuggestions.length > 0 && (
                       <ul className={gameStyles.suggestionsListModern}>

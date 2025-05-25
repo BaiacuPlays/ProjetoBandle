@@ -5,8 +5,8 @@
   "devFiles": [],
   "ampDevFiles": [],
   "lowPriorityFiles": [
-    "static/EDCCvfttx9BXBr7mCmY5W/_buildManifest.js",
-    "static/EDCCvfttx9BXBr7mCmY5W/_ssgManifest.js"
+    "static/w2-l_Ni0oJm5M6tbwsoVx/_buildManifest.js",
+    "static/w2-l_Ni0oJm5M6tbwsoVx/_ssgManifest.js"
   ],
   "rootMainFiles": [],
   "pages": {
@@ -18,7 +18,7 @@
       "static/chunks/c16184b3-38833bb2db7deae7.js",
       "static/chunks/603-254e7c3120731bc3.js",
       "static/css/a885e0a025fde1ae.css",
-      "static/chunks/234-c29c87e3927ab123.js",
+      "static/chunks/234-a100e6e8d0520fe4.js",
       "static/css/797220f5c9b8d475.css",
       "static/chunks/pages/index-210d8f1f0fcc4473.js"
     ],
@@ -60,9 +60,9 @@
       "static/chunks/cb355538-abf292dab7e68f25.js",
       "static/chunks/603-254e7c3120731bc3.js",
       "static/css/a885e0a025fde1ae.css",
-      "static/chunks/234-c29c87e3927ab123.js",
+      "static/chunks/234-a100e6e8d0520fe4.js",
       "static/css/ea6c2cfb0c9856d3.css",
-      "static/chunks/pages/multiplayer-b522d393c3b3cc1d.js"
+      "static/chunks/pages/multiplayer-9c112b2940a1ba65.js"
     ],
     "/politica-de-privacidad": [
       "static/chunks/webpack-8fa1640cc84ba8fe.js",

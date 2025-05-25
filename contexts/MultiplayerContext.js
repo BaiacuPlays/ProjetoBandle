@@ -305,7 +305,7 @@ export function MultiplayerProvider({ children }) {
           method: 'PATCH',
           body: JSON.stringify({
             roomCode: state.roomCode,
-            action: 'next_round',
+            action: 'nextRound',
             nickname: state.playerNickname
           })
         });

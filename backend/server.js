@@ -4,7 +4,20 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'https://projeto-bandle.vercel.app',
+    'https://projeto-bandle-ku6w02asi-baiacuplays-projects.vercel.app',
+    'https://projeto-bandle-6h4eqh7t5-baiacuplays-projects.vercel.app',
+    /^https:\/\/projeto-bandle-.*\.vercel\.app$/,
+    /^https:\/\/.*-baiacuplays-projects\.vercel\.app$/
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
 // Importar rotas
@@ -19,7 +32,7 @@ app.use('/api/timezone', timezoneRoutes);
 
 // Rota de teste
 app.get('/', (req, res) => {
-  res.json({ 
+  res.json({
     message: 'Bandle Backend está funcionando!',
     timestamp: new Date().toISOString(),
     endpoints: [
