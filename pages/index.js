@@ -112,6 +112,14 @@ export default function Home() {
         }
       }
 
+      console.log('🎵 MÚSICA CARREGADA:', {
+        id: song.id,
+        title: song.title,
+        game: song.game,
+        audioUrl: song.audioUrl,
+        fullPath: window.location.origin + song.audioUrl
+      });
+
       setCurrentSong(song);
       // Calcular tempo até a próxima meia-noite
       const nextMidnight = new Date(now);
@@ -905,7 +913,13 @@ export default function Home() {
                 style={{ display: 'none' }}
                 onLoadedMetadata={handleLoadedMetadata}
                 onEnded={handleAudioEnded}
-                onError={() => {
+                onError={(e) => {
+                  console.error('🚨 ERRO DE ÁUDIO:', {
+                    currentSong: currentSong,
+                    audioUrl: currentSong?.audioUrl,
+                    error: e,
+                    audioElement: audioRef.current
+                  });
                   setAudioError(true);
                   setMessage('Erro ao carregar o áudio. Verifique se o arquivo existe.');
                 }}
