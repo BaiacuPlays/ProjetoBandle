@@ -113,7 +113,12 @@ export default function Home() {
       }
 
       // Codifica o URL para lidar com espaços e caracteres especiais
-      const encodedAudioUrl = song.audioUrl.split('/').map(part => encodeURIComponent(part)).join('/');
+      // Não codifica as barras, apenas os nomes dos arquivos/pastas
+      const encodedAudioUrl = song.audioUrl.split('/').map((part, index) => {
+        // Não codifica a primeira parte vazia (antes da primeira /)
+        if (index === 0 && part === '') return part;
+        return encodeURIComponent(part);
+      }).join('/');
       const songWithEncodedUrl = { ...song, audioUrl: encodedAudioUrl };
 
       console.log('🎵 MÚSICA CARREGADA:', {
@@ -124,6 +129,20 @@ export default function Home() {
         encodedUrl: encodedAudioUrl,
         fullPath: window.location.origin + encodedAudioUrl
       });
+
+      // Teste de conectividade do arquivo
+      fetch(encodedAudioUrl, { method: 'HEAD' })
+        .then(response => {
+          console.log('🔍 TESTE DE ARQUIVO:', {
+            url: encodedAudioUrl,
+            status: response.status,
+            ok: response.ok,
+            headers: Object.fromEntries(response.headers.entries())
+          });
+        })
+        .catch(error => {
+          console.error('❌ ERRO NO TESTE DE ARQUIVO:', error);
+        });
 
       setCurrentSong(songWithEncodedUrl);
       // Calcular tempo até a próxima meia-noite
