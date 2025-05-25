@@ -1,1 +1,18 @@
-{"/_app":"pages/_app.js","/_error":"pages/_error.js","/_document":"pages/_document.js","/api/music-info":"pages/api/music-info.js","/content-removal":"pages/content-removal.html","/eliminacion-de-contenido":"pages/eliminacion-de-contenido.html","/":"pages/index.html","/multiplayer":"pages/multiplayer.html","/politica-de-privacidad":"pages/politica-de-privacidad.html","/politica-de-privacidade":"pages/politica-de-privacidade.html","/privacy-policy":"pages/privacy-policy.html","/remocao-de-conteudo":"pages/remocao-de-conteudo.html","/terminos-de-uso":"pages/terminos-de-uso.html","/termos-de-uso":"pages/termos-de-uso.html","/terms-of-use":"pages/terms-of-use.html","/api/lobby":"pages/api/lobby.js","/404":"pages/404.html"}
+{
+  "/_app": "pages/_app.js",
+  "/_error": "pages/_error.js",
+  "/_document": "pages/_document.js",
+  "/api/music-info": "pages/api/music-info.js",
+  "/content-removal": "pages/content-removal.js",
+  "/eliminacion-de-contenido": "pages/eliminacion-de-contenido.js",
+  "/": "pages/index.js",
+  "/multiplayer": "pages/multiplayer.js",
+  "/politica-de-privacidad": "pages/politica-de-privacidad.js",
+  "/politica-de-privacidade": "pages/politica-de-privacidade.js",
+  "/privacy-policy": "pages/privacy-policy.js",
+  "/remocao-de-conteudo": "pages/remocao-de-conteudo.js",
+  "/terminos-de-uso": "pages/terminos-de-uso.js",
+  "/termos-de-uso": "pages/termos-de-uso.js",
+  "/terms-of-use": "pages/terms-of-use.js",
+  "/api/lobby": "pages/api/lobby.js"
+}

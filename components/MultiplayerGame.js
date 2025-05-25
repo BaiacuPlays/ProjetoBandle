@@ -8,6 +8,8 @@ import { FaPlay, FaPause, FaVolumeUp, FaFastForward } from 'react-icons/fa';
 
 const MultiplayerGame = ({ onBackToLobby }) => {
   console.log('🎮 JOGO - MultiplayerGame renderizado');
+  console.log('🎵 SONGS - Total de músicas carregadas:', songs.length);
+  console.log('🎵 SONGS - Primeiras 3 músicas:', songs.slice(0, 3).map(s => s.title));
 
   const { t, isClient } = useLanguage();
   const { state, actions } = useMultiplayerContext();
@@ -48,6 +50,14 @@ const MultiplayerGame = ({ onBackToLobby }) => {
     roundWinners,
     myAttempts,
     gameState: gameState ? 'exists' : 'null'
+  });
+
+  // DEBUG: Log para verificar host
+  console.log('🔍 HOST DEBUG:', {
+    nickname,
+    lobbyHost: lobbyData?.host,
+    isHost,
+    shouldShowButton: roundFinished && isHost
   });
   // Tempos de duração iguais ao single player
   const maxClipDurations = [0.6, 1.2, 2.0, 3.0, 3.5, 4.2];
@@ -307,7 +317,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
 
   const handleGuess = async (e) => {
     e.preventDefault();
-    if (roundFinished || !guess.trim() || isLoading || isSubmitting) {
+    if (roundFinished || !guess.trim() || isSubmitting) {
       setIsShaking(true);
       setTimeout(() => setIsShaking(false), 500);
       return;
@@ -315,7 +325,15 @@ const MultiplayerGame = ({ onBackToLobby }) => {
 
     // Verificar se a música existe na lista
     const normalizedGuess = normalize(guess);
-    const songExists = songs.some(song => normalize(song.title) === normalizedGuess);
+    console.log('🔍 GUESS - Tentativa normalizada:', normalizedGuess);
+    console.log('🔍 GUESS - Tentativa original:', guess);
+
+    const songExists = songs.some(song => {
+      const normalizedTitle = normalize(song.title);
+      return normalizedTitle === normalizedGuess;
+    });
+
+    console.log('🔍 RESULT - Música existe?', songExists);
 
     if (!songExists) {
       actions.setError(isClient ? t('select_from_list') : 'Selecione uma música da lista');
