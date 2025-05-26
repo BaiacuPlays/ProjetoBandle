@@ -16,6 +16,40 @@ const MultiplayerGame = ({ onBackToLobby }) => {
     error
   } = state;
 
+  // Detecção de navegador para compatibilidade
+  const [browserInfo, setBrowserInfo] = useState(null);
+
+  useEffect(() => {
+    const detectBrowser = () => {
+      const ua = navigator.userAgent;
+      const info = {
+        isIE: /MSIE|Trident/.test(ua),
+        isEdge: /Edge/.test(ua),
+        isChrome: /Chrome/.test(ua) && !/Edge/.test(ua),
+        isFirefox: /Firefox/.test(ua),
+        isSafari: /Safari/.test(ua) && !/Chrome/.test(ua),
+        isMobile: /Mobile|Android|iPhone|iPad/.test(ua),
+        supportsAudioContext: !!(window.AudioContext || window.webkitAudioContext),
+        supportsPromises: typeof Promise !== 'undefined',
+        supportsFetch: typeof fetch !== 'undefined'
+      };
+
+      console.log('🌐 BROWSER INFO:', info);
+      setBrowserInfo(info);
+
+      // Avisos para navegadores problemáticos
+      if (info.isIE) {
+        alert('⚠️ Internet Explorer não é suportado. Use Chrome, Firefox ou Edge.');
+      }
+
+      if (info.isMobile) {
+        console.log('📱 DISPOSITIVO MÓVEL DETECTADO - Pode haver limitações de áudio');
+      }
+    };
+
+    detectBrowser();
+  }, []);
+
 
 
   const [guess, setGuess] = useState('');
@@ -389,7 +423,27 @@ const MultiplayerGame = ({ onBackToLobby }) => {
         audioRef.current.currentTime = startTime;
         setAudioProgress(0);
       }
-      audioRef.current.play().catch(() => {});
+
+      // Melhor compatibilidade com navegadores
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          console.error('🚨 ERRO DE REPRODUÇÃO:', {
+            error: error.message,
+            browser: navigator.userAgent,
+            audioState: {
+              readyState: audioRef.current?.readyState,
+              networkState: audioRef.current?.networkState,
+              src: audioRef.current?.src
+            }
+          });
+
+          // Tentar forçar interação do usuário
+          if (error.name === 'NotAllowedError') {
+            alert('⚠️ Clique em qualquer lugar da página para permitir reprodução de áudio!');
+          }
+        });
+      }
     }
   };
 

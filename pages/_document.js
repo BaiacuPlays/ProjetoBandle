@@ -10,6 +10,9 @@ class MyDocument extends Document {
     return (
       <Html lang="pt-BR">
         <Head>
+          {/* Polyfills para compatibilidade com navegadores antigos */}
+          <script src="https://polyfill.io/v3/polyfill.min.js?features=fetch,Promise,Array.prototype.includes,Object.assign,Symbol"></script>
+
           {/* Script para carregar o idioma do localStorage antes de renderizar a página */}
           <script dangerouslySetInnerHTML={{
             __html: `
