@@ -121,8 +121,15 @@ export function MultiplayerProvider({ children }) {
     // Poll inicial após um pequeno delay
     const initialTimeout = setTimeout(pollLobby, 1000);
 
-    // Poll a cada 5 segundos (aumentado para reduzir conflitos)
-    const interval = setInterval(pollLobby, 5000);
+    // Poll adaptativo: mais frequente durante o jogo, menos frequente no lobby
+    const getPollingInterval = () => {
+      if (state.currentScreen === 'game' && state.lobbyData?.gameStarted) {
+        return 3000; // 3 segundos durante o jogo
+      }
+      return 6000; // 6 segundos no lobby
+    };
+
+    let interval = setInterval(pollLobby, getPollingInterval());
 
     return () => {
       isActive = false;
