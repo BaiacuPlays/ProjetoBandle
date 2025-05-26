@@ -6,6 +6,7 @@ import { FaPlay, FaPause, FaVolumeUp, FaFastForward, FaQuestionCircle, FaBars } 
 import MusicInfoFetcher from '../components/MusicInfoFetcher';
 import Footer from '../components/Footer';
 import GameMenu from '../components/GameMenu';
+import Statistics from '../components/Statistics';
 import { useLanguage } from '../contexts/LanguageContext';
 import { fetchTimezone } from '../config/api';
 
@@ -41,6 +42,8 @@ export default function Home() {
   const [showMenu, setShowMenu] = useState(false);
   const [secretCode, setSecretCode] = useState('');
   const [showSacabambapis, setShowSacabambapis] = useState(false);
+  const [showStatistics, setShowStatistics] = useState(false);
+  const [gameResult, setGameResult] = useState(null);
 
   // Tempos máximos de reprodução por tentativa
   const maxClipDurations = [0.6, 1.2, 2.0, 3.0, 3.5, 4.2];
@@ -356,10 +359,16 @@ export default function Home() {
       setMessage(t('congratulations'));
       setGameOver(true);
       result = { type: 'success', value: selectedGuess };
+      // Mostrar estatísticas após vitória
+      setGameResult({ won: true, attempts: newAttempts });
+      setTimeout(() => setShowStatistics(true), 800);
     } else if (newAttempts >= MAX_ATTEMPTS) {
       setMessage(`${t('game_over')} ${currentSong.game} - ${currentSong.title}`);
       setGameOver(true);
       result = { type: 'fail', value: selectedGuess };
+      // Mostrar estatísticas após derrota
+      setGameResult({ won: false, attempts: newAttempts });
+      setTimeout(() => setShowStatistics(true), 800);
     } else {
       setMessage(t('try_again'));
       setShowHint(true);
@@ -371,13 +380,17 @@ export default function Home() {
   // Skip
   const handleSkip = () => {
     if (gameOver) return;
-    setAttempts(a => a + 1);
+    const newAttempts = attempts + 1;
+    setAttempts(newAttempts);
     setShowHint(true);
     setHistory(prev => [...prev, { type: 'skipped' }]);
     setMessage(t('skipped'));
-    if (attempts + 1 >= MAX_ATTEMPTS) {
+    if (newAttempts >= MAX_ATTEMPTS) {
       setMessage(`${t('game_over')} ${currentSong.game} - ${currentSong.title}`);
       setGameOver(true);
+      // Mostrar estatísticas após derrota por skip
+      setGameResult({ won: false, attempts: newAttempts });
+      setTimeout(() => setShowStatistics(true), 800);
     }
   };
 
@@ -1127,6 +1140,13 @@ export default function Home() {
             />
           </div>
         )}
+
+        {/* Modal de estatísticas */}
+        <Statistics
+          isOpen={showStatistics}
+          onClose={() => setShowStatistics(false)}
+          gameResult={gameResult}
+        />
         </div>
         <Footer />
       </div>

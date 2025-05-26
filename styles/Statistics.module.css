@@ -1,0 +1,263 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.modal {
+  background: #23272f;
+  border-radius: 1rem;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem 1rem 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.header h2 {
+  color: #1DB954;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: #ccc;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.content {
+  padding: 1.5rem 2rem;
+}
+
+.generalStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.statItem {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.statNumber {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #1DB954;
+  margin-bottom: 0.5rem;
+}
+
+.statLabel {
+  font-size: 0.9rem;
+  color: #ccc;
+  line-height: 1.2;
+}
+
+.distributionSection {
+  margin-bottom: 2rem;
+}
+
+.distributionSection h3 {
+  color: #fff;
+  margin: 0 0 1rem 0;
+  font-size: 1.2rem;
+}
+
+.distributionChart {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.chartRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.attemptNumber {
+  width: 2rem;
+  text-align: center;
+  font-weight: bold;
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.progressBar {
+  flex: 1;
+  height: 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #1DB954, #1ed760);
+  border-radius: 0.75rem;
+  transition: width 0.5s ease;
+  min-width: 2px;
+}
+
+.lossBar {
+  background: linear-gradient(90deg, #ff6b6b, #ff8787);
+}
+
+.percentageText {
+  min-width: 4rem;
+  text-align: right;
+  color: #ccc;
+  font-size: 0.9rem;
+}
+
+.currentResult {
+  background: rgba(29, 185, 84, 0.1);
+  border: 1px solid rgba(29, 185, 84, 0.3);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+.currentResult h4 {
+  color: #1DB954;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.resultText {
+  color: #fff;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.footer {
+  padding: 1rem 2rem 1.5rem 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.continueButton {
+  background: #1DB954;
+  color: white;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 2rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.continueButton:hover {
+  background: #1ed760;
+  transform: scale(1.05);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .modal {
+    width: 95%;
+    margin: 1rem;
+  }
+  
+  .header {
+    padding: 1rem 1.5rem 0.5rem 1.5rem;
+  }
+  
+  .header h2 {
+    font-size: 1.3rem;
+  }
+  
+  .content {
+    padding: 1rem 1.5rem;
+  }
+  
+  .generalStats {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .statNumber {
+    font-size: 1.5rem;
+  }
+  
+  .statLabel {
+    font-size: 0.8rem;
+  }
+  
+  .chartRow {
+    gap: 0.5rem;
+  }
+  
+  .attemptNumber {
+    width: 1.5rem;
+    font-size: 1rem;
+  }
+  
+  .progressBar {
+    height: 1.2rem;
+  }
+  
+  .percentageText {
+    min-width: 3rem;
+    font-size: 0.8rem;
+  }
+  
+  .footer {
+    padding: 0.8rem 1.5rem 1rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .generalStats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
+  
+  .statItem {
+    padding: 0.8rem 0.5rem;
+  }
+  
+  .statNumber {
+    font-size: 1.3rem;
+  }
+  
+  .statLabel {
+    font-size: 0.7rem;
+  }
+}

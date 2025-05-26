@@ -86,6 +86,17 @@ export const translations = {
     'waiting_for_others': 'Aguardando outros jogadores...',
     'round_of': 'Rodada {current} de {total}',
     'no_one_guessed': 'Ninguém acertou a música!',
+
+    // Estatísticas
+    'statistics': 'Estatísticas',
+    'total_games': 'Partidas Jogadas',
+    'win_percentage': 'Taxa de Vitória',
+    'average_attempts': 'Média de Tentativas',
+    'attempt_distribution': 'Distribuição de Acertos',
+    'current_game': 'Partida Atual',
+    'won_in_attempts': 'Acertou em',
+    'lost_game': 'Não conseguiu acertar',
+    'continue': 'Continuar',
   },
   'en-US': {
     // General texts
@@ -172,6 +183,17 @@ export const translations = {
     'your_turn': 'Your turn to try!',
     'waiting_for_others': 'Waiting for other players...',
     'round_of': 'Round {current} of {total}',
+
+    // Statistics
+    'statistics': 'Statistics',
+    'total_games': 'Games Played',
+    'win_percentage': 'Win Rate',
+    'average_attempts': 'Average Attempts',
+    'attempt_distribution': 'Guess Distribution',
+    'current_game': 'Current Game',
+    'won_in_attempts': 'Won in',
+    'lost_game': 'Could not guess',
+    'continue': 'Continue',
   },
   'es': {
     // Textos generales
@@ -258,6 +280,17 @@ export const translations = {
     'your_turn': '¡Tu turno de intentar!',
     'waiting_for_others': 'Esperando otros jugadores...',
     'round_of': 'Ronda {current} de {total}',
+
+    // Estadísticas
+    'statistics': 'Estadísticas',
+    'total_games': 'Partidas Jugadas',
+    'win_percentage': 'Tasa de Victoria',
+    'average_attempts': 'Promedio de Intentos',
+    'attempt_distribution': 'Distribución de Aciertos',
+    'current_game': 'Partida Actual',
+    'won_in_attempts': 'Ganó en',
+    'lost_game': 'No pudo adivinar',
+    'continue': 'Continuar',
   }
 };
 
