@@ -4,6 +4,10 @@ const nextConfig = {
   images: {
     unoptimized: true
   },
+  // SEO e Performance
+  compress: true,
+  poweredByHeader: false,
+  generateEtags: true,
   // Excluir arquivos de áudio das funções serverless
   experimental: {
     outputFileTracingExcludes: {
@@ -12,7 +16,7 @@ const nextConfig = {
     },
     outputFileTracingIgnores: ['./public/audio/**/*']
   },
-  // Configuração para servir arquivos estáticos
+  // Configuração para servir arquivos estáticos e SEO
   async headers() {
     return [
       {
@@ -25,6 +29,27 @@ const nextConfig = {
           {
             key: 'Access-Control-Allow-Origin',
             value: '*',
+          },
+        ],
+      },
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'origin-when-cross-origin',
           },
         ],
       },

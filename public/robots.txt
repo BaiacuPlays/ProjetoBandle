@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+
+# Permitir acesso a arquivos importantes
+Allow: /sitemap.xml
+Allow: /Logo.png
+Allow: /*.css
+Allow: /*.js
+
+# Bloquear arquivos desnecessários para SEO
+Disallow: /_next/static/chunks/
+Disallow: /api/
+Disallow: /*.mp3
+
+# Sitemap
+Sitemap: https://ludomusic.xyz/sitemap.xml
+
+# Crawl-delay para não sobrecarregar o servidor
+Crawl-delay: 1

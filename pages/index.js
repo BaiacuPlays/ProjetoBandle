@@ -1265,8 +1265,23 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>LudoMusic - Adivinhe a Música dos Games</title>
-        <meta name="description" content="Teste seus conhecimentos musicais dos videogames! Ouça trechos e adivinhe as músicas." />
+        <title>LudoMusic - Adivinhe a Música dos Seus Jogos Favoritos | Jogo Musical Gratuito</title>
+        <meta name="description" content="🎮 Teste seus conhecimentos musicais dos videogames! Ouça trechos de mais de 1000 músicas de jogos famosos e adivinhe o nome. Jogue sozinho ou com amigos no modo multiplayer. Totalmente gratuito!" />
+        <meta name="keywords" content="jogo musical, videogame música, quiz musical, adivinhar música games, trilha sonora jogos, ludomusic, bandle, heardle games" />
+        <link rel="canonical" href="https://ludomusic.xyz" />
+
+        {/* Open Graph específico para a home */}
+        <meta property="og:title" content="LudoMusic - Adivinhe a Música dos Seus Jogos Favoritos" />
+        <meta property="og:description" content="🎮 Teste seus conhecimentos musicais dos videogames! Mais de 1000 músicas de jogos famosos. Jogue sozinho ou com amigos!" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://ludomusic.xyz" />
+        <meta property="og:image" content="https://ludomusic.xyz/Logo.png" />
+
+        {/* Twitter Card específico */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="LudoMusic - Jogo Musical de Videogames" />
+        <meta name="twitter:description" content="🎮 Teste seus conhecimentos musicais! Mais de 1000 músicas de jogos famosos." />
+
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎵</text></svg>" />
       </Head>
       <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>

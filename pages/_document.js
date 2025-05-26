@@ -10,10 +10,68 @@ class MyDocument extends Document {
     return (
       <Html lang="pt-BR">
         <Head>
-          {/* Título padrão do site */}
-          <title>Ludomusic - Adivinhe a música dos seus jogos favoritos!</title>
-          <meta name="description" content="Adivinhe a música dos seus jogos favoritos! Jogue sozinho ou com amigos no modo multiplayer." />
+          {/* SEO Meta Tags */}
+          <title>LudoMusic - Adivinhe a Música dos Seus Jogos Favoritos!</title>
+          <meta name="description" content="Teste seus conhecimentos musicais dos videogames! Ouça trechos de músicas de jogos famosos e adivinhe o nome. Jogue sozinho ou com amigos no modo multiplayer. Mais de 1000 músicas de games clássicos e modernos." />
+          <meta name="keywords" content="jogo musical, videogame, música de jogos, quiz musical, adivinhar música, games, soundtrack, trilha sonora, multiplayer, puzzle musical" />
+          <meta name="author" content="LudoMusic" />
+          <meta name="robots" content="index, follow" />
+          <meta name="language" content="pt-BR" />
+          <meta name="google-site-verification" content="WZX2COa_HuHe-uemirKECoGrUxOlH09P62F" />
+          <link rel="canonical" href="https://ludomusic.xyz" />
+
+          {/* Open Graph Meta Tags */}
+          <meta property="og:title" content="LudoMusic - Adivinhe a Música dos Seus Jogos Favoritos!" />
+          <meta property="og:description" content="Teste seus conhecimentos musicais dos videogames! Ouça trechos de músicas de jogos famosos e adivinhe o nome. Jogue sozinho ou com amigos no modo multiplayer." />
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content="https://ludomusic.xyz" />
+          <meta property="og:image" content="https://ludomusic.xyz/Logo.png" />
+          <meta property="og:image:alt" content="LudoMusic - Jogo Musical de Videogames" />
+          <meta property="og:site_name" content="LudoMusic" />
+          <meta property="og:locale" content="pt_BR" />
+
+          {/* Twitter Card Meta Tags */}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content="LudoMusic - Adivinhe a Música dos Seus Jogos Favoritos!" />
+          <meta name="twitter:description" content="Teste seus conhecimentos musicais dos videogames! Ouça trechos de músicas de jogos famosos e adivinhe o nome." />
+          <meta name="twitter:image" content="https://ludomusic.xyz/Logo.png" />
+
+          {/* Favicon */}
           <link rel="icon" href="/Logo.png" />
+          <link rel="apple-touch-icon" href="/Logo.png" />
+
+          {/* JSON-LD Structured Data */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "WebApplication",
+                "name": "LudoMusic",
+                "description": "Jogo musical onde você adivinha músicas de videogames. Teste seus conhecimentos com mais de 1000 trilhas sonoras de jogos clássicos e modernos.",
+                "url": "https://ludomusic.xyz",
+                "applicationCategory": "Game",
+                "operatingSystem": "Web Browser",
+                "offers": {
+                  "@type": "Offer",
+                  "price": "0",
+                  "priceCurrency": "BRL"
+                },
+                "author": {
+                  "@type": "Organization",
+                  "name": "LudoMusic"
+                },
+                "genre": ["Music Game", "Quiz Game", "Video Game Music"],
+                "keywords": "jogo musical, videogame, música de jogos, quiz musical, adivinhar música, games, soundtrack",
+                "inLanguage": "pt-BR",
+                "isAccessibleForFree": true,
+                "browserRequirements": "Requires JavaScript. Requires HTML5.",
+                "softwareVersion": "1.0",
+                "datePublished": "2024-01-01",
+                "dateModified": new Date().toISOString().split('T')[0]
+              })
+            }}
+          />
 
           {/* Meta tags para responsividade mobile */}
           <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />

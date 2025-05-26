@@ -9,7 +9,9 @@
     "export": "set BUILD_STATIC=true && next build",
     "build:static": "set BUILD_STATIC=true && next build",
     "build:hostinger": "npm run export && node scripts/build-for-hostinger.js",
-    "prepare:deploy": "npm run build:hostinger"
+    "prepare:deploy": "npm run build:hostinger",
+    "generate:sitemap": "node scripts/generate-sitemap.js",
+    "seo:optimize": "npm run generate:sitemap"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
