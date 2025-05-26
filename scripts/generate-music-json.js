@@ -188,6 +188,86 @@ function getGameInfo(gameFolder, subFolder, pathParts) {
         console: 'Wii'
       };
     }
+    if (subFolder === 'mario-3d-world') {
+      return {
+        artist: 'Mahito Yokota',
+        composer: 'Mahito Yokota',
+        game: 'Super Mario 3D World',
+        year: 2013,
+        genre: 'Platform Game Soundtrack',
+        console: 'Wii U'
+      };
+    }
+    if (subFolder === 'mario sunshine' || subFolder === 'super-mario-sunshine') {
+      return {
+        artist: 'Koji Kondo',
+        composer: 'Koji Kondo',
+        game: 'Super Mario Sunshine',
+        year: 2002,
+        genre: 'Platform Game Soundtrack',
+        console: 'GameCube'
+      };
+    }
+    if (subFolder === 'mario world') {
+      return {
+        artist: 'Koji Kondo',
+        composer: 'Koji Kondo',
+        game: 'Super Mario World',
+        year: 1990,
+        genre: 'Platform Game Soundtrack',
+        console: 'SNES'
+      };
+    }
+    if (subFolder === 'mario-kart-ds') {
+      return {
+        artist: 'Asuka Ohta',
+        composer: 'Asuka Ohta',
+        game: 'Mario Kart DS',
+        year: 2005,
+        genre: 'Racing Game Soundtrack',
+        console: 'Nintendo DS'
+      };
+    }
+    if (subFolder === 'mario-paint') {
+      return {
+        artist: 'Hirokazu Tanaka',
+        composer: 'Hirokazu Tanaka',
+        game: 'Mario Paint',
+        year: 1992,
+        genre: 'Creative Game Soundtrack',
+        console: 'SNES'
+      };
+    }
+    if (subFolder === 'new-super-mario-bros-ds') {
+      return {
+        artist: 'Asuka Ohta',
+        composer: 'Asuka Ohta',
+        game: 'New Super Mario Bros.',
+        year: 2006,
+        genre: 'Platform Game Soundtrack',
+        console: 'Nintendo DS'
+      };
+    }
+    if (subFolder === 'new-super-mario-bros-wii') {
+      return {
+        artist: 'Ryo Nagamatsu',
+        composer: 'Ryo Nagamatsu',
+        game: 'New Super Mario Bros. Wii',
+        year: 2009,
+        genre: 'Platform Game Soundtrack',
+        console: 'Wii'
+      };
+    }
+    if (subFolder === 'paper-mario') {
+      return {
+        artist: 'Yuka Tsujiyoko',
+        composer: 'Yuka Tsujiyoko',
+        game: 'Paper Mario',
+        year: 2000,
+        genre: 'RPG Soundtrack',
+        console: 'Nintendo 64'
+      };
+    }
   }
 
   // Sonic games específicos
