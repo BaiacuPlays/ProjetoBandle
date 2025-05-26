@@ -103,13 +103,7 @@ export default function Home() {
       // Não depende do localStorage, mas usa o dia como seed
       const song = getDeterministicSong(dayOfYear);
 
-      console.log('🎵 MÚSICA DETERMINÍSTICA DO DIA:', {
-        dayOfYear,
-        songId: song.id,
-        title: song.title,
-        game: song.game,
-        deterministic: true
-      });
+
 
       // Opcional: ainda salvar no localStorage para debug/cache
       const savedSongKey = `bandle_daily_song_day_${dayOfYear}`;
@@ -129,13 +123,7 @@ export default function Home() {
       // Usar URL original sem codificação - mais compatível com Vercel
       const songWithEncodedUrl = { ...song, audioUrl: song.audioUrl };
 
-      // console.log('🎵 MÚSICA CARREGADA:', {
-      //   id: song.id,
-      //   title: song.title,
-      //   game: song.game,
-      //   audioUrl: song.audioUrl,
-      //   fullPath: window.location.origin + song.audioUrl
-      // });
+
 
       setCurrentSong(songWithEncodedUrl);
       // Calcular tempo até a próxima meia-noite
@@ -545,16 +533,14 @@ export default function Home() {
 
       // Verifica se o código secreto foi digitado
       if (newCode.includes('sacabambapis')) {
-        // console.log('🎉 Código secreto ativado!');
-
         // Mostrar efeito visual
         setShowSacabambapis(true);
 
         // Tocar som do vine boom
         const vineAudio = new Audio('/vine.mp3');
         vineAudio.volume = 0.7;
-        vineAudio.play().catch(e => {
-          // console.log('Erro ao tocar vine boom:', e);
+        vineAudio.play().catch(() => {
+          // Silenciar erro de áudio
         });
 
         // Após 2 segundos, apenas recarrega (não precisa remover música pois é determinística)
@@ -588,7 +574,7 @@ export default function Home() {
         timestamp: Date.now()
       };
 
-      // console.log('🎮 Salvando estado do jogo:', stateToSave);
+
       localStorage.setItem(`bandle_game_state_day_${currentDay}`, JSON.stringify(stateToSave));
 
       // Manter compatibilidade com o sistema antigo para jogos terminados
@@ -1116,12 +1102,7 @@ export default function Home() {
             Novo jogo em: <span className={styles.timer}>{formatTimer(timer)}</span>
           </div>
         </div>
-        {/* MusicInfoFetcher temporariamente desabilitado para evitar loop infinito */}
-        {/* {currentSong && (
-          <MusicInfoFetcher
-            song={currentSong}
-            onInfoLoaded={handleMusicInfoLoaded} />
-        )} */}
+
 
         {/* Menu do jogo */}
         <GameMenu

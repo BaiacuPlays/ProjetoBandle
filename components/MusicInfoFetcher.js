@@ -22,7 +22,6 @@ export default function MusicInfoFetcher({ song, onInfoLoaded }) {
 
         onInfoLoaded(updatedSong);
       } catch (err) {
-        console.warn('Erro ao buscar informações da música:', err.message);
         setError(err.message);
         // Em caso de erro, usa a música original
         onInfoLoaded(song);

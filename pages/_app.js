@@ -10,7 +10,6 @@ export default function MyApp({ Component, pageProps }) {
       const savedSettings = localStorage.getItem('bandle_settings');
       if (savedSettings) {
         const parsedSettings = JSON.parse(savedSettings);
-        console.log('Configurações carregadas no _app.js:', parsedSettings);
 
         // Aplicar configurações iniciais
         if (parsedSettings.language) {
@@ -18,7 +17,7 @@ export default function MyApp({ Component, pageProps }) {
         }
       }
     } catch (error) {
-      console.error('Erro ao carregar configurações em _app.js:', error);
+      // Silenciar erro
     }
   }, []);
 

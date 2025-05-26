@@ -59,7 +59,6 @@ const LocalStorageAPI = {
     };
 
     localStorage.setItem(`lobby:${roomCode}`, JSON.stringify(lobby));
-    console.log('🔄 FALLBACK - Sala criada:', roomCode, lobby);
     return { roomCode };
   },
 
@@ -116,17 +115,13 @@ const LocalStorageAPI = {
     }
 
     const lobby = JSON.parse(data);
-    console.log('✅ FALLBACK - Sala encontrada:', roomCode, lobby);
     return lobby;
   },
 
   // Entrar na sala
   joinRoom(roomCode, nickname) {
-    console.log('🔄 FALLBACK - Tentando entrar na sala:', roomCode, nickname);
-
     const lobby = this.getLobby(roomCode);
     if (lobby.roomNotFound) {
-      console.log('❌ FALLBACK - Sala não encontrada:', roomCode);
       throw new Error('Sala não encontrada');
     }
 
@@ -137,9 +132,6 @@ const LocalStorageAPI = {
         lobby.gameState.scores[nickname] = 0;
       }
       localStorage.setItem(`lobby:${roomCode}`, JSON.stringify(lobby));
-      console.log('✅ FALLBACK - Jogador adicionado à sala:', nickname);
-    } else {
-      console.log('ℹ️ FALLBACK - Jogador já está na sala:', nickname);
     }
 
     return lobby;
@@ -176,14 +168,12 @@ export const apiRequest = async (endpoint, options = {}) => {
       });
 
       if (response.ok) {
-        console.log('✅ API REAL funcionou!');
         return response;
       } else {
-        console.log('⚠️ API REAL falhou, usando fallback...');
         throw new Error('API falhou');
       }
     } catch (error) {
-      console.log('🔄 USANDO FALLBACK LOCALSTORAGE para:', endpoint, options);
+      // Fallback para localStorage
 
       try {
       if (options.method === 'POST') {

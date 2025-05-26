@@ -54,7 +54,6 @@ class MyDocument extends Document {
                 // Aplicar o idioma
                 if (language) {
                   document.documentElement.lang = language;
-                  console.log('Idioma aplicado pelo _document.js:', language);
 
                   // Se o idioma veio do cookie, mas não está no localStorage, salvá-lo
                   if (!savedSettings || !JSON.parse(savedSettings).language) {
@@ -65,7 +64,6 @@ class MyDocument extends Document {
                       language: language
                     };
                     localStorage.setItem('bandle_settings', JSON.stringify(defaultSettings));
-                    console.log('Configurações salvas do cookie para localStorage:', defaultSettings);
                   } else if (savedSettings) {
                     // Se já existe configurações no localStorage, atualizar o idioma
                     try {
@@ -73,15 +71,14 @@ class MyDocument extends Document {
                       if (settings.language !== language) {
                         settings.language = language;
                         localStorage.setItem('bandle_settings', JSON.stringify(settings));
-                        console.log('Idioma atualizado no localStorage:', settings);
                       }
                     } catch (e) {
-                      console.error('Erro ao atualizar idioma no localStorage:', e);
+                      // Silenciar erro
                     }
                   }
                 }
               } catch (e) {
-                console.error('Erro ao aplicar idioma em _document.js:', e);
+                // Silenciar erro
               }
             `
           }} />
