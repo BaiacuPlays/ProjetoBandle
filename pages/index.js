@@ -374,18 +374,6 @@ export default function Home() {
     setInfiniteGameOver(false);
     setShowNextSongButton(false);
 
-    // Reseta o estado do jogo
-    setAttempts(0);
-    setHistory([]);
-    setMessage('');
-    setGameOver(false);
-    setShowHint(false);
-    setActiveHint(0);
-    setGuess('');
-    setShowSuggestions(false);
-    setShowStatistics(false);
-    setGameResult(null);
-
     // Carrega a música do dia usando o currentDay já calculado
     // Se currentDay ainda não foi definido, usa o dia local como fallback
     const dayToUse = currentDay !== null ? currentDay : getDayOfYear();
@@ -410,6 +398,48 @@ export default function Home() {
     }
 
     setCurrentSong(dailySong);
+
+    // Agora carrega o estado salvo do jogo diário (se existir)
+    const loadSavedDailyGameState = () => {
+      if (typeof window === 'undefined') return;
+
+      try {
+        const savedState = localStorage.getItem(`ludomusic_game_state_day_${dayToUse}`);
+
+        if (savedState) {
+          const parsedState = JSON.parse(savedState);
+
+          if (parsedState.day === dayToUse) {
+            setAttempts(parsedState.attempts || 0);
+            setHistory(parsedState.history || []);
+            setMessage(parsedState.message || '');
+            setGameOver(parsedState.gameOver || false);
+            setShowHint(parsedState.showHint || false);
+            setActiveHint(parsedState.activeHint || 0);
+            setCurrentClipDuration(parsedState.currentClipDuration || 0.3);
+            setGameResult(parsedState.gameOver ? { won: false, attempts: parsedState.attempts } : null);
+            return;
+          }
+        }
+      } catch (error) {
+        console.error('Erro ao carregar estado do jogo diário:', error);
+      }
+
+      // Se não conseguiu carregar o estado, reseta para o estado inicial
+      setAttempts(0);
+      setHistory([]);
+      setMessage('');
+      setGameOver(false);
+      setShowHint(false);
+      setActiveHint(0);
+      setGuess('');
+      setShowSuggestions(false);
+      setShowStatistics(false);
+      setGameResult(null);
+    };
+
+    // Carrega o estado salvo
+    loadSavedDailyGameState();
   };
 
 
@@ -599,7 +629,13 @@ export default function Home() {
         if (!audio || audio.paused || audio.ended || !audio.duration || isNaN(audio.duration)) return;
 
         const currentTime = audio.currentTime - startTime;
+
+        // Sempre atualizar o progresso primeiro
+        setAudioProgress(Math.max(0, currentTime));
+
+        // Verificar se excedeu o tempo limite
         if ((!gameOver || isInfiniteMode) && currentTime >= maxDuration) {
+          // Para o áudio e volta para o início
           audio.pause();
           setIsPlaying(false);
           audio.currentTime = startTime;
@@ -622,8 +658,6 @@ export default function Home() {
               }
             }, fadeOutStepTime * 1000);
           }
-        } else {
-          setAudioProgress(Math.max(0, currentTime));
         }
       } catch (error) {
         // console.error('Erro ao atualizar progresso:', error);
@@ -632,32 +666,8 @@ export default function Home() {
 
     const updatePlay = () => {
       try {
-        if (!audio || !audio.duration || isNaN(audio.duration)) return;
-
-        const currentTime = audio.currentTime - startTime;
-        if ((!gameOver || isInfiniteMode) && currentTime >= maxDuration) {
-          audio.pause();
+        if (audio.paused || audio.ended) {
           setIsPlaying(false);
-          audio.currentTime = startTime;
-          setAudioProgress(0);
-        } else if (gameOver && !isInfiniteMode && currentTime >= MAX_PLAY_TIME) {
-          // FADE OUT após 15s se o jogo acabou
-          if (!fadeOutInterval) {
-            let step = 0;
-            originalVolumeRef.current = audio.volume;
-            fadeOutInterval = setInterval(() => {
-              step++;
-              audio.volume = originalVolumeRef.current * (1 - step / fadeOutSteps);
-              if (step >= fadeOutSteps) {
-                clearInterval(fadeOutInterval);
-                audio.pause();
-                setIsPlaying(false);
-                audio.currentTime = startTime;
-                setAudioProgress(0);
-                audio.volume = originalVolumeRef.current;
-              }
-            }, fadeOutStepTime * 1000);
-          }
         } else {
           setIsPlaying(!audio.paused && !audio.ended);
         }
@@ -687,7 +697,7 @@ export default function Home() {
       if (fadeOutInterval) clearInterval(fadeOutInterval);
       if (fadeOutTimeout) clearTimeout(fadeOutTimeout);
     };
-  }, [audioRef.current, startTime, gameOver, attempts, isInfiniteMode]);
+  }, [startTime, gameOver, attempts, isInfiniteMode, maxClipDurations]);
 
   // Atualiza volume
   useEffect(() => {
@@ -1033,7 +1043,8 @@ export default function Home() {
   // Persistência do estado do jogo (salva sempre que houver mudanças importantes)
   useEffect(() => {
     // Só salva se já carregou o estado inicial para evitar sobrescrever dados salvos
-    if (currentDay !== null && hasLoadedSavedState) {
+    // E apenas no modo diário (modo infinito tem seu próprio sistema de salvamento)
+    if (currentDay !== null && hasLoadedSavedState && !isInfiniteMode) {
       const gameState = {
         attempts,
         history,
@@ -1045,7 +1056,7 @@ export default function Home() {
       };
       saveGameState(gameState);
     }
-  }, [attempts, history, message, gameOver, showHint, activeHint, currentClipDuration, currentDay, hasLoadedSavedState]);
+  }, [attempts, history, message, gameOver, showHint, activeHint, currentClipDuration, currentDay, hasLoadedSavedState, isInfiniteMode]);
 
   // Limpa dados antigos do localStorage
   const cleanupOldLocalStorageData = (currentDay) => {

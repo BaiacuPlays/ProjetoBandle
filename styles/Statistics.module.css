@@ -27,7 +27,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 2rem 1rem 2rem;
+  padding: 1.5rem 3rem 1rem 2rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -47,6 +47,11 @@
   padding: 0.5rem;
   border-radius: 50%;
   transition: all 0.2s ease;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .closeButton:hover {
@@ -193,51 +198,51 @@
     width: 95%;
     margin: 1rem;
   }
-  
+
   .header {
-    padding: 1rem 1.5rem 0.5rem 1.5rem;
+    padding: 1rem 2.5rem 0.5rem 1.5rem;
   }
-  
+
   .header h2 {
     font-size: 1.3rem;
   }
-  
+
   .content {
     padding: 1rem 1.5rem;
   }
-  
+
   .generalStats {
     grid-template-columns: 1fr;
     gap: 0.8rem;
     margin-bottom: 1.5rem;
   }
-  
+
   .statNumber {
     font-size: 1.5rem;
   }
-  
+
   .statLabel {
     font-size: 0.8rem;
   }
-  
+
   .chartRow {
     gap: 0.5rem;
   }
-  
+
   .attemptNumber {
     width: 1.5rem;
     font-size: 1rem;
   }
-  
+
   .progressBar {
     height: 1.2rem;
   }
-  
+
   .percentageText {
     min-width: 3rem;
     font-size: 0.8rem;
   }
-  
+
   .footer {
     padding: 0.8rem 1.5rem 1rem 1.5rem;
   }
@@ -248,15 +253,15 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 0.5rem;
   }
-  
+
   .statItem {
     padding: 0.8rem 0.5rem;
   }
-  
+
   .statNumber {
     font-size: 1.3rem;
   }
-  
+
   .statLabel {
     font-size: 0.7rem;
   }
