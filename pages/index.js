@@ -85,9 +85,62 @@ export default function Home() {
 
   // Função para selecionar música determinística baseada no dia
   const getDeterministicSong = (day) => {
+    // Obter histórico de músicas dos últimos 30 dias
+    const musicHistory = getMusicHistory();
+
+    // Filtrar músicas que não foram tocadas nos últimos 30 dias
+    const availableSongs = songs.filter(song => {
+      const lastPlayedDay = musicHistory[song.id];
+      return !lastPlayedDay || (day - lastPlayedDay) >= 30;
+    });
+
+    // Se não há músicas disponíveis (todas foram tocadas recentemente), usar todas as músicas
+    const songsToChooseFrom = availableSongs.length > 0 ? availableSongs : songs;
+
+    // Usar função determinística para selecionar da lista filtrada
     const deterministicRandom = getDeterministicRandom(day, 0);
-    const index = Math.floor(deterministicRandom * songs.length);
-    return songs[index];
+    const index = Math.floor(deterministicRandom * songsToChooseFrom.length);
+    const selectedSong = songsToChooseFrom[index];
+
+    // Registrar no histórico apenas se for uma nova seleção para este dia
+    const savedSongKey = `ludomusic_daily_song_day_${day}`;
+    const existingSongId = localStorage.getItem(savedSongKey);
+
+    if (!existingSongId || existingSongId !== selectedSong.id.toString()) {
+      saveMusicHistory(selectedSong.id, day);
+    }
+
+    return selectedSong;
+  };
+
+  // Função para obter histórico de músicas tocadas
+  const getMusicHistory = () => {
+    try {
+      const history = localStorage.getItem('ludomusic_daily_history');
+      return history ? JSON.parse(history) : {};
+    } catch {
+      return {};
+    }
+  };
+
+  // Função para salvar música no histórico
+  const saveMusicHistory = (songId, day) => {
+    try {
+      const history = getMusicHistory();
+      history[songId] = day;
+
+      // Limpar entradas muito antigas (mais de 60 dias para ter margem)
+      const cutoffDay = day - 60;
+      Object.keys(history).forEach(id => {
+        if (history[id] < cutoffDay) {
+          delete history[id];
+        }
+      });
+
+      localStorage.setItem('ludomusic_daily_history', JSON.stringify(history));
+    } catch (error) {
+      console.warn('Erro ao salvar histórico de músicas:', error);
+    }
   };
 
   // Função para calcular o dia do ano
@@ -906,7 +959,8 @@ export default function Home() {
         'ludomusic_gameover_message',
         'ludomusic_settings',
         'ludomusic_statistics',
-        'ludomusic_infinite_stats'
+        'ludomusic_infinite_stats',
+        'ludomusic_daily_history' // Histórico de músicas para controle de repetições
       ];
 
       // Procura por chaves antigas relacionadas ao ludomusic
@@ -1212,7 +1266,7 @@ export default function Home() {
                 <input
                   type="range"
                   min={0}
-                  max={maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1]}
+                  max={(gameOver && !isInfiniteMode) ? MAX_PLAY_TIME : (maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1])}
                   step={0.01}
                   value={audioProgress}
                   onChange={e => {
@@ -1225,7 +1279,8 @@ export default function Home() {
                       setAudioProgress(0);
                       return;
                     }
-                    if (value > maxClipDurations[attempts] || value > maxClipDurations[maxClipDurations.length - 1]) value = maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1];
+                    const maxAllowed = (gameOver && !isInfiniteMode) ? MAX_PLAY_TIME : (maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1]);
+                    if (value > maxAllowed) value = maxAllowed;
                     if (audioRef.current) {
                       audioRef.current.currentTime = startTime + value;
                       setAudioProgress(value);
@@ -1236,7 +1291,7 @@ export default function Home() {
                 <span className={styles.audioTime} style={{ marginLeft: 10 }}>
                   {audioDuration
                     ? new Date(
-                        (maxClipDurations[attempts] ?? maxClipDurations[maxClipDurations.length - 1]) * 1000
+                        ((gameOver && !isInfiniteMode) ? MAX_PLAY_TIME : (maxClipDurations[attempts] ?? maxClipDurations[maxClipDurations.length - 1])) * 1000
                       ).toISOString().substring(14, 19)
                     : '00:00'}
                 </span>
@@ -1256,7 +1311,8 @@ export default function Home() {
                     }
 
                     const currentTime = audioRef.current.currentTime - startTime;
-                    if (currentTime >= maxClipDurations[attempts] || currentTime >= maxClipDurations[maxClipDurations.length - 1]) {
+                    const maxAllowed = (gameOver && !isInfiniteMode) ? MAX_PLAY_TIME : (maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1]);
+                    if (currentTime >= maxAllowed) {
                       // Se já passou do limite, volta para o início do trecho
                       audioRef.current.currentTime = startTime;
                       setAudioProgress(0);
