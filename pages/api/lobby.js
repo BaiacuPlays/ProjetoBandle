@@ -381,22 +381,29 @@ export default async function handler(req, res) {
 
 
 
-        // Verificar se todos os jogadores esgotaram suas tentativas OU todos acertaram
-        const allPlayersExhausted = lobby.players.every(player =>
-          (lobby.gameState.attempts[player] || 0) >= 6
-        );
+        // Verificar se todos os jogadores terminaram (esgotaram tentativas OU acertaram)
+        const allPlayersFinished = lobby.players.every(player => {
+          const playerAttempts = lobby.gameState.attempts[player] || 0;
+          const playerWon = lobby.gameState.roundWinners.includes(player);
+          return playerAttempts >= 6 || playerWon;
+        });
 
-        const allPlayersWon = lobby.players.every(player =>
-          lobby.gameState.roundWinners.includes(player)
-        );
+        console.log('🔍 API - Verificando se todos terminaram (GUESS):', {
+          players: lobby.players,
+          attempts: lobby.gameState.attempts,
+          winners: lobby.gameState.roundWinners,
+          allFinished: allPlayersFinished
+        });
 
         // Determinar se a rodada deve terminar
-        if (allPlayersExhausted || allPlayersWon) {
+        if (allPlayersFinished) {
           lobby.gameState.roundFinished = true;
+          console.log('✅ API - Rodada finalizada (GUESS)!');
 
           // Se ninguém acertou, marcar como rodada sem vencedor
           if (lobby.gameState.roundWinners.length === 0) {
             lobby.gameState.roundWinners = ['NONE'];
+            console.log('❌ API - Ninguém acertou (GUESS), marcando como NONE');
           }
         }
 
@@ -408,7 +415,7 @@ export default async function handler(req, res) {
           gameCorrect,
           winner,
           attempts: lobby.gameState.attempts[nickname],
-          allExhausted: allPlayersExhausted,
+          allFinished: allPlayersFinished,
           lobbyData: {
             players: lobby.players,
             host: lobby.host,
@@ -460,22 +467,29 @@ export default async function handler(req, res) {
           tooLate: false
         });
 
-        // Verificar se todos os jogadores esgotaram suas tentativas OU todos acertaram após o skip
-        const allPlayersExhausted = lobby.players.every(player =>
-          (lobby.gameState.attempts[player] || 0) >= 6
-        );
+        // Verificar se todos os jogadores terminaram (esgotaram tentativas OU acertaram)
+        const allPlayersFinished = lobby.players.every(player => {
+          const playerAttempts = lobby.gameState.attempts[player] || 0;
+          const playerWon = lobby.gameState.roundWinners.includes(player);
+          return playerAttempts >= 6 || playerWon;
+        });
 
-        const allPlayersWon = lobby.players.every(player =>
-          lobby.gameState.roundWinners.includes(player)
-        );
+        console.log('🔍 API - Verificando se todos terminaram:', {
+          players: lobby.players,
+          attempts: lobby.gameState.attempts,
+          winners: lobby.gameState.roundWinners,
+          allFinished: allPlayersFinished
+        });
 
         // Determinar se a rodada deve terminar
-        if (allPlayersExhausted || allPlayersWon) {
+        if (allPlayersFinished) {
           lobby.gameState.roundFinished = true;
+          console.log('✅ API - Rodada finalizada!');
 
           // Se ninguém acertou, marcar como rodada sem vencedor
           if (lobby.gameState.roundWinners.length === 0) {
             lobby.gameState.roundWinners = ['NONE'];
+            console.log('❌ API - Ninguém acertou, marcando como NONE');
           }
         }
 
@@ -483,7 +497,7 @@ export default async function handler(req, res) {
 
         return res.status(200).json({
           success: true,
-          allExhausted: allPlayersExhausted,
+          allFinished: allPlayersFinished,
           lobbyData: {
             players: lobby.players,
             host: lobby.host,
