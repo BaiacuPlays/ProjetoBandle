@@ -13,7 +13,7 @@
   },
   {
     "id": 1,
-    "title": "Somewhere In The Woods (Short Hike)",
+    "title": "Somewhere in the Woods (Short Hike)",
     "artist": "Mark Sparling",
     "composer": "Mark Sparling",
     "game": "A Short Hike",
@@ -25,7 +25,7 @@
   },
   {
     "id": 2,
-    "title": "See You At The Top (Short Hike)",
+    "title": "See You at the Top (Short Hike)",
     "artist": "Mark Sparling",
     "composer": "Mark Sparling",
     "game": "A Short Hike",
@@ -121,7 +121,7 @@
   },
   {
     "id": 10,
-    "title": "Godot ~ The Fragrance Of Dark Coffee",
+    "title": "Godot ~ the Fragrance of Dark Coffee",
     "artist": "Masakazu Sugimori",
     "composer": "Masakazu Sugimori",
     "game": "Phoenix Wright: Ace Attorney",
@@ -133,7 +133,7 @@
   },
   {
     "id": 11,
-    "title": "Follow You Into The Dark",
+    "title": "Follow You Into the Dark",
     "artist": "Petri Alanko",
     "composer": "Petri Alanko",
     "game": "Alan Wake 2",
@@ -205,7 +205,7 @@
   },
   {
     "id": 17,
-    "title": "Ezio's Family",
+    "title": "Ezio'S Family",
     "artist": "Jesper Kyd",
     "composer": "Jesper Kyd",
     "game": "Assassin's Creed II",
@@ -277,6 +277,30 @@
   },
   {
     "id": 23,
+    "title": "Raphael'S Final Act",
+    "artist": "Borislav Slavov",
+    "composer": "Borislav Slavov",
+    "game": "Baldur's Gate 3",
+    "context": "Audio - Baldur's Gate 3",
+    "audioUrl": "/audio/baldurs-gate-3/Baldur's Gate 3 - Raphael's Final Act.mp3",
+    "year": 2023,
+    "genre": "RPG Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 24,
+    "title": "＂I Want to Live＂",
+    "artist": "Borislav Slavov",
+    "composer": "Borislav Slavov",
+    "game": "Baldur's Gate 3",
+    "context": "Audio - Baldur's Gate 3",
+    "audioUrl": "/audio/baldurs-gate-3/Baldur's Gate 3 - ＂I Want To Live＂.mp3",
+    "year": 2023,
+    "genre": "RPG Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 25,
     "title": "Main Title",
     "artist": "Grant Kirkhope",
     "composer": "Grant Kirkhope",
@@ -288,8 +312,8 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 24,
-    "title": "a Spiral Mountain (All-In-One)",
+    "id": 26,
+    "title": "A Spiral Mountain (All in One)",
     "artist": "Grant Kirkhope",
     "composer": "Grant Kirkhope",
     "game": "Banjo-Kazooie",
@@ -300,8 +324,8 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 25,
-    "title": "a Mumbo's Mountain (All-In-One)",
+    "id": 27,
+    "title": "A Mumbo'S Mountain (All in One)",
     "artist": "Grant Kirkhope",
     "composer": "Grant Kirkhope",
     "game": "Banjo-Kazooie",
@@ -312,8 +336,8 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 26,
-    "title": "Brentilda's Theme",
+    "id": 28,
+    "title": "Brentilda'S Theme",
     "artist": "Grant Kirkhope",
     "composer": "Grant Kirkhope",
     "game": "Banjo-Kazooie",
@@ -324,8 +348,8 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 27,
-    "title": "b Freezeezy Peak (Normal)",
+    "id": 29,
+    "title": "B Freezeezy Peak (Normal)",
     "artist": "Grant Kirkhope",
     "composer": "Grant Kirkhope",
     "game": "Banjo-Kazooie",
@@ -336,7 +360,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 28,
+    "id": 30,
     "title": "Going Up, Going Down",
     "artist": "Garry Schyman",
     "composer": "Garry Schyman",
@@ -348,8 +372,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 29,
-    "title": "Dancers On A String (Reprise)",
+    "id": 31,
+    "title": "Dancers on a String (Reprise)",
     "artist": "Garry Schyman",
     "composer": "Garry Schyman",
     "game": "BioShock",
@@ -360,8 +384,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 30,
-    "title": "You Have To Save My Family",
+    "id": 32,
+    "title": "You Have to Save My Family",
     "artist": "Garry Schyman",
     "composer": "Garry Schyman",
     "game": "BioShock",
@@ -372,7 +396,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 31,
+    "id": 33,
     "title": "Cave Story",
     "artist": "Daisuke Amaya",
     "composer": "Daisuke Amaya",
@@ -384,7 +408,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 32,
+    "id": 34,
     "title": "Gestation",
     "artist": "Daisuke Amaya",
     "composer": "Daisuke Amaya",
@@ -396,7 +420,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 33,
+    "id": 35,
     "title": "Mimiga Town",
     "artist": "Daisuke Amaya",
     "composer": "Daisuke Amaya",
@@ -408,8 +432,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 34,
-    "title": "Celeste Prologue 1",
+    "id": 36,
+    "title": "Prologue 1",
     "artist": "Lena Raine",
     "composer": "Lena Raine",
     "game": "Celeste",
@@ -420,8 +444,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 35,
-    "title": "Celeste First Steps",
+    "id": 37,
+    "title": "First Steps",
     "artist": "Lena Raine",
     "composer": "Lena Raine",
     "game": "Celeste",
@@ -432,8 +456,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 36,
-    "title": "Celeste Resurrections",
+    "id": 38,
+    "title": "Resurrections",
     "artist": "Lena Raine",
     "composer": "Lena Raine",
     "game": "Celeste",
@@ -444,8 +468,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 37,
-    "title": "Celeste Anxiety",
+    "id": 39,
+    "title": "Anxiety",
     "artist": "Lena Raine",
     "composer": "Lena Raine",
     "game": "Celeste",
@@ -456,8 +480,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 38,
-    "title": "Celeste Quiet and Falling",
+    "id": 40,
+    "title": "Quiet and Falling",
     "artist": "Lena Raine",
     "composer": "Lena Raine",
     "game": "Celeste",
@@ -468,8 +492,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 39,
-    "title": "Celeste Starjump",
+    "id": 41,
+    "title": "Starjump",
     "artist": "Lena Raine",
     "composer": "Lena Raine",
     "game": "Celeste",
@@ -480,8 +504,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 40,
-    "title": "Celeste Reflection",
+    "id": 42,
+    "title": "Reflection",
     "artist": "Lena Raine",
     "composer": "Lena Raine",
     "game": "Celeste",
@@ -492,8 +516,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 41,
-    "title": "Celeste Confronting Myself",
+    "id": 43,
+    "title": "Confronting Myself",
     "artist": "Lena Raine",
     "composer": "Lena Raine",
     "game": "Celeste",
@@ -504,8 +528,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 42,
-    "title": "Celeste Little Goth",
+    "id": 44,
+    "title": "Little Goth",
     "artist": "Lena Raine",
     "composer": "Lena Raine",
     "game": "Celeste",
@@ -516,8 +540,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 43,
-    "title": "Celeste Exhale",
+    "id": 45,
+    "title": "Exhale",
     "artist": "Lena Raine",
     "composer": "Lena Raine",
     "game": "Celeste",
@@ -528,8 +552,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 44,
-    "title": "Celeste Heart of the Mountain",
+    "id": 46,
+    "title": "Heart of the Mountain",
     "artist": "Lena Raine",
     "composer": "Lena Raine",
     "game": "Celeste",
@@ -540,8 +564,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 45,
-    "title": "Celeste My Dearest Friends",
+    "id": 47,
+    "title": "My Dearest Friends",
     "artist": "Lena Raine",
     "composer": "Lena Raine",
     "game": "Celeste",
@@ -552,7 +576,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 46,
+    "id": 48,
     "title": "Alicia",
     "artist": "Yasunori Mitsuda",
     "composer": "Yasunori Mitsuda",
@@ -564,7 +588,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 47,
+    "id": 49,
     "title": "Renoir",
     "artist": "Yasunori Mitsuda",
     "composer": "Yasunori Mitsuda",
@@ -576,8 +600,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 48,
-    "title": "Clair-Obscur",
+    "id": 50,
+    "title": "Clair Obscur",
     "artist": "Yasunori Mitsuda",
     "composer": "Yasunori Mitsuda",
     "game": "Clair Obscur: Expedition 33",
@@ -588,7 +612,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 49,
+    "id": 51,
     "title": "Our Drafts Unite",
     "artist": "Yasunori Mitsuda",
     "composer": "Yasunori Mitsuda",
@@ -600,7 +624,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 50,
+    "id": 52,
     "title": "Clair Obscur Main Theme",
     "artist": "Yasunori Mitsuda",
     "composer": "Yasunori Mitsuda",
@@ -612,7 +636,55 @@
     "console": "Multi-platform"
   },
   {
-    "id": 51,
+    "id": 53,
+    "title": "Lost Voice",
+    "artist": "Yasunori Mitsuda",
+    "composer": "Yasunori Mitsuda",
+    "game": "Clair Obscur: Expedition 33",
+    "context": "Audio - Clair Obscur: Expedition 33",
+    "audioUrl": "/audio/clair-obscur/Lost Voice.mp3",
+    "year": 2025,
+    "genre": "JRPG Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 54,
+    "title": "LumièRe",
+    "artist": "Yasunori Mitsuda",
+    "composer": "Yasunori Mitsuda",
+    "game": "Clair Obscur: Expedition 33",
+    "context": "Audio - Clair Obscur: Expedition 33",
+    "audioUrl": "/audio/clair-obscur/Lumière.mp3",
+    "year": 2025,
+    "genre": "JRPG Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 55,
+    "title": "Maelle",
+    "artist": "Yasunori Mitsuda",
+    "composer": "Yasunori Mitsuda",
+    "game": "Clair Obscur: Expedition 33",
+    "context": "Audio - Clair Obscur: Expedition 33",
+    "audioUrl": "/audio/clair-obscur/Maelle.mp3",
+    "year": 2025,
+    "genre": "JRPG Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 56,
+    "title": "We Lost",
+    "artist": "Yasunori Mitsuda",
+    "composer": "Yasunori Mitsuda",
+    "game": "Clair Obscur: Expedition 33",
+    "context": "Audio - Clair Obscur: Expedition 33",
+    "audioUrl": "/audio/clair-obscur/We Lost.mp3",
+    "year": 2025,
+    "genre": "JRPG Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 57,
     "title": "Et Ratio Principalis",
     "artist": "Petri Alanko",
     "composer": "Petri Alanko",
@@ -624,7 +696,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 52,
+    "id": 58,
     "title": "Counterfeit",
     "artist": "Petri Alanko",
     "composer": "Petri Alanko",
@@ -636,7 +708,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 53,
+    "id": 59,
     "title": "Portam Ad Inferno",
     "artist": "Petri Alanko",
     "composer": "Petri Alanko",
@@ -648,7 +720,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 54,
+    "id": 60,
     "title": "Main Menu",
     "artist": "Josh Mancell",
     "composer": "Josh Mancell",
@@ -660,8 +732,8 @@
     "console": "PlayStation"
   },
   {
-    "id": 55,
-    "title": "Crash Cove",
+    "id": 61,
+    "title": "Cove",
     "artist": "Josh Mancell",
     "composer": "Josh Mancell",
     "game": "Crash Team Racing",
@@ -672,7 +744,7 @@
     "console": "PlayStation"
   },
   {
-    "id": 56,
+    "id": 62,
     "title": "Mystery Caves",
     "artist": "Josh Mancell",
     "composer": "Josh Mancell",
@@ -684,7 +756,7 @@
     "console": "PlayStation"
   },
   {
-    "id": 57,
+    "id": 63,
     "title": "Polar Pass",
     "artist": "Josh Mancell",
     "composer": "Josh Mancell",
@@ -696,7 +768,7 @@
     "console": "PlayStation"
   },
   {
-    "id": 58,
+    "id": 64,
     "title": "N. Sanity Beach",
     "artist": "Josh Mancell",
     "composer": "Josh Mancell",
@@ -708,7 +780,7 @@
     "console": "PlayStation"
   },
   {
-    "id": 59,
+    "id": 65,
     "title": "Hog Wild",
     "artist": "Josh Mancell",
     "composer": "Josh Mancell",
@@ -720,7 +792,7 @@
     "console": "PlayStation"
   },
   {
-    "id": 60,
+    "id": 66,
     "title": "Cortex Power",
     "artist": "Josh Mancell",
     "composer": "Josh Mancell",
@@ -732,7 +804,7 @@
     "console": "PlayStation"
   },
   {
-    "id": 61,
+    "id": 67,
     "title": "Turtle Woods",
     "artist": "Josh Mancell",
     "composer": "Josh Mancell",
@@ -744,7 +816,7 @@
     "console": "PlayStation"
   },
   {
-    "id": 62,
+    "id": 68,
     "title": "Snow Go",
     "artist": "Josh Mancell",
     "composer": "Josh Mancell",
@@ -756,7 +828,7 @@
     "console": "PlayStation"
   },
   {
-    "id": 63,
+    "id": 69,
     "title": "Road to Ruin",
     "artist": "Josh Mancell",
     "composer": "Josh Mancell",
@@ -768,7 +840,7 @@
     "console": "PlayStation"
   },
   {
-    "id": 64,
+    "id": 70,
     "title": "Warp Room",
     "artist": "Josh Mancell",
     "composer": "Josh Mancell",
@@ -780,7 +852,7 @@
     "console": "PlayStation"
   },
   {
-    "id": 65,
+    "id": 71,
     "title": "Toad Village",
     "artist": "Josh Mancell",
     "composer": "Josh Mancell",
@@ -792,7 +864,7 @@
     "console": "PlayStation"
   },
   {
-    "id": 66,
+    "id": 72,
     "title": "Future Frenzy",
     "artist": "Josh Mancell",
     "composer": "Josh Mancell",
@@ -804,7 +876,7 @@
     "console": "PlayStation"
   },
   {
-    "id": 67,
+    "id": 73,
     "title": "Praise the Lamb",
     "artist": "River Boy",
     "composer": "River Boy",
@@ -816,7 +888,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 68,
+    "id": 74,
     "title": "Start a Cult",
     "artist": "River Boy",
     "composer": "River Boy",
@@ -828,7 +900,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 69,
+    "id": 75,
     "title": "Work and Worship",
     "artist": "River Boy",
     "composer": "River Boy",
@@ -840,7 +912,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 70,
+    "id": 76,
     "title": "Darkwood",
     "artist": "River Boy",
     "composer": "River Boy",
@@ -852,7 +924,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 71,
+    "id": 77,
     "title": "The One Who Waits",
     "artist": "River Boy",
     "composer": "River Boy",
@@ -864,7 +936,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 72,
+    "id": 78,
     "title": "Tutorial",
     "artist": "Kristofer Maddigan",
     "composer": "Kristofer Maddigan",
@@ -876,7 +948,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 73,
+    "id": 79,
     "title": "Inkwell Isle One",
     "artist": "Kristofer Maddigan",
     "composer": "Kristofer Maddigan",
@@ -888,7 +960,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 74,
+    "id": 80,
     "title": "Botanic Panic",
     "artist": "Kristofer Maddigan",
     "composer": "Kristofer Maddigan",
@@ -900,7 +972,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 75,
+    "id": 81,
     "title": "Forest Follies",
     "artist": "Kristofer Maddigan",
     "composer": "Kristofer Maddigan",
@@ -912,7 +984,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 76,
+    "id": 82,
     "title": "Floral Fury",
     "artist": "Kristofer Maddigan",
     "composer": "Kristofer Maddigan",
@@ -924,7 +996,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 77,
+    "id": 83,
     "title": "Extraction Action",
     "artist": "Marcin Przybyłowicz",
     "composer": "Marcin Przybyłowicz",
@@ -936,7 +1008,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 78,
+    "id": 84,
     "title": "The Rebel Path",
     "artist": "Marcin Przybyłowicz",
     "composer": "Marcin Przybyłowicz",
@@ -948,8 +1020,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 79,
-    "title": "The Streets Are Long-Ass Gutters",
+    "id": 85,
+    "title": "The Streets Are Long Ass Gutters",
     "artist": "Marcin Przybyłowicz",
     "composer": "Marcin Przybyłowicz",
     "game": "Cyberpunk 2077",
@@ -960,8 +1032,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 80,
-    "title": "Dark Souls III",
+    "id": 86,
+    "title": "Dark Souls Iii",
     "artist": "Motoi Sakuraba",
     "composer": "Motoi Sakuraba",
     "game": "Dark Souls",
@@ -972,7 +1044,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 81,
+    "id": 87,
     "title": "Gwyn, Lord of Cinder",
     "artist": "Motoi Sakuraba",
     "composer": "Motoi Sakuraba",
@@ -984,7 +1056,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 82,
+    "id": 88,
     "title": "Symphony of the Night",
     "artist": "Motoi Sakuraba",
     "composer": "Motoi Sakuraba",
@@ -996,7 +1068,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 83,
+    "id": 89,
     "title": "Dead Cells",
     "artist": "Yoann Laulan",
     "composer": "Yoann Laulan",
@@ -1008,8 +1080,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 84,
-    "title": "Prisoner's Awakening",
+    "id": 90,
+    "title": "Prisoner'S Awakening",
     "artist": "Yoann Laulan",
     "composer": "Yoann Laulan",
     "game": "Dead Cells",
@@ -1020,8 +1092,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 85,
-    "title": "Promenade Of The Condemned",
+    "id": 91,
+    "title": "Promenade of the Condemned",
     "artist": "Yoann Laulan",
     "composer": "Yoann Laulan",
     "game": "Dead Cells",
@@ -1032,7 +1104,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 86,
+    "id": 92,
     "title": "The Merchant",
     "artist": "Yoann Laulan",
     "composer": "Yoann Laulan",
@@ -1044,7 +1116,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 87,
+    "id": 93,
     "title": "Beginning",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -1056,7 +1128,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 88,
+    "id": 94,
     "title": "School",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -1068,7 +1140,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 89,
+    "id": 95,
     "title": "Susie",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -1080,7 +1152,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 90,
+    "id": 96,
     "title": "The Door",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -1092,7 +1164,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 91,
+    "id": 97,
     "title": "Lancer",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -1104,7 +1176,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 92,
+    "id": 98,
     "title": "Rude Buster",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -1116,7 +1188,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 93,
+    "id": 99,
     "title": "Field of Hopes and Dreams",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -1128,7 +1200,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 94,
+    "id": 100,
     "title": "Scarlet Forest",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -1140,7 +1212,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 95,
+    "id": 101,
     "title": "Hip Shop",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -1152,7 +1224,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 96,
+    "id": 102,
     "title": "Chaos King",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -1164,8 +1236,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 97,
-    "title": "THE WORLD REVOLVING",
+    "id": 103,
+    "title": "The World Revolving",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Deltarune",
@@ -1176,7 +1248,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 98,
+    "id": 104,
     "title": "Don_t Forget",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -1188,8 +1260,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 99,
-    "title": "A CYBER'S WORLD",
+    "id": 105,
+    "title": "A Cyber'S World",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Deltarune",
@@ -1200,7 +1272,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 100,
+    "id": 106,
     "title": "Attack of the Killer Queen",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -1212,8 +1284,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 101,
-    "title": "BIG SHOT",
+    "id": 107,
+    "title": "Big Shot",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Deltarune",
@@ -1224,8 +1296,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 102,
-    "title": "NOW'S YOUR CHANCE TO BE A",
+    "id": 108,
+    "title": "Now'S Your Chance to Be a",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Deltarune",
@@ -1236,7 +1308,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 103,
+    "id": 109,
     "title": "Spamton",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -1248,7 +1320,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 104,
+    "id": 110,
     "title": "You Can Always Come Home",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -1260,8 +1332,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 105,
-    "title": "And The Heavens Shall Tremble",
+    "id": 111,
+    "title": "And the Heavens Shall Tremble",
     "artist": "Matt Uelmen",
     "composer": "Matt Uelmen",
     "game": "Diablo",
@@ -1272,7 +1344,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 106,
+    "id": 112,
     "title": "The Eternal Conflict",
     "artist": "Matt Uelmen",
     "composer": "Matt Uelmen",
@@ -1284,7 +1356,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 107,
+    "id": 113,
     "title": "New Tristram",
     "artist": "Matt Uelmen",
     "composer": "Matt Uelmen",
@@ -1296,7 +1368,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 108,
+    "id": 114,
     "title": "Caves",
     "artist": "Matt Uelmen",
     "composer": "Matt Uelmen",
@@ -1308,7 +1380,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 109,
+    "id": 115,
     "title": "Crypt",
     "artist": "Matt Uelmen",
     "composer": "Matt Uelmen",
@@ -1320,7 +1392,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 110,
+    "id": 116,
     "title": "Diablo",
     "artist": "Matt Uelmen",
     "composer": "Matt Uelmen",
@@ -1332,7 +1404,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 111,
+    "id": 117,
     "title": "David Wise",
     "artist": "David Wise",
     "composer": "David Wise",
@@ -1344,7 +1416,7 @@
     "console": "SNES"
   },
   {
-    "id": 112,
+    "id": 118,
     "title": "David Wise",
     "artist": "David Wise",
     "composer": "David Wise",
@@ -1356,7 +1428,7 @@
     "console": "SNES"
   },
   {
-    "id": 113,
+    "id": 119,
     "title": "David Wise",
     "artist": "David Wise",
     "composer": "David Wise",
@@ -1368,7 +1440,7 @@
     "console": "SNES"
   },
   {
-    "id": 114,
+    "id": 120,
     "title": "David Wise",
     "artist": "David Wise",
     "composer": "David Wise",
@@ -1380,7 +1452,7 @@
     "console": "SNES"
   },
   {
-    "id": 115,
+    "id": 121,
     "title": "David Wise",
     "artist": "David Wise",
     "composer": "David Wise",
@@ -1392,7 +1464,7 @@
     "console": "SNES"
   },
   {
-    "id": 116,
+    "id": 122,
     "title": "David Wise",
     "artist": "David Wise",
     "composer": "David Wise",
@@ -1404,7 +1476,7 @@
     "console": "SNES"
   },
   {
-    "id": 117,
+    "id": 123,
     "title": "David Wise",
     "artist": "David Wise",
     "composer": "David Wise",
@@ -1416,7 +1488,7 @@
     "console": "SNES"
   },
   {
-    "id": 118,
+    "id": 124,
     "title": "David Wise",
     "artist": "David Wise",
     "composer": "David Wise",
@@ -1428,7 +1500,7 @@
     "console": "SNES"
   },
   {
-    "id": 119,
+    "id": 125,
     "title": "David Wise",
     "artist": "David Wise",
     "composer": "David Wise",
@@ -1440,7 +1512,7 @@
     "console": "SNES"
   },
   {
-    "id": 120,
+    "id": 126,
     "title": "David Wise",
     "artist": "David Wise",
     "composer": "David Wise",
@@ -1452,7 +1524,7 @@
     "console": "SNES"
   },
   {
-    "id": 121,
+    "id": 127,
     "title": "David Wise",
     "artist": "David Wise",
     "composer": "David Wise",
@@ -1464,7 +1536,7 @@
     "console": "SNES"
   },
   {
-    "id": 122,
+    "id": 128,
     "title": "David Wise",
     "artist": "David Wise",
     "composer": "David Wise",
@@ -1476,7 +1548,7 @@
     "console": "SNES"
   },
   {
-    "id": 123,
+    "id": 129,
     "title": "David Wise",
     "artist": "David Wise",
     "composer": "David Wise",
@@ -1488,7 +1560,7 @@
     "console": "SNES"
   },
   {
-    "id": 124,
+    "id": 130,
     "title": "Fanfare",
     "artist": "David Wise",
     "composer": "David Wise",
@@ -1500,7 +1572,7 @@
     "console": "SNES"
   },
   {
-    "id": 125,
+    "id": 131,
     "title": "Dixie Beat",
     "artist": "David Wise",
     "composer": "David Wise",
@@ -1512,7 +1584,7 @@
     "console": "SNES"
   },
   {
-    "id": 126,
+    "id": 132,
     "title": "Crazy Calypso",
     "artist": "David Wise",
     "composer": "David Wise",
@@ -1524,7 +1596,7 @@
     "console": "SNES"
   },
   {
-    "id": 127,
+    "id": 133,
     "title": "Stilt Village",
     "artist": "David Wise",
     "composer": "David Wise",
@@ -1536,7 +1608,7 @@
     "console": "SNES"
   },
   {
-    "id": 128,
+    "id": 134,
     "title": "Nuts and Bolts",
     "artist": "David Wise",
     "composer": "David Wise",
@@ -1548,8 +1620,8 @@
     "console": "SNES"
   },
   {
-    "id": 129,
-    "title": "Don't Starve Theme",
+    "id": 135,
+    "title": "Don'T Starve Theme",
     "artist": "Jason Garner",
     "composer": "Jason Garner",
     "game": "Don't Starve",
@@ -1560,8 +1632,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 130,
-    "title": "Work To Be Done",
+    "id": 136,
+    "title": "Work to Be Done",
     "artist": "Jason Garner",
     "composer": "Jason Garner",
     "game": "Don't Starve",
@@ -1572,7 +1644,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 131,
+    "id": 137,
     "title": "E.F.S.",
     "artist": "Jason Garner",
     "composer": "Jason Garner",
@@ -1584,8 +1656,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 132,
-    "title": "At Doom's Gate",
+    "id": 138,
+    "title": "At Doom'S Gate",
     "artist": "Mick Gordon",
     "composer": "Mick Gordon",
     "game": "DOOM",
@@ -1596,7 +1668,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 133,
+    "id": 139,
     "title": "The Only Thing They Fear Is You",
     "artist": "Mick Gordon",
     "composer": "Mick Gordon",
@@ -1608,7 +1680,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 134,
+    "id": 140,
     "title": "Elden Ring",
     "artist": "Tsukasa Saitoh",
     "composer": "Tsukasa Saitoh",
@@ -1620,7 +1692,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 135,
+    "id": 141,
     "title": "Elden Ring Opening",
     "artist": "Tsukasa Saitoh",
     "composer": "Tsukasa Saitoh",
@@ -1632,7 +1704,115 @@
     "console": "Multi-platform"
   },
   {
-    "id": 136,
+    "id": 142,
+    "title": "Anxiety",
+    "artist": "Guilherme Gama",
+    "composer": "Guilherme Gama",
+    "game": "Paranormal Order: Enigma do Medo",
+    "context": "Audio - Paranormal Order: Enigma do Medo",
+    "audioUrl": "/audio/enigma-do-medo/Anxiety.mp3",
+    "year": 2023,
+    "genre": "Horror Game Soundtrack",
+    "console": "PC"
+  },
+  {
+    "id": 143,
+    "title": "Final Battle",
+    "artist": "Guilherme Gama",
+    "composer": "Guilherme Gama",
+    "game": "Paranormal Order: Enigma do Medo",
+    "context": "Audio - Paranormal Order: Enigma do Medo",
+    "audioUrl": "/audio/enigma-do-medo/Final Battle.mp3",
+    "year": 2023,
+    "genre": "Horror Game Soundtrack",
+    "console": "PC"
+  },
+  {
+    "id": 144,
+    "title": "Goliath",
+    "artist": "Guilherme Gama",
+    "composer": "Guilherme Gama",
+    "game": "Paranormal Order: Enigma do Medo",
+    "context": "Audio - Paranormal Order: Enigma do Medo",
+    "audioUrl": "/audio/enigma-do-medo/Goliath.mp3",
+    "year": 2023,
+    "genre": "Horror Game Soundtrack",
+    "console": "PC"
+  },
+  {
+    "id": 145,
+    "title": "Immortal King",
+    "artist": "Guilherme Gama",
+    "composer": "Guilherme Gama",
+    "game": "Paranormal Order: Enigma do Medo",
+    "context": "Audio - Paranormal Order: Enigma do Medo",
+    "audioUrl": "/audio/enigma-do-medo/Immortal King.mp3",
+    "year": 2023,
+    "genre": "Horror Game Soundtrack",
+    "console": "PC"
+  },
+  {
+    "id": 146,
+    "title": "Memoria Timoris",
+    "artist": "Guilherme Gama",
+    "composer": "Guilherme Gama",
+    "game": "Paranormal Order: Enigma do Medo",
+    "context": "Audio - Paranormal Order: Enigma do Medo",
+    "audioUrl": "/audio/enigma-do-medo/Memoria Timoris.mp3",
+    "year": 2023,
+    "genre": "Horror Game Soundtrack",
+    "console": "PC"
+  },
+  {
+    "id": 147,
+    "title": "Ode Ao Medo (Feat. Luciana Burger)",
+    "artist": "Guilherme Gama",
+    "composer": "Guilherme Gama",
+    "game": "Paranormal Order: Enigma do Medo",
+    "context": "Audio - Paranormal Order: Enigma do Medo",
+    "audioUrl": "/audio/enigma-do-medo/Ode ao Medo (feat. Luciana Burger).mp3",
+    "year": 2023,
+    "genre": "Horror Game Soundtrack",
+    "console": "PC"
+  },
+  {
+    "id": 148,
+    "title": "Original Game Soundtrack)",
+    "artist": "Guilherme Gama",
+    "composer": "Guilherme Gama",
+    "game": "Paranormal Order: Enigma do Medo",
+    "context": "Audio - Paranormal Order: Enigma do Medo",
+    "audioUrl": "/audio/enigma-do-medo/Paranormal Order： Enigma of Fear (Crowdfunding Single - Original Game Soundtrack).mp3",
+    "year": 2023,
+    "genre": "Horror Game Soundtrack",
+    "console": "PC"
+  },
+  {
+    "id": 149,
+    "title": "Sigils",
+    "artist": "Guilherme Gama",
+    "composer": "Guilherme Gama",
+    "game": "Paranormal Order: Enigma do Medo",
+    "context": "Audio - Paranormal Order: Enigma do Medo",
+    "audioUrl": "/audio/enigma-do-medo/Sigils.mp3",
+    "year": 2023,
+    "genre": "Horror Game Soundtrack",
+    "console": "PC"
+  },
+  {
+    "id": 150,
+    "title": "Transcend (Mia)",
+    "artist": "Guilherme Gama",
+    "composer": "Guilherme Gama",
+    "game": "Paranormal Order: Enigma do Medo",
+    "context": "Audio - Paranormal Order: Enigma do Medo",
+    "audioUrl": "/audio/enigma-do-medo/Transcend (Mia).mp3",
+    "year": 2023,
+    "genre": "Horror Game Soundtrack",
+    "console": "PC"
+  },
+  {
+    "id": 151,
     "title": "Opening Theme",
     "artist": "Yumiko Kanki & Naoto Ishida",
     "composer": "Yumiko Kanki & Naoto Ishida",
@@ -1644,7 +1824,7 @@
     "console": "SNES"
   },
   {
-    "id": 137,
+    "id": 152,
     "title": "Big Blue",
     "artist": "Yumiko Kanki & Naoto Ishida",
     "composer": "Yumiko Kanki & Naoto Ishida",
@@ -1656,7 +1836,7 @@
     "console": "SNES"
   },
   {
-    "id": 138,
+    "id": 153,
     "title": "Mute City",
     "artist": "Yumiko Kanki & Naoto Ishida",
     "composer": "Yumiko Kanki & Naoto Ishida",
@@ -1668,7 +1848,7 @@
     "console": "SNES"
   },
   {
-    "id": 139,
+    "id": 154,
     "title": "Everybody Falls (Fall Guys Theme)",
     "artist": "Jukio Kallio",
     "composer": "Jukio Kallio",
@@ -1680,7 +1860,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 140,
+    "id": 155,
     "title": "Adventure",
     "artist": "Disasterpeace",
     "composer": "Disasterpeace",
@@ -1692,7 +1872,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 141,
+    "id": 156,
     "title": "Puzzle",
     "artist": "Disasterpeace",
     "composer": "Disasterpeace",
@@ -1704,7 +1884,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 142,
+    "id": 157,
     "title": "Beyond",
     "artist": "Disasterpeace",
     "composer": "Disasterpeace",
@@ -1716,7 +1896,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 143,
+    "id": 158,
     "title": "Prelude",
     "artist": "Nobuo Uematsu",
     "composer": "Nobuo Uematsu",
@@ -1728,7 +1908,7 @@
     "console": "PlayStation"
   },
   {
-    "id": 144,
+    "id": 159,
     "title": "Opening~Bombing Mission",
     "artist": "Nobuo Uematsu",
     "composer": "Nobuo Uematsu",
@@ -1740,7 +1920,7 @@
     "console": "PlayStation"
   },
   {
-    "id": 145,
+    "id": 160,
     "title": "Makou Reactor",
     "artist": "Nobuo Uematsu",
     "composer": "Nobuo Uematsu",
@@ -1752,43 +1932,163 @@
     "console": "PlayStation"
   },
   {
-    "id": 146,
+    "id": 161,
+    "title": "Wish My Life Away (Laura Shigihara) (Lyrics Below)",
+    "artist": "Kan Gao",
+    "composer": "Kan Gao",
+    "game": "Finding Paradise",
+    "context": "Audio - Finding Paradise",
+    "audioUrl": "/audio/finding-paradise/Finding Paradise - Wish My Life Away (Laura Shigihara) (Lyrics below).mp3",
+    "year": 2017,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 162,
+    "title": "Bestest Detectives in the World (Outdoor)",
+    "artist": "Kan Gao",
+    "composer": "Kan Gao",
+    "game": "Finding Paradise",
+    "context": "Audio - Finding Paradise",
+    "audioUrl": "/audio/finding-paradise/Finding Paradise OST - Bestest Detectives in the World (Outdoor).mp3",
+    "year": 2017,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 163,
+    "title": "Faye'S Theme (Piano Vers.)",
+    "artist": "Kan Gao",
+    "composer": "Kan Gao",
+    "game": "Finding Paradise",
+    "context": "Audio - Finding Paradise",
+    "audioUrl": "/audio/finding-paradise/Finding Paradise OST - Faye's Theme (Piano Vers.).mp3",
+    "year": 2017,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 164,
+    "title": "Faye'S Theme",
+    "artist": "Kan Gao",
+    "composer": "Kan Gao",
+    "game": "Finding Paradise",
+    "context": "Audio - Finding Paradise",
+    "audioUrl": "/audio/finding-paradise/Finding Paradise OST - Faye's Theme.mp3",
+    "year": 2017,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 165,
+    "title": "The Scale Theme (Piano & Cello Vers.)",
+    "artist": "Kan Gao",
+    "composer": "Kan Gao",
+    "game": "Finding Paradise",
+    "context": "Audio - Finding Paradise",
+    "audioUrl": "/audio/finding-paradise/Finding Paradise OST - The Scale Theme (Piano & Cello Vers.).mp3",
+    "year": 2017,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 166,
+    "title": "The Scale Theme",
+    "artist": "Kan Gao",
+    "composer": "Kan Gao",
+    "game": "Finding Paradise",
+    "context": "Audio - Finding Paradise",
+    "audioUrl": "/audio/finding-paradise/Finding Paradise OST - The Scale Theme.mp3",
+    "year": 2017,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 167,
+    "title": "Time Is a Place",
+    "artist": "Kan Gao",
+    "composer": "Kan Gao",
+    "game": "Finding Paradise",
+    "context": "Audio - Finding Paradise",
+    "audioUrl": "/audio/finding-paradise/Finding Paradise OST - Time is a Place.mp3",
+    "year": 2017,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 168,
+    "title": "Title Theme (Short Vers.)",
+    "artist": "Kan Gao",
+    "composer": "Kan Gao",
+    "game": "Finding Paradise",
+    "context": "Audio - Finding Paradise",
+    "audioUrl": "/audio/finding-paradise/Finding Paradise OST - Title Theme (Short Vers.).mp3",
+    "year": 2017,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 169,
+    "title": "Trailer Theme",
+    "artist": "Kan Gao",
+    "composer": "Kan Gao",
+    "game": "Finding Paradise",
+    "context": "Audio - Finding Paradise",
+    "audioUrl": "/audio/finding-paradise/Finding Paradise OST - Trailer Theme.mp3",
+    "year": 2017,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 170,
+    "title": "Where Are You (Duet Version)",
+    "artist": "Kan Gao",
+    "composer": "Kan Gao",
+    "game": "Finding Paradise",
+    "context": "Audio - Finding Paradise",
+    "audioUrl": "/audio/finding-paradise/Finding Paradise OST - Where Are You (Duet Version).mp3",
+    "year": 2017,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 171,
     "title": "March in the Storm",
-    "artist": "Unknown Artist",
-    "composer": "Unknown Composer",
-    "game": "fuga",
-    "context": "Audio - fuga",
+    "artist": "Tomoki Miyoshi",
+    "composer": "Tomoki Miyoshi",
+    "game": "Fuga: Melodies of Steel",
+    "context": "Audio - Fuga: Melodies of Steel",
     "audioUrl": "/audio/fuga/1-04 March in the Storm.mp3",
-    "year": 2000,
-    "genre": "Game Soundtrack",
+    "year": 2021,
+    "genre": "JRPG Soundtrack",
     "console": "Multi-platform"
   },
   {
-    "id": 147,
+    "id": 172,
     "title": "Taranis Base",
-    "artist": "Unknown Artist",
-    "composer": "Unknown Composer",
-    "game": "fuga",
-    "context": "Audio - fuga",
+    "artist": "Tomoki Miyoshi",
+    "composer": "Tomoki Miyoshi",
+    "game": "Fuga: Melodies of Steel",
+    "context": "Audio - Fuga: Melodies of Steel",
     "audioUrl": "/audio/fuga/1-09 Taranis Base.mp3",
-    "year": 2000,
-    "genre": "Game Soundtrack",
+    "year": 2021,
+    "genre": "JRPG Soundtrack",
     "console": "Multi-platform"
   },
   {
-    "id": 148,
+    "id": 173,
     "title": "Flower on the Trails",
-    "artist": "Unknown Artist",
-    "composer": "Unknown Composer",
-    "game": "fuga",
-    "context": "Audio - fuga",
+    "artist": "Tomoki Miyoshi",
+    "composer": "Tomoki Miyoshi",
+    "game": "Fuga: Melodies of Steel",
+    "context": "Audio - Fuga: Melodies of Steel",
     "audioUrl": "/audio/fuga/1-10 Flower on the Trails.mp3",
-    "year": 2000,
-    "genre": "Game Soundtrack",
+    "year": 2021,
+    "genre": "JRPG Soundtrack",
     "console": "Multi-platform"
   },
   {
-    "id": 149,
+    "id": 174,
     "title": "Main Menu",
     "artist": "ForeverBound",
     "composer": "ForeverBound",
@@ -1800,7 +2100,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 150,
+    "id": 175,
     "title": "Stereo Madness",
     "artist": "ForeverBound",
     "composer": "ForeverBound",
@@ -1812,8 +2112,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 151,
-    "title": "Back On Track",
+    "id": 176,
+    "title": "Back on Track",
     "artist": "ForeverBound",
     "composer": "ForeverBound",
     "game": "Geometry Dash",
@@ -1824,7 +2124,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 152,
+    "id": 177,
     "title": "Watch Theme",
     "artist": "Grant Kirkhope",
     "composer": "Grant Kirkhope",
@@ -1836,55 +2136,55 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 153,
-    "title": "Main Theme",
-    "artist": "Michael Hunter",
-    "composer": "Michael Hunter",
-    "game": "Grand Theft Auto IV",
+    "id": 178,
+    "title": "Gta4",
+    "artist": "Craig Conner",
+    "composer": "Craig Conner",
+    "game": "Grand Theft Auto",
     "context": "Audio - Grand Theft Auto",
     "audioUrl": "/audio/grand-theft-auto/gta4.mp3",
-    "year": 2008,
+    "year": 1997,
     "genre": "Game Soundtrack",
     "console": "Multi-platform"
   },
   {
-    "id": 154,
-    "title": "Main Theme",
-    "artist": "Woody Jackson",
-    "composer": "Woody Jackson",
-    "game": "Grand Theft Auto V",
+    "id": 179,
+    "title": "Gta5",
+    "artist": "Craig Conner",
+    "composer": "Craig Conner",
+    "game": "Grand Theft Auto",
     "context": "Audio - Grand Theft Auto",
     "audioUrl": "/audio/grand-theft-auto/gta5.mp3",
-    "year": 2013,
+    "year": 1997,
     "genre": "Game Soundtrack",
     "console": "Multi-platform"
   },
   {
-    "id": 155,
-    "title": "Main Theme",
-    "artist": "Michael Hunter",
-    "composer": "Michael Hunter",
-    "game": "Grand Theft Auto San Andreas",
+    "id": 180,
+    "title": "Sanandreas",
+    "artist": "Craig Conner",
+    "composer": "Craig Conner",
+    "game": "Grand Theft Auto",
     "context": "Audio - Grand Theft Auto",
     "audioUrl": "/audio/grand-theft-auto/sanandreas.mp3",
-    "year": 2004,
+    "year": 1997,
     "genre": "Game Soundtrack",
     "console": "Multi-platform"
   },
   {
-    "id": 156,
-    "title": "Main Theme",
-    "artist": "Lex Horton",
-    "composer": "Lex Horton",
-    "game": "Grand Theft Auto Vice City",
+    "id": 181,
+    "title": "Vice City",
+    "artist": "Craig Conner",
+    "composer": "Craig Conner",
+    "game": "Grand Theft Auto",
     "context": "Audio - Grand Theft Auto",
     "audioUrl": "/audio/grand-theft-auto/vice city.mp3",
-    "year": 2002,
+    "year": 1997,
     "genre": "Game Soundtrack",
     "console": "Multi-platform"
   },
   {
-    "id": 157,
+    "id": 182,
     "title": "No Escape",
     "artist": "Darren Korb",
     "composer": "Darren Korb",
@@ -1896,7 +2196,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 158,
+    "id": 183,
     "title": "The House of Hades",
     "artist": "Darren Korb",
     "composer": "Darren Korb",
@@ -1908,7 +2208,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 159,
+    "id": 184,
     "title": "Out of Tartarus",
     "artist": "Darren Korb",
     "composer": "Darren Korb",
@@ -1920,8 +2220,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 160,
-    "title": "You're Not Supposed to Be Here",
+    "id": 185,
+    "title": "You'Re Not Supposed to Be Here",
     "artist": "Kelly Bailey",
     "composer": "Kelly Bailey",
     "game": "Half-Life",
@@ -1932,7 +2232,7 @@
     "console": "PC"
   },
   {
-    "id": 161,
+    "id": 186,
     "title": "Hard Fought",
     "artist": "Kelly Bailey",
     "composer": "Kelly Bailey",
@@ -1944,7 +2244,7 @@
     "console": "PC"
   },
   {
-    "id": 162,
+    "id": 187,
     "title": "Enter Hallownest",
     "artist": "Christopher Larkin",
     "composer": "Christopher Larkin",
@@ -1956,7 +2256,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 163,
+    "id": 188,
     "title": "Hornet",
     "artist": "Christopher Larkin",
     "composer": "Christopher Larkin",
@@ -1968,7 +2268,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 164,
+    "id": 189,
     "title": "Reflection",
     "artist": "Christopher Larkin",
     "composer": "Christopher Larkin",
@@ -1980,7 +2280,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 165,
+    "id": 190,
     "title": "City of Tears",
     "artist": "Christopher Larkin",
     "composer": "Christopher Larkin",
@@ -1992,7 +2292,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 166,
+    "id": 191,
     "title": "Soul Sanctum",
     "artist": "Christopher Larkin",
     "composer": "Christopher Larkin",
@@ -2004,7 +2304,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 167,
+    "id": 192,
     "title": "The White Lady",
     "artist": "Christopher Larkin",
     "composer": "Christopher Larkin",
@@ -2016,7 +2316,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 168,
+    "id": 193,
     "title": "Dream",
     "artist": "Christopher Larkin",
     "composer": "Christopher Larkin",
@@ -2028,7 +2328,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 169,
+    "id": 194,
     "title": "Hollow Knight",
     "artist": "Christopher Larkin",
     "composer": "Christopher Larkin",
@@ -2040,10 +2340,10 @@
     "console": "Multi-platform"
   },
   {
-    "id": 170,
+    "id": 195,
     "title": "Horse Steppin",
-    "artist": "Various Artists",
-    "composer": "Various Artists",
+    "artist": "M|O|O|N",
+    "composer": "M|O|O|N",
     "game": "Hotline Miami",
     "context": "Audio - Hotline Miami",
     "audioUrl": "/audio/hotline-miami/01. Horse Steppin.mp3",
@@ -2052,10 +2352,10 @@
     "console": "Multi-platform"
   },
   {
-    "id": 171,
+    "id": 196,
     "title": "Hydrogen",
-    "artist": "Various Artists",
-    "composer": "Various Artists",
+    "artist": "M|O|O|N",
+    "composer": "M|O|O|N",
     "game": "Hotline Miami",
     "context": "Audio - Hotline Miami",
     "audioUrl": "/audio/hotline-miami/02. Hydrogen.mp3",
@@ -2064,10 +2364,10 @@
     "console": "Multi-platform"
   },
   {
-    "id": 172,
+    "id": 197,
     "title": "Paris",
-    "artist": "Various Artists",
-    "composer": "Various Artists",
+    "artist": "M|O|O|N",
+    "composer": "M|O|O|N",
     "game": "Hotline Miami",
     "context": "Audio - Hotline Miami",
     "audioUrl": "/audio/hotline-miami/03. Paris.mp3",
@@ -2076,10 +2376,10 @@
     "console": "Multi-platform"
   },
   {
-    "id": 173,
+    "id": 198,
     "title": "Crystals",
-    "artist": "Various Artists",
-    "composer": "Various Artists",
+    "artist": "M|O|O|N",
+    "composer": "M|O|O|N",
     "game": "Hotline Miami",
     "context": "Audio - Hotline Miami",
     "audioUrl": "/audio/hotline-miami/04. Crystals.mp3",
@@ -2088,10 +2388,10 @@
     "console": "Multi-platform"
   },
   {
-    "id": 174,
+    "id": 199,
     "title": "Vengeance",
-    "artist": "Various Artists",
-    "composer": "Various Artists",
+    "artist": "M|O|O|N",
+    "composer": "M|O|O|N",
     "game": "Hotline Miami",
     "context": "Audio - Hotline Miami",
     "audioUrl": "/audio/hotline-miami/05. Vengeance.mp3",
@@ -2100,7 +2400,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 175,
+    "id": 200,
     "title": "Let Mom Sleep",
     "artist": "Hideki Naganuma",
     "composer": "Hideki Naganuma",
@@ -2112,7 +2412,7 @@
     "console": "Dreamcast"
   },
   {
-    "id": 176,
+    "id": 201,
     "title": "Humming the Bassline",
     "artist": "Hideki Naganuma",
     "composer": "Hideki Naganuma",
@@ -2124,8 +2424,8 @@
     "console": "Dreamcast"
   },
   {
-    "id": 177,
-    "title": "That's Enough",
+    "id": 202,
+    "title": "That'S Enough",
     "artist": "Hideki Naganuma",
     "composer": "Hideki Naganuma",
     "game": "Jet Set Radio",
@@ -2136,7 +2436,7 @@
     "console": "Dreamcast"
   },
   {
-    "id": 178,
+    "id": 203,
     "title": "Bossbattle",
     "artist": "LudoWic",
     "composer": "LudoWic",
@@ -2148,7 +2448,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 179,
+    "id": 204,
     "title": "Chinatown",
     "artist": "LudoWic",
     "composer": "LudoWic",
@@ -2160,7 +2460,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 180,
+    "id": 205,
     "title": "Katanazero",
     "artist": "LudoWic",
     "composer": "LudoWic",
@@ -2172,7 +2472,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 181,
+    "id": 206,
     "title": "Running Through the New World",
     "artist": "Jun Ishikawa",
     "composer": "Jun Ishikawa",
@@ -2184,7 +2484,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 182,
+    "id": 207,
     "title": "Ready to Go! (Title Screen)",
     "artist": "Jun Ishikawa",
     "composer": "Jun Ishikawa",
@@ -2196,7 +2496,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 183,
+    "id": 208,
     "title": "Welcome to the New World! (Full)",
     "artist": "Jun Ishikawa",
     "composer": "Jun Ishikawa",
@@ -2208,7 +2508,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 184,
+    "id": 209,
     "title": "Cookie Country (Level 1)",
     "artist": "Jun Ishikawa",
     "composer": "Jun Ishikawa",
@@ -2220,8 +2520,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 185,
-    "title": "Magolor, the Far-Flung Traveler (Lor Starcutter)",
+    "id": 210,
+    "title": "Magolor, the Far Flung Traveler (Lor Starcutter)",
     "artist": "Jun Ishikawa",
     "composer": "Jun Ishikawa",
     "game": "Kirby",
@@ -2232,7 +2532,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 186,
+    "id": 211,
     "title": "Planet Popstar (Planet Popstar Map)",
     "artist": "Jun Ishikawa",
     "composer": "Jun Ishikawa",
@@ -2244,7 +2544,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 187,
+    "id": 212,
     "title": "Woods Wayfarer (Forest Area)",
     "artist": "Jun Ishikawa",
     "composer": "Jun Ishikawa",
@@ -2256,7 +2556,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 188,
+    "id": 213,
     "title": "Kirby Super Star",
     "artist": "Jun Ishikawa",
     "composer": "Jun Ishikawa",
@@ -2268,7 +2568,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 189,
+    "id": 214,
     "title": "Green Greens",
     "artist": "Jun Ishikawa",
     "composer": "Jun Ishikawa",
@@ -2280,7 +2580,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 190,
+    "id": 215,
     "title": "Float Islands",
     "artist": "Jun Ishikawa",
     "composer": "Jun Ishikawa",
@@ -2292,7 +2592,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 191,
+    "id": 216,
     "title": "Boss Battle",
     "artist": "Jun Ishikawa",
     "composer": "Jun Ishikawa",
@@ -2304,7 +2604,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 192,
+    "id": 217,
     "title": "And I Begin to Wonder",
     "artist": "Kanako Kakino",
     "composer": "Kanako Kakino",
@@ -2316,7 +2616,7 @@
     "console": "PlayStation"
   },
   {
-    "id": 193,
+    "id": 218,
     "title": "Inquisitive Waltz",
     "artist": "Kanako Kakino",
     "composer": "Kanako Kakino",
@@ -2328,7 +2628,7 @@
     "console": "PlayStation"
   },
   {
-    "id": 194,
+    "id": 219,
     "title": "The Windmill Song",
     "artist": "Kanako Kakino",
     "composer": "Kanako Kakino",
@@ -2340,7 +2640,7 @@
     "console": "PlayStation"
   },
   {
-    "id": 195,
+    "id": 220,
     "title": "Farewell",
     "artist": "Kanako Kakino",
     "composer": "Kanako Kakino",
@@ -2352,7 +2652,7 @@
     "console": "PlayStation"
   },
   {
-    "id": 196,
+    "id": 221,
     "title": "The Whisper",
     "artist": "Beicoli",
     "composer": "Beicoli",
@@ -2364,7 +2664,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 197,
+    "id": 222,
     "title": "Bloody Sunset",
     "artist": "Beicoli",
     "composer": "Beicoli",
@@ -2376,8 +2676,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 198,
-    "title": "Playing In The Sun",
+    "id": 223,
+    "title": "Playing in the Sun",
     "artist": "Beicoli",
     "composer": "Beicoli",
     "game": "Laika: Aged Through Blood",
@@ -2388,8 +2688,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 199,
-    "title": "Heartbeat From The Last Century",
+    "id": 224,
+    "title": "Heartbeat from the Last Century",
     "artist": "Beicoli",
     "composer": "Beicoli",
     "game": "Laika: Aged Through Blood",
@@ -2400,7 +2700,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 200,
+    "id": 225,
     "title": "Trust Them",
     "artist": "Beicoli",
     "composer": "Beicoli",
@@ -2412,8 +2712,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 201,
-    "title": "Lullaby Of The Dead",
+    "id": 226,
+    "title": "Lullaby of the Dead",
     "artist": "Beicoli",
     "composer": "Beicoli",
     "game": "Laika: Aged Through Blood",
@@ -2424,7 +2724,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 202,
+    "id": 227,
     "title": "The Hero",
     "artist": "Beicoli",
     "composer": "Beicoli",
@@ -2436,7 +2736,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 203,
+    "id": 228,
     "title": "The Last Tear",
     "artist": "Beicoli",
     "composer": "Beicoli",
@@ -2448,8 +2748,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 204,
-    "title": "Visions Of Red",
+    "id": 229,
+    "title": "Visions of Red",
     "artist": "Beicoli",
     "composer": "Beicoli",
     "game": "Laika: Aged Through Blood",
@@ -2460,7 +2760,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 205,
+    "id": 230,
     "title": "My Destiny",
     "artist": "Beicoli",
     "composer": "Beicoli",
@@ -2472,7 +2772,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 206,
+    "id": 231,
     "title": "Heartglaze Hope",
     "artist": "Beicoli",
     "composer": "Beicoli",
@@ -2484,7 +2784,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 207,
+    "id": 232,
     "title": "Coming Home",
     "artist": "Beicoli",
     "composer": "Beicoli",
@@ -2496,7 +2796,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 208,
+    "id": 233,
     "title": "Blue Limbo",
     "artist": "Beicoli",
     "composer": "Beicoli",
@@ -2508,8 +2808,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 209,
-    "title": "The End Of The Road",
+    "id": 234,
+    "title": "The End of The Road",
     "artist": "Beicoli",
     "composer": "Beicoli",
     "game": "Laika: Aged Through Blood",
@@ -2520,7 +2820,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 210,
+    "id": 235,
     "title": "The Final Hour",
     "artist": "Beicoli",
     "composer": "Beicoli",
@@ -2532,7 +2832,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 211,
+    "id": 236,
     "title": "Overthinker",
     "artist": "Beicoli",
     "composer": "Beicoli",
@@ -2544,7 +2844,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 212,
+    "id": 237,
     "title": "Mother",
     "artist": "Beicoli",
     "composer": "Beicoli",
@@ -2556,7 +2856,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 213,
+    "id": 238,
     "title": "Lonely Mountain",
     "artist": "Beicoli",
     "composer": "Beicoli",
@@ -2568,8 +2868,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 214,
-    "title": "Recurring dream",
+    "id": 239,
+    "title": "Recurring Dream",
     "artist": "Beicoli",
     "composer": "Beicoli",
     "game": "Laika: Aged Through Blood",
@@ -2580,8 +2880,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 215,
-    "title": "Through The Wind",
+    "id": 240,
+    "title": "Through the Wind",
     "artist": "Beicoli",
     "composer": "Beicoli",
     "game": "Laika: Aged Through Blood",
@@ -2592,8 +2892,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 216,
-    "title": "I'm Not Gone",
+    "id": 241,
+    "title": "I'M Not Gone",
     "artist": "Beicoli",
     "composer": "Beicoli",
     "game": "Laika: Aged Through Blood",
@@ -2604,7 +2904,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 217,
+    "id": 242,
     "title": "Overture",
     "artist": "Mahito Yokota",
     "composer": "Mahito Yokota",
@@ -2616,7 +2916,7 @@
     "console": "Wii"
   },
   {
-    "id": 218,
+    "id": 243,
     "title": "Rosalina in the Observatory 1",
     "artist": "Mahito Yokota",
     "composer": "Mahito Yokota",
@@ -2628,7 +2928,7 @@
     "console": "Wii"
   },
   {
-    "id": 219,
+    "id": 244,
     "title": "Gusty Garden Galaxy",
     "artist": "Mahito Yokota",
     "composer": "Mahito Yokota",
@@ -2640,7 +2940,7 @@
     "console": "Wii"
   },
   {
-    "id": 220,
+    "id": 245,
     "title": "Rosalina in the Observatory 3",
     "artist": "Mahito Yokota",
     "composer": "Mahito Yokota",
@@ -2652,8 +2952,8 @@
     "console": "Wii"
   },
   {
-    "id": 221,
-    "title": "Overture galaxy 2",
+    "id": 246,
+    "title": "Overture Galaxy 2",
     "artist": "Mahito Yokota",
     "composer": "Mahito Yokota",
     "game": "Super Mario Galaxy 2",
@@ -2664,7 +2964,7 @@
     "console": "Wii"
   },
   {
-    "id": 222,
+    "id": 247,
     "title": "Sky Station Galaxy",
     "artist": "Mahito Yokota",
     "composer": "Mahito Yokota",
@@ -2676,8 +2976,8 @@
     "console": "Wii"
   },
   {
-    "id": 223,
-    "title": "Spin-Dig Galaxy",
+    "id": 248,
+    "title": "Spin Dig Galaxy",
     "artist": "Mahito Yokota",
     "composer": "Mahito Yokota",
     "game": "Super Mario Galaxy 2",
@@ -2688,8 +2988,8 @@
     "console": "Wii"
   },
   {
-    "id": 224,
-    "title": "Flip-Swap Galaxy",
+    "id": 249,
+    "title": "Flip Swap Galaxy",
     "artist": "Mahito Yokota",
     "composer": "Mahito Yokota",
     "game": "Super Mario Galaxy 2",
@@ -2700,7 +3000,7 @@
     "console": "Wii"
   },
   {
-    "id": 225,
+    "id": 250,
     "title": "Cosmic Cove Galaxy",
     "artist": "Mahito Yokota",
     "composer": "Mahito Yokota",
@@ -2712,7 +3012,7 @@
     "console": "Wii"
   },
   {
-    "id": 226,
+    "id": 251,
     "title": "Hightail Falls Galaxy",
     "artist": "Mahito Yokota",
     "composer": "Mahito Yokota",
@@ -2724,7 +3024,7 @@
     "console": "Wii"
   },
   {
-    "id": 227,
+    "id": 252,
     "title": "Throwback Galaxy",
     "artist": "Mahito Yokota",
     "composer": "Mahito Yokota",
@@ -2736,7 +3036,7 @@
     "console": "Wii"
   },
   {
-    "id": 228,
+    "id": 253,
     "title": "Fossil Falls",
     "artist": "Naoto Kubo",
     "composer": "Naoto Kubo",
@@ -2748,7 +3048,7 @@
     "console": "Nintendo Switch"
   },
   {
-    "id": 229,
+    "id": 254,
     "title": "Steam Gardens",
     "artist": "Naoto Kubo",
     "composer": "Naoto Kubo",
@@ -2760,7 +3060,7 @@
     "console": "Nintendo Switch"
   },
   {
-    "id": 230,
+    "id": 255,
     "title": "New Donk City Festival",
     "artist": "Naoto Kubo",
     "composer": "Naoto Kubo",
@@ -2772,7 +3072,7 @@
     "console": "Nintendo Switch"
   },
   {
-    "id": 231,
+    "id": 256,
     "title": "Delfino Plaza",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -2784,7 +3084,7 @@
     "console": "GameCube"
   },
   {
-    "id": 232,
+    "id": 257,
     "title": "Bianco Hills",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -2796,7 +3096,7 @@
     "console": "GameCube"
   },
   {
-    "id": 233,
+    "id": 258,
     "title": "Ricco Harbor",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -2808,8 +3108,8 @@
     "console": "GameCube"
   },
   {
-    "id": 234,
-    "title": "Yoshi's Island",
+    "id": 259,
+    "title": "Yoshi'S Island",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Super Mario World",
@@ -2820,7 +3120,7 @@
     "console": "SNES"
   },
   {
-    "id": 235,
+    "id": 260,
     "title": "Wandering the Plains",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -2832,7 +3132,7 @@
     "console": "SNES"
   },
   {
-    "id": 236,
+    "id": 261,
     "title": "Star Road",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -2844,7 +3144,7 @@
     "console": "SNES"
   },
   {
-    "id": 237,
+    "id": 262,
     "title": "Overworld",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -2856,7 +3156,7 @@
     "console": "SNES"
   },
   {
-    "id": 238,
+    "id": 263,
     "title": "Athletic",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -2868,7 +3168,7 @@
     "console": "SNES"
   },
   {
-    "id": 239,
+    "id": 264,
     "title": "Title Screen",
     "artist": "Mahito Yokota",
     "composer": "Mahito Yokota",
@@ -2880,8 +3180,8 @@
     "console": "Wii U"
   },
   {
-    "id": 240,
-    "title": "WORLD 1",
+    "id": 265,
+    "title": "World 1",
     "artist": "Mahito Yokota",
     "composer": "Mahito Yokota",
     "game": "Super Mario 3D World",
@@ -2892,7 +3192,7 @@
     "console": "Wii U"
   },
   {
-    "id": 241,
+    "id": 266,
     "title": "Super Bell Hill",
     "artist": "Mahito Yokota",
     "composer": "Mahito Yokota",
@@ -2904,8 +3204,8 @@
     "console": "Wii U"
   },
   {
-    "id": 242,
-    "title": "Chain-Link Charge",
+    "id": 267,
+    "title": "Chain Link Charge",
     "artist": "Mahito Yokota",
     "composer": "Mahito Yokota",
     "game": "Super Mario 3D World",
@@ -2916,7 +3216,7 @@
     "console": "Wii U"
   },
   {
-    "id": 243,
+    "id": 268,
     "title": "Double Cherry Pass",
     "artist": "Mahito Yokota",
     "composer": "Mahito Yokota",
@@ -2928,7 +3228,7 @@
     "console": "Wii U"
   },
   {
-    "id": 244,
+    "id": 269,
     "title": "Snowball Park",
     "artist": "Mahito Yokota",
     "composer": "Mahito Yokota",
@@ -2940,8 +3240,8 @@
     "console": "Wii U"
   },
   {
-    "id": 245,
-    "title": "a Mario Kart 64 Theme",
+    "id": 270,
+    "title": "A Mario Kart 64 Theme",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Mario Kart 64",
@@ -2952,8 +3252,8 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 246,
-    "title": "a 3 Raceways, Wario Stadium",
+    "id": 271,
+    "title": "A 3 Raceways, Wario Stadium",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Mario Kart 64",
@@ -2964,8 +3264,8 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 247,
-    "title": "a Moo Moo Farm, Yoshi Valley",
+    "id": 272,
+    "title": "A Moo Moo Farm, Yoshi Valley",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Mario Kart 64",
@@ -2976,8 +3276,8 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 248,
-    "title": "a Choco Mountain, Battle Arenas",
+    "id": 273,
+    "title": "A Choco Mountain, Battle Arenas",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Mario Kart 64",
@@ -2988,8 +3288,8 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 249,
-    "title": "a Rainbow Road",
+    "id": 274,
+    "title": "A Rainbow Road",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Mario Kart 64",
@@ -3000,7 +3300,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 250,
+    "id": 275,
     "title": "Main Menu",
     "artist": "Asuka Ohta",
     "composer": "Asuka Ohta",
@@ -3012,7 +3312,7 @@
     "console": "Nintendo DS"
   },
   {
-    "id": 251,
+    "id": 276,
     "title": "Singleplayer Menu",
     "artist": "Asuka Ohta",
     "composer": "Asuka Ohta",
@@ -3024,8 +3324,8 @@
     "console": "Nintendo DS"
   },
   {
-    "id": 252,
-    "title": "Mario Kart Wii",
+    "id": 277,
+    "title": "Kart Wii",
     "artist": "Asuka Ohta",
     "composer": "Asuka Ohta",
     "game": "Mario Kart Wii",
@@ -3036,7 +3336,7 @@
     "console": "Wii"
   },
   {
-    "id": 253,
+    "id": 278,
     "title": "Main Menu (Medley)",
     "artist": "Asuka Ohta",
     "composer": "Asuka Ohta",
@@ -3048,7 +3348,7 @@
     "console": "Wii"
   },
   {
-    "id": 254,
+    "id": 279,
     "title": "Luigi Circuit",
     "artist": "Asuka Ohta",
     "composer": "Asuka Ohta",
@@ -3060,7 +3360,7 @@
     "console": "Wii"
   },
   {
-    "id": 255,
+    "id": 280,
     "title": "Moo Moo Meadows",
     "artist": "Asuka Ohta",
     "composer": "Asuka Ohta",
@@ -3072,7 +3372,7 @@
     "console": "Wii"
   },
   {
-    "id": 256,
+    "id": 281,
     "title": "Mushroom Gorge",
     "artist": "Asuka Ohta",
     "composer": "Asuka Ohta",
@@ -3084,8 +3384,8 @@
     "console": "Wii"
   },
   {
-    "id": 257,
-    "title": "Toad's Factory",
+    "id": 282,
+    "title": "Toad'S Factory",
     "artist": "Asuka Ohta",
     "composer": "Asuka Ohta",
     "game": "Mario Kart Wii",
@@ -3096,7 +3396,7 @@
     "console": "Wii"
   },
   {
-    "id": 258,
+    "id": 283,
     "title": "Coconut Mall",
     "artist": "Asuka Ohta",
     "composer": "Asuka Ohta",
@@ -3108,7 +3408,7 @@
     "console": "Wii"
   },
   {
-    "id": 259,
+    "id": 284,
     "title": "Maple Treeway",
     "artist": "Asuka Ohta",
     "composer": "Asuka Ohta",
@@ -3120,7 +3420,7 @@
     "console": "Wii"
   },
   {
-    "id": 260,
+    "id": 285,
     "title": "Rainbow Road",
     "artist": "Asuka Ohta",
     "composer": "Asuka Ohta",
@@ -3132,8 +3432,8 @@
     "console": "Wii"
   },
   {
-    "id": 261,
-    "title": "a Mario Paint",
+    "id": 286,
+    "title": "A Mario Paint",
     "artist": "Hirokazu Tanaka",
     "composer": "Hirokazu Tanaka",
     "game": "Mario Paint",
@@ -3144,7 +3444,7 @@
     "console": "SNES"
   },
   {
-    "id": 262,
+    "id": 287,
     "title": "Creative Exercise",
     "artist": "Hirokazu Tanaka",
     "composer": "Hirokazu Tanaka",
@@ -3156,7 +3456,7 @@
     "console": "SNES"
   },
   {
-    "id": 263,
+    "id": 288,
     "title": "Monkey Song",
     "artist": "Hirokazu Tanaka",
     "composer": "Hirokazu Tanaka",
@@ -3168,7 +3468,7 @@
     "console": "SNES"
   },
   {
-    "id": 264,
+    "id": 289,
     "title": "Title Screen",
     "artist": "Asuka Ohta",
     "composer": "Asuka Ohta",
@@ -3180,7 +3480,7 @@
     "console": "Nintendo DS"
   },
   {
-    "id": 265,
+    "id": 290,
     "title": "Mushroom Plains",
     "artist": "Asuka Ohta",
     "composer": "Asuka Ohta",
@@ -3192,7 +3492,7 @@
     "console": "Nintendo DS"
   },
   {
-    "id": 266,
+    "id": 291,
     "title": "Walking the Plains",
     "artist": "Asuka Ohta",
     "composer": "Asuka Ohta",
@@ -3204,7 +3504,7 @@
     "console": "Nintendo DS"
   },
   {
-    "id": 267,
+    "id": 292,
     "title": "Underground Theme",
     "artist": "Asuka Ohta",
     "composer": "Asuka Ohta",
@@ -3216,7 +3516,7 @@
     "console": "Nintendo DS"
   },
   {
-    "id": 268,
+    "id": 293,
     "title": "Starman",
     "artist": "Asuka Ohta",
     "composer": "Asuka Ohta",
@@ -3228,7 +3528,7 @@
     "console": "Nintendo DS"
   },
   {
-    "id": 269,
+    "id": 294,
     "title": "Title Screen",
     "artist": "Ryo Nagamatsu",
     "composer": "Ryo Nagamatsu",
@@ -3240,7 +3540,7 @@
     "console": "Wii"
   },
   {
-    "id": 270,
+    "id": 295,
     "title": "World 1 Map",
     "artist": "Ryo Nagamatsu",
     "composer": "Ryo Nagamatsu",
@@ -3252,8 +3552,8 @@
     "console": "Wii"
   },
   {
-    "id": 271,
-    "title": "Peach's Castle",
+    "id": 296,
+    "title": "Peach'S Castle",
     "artist": "Ryo Nagamatsu",
     "composer": "Ryo Nagamatsu",
     "game": "New Super Mario Bros. Wii",
@@ -3264,7 +3564,7 @@
     "console": "Wii"
   },
   {
-    "id": 272,
+    "id": 297,
     "title": "Overworld",
     "artist": "Ryo Nagamatsu",
     "composer": "Ryo Nagamatsu",
@@ -3276,7 +3576,7 @@
     "console": "Wii"
   },
   {
-    "id": 273,
+    "id": 298,
     "title": "Toad House",
     "artist": "Ryo Nagamatsu",
     "composer": "Ryo Nagamatsu",
@@ -3288,7 +3588,7 @@
     "console": "Wii"
   },
   {
-    "id": 274,
+    "id": 299,
     "title": "Tower",
     "artist": "Ryo Nagamatsu",
     "composer": "Ryo Nagamatsu",
@@ -3300,7 +3600,7 @@
     "console": "Wii"
   },
   {
-    "id": 275,
+    "id": 300,
     "title": "Athletic",
     "artist": "Ryo Nagamatsu",
     "composer": "Ryo Nagamatsu",
@@ -3312,7 +3612,7 @@
     "console": "Wii"
   },
   {
-    "id": 276,
+    "id": 301,
     "title": "Main Title",
     "artist": "Yuka Tsujiyoko",
     "composer": "Yuka Tsujiyoko",
@@ -3324,8 +3624,8 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 277,
-    "title": "A Party at Peach's Castle",
+    "id": 302,
+    "title": "A Party at Peach'S Castle",
     "artist": "Yuka Tsujiyoko",
     "composer": "Yuka Tsujiyoko",
     "game": "Paper Mario",
@@ -3336,8 +3636,8 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 278,
-    "title": "Mario's Theme",
+    "id": 303,
+    "title": "Mario'S Theme",
     "artist": "Yuka Tsujiyoko",
     "composer": "Yuka Tsujiyoko",
     "game": "Paper Mario",
@@ -3348,7 +3648,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 279,
+    "id": 304,
     "title": "March Ahead",
     "artist": "Yuka Tsujiyoko",
     "composer": "Yuka Tsujiyoko",
@@ -3360,8 +3660,8 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 280,
-    "title": "b Battle Fanfare",
+    "id": 305,
+    "title": "B Battle Fanfare",
     "artist": "Yuka Tsujiyoko",
     "composer": "Yuka Tsujiyoko",
     "game": "Paper Mario",
@@ -3372,7 +3672,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 281,
+    "id": 306,
     "title": "Toad Town",
     "artist": "Yuka Tsujiyoko",
     "composer": "Yuka Tsujiyoko",
@@ -3384,7 +3684,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 282,
+    "id": 307,
     "title": "Koji Kondo",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -3396,7 +3696,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 283,
+    "id": 308,
     "title": "Koji Kondo",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -3408,7 +3708,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 284,
+    "id": 309,
     "title": "Koji Kondo",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -3420,7 +3720,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 285,
+    "id": 310,
     "title": "Koji Kondo",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -3432,7 +3732,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 286,
+    "id": 311,
     "title": "Koji Kondo",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -3444,7 +3744,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 287,
+    "id": 312,
     "title": "Koji Kondo",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -3456,7 +3756,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 288,
+    "id": 313,
     "title": "Koji Kondo",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -3468,7 +3768,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 289,
+    "id": 314,
     "title": "Koji Kondo",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -3480,7 +3780,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 290,
+    "id": 315,
     "title": "Koji Kondo",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -3492,7 +3792,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 291,
+    "id": 316,
     "title": "Koji Kondo",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -3504,8 +3804,8 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 292,
-    "title": "Bob-omb Battlefield",
+    "id": 317,
+    "title": "Bob Omb Battlefield",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Super Mario 64",
@@ -3516,7 +3816,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 293,
+    "id": 318,
     "title": "David Wise",
     "artist": "Setsuo Yamamoto",
     "composer": "Setsuo Yamamoto",
@@ -3528,7 +3828,7 @@
     "console": "SNES"
   },
   {
-    "id": 294,
+    "id": 319,
     "title": "Setsuo Yamamoto",
     "artist": "Setsuo Yamamoto",
     "composer": "Setsuo Yamamoto",
@@ -3540,7 +3840,7 @@
     "console": "SNES"
   },
   {
-    "id": 295,
+    "id": 320,
     "title": "Setsuo Yamamoto",
     "artist": "Setsuo Yamamoto",
     "composer": "Setsuo Yamamoto",
@@ -3552,7 +3852,7 @@
     "console": "SNES"
   },
   {
-    "id": 296,
+    "id": 321,
     "title": "Setsuo Yamamoto",
     "artist": "Setsuo Yamamoto",
     "composer": "Setsuo Yamamoto",
@@ -3564,7 +3864,7 @@
     "console": "SNES"
   },
   {
-    "id": 297,
+    "id": 322,
     "title": "Setsuo Yamamoto",
     "artist": "Setsuo Yamamoto",
     "composer": "Setsuo Yamamoto",
@@ -3576,7 +3876,7 @@
     "console": "SNES"
   },
   {
-    "id": 298,
+    "id": 323,
     "title": "Setsuo Yamamoto",
     "artist": "Setsuo Yamamoto",
     "composer": "Setsuo Yamamoto",
@@ -3588,7 +3888,7 @@
     "console": "SNES"
   },
   {
-    "id": 299,
+    "id": 324,
     "title": "Setsuo Yamamoto",
     "artist": "Setsuo Yamamoto",
     "composer": "Setsuo Yamamoto",
@@ -3600,7 +3900,7 @@
     "console": "SNES"
   },
   {
-    "id": 300,
+    "id": 325,
     "title": "Setsuo Yamamoto",
     "artist": "Setsuo Yamamoto",
     "composer": "Setsuo Yamamoto",
@@ -3612,7 +3912,7 @@
     "console": "SNES"
   },
   {
-    "id": 301,
+    "id": 326,
     "title": "Setsuo Yamamoto",
     "artist": "Setsuo Yamamoto",
     "composer": "Setsuo Yamamoto",
@@ -3624,7 +3924,7 @@
     "console": "SNES"
   },
   {
-    "id": 302,
+    "id": 327,
     "title": "Setsuo Yamamoto",
     "artist": "Setsuo Yamamoto",
     "composer": "Setsuo Yamamoto",
@@ -3636,7 +3936,7 @@
     "console": "SNES"
   },
   {
-    "id": 303,
+    "id": 328,
     "title": "Snake Eater",
     "artist": "Harry Gregson-Williams",
     "composer": "Harry Gregson-Williams",
@@ -3648,7 +3948,7 @@
     "console": "PlayStation"
   },
   {
-    "id": 304,
+    "id": 329,
     "title": "Rules of Nature (Platinum Mix)",
     "artist": "Jamie Christopherson",
     "composer": "Jamie Christopherson",
@@ -3660,8 +3960,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 305,
-    "title": "The Only Thing I Know For Real (Manic Agenda Mix)",
+    "id": 330,
+    "title": "The Only Thing I Know for Real (Manic Agenda Mix)",
     "artist": "Jamie Christopherson",
     "composer": "Jamie Christopherson",
     "game": "Metal Gear Rising: Revengeance",
@@ -3672,7 +3972,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 306,
+    "id": 331,
     "title": "Intro",
     "artist": "Hirokazu Tanaka",
     "composer": "Hirokazu Tanaka",
@@ -3684,8 +3984,8 @@
     "console": "Nintendo"
   },
   {
-    "id": 307,
-    "title": "Enter  Samus",
+    "id": 332,
+    "title": "Enter Samus",
     "artist": "Hirokazu Tanaka",
     "composer": "Hirokazu Tanaka",
     "game": "Metroid",
@@ -3696,7 +3996,7 @@
     "console": "Nintendo"
   },
   {
-    "id": 308,
+    "id": 333,
     "title": "Brinstar",
     "artist": "Hirokazu Tanaka",
     "composer": "Hirokazu Tanaka",
@@ -3708,7 +4008,7 @@
     "console": "Nintendo"
   },
   {
-    "id": 309,
+    "id": 334,
     "title": "C418",
     "artist": "C418",
     "composer": "C418",
@@ -3720,7 +4020,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 310,
+    "id": 335,
     "title": "C418",
     "artist": "C418",
     "composer": "C418",
@@ -3732,7 +4032,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 311,
+    "id": 336,
     "title": "C418",
     "artist": "C418",
     "composer": "C418",
@@ -3744,7 +4044,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 312,
+    "id": 337,
     "title": "C418",
     "artist": "C418",
     "composer": "C418",
@@ -3756,7 +4056,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 313,
+    "id": 338,
     "title": "C418",
     "artist": "C418",
     "composer": "C418",
@@ -3768,7 +4068,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 314,
+    "id": 339,
     "title": "C418",
     "artist": "C418",
     "composer": "C418",
@@ -3780,7 +4080,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 315,
+    "id": 340,
     "title": "C418",
     "artist": "C418",
     "composer": "C418",
@@ -3792,7 +4092,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 316,
+    "id": 341,
     "title": "C418",
     "artist": "C418",
     "composer": "C418",
@@ -3804,7 +4104,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 317,
+    "id": 342,
     "title": "C418",
     "artist": "C418",
     "composer": "C418",
@@ -3816,8 +4116,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 318,
-    "title": "Title Night in the woods",
+    "id": 343,
+    "title": "Title Night in the Woods",
     "artist": "Alec Holowka",
     "composer": "Alec Holowka",
     "game": "Night in the Woods",
@@ -3828,7 +4128,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 319,
+    "id": 344,
     "title": "Die Anywhere Else",
     "artist": "Alec Holowka",
     "composer": "Alec Holowka",
@@ -3840,7 +4140,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 320,
+    "id": 345,
     "title": "Possum Springs",
     "artist": "Alec Holowka",
     "composer": "Alec Holowka",
@@ -3852,7 +4152,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 321,
+    "id": 346,
     "title": "Weird Autumn",
     "artist": "Alec Holowka",
     "composer": "Alec Holowka",
@@ -3864,7 +4164,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 322,
+    "id": 347,
     "title": "Nine Sols",
     "artist": "Vivi Weng",
     "composer": "Vivi Weng",
@@ -3876,7 +4176,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 323,
+    "id": 348,
     "title": "Awakening",
     "artist": "Vivi Weng",
     "composer": "Vivi Weng",
@@ -3888,8 +4188,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 324,
-    "title": "The Puppeteer ~Goumang's Theme~",
+    "id": 349,
+    "title": "The Puppeteer ~Goumang'S Theme~",
     "artist": "Vivi Weng",
     "composer": "Vivi Weng",
     "game": "Nine Sols",
@@ -3900,8 +4200,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 325,
-    "title": "Ballad of Warriors ~Jiequan's Theme~",
+    "id": 350,
+    "title": "Ballad of Warriors ~Jiequan'S Theme~",
     "artist": "Vivi Weng",
     "composer": "Vivi Weng",
     "game": "Nine Sols",
@@ -3912,8 +4212,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 326,
-    "title": "Smile at My Cursed Dream ~Lady Ethereal's Theme~",
+    "id": 351,
+    "title": "Smile at My Cursed Dream ~Lady Ethereal'S Theme~",
     "artist": "Vivi Weng",
     "composer": "Vivi Weng",
     "game": "Nine Sols",
@@ -3924,8 +4224,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 327,
-    "title": "Our Passion ~Fuxi & Nuwa's Theme~",
+    "id": 352,
+    "title": "Our Passion ~Fuxi & Nuwa'S Theme~",
     "artist": "Vivi Weng",
     "composer": "Vivi Weng",
     "game": "Nine Sols",
@@ -3936,8 +4236,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 328,
-    "title": "Long Awaited Death ~Ji's Theme~",
+    "id": 353,
+    "title": "Long Awaited Death ~Ji'S Theme~",
     "artist": "Vivi Weng",
     "composer": "Vivi Weng",
     "game": "Nine Sols",
@@ -3948,8 +4248,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 329,
-    "title": "My Will Is Our Truth ~Eigong's Theme~",
+    "id": 354,
+    "title": "My Will Is Our Truth ~Eigong'S Theme~",
     "artist": "Vivi Weng",
     "composer": "Vivi Weng",
     "game": "Nine Sols",
@@ -3960,7 +4260,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 330,
+    "id": 355,
     "title": "Collage",
     "artist": "Vivi Weng",
     "composer": "Vivi Weng",
@@ -3972,7 +4272,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 331,
+    "id": 356,
     "title": "Okami Title",
     "artist": "Hiroshi Yamaguchi",
     "composer": "Hiroshi Yamaguchi",
@@ -3984,7 +4284,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 332,
+    "id": 357,
     "title": "Okami Prologue",
     "artist": "Hiroshi Yamaguchi",
     "composer": "Hiroshi Yamaguchi",
@@ -3996,8 +4296,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 333,
-    "title": "Issun's Theme",
+    "id": 358,
+    "title": "Issun'S Theme",
     "artist": "Hiroshi Yamaguchi",
     "composer": "Hiroshi Yamaguchi",
     "game": "Ōkami",
@@ -4008,7 +4308,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 334,
+    "id": 359,
     "title": "Title Omori",
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
@@ -4020,8 +4320,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 335,
-    "title": "Take A Load Off",
+    "id": 360,
+    "title": "Take a Load Off",
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
     "game": "OMORI",
@@ -4032,7 +4332,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 336,
+    "id": 361,
     "title": "I Prefer My Pizza 90% Grease",
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
@@ -4044,8 +4344,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 337,
-    "title": "Fresh...ish...",
+    "id": 362,
+    "title": "Fresh...Ish...",
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
     "game": "OMORI",
@@ -4056,7 +4356,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 338,
+    "id": 363,
     "title": "High Fructose Headache",
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
@@ -4068,7 +4368,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 339,
+    "id": 364,
     "title": "I Think My Dad Shops Here...",
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
@@ -4080,8 +4380,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 340,
-    "title": "Just Leave Me Alone",
+    "id": 365,
+    "title": "Just Leave M.E. Alone",
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
     "game": "OMORI",
@@ -4092,7 +4392,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 341,
+    "id": 366,
     "title": "Cram It Wad",
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
@@ -4104,7 +4404,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 342,
+    "id": 367,
     "title": "Respite",
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
@@ -4116,7 +4416,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 343,
+    "id": 368,
     "title": "It Means Everything.",
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
@@ -4128,7 +4428,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 344,
+    "id": 369,
     "title": "See You Tomorrow",
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
@@ -4140,8 +4440,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 345,
-    "title": "A Home For Flowers (Empty)",
+    "id": 370,
+    "title": "A Home for Flowers (Empty)",
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
     "game": "OMORI",
@@ -4152,8 +4452,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 346,
-    "title": "Help Me",
+    "id": 371,
+    "title": "Help M.E.",
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
     "game": "OMORI",
@@ -4164,7 +4464,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 347,
+    "id": 372,
     "title": "Arachnophobia",
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
@@ -4176,7 +4476,151 @@
     "console": "Multi-platform"
   },
   {
-    "id": 348,
+    "id": 373,
+    "title": "Bready Steady Go",
+    "artist": "Pedro Silva",
+    "composer": "Pedro Silva",
+    "game": "OMORI",
+    "context": "Audio - OMORI",
+    "audioUrl": "/audio/omori/OMORI OST - BREADY STEADY GO.mp3",
+    "year": 2020,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 374,
+    "title": "By Your Side.",
+    "artist": "Pedro Silva",
+    "composer": "Pedro Silva",
+    "game": "OMORI",
+    "context": "Audio - OMORI",
+    "audioUrl": "/audio/omori/OMORI OST - By Your Side..mp3",
+    "year": 2020,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 375,
+    "title": "Duet",
+    "artist": "Pedro Silva",
+    "composer": "Pedro Silva",
+    "game": "OMORI",
+    "context": "Audio - OMORI",
+    "audioUrl": "/audio/omori/OMORI OST - DUET.mp3",
+    "year": 2020,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 376,
+    "title": "Friends.",
+    "artist": "Pedro Silva",
+    "composer": "Pedro Silva",
+    "game": "OMORI",
+    "context": "Audio - OMORI",
+    "audioUrl": "/audio/omori/OMORI OST - Friends..mp3",
+    "year": 2020,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 377,
+    "title": "Goldenvengeance",
+    "artist": "Pedro Silva",
+    "composer": "Pedro Silva",
+    "game": "OMORI",
+    "context": "Audio - OMORI",
+    "audioUrl": "/audio/omori/OMORI OST - GOLDENVENGEANCE.mp3",
+    "year": 2020,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 378,
+    "title": "Omori",
+    "artist": "Pedro Silva",
+    "composer": "Pedro Silva",
+    "game": "OMORI",
+    "context": "Audio - OMORI",
+    "audioUrl": "/audio/omori/OMORI OST - OMORI.mp3",
+    "year": 2020,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 379,
+    "title": "See You Tomorrow",
+    "artist": "Pedro Silva",
+    "composer": "Pedro Silva",
+    "game": "OMORI",
+    "context": "Audio - OMORI",
+    "audioUrl": "/audio/omori/OMORI OST - See You Tomorrow.mp3",
+    "year": 2020,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 380,
+    "title": "Tee Hee Time",
+    "artist": "Pedro Silva",
+    "composer": "Pedro Silva",
+    "game": "OMORI",
+    "context": "Audio - OMORI",
+    "audioUrl": "/audio/omori/OMORI OST - Tee-hee Time.mp3",
+    "year": 2020,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 381,
+    "title": "Three Bar Logos",
+    "artist": "Pedro Silva",
+    "composer": "Pedro Silva",
+    "game": "OMORI",
+    "context": "Audio - OMORI",
+    "audioUrl": "/audio/omori/OMORI OST - Three Bar Logos.mp3",
+    "year": 2020,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 382,
+    "title": "Title",
+    "artist": "Pedro Silva",
+    "composer": "Pedro Silva",
+    "game": "OMORI",
+    "context": "Audio - OMORI",
+    "audioUrl": "/audio/omori/OMORI OST - Title.mp3",
+    "year": 2020,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 383,
+    "title": "Tussle Among Trees",
+    "artist": "Pedro Silva",
+    "composer": "Pedro Silva",
+    "game": "OMORI",
+    "context": "Audio - OMORI",
+    "audioUrl": "/audio/omori/OMORI OST - Tussle Among Trees.mp3",
+    "year": 2020,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 384,
+    "title": "World'S End Valentine",
+    "artist": "Pedro Silva",
+    "composer": "Pedro Silva",
+    "game": "OMORI",
+    "context": "Audio - OMORI",
+    "audioUrl": "/audio/omori/OMORI OST - World's End Valentine.mp3",
+    "year": 2020,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 385,
     "title": "My Burden Is Light",
     "artist": "Nightmargin",
     "composer": "Nightmargin",
@@ -4188,7 +4632,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 349,
+    "id": 386,
     "title": "Someplace I Know",
     "artist": "Nightmargin",
     "composer": "Nightmargin",
@@ -4200,7 +4644,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 350,
+    "id": 387,
     "title": "The Prophecy",
     "artist": "Nightmargin",
     "composer": "Nightmargin",
@@ -4212,8 +4656,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 351,
-    "title": "IT'S TIME TO FIGHT CRIME",
+    "id": 388,
+    "title": "It'S Time to Fight Crime",
     "artist": "Nightmargin",
     "composer": "Nightmargin",
     "game": "OneShot",
@@ -4224,7 +4668,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 352,
+    "id": 389,
     "title": "Main Theme",
     "artist": "Gareth Coker",
     "composer": "Gareth Coker",
@@ -4236,8 +4680,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 353,
-    "title": "Ori, Lost in the Storm (feat. Aeralie Brighton)",
+    "id": 390,
+    "title": "Ori, Lost in the Storm (Feat. Aeralie Brighton)",
     "artist": "Gareth Coker",
     "composer": "Gareth Coker",
     "game": "Ori and the Blind Forest",
@@ -4248,8 +4692,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 354,
-    "title": "Naru, Embracing the Light (feat. Rachel Mellis)",
+    "id": 391,
+    "title": "Naru, Embracing the Light (Feat. Rachel Mellis)",
     "artist": "Gareth Coker",
     "composer": "Gareth Coker",
     "game": "Ori and the Blind Forest",
@@ -4260,7 +4704,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 355,
+    "id": 392,
     "title": "A Yearning for the Sky",
     "artist": "Gareth Coker",
     "composer": "Gareth Coker",
@@ -4272,7 +4716,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 356,
+    "id": 393,
     "title": "Outer Wilds",
     "artist": "Andrew Prahlow",
     "composer": "Andrew Prahlow",
@@ -4284,7 +4728,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 357,
+    "id": 394,
     "title": "Main Title",
     "artist": "Andrew Prahlow",
     "composer": "Andrew Prahlow",
@@ -4296,7 +4740,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 358,
+    "id": 395,
     "title": "End Times",
     "artist": "Andrew Prahlow",
     "composer": "Andrew Prahlow",
@@ -4308,7 +4752,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 359,
+    "id": 396,
     "title": "Travelers",
     "artist": "Andrew Prahlow",
     "composer": "Andrew Prahlow",
@@ -4320,7 +4764,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 360,
+    "id": 397,
     "title": "Billion Years",
     "artist": "Andrew Prahlow",
     "composer": "Andrew Prahlow",
@@ -4332,8 +4776,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 361,
-    "title": "Mass Destruction -Reload",
+    "id": 398,
+    "title": "Mass Destruction Reload",
     "artist": "Shoji Meguro",
     "composer": "Shoji Meguro",
     "game": "Persona",
@@ -4344,7 +4788,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 362,
+    "id": 399,
     "title": "Last Surprise",
     "artist": "Shoji Meguro",
     "composer": "Shoji Meguro",
@@ -4356,7 +4800,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 363,
+    "id": 400,
     "title": "Crazy Dave (Intro Theme)",
     "artist": "Laura Shigihara",
     "composer": "Laura Shigihara",
@@ -4368,7 +4812,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 364,
+    "id": 401,
     "title": "Zombies on Your Lawn",
     "artist": "Laura Shigihara",
     "composer": "Laura Shigihara",
@@ -4380,7 +4824,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 365,
+    "id": 402,
     "title": "Title",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
@@ -4392,7 +4836,7 @@
     "console": "Nintendo"
   },
   {
-    "id": 366,
+    "id": 403,
     "title": "Kanoko Town",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
@@ -4404,8 +4848,8 @@
     "console": "Nintendo"
   },
   {
-    "id": 367,
-    "title": "a Opening Demo (Part 1)",
+    "id": 404,
+    "title": "A Opening Demo (Part 1)",
     "artist": "Go Ichinose",
     "composer": "Go Ichinose",
     "game": "Pokémon Diamond/Pearl",
@@ -4416,7 +4860,7 @@
     "console": "Nintendo DS"
   },
   {
-    "id": 368,
+    "id": 405,
     "title": "Twinleaf Town (Daytime)",
     "artist": "Go Ichinose",
     "composer": "Go Ichinose",
@@ -4428,7 +4872,7 @@
     "console": "Nintendo DS"
   },
   {
-    "id": 369,
+    "id": 406,
     "title": "Route 201 (Daytime)",
     "artist": "Go Ichinose",
     "composer": "Go Ichinose",
@@ -4440,7 +4884,7 @@
     "console": "Nintendo DS"
   },
   {
-    "id": 370,
+    "id": 407,
     "title": "Sandgem Town (Daytime)",
     "artist": "Go Ichinose",
     "composer": "Go Ichinose",
@@ -4452,7 +4896,7 @@
     "console": "Nintendo DS"
   },
   {
-    "id": 371,
+    "id": 408,
     "title": "Opening Demo",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
@@ -4464,7 +4908,7 @@
     "console": "Nintendo"
   },
   {
-    "id": 372,
+    "id": 409,
     "title": "Title",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
@@ -4476,7 +4920,7 @@
     "console": "Nintendo"
   },
   {
-    "id": 373,
+    "id": 410,
     "title": "Wakaba Town",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
@@ -4488,7 +4932,7 @@
     "console": "Nintendo"
   },
   {
-    "id": 374,
+    "id": 411,
     "title": "~Opening~",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
@@ -4500,7 +4944,7 @@
     "console": "Nintendo"
   },
   {
-    "id": 375,
+    "id": 412,
     "title": "Pallet Town Theme",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
@@ -4512,7 +4956,7 @@
     "console": "Nintendo"
   },
   {
-    "id": 376,
+    "id": 413,
     "title": "Pewter City Theme",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
@@ -4524,8 +4968,8 @@
     "console": "Nintendo"
   },
   {
-    "id": 377,
-    "title": "Battle (VS Wild Pokemon)",
+    "id": 414,
+    "title": "Battle (Vs Wild Pokemon)",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
     "game": "Pokémon",
@@ -4536,7 +4980,7 @@
     "console": "Nintendo"
   },
   {
-    "id": 378,
+    "id": 415,
     "title": "Lavender Town Theme",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
@@ -4548,8 +4992,8 @@
     "console": "Nintendo"
   },
   {
-    "id": 379,
-    "title": "Title Screen pokemon X",
+    "id": 416,
+    "title": "Title Screen Pokemon X",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
     "game": "Pokémon",
@@ -4560,7 +5004,7 @@
     "console": "Nintendo"
   },
   {
-    "id": 380,
+    "id": 417,
     "title": "Kalos Region Theme",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
@@ -4572,7 +5016,7 @@
     "console": "Nintendo"
   },
   {
-    "id": 381,
+    "id": 418,
     "title": "Vaniville Town",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
@@ -4584,7 +5028,7 @@
     "console": "Nintendo"
   },
   {
-    "id": 382,
+    "id": 419,
     "title": "Aquacorde Town",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
@@ -4596,7 +5040,7 @@
     "console": "Nintendo"
   },
   {
-    "id": 383,
+    "id": 420,
     "title": "Opening Selection",
     "artist": "Go Ichinose",
     "composer": "Go Ichinose",
@@ -4608,7 +5052,7 @@
     "console": "Game Boy Advance"
   },
   {
-    "id": 384,
+    "id": 421,
     "title": "Littleroot Town",
     "artist": "Go Ichinose",
     "composer": "Go Ichinose",
@@ -4620,7 +5064,7 @@
     "console": "Game Boy Advance"
   },
   {
-    "id": 385,
+    "id": 422,
     "title": "Route 101",
     "artist": "Go Ichinose",
     "composer": "Go Ichinose",
@@ -4632,7 +5076,7 @@
     "console": "Game Boy Advance"
   },
   {
-    "id": 386,
+    "id": 423,
     "title": "Battle! Trainer",
     "artist": "Go Ichinose",
     "composer": "Go Ichinose",
@@ -4644,7 +5088,7 @@
     "console": "Game Boy Advance"
   },
   {
-    "id": 387,
+    "id": 424,
     "title": "Rustboro City",
     "artist": "Go Ichinose",
     "composer": "Go Ichinose",
@@ -4656,7 +5100,7 @@
     "console": "Game Boy Advance"
   },
   {
-    "id": 388,
+    "id": 425,
     "title": "Dewford Town",
     "artist": "Go Ichinose",
     "composer": "Go Ichinose",
@@ -4668,7 +5112,7 @@
     "console": "Game Boy Advance"
   },
   {
-    "id": 389,
+    "id": 426,
     "title": "Verdanturf Town",
     "artist": "Go Ichinose",
     "composer": "Go Ichinose",
@@ -4680,7 +5124,7 @@
     "console": "Game Boy Advance"
   },
   {
-    "id": 390,
+    "id": 427,
     "title": "Title Theme",
     "artist": "Rémi Gazel",
     "composer": "Rémi Gazel",
@@ -4692,7 +5136,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 391,
+    "id": 428,
     "title": "Pink Plant Woods Area 1",
     "artist": "Rémi Gazel",
     "composer": "Rémi Gazel",
@@ -4704,7 +5148,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 392,
+    "id": 429,
     "title": "Mysterious Swamps",
     "artist": "Christophe Héral",
     "composer": "Christophe Héral",
@@ -4716,7 +5160,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 393,
+    "id": 430,
     "title": "Medieval Theme",
     "artist": "Christophe Héral",
     "composer": "Christophe Héral",
@@ -4728,7 +5172,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 394,
+    "id": 431,
     "title": "Storming the Castle",
     "artist": "Christophe Héral",
     "composer": "Christophe Héral",
@@ -4740,7 +5184,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 395,
+    "id": 432,
     "title": "Intro",
     "artist": "Christophe Héral",
     "composer": "Christophe Héral",
@@ -4752,7 +5196,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 396,
+    "id": 433,
     "title": "Frozen Paradise",
     "artist": "Christophe Héral",
     "composer": "Christophe Héral",
@@ -4764,7 +5208,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 397,
+    "id": 434,
     "title": "Glacier Cocktail",
     "artist": "Christophe Héral",
     "composer": "Christophe Héral",
@@ -4776,7 +5220,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 398,
+    "id": 435,
     "title": "Born Unto Trouble",
     "artist": "Bill Elm & Woody Jackson",
     "composer": "Bill Elm & Woody Jackson",
@@ -4788,7 +5232,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 399,
+    "id": 436,
     "title": "Unshaken",
     "artist": "Bill Elm & Woody Jackson",
     "composer": "Bill Elm & Woody Jackson",
@@ -4800,7 +5244,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 400,
+    "id": 437,
     "title": "The Shootist",
     "artist": "Bill Elm & Woody Jackson",
     "composer": "Bill Elm & Woody Jackson",
@@ -4812,7 +5256,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 401,
+    "id": 438,
     "title": "Moonlight",
     "artist": "Bill Elm & Woody Jackson",
     "composer": "Bill Elm & Woody Jackson",
@@ -4824,7 +5268,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 402,
+    "id": 439,
     "title": "Dead End Alley",
     "artist": "Bill Elm & Woody Jackson",
     "composer": "Bill Elm & Woody Jackson",
@@ -4836,7 +5280,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 403,
+    "id": 440,
     "title": "Horseplay",
     "artist": "Bill Elm & Woody Jackson",
     "composer": "Bill Elm & Woody Jackson",
@@ -4848,8 +5292,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 404,
-    "title": "R.E. 1 Save Room- Safe Haven",
+    "id": 441,
+    "title": "R.E. 1 Save Room Safe Haven",
     "artist": "Masami Ueda",
     "composer": "Masami Ueda",
     "game": "Resident Evil",
@@ -4860,7 +5304,7 @@
     "console": "PlayStation"
   },
   {
-    "id": 405,
+    "id": 442,
     "title": "Risk of Rain",
     "artist": "Chris Christodoulou",
     "composer": "Chris Christodoulou",
@@ -4872,7 +5316,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 406,
+    "id": 443,
     "title": "Dew Point",
     "artist": "Chris Christodoulou",
     "composer": "Chris Christodoulou",
@@ -4884,7 +5328,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 407,
+    "id": 444,
     "title": "Tropic of Capricorn",
     "artist": "Chris Christodoulou",
     "composer": "Chris Christodoulou",
@@ -4896,10 +5340,10 @@
     "console": "Multi-platform"
   },
   {
-    "id": 408,
+    "id": 445,
     "title": "Ancient Rome",
-    "artist": "Various Artists",
-    "composer": "Various Artists",
+    "artist": "David Whittaker",
+    "composer": "David Whittaker",
     "game": "Scooby-Doo and the Cyber Chase",
     "context": "Audio - Scooby-Doo and the Cyber Chase",
     "audioUrl": "/audio/scooby-doo-and-the-cyber-chase/Ancient Rome.mp3",
@@ -4908,10 +5352,10 @@
     "console": "PlayStation"
   },
   {
-    "id": 409,
+    "id": 446,
     "title": "Control Room",
-    "artist": "Various Artists",
-    "composer": "Various Artists",
+    "artist": "David Whittaker",
+    "composer": "David Whittaker",
     "game": "Scooby-Doo and the Cyber Chase",
     "context": "Audio - Scooby-Doo and the Cyber Chase",
     "audioUrl": "/audio/scooby-doo-and-the-cyber-chase/Control Room.mp3",
@@ -4920,10 +5364,10 @@
     "console": "PlayStation"
   },
   {
-    "id": 410,
+    "id": 447,
     "title": "Japan",
-    "artist": "Various Artists",
-    "composer": "Various Artists",
+    "artist": "David Whittaker",
+    "composer": "David Whittaker",
     "game": "Scooby-Doo and the Cyber Chase",
     "context": "Audio - Scooby-Doo and the Cyber Chase",
     "audioUrl": "/audio/scooby-doo-and-the-cyber-chase/Japan.mp3",
@@ -4932,7 +5376,7 @@
     "console": "PlayStation"
   },
   {
-    "id": 411,
+    "id": 448,
     "title": "Title Screen",
     "artist": "Yasunori Mitsuda",
     "composer": "Yasunori Mitsuda",
@@ -4944,7 +5388,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 412,
+    "id": 449,
     "title": "The Mountain Trail (Day)",
     "artist": "Yasunori Mitsuda",
     "composer": "Yasunori Mitsuda",
@@ -4956,7 +5400,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 413,
+    "id": 450,
     "title": "Devoted Warriors",
     "artist": "Yasunori Mitsuda",
     "composer": "Yasunori Mitsuda",
@@ -4968,8 +5412,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 414,
-    "title": "Dance Of 1,000 Suns",
+    "id": 451,
+    "title": "Dance of 1,000 Suns",
     "artist": "Yasunori Mitsuda",
     "composer": "Yasunori Mitsuda",
     "game": "Sea of Stars",
@@ -4980,7 +5424,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 415,
+    "id": 452,
     "title": "Theme of Laura",
     "artist": "Akira Yamaoka",
     "composer": "Akira Yamaoka",
@@ -4992,7 +5436,7 @@
     "console": "PlayStation 2"
   },
   {
-    "id": 416,
+    "id": 453,
     "title": "White Noiz",
     "artist": "Akira Yamaoka",
     "composer": "Akira Yamaoka",
@@ -5004,7 +5448,7 @@
     "console": "PlayStation 2"
   },
   {
-    "id": 417,
+    "id": 454,
     "title": "Forest",
     "artist": "Akira Yamaoka",
     "composer": "Akira Yamaoka",
@@ -5016,7 +5460,7 @@
     "console": "PlayStation 2"
   },
   {
-    "id": 418,
+    "id": 455,
     "title": "Promise",
     "artist": "Akira Yamaoka",
     "composer": "Akira Yamaoka",
@@ -5028,7 +5472,7 @@
     "console": "PlayStation 2"
   },
   {
-    "id": 419,
+    "id": 456,
     "title": "Before the Storm",
     "artist": "Jeremy Soule",
     "composer": "Jeremy Soule",
@@ -5040,7 +5484,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 420,
+    "id": 457,
     "title": "Dragonborn",
     "artist": "Jeremy Soule",
     "composer": "Jeremy Soule",
@@ -5052,10 +5496,10 @@
     "console": "Multi-platform"
   },
   {
-    "id": 421,
+    "id": 458,
     "title": "Intro",
-    "artist": "Various Artists",
-    "composer": "Various Artists",
+    "artist": "Hirokazu Ando",
+    "composer": "Hirokazu Ando",
     "game": "Super Smash Bros.",
     "context": "Audio - Super Smash Bros.",
     "audioUrl": "/audio/smash-bros/smash-bros-64/01 Intro.mp3",
@@ -5064,10 +5508,10 @@
     "console": "Nintendo"
   },
   {
-    "id": 422,
+    "id": 459,
     "title": "Main Menu",
-    "artist": "Various Artists",
-    "composer": "Various Artists",
+    "artist": "Hirokazu Ando",
+    "composer": "Hirokazu Ando",
     "game": "Super Smash Bros.",
     "context": "Audio - Super Smash Bros.",
     "audioUrl": "/audio/smash-bros/smash-bros-64/04 Main Menu.mp3",
@@ -5076,10 +5520,10 @@
     "console": "Nintendo"
   },
   {
-    "id": 423,
+    "id": 460,
     "title": "Character Select",
-    "artist": "Various Artists",
-    "composer": "Various Artists",
+    "artist": "Hirokazu Ando",
+    "composer": "Hirokazu Ando",
     "game": "Super Smash Bros.",
     "context": "Audio - Super Smash Bros.",
     "audioUrl": "/audio/smash-bros/smash-bros-64/05 Character Select.mp3",
@@ -5088,10 +5532,10 @@
     "console": "Nintendo"
   },
   {
-    "id": 424,
+    "id": 461,
     "title": "Super Smash Bros. Brawl",
-    "artist": "Various Artists",
-    "composer": "Various Artists",
+    "artist": "Hirokazu Ando",
+    "composer": "Hirokazu Ando",
     "game": "Super Smash Bros.",
     "context": "Audio - Super Smash Bros.",
     "audioUrl": "/audio/smash-bros/smash-bros-brawl/01 - Main Theme - Super Smash Bros. Brawl.mp3",
@@ -5100,680 +5544,680 @@
     "console": "Nintendo"
   },
   {
-    "id": 425,
-    "title": "reach-for-the-stars-opening-theme",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
+    "id": 462,
+    "title": "Reach for the Stars Opening Theme",
+    "artist": "Tomoya Ohtani",
+    "composer": "Tomoya Ohtani",
+    "game": "Sonic Colors",
+    "context": "Audio - Sonic Colors",
     "audioUrl": "/audio/sonic/Sonic outras/01-01_reach_for_the_stars-opening_theme/01-reach-for-the-stars-opening-theme-.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
+    "year": 2010,
+    "genre": "Platform Game Soundtrack",
+    "console": "Nintendo Wii"
   },
   {
-    "id": 426,
-    "title": "tropical-resort-act-1",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
+    "id": 463,
+    "title": "Tropical Resort Act 1",
+    "artist": "Tomoya Ohtani",
+    "composer": "Tomoya Ohtani",
+    "game": "Sonic Colors",
+    "context": "Audio - Sonic Colors",
     "audioUrl": "/audio/sonic/Sonic outras/01-03_tropical_resort-act_1/03-tropical-resort-act-1.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
+    "year": 2010,
+    "genre": "Platform Game Soundtrack",
+    "console": "Nintendo Wii"
   },
   {
-    "id": 427,
-    "title": "crisis-city-act-2",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
+    "id": 464,
+    "title": "Crisis City Act 2",
+    "artist": "Hideaki Kobayashi",
+    "composer": "Hideaki Kobayashi",
+    "game": "Sonic the Hedgehog (2006)",
+    "context": "Audio - Sonic the Hedgehog (2006)",
     "audioUrl": "/audio/sonic/Sonic outras/01-19_crisis_city-act_2/19-crisis-city-act-2.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
+    "year": 2006,
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
   },
   {
-    "id": 428,
-    "title": "endless-possibilities",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
+    "id": 465,
+    "title": "Endless Possibilities",
+    "artist": "Tomoya Ohtani",
+    "composer": "Tomoya Ohtani",
+    "game": "Sonic Unleashed",
+    "context": "Audio - Sonic Unleashed",
     "audioUrl": "/audio/sonic/Sonic outras/01-endless_possibilities/01-endless-possibilities.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
+    "year": 2008,
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
   },
   {
-    "id": 429,
-    "title": "title-theme",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
+    "id": 466,
+    "title": "Title Theme",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
     "game": "Sonic the Hedgehog",
     "context": "Audio - Sonic the Hedgehog",
     "audioUrl": "/audio/sonic/Sonic outras/01-title_theme/01.-title-theme.mp3",
     "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 430,
-    "title": "rightthererideon",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/01rightthererideon/01rightthererideon.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 431,
-    "title": "fist-bump-main-theme-of-sonic-forces",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/01_fist_bump_main_theme_of_sonic_forces/01-fist-bump-main-theme-of-sonic-forces-.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 432,
-    "title": "_un-gravitify",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/01_un-gravitify/01_un-gravitify.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 433,
-    "title": "starlight-carnival-act-1",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/02-03_starlight_carnival-act_1/03-starlight-carnival-act-1.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 434,
-    "title": "planet-wisp-act-1",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/02-12_planet_wisp-act_1/12-planet-wisp-act-1.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 435,
-    "title": "back2back",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/02back2back/02back2back.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 436,
-    "title": "apotos-day",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/07-apotos_day/07-apotos-day.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 437,
-    "title": "apotos-windmill-isle-day",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/08-apotos_windmill_isle_day/08-apotos-windmill-isle-day.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 438,
-    "title": "opening-movie",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/1-01_opening_movie/1-01-opening-movie.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 439,
-    "title": "lights-camera-action-studiopolis-zone-act-1",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/1-14_lights_camera_action_studiopolis_zone_act_1/1-14-lights-camera-action-studiopolis-zone-act-1-.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 440,
-    "title": "tabloid-jargon-press-garden-zone-act-1",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/1-19_tabloid_jargon_press_garden_zone_act_1/1-19-tabloid-jargon-press-garden-zone-act-1-.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 441,
-    "title": "seven-rings-in-hand",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/101_seven_rings_in_hand/101-seven-rings-in-hand.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 442,
-    "title": "mazuri-savannah-citadel-day",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/16-mazuri_savannah_citadel_day/16-mazuri-savannah-citadel-day.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 443,
-    "title": "spagonia-day",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/21-spagonia_day/21-spagonia-day.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 444,
-    "title": "spagonia-rooftop-run-day",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/22-spagonia_rooftop_run_day/22-spagonia-rooftop-run-day.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 445,
-    "title": "chun-nan-day",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/31-chun-nan_day/31-chun-nan-day.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 446,
-    "title": "eggman-land-theme-of-eggman",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/49-eggman_land_theme_of_eggman/49-eggman-land-theme-of-eggman.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 447,
-    "title": "dreams-of-an-absolution-lee-brotherton-sonic-the-hedgehog-2006",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/dreams_of_an_absolution-lee_brotherton/dreams-of-an-absolution-lee-brotherton-sonic-the-hedgehog-2006-.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 448,
-    "title": "his-world-ali-tabatabaee-matty-lewis-sonic-the-hedgehog-2006",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/his_world-ali_tabatabaee_matty_lewis/his-world-ali-tabatabaee-matty-lewis-sonic-the-hedgehog-2006-.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 449,
-    "title": "._his-world-ali-tabatabaee-matty-lewis-sonic-the-hedgehog-2006",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/his_world-ali_tabatabaee_matty_lewis/__macosx/._his-world-ali-tabatabaee-matty-lewis-sonic-the-hedgehog-2006-.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 450,
-    "title": "all-hail-shadow-magna-fi-shadow-the-hedgehog",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/lost-all_hail_shadow/all-hail-shadow-magna-fi-shadow-the-hedgehog.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 451,
-    "title": "i-am...-all-of-me-crush-40-shadow-the-hedgehog",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/lost-i_am/i-am...-all-of-me-crush-40-shadow-the-hedgehog.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 452,
-    "title": "it-doesnt-matter-theme-of-sonic",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure01_songs_with_attitude/01-it-doesnt-matter-theme-of-sonic-.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 453,
-    "title": "my-sweet-passion-theme-of-amy",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure01_songs_with_attitude/02-my-sweet-passion-theme-of-amy-.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 454,
-    "title": "lazy-days-livin-in-paradaise-theme-of-big",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure01_songs_with_attitude/03-lazy-days-livin-in-paradaise-theme-of-big-.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 455,
-    "title": "believe-in-myself-theme-of-miles",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure01_songs_with_attitude/04-believe-in-myself-theme-of-miles-.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 456,
-    "title": "unknown-from-me-theme-of-knuckles",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure01_songs_with_attitude/05-unknown-from-me-theme-of-knuckles-.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 457,
-    "title": "open-your-heart-main-theme-of-sonic-adventure",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure01_songs_with_attitude/06-open-your-heart-main-theme-of-sonic-adventure-.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 458,
-    "title": "._01-it-doesnt-matter-theme-of-sonic",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure01_songs_with_attitude/__macosx/._01-it-doesnt-matter-theme-of-sonic-.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 459,
-    "title": "._02-my-sweet-passion-theme-of-amy",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure01_songs_with_attitude/__macosx/._02-my-sweet-passion-theme-of-amy-.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 460,
-    "title": "._03-lazy-days-livin-in-paradaise-theme-of-big",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure01_songs_with_attitude/__macosx/._03-lazy-days-livin-in-paradaise-theme-of-big-.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 461,
-    "title": "._04-believe-in-myself-theme-of-miles",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure01_songs_with_attitude/__macosx/._04-believe-in-myself-theme-of-miles-.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 462,
-    "title": "._05-unknown-from-me-theme-of-knuckles",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure01_songs_with_attitude/__macosx/._05-unknown-from-me-theme-of-knuckles-.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 463,
-    "title": "._06-open-your-heart-main-theme-of-sonic-adventure",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure01_songs_with_attitude/__macosx/._06-open-your-heart-main-theme-of-sonic-adventure-.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 464,
-    "title": "it-doesn-t-matter",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/01-it-doesn-t-matter.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 465,
-    "title": "escape-from-the-city",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/02-escape-from-the-city.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
-  },
-  {
-    "id": 466,
-    "title": "believe-in-myself",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/03-believe-in-myself.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
+    "genre": "Platform Game Soundtrack",
     "console": "Sega Genesis"
   },
   {
     "id": 467,
-    "title": "unknown-from-me",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/04-unknown-from-me.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
+    "title": "Rightthererideon",
+    "artist": "Tomoya Ohtani",
+    "composer": "Tomoya Ohtani",
+    "game": "Sonic Generations",
+    "context": "Audio - Sonic Generations",
+    "audioUrl": "/audio/sonic/Sonic outras/01rightthererideon/01rightthererideon.mp3",
+    "year": 2011,
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
   },
   {
     "id": 468,
-    "title": "fly-in-the-freedom",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/05-fly-in-the-freedom.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
+    "title": "Fist Bump Main Theme of Sonic Forces",
+    "artist": "Tomoya Ohtani",
+    "composer": "Tomoya Ohtani",
+    "game": "Sonic Forces",
+    "context": "Audio - Sonic Forces",
+    "audioUrl": "/audio/sonic/Sonic outras/01_fist_bump_main_theme_of_sonic_forces/01-fist-bump-main-theme-of-sonic-forces-.mp3",
+    "year": 2017,
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
   },
   {
     "id": 469,
-    "title": "throw-it-all-away",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/06-throw-it-all-away.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
+    "title": "Un Gravitify",
+    "artist": "Hideki Naganuma",
+    "composer": "Hideki Naganuma",
+    "game": "Sonic Riders: Zero Gravity",
+    "context": "Audio - Sonic Riders: Zero Gravity",
+    "audioUrl": "/audio/sonic/Sonic outras/01_un-gravitify/01_un-gravitify.mp3",
+    "year": 2008,
+    "genre": "Racing Game Soundtrack",
+    "console": "Multi-platform"
   },
   {
     "id": 470,
-    "title": "_eggman",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/07_eggman.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
+    "title": "Starlight Carnival Act 1",
+    "artist": "Tomoya Ohtani",
+    "composer": "Tomoya Ohtani",
+    "game": "Sonic Colors",
+    "context": "Audio - Sonic Colors",
+    "audioUrl": "/audio/sonic/Sonic outras/02-03_starlight_carnival-act_1/03-starlight-carnival-act-1.mp3",
+    "year": 2010,
+    "genre": "Platform Game Soundtrack",
+    "console": "Nintendo Wii"
   },
   {
     "id": 471,
-    "title": "live-and-learn",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/08-live-and-learn.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
+    "title": "Planet Wisp Act 1",
+    "artist": "Tomoya Ohtani",
+    "composer": "Tomoya Ohtani",
+    "game": "Sonic Colors",
+    "context": "Audio - Sonic Colors",
+    "audioUrl": "/audio/sonic/Sonic outras/02-12_planet_wisp-act_1/12-planet-wisp-act-1.mp3",
+    "year": 2010,
+    "genre": "Platform Game Soundtrack",
+    "console": "Nintendo Wii"
   },
   {
     "id": 472,
-    "title": "it-doesn-t-matter-instrumental",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
+    "title": "Back2back",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
     "game": "Sonic the Hedgehog",
     "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/92-it-doesn-t-matter-instrumental-.mp3",
+    "audioUrl": "/audio/sonic/Sonic outras/02back2back/02back2back.mp3",
     "year": 1991,
-    "genre": "Game Soundtrack",
+    "genre": "Platform Game Soundtrack",
     "console": "Sega Genesis"
   },
   {
     "id": 473,
-    "title": "escape-from-the-city-instrumental",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/93-escape-from-the-city-instrumental-.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
+    "title": "Apotos Day",
+    "artist": "Tomoya Ohtani",
+    "composer": "Tomoya Ohtani",
+    "game": "Sonic Unleashed",
+    "context": "Audio - Sonic Unleashed",
+    "audioUrl": "/audio/sonic/Sonic outras/07-apotos_day/07-apotos-day.mp3",
+    "year": 2008,
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
   },
   {
     "id": 474,
-    "title": "believe-in-myself-instrumental",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/94-believe-in-myself-instrumental-.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
+    "title": "Apotos Windmill Isle Day",
+    "artist": "Tomoya Ohtani",
+    "composer": "Tomoya Ohtani",
+    "game": "Sonic Unleashed",
+    "context": "Audio - Sonic Unleashed",
+    "audioUrl": "/audio/sonic/Sonic outras/08-apotos_windmill_isle_day/08-apotos-windmill-isle-day.mp3",
+    "year": 2008,
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
   },
   {
     "id": 475,
-    "title": "unknown-from-m.e.-instrumental",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
+    "title": "Opening Movie",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
     "game": "Sonic the Hedgehog",
     "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/95-unknown-from-m.e.-instrumental-.mp3",
+    "audioUrl": "/audio/sonic/Sonic outras/1-01_opening_movie/1-01-opening-movie.mp3",
     "year": 1991,
-    "genre": "Game Soundtrack",
+    "genre": "Platform Game Soundtrack",
     "console": "Sega Genesis"
   },
   {
     "id": 476,
-    "title": "fly-in-the-freedom-instrumental",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/96-fly-in-the-freedom-instrumental-.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
+    "title": "Lights Camera Action Studiopolis Zone Act 1",
+    "artist": "Tee Lopes",
+    "composer": "Tee Lopes",
+    "game": "Sonic Mania",
+    "context": "Audio - Sonic Mania",
+    "audioUrl": "/audio/sonic/Sonic outras/1-14_lights_camera_action_studiopolis_zone_act_1/1-14-lights-camera-action-studiopolis-zone-act-1-.mp3",
+    "year": 2017,
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
   },
   {
     "id": 477,
-    "title": "throw-it-all-away-instrumental",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/97-throw-it-all-away-instrumental-.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
+    "title": "Tabloid Jargon Press Garden Zone Act 1",
+    "artist": "Tee Lopes",
+    "composer": "Tee Lopes",
+    "game": "Sonic Mania",
+    "context": "Audio - Sonic Mania",
+    "audioUrl": "/audio/sonic/Sonic outras/1-19_tabloid_jargon_press_garden_zone_act_1/1-19-tabloid-jargon-press-garden-zone-act-1-.mp3",
+    "year": 2017,
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
   },
   {
     "id": 478,
-    "title": "e.g.g.m.a.n.-instrumental",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/98-e.g.g.m.a.n.-instrumental-.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
+    "title": "Seven Rings in Hand",
+    "artist": "Steve Conte",
+    "composer": "Steve Conte",
+    "game": "Sonic and the Secret Rings",
+    "context": "Audio - Sonic and the Secret Rings",
+    "audioUrl": "/audio/sonic/Sonic outras/101_seven_rings_in_hand/101-seven-rings-in-hand.mp3",
+    "year": 2007,
+    "genre": "Platform Game Soundtrack",
+    "console": "Nintendo Wii"
   },
   {
     "id": 479,
-    "title": "live-and-learn-instrumental",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/99-live-and-learn-instrumental-.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
+    "title": "Mazuri Savannah Citadel Day",
+    "artist": "Tomoya Ohtani",
+    "composer": "Tomoya Ohtani",
+    "game": "Sonic Unleashed",
+    "context": "Audio - Sonic Unleashed",
+    "audioUrl": "/audio/sonic/Sonic outras/16-mazuri_savannah_citadel_day/16-mazuri-savannah-citadel-day.mp3",
+    "year": 2008,
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
   },
   {
     "id": 480,
-    "title": "knight-of-the-wind",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
-    "audioUrl": "/audio/sonic/Sonic outras/vocal-01_knight_of_the_wind/01-knight-of-the-wind.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
-    "console": "Sega Genesis"
+    "title": "Spagonia Day",
+    "artist": "Tomoya Ohtani",
+    "composer": "Tomoya Ohtani",
+    "game": "Sonic Unleashed",
+    "context": "Audio - Sonic Unleashed",
+    "audioUrl": "/audio/sonic/Sonic outras/21-spagonia_day/21-spagonia-day.mp3",
+    "year": 2008,
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
   },
   {
     "id": 481,
-    "title": "Masato Nakamura",
+    "title": "Spagonia Rooftop Run Day",
+    "artist": "Tomoya Ohtani",
+    "composer": "Tomoya Ohtani",
+    "game": "Sonic Unleashed",
+    "context": "Audio - Sonic Unleashed",
+    "audioUrl": "/audio/sonic/Sonic outras/22-spagonia_rooftop_run_day/22-spagonia-rooftop-run-day.mp3",
+    "year": 2008,
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 482,
+    "title": "Chun Nan Day",
+    "artist": "Tomoya Ohtani",
+    "composer": "Tomoya Ohtani",
+    "game": "Sonic Unleashed",
+    "context": "Audio - Sonic Unleashed",
+    "audioUrl": "/audio/sonic/Sonic outras/31-chun-nan_day/31-chun-nan-day.mp3",
+    "year": 2008,
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 483,
+    "title": "Eggman Land Theme of Eggman",
+    "artist": "Tomoya Ohtani",
+    "composer": "Tomoya Ohtani",
+    "game": "Sonic Unleashed",
+    "context": "Audio - Sonic Unleashed",
+    "audioUrl": "/audio/sonic/Sonic outras/49-eggman_land_theme_of_eggman/49-eggman-land-theme-of-eggman.mp3",
+    "year": 2008,
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 484,
+    "title": "Dreams of an Absolution Lee Brotherton Sonic the Hedgehog 2006",
+    "artist": "Hideaki Kobayashi",
+    "composer": "Hideaki Kobayashi",
+    "game": "Sonic the Hedgehog (2006)",
+    "context": "Audio - Sonic the Hedgehog (2006)",
+    "audioUrl": "/audio/sonic/Sonic outras/dreams_of_an_absolution-lee_brotherton/dreams-of-an-absolution-lee-brotherton-sonic-the-hedgehog-2006-.mp3",
+    "year": 2006,
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 485,
+    "title": "His World Ali Tabatabaee Matty Lewis Sonic the Hedgehog 2006",
+    "artist": "Hideaki Kobayashi",
+    "composer": "Hideaki Kobayashi",
+    "game": "Sonic the Hedgehog (2006)",
+    "context": "Audio - Sonic the Hedgehog (2006)",
+    "audioUrl": "/audio/sonic/Sonic outras/his_world-ali_tabatabaee_matty_lewis/his-world-ali-tabatabaee-matty-lewis-sonic-the-hedgehog-2006-.mp3",
+    "year": 2006,
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 486,
+    "title": "His World Ali Tabatabaee Matty Lewis Sonic the Hedgehog 2006",
+    "artist": "Hideaki Kobayashi",
+    "composer": "Hideaki Kobayashi",
+    "game": "Sonic the Hedgehog (2006)",
+    "context": "Audio - Sonic the Hedgehog (2006)",
+    "audioUrl": "/audio/sonic/Sonic outras/his_world-ali_tabatabaee_matty_lewis/__macosx/._his-world-ali-tabatabaee-matty-lewis-sonic-the-hedgehog-2006-.mp3",
+    "year": 2006,
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 487,
+    "title": "All Hail Shadow Magna Fi Shadow the Hedgehog",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Shadow the Hedgehog",
+    "context": "Audio - Shadow the Hedgehog",
+    "audioUrl": "/audio/sonic/Sonic outras/lost-all_hail_shadow/all-hail-shadow-magna-fi-shadow-the-hedgehog.mp3",
+    "year": 2005,
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 488,
+    "title": "I Am... All of M.E. Crush 40 Shadow the Hedgehog",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Shadow the Hedgehog",
+    "context": "Audio - Shadow the Hedgehog",
+    "audioUrl": "/audio/sonic/Sonic outras/lost-i_am/i-am...-all-of-me-crush-40-shadow-the-hedgehog.mp3",
+    "year": 2005,
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 489,
+    "title": "It Doesnt Matter Theme of Sonic",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure",
+    "context": "Audio - Sonic Adventure",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure01_songs_with_attitude/01-it-doesnt-matter-theme-of-sonic-.mp3",
+    "year": 1998,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 490,
+    "title": "My Sweet Passion",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure",
+    "context": "Audio - Sonic Adventure",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure01_songs_with_attitude/02-my-sweet-passion-theme-of-amy-.mp3",
+    "year": 1998,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 491,
+    "title": "Lazy Days Livin in Paradise",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure",
+    "context": "Audio - Sonic Adventure",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure01_songs_with_attitude/03-lazy-days-livin-in-paradaise-theme-of-big-.mp3",
+    "year": 1998,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 492,
+    "title": "Believe in Myself",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure",
+    "context": "Audio - Sonic Adventure",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure01_songs_with_attitude/04-believe-in-myself-theme-of-miles-.mp3",
+    "year": 1998,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 493,
+    "title": "Unknown from M.E.",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure",
+    "context": "Audio - Sonic Adventure",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure01_songs_with_attitude/05-unknown-from-me-theme-of-knuckles-.mp3",
+    "year": 1998,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 494,
+    "title": "Open Your Heart",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure",
+    "context": "Audio - Sonic Adventure",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure01_songs_with_attitude/06-open-your-heart-main-theme-of-sonic-adventure-.mp3",
+    "year": 1998,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 495,
+    "title": "01 It Doesnt Matter Theme of Sonic",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure",
+    "context": "Audio - Sonic Adventure",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure01_songs_with_attitude/__macosx/._01-it-doesnt-matter-theme-of-sonic-.mp3",
+    "year": 1998,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 496,
+    "title": "02 My Sweet Passion Theme of Amy",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure",
+    "context": "Audio - Sonic Adventure",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure01_songs_with_attitude/__macosx/._02-my-sweet-passion-theme-of-amy-.mp3",
+    "year": 1998,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 497,
+    "title": "03 Lazy Days Livin in Paradaise Theme of Big",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure",
+    "context": "Audio - Sonic Adventure",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure01_songs_with_attitude/__macosx/._03-lazy-days-livin-in-paradaise-theme-of-big-.mp3",
+    "year": 1998,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 498,
+    "title": "04 Believe in Myself Theme of Miles",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure",
+    "context": "Audio - Sonic Adventure",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure01_songs_with_attitude/__macosx/._04-believe-in-myself-theme-of-miles-.mp3",
+    "year": 1998,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 499,
+    "title": "05 Unknown from M.E. Theme of Knuckles",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure",
+    "context": "Audio - Sonic Adventure",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure01_songs_with_attitude/__macosx/._05-unknown-from-me-theme-of-knuckles-.mp3",
+    "year": 1998,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 500,
+    "title": "06 Open Your Heart Main Theme of Sonic Adventure",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure",
+    "context": "Audio - Sonic Adventure",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure01_songs_with_attitude/__macosx/._06-open-your-heart-main-theme-of-sonic-adventure-.mp3",
+    "year": 1998,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 501,
+    "title": "It Doesn T Matter",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure 2",
+    "context": "Audio - Sonic Adventure 2",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/01-it-doesn-t-matter.mp3",
+    "year": 2001,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 502,
+    "title": "Escape from the City",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure 2",
+    "context": "Audio - Sonic Adventure 2",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/02-escape-from-the-city.mp3",
+    "year": 2001,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 503,
+    "title": "Believe in Myself",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure",
+    "context": "Audio - Sonic Adventure",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/03-believe-in-myself.mp3",
+    "year": 1998,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 504,
+    "title": "Unknown from M.E.",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure",
+    "context": "Audio - Sonic Adventure",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/04-unknown-from-me.mp3",
+    "year": 1998,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 505,
+    "title": "Fly in the Freedom",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure 2",
+    "context": "Audio - Sonic Adventure 2",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/05-fly-in-the-freedom.mp3",
+    "year": 2001,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 506,
+    "title": "Throw It All Away",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure 2",
+    "context": "Audio - Sonic Adventure 2",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/06-throw-it-all-away.mp3",
+    "year": 2001,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 507,
+    "title": "Eggman",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure 2",
+    "context": "Audio - Sonic Adventure 2",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/07_eggman.mp3",
+    "year": 2001,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 508,
+    "title": "Live and Learn",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure 2",
+    "context": "Audio - Sonic Adventure 2",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/08-live-and-learn.mp3",
+    "year": 2001,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 509,
+    "title": "It Doesn T Matter Instrumental",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure 2",
+    "context": "Audio - Sonic Adventure 2",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/92-it-doesn-t-matter-instrumental-.mp3",
+    "year": 2001,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 510,
+    "title": "Escape from the City Instrumental",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure 2",
+    "context": "Audio - Sonic Adventure 2",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/93-escape-from-the-city-instrumental-.mp3",
+    "year": 2001,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 511,
+    "title": "Believe in Myself Instrumental",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure",
+    "context": "Audio - Sonic Adventure",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/94-believe-in-myself-instrumental-.mp3",
+    "year": 1998,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 512,
+    "title": "Unknown from M.E. Instrumental",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure 2",
+    "context": "Audio - Sonic Adventure 2",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/95-unknown-from-m.e.-instrumental-.mp3",
+    "year": 2001,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 513,
+    "title": "Fly in the Freedom Instrumental",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure 2",
+    "context": "Audio - Sonic Adventure 2",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/96-fly-in-the-freedom-instrumental-.mp3",
+    "year": 2001,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 514,
+    "title": "Throw It All Away Instrumental",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure 2",
+    "context": "Audio - Sonic Adventure 2",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/97-throw-it-all-away-instrumental-.mp3",
+    "year": 2001,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 515,
+    "title": "E.G.G.M.a.N. Instrumental",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure 2",
+    "context": "Audio - Sonic Adventure 2",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/98-e.g.g.m.a.n.-instrumental-.mp3",
+    "year": 2001,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 516,
+    "title": "Live and Learn Instrumental",
+    "artist": "Jun Senoue",
+    "composer": "Jun Senoue",
+    "game": "Sonic Adventure 2",
+    "context": "Audio - Sonic Adventure 2",
+    "audioUrl": "/audio/sonic/Sonic outras/sonic_adventure02_vocal/99-live-and-learn-instrumental-.mp3",
+    "year": 2001,
+    "genre": "Platform Game Soundtrack",
+    "console": "Dreamcast"
+  },
+  {
+    "id": 517,
+    "title": "Knight of the Wind",
+    "artist": "Crush 40",
+    "composer": "Crush 40",
+    "game": "Sonic and the Black Knight",
+    "context": "Audio - Sonic and the Black Knight",
+    "audioUrl": "/audio/sonic/Sonic outras/vocal-01_knight_of_the_wind/01-knight-of-the-wind.mp3",
+    "year": 2009,
+    "genre": "Platform Game Soundtrack",
+    "console": "Nintendo Wii"
+  },
+  {
+    "id": 518,
+    "title": "Title Theme",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog",
@@ -5784,8 +6228,8 @@
     "console": "Sega Genesis"
   },
   {
-    "id": 482,
-    "title": "Masato Nakamura",
+    "id": 519,
+    "title": "Green Hill Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog",
@@ -5796,8 +6240,8 @@
     "console": "Sega Genesis"
   },
   {
-    "id": 483,
-    "title": "Masato Nakamura",
+    "id": 520,
+    "title": "Marble Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog",
@@ -5808,8 +6252,8 @@
     "console": "Sega Genesis"
   },
   {
-    "id": 484,
-    "title": "Masato Nakamura",
+    "id": 521,
+    "title": "Spring Yard Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog",
@@ -5820,8 +6264,8 @@
     "console": "Sega Genesis"
   },
   {
-    "id": 485,
-    "title": "Masato Nakamura",
+    "id": 522,
+    "title": "Labyrinth Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog",
@@ -5832,8 +6276,8 @@
     "console": "Sega Genesis"
   },
   {
-    "id": 486,
-    "title": "Masato Nakamura",
+    "id": 523,
+    "title": "Star Light Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog",
@@ -5844,8 +6288,8 @@
     "console": "Sega Genesis"
   },
   {
-    "id": 487,
-    "title": "Masato Nakamura",
+    "id": 524,
+    "title": "Scrap Brain Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog",
@@ -5856,8 +6300,8 @@
     "console": "Sega Genesis"
   },
   {
-    "id": 488,
-    "title": "Masato Nakamura",
+    "id": 525,
+    "title": "Robotnik",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog",
@@ -5868,8 +6312,8 @@
     "console": "Sega Genesis"
   },
   {
-    "id": 489,
-    "title": "Masato Nakamura",
+    "id": 526,
+    "title": "Title Theme",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog 2",
@@ -5880,8 +6324,8 @@
     "console": "Sega Genesis"
   },
   {
-    "id": 490,
-    "title": "Masato Nakamura",
+    "id": 527,
+    "title": "Emerald Hill Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog 2",
@@ -5892,8 +6336,8 @@
     "console": "Sega Genesis"
   },
   {
-    "id": 491,
-    "title": "Masato Nakamura",
+    "id": 528,
+    "title": "Chemical Plant Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog 2",
@@ -5904,8 +6348,8 @@
     "console": "Sega Genesis"
   },
   {
-    "id": 492,
-    "title": "Masato Nakamura",
+    "id": 529,
+    "title": "Aquatic Ruin Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog 2",
@@ -5916,8 +6360,8 @@
     "console": "Sega Genesis"
   },
   {
-    "id": 493,
-    "title": "Masato Nakamura",
+    "id": 530,
+    "title": "Casino Night Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog 2",
@@ -5928,8 +6372,8 @@
     "console": "Sega Genesis"
   },
   {
-    "id": 494,
-    "title": "Masato Nakamura",
+    "id": 531,
+    "title": "Hill Top Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog 2",
@@ -5940,8 +6384,8 @@
     "console": "Sega Genesis"
   },
   {
-    "id": 495,
-    "title": "Masato Nakamura",
+    "id": 532,
+    "title": "Mystic Cave Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog 2",
@@ -5952,8 +6396,8 @@
     "console": "Sega Genesis"
   },
   {
-    "id": 496,
-    "title": "Masato Nakamura",
+    "id": 533,
+    "title": "Oil Ocean Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog 2",
@@ -5964,8 +6408,8 @@
     "console": "Sega Genesis"
   },
   {
-    "id": 497,
-    "title": "Masato Nakamura",
+    "id": 534,
+    "title": "Metropolis Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog 2",
@@ -5976,8 +6420,8 @@
     "console": "Sega Genesis"
   },
   {
-    "id": 498,
-    "title": "Masato Nakamura",
+    "id": 535,
+    "title": "Death Egg Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog 2",
@@ -5988,44 +6432,44 @@
     "console": "Sega Genesis"
   },
   {
-    "id": 499,
-    "title": "Michael Jackson & Sega Sound Team",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
+    "id": 536,
+    "title": "Angel Island Zone Act 1",
+    "artist": "Michael Jackson & Sega Sound Team",
+    "composer": "Michael Jackson & Sega Sound Team",
+    "game": "Sonic the Hedgehog 3",
+    "context": "Audio - Sonic the Hedgehog 3",
     "audioUrl": "/audio/sonic/sonic-3/03 - Angel Island Zone Act 1 - Sonic the Hedgehog 3 - Michael Jackson & Sega Sound Team.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
+    "year": 1994,
+    "genre": "Platform Game Soundtrack",
     "console": "Sega Genesis"
   },
   {
-    "id": 500,
-    "title": "Michael Jackson & Sega Sound Team",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
+    "id": 537,
+    "title": "Icecap Zone Act 1",
+    "artist": "Michael Jackson & Sega Sound Team",
+    "composer": "Michael Jackson & Sega Sound Team",
+    "game": "Sonic the Hedgehog 3",
+    "context": "Audio - Sonic the Hedgehog 3",
     "audioUrl": "/audio/sonic/sonic-3/11 - IceCap Zone Act 1 - Sonic the Hedgehog 3 - Michael Jackson & Sega Sound Team.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
+    "year": 1994,
+    "genre": "Platform Game Soundtrack",
     "console": "Sega Genesis"
   },
   {
-    "id": 501,
-    "title": "Michael Jackson & Sega Sound Team",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog",
-    "context": "Audio - Sonic the Hedgehog",
+    "id": 538,
+    "title": "Launch Base Zone Act 1",
+    "artist": "Michael Jackson & Sega Sound Team",
+    "composer": "Michael Jackson & Sega Sound Team",
+    "game": "Sonic the Hedgehog 3",
+    "context": "Audio - Sonic the Hedgehog 3",
     "audioUrl": "/audio/sonic/sonic-3/13 - Launch Base Zone Act 1 - Sonic the Hedgehog 3 - Michael Jackson & Sega Sound Team.mp3",
-    "year": 1991,
-    "genre": "Game Soundtrack",
+    "year": 1994,
+    "genre": "Platform Game Soundtrack",
     "console": "Sega Genesis"
   },
   {
-    "id": 502,
-    "title": "youtube_4gzIL8_G4Xs_audio",
+    "id": 539,
+    "title": "Youtube_4gzil8_g4xs_audio",
     "artist": "Tomoya Ohtani",
     "composer": "Tomoya Ohtani",
     "game": "Sonic Frontiers",
@@ -6036,8 +6480,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 503,
-    "title": "youtube_AzSIuBwPAKs_audio",
+    "id": 540,
+    "title": "Youtube_azsiubwpaks_audio",
     "artist": "Tomoya Ohtani",
     "composer": "Tomoya Ohtani",
     "game": "Sonic Frontiers",
@@ -6048,8 +6492,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 504,
-    "title": "youtube_mUJS9ystZlc_audio",
+    "id": 541,
+    "title": "Youtube_mujs9ystzlc_audio",
     "artist": "Tomoya Ohtani",
     "composer": "Tomoya Ohtani",
     "game": "Sonic Frontiers",
@@ -6060,8 +6504,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 505,
-    "title": "youtube_neexlOTmAxw_audio",
+    "id": 542,
+    "title": "Youtube_neexlotmaxw_audio",
     "artist": "Tomoya Ohtani",
     "composer": "Tomoya Ohtani",
     "game": "Sonic Frontiers",
@@ -6072,8 +6516,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 506,
-    "title": "youtube_oyVKV5BWzhk_audio",
+    "id": 543,
+    "title": "Youtube_oyvkv5bwzhk_audio",
     "artist": "Tomoya Ohtani",
     "composer": "Tomoya Ohtani",
     "game": "Sonic Frontiers",
@@ -6084,8 +6528,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 507,
-    "title": "youtube_TYtGaUQLJC0_audio",
+    "id": 544,
+    "title": "Youtube_tytgauqljc0_audio",
     "artist": "Tomoya Ohtani",
     "composer": "Tomoya Ohtani",
     "game": "Sonic Frontiers",
@@ -6096,8 +6540,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 508,
-    "title": "youtube_u_FRDqHT5y0_audio",
+    "id": 545,
+    "title": "Youtube_u_frdqht5y0_audio",
     "artist": "Tomoya Ohtani",
     "composer": "Tomoya Ohtani",
     "game": "Sonic Frontiers",
@@ -6108,7 +6552,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 509,
+    "id": 546,
     "title": "Breathe",
     "artist": "Nym",
     "composer": "Nym",
@@ -6120,7 +6564,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 510,
+    "id": 547,
     "title": "Climbing",
     "artist": "Nym",
     "composer": "Nym",
@@ -6132,7 +6576,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 511,
+    "id": 548,
     "title": "Cold and Distant",
     "artist": "Nym",
     "composer": "Nym",
@@ -6144,7 +6588,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 512,
+    "id": 549,
     "title": "Departed",
     "artist": "Nym",
     "composer": "Nym",
@@ -6156,7 +6600,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 513,
+    "id": 550,
     "title": "Exodus",
     "artist": "Nym",
     "composer": "Nym",
@@ -6168,7 +6612,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 514,
+    "id": 551,
     "title": "Splattack!",
     "artist": "Toru Minegishi",
     "composer": "Toru Minegishi",
@@ -6180,8 +6624,8 @@
     "console": "Wii U"
   },
   {
-    "id": 515,
-    "title": "Ink or Sink",
+    "id": 552,
+    "title": "Ink Or Sink",
     "artist": "Toru Minegishi",
     "composer": "Toru Minegishi",
     "game": "Splatoon",
@@ -6192,7 +6636,7 @@
     "console": "Wii U"
   },
   {
-    "id": 516,
+    "id": 553,
     "title": "Corneria",
     "artist": "Hajime Hirasawa",
     "composer": "Hajime Hirasawa",
@@ -6204,7 +6648,7 @@
     "console": "SNES"
   },
   {
-    "id": 517,
+    "id": 554,
     "title": "Fortuna",
     "artist": "Hajime Hirasawa",
     "composer": "Hajime Hirasawa",
@@ -6216,7 +6660,7 @@
     "console": "SNES"
   },
   {
-    "id": 518,
+    "id": 555,
     "title": "Macbeth",
     "artist": "Hajime Hirasawa",
     "composer": "Hajime Hirasawa",
@@ -6228,7 +6672,7 @@
     "console": "SNES"
   },
   {
-    "id": 519,
+    "id": 556,
     "title": "Main Theme",
     "artist": "Hajime Hirasawa",
     "composer": "Hajime Hirasawa",
@@ -6240,7 +6684,7 @@
     "console": "SNES"
   },
   {
-    "id": 520,
+    "id": 557,
     "title": "Stardew Valley Overture",
     "artist": "ConcernedApe",
     "composer": "ConcernedApe",
@@ -6252,7 +6696,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 521,
+    "id": 558,
     "title": "Cloud Country",
     "artist": "ConcernedApe",
     "composer": "ConcernedApe",
@@ -6264,8 +6708,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 522,
-    "title": "Spring (It's A Big World Outside)",
+    "id": 559,
+    "title": "Spring (It'S a Big World Outside)",
     "artist": "ConcernedApe",
     "composer": "ConcernedApe",
     "game": "Stardew Valley",
@@ -6276,7 +6720,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 523,
+    "id": 560,
     "title": "Pelican Town",
     "artist": "ConcernedApe",
     "composer": "ConcernedApe",
@@ -6288,8 +6732,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 524,
-    "title": "Summer (Nature's Crescendo)",
+    "id": 561,
+    "title": "Summer (Nature'S Crescendo)",
     "artist": "ConcernedApe",
     "composer": "ConcernedApe",
     "game": "Stardew Valley",
@@ -6300,8 +6744,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 525,
-    "title": "Fall (The Smell Of Mushroom)",
+    "id": 562,
+    "title": "Fall (the Smell of Mushroom)",
     "artist": "ConcernedApe",
     "composer": "ConcernedApe",
     "game": "Stardew Valley",
@@ -6312,8 +6756,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 526,
-    "title": "Winter (Nocturne Of Ice)",
+    "id": 563,
+    "title": "Winter (Nocturne of Ice)",
     "artist": "ConcernedApe",
     "composer": "ConcernedApe",
     "game": "Stardew Valley",
@@ -6324,7 +6768,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 527,
+    "id": 564,
     "title": "Mines (Crystal Bells)",
     "artist": "ConcernedApe",
     "composer": "ConcernedApe",
@@ -6336,7 +6780,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 528,
+    "id": 565,
     "title": "The World Warrior",
     "artist": "Yoko Shimomura",
     "composer": "Yoko Shimomura",
@@ -6348,7 +6792,7 @@
     "console": "Arcade"
   },
   {
-    "id": 529,
+    "id": 566,
     "title": "Player Select",
     "artist": "Yoko Shimomura",
     "composer": "Yoko Shimomura",
@@ -6360,7 +6804,7 @@
     "console": "Arcade"
   },
   {
-    "id": 530,
+    "id": 567,
     "title": "Ryu",
     "artist": "Yoko Shimomura",
     "composer": "Yoko Shimomura",
@@ -6372,7 +6816,7 @@
     "console": "Arcade"
   },
   {
-    "id": 531,
+    "id": 568,
     "title": "Guile",
     "artist": "Yoko Shimomura",
     "composer": "Yoko Shimomura",
@@ -6384,7 +6828,7 @@
     "console": "Arcade"
   },
   {
-    "id": 532,
+    "id": 569,
     "title": "Player Select V2",
     "artist": "Yuzo Koshiro",
     "composer": "Yuzo Koshiro",
@@ -6396,7 +6840,7 @@
     "console": "Sega Genesis"
   },
   {
-    "id": 533,
+    "id": 570,
     "title": "Go Straight",
     "artist": "Yuzo Koshiro",
     "composer": "Yuzo Koshiro",
@@ -6408,7 +6852,7 @@
     "console": "Sega Genesis"
   },
   {
-    "id": 534,
+    "id": 571,
     "title": "In the Bar",
     "artist": "Yuzo Koshiro",
     "composer": "Yuzo Koshiro",
@@ -6420,7 +6864,7 @@
     "console": "Sega Genesis"
   },
   {
-    "id": 535,
+    "id": 572,
     "title": "Dreamer",
     "artist": "Yuzo Koshiro",
     "composer": "Yuzo Koshiro",
@@ -6432,7 +6876,7 @@
     "console": "Sega Genesis"
   },
   {
-    "id": 536,
+    "id": 573,
     "title": "Salutations",
     "artist": "Simon Chylinski",
     "composer": "Simon Chylinski",
@@ -6444,7 +6888,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 537,
+    "id": 574,
     "title": "Into the Unknown",
     "artist": "Simon Chylinski",
     "composer": "Simon Chylinski",
@@ -6456,7 +6900,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 538,
+    "id": 575,
     "title": "Tropical Eden",
     "artist": "Simon Chylinski",
     "composer": "Simon Chylinski",
@@ -6468,7 +6912,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 539,
+    "id": 576,
     "title": "Overworld Day",
     "artist": "Scott Lloyd Shelly",
     "composer": "Scott Lloyd Shelly",
@@ -6480,7 +6924,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 540,
+    "id": 577,
     "title": "Overworld Night",
     "artist": "Scott Lloyd Shelly",
     "composer": "Scott Lloyd Shelly",
@@ -6492,7 +6936,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 541,
+    "id": 578,
     "title": "Boss 1",
     "artist": "Scott Lloyd Shelly",
     "composer": "Scott Lloyd Shelly",
@@ -6504,7 +6948,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 542,
+    "id": 579,
     "title": "Jungle",
     "artist": "Scott Lloyd Shelly",
     "composer": "Scott Lloyd Shelly",
@@ -6516,7 +6960,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 543,
+    "id": 580,
     "title": "Title",
     "artist": "Hirokazu Tanaka",
     "composer": "Hirokazu Tanaka",
@@ -6528,8 +6972,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 544,
-    "title": "B-Type Music",
+    "id": 581,
+    "title": "B Type Music",
     "artist": "Hirokazu Tanaka",
     "composer": "Hirokazu Tanaka",
     "game": "Tetris",
@@ -6540,8 +6984,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 545,
-    "title": "tetris",
+    "id": 582,
+    "title": "Tetris",
     "artist": "Hirokazu Tanaka",
     "composer": "Hirokazu Tanaka",
     "game": "Tetris",
@@ -6552,7 +6996,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 546,
+    "id": 583,
     "title": "The Quarantine Zone [20 Years Later]",
     "artist": "Gustavo Santaolalla",
     "composer": "Gustavo Santaolalla",
@@ -6564,7 +7008,7 @@
     "console": "PlayStation"
   },
   {
-    "id": 547,
+    "id": 584,
     "title": "The Last of Us",
     "artist": "Gustavo Santaolalla",
     "composer": "Gustavo Santaolalla",
@@ -6576,7 +7020,7 @@
     "console": "PlayStation"
   },
   {
-    "id": 548,
+    "id": 585,
     "title": "Breathless",
     "artist": "Gustavo Santaolalla",
     "composer": "Gustavo Santaolalla",
@@ -6588,8 +7032,8 @@
     "console": "PlayStation"
   },
   {
-    "id": 549,
-    "title": "It's the Sims",
+    "id": 586,
+    "title": "It'S the Sims",
     "artist": "Jerry Martin",
     "composer": "Jerry Martin",
     "game": "The Sims",
@@ -6600,7 +7044,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 550,
+    "id": 587,
     "title": "Main Theme",
     "artist": "Jerry Martin",
     "composer": "Jerry Martin",
@@ -6612,7 +7056,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 551,
+    "id": 588,
     "title": "Buy Mode 1",
     "artist": "Jerry Martin",
     "composer": "Jerry Martin",
@@ -6624,7 +7068,79 @@
     "console": "Multi-platform"
   },
   {
-    "id": 552,
+    "id": 589,
+    "title": "Everything'S Alright",
+    "artist": "Kan Gao",
+    "composer": "Kan Gao",
+    "game": "To the Moon",
+    "context": "Audio - To the Moon",
+    "audioUrl": "/audio/to-the-moon/Everything's Alright.mp3",
+    "year": 2011,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 590,
+    "title": "Piano (Johnny'S Version)",
+    "artist": "Kan Gao",
+    "composer": "Kan Gao",
+    "game": "To the Moon",
+    "context": "Audio - To the Moon",
+    "audioUrl": "/audio/to-the-moon/For River - Piano (Johnny's Version).mp3",
+    "year": 2011,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 591,
+    "title": "Moonwisher",
+    "artist": "Kan Gao",
+    "composer": "Kan Gao",
+    "game": "To the Moon",
+    "context": "Audio - To the Moon",
+    "audioUrl": "/audio/to-the-moon/Moonwisher.mp3",
+    "year": 2011,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 592,
+    "title": "Once Upon a Memory",
+    "artist": "Kan Gao",
+    "composer": "Kan Gao",
+    "game": "To the Moon",
+    "context": "Audio - To the Moon",
+    "audioUrl": "/audio/to-the-moon/Once Upon a Memory.mp3",
+    "year": 2011,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 593,
+    "title": "Main Theme",
+    "artist": "Kan Gao",
+    "composer": "Kan Gao",
+    "game": "To the Moon",
+    "context": "Audio - To the Moon",
+    "audioUrl": "/audio/to-the-moon/To the Moon - Main Theme.mp3",
+    "year": 2011,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 594,
+    "title": "Piano (Ending Version)",
+    "artist": "Kan Gao",
+    "composer": "Kan Gao",
+    "game": "To the Moon",
+    "context": "Audio - To the Moon",
+    "audioUrl": "/audio/to-the-moon/To the Moon - Piano (Ending Version).mp3",
+    "year": 2011,
+    "genre": "Indie Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
+    "id": 595,
     "title": "Title Top Gear",
     "artist": "Barry Leitch",
     "composer": "Barry Leitch",
@@ -6636,7 +7152,7 @@
     "console": "SNES"
   },
   {
-    "id": 553,
+    "id": 596,
     "title": "Las Vegas",
     "artist": "Barry Leitch",
     "composer": "Barry Leitch",
@@ -6648,7 +7164,7 @@
     "console": "SNES"
   },
   {
-    "id": 554,
+    "id": 597,
     "title": "Bordeaux",
     "artist": "Barry Leitch",
     "composer": "Barry Leitch",
@@ -6660,7 +7176,7 @@
     "console": "SNES"
   },
   {
-    "id": 555,
+    "id": 598,
     "title": "Frankfurt",
     "artist": "Barry Leitch",
     "composer": "Barry Leitch",
@@ -6672,80 +7188,56 @@
     "console": "SNES"
   },
   {
-    "id": 556,
-    "title": "orderintroextended",
+    "id": 599,
+    "title": "Altars of Apostasy",
     "artist": "Heaven Pierce Her",
     "composer": "Heaven Pierce Her",
     "game": "ULTRAKILL",
     "context": "Audio - ULTRAKILL",
-    "audioUrl": "/audio/ultrakill/orderintroextended.wav",
+    "audioUrl": "/audio/ultrakill/Altars of Apostasy.mp3",
     "year": 2020,
     "genre": "FPS Soundtrack",
     "console": "PC"
   },
   {
-    "id": 557,
-    "title": "Final Version 1 (seamless loop without intro)",
+    "id": 600,
+    "title": "War Without Reason (Ultrakill 7 4 Theme)",
     "artist": "Heaven Pierce Her",
     "composer": "Heaven Pierce Her",
     "game": "ULTRAKILL",
     "context": "Audio - ULTRAKILL",
-    "audioUrl": "/audio/ultrakill/The Cyber Grind - Final Version 1 (seamless loop without intro).wav",
+    "audioUrl": "/audio/ultrakill/Heaven Pierce Her - War Without Reason (ULTRAKILL 7-4 Theme).mp3",
     "year": 2020,
     "genre": "FPS Soundtrack",
     "console": "PC"
   },
   {
-    "id": 558,
-    "title": "The Fire Is Gone (Christmas)",
+    "id": 601,
+    "title": "Tenebre Rosso Sangue (Ultrakill Soundtrack)",
     "artist": "Heaven Pierce Her",
     "composer": "Heaven Pierce Her",
     "game": "ULTRAKILL",
     "context": "Audio - ULTRAKILL",
-    "audioUrl": "/audio/ultrakill/The Fire Is Gone (Christmas).wav",
+    "audioUrl": "/audio/ultrakill/KEYGEN CHURCH - Tenebre Rosso Sangue (ULTRAKILL Soundtrack).mp3",
     "year": 2020,
     "genre": "FPS Soundtrack",
     "console": "PC"
   },
   {
-    "id": 559,
-    "title": "ULTRACHURCH (Loop)",
+    "id": 602,
+    "title": "The World Looks Red",
     "artist": "Heaven Pierce Her",
     "composer": "Heaven Pierce Her",
     "game": "ULTRAKILL",
     "context": "Audio - ULTRAKILL",
-    "audioUrl": "/audio/ultrakill/ULTRACHURCH (Loop).wav",
+    "audioUrl": "/audio/ultrakill/The World Looks Red.mp3",
     "year": 2020,
     "genre": "FPS Soundtrack",
     "console": "PC"
   },
   {
-    "id": 560,
-    "title": "Versus2Outro",
-    "artist": "Heaven Pierce Her",
-    "composer": "Heaven Pierce Her",
-    "game": "ULTRAKILL",
-    "context": "Audio - ULTRAKILL",
-    "audioUrl": "/audio/ultrakill/Versus2Outro.wav",
-    "year": 2020,
-    "genre": "FPS Soundtrack",
-    "console": "PC"
-  },
-  {
-    "id": 561,
-    "title": "HANE",
-    "artist": "ZTS",
-    "composer": "ZTS",
-    "game": "Umineko When They Cry",
-    "context": "Audio - Umineko When They Cry",
-    "audioUrl": "/audio/umineko/05. HANE.mp3",
-    "year": 2007,
-    "genre": "Visual Novel Soundtrack",
-    "console": "PC"
-  },
-  {
-    "id": 562,
-    "title": "goldenslaughterer",
+    "id": 603,
+    "title": "Goldenslaughterer",
     "artist": "ZTS",
     "composer": "ZTS",
     "game": "Umineko When They Cry",
@@ -6756,43 +7248,55 @@
     "console": "PC"
   },
   {
-    "id": 563,
-    "title": "worldenddominator",
+    "id": 604,
+    "title": "Far (Flat)",
     "artist": "ZTS",
     "composer": "ZTS",
     "game": "Umineko When They Cry",
     "context": "Audio - Umineko When They Cry",
-    "audioUrl": "/audio/umineko/59. worldenddominator.mp3",
+    "audioUrl": "/audio/umineko/far (flat).mp3",
     "year": 2007,
     "genre": "Visual Novel Soundtrack",
     "console": "PC"
   },
   {
-    "id": 564,
-    "title": "Dread of the grave -More fear",
+    "id": 605,
+    "title": "Hope",
     "artist": "ZTS",
     "composer": "ZTS",
     "game": "Umineko When They Cry",
     "context": "Audio - Umineko When They Cry",
-    "audioUrl": "/audio/umineko/74. Dread of the grave -More fear-.mp3",
+    "audioUrl": "/audio/umineko/Hope.mp3",
     "year": 2007,
     "genre": "Visual Novel Soundtrack",
     "console": "PC"
   },
   {
-    "id": 565,
-    "title": "miragecoordinator",
+    "id": 606,
+    "title": "The Girl'S Witch Hunt",
     "artist": "ZTS",
     "composer": "ZTS",
     "game": "Umineko When They Cry",
     "context": "Audio - Umineko When They Cry",
-    "audioUrl": "/audio/umineko/86. miragecoordinator.mp3",
+    "audioUrl": "/audio/umineko/The girl's witch hunt.mp3",
     "year": 2007,
     "genre": "Visual Novel Soundtrack",
     "console": "PC"
   },
   {
-    "id": 566,
+    "id": 607,
+    "title": "Yomitsu Hirasaka Corruption",
+    "artist": "ZTS",
+    "composer": "ZTS",
+    "game": "Umineko When They Cry",
+    "context": "Audio - Umineko When They Cry",
+    "audioUrl": "/audio/umineko/Yomitsu Hirasaka Corruption.mp3",
+    "year": 2007,
+    "genre": "Visual Novel Soundtrack",
+    "console": "PC"
+  },
+  {
+    "id": 608,
     "title": "Once Upon a Time",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -6804,7 +7308,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 567,
+    "id": 609,
     "title": "Your Best Friend",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -6816,7 +7320,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 568,
+    "id": 610,
     "title": "Ruins",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -6828,7 +7332,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 569,
+    "id": 611,
     "title": "Enemy Approaching",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -6840,7 +7344,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 570,
+    "id": 612,
     "title": "Heartache",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -6852,8 +7356,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 571,
-    "title": "sans.",
+    "id": 613,
+    "title": "Sans.",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Undertale",
@@ -6864,7 +7368,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 572,
+    "id": 614,
     "title": "Snowy",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -6876,7 +7380,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 573,
+    "id": 615,
     "title": "Bonetrousle",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -6888,7 +7392,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 574,
+    "id": 616,
     "title": "Waterfall",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -6900,7 +7404,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 575,
+    "id": 617,
     "title": "Memory",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -6912,7 +7416,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 576,
+    "id": 618,
     "title": "Spider Dance",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -6924,8 +7428,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 577,
-    "title": "It's Raining Somewhere Else",
+    "id": 619,
+    "title": "It'S Raining Somewhere Else",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Undertale",
@@ -6936,8 +7440,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 578,
-    "title": "CORE",
+    "id": 620,
+    "title": "Core",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Undertale",
@@ -6948,7 +7452,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 579,
+    "id": 621,
     "title": "Death by Glamour",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -6960,7 +7464,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 580,
+    "id": 622,
     "title": "Undertale",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -6972,7 +7476,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 581,
+    "id": 623,
     "title": "An Ending",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -6984,7 +7488,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 582,
+    "id": 624,
     "title": "Hopes and Dreams",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -6996,8 +7500,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 583,
-    "title": "SAVE the World",
+    "id": 625,
+    "title": "Save the World",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Undertale",
@@ -7008,7 +7512,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 584,
+    "id": 626,
     "title": "Final Power",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -7020,7 +7524,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 585,
+    "id": 627,
     "title": "Respite",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -7032,7 +7536,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 586,
+    "id": 628,
     "title": "Battle Against a True Hero",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
@@ -7044,8 +7548,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 587,
-    "title": "MEGALOVANIA",
+    "id": 629,
+    "title": "Megalovania",
     "artist": "Toby Fox",
     "composer": "Toby Fox",
     "game": "Undertale",
@@ -7056,7 +7560,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 588,
+    "id": 630,
     "title": "Memories",
     "artist": "Nico Nico",
     "composer": "Nico Nico",
@@ -7068,7 +7572,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 589,
+    "id": 631,
     "title": "Time Is Tearing Us Apart",
     "artist": "Nico Nico",
     "composer": "Nico Nico",
@@ -7080,8 +7584,8 @@
     "console": "Multi-platform"
   },
   {
-    "id": 590,
-    "title": "The World Hasn't Ended Yet",
+    "id": 632,
+    "title": "The World Hasn'T Ended Yet",
     "artist": "Nico Nico",
     "composer": "Nico Nico",
     "game": "Until Then",
@@ -7092,7 +7596,7 @@
     "console": "Multi-platform"
   },
   {
-    "id": 591,
+    "id": 633,
     "title": "Mii Channel",
     "artist": "Kazumi Totaka",
     "composer": "Kazumi Totaka",
@@ -7104,7 +7608,7 @@
     "console": "Wii"
   },
   {
-    "id": 592,
+    "id": 634,
     "title": "Shop Channel",
     "artist": "Kazumi Totaka",
     "composer": "Kazumi Totaka",
@@ -7116,7 +7620,7 @@
     "console": "Wii"
   },
   {
-    "id": 593,
+    "id": 635,
     "title": "Title (Wii Sports)",
     "artist": "Kazumi Totaka",
     "composer": "Kazumi Totaka",
@@ -7128,7 +7632,7 @@
     "console": "Wii"
   },
   {
-    "id": 594,
+    "id": 636,
     "title": "Main Theme",
     "artist": "Yasuaki Iwata",
     "composer": "Yasuaki Iwata",
@@ -7140,7 +7644,7 @@
     "console": "Nintendo Switch"
   },
   {
-    "id": 595,
+    "id": 637,
     "title": "Hyrule Castle",
     "artist": "Yasuaki Iwata",
     "composer": "Yasuaki Iwata",
@@ -7152,8 +7656,8 @@
     "console": "Nintendo Switch"
   },
   {
-    "id": 596,
-    "title": "Kass's Theme (Song of the Hero ver.)",
+    "id": 638,
+    "title": "Kass'S Theme (Song of the Hero Ver.)",
     "artist": "Yasuaki Iwata",
     "composer": "Yasuaki Iwata",
     "game": "The Legend of Zelda: Breath of the Wild",
@@ -7164,7 +7668,7 @@
     "console": "Nintendo Switch"
   },
   {
-    "id": 597,
+    "id": 639,
     "title": "Title Theme",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -7176,7 +7680,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 598,
+    "id": 640,
     "title": "Clock Town, First Day",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -7188,7 +7692,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 599,
+    "id": 641,
     "title": "Astral Observatory",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -7200,7 +7704,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 600,
+    "id": 642,
     "title": "Song of Healing",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -7212,7 +7716,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 601,
+    "id": 643,
     "title": "Deku Palace",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -7224,7 +7728,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 602,
+    "id": 644,
     "title": "Woodfall Temple",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -7236,8 +7740,8 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 603,
-    "title": "The End-Credits",
+    "id": 645,
+    "title": "The End Credits",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Majora's Mask",
@@ -7248,7 +7752,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 604,
+    "id": 646,
     "title": "Title Theme",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -7260,7 +7764,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 605,
+    "id": 647,
     "title": "Deku Tree",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -7272,7 +7776,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 606,
+    "id": 648,
     "title": "Kokiri Forest",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -7284,8 +7788,8 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 607,
-    "title": "a Hyrule Field Main Theme",
+    "id": 649,
+    "title": "A Hyrule Field Main Theme",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -7296,7 +7800,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 608,
+    "id": 650,
     "title": "Hyrule Castle Courtyard",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -7308,8 +7812,8 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 609,
-    "title": "Zelda's Theme",
+    "id": 651,
+    "title": "Zelda'S Theme",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -7320,7 +7824,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 610,
+    "id": 652,
     "title": "Lon Lon Ranch",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -7332,7 +7836,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 611,
+    "id": 653,
     "title": "Kakariko Village",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -7344,8 +7848,8 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 612,
-    "title": "Ocarina ~Saria's Song~",
+    "id": 654,
+    "title": "Ocarina ~Saria'S Song~",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -7356,7 +7860,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 613,
+    "id": 655,
     "title": "Lost Woods",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -7368,8 +7872,8 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 614,
-    "title": "Great Fairy's Fountain",
+    "id": 656,
+    "title": "Great Fairy'S Fountain",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -7380,7 +7884,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 615,
+    "id": 657,
     "title": "Master Sword",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -7392,7 +7896,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 616,
+    "id": 658,
     "title": "Ocarina ~Song of Storms~",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -7404,7 +7908,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 617,
+    "id": 659,
     "title": "Gerudo Valley",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -7416,7 +7920,7 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 618,
+    "id": 660,
     "title": "Ballad of the Goddess",
     "artist": "Hajime Wakai",
     "composer": "Hajime Wakai",
@@ -7428,7 +7932,7 @@
     "console": "Wii"
   },
   {
-    "id": 619,
+    "id": 661,
     "title": "Overture ~ Ballad of the Goddess",
     "artist": "Hajime Wakai",
     "composer": "Hajime Wakai",
@@ -7440,7 +7944,7 @@
     "console": "Wii"
   },
   {
-    "id": 620,
+    "id": 662,
     "title": "Title",
     "artist": "Toru Minegishi",
     "composer": "Toru Minegishi",
@@ -7452,7 +7956,7 @@
     "console": "GameCube/Wii"
   },
   {
-    "id": 621,
+    "id": 663,
     "title": "Ordon Ranch",
     "artist": "Toru Minegishi",
     "composer": "Toru Minegishi",
@@ -7464,7 +7968,7 @@
     "console": "GameCube/Wii"
   },
   {
-    "id": 622,
+    "id": 664,
     "title": "Title",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -7476,7 +7980,7 @@
     "console": "GameCube"
   },
   {
-    "id": 623,
+    "id": 665,
     "title": "Outset Island",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -7488,8 +7992,8 @@
     "console": "GameCube"
   },
   {
-    "id": 624,
-    "title": "Beedle's Shop",
+    "id": 666,
+    "title": "Beedle'S Shop",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: The Wind Waker",
@@ -7500,7 +8004,7 @@
     "console": "GameCube"
   },
   {
-    "id": 625,
+    "id": 667,
     "title": "Windfall Island",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
@@ -7512,7 +8016,7 @@
     "console": "GameCube"
   },
   {
-    "id": 626,
+    "id": 668,
     "title": "Dragon Roost Island",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",

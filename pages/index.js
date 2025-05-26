@@ -42,6 +42,7 @@ export default function Home() {
   const [currentDay, setCurrentDay] = useState(null);
   const [showMenu, setShowMenu] = useState(false);
   const [showSacabambapis, setShowSacabambapis] = useState(false);
+  const [isPlayButtonDisabled, setIsPlayButtonDisabled] = useState(false);
   const [showStatistics, setShowStatistics] = useState(false);
   const [gameResult, setGameResult] = useState(null);
   const [showTutorial, setShowTutorial] = useState(false);
@@ -83,7 +84,15 @@ export default function Home() {
     return deterministicRandom * maxStart;
   };
 
-  // Função para selecionar música determinística baseada no dia
+  // Função para selecionar música determinística baseada no dia (versão simples, sem histórico)
+  const getDeterministicSongSimple = (day) => {
+    // Usar função determinística para selecionar diretamente da lista completa
+    const deterministicRandom = getDeterministicRandom(day, 0);
+    const index = Math.floor(deterministicRandom * songs.length);
+    return songs[index];
+  };
+
+  // Função para selecionar música determinística baseada no dia (versão com histórico para modo infinito)
   const getDeterministicSong = (day) => {
     // Obter histórico de músicas dos últimos 30 dias
     const musicHistory = getMusicHistory();
@@ -185,21 +194,27 @@ export default function Home() {
           setInfiniteBestRecord(stats.bestRecord || 0);
           setInfiniteStreak(stats.currentStreak || 0);
           setInfiniteUsedSongs(stats.usedSongs || []);
+
+          // Retorna o estado do jogo salvo para poder restaurar
+          return stats.currentGameState || null;
         }
       } catch (error) {
         console.error('Erro ao carregar estatísticas do modo infinito:', error);
       }
     }
+    return null;
   };
 
-  const saveInfiniteStats = (streak, bestRecord, usedSongs) => {
+  const saveInfiniteStats = (streak, bestRecord, usedSongs, currentGameState = null) => {
     if (typeof window !== 'undefined') {
       try {
         const stats = {
           currentStreak: streak,
           bestRecord: bestRecord,
           usedSongs: usedSongs,
-          lastPlayed: Date.now()
+          lastPlayed: Date.now(),
+          // Salva o estado atual do jogo se fornecido (para continuar depois)
+          currentGameState: currentGameState
         };
         localStorage.setItem('ludomusic_infinite_stats', JSON.stringify(stats));
       } catch (error) {
@@ -215,23 +230,52 @@ export default function Home() {
     setIsInfiniteMode(true);
     setInfiniteGameOver(false);
     setGameOver(false);
-    setAttempts(0);
-    setHistory([]);
-    setMessage('');
-    setShowHint(false);
-    setActiveHint(0);
-    setGuess('');
-    setShowSuggestions(false);
 
-    // Carrega uma nova música para o modo infinito
-    const newSong = getRandomInfiniteSong();
-    if (newSong) {
-      setCurrentSong(newSong);
-      // O tempo de início será configurado pelo handleLoadedMetadata normal
+    // Verifica se há estado salvo do jogo para restaurar
+    const savedStats = typeof window !== 'undefined' ? localStorage.getItem('ludomusic_infinite_stats') : null;
+    let savedGameState = null;
+
+    if (savedStats) {
+      try {
+        const stats = JSON.parse(savedStats);
+        savedGameState = stats.currentGameState;
+      } catch (error) {
+        console.error('Erro ao carregar estado salvo:', error);
+      }
+    }
+
+    if (savedGameState && savedGameState.currentSong) {
+      // Restaura o estado do jogo salvo
+      setAttempts(savedGameState.attempts || 0);
+      setHistory(savedGameState.history || []);
+      setMessage(savedGameState.message || '');
+      setShowHint(savedGameState.showHint || false);
+      setActiveHint(savedGameState.activeHint || 0);
+      setCurrentClipDuration(savedGameState.currentClipDuration || 0.3);
+      setCurrentSong(savedGameState.currentSong);
+
+      // Limpa o estado salvo já que foi restaurado
+      saveInfiniteStats(infiniteStreak, infiniteBestRecord, infiniteUsedSongs, null);
     } else {
-      // Todas as músicas foram completadas
-      setMessage(t('all_songs_completed'));
-      setInfiniteGameOver(true);
+      // Inicia um novo jogo
+      setAttempts(0);
+      setHistory([]);
+      setMessage('');
+      setShowHint(false);
+      setActiveHint(0);
+      setGuess('');
+      setShowSuggestions(false);
+
+      // Carrega uma nova música para o modo infinito
+      const newSong = getRandomInfiniteSong();
+      if (newSong) {
+        setCurrentSong(newSong);
+        // O tempo de início será configurado pelo handleLoadedMetadata normal
+      } else {
+        // Todas as músicas foram completadas
+        setMessage(t('all_songs_completed'));
+        setInfiniteGameOver(true);
+      }
     }
   };
 
@@ -309,12 +353,26 @@ export default function Home() {
     // Para o áudio atual
     resetAudioState();
 
-    // Reseta todos os estados do modo infinito
+    // Se estiver no modo infinito e houver um jogo em andamento, salva o estado atual
+    if (isInfiniteMode && !gameOver && !infiniteGameOver) {
+      const currentGameState = {
+        currentSong: currentSong,
+        attempts: attempts,
+        history: history,
+        message: message,
+        showHint: showHint,
+        activeHint: activeHint,
+        currentClipDuration: currentClipDuration
+      };
+
+      // Salva o estado atual para poder continuar depois
+      saveInfiniteStats(infiniteStreak, infiniteBestRecord, infiniteUsedSongs, currentGameState);
+    }
+
+    // Reseta todos os estados do modo infinito (mas mantém as estatísticas salvas)
     setIsInfiniteMode(false);
     setInfiniteGameOver(false);
     setShowNextSongButton(false);
-    setInfiniteStreak(0);
-    setInfiniteUsedSongs([]);
 
     // Reseta o estado do jogo
     setAttempts(0);
@@ -328,9 +386,29 @@ export default function Home() {
     setShowStatistics(false);
     setGameResult(null);
 
-    // Carrega a música do dia
-    const today = getDayOfYear();
-    const dailySong = getDeterministicSong(today);
+    // Carrega a música do dia usando o currentDay já calculado
+    // Se currentDay ainda não foi definido, usa o dia local como fallback
+    const dayToUse = currentDay !== null ? currentDay : getDayOfYear();
+
+    // Primeiro, tenta recuperar a música salva para o dia
+    const savedSongKey = `ludomusic_daily_song_day_${dayToUse}`;
+    const savedSongId = localStorage.getItem(savedSongKey);
+
+    let dailySong;
+    if (savedSongId) {
+      // Usa a música salva se existir
+      dailySong = songs.find(s => s.id.toString() === savedSongId);
+      if (!dailySong) {
+        // Se a música salva não existe mais, gera uma nova determinística
+        dailySong = getDeterministicSongSimple(dayToUse);
+        localStorage.setItem(savedSongKey, dailySong.id.toString());
+      }
+    } else {
+      // Gera nova música determinística para o dia
+      dailySong = getDeterministicSongSimple(dayToUse);
+      localStorage.setItem(savedSongKey, dailySong.id.toString());
+    }
+
     setCurrentSong(dailySong);
   };
 
@@ -343,10 +421,10 @@ export default function Home() {
 
   // Verificar se é a primeira visita do usuário
   useEffect(() => {
-    if (typeof window !== 'undefined' && isClient) {
+    if (typeof window !== 'undefined') {
       try {
         const hasSeenTutorial = localStorage.getItem('ludomusic_tutorial_seen');
-        if (!hasSeenTutorial) {
+        if (!hasSeenTutorial || hasSeenTutorial !== 'true') {
           // É a primeira visita, mostrar tutorial
           setShowTutorial(true);
         }
@@ -355,12 +433,17 @@ export default function Home() {
         console.error('Erro ao verificar tutorial:', error);
       }
     }
-  }, [isClient]);
+  }, []); // Remover dependência do isClient
 
   // Carregar música do minuto ao montar
   useEffect(() => {
     const loadMusicOfTheDay = async () => {
       setIsLoading(true);
+
+      // Primeiro, verificar se já temos dados salvos para hoje
+      const savedDayKey = 'ludomusic_current_day';
+      const savedDay = localStorage.getItem(savedDayKey);
+
       let timeData;
       try {
         timeData = await fetchTimezone();
@@ -375,17 +458,33 @@ export default function Home() {
       const start = new Date(now.getFullYear(), 0, 0);
       const diff = now - start + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
       const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+      // Verificar se o dia mudou desde a última visita
+      const dayChanged = savedDay && parseInt(savedDay) !== dayOfYear;
+
+      // Salvar o dia atual
+      localStorage.setItem(savedDayKey, dayOfYear.toString());
       setCurrentDay(dayOfYear);
 
       // SISTEMA DETERMINÍSTICO: A música é sempre a mesma para o mesmo dia
-      // Não depende do localStorage, mas usa o dia como seed
-      const song = getDeterministicSong(dayOfYear);
-
-
-
-      // Opcional: ainda salvar no localStorage para debug/cache
+      // Verificar se já temos a música salva para hoje
       const savedSongKey = `ludomusic_daily_song_day_${dayOfYear}`;
-      localStorage.setItem(savedSongKey, song.id.toString());
+      const savedSongId = localStorage.getItem(savedSongKey);
+
+      let song;
+      if (savedSongId && !dayChanged) {
+        // Usar a música salva se for o mesmo dia
+        song = songs.find(s => s.id.toString() === savedSongId);
+        if (!song) {
+          // Se a música salva não existe mais, gerar uma nova
+          song = getDeterministicSongSimple(dayOfYear);
+          localStorage.setItem(savedSongKey, song.id.toString());
+        }
+      } else {
+        // Gerar nova música para o dia
+        song = getDeterministicSongSimple(dayOfYear);
+        localStorage.setItem(savedSongKey, song.id.toString());
+      }
 
       // Limpa músicas de dias anteriores (mantém apenas os últimos 3 dias)
       for (let i = 0; i < localStorage.length; i++) {
@@ -400,8 +499,6 @@ export default function Home() {
 
       // Usar URL original sem codificação - mais compatível com Vercel
       const songWithEncodedUrl = { ...song, audioUrl: song.audioUrl };
-
-
 
       setCurrentSong(songWithEncodedUrl);
       // Calcular tempo até a próxima meia-noite
@@ -804,7 +901,7 @@ export default function Home() {
 
   useEffect(() => {
     setCurrentClipDuration(0.3 + activeHint * 0.2);
-    if (audioRef.current) {
+    if (audioRef.current && startTime !== undefined) {
       audioRef.current.currentTime = startTime;
       audioRef.current.pause();
       setAudioProgress(0);
@@ -814,7 +911,7 @@ export default function Home() {
 
   useEffect(() => {
     setActiveHint(attempts);
-    if (audioRef.current) {
+    if (audioRef.current && startTime !== undefined) {
       audioRef.current.currentTime = startTime;
       audioRef.current.pause();
       setAudioProgress(0);
@@ -840,6 +937,7 @@ export default function Home() {
 
       // No modo infinito, força o recarregamento do áudio com um pequeno delay
       if (isInfiniteMode && audioRef.current) {
+        setIsPlaying(false); // Reset play state only in infinite mode
         setTimeout(() => {
           if (audioRef.current) {
             audioRef.current.load();
@@ -856,6 +954,11 @@ export default function Home() {
     if (typeof window !== 'undefined') {
       try {
         localStorage.setItem('ludomusic_tutorial_seen', 'true');
+        // Verificar se foi salvo corretamente
+        const saved = localStorage.getItem('ludomusic_tutorial_seen');
+        if (saved !== 'true') {
+          console.warn('Tutorial não foi salvo corretamente no localStorage');
+        }
       } catch (error) {
         console.error('Erro ao salvar tutorial visto:', error);
       }
@@ -863,10 +966,16 @@ export default function Home() {
   };
 
   const handleStartPlaying = () => {
+    setShowTutorial(false);
     // Marcar que o usuário já viu o tutorial
     if (typeof window !== 'undefined') {
       try {
         localStorage.setItem('ludomusic_tutorial_seen', 'true');
+        // Verificar se foi salvo corretamente
+        const saved = localStorage.getItem('ludomusic_tutorial_seen');
+        if (saved !== 'true') {
+          console.warn('Tutorial não foi salvo corretamente no localStorage');
+        }
       } catch (error) {
         console.error('Erro ao salvar tutorial visto:', error);
       }
@@ -960,7 +1069,9 @@ export default function Home() {
         'ludomusic_settings',
         'ludomusic_statistics',
         'ludomusic_infinite_stats',
-        'ludomusic_daily_history' // Histórico de músicas para controle de repetições
+        'ludomusic_daily_history', // Histórico de músicas para controle de repetições
+        'ludomusic_tutorial_seen', // Tutorial visto pelo usuário
+        'ludomusic_current_day' // Dia atual salvo
       ];
 
       // Procura por chaves antigas relacionadas ao ludomusic
@@ -1300,9 +1411,13 @@ export default function Home() {
                 <button
                   className={styles.audioPlayBtnCustom}
                   onClick={() => {
-                    if (!audioRef.current) {
+                    if (!audioRef.current || isPlayButtonDisabled) {
                       return;
                     }
+
+                    // Desabilita o botão temporariamente para evitar duplo clique
+                    setIsPlayButtonDisabled(true);
+                    setTimeout(() => setIsPlayButtonDisabled(false), 300);
 
                     // Se não há duração mas há URL, tentar forçar carregamento
                     if (!audioDuration && currentSong?.audioUrl) {
@@ -1310,10 +1425,16 @@ export default function Home() {
                       return;
                     }
 
+                    // Verificar se o startTime está definido
+                    if (startTime === undefined) {
+                      return;
+                    }
+
                     const currentTime = audioRef.current.currentTime - startTime;
                     const maxAllowed = (gameOver && !isInfiniteMode) ? MAX_PLAY_TIME : (maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1]);
-                    if (currentTime >= maxAllowed) {
-                      // Se já passou do limite, volta para o início do trecho
+
+                    if (currentTime >= maxAllowed || currentTime < 0) {
+                      // Se já passou do limite ou está antes do início, volta para o início do trecho
                       audioRef.current.currentTime = startTime;
                       setAudioProgress(0);
                     }
@@ -1322,13 +1443,13 @@ export default function Home() {
                       audioRef.current.pause();
                     } else {
                       audioRef.current.play().catch(error => {
-                        // console.error('Erro ao reproduzir áudio:', error);
+                        console.error('Erro ao reproduzir áudio:', error);
                         setAudioError(true);
                         setMessage('Erro ao reproduzir o áudio. Tentando novamente...');
                       });
                     }
                   } }
-                  disabled={audioError || (!audioDuration && !currentSong?.audioUrl)}
+                  disabled={audioError || (!audioDuration && !currentSong?.audioUrl) || isPlayButtonDisabled}
                   style={{
                     opacity: (audioError || !audioDuration) ? 0.5 : 1,
                     cursor: (audioError || !audioDuration) ? 'not-allowed' : 'pointer'
@@ -1355,6 +1476,8 @@ export default function Home() {
                 ref={audioRef}
                 src={currentSong?.audioUrl}
                 style={{ display: 'none' }}
+                preload="auto"
+                crossOrigin="anonymous"
                 onLoadedMetadata={handleLoadedMetadata}
                 onEnded={handleAudioEnded}
                 onError={(e) => {

@@ -58,6 +58,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
   const [volume, setVolume] = useState(1);
   const [isShaking, setIsShaking] = useState(false);
   const [startTime, setStartTime] = useState(0);
+  const [isPlayButtonDisabled, setIsPlayButtonDisabled] = useState(false);
 
   const audioRef = useRef(null);
   const inputRef = useRef(null);
@@ -403,7 +404,11 @@ const MultiplayerGame = ({ onBackToLobby }) => {
   };
 
   const handlePlayPause = () => {
-    if (!audioRef.current) return;
+    if (!audioRef.current || isPlayButtonDisabled) return;
+
+    // Desabilita o botão temporariamente para evitar duplo clique
+    setIsPlayButtonDisabled(true);
+    setTimeout(() => setIsPlayButtonDisabled(false), 300);
 
     const currentTime = audioRef.current.currentTime - startTime;
     const maxDuration = iAmWinner
@@ -601,7 +606,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                     <button
                       className={gameStyles.audioPlayBtnCustom}
                       onClick={handlePlayPause}
-                      disabled={!songToPlay}
+                      disabled={!songToPlay || isPlayButtonDisabled}
                     >
                       {isPlaying ? (
                         <FaPause color="#fff" size={20} />
@@ -632,7 +637,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                     ref={audioRef}
                     src={songToPlay?.audioUrl}
                     style={{ display: 'none' }}
-                    preload="metadata"
+                    preload="auto"
                     crossOrigin="anonymous"
                     onError={(e) => {
                       // Log apenas erros críticos

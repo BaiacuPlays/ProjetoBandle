@@ -21,16 +21,80 @@ function extractMusicInfo(filePath, id) {
   title = title.replace(/^OST\s*-\s*\d+\s*/, ''); // Remove "OST - 024 "
   title = title.replace(/^Undertale\s*OST\s*-\s*\d+\s*/, ''); // Remove "Undertale OST - 024 "
   title = title.replace(/^youtube_[a-zA-Z0-9_-]+_audio/, ''); // Remove "youtube_xxxxx_audio"
+  title = title.replace(/^youtube_[a-zA-Z0-9_-]+/, ''); // Remove "youtube_xxxxx"
+  title = title.replace(/^_audio$/, ''); // Remove "_audio" sozinho
+  title = title.replace(/^\._/, ''); // Remove prefixos de arquivos Mac como "._"
 
   // Remove prefixos comuns
   title = title.replace(/^[\[\(]?Official[\]\)]?\s*/, ''); // Remove [Official]
   title = title.replace(/Original Soundtrack\s*-\s*\d+\s*-\s*/, ''); // Remove "Original Soundtrack - XX -"
+
+  // Remove prefixos de nomes de jogos específicos que aparecem incorretamente nos títulos
+  title = title.replace(/^Celeste\s+/, ''); // Remove "Celeste " do início
+  title = title.replace(/^Sonic\s+/, ''); // Remove "Sonic " do início
+  title = title.replace(/^Mario\s+/, ''); // Remove "Mario " do início
+  title = title.replace(/^Zelda\s+/, ''); // Remove "Zelda " do início
+  title = title.replace(/^Pokemon\s+/, ''); // Remove "Pokemon " do início
+  title = title.replace(/^Crash\s+/, ''); // Remove "Crash " do início
+  title = title.replace(/^Cuphead\s+/, ''); // Remove "Cuphead " do início
+  title = title.replace(/^Undertale\s+/, ''); // Remove "Undertale " do início
+  title = title.replace(/^Deltarune\s+/, ''); // Remove "Deltarune " do início
+  title = title.replace(/^Hollow Knight\s+/, ''); // Remove "Hollow Knight " do início
+  title = title.replace(/^Hades\s+/, ''); // Remove "Hades " do início
+  title = title.replace(/^Doom\s+/, ''); // Remove "Doom " do início
+  title = title.replace(/^Minecraft\s+/, ''); // Remove "Minecraft " do início
 
   // Extrair título real do nome do arquivo
   if (title.includes(' - ')) {
     const parts = title.split(' - ');
     // Se há múltiplas partes, pegar a última (que geralmente é o título)
     title = parts[parts.length - 1];
+  }
+
+  // Limpezas específicas para casos problemáticos
+  title = title.replace(/^main-theme-of-.*/, ''); // Remove "main-theme-of-xxx"
+  title = title.replace(/^theme-of-.*/, ''); // Remove "theme-of-xxx"
+  title = title.replace(/-+/g, ' '); // Substitui múltiplos hífens por espaços
+  title = title.replace(/\s+/g, ' '); // Substitui múltiplos espaços por um só
+
+  // Se o título contém informações de artista/compositor, extrair apenas o nome da música
+  if (title.includes(' & ') && title.includes('Sound Team')) {
+    // Para casos como "IceCap Zone Act 1 - Sonic the Hedgehog 3 - Michael Jackson & Sega Sound Team"
+    const musicParts = title.split(' - ');
+    if (musicParts.length > 0) {
+      title = musicParts[0]; // Pegar apenas a primeira parte (nome da música)
+    }
+  }
+
+  // Casos específicos para arquivos do Sonic com formato "XX - Nome da Música - Sonic the Hedgehog X - Compositor"
+  if (title.includes(' - ') && (title.includes('Sonic the Hedgehog') || title.includes('Masato Nakamura'))) {
+    const parts = title.split(' - ');
+    if (parts.length >= 3) {
+      // Formato: "01 - Title Theme - Sonic the Hedgehog - Masato Nakamura"
+      title = parts[1]; // Pegar a segunda parte (nome da música)
+    }
+  }
+
+  // Se o título é apenas o nome do compositor, tentar extrair do nome do arquivo
+  if (title === 'Masato Nakamura' || title === 'Michael Jackson & Sega Sound Team' || title === 'Tomoya Ohtani') {
+    const originalName = fileName.replace(/\.(mp3|wav)$/i, '');
+    if (originalName.includes(' - ')) {
+      const parts = originalName.split(' - ');
+      if (parts.length >= 2) {
+        title = parts[1]; // Pegar a segunda parte
+      }
+    }
+  }
+
+  // Se o título está vazio ou muito curto após limpeza, tentar extrair do nome do arquivo original
+  if (!title || title.length < 2) {
+    const originalName = fileName.replace(/\.(mp3|wav)$/i, '');
+    if (originalName.includes(' - ')) {
+      const parts = originalName.split(' - ');
+      title = parts[parts.length - 1];
+    } else {
+      title = originalName;
+    }
   }
 
   // Se o título ainda está vazio ou muito curto, tentar extrair de outra forma
@@ -52,8 +116,41 @@ function extractMusicInfo(filePath, id) {
 
   // Limpeza final do título
   title = title.trim();
-  title = title.replace(/^[\-\s]+/, ''); // Remove hífens e espaços do início
-  title = title.replace(/[\-\s]+$/, ''); // Remove hífens e espaços do final
+  title = title.replace(/^[\-\s_]+/, ''); // Remove hífens, espaços e underscores do início
+  title = title.replace(/[\-\s_]+$/, ''); // Remove hífens, espaços e underscores do final
+
+  // Limpezas finais específicas
+  title = title.replace(/^main theme of .*/i, ''); // Remove "main theme of xxx"
+  title = title.replace(/^theme of .*/i, ''); // Remove "theme of xxx"
+  title = title.replace(/^open your heart main theme of .*/i, 'Open Your Heart'); // Caso específico
+  title = title.replace(/^it doesn t matter theme of .*/i, "It Doesn't Matter"); // Caso específico
+  title = title.replace(/^my sweet passion theme of .*/i, 'My Sweet Passion'); // Caso específico
+  title = title.replace(/^lazy days livin in paradaise theme of .*/i, 'Lazy Days Livin in Paradise'); // Caso específico
+  title = title.replace(/^believe in myself theme of .*/i, 'Believe in Myself'); // Caso específico
+  title = title.replace(/^unknown from me theme of .*/i, 'Unknown from M.E.'); // Caso específico
+
+  // Se o título ainda está vazio após todas as limpezas, usar o nome do arquivo como fallback
+  if (!title || title.trim().length === 0) {
+    title = fileName.replace(/\.(mp3|wav)$/i, '').replace(/^\d+[\s\-\.]*/, '');
+  }
+
+  // Capitalizar corretamente o título (primeira letra de cada palavra em maiúscula)
+  title = title.replace(/\b\w+/g, function(word) {
+    // Palavras que devem permanecer em minúsculas (exceto se forem a primeira palavra)
+    const lowercaseWords = ['and', 'the', 'of', 'in', 'on', 'at', 'to', 'for', 'with', 'by', 'from', 'a', 'an'];
+    const isFirstWord = title.indexOf(word) === 0;
+
+    if (!isFirstWord && lowercaseWords.includes(word.toLowerCase())) {
+      return word.toLowerCase();
+    }
+
+    // Casos especiais
+    if (word.toLowerCase() === 'me') return 'M.E.';
+    if (word.toLowerCase() === 'eggman') return 'Eggman';
+    if (word.toLowerCase() === 'dr') return 'Dr.';
+
+    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+  });
 
   return {
     id: id,
@@ -293,6 +390,16 @@ function getGameInfo(gameFolder, subFolder, pathParts) {
         console: 'Sega Genesis'
       };
     }
+    if (subFolder === 'sonic-3') {
+      return {
+        artist: 'Michael Jackson & Sega Sound Team',
+        composer: 'Michael Jackson & Sega Sound Team',
+        game: 'Sonic the Hedgehog 3',
+        year: 1994,
+        genre: 'Platform Game Soundtrack',
+        console: 'Sega Genesis'
+      };
+    }
     if (subFolder === 'sonic-frontiers') {
       return {
         artist: 'Tomoya Ohtani',
@@ -301,6 +408,182 @@ function getGameInfo(gameFolder, subFolder, pathParts) {
         year: 2022,
         genre: 'Platform Game Soundtrack',
         console: 'Multi-platform'
+      };
+    }
+
+    // Para a pasta "Sonic outras", detectar o jogo específico baseado no nome do arquivo/pasta
+    if (subFolder === 'Sonic outras') {
+      const fileName = pathParts[pathParts.length - 1].toLowerCase();
+      const fullPath = pathParts.join('/').toLowerCase();
+
+
+
+      // Sonic Adventure (1998)
+      if (fullPath.includes('sonic_adventure01') || fullPath.includes('sonic adventure') ||
+          fileName.includes('open-your-heart') || fileName.includes('it-doesnt-matter') ||
+          fileName.includes('my-sweet-passion') || fileName.includes('believe-in-myself') ||
+          fileName.includes('unknown-from-me') || fileName.includes('lazy-days')) {
+        return {
+          artist: 'Jun Senoue',
+          composer: 'Jun Senoue',
+          game: 'Sonic Adventure',
+          year: 1998,
+          genre: 'Platform Game Soundtrack',
+          console: 'Dreamcast'
+        };
+      }
+
+      // Sonic Adventure 2 (2001)
+      if (fullPath.includes('sonic_adventure02') || fullPath.includes('sonic adventure 2') ||
+          fileName.includes('escape-from-the-city') || fileName.includes('live-and-learn') ||
+          fileName.includes('throw-it-all-away') || fileName.includes('fly-in-the-freedom')) {
+        return {
+          artist: 'Jun Senoue',
+          composer: 'Jun Senoue',
+          game: 'Sonic Adventure 2',
+          year: 2001,
+          genre: 'Platform Game Soundtrack',
+          console: 'Dreamcast'
+        };
+      }
+
+      // Sonic Colors (2010)
+      if (fullPath.includes('sonic-colors') || fileName.includes('reach-for-the-stars') ||
+          fileName.includes('tropical-resort') || fileName.includes('starlight-carnival') ||
+          fileName.includes('planet-wisp')) {
+        return {
+          artist: 'Tomoya Ohtani',
+          composer: 'Tomoya Ohtani',
+          game: 'Sonic Colors',
+          year: 2010,
+          genre: 'Platform Game Soundtrack',
+          console: 'Nintendo Wii'
+        };
+      }
+
+      // Sonic Generations (2011)
+      if (fullPath.includes('sonic-generations') || fileName.includes('rightthererideon')) {
+        return {
+          artist: 'Tomoya Ohtani',
+          composer: 'Tomoya Ohtani',
+          game: 'Sonic Generations',
+          year: 2011,
+          genre: 'Platform Game Soundtrack',
+          console: 'Multi-platform'
+        };
+      }
+
+      // Sonic Unleashed (2008)
+      if (fullPath.includes('sonic-unleashed') || fileName.includes('endless-possibilities') ||
+          fileName.includes('apotos') || fileName.includes('windmill-isle') ||
+          fileName.includes('spagonia') || fileName.includes('rooftop-run') ||
+          fileName.includes('mazuri') || fileName.includes('chun-nan') ||
+          fileName.includes('eggman-land')) {
+        return {
+          artist: 'Tomoya Ohtani',
+          composer: 'Tomoya Ohtani',
+          game: 'Sonic Unleashed',
+          year: 2008,
+          genre: 'Platform Game Soundtrack',
+          console: 'Multi-platform'
+        };
+      }
+
+      // Sonic Forces (2017)
+      if (fileName.includes('fist-bump') || fileName.includes('sonic-forces')) {
+        return {
+          artist: 'Tomoya Ohtani',
+          composer: 'Tomoya Ohtani',
+          game: 'Sonic Forces',
+          year: 2017,
+          genre: 'Platform Game Soundtrack',
+          console: 'Multi-platform'
+        };
+      }
+
+      // Sonic Mania (2017)
+      if (fileName.includes('studiopolis') || fileName.includes('press-garden') ||
+          fileName.includes('lights-camera-action') || fileName.includes('tabloid-jargon')) {
+        return {
+          artist: 'Tee Lopes',
+          composer: 'Tee Lopes',
+          game: 'Sonic Mania',
+          year: 2017,
+          genre: 'Platform Game Soundtrack',
+          console: 'Multi-platform'
+        };
+      }
+
+      // Sonic and the Secret Rings (2007)
+      if (fileName.includes('seven-rings-in-hand')) {
+        return {
+          artist: 'Steve Conte',
+          composer: 'Steve Conte',
+          game: 'Sonic and the Secret Rings',
+          year: 2007,
+          genre: 'Platform Game Soundtrack',
+          console: 'Nintendo Wii'
+        };
+      }
+
+      // Sonic and the Black Knight (2009)
+      if (fileName.includes('knight-of-the-wind')) {
+        return {
+          artist: 'Crush 40',
+          composer: 'Crush 40',
+          game: 'Sonic and the Black Knight',
+          year: 2009,
+          genre: 'Platform Game Soundtrack',
+          console: 'Nintendo Wii'
+        };
+      }
+
+      // Sonic the Hedgehog (2006)
+      if (fileName.includes('his-world') || fileName.includes('dreams-of-an-absolution') ||
+          fileName.includes('crisis-city') || fileName.includes('sonic-the-hedgehog-2006')) {
+        return {
+          artist: 'Hideaki Kobayashi',
+          composer: 'Hideaki Kobayashi',
+          game: 'Sonic the Hedgehog (2006)',
+          year: 2006,
+          genre: 'Platform Game Soundtrack',
+          console: 'Multi-platform'
+        };
+      }
+
+      // Shadow the Hedgehog (2005)
+      if (fileName.includes('all-hail-shadow') || fileName.includes('i-am') ||
+          fileName.includes('shadow-the-hedgehog')) {
+        return {
+          artist: 'Jun Senoue',
+          composer: 'Jun Senoue',
+          game: 'Shadow the Hedgehog',
+          year: 2005,
+          genre: 'Platform Game Soundtrack',
+          console: 'Multi-platform'
+        };
+      }
+
+      // Sonic Riders: Zero Gravity (2008)
+      if (fullPath.includes('sonic-riders-zero-gravity') || fileName.includes('un-gravitify')) {
+        return {
+          artist: 'Hideki Naganuma',
+          composer: 'Hideki Naganuma',
+          game: 'Sonic Riders: Zero Gravity',
+          year: 2008,
+          genre: 'Racing Game Soundtrack',
+          console: 'Multi-platform'
+        };
+      }
+
+      // Se chegou até aqui e não encontrou um jogo específico, usar fallback genérico do Sonic
+      return {
+        artist: 'Jun Senoue',
+        composer: 'Jun Senoue',
+        game: 'Sonic the Hedgehog',
+        year: 1991,
+        genre: 'Platform Game Soundtrack',
+        console: 'Sega Genesis'
       };
     }
   }
@@ -600,6 +883,30 @@ function getGameInfo(gameFolder, subFolder, pathParts) {
       };
     }
 
+    // Hotline Miami específico
+    if (fileName.includes('hotline miami') || fileName.includes('hydrogen') || fileName.includes('crystals')) {
+      return {
+        artist: 'M|O|O|N',
+        composer: 'M|O|O|N',
+        game: 'Hotline Miami',
+        year: 2012,
+        genre: 'Electronic',
+        console: 'Multi-platform'
+      };
+    }
+
+    // Grand Theft Auto específico
+    if (fileName.includes('gta') || fileName.includes('grand theft auto')) {
+      return {
+        artist: 'Craig Conner',
+        composer: 'Craig Conner',
+        game: 'Grand Theft Auto',
+        year: 1997,
+        genre: 'Game Soundtrack',
+        console: 'Multi-platform'
+      };
+    }
+
     if (fileName.includes('dread of the grave') || fileName.includes('more fear')) {
       return {
         artist: 'ZTS',
@@ -714,6 +1021,14 @@ function getGameInfo(gameFolder, subFolder, pathParts) {
       year: 2022,
       genre: 'Action RPG Soundtrack',
       console: 'Multi-platform'
+    },
+    'enigma-do-medo': {
+      artist: 'Guilherme Gama',
+      composer: 'Guilherme Gama',
+      game: 'Paranormal Order: Enigma do Medo',
+      year: 2023,
+      genre: 'Horror Game Soundtrack',
+      console: 'PC'
     },
     'fall-guys': {
       artist: 'Jukio Kallio',
@@ -1003,6 +1318,14 @@ function getGameInfo(gameFolder, subFolder, pathParts) {
       genre: 'Indie Game Soundtrack',
       console: 'Multi-platform'
     },
+    'finding-paradise': {
+      artist: 'Kan Gao',
+      composer: 'Kan Gao',
+      game: 'Finding Paradise',
+      year: 2017,
+      genre: 'Indie Game Soundtrack',
+      console: 'Multi-platform'
+    },
     'final-fantasy-vii': {
       artist: 'Nobuo Uematsu',
       composer: 'Nobuo Uematsu',
@@ -1010,6 +1333,14 @@ function getGameInfo(gameFolder, subFolder, pathParts) {
       year: 1997,
       genre: 'JRPG Soundtrack',
       console: 'PlayStation'
+    },
+    'fuga': {
+      artist: 'Tomoki Miyoshi',
+      composer: 'Tomoki Miyoshi',
+      game: 'Fuga: Melodies of Steel',
+      year: 2021,
+      genre: 'JRPG Soundtrack',
+      console: 'Multi-platform'
     },
     'geometry-dash': {
       artist: 'ForeverBound',
@@ -1028,8 +1359,8 @@ function getGameInfo(gameFolder, subFolder, pathParts) {
       console: 'Nintendo 64'
     },
     'grand-theft-auto': {
-      artist: 'Various Artists',
-      composer: 'Various Artists',
+      artist: 'Craig Conner',
+      composer: 'Craig Conner',
       game: 'Grand Theft Auto',
       year: 1997,
       genre: 'Game Soundtrack',
@@ -1052,8 +1383,8 @@ function getGameInfo(gameFolder, subFolder, pathParts) {
       console: 'Multi-platform'
     },
     'hotline-miami': {
-      artist: 'Various Artists',
-      composer: 'Various Artists',
+      artist: 'M|O|O|N',
+      composer: 'M|O|O|N',
       game: 'Hotline Miami',
       year: 2012,
       genre: 'Electronic',
@@ -1164,8 +1495,8 @@ function getGameInfo(gameFolder, subFolder, pathParts) {
       console: 'Multi-platform'
     },
     'outros': {
-      artist: 'Various Artists',
-      composer: 'Various Artists',
+      artist: 'Unknown Artist',
+      composer: 'Unknown Composer',
       game: 'Various Games',
       year: 2000,
       genre: 'Game Soundtrack',
@@ -1228,8 +1559,8 @@ function getGameInfo(gameFolder, subFolder, pathParts) {
       console: 'Multi-platform'
     },
     'scooby-doo-and-the-cyber-chase': {
-      artist: 'Various Artists',
-      composer: 'Various Artists',
+      artist: 'David Whittaker',
+      composer: 'David Whittaker',
       game: 'Scooby-Doo and the Cyber Chase',
       year: 2001,
       genre: 'Game Soundtrack',
@@ -1260,8 +1591,8 @@ function getGameInfo(gameFolder, subFolder, pathParts) {
       console: 'Multi-platform'
     },
     'smash-bros': {
-      artist: 'Various Artists',
-      composer: 'Various Artists',
+      artist: 'Hirokazu Ando',
+      composer: 'Hirokazu Ando',
       game: 'Super Smash Bros.',
       year: 1999,
       genre: 'Game Soundtrack',
@@ -1355,6 +1686,14 @@ function getGameInfo(gameFolder, subFolder, pathParts) {
       genre: 'Simulation Game Soundtrack',
       console: 'Multi-platform'
     },
+    'to-the-moon': {
+      artist: 'Kan Gao',
+      composer: 'Kan Gao',
+      game: 'To the Moon',
+      year: 2011,
+      genre: 'Indie Game Soundtrack',
+      console: 'Multi-platform'
+    },
     'top-gear': {
       artist: 'Barry Leitch',
       composer: 'Barry Leitch',
@@ -1435,5 +1774,71 @@ function generateMusicJson() {
   console.log(`Saved to: ${outputPath}`);
 }
 
-// Executar o script
-generateMusicJson();
+// Função para verificar arquivos com nomes incorretos
+function checkMissingFiles() {
+  const fs = require('fs');
+  const path = require('path');
+
+  // Ler o arquivo music.json atual
+  const musicJsonPath = path.join(__dirname, '..', 'data', 'music.json');
+  const musicData = JSON.parse(fs.readFileSync(musicJsonPath, 'utf8'));
+
+  console.log('\n=== VERIFICANDO ARQUIVOS COM NOMES INCORRETOS ===\n');
+
+  let missingCount = 0;
+  let foundCount = 0;
+
+  musicData.forEach((song, index) => {
+    const audioPath = path.join(__dirname, '..', 'public', song.audioUrl);
+
+    if (!fs.existsSync(audioPath)) {
+      console.log(`❌ ARQUIVO NÃO ENCONTRADO (ID ${song.id}):`);
+      console.log(`   Título: ${song.title}`);
+      console.log(`   Jogo: ${song.game}`);
+      console.log(`   Caminho esperado: ${song.audioUrl}`);
+      console.log(`   Caminho completo: ${audioPath}`);
+
+      // Tentar encontrar arquivos similares na mesma pasta
+      const dir = path.dirname(audioPath);
+      const fileName = path.basename(audioPath);
+
+      if (fs.existsSync(dir)) {
+        const filesInDir = fs.readdirSync(dir);
+        const similarFiles = filesInDir.filter(file =>
+          file.toLowerCase().includes(song.title.toLowerCase().split(' ')[0]) ||
+          file.toLowerCase().includes(song.title.toLowerCase().split(' ')[1] || '')
+        );
+
+        if (similarFiles.length > 0) {
+          console.log(`   Arquivos similares encontrados:`);
+          similarFiles.forEach(file => {
+            console.log(`     - ${file}`);
+          });
+        }
+      }
+      console.log('');
+      missingCount++;
+    } else {
+      foundCount++;
+    }
+  });
+
+  console.log(`\n=== RESUMO ===`);
+  console.log(`✅ Arquivos encontrados: ${foundCount}`);
+  console.log(`❌ Arquivos não encontrados: ${missingCount}`);
+  console.log(`📊 Total de músicas: ${musicData.length}`);
+
+  if (missingCount > 0) {
+    console.log(`\n⚠️  ${missingCount} arquivos precisam ser corrigidos!`);
+  } else {
+    console.log(`\n🎉 Todos os arquivos estão corretos!`);
+  }
+}
+
+// Executar verificação se o argumento --check for passado
+if (process.argv.includes('--check')) {
+  checkMissingFiles();
+} else {
+  // Executar o script normal
+  generateMusicJson();
+}
