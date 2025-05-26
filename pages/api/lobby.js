@@ -1,38 +1,5 @@
 import songs from '../../data/music.json';
-
-// 🚀 ARMAZENAMENTO PERSISTENTE USANDO VERCEL KV SIMULADO
-const globalStorage = global.gameStorage || (global.gameStorage = new Map());
-
-// Sistema de armazenamento mais robusto
-const kv = {
-  async get(key) {
-    const data = globalStorage.get(key);
-    if (data) {
-      // Verificar se não expirou (24 horas)
-      const now = Date.now();
-      if (now - data.timestamp < 24 * 60 * 60 * 1000) {
-        return data.value;
-      } else {
-        globalStorage.delete(key);
-        return null;
-      }
-    }
-    return null;
-  },
-  async set(key, value) {
-    globalStorage.set(key, {
-      value: value,
-      timestamp: Date.now()
-    });
-    console.log('💾 SALVANDO:', key, value);
-    return 'OK';
-  },
-  async del(key) {
-    const existed = globalStorage.has(key);
-    globalStorage.delete(key);
-    return existed ? 1 : 0;
-  }
-};
+import { kv } from '@vercel/kv';
 function generateRoomCode() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   let code = '';

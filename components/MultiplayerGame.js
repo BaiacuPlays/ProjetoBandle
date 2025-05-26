@@ -1009,21 +1009,56 @@ const MultiplayerGame = ({ onBackToLobby }) => {
 
               {/* Mensagem final da rodada - SÓ QUANDO TERMINOU */}
               {roundFinished && (
-                <div className={`${styles.message} ${
-                  roundWinners.includes('NONE') ? styles.messageWarning : styles.messageSuccess
-                }`}>
-                  {roundWinners.includes('NONE')
-                    ? (isClient ? t('no_one_guessed') : 'Ninguém acertou a música!')
-                    : roundWinners.length === 1
-                      ? roundWinners[0] === nickname
-                        ? (isClient ? t('congratulations') : 'Parabéns! Você acertou!')
-                        : `${roundWinners[0]} ${isClient ? t('player_guessed_correctly') : 'acertou a música!'}`
-                      : roundWinners.length === lobbyData.players.length
-                        ? (isClient ? 'Todos acertaram!' : 'Todos acertaram!')
-                        : `${roundWinners.length} jogadores acertaram: ${roundWinners.join(', ')}`
-                  }
-                  <br />
-                  <strong>{songToPlay?.game} - {songToPlay?.title}</strong>
+                <div style={{
+                  background: roundWinners.includes('NONE')
+                    ? 'linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 152, 0, 0.15))'
+                    : 'linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(139, 195, 74, 0.15))',
+                  border: `2px solid ${roundWinners.includes('NONE') ? '#ffc107' : '#4caf50'}`,
+                  borderRadius: '12px',
+                  padding: '20px',
+                  margin: '20px 0',
+                  textAlign: 'center',
+                  backdropFilter: 'blur(10px)',
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+                }}>
+                  <div style={{
+                    fontSize: '1.2rem',
+                    fontWeight: 'bold',
+                    color: roundWinners.includes('NONE') ? '#ffc107' : '#4caf50',
+                    marginBottom: '10px',
+                    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)'
+                  }}>
+                    {roundWinners.includes('NONE')
+                      ? (isClient ? t('no_one_guessed') : 'Ninguém acertou a música!')
+                      : roundWinners.length === 1
+                        ? roundWinners[0] === nickname
+                          ? (isClient ? t('congratulations') : 'Parabéns! Você acertou!')
+                          : `${roundWinners[0]} ${isClient ? t('player_guessed_correctly') : 'acertou a música!'}`
+                        : roundWinners.length === lobbyData.players.length
+                          ? (isClient ? 'Todos acertaram!' : 'Todos acertaram!')
+                          : `${roundWinners.length} jogadores acertaram: ${roundWinners.join(', ')}`
+                    }
+                  </div>
+
+                  {/* Informações da música com melhor legibilidade */}
+                  <div style={{
+                    background: 'rgba(0, 0, 0, 0.6)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    borderRadius: '8px',
+                    padding: '15px',
+                    margin: '15px 0',
+                    backdropFilter: 'blur(10px)'
+                  }}>
+                    <div style={{
+                      fontSize: '1.1rem',
+                      fontWeight: 'bold',
+                      color: '#ffffff',
+                      textAlign: 'center',
+                      textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)'
+                    }}>
+                      {songToPlay?.game} - {songToPlay?.title}
+                    </div>
+                  </div>
 
                   {/* Mostrar pontos ganhos se o jogador atual ganhou */}
                   {iAmWinner && (
@@ -1037,16 +1072,17 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                     <div style={{ marginTop: '20px' }}>
                       <div style={{
                         marginBottom: '12px',
-                        fontSize: '0.9rem',
+                        fontSize: '1rem',
                         fontWeight: 'bold',
                         color: '#4ecdc4',
-                        textAlign: 'center'
+                        textAlign: 'center',
+                        textShadow: '1px 1px 2px rgba(0, 0, 0, 0.7)'
                       }}>
                         Suas Tentativas desta Rodada
                       </div>
                       <div style={{
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        background: 'rgba(0, 0, 0, 0.4)',
+                        border: '1px solid rgba(255, 255, 255, 0.2)',
                         borderRadius: '12px',
                         padding: '15px',
                         maxHeight: '120px',
@@ -1077,7 +1113,9 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                                   ? '#ffc107'
                                   : guessData.type === 'skipped'
                                     ? '#9e9e9e'
-                                    : '#f44336'
+                                    : '#f44336',
+                              fontWeight: 'bold',
+                              textShadow: '1px 1px 2px rgba(0, 0, 0, 0.8)'
                             }}>
                               {index + 1}. {guessData.type === 'skipped' ? 'Pulou' : guessData.guess}
                             </span>
@@ -1108,8 +1146,24 @@ const MultiplayerGame = ({ onBackToLobby }) => {
 
               {/* Mensagens de status */}
               {roundFinished && !isHost && (
-                <div className={`${styles.message} ${styles.messageInfo}`}>
-                  Aguardando anfitrião avançar para a próxima rodada...
+                <div style={{
+                  background: 'linear-gradient(135deg, rgba(33, 150, 243, 0.15), rgba(63, 81, 181, 0.15))',
+                  border: '2px solid #2196f3',
+                  borderRadius: '12px',
+                  padding: '15px',
+                  margin: '20px 0',
+                  textAlign: 'center',
+                  backdropFilter: 'blur(10px)',
+                  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.3)'
+                }}>
+                  <div style={{
+                    fontSize: '1rem',
+                    fontWeight: 'bold',
+                    color: '#2196f3',
+                    textShadow: '1px 1px 2px rgba(0, 0, 0, 0.7)'
+                  }}>
+                    Aguardando anfitrião avançar para a próxima rodada...
+                  </div>
                 </div>
               )}
 
