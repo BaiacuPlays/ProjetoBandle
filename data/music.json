@@ -614,37 +614,37 @@
   {
     "id": 51,
     "title": "Et Ratio Principalis",
-    "artist": "Unknown Artist",
-    "composer": "Unknown Composer",
-    "game": "control",
-    "context": "Audio - control",
+    "artist": "Petri Alanko",
+    "composer": "Petri Alanko",
+    "game": "Control",
+    "context": "Audio - Control",
     "audioUrl": "/audio/control/01. Et Ratio Principalis.mp3",
-    "year": 2000,
-    "genre": "Game Soundtrack",
+    "year": 2019,
+    "genre": "Action Game Soundtrack",
     "console": "Multi-platform"
   },
   {
     "id": 52,
     "title": "Counterfeit",
-    "artist": "Unknown Artist",
-    "composer": "Unknown Composer",
-    "game": "control",
-    "context": "Audio - control",
+    "artist": "Petri Alanko",
+    "composer": "Petri Alanko",
+    "game": "Control",
+    "context": "Audio - Control",
     "audioUrl": "/audio/control/02. Counterfeit.mp3",
-    "year": 2000,
-    "genre": "Game Soundtrack",
+    "year": 2019,
+    "genre": "Action Game Soundtrack",
     "console": "Multi-platform"
   },
   {
     "id": 53,
     "title": "Portam Ad Inferno",
-    "artist": "Unknown Artist",
-    "composer": "Unknown Composer",
-    "game": "control",
-    "context": "Audio - control",
+    "artist": "Petri Alanko",
+    "composer": "Petri Alanko",
+    "game": "Control",
+    "context": "Audio - Control",
     "audioUrl": "/audio/control/03. Portam Ad Inferno.mp3",
-    "year": 2000,
-    "genre": "Game Soundtrack",
+    "year": 2019,
+    "genre": "Action Game Soundtrack",
     "console": "Multi-platform"
   },
   {
@@ -986,13 +986,13 @@
   {
     "id": 82,
     "title": "Symphony of the Night",
-    "artist": "Unknown Artist",
-    "composer": "Unknown Composer",
-    "game": "dark-souls-symphony",
-    "context": "Audio - dark-souls-symphony",
+    "artist": "Motoi Sakuraba",
+    "composer": "Motoi Sakuraba",
+    "game": "Dark Souls Symphony",
+    "context": "Audio - Dark Souls Symphony",
     "audioUrl": "/audio/dark-souls-symphony/07. Symphony of the Night.mp3",
-    "year": 2000,
-    "genre": "Game Soundtrack",
+    "year": 2016,
+    "genre": "Orchestral Game Music",
     "console": "Multi-platform"
   },
   {
@@ -1837,49 +1837,49 @@
   },
   {
     "id": 153,
-    "title": "youtube_7qfbi3HACV8_audio",
-    "artist": "Various Artists",
-    "composer": "Various Artists",
-    "game": "Grand Theft Auto",
+    "title": "Main Theme",
+    "artist": "Michael Hunter",
+    "composer": "Michael Hunter",
+    "game": "Grand Theft Auto IV",
     "context": "Audio - Grand Theft Auto",
-    "audioUrl": "/audio/grand-theft-auto/youtube_7qfbi3HACV8_audio.mp3",
-    "year": 1997,
+    "audioUrl": "/audio/grand-theft-auto/gta4.mp3",
+    "year": 2008,
     "genre": "Game Soundtrack",
     "console": "Multi-platform"
   },
   {
     "id": 154,
-    "title": "youtube_jqE8M2ZnFL8_audio",
-    "artist": "Various Artists",
-    "composer": "Various Artists",
-    "game": "Grand Theft Auto",
+    "title": "Main Theme",
+    "artist": "Woody Jackson",
+    "composer": "Woody Jackson",
+    "game": "Grand Theft Auto V",
     "context": "Audio - Grand Theft Auto",
-    "audioUrl": "/audio/grand-theft-auto/youtube_jqE8M2ZnFL8_audio.mp3",
-    "year": 1997,
+    "audioUrl": "/audio/grand-theft-auto/gta5.mp3",
+    "year": 2013,
     "genre": "Game Soundtrack",
     "console": "Multi-platform"
   },
   {
     "id": 155,
-    "title": "youtube_oj6uvNpTyUk_audio",
-    "artist": "Various Artists",
-    "composer": "Various Artists",
-    "game": "Grand Theft Auto",
+    "title": "Main Theme",
+    "artist": "Michael Hunter",
+    "composer": "Michael Hunter",
+    "game": "Grand Theft Auto San Andreas",
     "context": "Audio - Grand Theft Auto",
-    "audioUrl": "/audio/grand-theft-auto/youtube_oj6uvNpTyUk_audio.mp3",
-    "year": 1997,
+    "audioUrl": "/audio/grand-theft-auto/sanandreas.mp3",
+    "year": 2004,
     "genre": "Game Soundtrack",
     "console": "Multi-platform"
   },
   {
     "id": 156,
-    "title": "youtube_t9d8GprMleU_audio",
-    "artist": "Various Artists",
-    "composer": "Various Artists",
-    "game": "Grand Theft Auto",
+    "title": "Main Theme",
+    "artist": "Lex Horton",
+    "composer": "Lex Horton",
+    "game": "Grand Theft Auto Vice City",
     "context": "Audio - Grand Theft Auto",
-    "audioUrl": "/audio/grand-theft-auto/youtube_t9d8GprMleU_audio.mp3",
-    "year": 1997,
+    "audioUrl": "/audio/grand-theft-auto/vice city.mp3",
+    "year": 2002,
     "genre": "Game Soundtrack",
     "console": "Multi-platform"
   },
@@ -1922,26 +1922,26 @@
   {
     "id": 160,
     "title": "You're Not Supposed to Be Here",
-    "artist": "Unknown Artist",
-    "composer": "Unknown Composer",
-    "game": "half-life",
-    "context": "Audio - half-life",
+    "artist": "Kelly Bailey",
+    "composer": "Kelly Bailey",
+    "game": "Half-Life",
+    "context": "Audio - Half-Life",
     "audioUrl": "/audio/half-life/24. You're Not Supposed to Be Here.mp3",
-    "year": 2000,
-    "genre": "Game Soundtrack",
-    "console": "Multi-platform"
+    "year": 1998,
+    "genre": "FPS Soundtrack",
+    "console": "PC"
   },
   {
     "id": 161,
     "title": "Hard Fought",
-    "artist": "Unknown Artist",
-    "composer": "Unknown Composer",
-    "game": "half-life",
-    "context": "Audio - half-life",
+    "artist": "Kelly Bailey",
+    "composer": "Kelly Bailey",
+    "game": "Half-Life",
+    "context": "Audio - Half-Life",
     "audioUrl": "/audio/half-life/26. Hard Fought.mp3",
-    "year": 2000,
-    "genre": "Game Soundtrack",
-    "console": "Multi-platform"
+    "year": 1998,
+    "genre": "FPS Soundtrack",
+    "console": "PC"
   },
   {
     "id": 162,
@@ -2102,38 +2102,38 @@
   {
     "id": 175,
     "title": "Let Mom Sleep",
-    "artist": "Unknown Artist",
-    "composer": "Unknown Composer",
-    "game": "jet-set-radio",
-    "context": "Audio - jet-set-radio",
+    "artist": "Hideki Naganuma",
+    "composer": "Hideki Naganuma",
+    "game": "Jet Set Radio",
+    "context": "Audio - Jet Set Radio",
     "audioUrl": "/audio/jet-set-radio/01 - Let Mom Sleep.mp3",
     "year": 2000,
-    "genre": "Game Soundtrack",
-    "console": "Multi-platform"
+    "genre": "Electronic",
+    "console": "Dreamcast"
   },
   {
     "id": 176,
     "title": "Humming the Bassline",
-    "artist": "Unknown Artist",
-    "composer": "Unknown Composer",
-    "game": "jet-set-radio",
-    "context": "Audio - jet-set-radio",
+    "artist": "Hideki Naganuma",
+    "composer": "Hideki Naganuma",
+    "game": "Jet Set Radio",
+    "context": "Audio - Jet Set Radio",
     "audioUrl": "/audio/jet-set-radio/02 - Humming the Bassline.mp3",
     "year": 2000,
-    "genre": "Game Soundtrack",
-    "console": "Multi-platform"
+    "genre": "Electronic",
+    "console": "Dreamcast"
   },
   {
     "id": 177,
     "title": "That's Enough",
-    "artist": "Unknown Artist",
-    "composer": "Unknown Composer",
-    "game": "jet-set-radio",
-    "context": "Audio - jet-set-radio",
+    "artist": "Hideki Naganuma",
+    "composer": "Hideki Naganuma",
+    "game": "Jet Set Radio",
+    "context": "Audio - Jet Set Radio",
     "audioUrl": "/audio/jet-set-radio/03 - That's Enough.mp3",
     "year": 2000,
-    "genre": "Game Soundtrack",
-    "console": "Multi-platform"
+    "genre": "Electronic",
+    "console": "Dreamcast"
   },
   {
     "id": 178,
@@ -2180,8 +2180,8 @@
     "context": "Audio - Kirby",
     "audioUrl": "/audio/kirby/forgotten-land/003. Running Through the New World.mp3",
     "year": 1992,
-    "genre": "Game Soundtrack",
-    "console": "Nintendo"
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
   },
   {
     "id": 182,
@@ -2192,8 +2192,8 @@
     "context": "Audio - Kirby",
     "audioUrl": "/audio/kirby/forgotten-land/01. Ready to Go! (Title Screen).mp3",
     "year": 1992,
-    "genre": "Game Soundtrack",
-    "console": "Nintendo"
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
   },
   {
     "id": 183,
@@ -2204,8 +2204,8 @@
     "context": "Audio - Kirby",
     "audioUrl": "/audio/kirby/forgotten-land/075. Welcome to the New World! (Full).mp3",
     "year": 1992,
-    "genre": "Game Soundtrack",
-    "console": "Nintendo"
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
   },
   {
     "id": 184,
@@ -2216,8 +2216,8 @@
     "context": "Audio - Kirby",
     "audioUrl": "/audio/kirby/return-to-dream-land/1-02. Four Adventurers - Cookie Country (Level 1).mp3",
     "year": 1992,
-    "genre": "Game Soundtrack",
-    "console": "Nintendo"
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
   },
   {
     "id": 185,
@@ -2228,8 +2228,8 @@
     "context": "Audio - Kirby",
     "audioUrl": "/audio/kirby/return-to-dream-land/1-06. Magolor, the Far-Flung Traveler (Lor Starcutter).mp3",
     "year": 1992,
-    "genre": "Game Soundtrack",
-    "console": "Nintendo"
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
   },
   {
     "id": 186,
@@ -2240,8 +2240,8 @@
     "context": "Audio - Kirby",
     "audioUrl": "/audio/kirby/return-to-dream-land/1-07. Planet Popstar (Planet Popstar Map).mp3",
     "year": 1992,
-    "genre": "Game Soundtrack",
-    "console": "Nintendo"
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
   },
   {
     "id": 187,
@@ -2252,8 +2252,8 @@
     "context": "Audio - Kirby",
     "audioUrl": "/audio/kirby/return-to-dream-land/1-19. Woods Wayfarer (Forest Area).mp3",
     "year": 1992,
-    "genre": "Game Soundtrack",
-    "console": "Nintendo"
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
   },
   {
     "id": 188,
@@ -2264,8 +2264,8 @@
     "context": "Audio - Kirby",
     "audioUrl": "/audio/kirby/super-star/01 Kirby Super Star.mp3",
     "year": 1992,
-    "genre": "Game Soundtrack",
-    "console": "Nintendo"
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
   },
   {
     "id": 189,
@@ -2276,8 +2276,8 @@
     "context": "Audio - Kirby",
     "audioUrl": "/audio/kirby/super-star/05 Green Greens.mp3",
     "year": 1992,
-    "genre": "Game Soundtrack",
-    "console": "Nintendo"
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
   },
   {
     "id": 190,
@@ -2288,8 +2288,8 @@
     "context": "Audio - Kirby",
     "audioUrl": "/audio/kirby/super-star/06 Float Islands.mp3",
     "year": 1992,
-    "genre": "Game Soundtrack",
-    "console": "Nintendo"
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
   },
   {
     "id": 191,
@@ -2300,56 +2300,56 @@
     "context": "Audio - Kirby",
     "audioUrl": "/audio/kirby/super-star/08 Boss Battle.mp3",
     "year": 1992,
-    "genre": "Game Soundtrack",
-    "console": "Nintendo"
+    "genre": "Platform Game Soundtrack",
+    "console": "Multi-platform"
   },
   {
     "id": 192,
     "title": "And I Begin to Wonder",
-    "artist": "Unknown Artist",
-    "composer": "Unknown Composer",
-    "game": "klonoa1",
-    "context": "Audio - klonoa1",
+    "artist": "Kanako Kakino",
+    "composer": "Kanako Kakino",
+    "game": "Klonoa: Door to Phantomile",
+    "context": "Audio - Klonoa: Door to Phantomile",
     "audioUrl": "/audio/klonoa1/1-01. And I Begin to Wonder.mp3",
-    "year": 2000,
-    "genre": "Game Soundtrack",
-    "console": "Multi-platform"
+    "year": 1997,
+    "genre": "Platform Game Soundtrack",
+    "console": "PlayStation"
   },
   {
     "id": 193,
     "title": "Inquisitive Waltz",
-    "artist": "Unknown Artist",
-    "composer": "Unknown Composer",
-    "game": "klonoa1",
-    "context": "Audio - klonoa1",
+    "artist": "Kanako Kakino",
+    "composer": "Kanako Kakino",
+    "game": "Klonoa: Door to Phantomile",
+    "context": "Audio - Klonoa: Door to Phantomile",
     "audioUrl": "/audio/klonoa1/1-02. Inquisitive Waltz.mp3",
-    "year": 2000,
-    "genre": "Game Soundtrack",
-    "console": "Multi-platform"
+    "year": 1997,
+    "genre": "Platform Game Soundtrack",
+    "console": "PlayStation"
   },
   {
     "id": 194,
     "title": "The Windmill Song",
-    "artist": "Unknown Artist",
-    "composer": "Unknown Composer",
-    "game": "klonoa1",
-    "context": "Audio - klonoa1",
+    "artist": "Kanako Kakino",
+    "composer": "Kanako Kakino",
+    "game": "Klonoa: Door to Phantomile",
+    "context": "Audio - Klonoa: Door to Phantomile",
     "audioUrl": "/audio/klonoa1/1-04. The Windmill Song.mp3",
-    "year": 2000,
-    "genre": "Game Soundtrack",
-    "console": "Multi-platform"
+    "year": 1997,
+    "genre": "Platform Game Soundtrack",
+    "console": "PlayStation"
   },
   {
     "id": 195,
     "title": "Farewell",
-    "artist": "Unknown Artist",
-    "composer": "Unknown Composer",
-    "game": "klonoa1",
-    "context": "Audio - klonoa1",
+    "artist": "Kanako Kakino",
+    "composer": "Kanako Kakino",
+    "game": "Klonoa: Door to Phantomile",
+    "context": "Audio - Klonoa: Door to Phantomile",
     "audioUrl": "/audio/klonoa1/2-21. Farewell.mp3",
-    "year": 2000,
-    "genre": "Game Soundtrack",
-    "console": "Multi-platform"
+    "year": 1997,
+    "genre": "Platform Game Soundtrack",
+    "console": "PlayStation"
   },
   {
     "id": 196,

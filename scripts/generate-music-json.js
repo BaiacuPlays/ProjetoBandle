@@ -20,6 +20,7 @@ function extractMusicInfo(filePath, id) {
   title = title.replace(/^\d+\s+/, ''); // Remove números seguidos de espaço como "024 "
   title = title.replace(/^OST\s*-\s*\d+\s*/, ''); // Remove "OST - 024 "
   title = title.replace(/^Undertale\s*OST\s*-\s*\d+\s*/, ''); // Remove "Undertale OST - 024 "
+  title = title.replace(/^youtube_[a-zA-Z0-9_-]+_audio/, ''); // Remove "youtube_xxxxx_audio"
 
   // Remove prefixos comuns
   title = title.replace(/^[\[\(]?Official[\]\)]?\s*/, ''); // Remove [Official]
@@ -802,6 +803,62 @@ function getGameInfo(gameFolder, subFolder, pathParts) {
       genre: 'Visual Novel Soundtrack',
       console: 'Multi-platform'
     },
+    'control': {
+      artist: 'Petri Alanko',
+      composer: 'Petri Alanko',
+      game: 'Control',
+      year: 2019,
+      genre: 'Action Game Soundtrack',
+      console: 'Multi-platform'
+    },
+    'dark-souls-symphony': {
+      artist: 'Motoi Sakuraba',
+      composer: 'Motoi Sakuraba',
+      game: 'Dark Souls Symphony',
+      year: 2016,
+      genre: 'Orchestral Game Music',
+      console: 'Multi-platform'
+    },
+    'grand-theft-auto': {
+      artist: 'Craig Conner',
+      composer: 'Craig Conner',
+      game: 'Grand Theft Auto',
+      year: 1997,
+      genre: 'Action Game Soundtrack',
+      console: 'Multi-platform'
+    },
+    'half-life': {
+      artist: 'Kelly Bailey',
+      composer: 'Kelly Bailey',
+      game: 'Half-Life',
+      year: 1998,
+      genre: 'FPS Soundtrack',
+      console: 'PC'
+    },
+    'hotline-miami': {
+      artist: 'Various Artists',
+      composer: 'Various Artists',
+      game: 'Hotline Miami',
+      year: 2012,
+      genre: 'Electronic',
+      console: 'Multi-platform'
+    },
+    'jet-set-radio': {
+      artist: 'Hideki Naganuma',
+      composer: 'Hideki Naganuma',
+      game: 'Jet Set Radio',
+      year: 2000,
+      genre: 'Electronic',
+      console: 'Dreamcast'
+    },
+    'klonoa1': {
+      artist: 'Kanako Kakino',
+      composer: 'Kanako Kakino',
+      game: 'Klonoa: Door to Phantomile',
+      year: 1997,
+      genre: 'Platform Game Soundtrack',
+      console: 'PlayStation'
+    },
     'zelda-majoras-mask': {
       artist: 'Koji Kondo',
       composer: 'Koji Kondo',
@@ -1015,8 +1072,8 @@ function getGameInfo(gameFolder, subFolder, pathParts) {
       composer: 'Jun Ishikawa',
       game: 'Kirby',
       year: 1992,
-      genre: 'Game Soundtrack',
-      console: 'Nintendo'
+      genre: 'Platform Game Soundtrack',
+      console: 'Multi-platform'
     },
     'laika-aged-through-blood': {
       artist: 'Beicoli',
