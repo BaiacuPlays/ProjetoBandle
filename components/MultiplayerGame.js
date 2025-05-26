@@ -547,6 +547,49 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                         <FaPlay color="#fff" size={20} />
                       )}
                     </button>
+
+                    {/* Botão de teste de áudio */}
+                    <button
+                      onClick={() => {
+                        if (audioRef.current) {
+                          console.log('🔧 TESTE DE ÁUDIO:', {
+                            src: audioRef.current.src,
+                            readyState: audioRef.current.readyState,
+                            networkState: audioRef.current.networkState,
+                            duration: audioRef.current.duration,
+                            currentTime: audioRef.current.currentTime,
+                            volume: audioRef.current.volume,
+                            muted: audioRef.current.muted,
+                            paused: audioRef.current.paused
+                          });
+
+                          // Forçar reload
+                          audioRef.current.load();
+
+                          // Tentar reproduzir após um delay
+                          setTimeout(() => {
+                            audioRef.current.play().then(() => {
+                              console.log('✅ ÁUDIO FUNCIONANDO!');
+                            }).catch(err => {
+                              console.error('❌ ERRO AO REPRODUZIR:', err);
+                            });
+                          }, 500);
+                        }
+                      }}
+                      style={{
+                        marginLeft: '10px',
+                        padding: '5px 10px',
+                        background: '#ff6b6b',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                        fontSize: '12px'
+                      }}
+                    >
+                      🔧 Teste
+                    </button>
+
                     <FaVolumeUp color="#fff" style={{ marginRight: 8 }} />
                     <input
                       type="range"
@@ -567,7 +610,28 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                     ref={audioRef}
                     src={songToPlay?.audioUrl}
                     style={{ display: 'none' }}
-                    onError={() => actions.setError('Erro ao carregar áudio')}
+                    onError={(e) => {
+                      console.error('🚨 ERRO DE ÁUDIO MULTIPLAYER:', {
+                        url: songToPlay?.audioUrl,
+                        error: e,
+                        networkState: audioRef.current?.networkState,
+                        readyState: audioRef.current?.readyState,
+                        userAgent: navigator.userAgent
+                      });
+                      actions.setError('Erro ao carregar áudio');
+                    }}
+                    onLoadStart={() => {
+                      console.log('🔄 INICIANDO CARREGAMENTO:', songToPlay?.audioUrl);
+                    }}
+                    onCanPlay={() => {
+                      console.log('✅ ÁUDIO PRONTO PARA REPRODUZIR:', songToPlay?.audioUrl);
+                    }}
+                    onLoadedMetadata={() => {
+                      console.log('📊 METADATA CARREGADA:', {
+                        duration: audioRef.current?.duration,
+                        url: songToPlay?.audioUrl
+                      });
+                    }}
                   />
                 </div>
               </div>
