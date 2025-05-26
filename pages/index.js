@@ -7,6 +7,7 @@ import MusicInfoFetcher from '../components/MusicInfoFetcher';
 import Footer from '../components/Footer';
 import GameMenu from '../components/GameMenu';
 import Statistics from '../components/Statistics';
+import Tutorial from '../components/Tutorial';
 import { useLanguage } from '../contexts/LanguageContext';
 import { fetchTimezone } from '../config/api';
 
@@ -40,10 +41,10 @@ export default function Home() {
   const [isShaking, setIsShaking] = useState(false);
   const [currentDay, setCurrentDay] = useState(null);
   const [showMenu, setShowMenu] = useState(false);
-  const [secretCode, setSecretCode] = useState('');
   const [showSacabambapis, setShowSacabambapis] = useState(false);
   const [showStatistics, setShowStatistics] = useState(false);
   const [gameResult, setGameResult] = useState(null);
+  const [showTutorial, setShowTutorial] = useState(false);
 
   // Estados do modo infinito
   const [isInfiniteMode, setIsInfiniteMode] = useState(false);
@@ -87,6 +88,14 @@ export default function Home() {
     const deterministicRandom = getDeterministicRandom(day, 0);
     const index = Math.floor(deterministicRandom * songs.length);
     return songs[index];
+  };
+
+  // Função para calcular o dia do ano
+  const getDayOfYear = () => {
+    const now = new Date();
+    const start = new Date(now.getFullYear(), 0, 0);
+    const diff = now - start + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
+    return Math.floor(diff / (1000 * 60 * 60 * 24));
   };
 
   // Funções do modo infinito
@@ -278,6 +287,22 @@ export default function Home() {
   useEffect(() => {
     loadInfiniteStats();
   }, []);
+
+  // Verificar se é a primeira visita do usuário
+  useEffect(() => {
+    if (typeof window !== 'undefined' && isClient) {
+      try {
+        const hasSeenTutorial = localStorage.getItem('ludomusic_tutorial_seen');
+        if (!hasSeenTutorial) {
+          // É a primeira visita, mostrar tutorial
+          setShowTutorial(true);
+        }
+      } catch (error) {
+        // Em caso de erro, não mostrar o tutorial
+        console.error('Erro ao verificar tutorial:', error);
+      }
+    }
+  }, [isClient]);
 
   // Carregar música do minuto ao montar
   useEffect(() => {
@@ -771,42 +796,47 @@ export default function Home() {
     }
   }, [currentSong?.audioUrl, isInfiniteMode]);
 
-  // Listener para código secreto
-  useEffect(() => {
-    const handleKeyPress = (e) => {
-      // Só funciona se não estiver digitando no input
-      if (e.target.tagName === 'INPUT') return;
-
-      const newCode = secretCode + e.key.toLowerCase();
-      setSecretCode(newCode);
-
-      // Verifica se o código secreto foi digitado
-      if (newCode.includes('sacabambapis')) {
-        // Mostrar efeito visual
-        setShowSacabambapis(true);
-
-        // Tocar som do vine boom
-        const vineAudio = new Audio('/vine.mp3');
-        vineAudio.volume = 0.7;
-        vineAudio.play().catch(() => {
-          // Silenciar erro de áudio
-        });
-
-        // Após 2 segundos, apenas recarrega (não precisa remover música pois é determinística)
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+  // Funções para lidar com o tutorial
+  const handleCloseTutorial = () => {
+    setShowTutorial(false);
+    // Marcar que o usuário já viu o tutorial
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('ludomusic_tutorial_seen', 'true');
+      } catch (error) {
+        console.error('Erro ao salvar tutorial visto:', error);
       }
+    }
+  };
 
-      // Limpa o código se ficar muito longo
-      if (newCode.length > 20) {
-        setSecretCode('');
+  const handleStartPlaying = () => {
+    // Marcar que o usuário já viu o tutorial
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('ludomusic_tutorial_seen', 'true');
+      } catch (error) {
+        console.error('Erro ao salvar tutorial visto:', error);
       }
-    };
+    }
+  };
 
-    document.addEventListener('keypress', handleKeyPress);
-    return () => document.removeEventListener('keypress', handleKeyPress);
-  }, [secretCode, currentDay]);
+  // Função para ativar o easter egg do sacabambapis
+  const triggerSacabambapis = () => {
+    // Mostrar efeito visual
+    setShowSacabambapis(true);
+
+    // Tocar som do vine boom
+    const vineAudio = new Audio('/vine.mp3');
+    vineAudio.volume = 0.7;
+    vineAudio.play().catch(() => {
+      // Silenciar erro de áudio
+    });
+
+    // Após 2 segundos, esconde o efeito
+    setTimeout(() => {
+      setShowSacabambapis(false);
+    }, 2000);
+  };
 
   // Função para salvar o estado completo do jogo
   const saveGameState = (gameState) => {
@@ -1379,6 +1409,19 @@ export default function Home() {
                     {suggestion.game} - {suggestion.title}
                   </li>
                 ))}
+                <li
+                  className={styles.suggestionItemModern}
+                  onMouseDown={triggerSacabambapis}
+                  style={{
+                    fontStyle: 'italic',
+                    opacity: 0.7,
+                    borderTop: '1px solid rgba(29, 185, 84, 0.3)',
+                    marginTop: '0.5rem',
+                    paddingTop: '0.75rem'
+                  }}
+                >
+                  ??? - ???
+                </li>
               </ul>
             )}
           </form>
@@ -1473,6 +1516,13 @@ export default function Home() {
           onClose={() => setShowStatistics(false)}
           gameResult={gameResult}
           isInfiniteMode={isInfiniteMode}
+        />
+
+        {/* Tutorial de boas-vindas */}
+        <Tutorial
+          isOpen={showTutorial}
+          onClose={handleCloseTutorial}
+          onStartPlaying={handleStartPlaying}
         />
         </div>
         <Footer />

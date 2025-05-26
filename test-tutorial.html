@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste do Tutorial - LudoMusic</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #1a1e26;
+            color: white;
+        }
+        .button {
+            background: #1DB954;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 16px;
+        }
+        .button:hover {
+            background: #1ed760;
+        }
+        .info {
+            background: rgba(29, 185, 84, 0.1);
+            border: 1px solid rgba(29, 185, 84, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎵 Teste do Tutorial - LudoMusic</h1>
+
+    <div class="info">
+        <h3>📋 Instruções para Teste</h3>
+        <p>Use os botões abaixo para testar o sistema de tutorial:</p>
+        <ul>
+            <li><strong>Limpar Tutorial:</strong> Remove a flag do localStorage para simular primeira visita</li>
+            <li><strong>Marcar como Visto:</strong> Adiciona a flag para simular que já viu o tutorial</li>
+            <li><strong>Verificar Status:</strong> Mostra se o tutorial foi visto ou não</li>
+            <li><strong>Ir para LudoMusic:</strong> Abre o jogo em nova aba</li>
+        </ul>
+    </div>
+
+    <div>
+        <button class="button" onclick="clearTutorial()">🗑️ Limpar Tutorial (Simular Primeira Visita)</button>
+        <button class="button" onclick="markAsSeen()">✅ Marcar Tutorial como Visto</button>
+        <button class="button" onclick="checkStatus()">🔍 Verificar Status do Tutorial</button>
+        <button class="button" onclick="openGame()">🎮 Ir para LudoMusic</button>
+    </div>
+
+    <div id="status" class="info" style="display: none;">
+        <h3>📊 Status Atual</h3>
+        <p id="statusText"></p>
+    </div>
+
+    <div class="info">
+        <h3>🧪 Como Testar o Tutorial</h3>
+        <ol>
+            <li>Clique em "Limpar Tutorial" para simular uma primeira visita</li>
+            <li>Clique em "Ir para LudoMusic" - o tutorial deve aparecer automaticamente</li>
+            <li>Teste os botões do tutorial (fechar, começar a jogar)</li>
+            <li>Verifique se a informação sobre o modo multiplayer estar em BETA aparece</li>
+            <li>Recarregue a página - o tutorial não deve aparecer novamente</li>
+            <li>Use "Limpar Tutorial" novamente para testar outras vezes</li>
+        </ol>
+    </div>
+
+    <div class="info">
+        <h3>📧 Como Testar o Sistema de Relatório de Erro</h3>
+        <ol>
+            <li>Acesse o LudoMusic</li>
+            <li>Clique no botão de menu (☰) no canto superior esquerdo</li>
+            <li>Expanda a seção "Relatório de erro"</li>
+            <li>Preencha o formulário com uma descrição de teste</li>
+            <li>Clique em "Enviar Relatório"</li>
+            <li>Verifique se o email chegou em andreibonatto8@gmail.com</li>
+            <li>Se não chegou, verifique se o fallback mailto: foi ativado</li>
+        </ol>
+        <p><strong>Nota:</strong> O sistema tem fallbacks automáticos para garantir que o relatório seja sempre enviado.</p>
+    </div>
+
+    <script>
+        function clearTutorial() {
+            try {
+                localStorage.removeItem('ludomusic_tutorial_seen');
+                alert('✅ Tutorial limpo! Agora o tutorial aparecerá na próxima visita ao LudoMusic.');
+                checkStatus();
+            } catch (error) {
+                alert('❌ Erro ao limpar tutorial: ' + error.message);
+            }
+        }
+
+        function markAsSeen() {
+            try {
+                localStorage.setItem('ludomusic_tutorial_seen', 'true');
+                alert('✅ Tutorial marcado como visto! Agora o tutorial não aparecerá mais.');
+                checkStatus();
+            } catch (error) {
+                alert('❌ Erro ao marcar tutorial: ' + error.message);
+            }
+        }
+
+        function checkStatus() {
+            try {
+                const hasSeenTutorial = localStorage.getItem('ludomusic_tutorial_seen');
+                const statusDiv = document.getElementById('status');
+                const statusText = document.getElementById('statusText');
+
+                statusDiv.style.display = 'block';
+
+                if (hasSeenTutorial) {
+                    statusText.innerHTML = '✅ <strong>Tutorial já foi visto</strong><br>O tutorial NÃO aparecerá na próxima visita.';
+                    statusDiv.style.borderColor = 'rgba(255, 193, 7, 0.3)';
+                    statusDiv.style.backgroundColor = 'rgba(255, 193, 7, 0.1)';
+                } else {
+                    statusText.innerHTML = '🆕 <strong>Tutorial ainda não foi visto</strong><br>O tutorial APARECERÁ na próxima visita.';
+                    statusDiv.style.borderColor = 'rgba(29, 185, 84, 0.3)';
+                    statusDiv.style.backgroundColor = 'rgba(29, 185, 84, 0.1)';
+                }
+            } catch (error) {
+                alert('❌ Erro ao verificar status: ' + error.message);
+            }
+        }
+
+        function openGame() {
+            window.open('http://localhost:3000', '_blank');
+        }
+
+        // Verificar status inicial
+        window.onload = function() {
+            checkStatus();
+        };
+    </script>
+</body>
+</html>

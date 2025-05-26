@@ -759,6 +759,63 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                           {suggestion.game} - {suggestion.title}
                         </li>
                       ))}
+                      <li
+                        className={gameStyles.suggestionItemModern}
+                        onMouseDown={() => {
+                          // Função para ativar o easter egg do sacabambapis
+                          const triggerSacabambapis = () => {
+                            // Criar elemento para mostrar o efeito
+                            const easterEggDiv = document.createElement('div');
+                            easterEggDiv.style.cssText = `
+                              position: fixed;
+                              top: 0;
+                              left: 0;
+                              width: 100vw;
+                              height: 100vh;
+                              background: rgba(0, 0, 0, 0.9);
+                              display: flex;
+                              justify-content: center;
+                              align-items: center;
+                              z-index: 9999;
+                              animation: sacabambapisAppear 2s ease-out;
+                            `;
+
+                            const img = document.createElement('img');
+                            img.src = '/sacabambapis.png';
+                            img.alt = 'Sacabambapis';
+                            img.style.cssText = `
+                              max-width: 80vw;
+                              max-height: 80vh;
+                              object-fit: contain;
+                              animation: sacabambapisZoom 2s ease-out;
+                              filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5));
+                            `;
+
+                            easterEggDiv.appendChild(img);
+                            document.body.appendChild(easterEggDiv);
+
+                            // Tocar som do vine boom
+                            const vineAudio = new Audio('/vine.mp3');
+                            vineAudio.volume = 0.7;
+                            vineAudio.play().catch(() => {});
+
+                            // Remover após 2 segundos
+                            setTimeout(() => {
+                              document.body.removeChild(easterEggDiv);
+                            }, 2000);
+                          };
+                          triggerSacabambapis();
+                        }}
+                        style={{
+                          fontStyle: 'italic',
+                          opacity: 0.7,
+                          borderTop: '1px solid rgba(29, 185, 84, 0.3)',
+                          marginTop: '0.5rem',
+                          paddingTop: '0.75rem'
+                        }}
+                      >
+                        ??? - ???
+                      </li>
                     </ul>
                   )}
                 </form>

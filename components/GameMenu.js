@@ -26,7 +26,8 @@ const GameMenu = ({ isOpen, onClose }) => {
     email: '',
     submitting: false,
     submitted: false,
-    error: null
+    error: null,
+    successMessage: null
   });
 
   const toggleSection = (section) => {
@@ -204,28 +205,108 @@ const GameMenu = ({ isOpen, onClose }) => {
     }));
 
     try {
-      // Construir o link mailto com os parâmetros
-      const subject = encodeURIComponent('Relatório de Erro - Bandle');
-      const body = encodeURIComponent(`Descrição do erro: ${errorReport.description}\n\nEmail para contato: ${errorReport.email || 'Não informado'}`);
+      // Método 1: Tentar enviar via EmailJS (serviço gratuito)
+      try {
+        // Carregar EmailJS se não estiver carregado
+        if (typeof window.emailjs === 'undefined') {
+          const script = document.createElement('script');
+          script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+          document.head.appendChild(script);
 
-      // Abrir o cliente de email do usuário
-      window.location.href = `mailto:andreibonatto8@gmail.com?subject=${subject}&body=${body}`;
+          // Aguardar o script carregar
+          await new Promise((resolve) => {
+            script.onload = resolve;
+          });
 
-      // Marcar como enviado após um pequeno delay para dar tempo de abrir o cliente de email
-      setTimeout(() => {
+          // Inicializar EmailJS com chave pública
+          window.emailjs.init('YOUR_PUBLIC_KEY'); // Você precisará configurar isso
+        }
+
+        // Tentar enviar via EmailJS
+        const templateParams = {
+          to_email: 'andreibonatto8@gmail.com',
+          from_name: errorReport.email || 'Usuário Anônimo',
+          message: errorReport.description,
+          user_email: errorReport.email || 'Não informado',
+          page_url: window.location.href,
+          user_agent: navigator.userAgent,
+          timestamp: new Date().toLocaleString('pt-BR')
+        };
+
+        // Esta parte só funcionará se você configurar o EmailJS
+        // Por enquanto, vamos pular direto para o método 2
+        throw new Error('EmailJS não configurado');
+
+      } catch (emailjsError) {
+        console.log('EmailJS não disponível, usando método alternativo');
+
+        // Método 2: Usar a API interna (mesmo que tenha problemas, vai logar)
+        try {
+          const reportData = {
+            description: errorReport.description.trim(),
+            email: errorReport.email.trim() || '',
+            userAgent: navigator.userAgent,
+            url: window.location.href,
+            timestamp: new Date().toISOString()
+          };
+
+          const response = await fetch('/api/send-error-simple', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(reportData)
+          });
+
+          const result = await response.json();
+
+          if (response.ok && result.success) {
+            setErrorReport({
+              description: '',
+              email: '',
+              submitting: false,
+              submitted: true,
+              error: null,
+              successMessage: 'Relatório recebido! Verifique os logs do servidor para confirmação.'
+            });
+            return;
+          }
+        } catch (apiError) {
+          console.log('API também falhou, usando mailto');
+        }
+
+        // Método 3: Fallback garantido - mailto
+        const subject = encodeURIComponent('Relatório de Erro - LudoMusic');
+        const body = encodeURIComponent(
+          `Descrição do erro: ${errorReport.description}\n\n` +
+          `Email para contato: ${errorReport.email || 'Não informado'}\n\n` +
+          `URL: ${window.location.href}\n` +
+          `Navegador: ${navigator.userAgent}\n` +
+          `Data: ${new Date().toLocaleString('pt-BR')}\n\n` +
+          `--- INSTRUÇÕES ---\n` +
+          `Este email foi gerado automaticamente pelo sistema de relatório de erro do LudoMusic.\n` +
+          `Por favor, envie este email para que possamos receber seu relatório.`
+        );
+
+        // Abrir o cliente de email do usuário
+        window.open(`mailto:andreibonatto8@gmail.com?subject=${subject}&body=${body}`, '_blank');
+
+        // Marcar como enviado
         setErrorReport({
           description: '',
           email: '',
           submitting: false,
           submitted: true,
-          error: null
+          error: null,
+          successMessage: 'Cliente de email aberto! Por favor, envie o email que foi preparado automaticamente.'
         });
-      }, 1000);
+      }
     } catch (error) {
+      console.error('Erro geral:', error);
       setErrorReport(prev => ({
         ...prev,
         submitting: false,
-        error: 'Erro ao enviar o relatório. Por favor, tente novamente.'
+        error: 'Erro ao processar relatório. Tente enviar diretamente para: andreibonatto8@gmail.com'
       }));
     }
   };
@@ -354,11 +435,21 @@ const GameMenu = ({ isOpen, onClose }) => {
 
               {errorReport.submitted ? (
                 <div className={styles.successMessage}>
-                  <p>Obrigado pelo seu relatório!</p>
-                  <p>Sua mensagem foi enviada com sucesso.</p>
+                  <p>✅ Obrigado pelo seu relatório!</p>
+                  <p>{errorReport.successMessage || 'Sua mensagem foi recebida com sucesso.'}</p>
+                  <p style={{ fontSize: '0.9rem', color: '#888', marginTop: '0.5rem' }}>
+                    📧 Os relatórios são enviados para: andreibonatto8@gmail.com
+                  </p>
                   <button
                     className={styles.actionButton}
-                    onClick={() => setErrorReport(prev => ({ ...prev, submitted: false }))}
+                    onClick={() => setErrorReport(prev => ({
+                      ...prev,
+                      submitted: false,
+                      successMessage: null,
+                      description: '',
+                      email: '',
+                      error: null
+                    }))}
                   >
                     Enviar outro relatório
                   </button>
