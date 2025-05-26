@@ -412,7 +412,7 @@ export default function Home() {
     if (!audio) return;
 
     // Tempo máximo para a tentativa atual
-    const maxDuration = gameOver
+    const maxDuration = (gameOver && !isInfiniteMode)
       ? MAX_PLAY_TIME
       : maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1];
 
@@ -424,12 +424,12 @@ export default function Home() {
         if (!audio || audio.paused || audio.ended || !audio.duration || isNaN(audio.duration)) return;
 
         const currentTime = audio.currentTime - startTime;
-        if (!gameOver && currentTime >= maxDuration) {
+        if ((!gameOver || isInfiniteMode) && currentTime >= maxDuration) {
           audio.pause();
           setIsPlaying(false);
           audio.currentTime = startTime;
           setAudioProgress(0);
-        } else if (gameOver && currentTime >= MAX_PLAY_TIME) {
+        } else if (gameOver && !isInfiniteMode && currentTime >= MAX_PLAY_TIME) {
           // FADE OUT após 15s se o jogo acabou
           if (!fadeOutInterval) {
             let step = 0;
@@ -460,12 +460,12 @@ export default function Home() {
         if (!audio || !audio.duration || isNaN(audio.duration)) return;
 
         const currentTime = audio.currentTime - startTime;
-        if (!gameOver && currentTime >= maxDuration) {
+        if ((!gameOver || isInfiniteMode) && currentTime >= maxDuration) {
           audio.pause();
           setIsPlaying(false);
           audio.currentTime = startTime;
           setAudioProgress(0);
-        } else if (gameOver && currentTime >= MAX_PLAY_TIME) {
+        } else if (gameOver && !isInfiniteMode && currentTime >= MAX_PLAY_TIME) {
           // FADE OUT após 15s se o jogo acabou
           if (!fadeOutInterval) {
             let step = 0;
@@ -512,7 +512,7 @@ export default function Home() {
       if (fadeOutInterval) clearInterval(fadeOutInterval);
       if (fadeOutTimeout) clearTimeout(fadeOutTimeout);
     };
-  }, [audioRef.current, startTime, gameOver, attempts]);
+  }, [audioRef.current, startTime, gameOver, attempts, isInfiniteMode]);
 
   // Atualiza volume
   useEffect(() => {
