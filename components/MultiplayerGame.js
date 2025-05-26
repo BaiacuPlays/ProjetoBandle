@@ -279,7 +279,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
           if (gameCmp !== 0) return gameCmp;
           return normalize(a.title).localeCompare(normalize(b.title));
         })
-        .slice(0, 12); // Otimizado: 12 sugestões para melhor performance
+        .slice(0, 50); // Mostrar até 50 sugestões para busca completa
 
       setFilteredSuggestions(suggestions);
       setShowSuggestions(suggestions.length > 0);
@@ -745,7 +745,11 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                     {isSubmitting ? 'Enviando...' : (isClient ? t('guess') : 'Adivinhar')}
                   </button>
                   {showSuggestions && filteredSuggestions.length > 0 && (
-                    <ul className={gameStyles.suggestionsListModern}>
+                    <ul className={gameStyles.suggestionsListModern} style={{
+                      maxHeight: '200px',
+                      overflowY: 'auto',
+                      scrollbarWidth: 'thin'
+                    }}>
                       {filteredSuggestions.map((suggestion, suggestionIndex) => (
                         <li
                           key={`mp-suggestion-${suggestion.id}-${suggestionIndex}`}

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import Head from 'next/head';
 import { songs } from '../data/songs';
 import styles from '../styles/Home.module.css';
 import { FaPlay, FaPause, FaVolumeUp, FaFastForward, FaQuestionCircle, FaBars } from 'react-icons/fa';
@@ -806,8 +807,14 @@ export default function Home() {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <div className={styles.darkBg} style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+    <>
+      <Head>
+        <title>LudoMusic - Adivinhe a Música dos Games</title>
+        <meta name="description" content="Teste seus conhecimentos musicais dos videogames! Ouça trechos e adivinhe as músicas." />
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎵</text></svg>" />
+      </Head>
+      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <div className={styles.darkBg} style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div className={styles.topBar}>
           <div className={styles.titleBarContainer}>
             <button
@@ -1120,8 +1127,9 @@ export default function Home() {
             />
           </div>
         )}
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </>
   );
 };
