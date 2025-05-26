@@ -197,23 +197,7 @@ export default async function handler(req, res) {
       return res.status(200).json({ success: true, lobbyData: lobby });
     }
 
-    if (req.method === 'GET') {
-      const { roomCode } = req.query;
-      console.log('🔍 API - GET sala:', roomCode);
 
-      if (!roomCode) {
-        return res.status(400).json({ error: 'Código da sala é obrigatório.' });
-      }
-
-      const lobby = await kv.get(`lobby:${roomCode}`);
-      console.log('🔍 API - Resultado GET:', roomCode, lobby ? 'ENCONTRADA' : 'NÃO ENCONTRADA');
-
-      if (!lobby) {
-        return res.status(404).json({ error: 'Sala não encontrada.' });
-      }
-
-      return res.status(200).json(lobby);
-    }
 
     if (req.method === 'PATCH') {
       let body;
@@ -557,11 +541,18 @@ export default async function handler(req, res) {
 
     if (req.method === 'GET') {
       const { roomCode } = req.query;
+      console.log('🔍 API GET - Buscando sala:', roomCode);
+
       if (!roomCode) {
+        console.log('❌ API GET - Código da sala não fornecido');
         return res.status(400).json({ error: 'Código da sala é obrigatório.' });
       }
+
       const lobby = await kv.get(`lobby:${roomCode}`);
+      console.log('🔍 API GET - Resultado da busca:', lobby ? 'ENCONTRADA' : 'NÃO ENCONTRADA');
+
       if (!lobby) {
+        console.log('❌ API GET - Sala não encontrada, retornando dados vazios');
         // Retornar dados vazios em vez de erro para evitar spam no console
         return res.status(200).json({
           players: [],
