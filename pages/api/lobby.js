@@ -1,19 +1,36 @@
 import songs from '../../data/music.json';
 
-// Armazenamento em memória para desenvolvimento local
-const memoryStorage = new Map();
+// 🚀 ARMAZENAMENTO PERSISTENTE USANDO VERCEL KV SIMULADO
+const globalStorage = global.gameStorage || (global.gameStorage = new Map());
 
-// Fallback para desenvolvimento local
+// Sistema de armazenamento mais robusto
 const kv = {
   async get(key) {
-    return memoryStorage.get(key) || null;
+    const data = globalStorage.get(key);
+    if (data) {
+      // Verificar se não expirou (24 horas)
+      const now = Date.now();
+      if (now - data.timestamp < 24 * 60 * 60 * 1000) {
+        return data.value;
+      } else {
+        globalStorage.delete(key);
+        return null;
+      }
+    }
+    return null;
   },
   async set(key, value) {
-    memoryStorage.set(key, value);
+    globalStorage.set(key, {
+      value: value,
+      timestamp: Date.now()
+    });
+    console.log('💾 SALVANDO:', key, value);
     return 'OK';
   },
   async del(key) {
-    return memoryStorage.delete(key) ? 1 : 0;
+    const existed = globalStorage.has(key);
+    globalStorage.delete(key);
+    return existed ? 1 : 0;
   }
 };
 function generateRoomCode() {
@@ -162,14 +179,40 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Nickname e código da sala são obrigatórios.' });
       }
       const lobby = await kv.get(`lobby:${roomCode}`);
+      console.log('🔍 API - Buscando sala:', roomCode, lobby ? 'ENCONTRADA' : 'NÃO ENCONTRADA');
+
       if (!lobby) {
+        console.log('❌ API - Sala não encontrada:', roomCode);
         return res.status(404).json({ error: 'Sala não encontrada.' });
       }
+
       if (!lobby.players.includes(nickname)) {
         lobby.players.push(nickname);
         await kv.set(`lobby:${roomCode}`, lobby);
+        console.log('✅ API - Jogador adicionado:', nickname, 'à sala:', roomCode);
+      } else {
+        console.log('ℹ️ API - Jogador já estava na sala:', nickname);
       }
-      return res.status(200).json({ success: true });
+
+      return res.status(200).json({ success: true, lobbyData: lobby });
+    }
+
+    if (req.method === 'GET') {
+      const { roomCode } = req.query;
+      console.log('🔍 API - GET sala:', roomCode);
+
+      if (!roomCode) {
+        return res.status(400).json({ error: 'Código da sala é obrigatório.' });
+      }
+
+      const lobby = await kv.get(`lobby:${roomCode}`);
+      console.log('🔍 API - Resultado GET:', roomCode, lobby ? 'ENCONTRADA' : 'NÃO ENCONTRADA');
+
+      if (!lobby) {
+        return res.status(404).json({ error: 'Sala não encontrada.' });
+      }
+
+      return res.status(200).json(lobby);
     }
 
     if (req.method === 'PATCH') {
