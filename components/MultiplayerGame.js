@@ -34,7 +34,6 @@ const MultiplayerGame = ({ onBackToLobby }) => {
         supportsFetch: typeof fetch !== 'undefined'
       };
 
-      console.log('🌐 BROWSER INFO:', info);
       setBrowserInfo(info);
 
       // Avisos para navegadores problemáticos

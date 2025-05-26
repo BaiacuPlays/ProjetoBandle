@@ -9,11 +9,16 @@ export default function MyApp({ Component, pageProps }) {
     try {
       const savedSettings = localStorage.getItem('bandle_settings');
       if (savedSettings) {
-        const parsedSettings = JSON.parse(savedSettings);
+        try {
+          const parsedSettings = JSON.parse(savedSettings);
 
-        // Aplicar configurações iniciais
-        if (parsedSettings.language) {
-          document.documentElement.lang = parsedSettings.language;
+          // Aplicar configurações iniciais
+          if (parsedSettings && parsedSettings.language) {
+            document.documentElement.lang = parsedSettings.language;
+          }
+        } catch (e) {
+          // JSON inválido, remover e usar padrão
+          localStorage.removeItem('bandle_settings');
         }
       }
     } catch (error) {

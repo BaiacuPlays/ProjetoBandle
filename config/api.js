@@ -90,7 +90,6 @@ const LocalStorageAPI = {
 
     const data = localStorage.getItem(`lobby:${roomCode}`);
     if (!data) {
-      console.log('🔍 FALLBACK - Sala não encontrada:', roomCode);
       return {
         players: [],
         host: null,
@@ -600,7 +599,7 @@ export const apiRequest = async (endpoint, options = {}) => {
     clearTimeout(timeoutId);
     return response;
   } catch (error) {
-    console.warn(`🔄 API falhou, usando fallback:`, error.message);
+
 
     // Fallback para timezone
     if (endpoint.includes('timezone')) {
@@ -638,7 +637,7 @@ export const fetchTimezone = async () => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.warn('API externa falhou, usando fallback local:', error.message);
+
 
     // Fallback: usar data local do navegador
     const now = new Date();

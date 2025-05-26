@@ -103,7 +103,6 @@ export default async function handler(req, res) {
       }
 
       const { nickname } = body;
-      console.log('🔄 API - POST body recebido:', body);
 
       if (!nickname) {
         return res.status(400).json({ error: 'Nickname é obrigatório.' });
@@ -140,16 +139,13 @@ export default async function handler(req, res) {
       }
 
       const { nickname, roomCode } = body;
-      console.log('🔄 API - PUT body recebido:', body);
 
       if (!nickname || !roomCode) {
         return res.status(400).json({ error: 'Nickname e código da sala são obrigatórios.' });
       }
       const lobby = await kv.get(`lobby:${roomCode}`);
-      console.log('🔍 API - Buscando sala:', roomCode, lobby ? 'ENCONTRADA' : 'NÃO ENCONTRADA');
 
       if (!lobby) {
-        console.log('❌ API - Sala não encontrada:', roomCode);
         return res.status(404).json({ error: 'Sala não encontrada.' });
       }
 
@@ -175,7 +171,6 @@ export default async function handler(req, res) {
       }
 
       const { roomCode, action, nickname } = body;
-      console.log('🔄 API - PATCH body recebido:', body);
 
       if (!roomCode) {
         return res.status(400).json({ error: 'Código da sala é obrigatório.' });

@@ -22,7 +22,7 @@ class MyDocument extends Document {
           <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
           {/* Polyfills para compatibilidade com navegadores antigos */}
-          <script src="https://polyfill.io/v3/polyfill.min.js?features=fetch,Promise,Array.prototype.includes,Object.assign,Symbol"></script>
+          <script src="https://cdn.jsdelivr.net/npm/core-js-bundle@3.32.0/minified.js"></script>
 
           {/* Script para carregar o idioma do localStorage antes de renderizar a página */}
           <script dangerouslySetInnerHTML={{
@@ -33,9 +33,13 @@ class MyDocument extends Document {
                 let language = null;
 
                 if (savedSettings) {
-                  const parsedSettings = JSON.parse(savedSettings);
-                  if (parsedSettings.language) {
-                    language = parsedSettings.language;
+                  try {
+                    const parsedSettings = JSON.parse(savedSettings);
+                    if (parsedSettings && parsedSettings.language) {
+                      language = parsedSettings.language;
+                    }
+                  } catch (e) {
+                    // JSON inválido, ignorar
                   }
                 }
 
@@ -56,7 +60,23 @@ class MyDocument extends Document {
                   document.documentElement.lang = language;
 
                   // Se o idioma veio do cookie, mas não está no localStorage, salvá-lo
-                  if (!savedSettings || !JSON.parse(savedSettings).language) {
+                  let needsUpdate = false;
+                  let currentSettings = null;
+
+                  if (savedSettings) {
+                    try {
+                      currentSettings = JSON.parse(savedSettings);
+                      if (!currentSettings || !currentSettings.language) {
+                        needsUpdate = true;
+                      }
+                    } catch (e) {
+                      needsUpdate = true;
+                    }
+                  } else {
+                    needsUpdate = true;
+                  }
+
+                  if (needsUpdate) {
                     const defaultSettings = {
                       daltonicMode: false,
                       sound: true,
@@ -64,17 +84,10 @@ class MyDocument extends Document {
                       language: language
                     };
                     localStorage.setItem('bandle_settings', JSON.stringify(defaultSettings));
-                  } else if (savedSettings) {
-                    // Se já existe configurações no localStorage, atualizar o idioma
-                    try {
-                      const settings = JSON.parse(savedSettings);
-                      if (settings.language !== language) {
-                        settings.language = language;
-                        localStorage.setItem('bandle_settings', JSON.stringify(settings));
-                      }
-                    } catch (e) {
-                      // Silenciar erro
-                    }
+                  } else if (currentSettings && currentSettings.language !== language) {
+                    // Atualizar idioma se diferente
+                    currentSettings.language = language;
+                    localStorage.setItem('bandle_settings', JSON.stringify(currentSettings));
                   }
                 }
               } catch (e) {
