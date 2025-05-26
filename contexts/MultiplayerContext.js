@@ -63,7 +63,7 @@ export function MultiplayerProvider({ children }) {
 
     let isActive = true;
     let consecutiveErrors = 0;
-    const maxErrors = 5;
+    const maxErrors = 8; // Aumentado para ser mais tolerante
 
     const pollLobby = async () => {
       if (!isActive) return;
@@ -85,7 +85,8 @@ export function MultiplayerProvider({ children }) {
             // Verificar se a sala foi encontrada
             if (data.roomNotFound) {
               consecutiveErrors++;
-              if (consecutiveErrors >= maxErrors) {
+              // Só mostrar erro se for muito persistente E não estivermos no meio de uma ação
+              if (consecutiveErrors >= maxErrors && !state.loading) {
                 dispatch({ type: ACTIONS.SET_ERROR, payload: 'Conexão perdida com a sala' });
               }
             } else {
@@ -93,15 +94,15 @@ export function MultiplayerProvider({ children }) {
               consecutiveErrors = 0;
 
               // Limpar erro se havia um
-              if (state.error) {
+              if (state.error && state.error.includes('Sala não encontrada')) {
                 dispatch({ type: ACTIONS.SET_ERROR, payload: '' });
               }
             }
           }
         } else {
           consecutiveErrors++;
-          // Só mostrar erro se for muito persistente
-          if (consecutiveErrors >= maxErrors * 2) {
+          // Só mostrar erro se for muito persistente E não estivermos no meio de uma ação
+          if (consecutiveErrors >= maxErrors * 2 && !state.loading) {
             if (isActive) {
               dispatch({ type: ACTIONS.SET_ERROR, payload: 'Problemas de conexão com o servidor' });
             }
@@ -110,7 +111,7 @@ export function MultiplayerProvider({ children }) {
       } catch (err) {
         consecutiveErrors++;
         // Ignorar erros de rede temporários e AbortError
-        if (err.name !== 'AbortError' && consecutiveErrors >= maxErrors && isActive) {
+        if (err.name !== 'AbortError' && consecutiveErrors >= maxErrors && isActive && !state.loading) {
           console.error('🚨 Erro persistente no polling:', err);
           dispatch({ type: ACTIONS.SET_ERROR, payload: 'Problemas de conexão' });
         }
@@ -118,17 +119,17 @@ export function MultiplayerProvider({ children }) {
     };
 
     // Poll inicial após um pequeno delay
-    const initialTimeout = setTimeout(pollLobby, 500);
+    const initialTimeout = setTimeout(pollLobby, 1000);
 
-    // Poll a cada 4 segundos
-    const interval = setInterval(pollLobby, 4000);
+    // Poll a cada 5 segundos (aumentado para reduzir conflitos)
+    const interval = setInterval(pollLobby, 5000);
 
     return () => {
       isActive = false;
       clearTimeout(initialTimeout);
       clearInterval(interval);
     };
-  }, [state.roomCode, state.isConnected]);
+  }, [state.roomCode, state.isConnected, state.loading]);
 
   // Actions
   const actions = {
@@ -272,11 +273,14 @@ export function MultiplayerProvider({ children }) {
             message: data.message
           };
         } else {
-          // NUNCA mostrar erros de tentativas no contexto - deixar para o componente decidir
+          // NÃO mostrar erro de "Sala não encontrada" no contexto - deixar para o polling lidar
+          if (!data.error || !data.error.includes('Sala não encontrada')) {
+            // NUNCA mostrar erros de tentativas no contexto - deixar para o componente decidir
+          }
           return { success: false, error: data.error };
         }
       } catch (err) {
-        // Só mostrar erro de conexão se for crítico
+        // NÃO mostrar erros de conexão temporários no contexto
         return { success: false, error: 'Erro de conexão' };
       }
     },
@@ -303,11 +307,14 @@ export function MultiplayerProvider({ children }) {
           }
           return { success: true };
         } else {
-          dispatch({ type: ACTIONS.SET_ERROR, payload: data.error || 'Erro ao avançar rodada' });
+          // NÃO mostrar erro de "Sala não encontrada" no contexto - deixar para o polling lidar
+          if (!data.error || !data.error.includes('Sala não encontrada')) {
+            dispatch({ type: ACTIONS.SET_ERROR, payload: data.error || 'Erro ao avançar rodada' });
+          }
           return { success: false, error: data.error };
         }
       } catch (err) {
-        dispatch({ type: ACTIONS.SET_ERROR, payload: 'Erro de conexão' });
+        // NÃO mostrar erros de conexão temporários no contexto
         return { success: false, error: 'Erro de conexão' };
       }
     },
@@ -334,11 +341,14 @@ export function MultiplayerProvider({ children }) {
           }
           return { success: true };
         } else {
-          dispatch({ type: ACTIONS.SET_ERROR, payload: data.error || 'Erro ao pular rodada' });
+          // NÃO mostrar erro de "Sala não encontrada" no contexto - deixar para o polling lidar
+          if (!data.error || !data.error.includes('Sala não encontrada')) {
+            dispatch({ type: ACTIONS.SET_ERROR, payload: data.error || 'Erro ao pular rodada' });
+          }
           return { success: false, error: data.error };
         }
       } catch (err) {
-        dispatch({ type: ACTIONS.SET_ERROR, payload: 'Erro de conexão' });
+        // NÃO mostrar erros de conexão temporários no contexto
         return { success: false, error: 'Erro de conexão' };
       }
     },
@@ -370,11 +380,14 @@ export function MultiplayerProvider({ children }) {
           dispatch({ type: ACTIONS.SET_CURRENT_SCREEN, payload: 'lobby' });
           return { success: true };
         } else {
-          dispatch({ type: ACTIONS.SET_ERROR, payload: data.error || 'Erro ao resetar jogo' });
+          // NÃO mostrar erro de "Sala não encontrada" no contexto - deixar para o polling lidar
+          if (!data.error || !data.error.includes('Sala não encontrada')) {
+            dispatch({ type: ACTIONS.SET_ERROR, payload: data.error || 'Erro ao resetar jogo' });
+          }
           return { success: false, error: data.error };
         }
       } catch (err) {
-        dispatch({ type: ACTIONS.SET_ERROR, payload: 'Erro de conexão' });
+        // NÃO mostrar erros de conexão temporários no contexto
         return { success: false, error: 'Erro de conexão' };
       } finally {
         dispatch({ type: ACTIONS.SET_LOADING, payload: false });
