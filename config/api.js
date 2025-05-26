@@ -160,11 +160,32 @@ const LocalStorageAPI = {
 
 // Função helper para fazer requests com fallback automático
 export const apiRequest = async (endpoint, options = {}) => {
-  // 🚨 FALLBACK IMEDIATO PARA MULTIPLAYER
+  // 🚀 TENTAR API REAL PRIMEIRO
   if (endpoint.includes('/api/lobby')) {
-    console.log('🔄 USANDO FALLBACK LOCALSTORAGE para:', endpoint, options);
+    console.log('🔄 TENTANDO API REAL para:', endpoint, options);
 
     try {
+      // Tentar API real do Vercel primeiro
+      const fullUrl = `${window.location.origin}${endpoint}`;
+      const response = await fetch(fullUrl, {
+        ...options,
+        headers: {
+          'Content-Type': 'application/json',
+          ...options.headers
+        }
+      });
+
+      if (response.ok) {
+        console.log('✅ API REAL funcionou!');
+        return response;
+      } else {
+        console.log('⚠️ API REAL falhou, usando fallback...');
+        throw new Error('API falhou');
+      }
+    } catch (error) {
+      console.log('🔄 USANDO FALLBACK LOCALSTORAGE para:', endpoint, options);
+
+      try {
       if (options.method === 'POST') {
         // Criar sala
         const body = typeof options.body === 'string' ? JSON.parse(options.body) : options.body;
@@ -560,12 +581,13 @@ export const apiRequest = async (endpoint, options = {}) => {
         };
       }
 
-    } catch (error) {
-      console.error('🔄 FALLBACK ERROR:', error);
-      return {
-        ok: false,
-        json: async () => ({ error: error.message })
-      };
+      } catch (error) {
+        console.error('🔄 FALLBACK ERROR:', error);
+        return {
+          ok: false,
+          json: async () => ({ error: error.message })
+        };
+      }
     }
   }
 
