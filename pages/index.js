@@ -45,6 +45,14 @@ export default function Home() {
   const [showStatistics, setShowStatistics] = useState(false);
   const [gameResult, setGameResult] = useState(null);
 
+  // Estados do modo infinito
+  const [isInfiniteMode, setIsInfiniteMode] = useState(false);
+  const [infiniteStreak, setInfiniteStreak] = useState(0);
+  const [infiniteBestRecord, setInfiniteBestRecord] = useState(0);
+  const [infiniteUsedSongs, setInfiniteUsedSongs] = useState([]);
+  const [infiniteGameOver, setInfiniteGameOver] = useState(false);
+  const [showNextSongButton, setShowNextSongButton] = useState(false);
+
   // Tempos máximos de reprodução por tentativa
   const maxClipDurations = [0.6, 1.2, 2.0, 3.0, 3.5, 4.2];
 
@@ -81,7 +89,195 @@ export default function Home() {
     return songs[index];
   };
 
+  // Funções do modo infinito
+  const getRandomInfiniteSong = (usedSongs = infiniteUsedSongs) => {
+    // Filtra músicas que ainda não foram usadas
+    const availableSongs = songs.filter(song => !usedSongs.includes(song.id));
 
+    // Se não há músicas disponíveis, o jogador completou todas
+    if (availableSongs.length === 0) {
+      return null;
+    }
+
+    // Seleciona uma música aleatória das disponíveis
+    const randomIndex = Math.floor(Math.random() * availableSongs.length);
+    return availableSongs[randomIndex];
+  };
+
+  const resetAudioState = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      setIsPlaying(false);
+      setAudioProgress(0);
+      setAudioError(false);
+    }
+  };
+
+  const loadInfiniteStats = () => {
+    if (typeof window !== 'undefined') {
+      try {
+        const savedStats = localStorage.getItem('ludomusic_infinite_stats');
+        if (savedStats) {
+          const stats = JSON.parse(savedStats);
+          setInfiniteBestRecord(stats.bestRecord || 0);
+          setInfiniteStreak(stats.currentStreak || 0);
+          setInfiniteUsedSongs(stats.usedSongs || []);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar estatísticas do modo infinito:', error);
+      }
+    }
+  };
+
+  const saveInfiniteStats = (streak, bestRecord, usedSongs) => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stats = {
+          currentStreak: streak,
+          bestRecord: bestRecord,
+          usedSongs: usedSongs,
+          lastPlayed: Date.now()
+        };
+        localStorage.setItem('ludomusic_infinite_stats', JSON.stringify(stats));
+      } catch (error) {
+        console.error('Erro ao salvar estatísticas do modo infinito:', error);
+      }
+    }
+  };
+
+  const startInfiniteMode = () => {
+    // Para o áudio atual se estiver tocando
+    resetAudioState();
+
+    setIsInfiniteMode(true);
+    setInfiniteGameOver(false);
+    setGameOver(false);
+    setAttempts(0);
+    setHistory([]);
+    setMessage('');
+    setShowHint(false);
+    setActiveHint(0);
+    setGuess('');
+    setShowSuggestions(false);
+
+    // Carrega uma nova música para o modo infinito
+    const newSong = getRandomInfiniteSong();
+    if (newSong) {
+      setCurrentSong(newSong);
+      // O tempo de início será configurado pelo handleLoadedMetadata normal
+    } else {
+      // Todas as músicas foram completadas
+      setMessage(t('all_songs_completed'));
+      setInfiniteGameOver(true);
+    }
+  };
+
+  const nextInfiniteSong = () => {
+    // Para o áudio atual
+    resetAudioState();
+
+    // Adiciona a música atual à lista de usadas
+    const newUsedSongs = [...infiniteUsedSongs, currentSong.id];
+    setInfiniteUsedSongs(newUsedSongs);
+
+    // Incrementa a sequência
+    const newStreak = infiniteStreak + 1;
+    setInfiniteStreak(newStreak);
+
+    // Atualiza o melhor recorde se necessário
+    let newBestRecord = infiniteBestRecord;
+    if (newStreak > infiniteBestRecord) {
+      newBestRecord = newStreak;
+      setInfiniteBestRecord(newBestRecord);
+    }
+
+    // Salva as estatísticas
+    saveInfiniteStats(newStreak, newBestRecord, newUsedSongs);
+
+    // Reseta o estado do jogo para a próxima música
+    setAttempts(0);
+    setHistory([]);
+    setMessage('');
+    setGameOver(false);
+    setShowHint(false);
+    setActiveHint(0);
+    setGuess('');
+    setShowSuggestions(false);
+    setShowNextSongButton(false);
+
+    // Carrega a próxima música
+    const nextSong = getRandomInfiniteSong(newUsedSongs);
+    if (nextSong) {
+      setCurrentSong(nextSong);
+      // O tempo de início será configurado pelo handleLoadedMetadata normal
+    } else {
+      // Todas as músicas foram completadas
+      setMessage(t('all_songs_completed'));
+      setInfiniteGameOver(true);
+    }
+  };
+
+  const endInfiniteMode = () => {
+    setInfiniteGameOver(true);
+    setGameOver(true);
+
+    // Salva o recorde final
+    let finalBestRecord = infiniteBestRecord;
+    if (infiniteStreak > infiniteBestRecord) {
+      finalBestRecord = infiniteStreak;
+      setInfiniteBestRecord(finalBestRecord);
+    }
+
+    // Reseta a sequência atual mas mantém as músicas usadas
+    saveInfiniteStats(0, finalBestRecord, infiniteUsedSongs);
+
+    // Mostra estatísticas após um delay
+    setTimeout(() => setShowStatistics(true), 800);
+  };
+
+  const resetInfiniteMode = () => {
+    setInfiniteStreak(0);
+    setInfiniteUsedSongs([]);
+    saveInfiniteStats(0, infiniteBestRecord, []);
+    startInfiniteMode();
+  };
+
+  const switchToDailyMode = () => {
+    // Para o áudio atual
+    resetAudioState();
+
+    // Reseta todos os estados do modo infinito
+    setIsInfiniteMode(false);
+    setInfiniteGameOver(false);
+    setShowNextSongButton(false);
+    setInfiniteStreak(0);
+    setInfiniteUsedSongs([]);
+
+    // Reseta o estado do jogo
+    setAttempts(0);
+    setHistory([]);
+    setMessage('');
+    setGameOver(false);
+    setShowHint(false);
+    setActiveHint(0);
+    setGuess('');
+    setShowSuggestions(false);
+    setShowStatistics(false);
+    setGameResult(null);
+
+    // Carrega a música do dia
+    const today = getDayOfYear();
+    const dailySong = getDeterministicSong(today);
+    setCurrentSong(dailySong);
+  };
+
+
+
+  // Carregar estatísticas do modo infinito ao montar
+  useEffect(() => {
+    loadInfiniteStats();
+  }, []);
 
   // Carregar música do minuto ao montar
   useEffect(() => {
@@ -110,14 +306,14 @@ export default function Home() {
 
 
       // Opcional: ainda salvar no localStorage para debug/cache
-      const savedSongKey = `bandle_daily_song_day_${dayOfYear}`;
+      const savedSongKey = `ludomusic_daily_song_day_${dayOfYear}`;
       localStorage.setItem(savedSongKey, song.id.toString());
 
       // Limpa músicas de dias anteriores (mantém apenas os últimos 3 dias)
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
-        if (key && key.startsWith('bandle_daily_song_day_')) {
-          const dayFromKey = parseInt(key.replace('bandle_daily_song_day_', ''));
+        if (key && key.startsWith('ludomusic_daily_song_day_')) {
+          const dayFromKey = parseInt(key.replace('ludomusic_daily_song_day_', ''));
           if (dayFromKey < dayOfYear - 2) {
             localStorage.removeItem(key);
           }
@@ -157,24 +353,31 @@ export default function Home() {
   const handleLoadedMetadata = () => {
 
 
-    if (audioRef.current && currentDay !== null) {
+    if (audioRef.current) {
       const duration = audioRef.current.duration || 0;
       setAudioDuration(duration);
 
-
-
-      // Verifica se já existe um tempo de início salvo para o dia atual
-      const savedStartTimeKey = `bandle_start_time_day_${currentDay}`;
       let startTimeToUse;
 
-      const savedStartTime = localStorage.getItem(savedStartTimeKey);
-      if (savedStartTime) {
-        // Usa o tempo salvo se existir
-        startTimeToUse = parseFloat(savedStartTime);
+      if (isInfiniteMode) {
+        // No modo infinito, gera um tempo aleatório
+        startTimeToUse = Math.random() * Math.max(0, duration - 10);
+      } else if (currentDay !== null) {
+        // No modo normal, usa o sistema determinístico baseado no dia
+        const savedStartTimeKey = `ludomusic_start_time_day_${currentDay}`;
+        const savedStartTime = localStorage.getItem(savedStartTimeKey);
+
+        if (savedStartTime) {
+          // Usa o tempo salvo se existir
+          startTimeToUse = parseFloat(savedStartTime);
+        } else {
+          // Gera um novo tempo determinístico baseado no dia e salva no localStorage
+          startTimeToUse = getDeterministicStartTime(duration, currentDay);
+          localStorage.setItem(savedStartTimeKey, startTimeToUse.toString());
+        }
       } else {
-        // Gera um novo tempo determinístico baseado no dia e salva no localStorage
-        startTimeToUse = getDeterministicStartTime(duration, currentDay);
-        localStorage.setItem(savedStartTimeKey, startTimeToUse.toString());
+        // Fallback para tempo aleatório
+        startTimeToUse = Math.random() * Math.max(0, duration - 10);
       }
 
       setStartTime(startTimeToUse);
@@ -355,20 +558,34 @@ export default function Home() {
     setShowSuggestions(false);
     setGuess('');
     let result = null;
+
     if (selectedGuess.toLowerCase() === currentSong.title.toLowerCase()) {
       setMessage(t('congratulations'));
-      setGameOver(true);
       result = { type: 'success', value: selectedGuess };
-      // Mostrar estatísticas após vitória
-      setGameResult({ won: true, attempts: newAttempts });
-      setTimeout(() => setShowStatistics(true), 800);
+
+      if (isInfiniteMode) {
+        // No modo infinito, mostra botão para próxima música
+        setGameOver(true);
+        setShowNextSongButton(true);
+      } else {
+        // No modo normal, termina o jogo
+        setGameOver(true);
+        setGameResult({ won: true, attempts: newAttempts });
+        setTimeout(() => setShowStatistics(true), 800);
+      }
     } else if (newAttempts >= MAX_ATTEMPTS) {
       setMessage(`${t('game_over')} ${currentSong.game} - ${currentSong.title}`);
-      setGameOver(true);
       result = { type: 'fail', value: selectedGuess };
-      // Mostrar estatísticas após derrota
-      setGameResult({ won: false, attempts: newAttempts });
-      setTimeout(() => setShowStatistics(true), 800);
+
+      if (isInfiniteMode) {
+        // No modo infinito, termina a sequência
+        endInfiniteMode();
+      } else {
+        // No modo normal, termina o jogo
+        setGameOver(true);
+        setGameResult({ won: false, attempts: newAttempts });
+        setTimeout(() => setShowStatistics(true), 800);
+      }
     } else {
       setMessage(t('try_again'));
       setShowHint(true);
@@ -385,12 +602,19 @@ export default function Home() {
     setShowHint(true);
     setHistory(prev => [...prev, { type: 'skipped' }]);
     setMessage(t('skipped'));
+
     if (newAttempts >= MAX_ATTEMPTS) {
       setMessage(`${t('game_over')} ${currentSong.game} - ${currentSong.title}`);
-      setGameOver(true);
-      // Mostrar estatísticas após derrota por skip
-      setGameResult({ won: false, attempts: newAttempts });
-      setTimeout(() => setShowStatistics(true), 800);
+
+      if (isInfiniteMode) {
+        // No modo infinito, termina a sequência
+        endInfiniteMode();
+      } else {
+        // No modo normal, termina o jogo
+        setGameOver(true);
+        setGameResult({ won: false, attempts: newAttempts });
+        setTimeout(() => setShowStatistics(true), 800);
+      }
     }
   };
 
@@ -530,11 +754,22 @@ export default function Home() {
     if (currentSong?.audioUrl) {
       // Reseta o estado de erro quando uma nova música é carregada
       setAudioError(false);
-      if (message === 'Erro ao carregar o áudio. Verifique se o arquivo existe.') {
+      if (message === 'Erro ao carregar o áudio. Verifique se o arquivo existe.' ||
+          message === 'Erro ao carregar o áudio. Tentando novamente...' ||
+          message === 'Erro ao reproduzir o áudio. Tentando novamente...') {
         setMessage('');
       }
+
+      // No modo infinito, força o recarregamento do áudio com um pequeno delay
+      if (isInfiniteMode && audioRef.current) {
+        setTimeout(() => {
+          if (audioRef.current) {
+            audioRef.current.load();
+          }
+        }, 100);
+      }
     }
-  }, [currentSong?.audioUrl, message]);
+  }, [currentSong?.audioUrl, isInfiniteMode]);
 
   // Listener para código secreto
   useEffect(() => {
@@ -589,13 +824,13 @@ export default function Home() {
       };
 
 
-      localStorage.setItem(`bandle_game_state_day_${currentDay}`, JSON.stringify(stateToSave));
+      localStorage.setItem(`ludomusic_game_state_day_${currentDay}`, JSON.stringify(stateToSave));
 
       // Manter compatibilidade com o sistema antigo para jogos terminados
       if (gameState.gameOver) {
-        localStorage.setItem('bandle_gameover_day', currentDay);
-        localStorage.setItem('bandle_gameover_history', JSON.stringify(gameState.history));
-        localStorage.setItem('bandle_gameover_message', gameState.message);
+        localStorage.setItem('ludomusic_gameover_day', currentDay);
+        localStorage.setItem('ludomusic_gameover_history', JSON.stringify(gameState.history));
+        localStorage.setItem('ludomusic_gameover_message', gameState.message);
       }
     }
   };
@@ -627,25 +862,27 @@ export default function Home() {
     try {
       // Mantém apenas os dados do dia atual e dos 2 dias anteriores
       const keysToKeep = [
-        `bandle_start_time_day_${currentDay}`,
-        `bandle_start_time_day_${currentDay - 1}`,
-        `bandle_start_time_day_${currentDay - 2}`,
-        `bandle_game_state_day_${currentDay}`,
-        `bandle_game_state_day_${currentDay - 1}`,
-        `bandle_game_state_day_${currentDay - 2}`,
-        `bandle_daily_song_day_${currentDay}`,
-        `bandle_daily_song_day_${currentDay - 1}`,
-        `bandle_daily_song_day_${currentDay - 2}`,
-        'bandle_gameover_day',
-        'bandle_gameover_history',
-        'bandle_gameover_message',
-        'bandle_settings'
+        `ludomusic_start_time_day_${currentDay}`,
+        `ludomusic_start_time_day_${currentDay - 1}`,
+        `ludomusic_start_time_day_${currentDay - 2}`,
+        `ludomusic_game_state_day_${currentDay}`,
+        `ludomusic_game_state_day_${currentDay - 1}`,
+        `ludomusic_game_state_day_${currentDay - 2}`,
+        `ludomusic_daily_song_day_${currentDay}`,
+        `ludomusic_daily_song_day_${currentDay - 1}`,
+        `ludomusic_daily_song_day_${currentDay - 2}`,
+        'ludomusic_gameover_day',
+        'ludomusic_gameover_history',
+        'ludomusic_gameover_message',
+        'ludomusic_settings',
+        'ludomusic_statistics',
+        'ludomusic_infinite_stats'
       ];
 
-      // Procura por chaves antigas relacionadas ao bandle
+      // Procura por chaves antigas relacionadas ao ludomusic
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
-        if (key && key.startsWith('bandle_') && !keysToKeep.includes(key)) {
+        if (key && key.startsWith('ludomusic_') && !keysToKeep.includes(key)) {
           localStorage.removeItem(key);
         }
       }
@@ -665,7 +902,7 @@ export default function Home() {
         if (typeof window === 'undefined') return false; // Verificação SSR
 
         try {
-          const savedState = localStorage.getItem(`bandle_game_state_day_${currentDay}`);
+          const savedState = localStorage.getItem(`ludomusic_game_state_day_${currentDay}`);
 
           if (savedState) {
             const parsedState = JSON.parse(savedState);
@@ -692,12 +929,12 @@ export default function Home() {
 
       // Se não conseguiu carregar o estado completo, verifica o sistema antigo (compatibilidade)
       if (!stateLoaded) {
-        const savedDay = localStorage.getItem('bandle_gameover_day');
+        const savedDay = localStorage.getItem('ludomusic_gameover_day');
         if (savedDay && Number(savedDay) === currentDay) {
           setGameOver(true);
-          const savedHistory = localStorage.getItem('bandle_gameover_history');
+          const savedHistory = localStorage.getItem('ludomusic_gameover_history');
           if (savedHistory) setHistory(JSON.parse(savedHistory));
-          const savedMessage = localStorage.getItem('bandle_gameover_message');
+          const savedMessage = localStorage.getItem('ludomusic_gameover_message');
           if (savedMessage) setMessage(savedMessage);
         }
       }
@@ -792,14 +1029,14 @@ export default function Home() {
     };
 
     // Adicionar listener para o evento personalizado
-    document.addEventListener('bandleSettingsChanged', handleSettingsChanged);
+    document.addEventListener('ludomusicSettingsChanged', handleSettingsChanged);
 
     // Adicionar listener para mudanças no localStorage
     window.addEventListener('storage', applySettings);
 
     // Limpar listeners ao desmontar
     return () => {
-      document.removeEventListener('bandleSettingsChanged', handleSettingsChanged);
+      document.removeEventListener('ludomusicSettingsChanged', handleSettingsChanged);
       window.removeEventListener('storage', applySettings);
     };
   }, []);
@@ -846,6 +1083,56 @@ export default function Home() {
               <FaQuestionCircle size={24} />
             </button>
           </div>
+
+          {/* Seletor de modo */}
+          <div className={styles.modeSelector}>
+            <button
+              className={`${styles.modeButton} ${!isInfiniteMode ? styles.modeActive : ''}`}
+              onClick={() => {
+                if (isInfiniteMode) {
+                  switchToDailyMode();
+                }
+              }}
+              disabled={!isInfiniteMode}
+            >
+              {isClient ? t('daily_mode') : 'Modo Diário'}
+            </button>
+            <button
+              className={`${styles.modeButton} ${isInfiniteMode ? styles.modeActive : ''}`}
+              onClick={() => {
+                if (!isInfiniteMode) {
+                  startInfiniteMode();
+                }
+              }}
+              disabled={isInfiniteMode}
+            >
+              {isClient ? t('infinite_mode') : 'Modo Infinito'}
+            </button>
+          </div>
+
+          {/* Estatísticas do modo infinito */}
+          {isInfiniteMode && (
+            <div className={styles.infiniteStats}>
+              <div className={styles.infiniteStat}>
+                <span className={styles.infiniteStatLabel}>
+                  {isClient ? t('current_streak') : 'Sequência Atual'}:
+                </span>
+                <span className={styles.infiniteStatValue}>{infiniteStreak}</span>
+              </div>
+              <div className={styles.infiniteStat}>
+                <span className={styles.infiniteStatLabel}>
+                  {isClient ? t('best_record') : 'Melhor Recorde'}:
+                </span>
+                <span className={styles.infiniteStatValue}>{infiniteBestRecord}</span>
+              </div>
+              <div className={styles.infiniteStat}>
+                <span className={styles.infiniteStatLabel}>
+                  {isClient ? t('songs_completed') : 'Músicas Completadas'}:
+                </span>
+                <span className={styles.infiniteStatValue}>{infiniteUsedSongs.length}/{songs.length}</span>
+              </div>
+            </div>
+          )}
           {getProgressiveHint(currentSong, activeHint) && !gameOver && (
             <div className={styles.hintBoxModern} style={{ marginTop: 12, marginBottom: 0, maxWidth: 420, textAlign: 'center' }}>
               <strong>Dica:</strong> {getProgressiveHint(currentSong, activeHint)}
@@ -1118,9 +1405,48 @@ export default function Home() {
               {message}
             </div>
           )}
-          <div className={styles.timerBox}>
-            Novo jogo em: <span className={styles.timer}>{formatTimer(timer)}</span>
-          </div>
+
+          {/* Botão Próxima Música no modo infinito */}
+          {isInfiniteMode && showNextSongButton && (
+            <div className={styles.nextSongContainer}>
+              <button
+                className={styles.nextSongButton}
+                onClick={nextInfiniteSong}
+              >
+                {isClient ? t('next_song') : 'Próxima Música'}
+                <FaFastForward style={{ marginLeft: 8, fontSize: '1em' }} />
+              </button>
+            </div>
+          )}
+
+          {!isInfiniteMode && (
+            <div className={styles.timerBox}>
+              Novo jogo em: <span className={styles.timer}>{formatTimer(timer)}</span>
+            </div>
+          )}
+
+          {isInfiniteMode && infiniteGameOver && (
+            <div className={styles.infiniteGameOverBox}>
+              <h3>{isClient ? t('infinite_game_over') : 'Fim da Sequência!'}</h3>
+              {infiniteStreak > infiniteBestRecord && (
+                <p className={styles.newRecord}>
+                  {isClient ? t('new_record') : 'Novo Recorde!'}
+                </p>
+              )}
+              <p>
+                {isClient
+                  ? t('streak_of').replace('{count}', infiniteStreak)
+                  : `Sequência de ${infiniteStreak} músicas`
+                }
+              </p>
+              <button
+                className={styles.playAgainButton}
+                onClick={resetInfiniteMode}
+              >
+                {isClient ? t('play_again_infinite') : 'Jogar Novamente'}
+              </button>
+            </div>
+          )}
         </div>
 
 
@@ -1146,6 +1472,7 @@ export default function Home() {
           isOpen={showStatistics}
           onClose={() => setShowStatistics(false)}
           gameResult={gameResult}
+          isInfiniteMode={isInfiniteMode}
         />
         </div>
         <Footer />

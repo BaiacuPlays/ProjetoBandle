@@ -46,7 +46,7 @@ const GameMenu = ({ isOpen, onClose }) => {
 
   // Carregar configurações do localStorage ao iniciar
   useEffect(() => {
-    const savedSettings = localStorage.getItem('bandle_settings');
+    const savedSettings = localStorage.getItem('ludomusic_settings');
     if (savedSettings) {
       try {
         const parsedSettings = JSON.parse(savedSettings);
@@ -74,7 +74,7 @@ const GameMenu = ({ isOpen, onClose }) => {
     setSettings(newSettings);
 
     // Salvar no localStorage
-    localStorage.setItem('bandle_settings', JSON.stringify(newSettings));
+    localStorage.setItem('ludomusic_settings', JSON.stringify(newSettings));
 
     // Aplicar as configurações imediatamente
     applySettings(newSettings);
@@ -88,10 +88,10 @@ const GameMenu = ({ isOpen, onClose }) => {
     };
 
     // Salvar no localStorage antes de qualquer outra operação
-    localStorage.setItem('bandle_settings', JSON.stringify(newSettings));
+    localStorage.setItem('ludomusic_settings', JSON.stringify(newSettings));
 
     // Definir um cookie para persistir o idioma entre recarregamentos
-    document.cookie = `bandle_language=${newLanguage}; path=/; max-age=31536000`; // 1 ano
+    document.cookie = `ludomusic_language=${newLanguage}; path=/; max-age=31536000`; // 1 ano
 
     setSettings(newSettings);
 
@@ -136,7 +136,7 @@ const GameMenu = ({ isOpen, onClose }) => {
     }
 
     // Disparar um evento personalizado para notificar a aplicação sobre a mudança
-    const event = new CustomEvent('bandleSettingsChanged', {
+    const event = new CustomEvent('ludomusicSettingsChanged', {
       detail: settingsToApply
     });
     document.dispatchEvent(event);
@@ -149,7 +149,7 @@ const GameMenu = ({ isOpen, onClose }) => {
 
     // Função para lidar com mudanças de configuração de outros componentes
     const handleExternalSettingsChange = () => {
-      const savedSettings = localStorage.getItem('bandle_settings');
+      const savedSettings = localStorage.getItem('ludomusic_settings');
       if (savedSettings) {
         try {
           const parsedSettings = JSON.parse(savedSettings);

@@ -97,6 +97,20 @@ export const translations = {
     'won_in_attempts': 'Acertou em',
     'lost_game': 'Não conseguiu acertar',
     'continue': 'Continuar',
+
+    // Modo Infinito
+    'infinite_mode': 'Modo Infinito',
+    'daily_mode': 'Modo Diário',
+    'current_streak': 'Sequência Atual',
+    'best_record': 'Melhor Recorde',
+    'songs_completed': 'Músicas Completadas',
+    'infinite_game_over': 'Fim da Sequência!',
+    'new_record': 'Novo Recorde!',
+    'streak_of': 'Sequência de {count} músicas',
+    'play_again_infinite': 'Jogar Novamente',
+    'next_song': 'Próxima Música',
+    'all_songs_completed': 'Parabéns! Você completou todas as músicas disponíveis!',
+    'infinite_statistics': 'Estatísticas do Modo Infinito',
   },
   'en-US': {
     // General texts
@@ -194,6 +208,20 @@ export const translations = {
     'won_in_attempts': 'Won in',
     'lost_game': 'Could not guess',
     'continue': 'Continue',
+
+    // Infinite Mode
+    'infinite_mode': 'Infinite Mode',
+    'daily_mode': 'Daily Mode',
+    'current_streak': 'Current Streak',
+    'best_record': 'Best Record',
+    'songs_completed': 'Songs Completed',
+    'infinite_game_over': 'Streak Ended!',
+    'new_record': 'New Record!',
+    'streak_of': 'Streak of {count} songs',
+    'play_again_infinite': 'Play Again',
+    'next_song': 'Next Song',
+    'all_songs_completed': 'Congratulations! You completed all available songs!',
+    'infinite_statistics': 'Infinite Mode Statistics',
   },
   'es': {
     // Textos generales
@@ -291,6 +319,20 @@ export const translations = {
     'won_in_attempts': 'Ganó en',
     'lost_game': 'No pudo adivinar',
     'continue': 'Continuar',
+
+    // Modo Infinito
+    'infinite_mode': 'Modo Infinito',
+    'daily_mode': 'Modo Diario',
+    'current_streak': 'Racha Actual',
+    'best_record': 'Mejor Récord',
+    'songs_completed': 'Canciones Completadas',
+    'infinite_game_over': '¡Fin de la Racha!',
+    'new_record': '¡Nuevo Récord!',
+    'streak_of': 'Racha de {count} canciones',
+    'play_again_infinite': 'Jugar de Nuevo',
+    'next_song': 'Siguiente Canción',
+    'all_songs_completed': '¡Felicidades! ¡Completaste todas las canciones disponibles!',
+    'infinite_statistics': 'Estadísticas del Modo Infinito',
   }
 };
 

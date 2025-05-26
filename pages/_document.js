@@ -29,7 +29,7 @@ class MyDocument extends Document {
             __html: `
               try {
                 // Verificar primeiro o localStorage
-                const savedSettings = localStorage.getItem('bandle_settings');
+                const savedSettings = localStorage.getItem('ludomusic_settings');
                 let language = null;
 
                 if (savedSettings) {
@@ -48,8 +48,8 @@ class MyDocument extends Document {
                   const cookies = document.cookie.split(';');
                   for (let i = 0; i < cookies.length; i++) {
                     const cookie = cookies[i].trim();
-                    if (cookie.startsWith('bandle_language=')) {
-                      language = cookie.substring('bandle_language='.length);
+                    if (cookie.startsWith('ludomusic_language=')) {
+                      language = cookie.substring('ludomusic_language='.length);
                       break;
                     }
                   }
@@ -83,11 +83,11 @@ class MyDocument extends Document {
                       animations: true,
                       language: language
                     };
-                    localStorage.setItem('bandle_settings', JSON.stringify(defaultSettings));
+                    localStorage.setItem('ludomusic_settings', JSON.stringify(defaultSettings));
                   } else if (currentSettings && currentSettings.language !== language) {
                     // Atualizar idioma se diferente
                     currentSettings.language = language;
-                    localStorage.setItem('bandle_settings', JSON.stringify(currentSettings));
+                    localStorage.setItem('ludomusic_settings', JSON.stringify(currentSettings));
                   }
                 }
               } catch (e) {

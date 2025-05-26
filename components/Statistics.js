@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import styles from '../styles/Statistics.module.css';
 
-const Statistics = ({ isOpen, onClose, gameResult = null }) => {
+const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false }) => {
   const { t, isClient } = useLanguage();
   const [stats, setStats] = useState({
     totalGames: 0,
@@ -13,24 +13,35 @@ const Statistics = ({ isOpen, onClose, gameResult = null }) => {
     averageAttempts: 0
   });
 
+  const [infiniteStats, setInfiniteStats] = useState({
+    bestRecord: 0,
+    currentStreak: 0,
+    totalSongsCompleted: 0,
+    totalGamesPlayed: 0
+  });
+
   // Carregar estatísticas do localStorage
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      loadStatistics();
+      if (isInfiniteMode) {
+        loadInfiniteStatistics();
+      } else {
+        loadStatistics();
+      }
     }
-  }, [isOpen]);
+  }, [isOpen, isInfiniteMode]);
 
   // Salvar resultado do jogo atual quando o modal abrir
   useEffect(() => {
-    if (isOpen && gameResult) {
+    if (isOpen && gameResult && !isInfiniteMode) {
       saveGameResult(gameResult);
       loadStatistics(); // Recarregar após salvar
     }
-  }, [isOpen, gameResult]);
+  }, [isOpen, gameResult, isInfiniteMode]);
 
   const loadStatistics = () => {
     try {
-      const savedStats = localStorage.getItem('bandle_statistics');
+      const savedStats = localStorage.getItem('ludomusic_statistics');
       if (savedStats) {
         const parsedStats = JSON.parse(savedStats);
         setStats(parsedStats);
@@ -40,9 +51,26 @@ const Statistics = ({ isOpen, onClose, gameResult = null }) => {
     }
   };
 
+  const loadInfiniteStatistics = () => {
+    try {
+      const savedStats = localStorage.getItem('ludomusic_infinite_stats');
+      if (savedStats) {
+        const parsedStats = JSON.parse(savedStats);
+        setInfiniteStats({
+          bestRecord: parsedStats.bestRecord || 0,
+          currentStreak: parsedStats.currentStreak || 0,
+          totalSongsCompleted: parsedStats.usedSongs ? parsedStats.usedSongs.length : 0,
+          totalGamesPlayed: parsedStats.totalGamesPlayed || 0
+        });
+      }
+    } catch (error) {
+      console.error('Erro ao carregar estatísticas do modo infinito:', error);
+    }
+  };
+
   const saveGameResult = (result) => {
     try {
-      const savedStats = localStorage.getItem('bandle_statistics');
+      const savedStats = localStorage.getItem('ludomusic_statistics');
       let currentStats = {
         totalGames: 0,
         wins: 0,
@@ -69,8 +97,8 @@ const Statistics = ({ isOpen, onClose, gameResult = null }) => {
       }
 
       // Calcular percentuais
-      currentStats.winPercentage = currentStats.totalGames > 0 
-        ? Math.round((currentStats.wins / currentStats.totalGames) * 100) 
+      currentStats.winPercentage = currentStats.totalGames > 0
+        ? Math.round((currentStats.wins / currentStats.totalGames) * 100)
         : 0;
 
       // Calcular média de tentativas (apenas para vitórias)
@@ -82,7 +110,7 @@ const Statistics = ({ isOpen, onClose, gameResult = null }) => {
         currentStats.averageAttempts = Math.round((totalAttempts / currentStats.wins) * 10) / 10;
       }
 
-      localStorage.setItem('bandle_statistics', JSON.stringify(currentStats));
+      localStorage.setItem('ludomusic_statistics', JSON.stringify(currentStats));
     } catch (error) {
       console.error('Erro ao salvar resultado:', error);
     }
@@ -104,80 +132,111 @@ const Statistics = ({ isOpen, onClose, gameResult = null }) => {
     <div className={styles.overlay}>
       <div className={styles.modal}>
         <div className={styles.header}>
-          <h2>{isClient ? t('statistics') : 'Estatísticas'}</h2>
+          <h2>
+            {isInfiniteMode
+              ? (isClient ? t('infinite_statistics') : 'Estatísticas do Modo Infinito')
+              : (isClient ? t('statistics') : 'Estatísticas')
+            }
+          </h2>
           <button className={styles.closeButton} onClick={onClose}>
             ✕
           </button>
         </div>
 
         <div className={styles.content}>
-          {/* Estatísticas gerais */}
-          <div className={styles.generalStats}>
-            <div className={styles.statItem}>
-              <div className={styles.statNumber}>{stats.totalGames}</div>
-              <div className={styles.statLabel}>
-                {isClient ? t('total_games') : 'Partidas Jogadas'}
+          {isInfiniteMode ? (
+            /* Estatísticas do modo infinito */
+            <div className={styles.generalStats}>
+              <div className={styles.statItem}>
+                <div className={styles.statNumber}>{infiniteStats.bestRecord}</div>
+                <div className={styles.statLabel}>
+                  {isClient ? t('best_record') : 'Melhor Recorde'}
+                </div>
+              </div>
+              <div className={styles.statItem}>
+                <div className={styles.statNumber}>{infiniteStats.currentStreak}</div>
+                <div className={styles.statLabel}>
+                  {isClient ? t('current_streak') : 'Sequência Atual'}
+                </div>
+              </div>
+              <div className={styles.statItem}>
+                <div className={styles.statNumber}>{infiniteStats.totalSongsCompleted}</div>
+                <div className={styles.statLabel}>
+                  {isClient ? t('songs_completed') : 'Músicas Completadas'}
+                </div>
               </div>
             </div>
-            <div className={styles.statItem}>
-              <div className={styles.statNumber}>{stats.winPercentage}%</div>
-              <div className={styles.statLabel}>
-                {isClient ? t('win_percentage') : 'Taxa de Vitória'}
+          ) : (
+            /* Estatísticas do modo normal */
+            <div className={styles.generalStats}>
+              <div className={styles.statItem}>
+                <div className={styles.statNumber}>{stats.totalGames}</div>
+                <div className={styles.statLabel}>
+                  {isClient ? t('total_games') : 'Partidas Jogadas'}
+                </div>
+              </div>
+              <div className={styles.statItem}>
+                <div className={styles.statNumber}>{stats.winPercentage}%</div>
+                <div className={styles.statLabel}>
+                  {isClient ? t('win_percentage') : 'Taxa de Vitória'}
+                </div>
+              </div>
+              <div className={styles.statItem}>
+                <div className={styles.statNumber}>{stats.averageAttempts}</div>
+                <div className={styles.statLabel}>
+                  {isClient ? t('average_attempts') : 'Média de Tentativas'}
+                </div>
               </div>
             </div>
-            <div className={styles.statItem}>
-              <div className={styles.statNumber}>{stats.averageAttempts}</div>
-              <div className={styles.statLabel}>
-                {isClient ? t('average_attempts') : 'Média de Tentativas'}
-              </div>
-            </div>
-          </div>
+          )}
 
-          {/* Distribuição de tentativas */}
-          <div className={styles.distributionSection}>
-            <h3>{isClient ? t('attempt_distribution') : 'Distribuição de Acertos'}</h3>
-            <div className={styles.distributionChart}>
-              {[1, 2, 3, 4, 5, 6].map((attempt, index) => {
-                const percentage = getAttemptPercentage(index);
-                const count = stats.attemptDistribution[index];
-                return (
-                  <div key={attempt} className={styles.chartRow}>
-                    <div className={styles.attemptNumber}>{attempt}</div>
-                    <div className={styles.progressBar}>
-                      <div 
-                        className={styles.progressFill}
-                        style={{ width: `${percentage}%` }}
-                      ></div>
+          {/* Distribuição de tentativas - apenas no modo normal */}
+          {!isInfiniteMode && (
+            <div className={styles.distributionSection}>
+              <h3>{isClient ? t('attempt_distribution') : 'Distribuição de Acertos'}</h3>
+              <div className={styles.distributionChart}>
+                {[1, 2, 3, 4, 5, 6].map((attempt, index) => {
+                  const percentage = getAttemptPercentage(index);
+                  const count = stats.attemptDistribution[index];
+                  return (
+                    <div key={attempt} className={styles.chartRow}>
+                      <div className={styles.attemptNumber}>{attempt}</div>
+                      <div className={styles.progressBar}>
+                        <div
+                          className={styles.progressFill}
+                          style={{ width: `${percentage}%` }}
+                        ></div>
+                      </div>
+                      <div className={styles.percentageText}>
+                        {percentage}% ({count})
+                      </div>
                     </div>
-                    <div className={styles.percentageText}>
-                      {percentage}% ({count})
-                    </div>
+                  );
+                })}
+
+                {/* Linha para derrotas */}
+                <div className={styles.chartRow}>
+                  <div className={styles.attemptNumber}>❌</div>
+                  <div className={styles.progressBar}>
+                    <div
+                      className={`${styles.progressFill} ${styles.lossBar}`}
+                      style={{ width: `${getLossPercentage()}%` }}
+                    ></div>
                   </div>
-                );
-              })}
-              
-              {/* Linha para derrotas */}
-              <div className={styles.chartRow}>
-                <div className={styles.attemptNumber}>❌</div>
-                <div className={styles.progressBar}>
-                  <div 
-                    className={`${styles.progressFill} ${styles.lossBar}`}
-                    style={{ width: `${getLossPercentage()}%` }}
-                  ></div>
-                </div>
-                <div className={styles.percentageText}>
-                  {getLossPercentage()}% ({stats.losses})
+                  <div className={styles.percentageText}>
+                    {getLossPercentage()}% ({stats.losses})
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
 
-          {/* Resultado atual */}
-          {gameResult && (
+          {/* Resultado atual - apenas no modo normal */}
+          {!isInfiniteMode && gameResult && (
             <div className={styles.currentResult}>
               <h4>{isClient ? t('current_game') : 'Partida Atual'}</h4>
               <div className={styles.resultText}>
-                {gameResult.won 
+                {gameResult.won
                   ? `${isClient ? t('won_in_attempts') : 'Acertou em'} ${gameResult.attempts} ${gameResult.attempts === 1 ? 'tentativa' : 'tentativas'}!`
                   : `${isClient ? t('lost_game') : 'Não conseguiu acertar'} 😔`
                 }

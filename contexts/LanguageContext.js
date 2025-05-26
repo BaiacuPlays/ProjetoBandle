@@ -19,7 +19,7 @@ export function LanguageProvider({ children }) {
     }
 
     try {
-      const savedSettings = localStorage.getItem('bandle_settings');
+      const savedSettings = localStorage.getItem('ludomusic_settings');
       if (savedSettings) {
         const parsedSettings = JSON.parse(savedSettings);
         if (parsedSettings.language) {
@@ -47,11 +47,11 @@ export function LanguageProvider({ children }) {
     };
 
     // Adicionar listener para o evento personalizado
-    document.addEventListener('bandleSettingsChanged', handleSettingsChanged);
+    document.addEventListener('ludomusicSettingsChanged', handleSettingsChanged);
 
     // Limpar listener ao desmontar
     return () => {
-      document.removeEventListener('bandleSettingsChanged', handleSettingsChanged);
+      document.removeEventListener('ludomusicSettingsChanged', handleSettingsChanged);
     };
   }, []);
 
@@ -83,7 +83,7 @@ export function LanguageProvider({ children }) {
     document.documentElement.lang = newLanguage;
 
     // Atualizar localStorage
-    const savedSettings = localStorage.getItem('bandle_settings');
+    const savedSettings = localStorage.getItem('ludomusic_settings');
     try {
       let newSettings;
       if (savedSettings) {
@@ -103,10 +103,10 @@ export function LanguageProvider({ children }) {
       }
 
       // Salvar no localStorage
-      localStorage.setItem('bandle_settings', JSON.stringify(newSettings));
+      localStorage.setItem('ludomusic_settings', JSON.stringify(newSettings));
 
       // Disparar evento de mudança de configurações
-      const event = new CustomEvent('bandleSettingsChanged', {
+      const event = new CustomEvent('ludomusicSettingsChanged', {
         detail: newSettings
       });
       document.dispatchEvent(event);

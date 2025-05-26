@@ -27,7 +27,7 @@ O sistema de estatísticas foi implementado para mostrar dados detalhados sobre 
 
 ### 💾 Armazenamento de Dados
 
-Os dados são armazenados localmente no navegador usando `localStorage` com a chave `bandle_statistics`:
+Os dados são armazenados localmente no navegador usando `localStorage` com a chave `ludomusic_statistics`:
 
 ```json
 {
@@ -102,7 +102,7 @@ Suporte completo para:
 ### Para Desenvolvedores
 1. Em modo de desenvolvimento, use o botão "Testar Estatísticas" no canto inferior direito
 2. As estatísticas são salvas automaticamente no localStorage
-3. Para limpar os dados: `localStorage.removeItem('bandle_statistics')`
+3. Para limpar os dados: `localStorage.removeItem('ludomusic_statistics')`
 
 ## Personalização
 
