@@ -279,15 +279,12 @@ body.purple .wave {
 @keyframes waveMove {
   0% {
     transform: translateX(-50%) scale(1);
-    --wave-debug: 'Wave animation at 0%';
   }
   50% {
     transform: translateX(0%) scale(1.1);
-    --wave-debug: 'Wave animation at 50%';
   }
   100% {
     transform: translateX(-50%) scale(1);
-    --wave-debug: 'Wave animation at 100%';
   }
 }
 

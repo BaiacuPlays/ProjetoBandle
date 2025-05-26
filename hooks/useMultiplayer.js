@@ -38,7 +38,6 @@ export const useMultiplayer = () => {
     const interval = setInterval(pollLobby, 2000);
 
     return () => {
-      console.log('🔄 HOOK - Parando polling');
       clearInterval(interval);
     };
   }, [roomCode, isConnected]);

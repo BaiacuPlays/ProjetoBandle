@@ -8,11 +8,10 @@ export const createRoom = async (nickname) => {
       method: 'POST',
       body: JSON.stringify({ nickname })
     });
-    
+
     const data = await response.json();
     return { success: true, roomCode: data.roomCode };
   } catch (error) {
-    console.error('Erro ao criar sala:', error);
     return { success: false, error: error.message };
   }
 };
@@ -23,16 +22,15 @@ export const joinRoom = async (nickname, roomCode) => {
       method: 'PUT',
       body: JSON.stringify({ nickname, roomCode })
     });
-    
+
     const data = await response.json();
-    
+
     if (response.ok) {
       return { success: true };
     } else {
       return { success: false, error: data.error };
     }
   } catch (error) {
-    console.error('Erro ao entrar na sala:', error);
     return { success: false, error: 'Erro de conexão' };
   }
 };
@@ -46,11 +44,10 @@ export const getLobbyData = async (roomCode) => {
         'Pragma': 'no-cache'
       }
     });
-    
+
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Erro ao buscar dados da sala:', error);
     // Retorna dados vazios em caso de erro
     return {
       players: [],
@@ -82,20 +79,19 @@ export const performLobbyAction = async (roomCode, action, nickname, guess = nul
       action,
       nickname
     };
-    
+
     if (guess) {
       body.guess = guess;
     }
-    
+
     const response = await apiRequest('/api/lobby', {
       method: 'PATCH',
       body: JSON.stringify(body)
     });
-    
+
     const data = await response.json();
     return { success: response.ok, data, error: data.error };
   } catch (error) {
-    console.error('Erro ao executar ação na sala:', error);
     return { success: false, error: 'Erro de conexão' };
   }
 };

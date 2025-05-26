@@ -50,7 +50,6 @@ const GameMenu = ({ isOpen, onClose }) => {
     if (savedSettings) {
       try {
         const parsedSettings = JSON.parse(savedSettings);
-        console.log('Configurações carregadas no GameMenu:', parsedSettings);
         setSettings(prev => ({
           ...prev,
           ...parsedSettings
@@ -58,7 +57,6 @@ const GameMenu = ({ isOpen, onClose }) => {
 
         // Sincronizar com o contexto de idioma
         if (parsedSettings.language && parsedSettings.language !== language) {
-          console.log('Sincronizando idioma com o contexto:', parsedSettings.language);
           changeLanguage(parsedSettings.language);
         }
       } catch (error) {
@@ -80,9 +78,6 @@ const GameMenu = ({ isOpen, onClose }) => {
 
     // Aplicar as configurações imediatamente
     applySettings(newSettings);
-
-    // Log para debug
-    console.log(`Setting changed: ${setting} = ${newSettings[setting]}`);
   };
 
   const handleLanguageChange = (e) => {
@@ -94,11 +89,9 @@ const GameMenu = ({ isOpen, onClose }) => {
 
     // Salvar no localStorage antes de qualquer outra operação
     localStorage.setItem('bandle_settings', JSON.stringify(newSettings));
-    console.log('Configurações salvas no localStorage:', newSettings);
 
     // Definir um cookie para persistir o idioma entre recarregamentos
     document.cookie = `bandle_language=${newLanguage}; path=/; max-age=31536000`; // 1 ano
-    console.log('Cookie de idioma definido:', newLanguage);
 
     setSettings(newSettings);
 
@@ -108,16 +101,14 @@ const GameMenu = ({ isOpen, onClose }) => {
     // Forçar a atualização da página para aplicar as traduções em todos os componentes
     // Isso é necessário porque alguns componentes podem não estar usando o contexto de idioma
     setTimeout(() => {
-      console.log('Recarregando a página com o idioma:', newLanguage);
       window.location.reload();
     }, 500);
 
-    console.log(`Idioma alterado para: ${newLanguage}`);
+
   };
 
   // Função para aplicar as configurações
   const applySettings = (settingsToApply) => {
-    console.log('Aplicando configurações:', settingsToApply);
 
     // Aplicar modo daltônico
     if (settingsToApply.daltonicMode) {
@@ -155,7 +146,6 @@ const GameMenu = ({ isOpen, onClose }) => {
   useEffect(() => {
     // Aplicar configurações iniciais
     applySettings(settings);
-    console.log('Configurações iniciais aplicadas:', settings);
 
     // Função para lidar com mudanças de configuração de outros componentes
     const handleExternalSettingsChange = () => {
@@ -164,7 +154,6 @@ const GameMenu = ({ isOpen, onClose }) => {
         try {
           const parsedSettings = JSON.parse(savedSettings);
           setSettings(parsedSettings);
-          console.log('Configurações externas carregadas:', parsedSettings);
         } catch (error) {
           console.error('Erro ao carregar configurações externas:', error);
         }
@@ -184,7 +173,6 @@ const GameMenu = ({ isOpen, onClose }) => {
   useEffect(() => {
     // Aplicar configurações sempre que o estado de settings mudar
     applySettings(settings);
-    console.log('Configurações atualizadas:', settings);
   }, [settings]);
 
   // Função para atualizar o estado do formulário de relatório de erro

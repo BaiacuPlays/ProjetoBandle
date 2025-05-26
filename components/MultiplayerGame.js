@@ -41,9 +41,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
         alert('⚠️ Internet Explorer não é suportado. Use Chrome, Firefox ou Edge.');
       }
 
-      if (info.isMobile) {
-        console.log('📱 DISPOSITIVO MÓVEL DETECTADO - Pode haver limitações de áudio');
-      }
+
     };
 
     detectBrowser();
@@ -429,17 +427,26 @@ const MultiplayerGame = ({ onBackToLobby }) => {
         playPromise.catch(error => {
           console.error('🚨 ERRO DE REPRODUÇÃO:', {
             error: error.message,
+            name: error.name,
             browser: navigator.userAgent,
             audioState: {
               readyState: audioRef.current?.readyState,
               networkState: audioRef.current?.networkState,
-              src: audioRef.current?.src
+              src: audioRef.current?.src,
+              currentTime: audioRef.current?.currentTime,
+              duration: audioRef.current?.duration
             }
           });
 
-          // Tentar forçar interação do usuário
+          // Diferentes tipos de erro
           if (error.name === 'NotAllowedError') {
             alert('⚠️ Clique em qualquer lugar da página para permitir reprodução de áudio!');
+          } else if (error.name === 'NotSupportedError') {
+            alert('⚠️ Formato de áudio não suportado neste navegador!');
+          } else if (error.name === 'AbortError') {
+            console.log('🔄 Reprodução cancelada pelo usuário');
+          } else {
+            console.error('🚨 Erro desconhecido de reprodução:', error);
           }
         });
       }
@@ -573,6 +580,47 @@ const MultiplayerGame = ({ onBackToLobby }) => {
           ) : (
             /* Jogo em andamento */
             <>
+              {/* Debug de áudio */}
+              {songToPlay && (
+                <div style={{
+                  background: '#333',
+                  color: '#fff',
+                  padding: '10px',
+                  margin: '10px 0',
+                  borderRadius: '5px',
+                  fontSize: '12px'
+                }}>
+                  <strong>🔧 DEBUG ÁUDIO:</strong><br/>
+                  Música: {songToPlay.title}<br/>
+                  URL: {songToPlay.audioUrl}<br/>
+                  Estado: {audioRef.current?.readyState || 'N/A'} | Rede: {audioRef.current?.networkState || 'N/A'}<br/>
+                  <button
+                    onClick={() => {
+                      console.log('🔧 TESTE DIRETO:', {
+                        song: songToPlay,
+                        audioElement: audioRef.current,
+                        src: audioRef.current?.src,
+                        readyState: audioRef.current?.readyState
+                      });
+                      if (audioRef.current) {
+                        audioRef.current.load();
+                        audioRef.current.play().catch(e => console.error('Erro no teste:', e));
+                      }
+                    }}
+                    style={{
+                      background: '#007bff',
+                      color: 'white',
+                      border: 'none',
+                      padding: '5px 10px',
+                      borderRadius: '3px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    🔧 Testar Áudio
+                  </button>
+                </div>
+              )}
+
               {/* Player de áudio */}
               <div className={gameStyles.audioModernBox}>
                 <div className={gameStyles.customAudioPlayer}>
@@ -637,9 +685,19 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                     ref={audioRef}
                     src={songToPlay?.audioUrl}
                     style={{ display: 'none' }}
-                    onError={() => {
+                    preload="metadata"
+                    crossOrigin="anonymous"
+                    onError={(e) => {
+                      console.error('🚨 ERRO DE ÁUDIO:', {
+                        error: e.target.error,
+                        src: e.target.src,
+                        readyState: e.target.readyState,
+                        networkState: e.target.networkState
+                      });
                       actions.setError('Erro ao carregar áudio');
                     }}
+                    onLoadStart={() => console.log('🎵 Iniciando carregamento:', songToPlay?.audioUrl)}
+                    onCanPlay={() => console.log('🎵 Áudio pronto para reproduzir')}
                   />
                 </div>
               </div>

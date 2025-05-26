@@ -61,33 +61,11 @@ export const config = {
 }
 
 export default async function handler(req, res) {
-  console.log('🔄 API - Método:', req.method);
-  console.log('🔄 API - Headers:', req.headers);
-  console.log('🔄 API - Body raw:', req.body);
-
-  // 🚨 CONFIGURAÇÃO CORS REFORÇADA
-  const origin = req.headers.origin;
-  const allowedOrigins = [
-    'https://ludomusic.xyz',
-    'https://www.ludomusic.xyz',
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-    'https://bandle-git-main-baiacuplays-projects.vercel.app',
-    'https://bandle-baiacuplays-projects.vercel.app'
-  ];
-
-  if (allowedOrigins.includes(origin) || !origin) {
-    res.setHeader('Access-Control-Allow-Origin', origin || '*');
-  } else {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-  }
-
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT,HEAD');
-  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization, Cache-Control, Pragma');
-  res.setHeader('Access-Control-Max-Age', '86400');
+  // 🚨 CORS SIMPLIFICADO PARA RESOLVER PROBLEMAS
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
   res.setHeader('Content-Type', 'application/json');
-  res.setHeader('Vary', 'Origin');
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
@@ -152,9 +130,6 @@ export default async function handler(req, res) {
       if (!lobby.players.includes(nickname)) {
         lobby.players.push(nickname);
         await kv.set(`lobby:${roomCode}`, lobby);
-        console.log('✅ API - Jogador adicionado:', nickname, 'à sala:', roomCode);
-      } else {
-        console.log('ℹ️ API - Jogador já estava na sala:', nickname);
       }
 
       return res.status(200).json({ success: true, lobbyData: lobby });
@@ -298,12 +273,7 @@ export default async function handler(req, res) {
           const attemptsUsed = lobby.gameState.attempts[nickname];
           const pointsEarned = Math.max(0, 6 - attemptsUsed + 1); // +1 porque a tentativa atual ainda não foi contada
 
-          console.log('🏆 PONTOS - Calculando pontuação:', {
-            nickname: nickname,
-            attemptsUsed: attemptsUsed,
-            pointsEarned: pointsEarned,
-            currentScore: lobby.gameState.scores[nickname] || 0
-          });
+
 
           lobby.gameState.scores[nickname] = (lobby.gameState.scores[nickname] || 0) + pointsEarned;
         } else if (isFromCorrectGame) {
@@ -334,22 +304,15 @@ export default async function handler(req, res) {
           return playerAttempts >= 6 || playerWon;
         });
 
-        console.log('🔍 API - Verificando se todos terminaram (GUESS):', {
-          players: lobby.players,
-          attempts: lobby.gameState.attempts,
-          winners: lobby.gameState.roundWinners,
-          allFinished: allPlayersFinished
-        });
+
 
         // Determinar se a rodada deve terminar
         if (allPlayersFinished) {
           lobby.gameState.roundFinished = true;
-          console.log('✅ API - Rodada finalizada (GUESS)!');
 
           // Se ninguém acertou, marcar como rodada sem vencedor
           if (lobby.gameState.roundWinners.length === 0) {
             lobby.gameState.roundWinners = ['NONE'];
-            console.log('❌ API - Ninguém acertou (GUESS), marcando como NONE');
           }
         }
 
@@ -420,22 +383,15 @@ export default async function handler(req, res) {
           return playerAttempts >= 6 || playerWon;
         });
 
-        console.log('🔍 API - Verificando se todos terminaram:', {
-          players: lobby.players,
-          attempts: lobby.gameState.attempts,
-          winners: lobby.gameState.roundWinners,
-          allFinished: allPlayersFinished
-        });
+
 
         // Determinar se a rodada deve terminar
         if (allPlayersFinished) {
           lobby.gameState.roundFinished = true;
-          console.log('✅ API - Rodada finalizada!');
 
           // Se ninguém acertou, marcar como rodada sem vencedor
           if (lobby.gameState.roundWinners.length === 0) {
             lobby.gameState.roundWinners = ['NONE'];
-            console.log('❌ API - Ninguém acertou, marcando como NONE');
           }
         }
 
@@ -503,18 +459,14 @@ export default async function handler(req, res) {
 
     if (req.method === 'GET') {
       const { roomCode } = req.query;
-      console.log('🔍 API GET - Buscando sala:', roomCode);
 
       if (!roomCode) {
-        console.log('❌ API GET - Código da sala não fornecido');
         return res.status(400).json({ error: 'Código da sala é obrigatório.' });
       }
 
       const lobby = await kv.get(`lobby:${roomCode}`);
-      console.log('🔍 API GET - Resultado da busca:', lobby ? 'ENCONTRADA' : 'NÃO ENCONTRADA');
 
       if (!lobby) {
-        console.log('❌ API GET - Sala não encontrada, retornando dados vazios');
         // Retornar dados vazios em vez de erro para evitar spam no console
         return res.status(200).json({
           players: [],

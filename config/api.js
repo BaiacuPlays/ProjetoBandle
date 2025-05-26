@@ -11,7 +11,7 @@ const API_CONFIG = {
   },
 
   // Configurações de timeout
-  TIMEOUT: 5000, // Reduzido para 5 segundos
+  TIMEOUT: 10000, // Aumentado para 10 segundos para evitar aborts
 
   // Configurações de retry
   RETRY_ATTEMPTS: 1, // Reduzido para 1 tentativa
@@ -153,7 +153,6 @@ const LocalStorageAPI = {
 export const apiRequest = async (endpoint, options = {}) => {
   // 🚀 TENTAR API REAL PRIMEIRO
   if (endpoint.includes('/api/lobby')) {
-    console.log('🔄 TENTANDO API REAL para:', endpoint, options);
 
     try {
       // Tentar API real do Vercel primeiro
@@ -415,7 +414,7 @@ export const apiRequest = async (endpoint, options = {}) => {
             gameState
           });
 
-          console.log('🔄 FALLBACK - Próxima rodada:', gameState.currentRound);
+
 
           return {
             ok: true,

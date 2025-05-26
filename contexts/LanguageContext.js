@@ -23,7 +23,6 @@ export function LanguageProvider({ children }) {
       if (savedSettings) {
         const parsedSettings = JSON.parse(savedSettings);
         if (parsedSettings.language) {
-          console.log('Idioma inicial carregado:', parsedSettings.language);
           return parsedSettings.language;
         }
       }
@@ -39,7 +38,6 @@ export function LanguageProvider({ children }) {
   useEffect(() => {
     // Aplicar o idioma ao elemento HTML
     document.documentElement.lang = language;
-    console.log('Idioma aplicado ao HTML:', language);
 
     // Escutar eventos de mudança de configurações
     const handleSettingsChanged = (event) => {
@@ -81,7 +79,6 @@ export function LanguageProvider({ children }) {
 
   // Função para mudar o idioma
   const changeLanguage = (newLanguage) => {
-    console.log('Mudando idioma para:', newLanguage);
     setLanguage(newLanguage);
     document.documentElement.lang = newLanguage;
 
@@ -107,7 +104,6 @@ export function LanguageProvider({ children }) {
 
       // Salvar no localStorage
       localStorage.setItem('bandle_settings', JSON.stringify(newSettings));
-      console.log('Configurações atualizadas no localStorage:', newSettings);
 
       // Disparar evento de mudança de configurações
       const event = new CustomEvent('bandleSettingsChanged', {
