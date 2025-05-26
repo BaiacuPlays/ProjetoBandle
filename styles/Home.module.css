@@ -12,11 +12,33 @@
   box-sizing: border-box;
 }
 
+/* 📱 RESPONSIVIDADE MOBILE */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+}
+
 .title {
   font-size: 4rem;
   margin-bottom: 2rem;
   color: #1DB954;
   text-shadow: 0 0 10px rgba(29, 185, 84, 0.5);
+}
+
+/* 📱 TÍTULO RESPONSIVO */
+@media (max-width: 768px) {
+  .title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
 }
 
 .gameArea {
@@ -31,6 +53,23 @@
   gap: 1.5rem;
   backdrop-filter: blur(10px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* 📱 GAME AREA RESPONSIVO */
+@media (max-width: 768px) {
+  .gameArea {
+    padding: 1.5rem;
+    gap: 1rem;
+    margin: 0 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .gameArea {
+    padding: 1rem;
+    gap: 0.8rem;
+    margin: 0 0.25rem;
+  }
 }
 
 .playButton {
@@ -432,6 +471,13 @@
   margin-bottom: 1.5rem;
 }
 
+/* 📱 RESPONSIVIDADE PARA FORMULÁRIOS */
+@media (max-width: 768px) {
+  .guessFormModern {
+    margin-bottom: 1rem;
+  }
+}
+
 .guessInputModern {
   padding: 1rem;
   border: 2px solid #1DB954;
@@ -442,6 +488,23 @@
   margin-bottom: 0.7rem;
   width: 100%;
   transition: border 0.2s;
+}
+
+/* 📱 RESPONSIVIDADE PARA INPUTS */
+@media (max-width: 768px) {
+  .guessInputModern {
+    padding: 0.8rem;
+    font-size: 1rem;
+    margin-bottom: 0.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .guessInputModern {
+    padding: 0.7rem;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
 }
 
 .guessInputModern:focus {
@@ -460,6 +523,21 @@
   transition: all 0.3s ease;
   width: 100%;
   margin-bottom: 0.5rem;
+}
+
+/* 📱 RESPONSIVIDADE PARA BOTÕES */
+@media (max-width: 768px) {
+  .guessButtonModern {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .guessButtonModern {
+    padding: 0.7rem 1rem;
+    font-size: 0.9rem;
+  }
 }
 
 .guessButtonModern:disabled {
@@ -1001,6 +1079,56 @@
   min-width: 20px;
   min-height: 20px;
 }
+/* 📱 RESPONSIVIDADE COMPLETA PARA MOBILE */
+@media (max-width: 768px) {
+  .customAudioPlayer {
+    padding: 1rem 0.8rem;
+    gap: 0.8rem;
+  }
+
+  .audioPlayerRow {
+    gap: 0.8rem;
+  }
+
+  .audioVolumeRow {
+    gap: 0.8rem;
+  }
+
+  .audioPlayBtnCustom {
+    width: 2.2rem;
+    height: 2.2rem;
+    font-size: 1.3rem;
+  }
+
+  .audioTime {
+    font-size: 0.9rem;
+    min-width: 40px;
+  }
+
+  .audioVolumeCustom {
+    width: 60px;
+  }
+
+  .attemptsRow {
+    gap: 0.3rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .attemptButton {
+    min-width: 2rem;
+    min-height: 2rem;
+    font-size: 1rem;
+    padding: 0.3rem 0.7rem;
+    margin: 0 2px;
+  }
+
+  .skipBtn {
+    font-size: 1rem;
+    padding: 0.3rem 0.8rem;
+  }
+}
+
 @media (max-width: 600px) {
   .customAudioPlayer {
     flex-direction: column;
@@ -1019,6 +1147,43 @@
   }
   .audioVolumeCustom {
     width: 100px;
+  }
+
+  .attemptsRow {
+    gap: 0.2rem;
+  }
+
+  .attemptButton {
+    min-width: 1.8rem;
+    min-height: 1.8rem;
+    font-size: 0.9rem;
+    padding: 0.2rem 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .audioPlayBtnCustom {
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.2rem;
+  }
+
+  .audioTime {
+    font-size: 0.8rem;
+    min-width: 35px;
+  }
+
+  .attemptsRow {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .attemptsRow > div:first-child {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem;
+    justify-content: center;
   }
 }
 
@@ -1050,6 +1215,70 @@
 .titleBarContainer img{
   height: 20%;
   width: 20%;
+}
+
+/* 📱 RESPONSIVIDADE DO HEADER */
+@media (max-width: 768px) {
+  .titleBarContainer {
+    padding: 0 0.5rem;
+  }
+
+  .titleBarContainer img {
+    height: 15%;
+    width: 15%;
+    max-width: 120px;
+  }
+
+  .menuButton, .helpButton {
+    padding: 0.4rem;
+    font-size: 1.1rem;
+  }
+
+  .topBar {
+    padding: 0.8rem 0.3rem 0.3rem 0.3rem;
+  }
+
+  .songInfoBar {
+    gap: 1.5rem;
+    padding: 0.4rem 1rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .infoLabel {
+    font-size: 0.8rem;
+  }
+
+  .infoValue {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .titleBarContainer img {
+    height: 12%;
+    width: 12%;
+    max-width: 80px;
+  }
+
+  .menuButton, .helpButton {
+    padding: 0.3rem;
+    font-size: 1rem;
+  }
+
+  .songInfoBar {
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.3rem 0.5rem;
+    text-align: center;
+  }
+
+  .infoLabel {
+    font-size: 0.75rem;
+  }
+
+  .infoValue {
+    font-size: 0.9rem;
+  }
 }
 
 .menuButton, .helpButton {

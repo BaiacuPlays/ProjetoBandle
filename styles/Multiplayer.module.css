@@ -366,27 +366,209 @@
   100% { transform: rotate(360deg); }
 }
 
-/* Responsivo */
+/* 📱 RESPONSIVIDADE COMPLETA PARA MULTIPLAYER */
 @media (max-width: 768px) {
+  .content {
+    padding: 15px;
+  }
+
+  .lobbyContainer {
+    padding: 25px;
+    max-width: 90%;
+  }
+
+  .waitingRoom {
+    padding: 25px;
+    max-width: 90%;
+  }
+
+  .gameContainer {
+    padding: 20px;
+    max-width: 95%;
+  }
+
   .buttonGroup {
     flex-direction: column;
+    gap: 15px;
   }
 
   .gameHeader {
     flex-direction: column;
     text-align: center;
+    gap: 15px;
   }
 
   .scoreBoard {
     justify-content: center;
+    gap: 10px;
+  }
+
+  .scoreItem {
+    font-size: 0.8rem;
+    padding: 6px 10px;
   }
 
   .title {
     font-size: 2rem;
+    margin-bottom: 20px;
   }
 
   .roomCode {
     font-size: 1.5rem;
     letter-spacing: 2px;
+    padding: 12px;
+  }
+
+  .roundInfo {
+    font-size: 1.3rem;
+  }
+
+  .primaryButton, .secondaryButton {
+    padding: 12px 20px;
+    font-size: 1rem;
+  }
+
+  .input {
+    padding: 10px 14px;
+    font-size: 0.9rem;
+  }
+
+  .playerItem {
+    padding: 8px 12px;
+    margin: 6px 0;
+  }
+
+  .playerName {
+    font-size: 0.9rem;
+  }
+
+  .hostBadge {
+    font-size: 0.7rem;
+    padding: 3px 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    padding: 10px;
+  }
+
+  .lobbyContainer {
+    padding: 20px;
+    max-width: 95%;
+  }
+
+  .waitingRoom {
+    padding: 20px;
+    max-width: 95%;
+  }
+
+  .gameContainer {
+    padding: 15px;
+    max-width: 98%;
+  }
+
+  .title {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+  }
+
+  .roomCode {
+    font-size: 1.3rem;
+    letter-spacing: 1px;
+    padding: 10px;
+  }
+
+  .roundInfo {
+    font-size: 1.1rem;
+  }
+
+  .scoreBoard {
+    gap: 8px;
+  }
+
+  .scoreItem {
+    font-size: 0.75rem;
+    padding: 5px 8px;
+  }
+
+  .primaryButton, .secondaryButton {
+    padding: 10px 15px;
+    font-size: 0.9rem;
+  }
+
+  .input {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+
+  .playerItem {
+    padding: 6px 10px;
+    margin: 4px 0;
+    flex-direction: column;
+    gap: 5px;
+    text-align: center;
+  }
+
+  .playerName {
+    font-size: 0.85rem;
+  }
+
+  .hostBadge {
+    font-size: 0.65rem;
+    padding: 2px 5px;
+  }
+
+  .pointsInfo {
+    margin: 10px 0 8px 0;
+  }
+
+  .pointsText {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+
+  .hintBox {
+    padding: 10px 15px;
+    font-size: 0.85rem;
+    margin: 15px auto;
+  }
+
+  .message {
+    padding: 12px;
+    margin: 15px 0;
+    font-size: 0.9rem;
+  }
+
+  .pointsExplanation {
+    padding: 12px;
+    font-size: 0.8rem;
+  }
+
+  .pointsEarned {
+    font-size: 1rem;
+    padding: 6px 12px;
+  }
+}
+
+/* 📱 ORIENTAÇÃO PAISAGEM EM MOBILE */
+@media (max-height: 600px) and (orientation: landscape) {
+  .content {
+    padding: 10px;
+    justify-content: flex-start;
+  }
+
+  .lobbyContainer, .waitingRoom, .gameContainer {
+    margin: 10px 0;
+    padding: 15px;
+  }
+
+  .title {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+
+  .gameHeader {
+    margin-bottom: 15px;
   }
 }

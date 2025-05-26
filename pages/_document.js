@@ -10,6 +10,12 @@ class MyDocument extends Document {
     return (
       <Html lang="pt-BR">
         <Head>
+          {/* Meta tags para responsividade mobile */}
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          <meta name="mobile-web-app-capable" content="yes" />
+          <meta name="apple-mobile-web-app-capable" content="yes" />
+          <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
           {/* Polyfills para compatibilidade com navegadores antigos */}
           <script src="https://polyfill.io/v3/polyfill.min.js?features=fetch,Promise,Array.prototype.includes,Object.assign,Symbol"></script>
 
