@@ -51,17 +51,30 @@ export default function Home() {
   const fadeOutStepTime = fadeOutDuration / fadeOutSteps;
   const originalVolumeRef = useRef(volume);
 
+  // Função para gerar um número determinístico baseado no dia
+  const getDeterministicRandom = (day, seed = 0) => {
+    // Usa o dia e seed como entrada para gerar um número determinístico
+    // Algoritmo simples mas eficaz para gerar números pseudo-aleatórios
+    const x = Math.sin(day * 12.9898 + seed * 78.233) * 43758.5453;
+    return x - Math.floor(x); // Retorna apenas a parte decimal (0-1)
+  };
+
   // Função para gerar um tempo determinístico dentro da duração da música com base no dia
   const getDeterministicStartTime = (duration, day) => {
     // Deixa uma margem de 10 segundos no final da música
     const maxStart = Math.max(0, duration - 10);
 
-    // Usa o dia como semente para gerar um número determinístico entre 0 e 1
-    // Multiplicamos o dia por um número primo para melhor distribuição
-    const seed = (day * 31) % 997; // Usando números primos para melhor distribuição
-    const deterministicRandom = (seed / 997); // Valor entre 0 e 1
+    // Usa função determinística para gerar tempo de início
+    const deterministicRandom = getDeterministicRandom(day, 1);
 
     return deterministicRandom * maxStart;
+  };
+
+  // Função para selecionar música determinística baseada no dia
+  const getDeterministicSong = (day) => {
+    const deterministicRandom = getDeterministicRandom(day, 0);
+    const index = Math.floor(deterministicRandom * songs.length);
+    return songs[index];
   };
 
 
@@ -86,28 +99,29 @@ export default function Home() {
       const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
       setCurrentDay(dayOfYear);
 
-      // Verificar se já existe uma música salva para o dia atual
+      // SISTEMA DETERMINÍSTICO: A música é sempre a mesma para o mesmo dia
+      // Não depende do localStorage, mas usa o dia como seed
+      const song = getDeterministicSong(dayOfYear);
+
+      console.log('🎵 MÚSICA DETERMINÍSTICA DO DIA:', {
+        dayOfYear,
+        songId: song.id,
+        title: song.title,
+        game: song.game,
+        deterministic: true
+      });
+
+      // Opcional: ainda salvar no localStorage para debug/cache
       const savedSongKey = `bandle_daily_song_day_${dayOfYear}`;
-      let song;
+      localStorage.setItem(savedSongKey, song.id.toString());
 
-      const savedSongId = localStorage.getItem(savedSongKey);
-      if (savedSongId) {
-        // Usa a música já salva para o dia
-        song = songs.find(s => s.id === parseInt(savedSongId)) || songs[0];
-      } else {
-        // Gera uma nova música aleatória e salva para o dia
-        const randomIndex = Math.floor(Math.random() * songs.length);
-        song = songs[randomIndex];
-        localStorage.setItem(savedSongKey, song.id.toString());
-
-        // Limpa músicas de dias anteriores (mantém apenas os últimos 3 dias)
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
-          if (key && key.startsWith('bandle_daily_song_day_')) {
-            const dayFromKey = parseInt(key.replace('bandle_daily_song_day_', ''));
-            if (dayFromKey < dayOfYear - 2) {
-              localStorage.removeItem(key);
-            }
+      // Limpa músicas de dias anteriores (mantém apenas os últimos 3 dias)
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('bandle_daily_song_day_')) {
+          const dayFromKey = parseInt(key.replace('bandle_daily_song_day_', ''));
+          if (dayFromKey < dayOfYear - 2) {
+            localStorage.removeItem(key);
           }
         }
       }
@@ -543,12 +557,8 @@ export default function Home() {
           // console.log('Erro ao tocar vine boom:', e);
         });
 
-        // Após 2 segundos, remove a música salva e recarrega
+        // Após 2 segundos, apenas recarrega (não precisa remover música pois é determinística)
         setTimeout(() => {
-          if (currentDay !== null) {
-            const savedSongKey = `bandle_daily_song_day_${currentDay}`;
-            localStorage.removeItem(savedSongKey);
-          }
           window.location.reload();
         }, 2000);
       }
