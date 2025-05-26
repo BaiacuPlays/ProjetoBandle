@@ -124,6 +124,20 @@ const MultiplayerLobby = ({ onGameStart }) => {
               </button>
             </div>
 
+            {/* Botão voltar para o menu principal */}
+            <div style={{ marginTop: '20px' }}>
+              <button
+                className={styles.secondaryButton}
+                onClick={() => window.location.href = '/'}
+                style={{
+                  background: 'linear-gradient(45deg, #666, #888)',
+                  width: '100%'
+                }}
+              >
+                🏠 Voltar ao Menu Principal
+              </button>
+            </div>
+
             {error && (
               <div className={`${styles.message} ${styles.messageError}`}>
                 {error}
@@ -338,6 +352,20 @@ const MultiplayerLobby = ({ onGameStart }) => {
                 </div>
               </div>
             )}
+
+            {/* Botão voltar para o menu principal */}
+            <div style={{ marginTop: '15px' }}>
+              <button
+                className={styles.secondaryButton}
+                onClick={() => window.location.href = '/'}
+                style={{
+                  background: 'linear-gradient(45deg, #666, #888)',
+                  width: '100%'
+                }}
+              >
+                🏠 Voltar ao Menu Principal
+              </button>
+            </div>
 
             {!canStartGame && (
               <div className={`${styles.message} ${styles.messageWarning}`}>

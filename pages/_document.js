@@ -10,6 +10,11 @@ class MyDocument extends Document {
     return (
       <Html lang="pt-BR">
         <Head>
+          {/* Título padrão do site */}
+          <title>Ludomusic - Adivinhe a música dos seus jogos favoritos!</title>
+          <meta name="description" content="Adivinhe a música dos seus jogos favoritos! Jogue sozinho ou com amigos no modo multiplayer." />
+          <link rel="icon" href="/Logo.png" />
+
           {/* Meta tags para responsividade mobile */}
           <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
           <meta name="mobile-web-app-capable" content="yes" />

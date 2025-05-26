@@ -21,7 +21,7 @@ function MultiplayerContent() {
     <>
       <Head>
         <title>
-          {isClient ? `${t('multiplayer')} - Bandle` : 'Multiplayer - Bandle'}
+          {isClient ? `${t('multiplayer')} - Ludomusic` : 'Multiplayer - Ludomusic'}
         </title>
         <meta
           name="description"
