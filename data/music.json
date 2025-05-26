@@ -1,7 +1,7 @@
 [
   {
     "id": 0,
-    "title": " Main Title",
+    "title": "Main Title",
     "artist": "Grant Kirkhope",
     "composer": "Grant Kirkhope",
     "game": "Banjo-Kazooie",
@@ -37,7 +37,7 @@
   },
   {
     "id": 3,
-    "title": " Brentilda's Theme",
+    "title": "Brentilda's Theme",
     "artist": "Grant Kirkhope",
     "composer": "Grant Kirkhope",
     "game": "Banjo-Kazooie",
@@ -121,7 +121,7 @@
   },
   {
     "id": 10,
-    "title": " Title Screen",
+    "title": "Title Screen",
     "artist": "David Wise",
     "composer": "David Wise",
     "game": "Donkey Kong Country",
@@ -133,7 +133,7 @@
   },
   {
     "id": 11,
-    "title": " Simian Segue",
+    "title": "Simian Segue",
     "artist": "David Wise",
     "composer": "David Wise",
     "game": "Donkey Kong Country",
@@ -145,7 +145,7 @@
   },
   {
     "id": 12,
-    "title": " DK Island Swing",
+    "title": "DK Island Swing",
     "artist": "David Wise",
     "composer": "David Wise",
     "game": "Donkey Kong Country",
@@ -157,7 +157,7 @@
   },
   {
     "id": 13,
-    "title": " Cranky's Theme",
+    "title": "Cranky's Theme",
     "artist": "David Wise",
     "composer": "David Wise",
     "game": "Donkey Kong Country",
@@ -169,7 +169,7 @@
   },
   {
     "id": 14,
-    "title": " Cave Dweller Concert",
+    "title": "Cave Dweller Concert",
     "artist": "David Wise",
     "composer": "David Wise",
     "game": "Donkey Kong Country",
@@ -181,7 +181,7 @@
   },
   {
     "id": 15,
-    "title": " Bonus Room Blitz",
+    "title": "Bonus Room Blitz",
     "artist": "David Wise",
     "composer": "David Wise",
     "game": "Donkey Kong Country",
@@ -193,7 +193,7 @@
   },
   {
     "id": 16,
-    "title": " Aquatic Ambiance",
+    "title": "Aquatic Ambiance",
     "artist": "David Wise",
     "composer": "David Wise",
     "game": "Donkey Kong Country",
@@ -205,7 +205,7 @@
   },
   {
     "id": 17,
-    "title": " K. Rool Returns",
+    "title": "K. Rool Returns",
     "artist": "David Wise",
     "composer": "David Wise",
     "game": "Donkey Kong Country 2: Diddy's Kong Quest",
@@ -217,7 +217,7 @@
   },
   {
     "id": 18,
-    "title": " Welcome To Crocodile Isle",
+    "title": "Welcome To Crocodile Isle",
     "artist": "David Wise",
     "composer": "David Wise",
     "game": "Donkey Kong Country 2: Diddy's Kong Quest",
@@ -229,7 +229,7 @@
   },
   {
     "id": 19,
-    "title": " Klomp's Romp",
+    "title": "Klomp's Romp",
     "artist": "David Wise",
     "composer": "David Wise",
     "game": "Donkey Kong Country 2: Diddy's Kong Quest",
@@ -241,7 +241,7 @@
   },
   {
     "id": 20,
-    "title": " Lockjaw's Saga",
+    "title": "Lockjaw's Saga",
     "artist": "David Wise",
     "composer": "David Wise",
     "game": "Donkey Kong Country 2: Diddy's Kong Quest",
@@ -253,7 +253,7 @@
   },
   {
     "id": 21,
-    "title": " Forest Interlude",
+    "title": "Forest Interlude",
     "artist": "David Wise",
     "composer": "David Wise",
     "game": "Donkey Kong Country 2: Diddy's Kong Quest",
@@ -265,7 +265,7 @@
   },
   {
     "id": 22,
-    "title": " Stickerbrush Symphony",
+    "title": "Stickerbrush Symphony",
     "artist": "David Wise",
     "composer": "David Wise",
     "game": "Donkey Kong Country 2: Diddy's Kong Quest",
@@ -277,7 +277,7 @@
   },
   {
     "id": 23,
-    "title": " Fanfare",
+    "title": "Fanfare",
     "artist": "David Wise",
     "composer": "David Wise",
     "game": "Donkey Kong Country 3: Dixie Kong's Double Trouble!",
@@ -289,7 +289,7 @@
   },
   {
     "id": 24,
-    "title": " Dixie Beat",
+    "title": "Dixie Beat",
     "artist": "David Wise",
     "composer": "David Wise",
     "game": "Donkey Kong Country 3: Dixie Kong's Double Trouble!",
@@ -301,7 +301,7 @@
   },
   {
     "id": 25,
-    "title": " Crazy Calypso",
+    "title": "Crazy Calypso",
     "artist": "David Wise",
     "composer": "David Wise",
     "game": "Donkey Kong Country 3: Dixie Kong's Double Trouble!",
@@ -313,7 +313,7 @@
   },
   {
     "id": 26,
-    "title": " Stilt Village",
+    "title": "Stilt Village",
     "artist": "David Wise",
     "composer": "David Wise",
     "game": "Donkey Kong Country 3: Dixie Kong's Double Trouble!",
@@ -325,7 +325,7 @@
   },
   {
     "id": 27,
-    "title": " Nuts And Bolts",
+    "title": "Nuts And Bolts",
     "artist": "David Wise",
     "composer": "David Wise",
     "game": "Donkey Kong Country 3: Dixie Kong's Double Trouble!",
@@ -337,7 +337,7 @@
   },
   {
     "id": 28,
-    "title": " Opening Theme",
+    "title": "Opening Theme",
     "artist": "Yumiko Kanki & Naoto Ishida",
     "composer": "Yumiko Kanki & Naoto Ishida",
     "game": "F-Zero",
@@ -349,7 +349,7 @@
   },
   {
     "id": 29,
-    "title": " Big Blue",
+    "title": "Big Blue",
     "artist": "Yumiko Kanki & Naoto Ishida",
     "composer": "Yumiko Kanki & Naoto Ishida",
     "game": "F-Zero",
@@ -361,7 +361,7 @@
   },
   {
     "id": 30,
-    "title": " Mute City",
+    "title": "Mute City",
     "artist": "Yumiko Kanki & Naoto Ishida",
     "composer": "Yumiko Kanki & Naoto Ishida",
     "game": "F-Zero",
@@ -373,7 +373,7 @@
   },
   {
     "id": 31,
-    "title": " 007 Watch Theme",
+    "title": "007 Watch Theme",
     "artist": "Grant Kirkhope",
     "composer": "Grant Kirkhope",
     "game": "GoldenEye 007",
@@ -481,7 +481,7 @@
   },
   {
     "id": 40,
-    "title": " Kirby Super Star",
+    "title": "Kirby Super Star",
     "artist": "Jun Ishikawa",
     "composer": "Jun Ishikawa",
     "game": "Kirby Super Star",
@@ -493,7 +493,7 @@
   },
   {
     "id": 41,
-    "title": " Green Greens",
+    "title": "Green Greens",
     "artist": "Jun Ishikawa",
     "composer": "Jun Ishikawa",
     "game": "Kirby Super Star",
@@ -505,7 +505,7 @@
   },
   {
     "id": 42,
-    "title": " Float Islands",
+    "title": "Float Islands",
     "artist": "Jun Ishikawa",
     "composer": "Jun Ishikawa",
     "game": "Kirby Super Star",
@@ -517,7 +517,7 @@
   },
   {
     "id": 43,
-    "title": " Boss Battle",
+    "title": "Boss Battle",
     "artist": "Jun Ishikawa",
     "composer": "Jun Ishikawa",
     "game": "Kirby Super Star",
@@ -529,7 +529,7 @@
   },
   {
     "id": 44,
-    "title": " The Whisper",
+    "title": "The Whisper",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -541,7 +541,7 @@
   },
   {
     "id": 45,
-    "title": " Bloody Sunset",
+    "title": "Bloody Sunset",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -553,7 +553,7 @@
   },
   {
     "id": 46,
-    "title": " Playing In The Sun",
+    "title": "Playing In The Sun",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -565,7 +565,7 @@
   },
   {
     "id": 47,
-    "title": " Heartbeat From The Last Century",
+    "title": "Heartbeat From The Last Century",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -577,7 +577,7 @@
   },
   {
     "id": 48,
-    "title": " Trust Them",
+    "title": "Trust Them",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -589,7 +589,7 @@
   },
   {
     "id": 49,
-    "title": " Lullaby Of The Dead",
+    "title": "Lullaby Of The Dead",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -601,7 +601,7 @@
   },
   {
     "id": 50,
-    "title": " The Hero",
+    "title": "The Hero",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -613,7 +613,7 @@
   },
   {
     "id": 51,
-    "title": " The Last Tear",
+    "title": "The Last Tear",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -625,7 +625,7 @@
   },
   {
     "id": 52,
-    "title": " Visions Of Red",
+    "title": "Visions Of Red",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -637,7 +637,7 @@
   },
   {
     "id": 53,
-    "title": " My Destiny",
+    "title": "My Destiny",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -649,7 +649,7 @@
   },
   {
     "id": 54,
-    "title": " Heartglaze Hope",
+    "title": "Heartglaze Hope",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -661,7 +661,7 @@
   },
   {
     "id": 55,
-    "title": " Coming Home",
+    "title": "Coming Home",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -673,7 +673,7 @@
   },
   {
     "id": 56,
-    "title": " Blue Limbo",
+    "title": "Blue Limbo",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -685,7 +685,7 @@
   },
   {
     "id": 57,
-    "title": " The End Of The Road",
+    "title": "The End Of The Road",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -697,7 +697,7 @@
   },
   {
     "id": 58,
-    "title": " The Final Hour",
+    "title": "The Final Hour",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -709,7 +709,7 @@
   },
   {
     "id": 59,
-    "title": " Overthinker",
+    "title": "Overthinker",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -721,7 +721,7 @@
   },
   {
     "id": 60,
-    "title": " Mother",
+    "title": "Mother",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -733,7 +733,7 @@
   },
   {
     "id": 61,
-    "title": " Lonely Mountain",
+    "title": "Lonely Mountain",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -745,7 +745,7 @@
   },
   {
     "id": 62,
-    "title": " Recurring Dream",
+    "title": "Recurring Dream",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -757,7 +757,7 @@
   },
   {
     "id": 63,
-    "title": " Through The Wind",
+    "title": "Through The Wind",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -769,7 +769,7 @@
   },
   {
     "id": 64,
-    "title": " I'm Not Gone",
+    "title": "I'm Not Gone",
     "artist": "Laika",
     "composer": "Laika",
     "game": "Laika: Aged Through Blood",
@@ -841,7 +841,7 @@
   },
   {
     "id": 70,
-    "title": " Main Menu",
+    "title": "Main Menu",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Mario Kart Ds",
@@ -853,7 +853,7 @@
   },
   {
     "id": 71,
-    "title": " Singleplayer Menu",
+    "title": "Singleplayer Menu",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Mario Kart Ds",
@@ -985,7 +985,7 @@
   },
   {
     "id": 82,
-    "title": " Creative Exercise",
+    "title": "Creative Exercise",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Mario Paint",
@@ -997,7 +997,7 @@
   },
   {
     "id": 83,
-    "title": " Monkey Song",
+    "title": "Monkey Song",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Mario Paint",
@@ -1009,7 +1009,7 @@
   },
   {
     "id": 84,
-    "title": " Title Screen",
+    "title": "Title Screen",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "New Super Mario Bros. Wii",
@@ -1021,7 +1021,7 @@
   },
   {
     "id": 85,
-    "title": " World 1 Map",
+    "title": "World 1 Map",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "New Super Mario Bros. Wii",
@@ -1033,7 +1033,7 @@
   },
   {
     "id": 86,
-    "title": " Peach's Castle",
+    "title": "Peach's Castle",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "New Super Mario Bros. Wii",
@@ -1045,7 +1045,7 @@
   },
   {
     "id": 87,
-    "title": " Overworld",
+    "title": "Overworld",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "New Super Mario Bros. Wii",
@@ -1057,7 +1057,7 @@
   },
   {
     "id": 88,
-    "title": " Toad House",
+    "title": "Toad House",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "New Super Mario Bros. Wii",
@@ -1069,7 +1069,7 @@
   },
   {
     "id": 89,
-    "title": " Tower",
+    "title": "Tower",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "New Super Mario Bros. Wii",
@@ -1081,7 +1081,7 @@
   },
   {
     "id": 90,
-    "title": " Athletic",
+    "title": "Athletic",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "New Super Mario Bros. Wii",
@@ -1093,7 +1093,7 @@
   },
   {
     "id": 91,
-    "title": " Main Title",
+    "title": "Main Title",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Paper Mario",
@@ -1105,7 +1105,7 @@
   },
   {
     "id": 92,
-    "title": " A Party At Peach's Castle",
+    "title": "A Party At Peach's Castle",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Paper Mario",
@@ -1117,7 +1117,7 @@
   },
   {
     "id": 93,
-    "title": " Mario's Theme",
+    "title": "Mario's Theme",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Paper Mario",
@@ -1129,7 +1129,7 @@
   },
   {
     "id": 94,
-    "title": " March Ahead",
+    "title": "March Ahead",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Paper Mario",
@@ -1153,7 +1153,7 @@
   },
   {
     "id": 96,
-    "title": " Toad Town",
+    "title": "Toad Town",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Paper Mario",
@@ -1165,7 +1165,7 @@
   },
   {
     "id": 97,
-    "title": " Title Theme",
+    "title": "Title Theme",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Super Mario 64",
@@ -1177,7 +1177,7 @@
   },
   {
     "id": 98,
-    "title": " Opening",
+    "title": "Opening",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Super Mario 64",
@@ -1201,7 +1201,7 @@
   },
   {
     "id": 100,
-    "title": " Slider",
+    "title": "Slider",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Super Mario 64",
@@ -1213,7 +1213,7 @@
   },
   {
     "id": 101,
-    "title": " Inside The Castle Walls",
+    "title": "Inside The Castle Walls",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Super Mario 64",
@@ -1225,7 +1225,7 @@
   },
   {
     "id": 102,
-    "title": " Dire, Dire Docks",
+    "title": "Dire, Dire Docks",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Super Mario 64",
@@ -1237,7 +1237,7 @@
   },
   {
     "id": 103,
-    "title": " Lethal Lava Land",
+    "title": "Lethal Lava Land",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Super Mario 64",
@@ -1249,7 +1249,7 @@
   },
   {
     "id": 104,
-    "title": " Snow Mountain",
+    "title": "Snow Mountain",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Super Mario 64",
@@ -1261,7 +1261,7 @@
   },
   {
     "id": 105,
-    "title": " Haunted House",
+    "title": "Haunted House",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Super Mario 64",
@@ -1273,7 +1273,7 @@
   },
   {
     "id": 106,
-    "title": " Merry Go Round",
+    "title": "Merry Go Round",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Super Mario 64",
@@ -1285,7 +1285,7 @@
   },
   {
     "id": 107,
-    "title": " Piranha Plant's Lullaby",
+    "title": "Piranha Plant's Lullaby",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Super Mario 64",
@@ -1297,7 +1297,7 @@
   },
   {
     "id": 108,
-    "title": " Title Screen",
+    "title": "Title Screen",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "New Super Mario Bros DS",
@@ -1309,7 +1309,7 @@
   },
   {
     "id": 109,
-    "title": " World 1 Mushroom Plains",
+    "title": "World 1 Mushroom Plains",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "New Super Mario Bros DS",
@@ -1321,7 +1321,7 @@
   },
   {
     "id": 110,
-    "title": " Walking The Plains",
+    "title": "Walking The Plains",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "New Super Mario Bros DS",
@@ -1333,7 +1333,7 @@
   },
   {
     "id": 111,
-    "title": " Underground Theme",
+    "title": "Underground Theme",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "New Super Mario Bros DS",
@@ -1345,7 +1345,7 @@
   },
   {
     "id": 112,
-    "title": " Starman",
+    "title": "Starman",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "New Super Mario Bros DS",
@@ -1633,7 +1633,7 @@
   },
   {
     "id": 136,
-    "title": " Intro Stage",
+    "title": "Intro Stage",
     "artist": "Setsuo Yamamoto",
     "composer": "Setsuo Yamamoto",
     "game": "Mega Man X",
@@ -1645,7 +1645,7 @@
   },
   {
     "id": 137,
-    "title": " Armored Armadillo",
+    "title": "Armored Armadillo",
     "artist": "Setsuo Yamamoto",
     "composer": "Setsuo Yamamoto",
     "game": "Mega Man X",
@@ -1657,7 +1657,7 @@
   },
   {
     "id": 138,
-    "title": " Boomer Kuwanger",
+    "title": "Boomer Kuwanger",
     "artist": "Setsuo Yamamoto",
     "composer": "Setsuo Yamamoto",
     "game": "Mega Man X",
@@ -1669,7 +1669,7 @@
   },
   {
     "id": 139,
-    "title": " Chill Penguin",
+    "title": "Chill Penguin",
     "artist": "Setsuo Yamamoto",
     "composer": "Setsuo Yamamoto",
     "game": "Mega Man X",
@@ -1681,7 +1681,7 @@
   },
   {
     "id": 140,
-    "title": " Flame Mammoth",
+    "title": "Flame Mammoth",
     "artist": "Setsuo Yamamoto",
     "composer": "Setsuo Yamamoto",
     "game": "Mega Man X",
@@ -1693,7 +1693,7 @@
   },
   {
     "id": 141,
-    "title": " Launch Octopus",
+    "title": "Launch Octopus",
     "artist": "Setsuo Yamamoto",
     "composer": "Setsuo Yamamoto",
     "game": "Mega Man X",
@@ -1705,7 +1705,7 @@
   },
   {
     "id": 142,
-    "title": " Spark Mandrill",
+    "title": "Spark Mandrill",
     "artist": "Setsuo Yamamoto",
     "composer": "Setsuo Yamamoto",
     "game": "Mega Man X",
@@ -1717,7 +1717,7 @@
   },
   {
     "id": 143,
-    "title": " Sting Chameleon",
+    "title": "Sting Chameleon",
     "artist": "Setsuo Yamamoto",
     "composer": "Setsuo Yamamoto",
     "game": "Mega Man X",
@@ -1729,7 +1729,7 @@
   },
   {
     "id": 144,
-    "title": " Storm Eagle",
+    "title": "Storm Eagle",
     "artist": "Setsuo Yamamoto",
     "composer": "Setsuo Yamamoto",
     "game": "Mega Man X",
@@ -1741,7 +1741,7 @@
   },
   {
     "id": 145,
-    "title": " Intro",
+    "title": "Intro",
     "artist": "Hirokazu Tanaka",
     "composer": "Hirokazu Tanaka",
     "game": "Metroid",
@@ -1753,7 +1753,7 @@
   },
   {
     "id": 146,
-    "title": " Enter Samus",
+    "title": "Enter Samus",
     "artist": "Hirokazu Tanaka",
     "composer": "Hirokazu Tanaka",
     "game": "Metroid",
@@ -1765,7 +1765,7 @@
   },
   {
     "id": 147,
-    "title": " Brinstar",
+    "title": "Brinstar",
     "artist": "Hirokazu Tanaka",
     "composer": "Hirokazu Tanaka",
     "game": "Metroid",
@@ -1777,7 +1777,7 @@
   },
   {
     "id": 148,
-    "title": " Subwoofer Lullaby",
+    "title": "Subwoofer Lullaby",
     "artist": "C418",
     "composer": "C418",
     "game": "Minecraft",
@@ -1789,7 +1789,7 @@
   },
   {
     "id": 149,
-    "title": " Living Mice",
+    "title": "Living Mice",
     "artist": "C418",
     "composer": "C418",
     "game": "Minecraft",
@@ -1801,7 +1801,7 @@
   },
   {
     "id": 150,
-    "title": " Moog City",
+    "title": "Moog City",
     "artist": "C418",
     "composer": "C418",
     "game": "Minecraft",
@@ -1813,7 +1813,7 @@
   },
   {
     "id": 151,
-    "title": " Haggstrom",
+    "title": "Haggstrom",
     "artist": "C418",
     "composer": "C418",
     "game": "Minecraft",
@@ -1825,7 +1825,7 @@
   },
   {
     "id": 152,
-    "title": " Minecraft",
+    "title": "Minecraft",
     "artist": "C418",
     "composer": "C418",
     "game": "Minecraft",
@@ -1837,7 +1837,7 @@
   },
   {
     "id": 153,
-    "title": " Mice On Venus",
+    "title": "Mice On Venus",
     "artist": "C418",
     "composer": "C418",
     "game": "Minecraft",
@@ -1849,7 +1849,7 @@
   },
   {
     "id": 154,
-    "title": " Dry Hands",
+    "title": "Dry Hands",
     "artist": "C418",
     "composer": "C418",
     "game": "Minecraft",
@@ -1861,7 +1861,7 @@
   },
   {
     "id": 155,
-    "title": " Wet Hands",
+    "title": "Wet Hands",
     "artist": "C418",
     "composer": "C418",
     "game": "Minecraft",
@@ -1873,7 +1873,7 @@
   },
   {
     "id": 156,
-    "title": " Sweden",
+    "title": "Sweden",
     "artist": "C418",
     "composer": "C418",
     "game": "Minecraft",
@@ -2243,7 +2243,7 @@
   },
   {
     "id": 187,
-    "title": " Main Menu",
+    "title": "Main Menu",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
     "game": "Smash Bros",
@@ -2255,7 +2255,7 @@
   },
   {
     "id": 188,
-    "title": " Character Select",
+    "title": "Character Select",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
     "game": "Smash Bros",
@@ -2267,7 +2267,7 @@
   },
   {
     "id": 189,
-    "title": " Opening Demo",
+    "title": "Opening Demo",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
     "game": "Pokemon HeartGold & SoulSilver",
@@ -2279,7 +2279,7 @@
   },
   {
     "id": 190,
-    "title": " Title",
+    "title": "Title",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
     "game": "Pokemon HeartGold & SoulSilver",
@@ -2291,7 +2291,7 @@
   },
   {
     "id": 191,
-    "title": " Title",
+    "title": "Title",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
     "game": "Pokemon black & white",
@@ -2303,7 +2303,7 @@
   },
   {
     "id": 192,
-    "title": " Wakaba Town",
+    "title": "Wakaba Town",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
     "game": "Pokemon HeartGold & SoulSilver",
@@ -2315,7 +2315,7 @@
   },
   {
     "id": 193,
-    "title": " Kanoko Town",
+    "title": "Kanoko Town",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
     "game": "Pokemon black & white",
@@ -2339,7 +2339,7 @@
   },
   {
     "id": 195,
-    "title": " Twinleaf Town (Daytime)",
+    "title": "Twinleaf Town (Daytime)",
     "artist": "Go Ichinose & Junichi Masuda",
     "composer": "Go Ichinose & Junichi Masuda",
     "game": "Pokémon Diamond & Pearl",
@@ -2351,7 +2351,7 @@
   },
   {
     "id": 196,
-    "title": " Route 201 (Daytime)",
+    "title": "Route 201 (Daytime)",
     "artist": "Go Ichinose & Junichi Masuda",
     "composer": "Go Ichinose & Junichi Masuda",
     "game": "Pokémon Diamond & Pearl",
@@ -2363,7 +2363,7 @@
   },
   {
     "id": 197,
-    "title": " Sandgem Town (Daytime)",
+    "title": "Sandgem Town (Daytime)",
     "artist": "Go Ichinose & Junichi Masuda",
     "composer": "Go Ichinose & Junichi Masuda",
     "game": "Pokémon Diamond & Pearl",
@@ -2375,7 +2375,7 @@
   },
   {
     "id": 198,
-    "title": " ~Opening~",
+    "title": "~Opening~",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
     "game": "Pokémon LeafGreen & FireRed",
@@ -2387,7 +2387,7 @@
   },
   {
     "id": 199,
-    "title": " Pallet Town Theme",
+    "title": "Pallet Town Theme",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
     "game": "Pokémon LeafGreen & FireRed",
@@ -2399,7 +2399,7 @@
   },
   {
     "id": 200,
-    "title": " Pewter City Theme",
+    "title": "Pewter City Theme",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
     "game": "Pokémon LeafGreen & FireRed",
@@ -2411,7 +2411,7 @@
   },
   {
     "id": 201,
-    "title": " Battle (VS Wild Pokemon)",
+    "title": "Battle (VS Wild Pokemon)",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
     "game": "Pokémon LeafGreen & FireRed",
@@ -2423,7 +2423,7 @@
   },
   {
     "id": 202,
-    "title": " Lavender Town Theme",
+    "title": "Lavender Town Theme",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
     "game": "Pokémon LeafGreen & FireRed",
@@ -2435,7 +2435,7 @@
   },
   {
     "id": 203,
-    "title": " Opening Selection",
+    "title": "Opening Selection",
     "artist": "Go Ichinose & Junichi Masuda",
     "composer": "Go Ichinose & Junichi Masuda",
     "game": "Pokémon Ruby & Sapphire",
@@ -2447,7 +2447,7 @@
   },
   {
     "id": 204,
-    "title": " Littleroot Town",
+    "title": "Littleroot Town",
     "artist": "Go Ichinose & Junichi Masuda",
     "composer": "Go Ichinose & Junichi Masuda",
     "game": "Pokémon Ruby & Sapphire",
@@ -2459,7 +2459,7 @@
   },
   {
     "id": 205,
-    "title": " Route 101",
+    "title": "Route 101",
     "artist": "Go Ichinose & Junichi Masuda",
     "composer": "Go Ichinose & Junichi Masuda",
     "game": "Pokémon Ruby & Sapphire",
@@ -2471,7 +2471,7 @@
   },
   {
     "id": 206,
-    "title": " Battle! Trainer",
+    "title": "Battle! Trainer",
     "artist": "Go Ichinose & Junichi Masuda",
     "composer": "Go Ichinose & Junichi Masuda",
     "game": "Pokémon Ruby & Sapphire",
@@ -2483,7 +2483,7 @@
   },
   {
     "id": 207,
-    "title": " Rustboro City",
+    "title": "Rustboro City",
     "artist": "Go Ichinose & Junichi Masuda",
     "composer": "Go Ichinose & Junichi Masuda",
     "game": "Pokémon Ruby & Sapphire",
@@ -2495,7 +2495,7 @@
   },
   {
     "id": 208,
-    "title": " Dewford Town",
+    "title": "Dewford Town",
     "artist": "Go Ichinose & Junichi Masuda",
     "composer": "Go Ichinose & Junichi Masuda",
     "game": "Pokémon Ruby & Sapphire",
@@ -2507,7 +2507,7 @@
   },
   {
     "id": 209,
-    "title": " Verdanturf Town",
+    "title": "Verdanturf Town",
     "artist": "Go Ichinose & Junichi Masuda",
     "composer": "Go Ichinose & Junichi Masuda",
     "game": "Pokémon Ruby & Sapphire",
@@ -2519,7 +2519,7 @@
   },
   {
     "id": 210,
-    "title": " Main Theme Super Smash Bros. Brawl",
+    "title": "Main Theme Super Smash Bros. Brawl",
     "artist": "Various Artists",
     "composer": "Various Artists",
     "game": "Smash Bros Brawl",
@@ -2531,7 +2531,7 @@
   },
   {
     "id": 211,
-    "title": " Smash Bros Intro",
+    "title": "Smash Bros Intro",
     "artist": "Various Artists",
     "composer": "Various Artists",
     "game": "Smash Bros",
@@ -2543,7 +2543,7 @@
   },
   {
     "id": 212,
-    "title": " Title Theme ",
+    "title": "Title Theme",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog",
@@ -2555,7 +2555,7 @@
   },
   {
     "id": 213,
-    "title": " Green Hill Zone",
+    "title": "Green Hill Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog",
@@ -2567,7 +2567,7 @@
   },
   {
     "id": 214,
-    "title": " Marble Zone",
+    "title": "Marble Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog",
@@ -2579,7 +2579,7 @@
   },
   {
     "id": 215,
-    "title": " Spring Yard Zone",
+    "title": "Spring Yard Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog",
@@ -2591,7 +2591,7 @@
   },
   {
     "id": 216,
-    "title": " Labyrinth Zone",
+    "title": "Labyrinth Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog",
@@ -2603,7 +2603,7 @@
   },
   {
     "id": 217,
-    "title": " Star Light Zone",
+    "title": "Star Light Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog",
@@ -2615,7 +2615,7 @@
   },
   {
     "id": 218,
-    "title": " Scrap Brain Zone",
+    "title": "Scrap Brain Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog",
@@ -2627,7 +2627,7 @@
   },
   {
     "id": 219,
-    "title": " Robotnik",
+    "title": "Robotnik",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog",
@@ -2639,7 +2639,7 @@
   },
   {
     "id": 220,
-    "title": " Title Theme",
+    "title": "Title Theme",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog 2",
@@ -2651,7 +2651,7 @@
   },
   {
     "id": 221,
-    "title": " Emerald Hill Zone",
+    "title": "Emerald Hill Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog 2",
@@ -2663,7 +2663,7 @@
   },
   {
     "id": 222,
-    "title": " Chemical Plant Zone",
+    "title": "Chemical Plant Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog 2",
@@ -2675,7 +2675,7 @@
   },
   {
     "id": 223,
-    "title": " Aquatic Ruin Zone",
+    "title": "Aquatic Ruin Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog 2",
@@ -2687,7 +2687,7 @@
   },
   {
     "id": 224,
-    "title": " Casino Night Zone",
+    "title": "Casino Night Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog 2",
@@ -2699,7 +2699,7 @@
   },
   {
     "id": 225,
-    "title": " Hill Top Zone",
+    "title": "Hill Top Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog 2",
@@ -2711,7 +2711,7 @@
   },
   {
     "id": 226,
-    "title": " Mystic Cave Zone",
+    "title": "Mystic Cave Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog 2",
@@ -2723,7 +2723,7 @@
   },
   {
     "id": 227,
-    "title": " Oil Ocean Zone",
+    "title": "Oil Ocean Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog 2",
@@ -2735,7 +2735,7 @@
   },
   {
     "id": 228,
-    "title": " Metropolis Zone",
+    "title": "Metropolis Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog 2",
@@ -2747,7 +2747,7 @@
   },
   {
     "id": 229,
-    "title": " Death Egg Zone",
+    "title": "Death Egg Zone",
     "artist": "Masato Nakamura",
     "composer": "Masato Nakamura",
     "game": "Sonic the Hedgehog 2",
@@ -2759,7 +2759,7 @@
   },
   {
     "id": 230,
-    "title": " Angel Island Zone Act 1",
+    "title": "Angel Island Zone Act 1",
     "artist": "Michael Jackson & Sega Sound Team",
     "composer": "Michael Jackson & Sega Sound Team",
     "game": "Sonic the Hedgehog 3",
@@ -2771,7 +2771,7 @@
   },
   {
     "id": 231,
-    "title": " IceCap Zone Act 1",
+    "title": "IceCap Zone Act 1",
     "artist": "Michael Jackson & Sega Sound Team",
     "composer": "Michael Jackson & Sega Sound Team",
     "game": "Sonic the Hedgehog 3",
@@ -2783,7 +2783,7 @@
   },
   {
     "id": 232,
-    "title": " Launch Base Zone Act 1",
+    "title": "Launch Base Zone Act 1",
     "artist": "Michael Jackson & Sega Sound Team",
     "composer": "Michael Jackson & Sega Sound Team",
     "game": "Sonic the Hedgehog 3",
@@ -2795,7 +2795,7 @@
   },
   {
     "id": 233,
-    "title": " Corneria",
+    "title": "Corneria",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Star Fox",
@@ -2807,7 +2807,7 @@
   },
   {
     "id": 234,
-    "title": " Fortuna",
+    "title": "Fortuna",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Star Fox",
@@ -2819,7 +2819,7 @@
   },
   {
     "id": 235,
-    "title": " Macbeth",
+    "title": "Macbeth",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Star Fox",
@@ -2831,7 +2831,7 @@
   },
   {
     "id": 236,
-    "title": " Main Theme",
+    "title": "Main Theme",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "Star Fox",
@@ -2939,7 +2939,7 @@
   },
   {
     "id": 245,
-    "title": " The World Warrior",
+    "title": "The World Warrior",
     "artist": "Yoko Shimomura",
     "composer": "Yoko Shimomura",
     "game": "Street Fighter II",
@@ -2951,7 +2951,7 @@
   },
   {
     "id": 246,
-    "title": " Player Select",
+    "title": "Player Select",
     "artist": "Yoko Shimomura",
     "composer": "Yoko Shimomura",
     "game": "Street Fighter II",
@@ -2963,7 +2963,7 @@
   },
   {
     "id": 247,
-    "title": " Ryu",
+    "title": "Ryu",
     "artist": "Yoko Shimomura",
     "composer": "Yoko Shimomura",
     "game": "Street Fighter II",
@@ -2975,7 +2975,7 @@
   },
   {
     "id": 248,
-    "title": " Guile",
+    "title": "Guile",
     "artist": "Yoko Shimomura",
     "composer": "Yoko Shimomura",
     "game": "Street Fighter II",
@@ -2987,7 +2987,7 @@
   },
   {
     "id": 249,
-    "title": " Player Select V2",
+    "title": "Player Select V2",
     "artist": "Yuzo Koshiro",
     "composer": "Yuzo Koshiro",
     "game": "Streets of Rage 2",
@@ -2999,7 +2999,7 @@
   },
   {
     "id": 250,
-    "title": " Go Straight",
+    "title": "Go Straight",
     "artist": "Yuzo Koshiro",
     "composer": "Yuzo Koshiro",
     "game": "Streets of Rage 2",
@@ -3011,7 +3011,7 @@
   },
   {
     "id": 251,
-    "title": " In The Bar",
+    "title": "In The Bar",
     "artist": "Yuzo Koshiro",
     "composer": "Yuzo Koshiro",
     "game": "Streets of Rage 2",
@@ -3023,7 +3023,7 @@
   },
   {
     "id": 252,
-    "title": " Dreamer",
+    "title": "Dreamer",
     "artist": "Yuzo Koshiro",
     "composer": "Yuzo Koshiro",
     "game": "Streets of Rage 2",
@@ -3095,7 +3095,7 @@
   },
   {
     "id": 258,
-    "title": " Title Theme",
+    "title": "Title Theme",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -3107,7 +3107,7 @@
   },
   {
     "id": 259,
-    "title": " Deku Tree",
+    "title": "Deku Tree",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -3119,7 +3119,7 @@
   },
   {
     "id": 260,
-    "title": " Kokiri Forest",
+    "title": "Kokiri Forest",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -3143,7 +3143,7 @@
   },
   {
     "id": 262,
-    "title": " Hyrule Castle Courtyard",
+    "title": "Hyrule Castle Courtyard",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -3155,7 +3155,7 @@
   },
   {
     "id": 263,
-    "title": " Ocarina ~Zelda's Lullaby~",
+    "title": "Ocarina ~Zelda's Lullaby~",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -3167,7 +3167,7 @@
   },
   {
     "id": 264,
-    "title": " Zelda's Theme",
+    "title": "Zelda's Theme",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -3179,7 +3179,7 @@
   },
   {
     "id": 265,
-    "title": " Ocarina ~Epona's Theme~",
+    "title": "Ocarina ~Epona's Theme~",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -3191,7 +3191,7 @@
   },
   {
     "id": 266,
-    "title": " Lon Lon Ranch",
+    "title": "Lon Lon Ranch",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -3203,7 +3203,7 @@
   },
   {
     "id": 267,
-    "title": " Kakariko Village",
+    "title": "Kakariko Village",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -3215,7 +3215,7 @@
   },
   {
     "id": 268,
-    "title": " Ocarina ~Sun's Song~",
+    "title": "Ocarina ~Sun's Song~",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -3227,7 +3227,7 @@
   },
   {
     "id": 269,
-    "title": " Ocarina ~Saria's Song~",
+    "title": "Ocarina ~Saria's Song~",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -3239,7 +3239,7 @@
   },
   {
     "id": 270,
-    "title": " Lost Woods",
+    "title": "Lost Woods",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -3251,7 +3251,7 @@
   },
   {
     "id": 271,
-    "title": " Zora's Domain",
+    "title": "Zora's Domain",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -3263,7 +3263,7 @@
   },
   {
     "id": 272,
-    "title": " Great Fairy's Fountain",
+    "title": "Great Fairy's Fountain",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -3275,7 +3275,7 @@
   },
   {
     "id": 273,
-    "title": " Ocarina ~Song Of Time~",
+    "title": "Ocarina ~Song Of Time~",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -3287,7 +3287,7 @@
   },
   {
     "id": 274,
-    "title": " Temple Of Time",
+    "title": "Temple Of Time",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -3299,7 +3299,7 @@
   },
   {
     "id": 275,
-    "title": " Master Sword",
+    "title": "Master Sword",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -3311,7 +3311,7 @@
   },
   {
     "id": 276,
-    "title": " Ocarina ~Song Of Storms~",
+    "title": "Ocarina ~Song Of Storms~",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -3323,7 +3323,7 @@
   },
   {
     "id": 277,
-    "title": " Minuet Of Forest",
+    "title": "Minuet Of Forest",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -3335,7 +3335,7 @@
   },
   {
     "id": 278,
-    "title": " Forest Temple",
+    "title": "Forest Temple",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -3347,7 +3347,7 @@
   },
   {
     "id": 279,
-    "title": " Bolero Of Fire",
+    "title": "Bolero Of Fire",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -3359,7 +3359,7 @@
   },
   {
     "id": 280,
-    "title": " Fire Temple",
+    "title": "Fire Temple",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -3371,7 +3371,7 @@
   },
   {
     "id": 281,
-    "title": " Serenade Of Water",
+    "title": "Serenade Of Water",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -3383,7 +3383,7 @@
   },
   {
     "id": 282,
-    "title": " Water Temple",
+    "title": "Water Temple",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -3395,7 +3395,7 @@
   },
   {
     "id": 283,
-    "title": " Nocturne Of Shadow",
+    "title": "Nocturne Of Shadow",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -3407,7 +3407,7 @@
   },
   {
     "id": 284,
-    "title": " Prelude Of Light",
+    "title": "Prelude Of Light",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -3419,7 +3419,7 @@
   },
   {
     "id": 285,
-    "title": " Gerudo Valley",
+    "title": "Gerudo Valley",
     "artist": "Koji Kondo",
     "composer": "Koji Kondo",
     "game": "The Legend of Zelda: Ocarina of Time",
@@ -3904,7 +3904,7 @@
     "genre": "Game Soundtrack",
     "console": "Multi-platform"
   },
-   {
+  {
     "id": 332,
     "title": "Portam Ad Inferno",
     "artist": "Petri Alanko & Martin Stig Andersen;  ",
@@ -3915,7 +3915,7 @@
     "genre": "Game Soundtrack",
     "console": "Multi-platform"
   },
-   {
+  {
     "id": 333,
     "title": "Counterfeit",
     "artist": "Petri Alanko & Martin Stig Andersen;  ",
@@ -3926,7 +3926,7 @@
     "genre": "Game Soundtrack",
     "console": "Multi-platform"
   },
-   {
+  {
     "id": 334,
     "title": "Et Ratio Principalis",
     "artist": "Petri Alanko & Martin Stig Andersen;  ",
@@ -3970,7 +3970,7 @@
     "genre": "Game Soundtrack",
     "console": "Dreamcast"
   },
-   {
+  {
     "id": 338,
     "title": "And I Begin to Wonder",
     "artist": "Kanako Kakino;  ",
@@ -3981,7 +3981,7 @@
     "genre": "Game Soundtrack",
     "console": "PS1"
   },
-   {
+  {
     "id": 339,
     "title": "The Windmill Song",
     "artist": "Kanako Kakino;  ",
@@ -3992,7 +3992,7 @@
     "genre": "Game Soundtrack",
     "console": "PS1"
   },
-   {
+  {
     "id": 340,
     "title": "Inquisitive Waltz",
     "artist": "Kanako Kakino;  ",
@@ -4003,7 +4003,7 @@
     "genre": "Game Soundtrack",
     "console": "PS1"
   },
-   {
+  {
     "id": 341,
     "title": "Farewell",
     "artist": "Kanako Kakino;  ",
@@ -4058,7 +4058,7 @@
     "genre": "Game Soundtrack",
     "console": "Super Nintendo"
   },
-{
+  {
     "id": 346,
     "title": "Las Vegas",
     "artist": "Barry Leitch, Hiroyuki Masuno;  ",
@@ -4069,7 +4069,7 @@
     "genre": "Game Soundtrack",
     "console": "Super Nintendo"
   },
-{
+  {
     "id": 347,
     "title": "Frankfurt",
     "artist": "Barry Leitch, Hiroyuki Masuno;  ",
@@ -4157,7 +4157,7 @@
     "genre": "Game Soundtrack",
     "console": "Nintendo 64"
   },
-{
+  {
     "id": 355,
     "title": "You're Not Supposed to Be Here",
     "artist": "Kelly Bailey",
@@ -4179,7 +4179,7 @@
     "genre": "Game Soundtrack",
     "console": "PC"
   },
- {
+  {
     "id": 357,
     "title": "Objection!",
     "artist": "Masakazu Sugimori",
@@ -4256,18 +4256,18 @@
     "genre": "Game Soundtrack",
     "console": "Game Boy Advance"
   },
-{
-  "id": 364,
-  "title": "Fragrancy of Black Coffee",
-  "artist": "Noriyuki Iwadare",
-  "composer": "Noriyuki Iwadare",
-  "game": "Phoenix Wright: Ace Attorney - Trials and Tribulations",
-  "audioUrl": "/audio/outros/3-11. Godot ~ The Fragrance Of Dark Coffee.mp3",
-  "year": 2004,
-  "genre": "Game Soundtrack",
-  "console": "Game Boy Advance"
-},
-{
+  {
+    "id": 364,
+    "title": "Fragrancy of Black Coffee",
+    "artist": "Noriyuki Iwadare",
+    "composer": "Noriyuki Iwadare",
+    "game": "Phoenix Wright: Ace Attorney - Trials and Tribulations",
+    "audioUrl": "/audio/outros/3-11. Godot ~ The Fragrance Of Dark Coffee.mp3",
+    "year": 2004,
+    "genre": "Game Soundtrack",
+    "console": "Game Boy Advance"
+  },
+  {
     "id": 365,
     "title": "goldenslaughterer",
     "artist": "zts",
@@ -4322,7 +4322,7 @@
     "genre": "Game Soundtrack",
     "console": "PC"
   },
-{
+  {
     "id": 370,
     "title": "Versus",
     "artist": "Hakita",
@@ -4357,7 +4357,7 @@
   },
   {
     "id": 373,
-    "title": "The Fire Is Gone ",
+    "title": "The Fire Is Gone",
     "artist": "Keygen Church",
     "composer": "Keygen Church",
     "game": "Ultrakill",
@@ -4377,7 +4377,7 @@
     "genre": "Game Soundtrack",
     "console": "PC"
   },
-{
+  {
     "id": 375,
     "title": "Clair Obscur Main Theme",
     "artist": "Lorien Testard",
@@ -4432,7 +4432,7 @@
     "genre": "Game Soundtrack",
     "console": "PC"
   },
- {
+  {
     "id": 380,
     "title": "Once Upon a Time",
     "artist": "Toby Fox",
@@ -4542,7 +4542,7 @@
     "genre": "Game Soundtrack",
     "console": "PC"
   },
-{
+  {
     "id": 390,
     "title": "Spider Dance",
     "artist": "Toby Fox",
@@ -4663,7 +4663,7 @@
     "genre": "Game Soundtrack",
     "console": "PC"
   },
-{
+  {
     "id": 401,
     "title": "The Beginning",
     "artist": "Toby Fox",
@@ -4762,7 +4762,7 @@
     "genre": "Game Soundtrack",
     "console": "PC"
   },
-{
+  {
     "id": 410,
     "title": "Chaos King",
     "artist": "Toby Fox",
@@ -4861,7 +4861,7 @@
     "genre": "Game Soundtrack",
     "console": "PC"
   },
- {
+  {
     "id": 419,
     "title": "Main Theme",
     "artist": "Borislav Slavov",
@@ -4916,7 +4916,7 @@
     "genre": "Game Soundtrack",
     "console": "PC"
   },
- {
+  {
     "id": 433,
     "title": "Take A Load Off",
     "artist": "Pedro Silva",
@@ -5059,7 +5059,6 @@
     "genre": "Game Soundtrack",
     "console": "PC, Switch, PS4, Xbox"
   },
-
   {
     "id": 481,
     "title": "Title Theme",

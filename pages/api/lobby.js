@@ -207,7 +207,7 @@ export default async function handler(req, res) {
       }
 
       if (action === 'guess') {
-        const { nickname, guess } = req.body;
+        const { nickname, guess } = body;
 
         if (!nickname || !guess) {
           return res.status(400).json({ error: 'Nickname e tentativa são obrigatórios.' });
@@ -335,7 +335,7 @@ export default async function handler(req, res) {
       }
 
       if (action === 'skip') {
-        const { nickname } = req.body;
+        const { nickname } = body;
 
         if (!nickname) {
           return res.status(400).json({ error: 'Nickname é obrigatório.' });
@@ -410,7 +410,7 @@ export default async function handler(req, res) {
       }
 
       if (action === 'nextRound') {
-        const { nickname } = req.body;
+        const { nickname } = body;
 
         if (!nickname || nickname !== lobby.host) {
           return res.status(400).json({ error: 'Apenas o host pode avançar rodadas.' });
