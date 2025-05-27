@@ -378,24 +378,8 @@ export default function Home() {
     // Se currentDay ainda não foi definido, usa o dia local como fallback
     const dayToUse = currentDay !== null ? currentDay : getDayOfYear();
 
-    // Primeiro, tenta recuperar a música salva para o dia
-    const savedSongKey = `ludomusic_daily_song_day_${dayToUse}`;
-    const savedSongId = localStorage.getItem(savedSongKey);
-
-    let dailySong;
-    if (savedSongId) {
-      // Usa a música salva se existir
-      dailySong = songs.find(s => s.id.toString() === savedSongId);
-      if (!dailySong) {
-        // Se a música salva não existe mais, gera uma nova determinística
-        dailySong = getDeterministicSongSimple(dayToUse);
-        localStorage.setItem(savedSongKey, dailySong.id.toString());
-      }
-    } else {
-      // Gera nova música determinística para o dia
-      dailySong = getDeterministicSongSimple(dayToUse);
-      localStorage.setItem(savedSongKey, dailySong.id.toString());
-    }
+    // Gera música determinística baseada APENAS no dia (sem localStorage)
+    const dailySong = getDeterministicSongSimple(dayToUse);
 
     setCurrentSong(dailySong);
 
@@ -497,35 +481,10 @@ export default function Home() {
       setCurrentDay(dayOfYear);
 
       // SISTEMA DETERMINÍSTICO: A música é sempre a mesma para o mesmo dia
-      // Verificar se já temos a música salva para hoje
-      const savedSongKey = `ludomusic_daily_song_day_${dayOfYear}`;
-      const savedSongId = localStorage.getItem(savedSongKey);
+      // Gera música determinística baseada APENAS no dia (sem localStorage)
+      const song = getDeterministicSongSimple(dayOfYear);
 
-      let song;
-      if (savedSongId && !dayChanged) {
-        // Usar a música salva se for o mesmo dia
-        song = songs.find(s => s.id.toString() === savedSongId);
-        if (!song) {
-          // Se a música salva não existe mais, gerar uma nova
-          song = getDeterministicSongSimple(dayOfYear);
-          localStorage.setItem(savedSongKey, song.id.toString());
-        }
-      } else {
-        // Gerar nova música para o dia
-        song = getDeterministicSongSimple(dayOfYear);
-        localStorage.setItem(savedSongKey, song.id.toString());
-      }
-
-      // Limpa músicas de dias anteriores (mantém apenas os últimos 3 dias)
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && key.startsWith('ludomusic_daily_song_day_')) {
-          const dayFromKey = parseInt(key.replace('ludomusic_daily_song_day_', ''));
-          if (dayFromKey < dayOfYear - 2) {
-            localStorage.removeItem(key);
-          }
-        }
-      }
+      // Sistema determinístico não precisa de limpeza de localStorage para músicas
 
       // Usar URL original sem codificação - mais compatível com Vercel
       const songWithEncodedUrl = { ...song, audioUrl: song.audioUrl };
@@ -576,18 +535,8 @@ export default function Home() {
         // No modo infinito, gera um tempo aleatório
         startTimeToUse = Math.random() * Math.max(0, duration - 10);
       } else if (currentDay !== null) {
-        // No modo normal, usa o sistema determinístico baseado no dia
-        const savedStartTimeKey = `ludomusic_start_time_day_${currentDay}`;
-        const savedStartTime = localStorage.getItem(savedStartTimeKey);
-
-        if (savedStartTime && !isNaN(parseFloat(savedStartTime))) {
-          // Usa o tempo salvo se existir e for válido
-          startTimeToUse = parseFloat(savedStartTime);
-        } else {
-          // Gera um novo tempo determinístico baseado no dia e salva no localStorage
-          startTimeToUse = getDeterministicStartTime(duration, currentDay);
-          localStorage.setItem(savedStartTimeKey, startTimeToUse.toString());
-        }
+        // No modo normal, usa o sistema determinístico baseado no dia (sem localStorage)
+        startTimeToUse = getDeterministicStartTime(duration, currentDay);
       } else {
         // Fallback para tempo aleatório
         startTimeToUse = Math.random() * Math.max(0, duration - 10);
