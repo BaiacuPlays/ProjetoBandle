@@ -15,15 +15,7 @@ const nextConfig = {
       '/api/**': ['./public/audio/**/*']
     }
   },
-  // Redirects para sitemap
-  async rewrites() {
-    return [
-      {
-        source: '/sitemap.xml',
-        destination: '/api/sitemap.xml',
-      },
-    ];
-  },
+  // Sitemap agora é servido como arquivo estático em /public/sitemap.xml
   // Configuração para servir arquivos estáticos e SEO
   async headers() {
     return [
