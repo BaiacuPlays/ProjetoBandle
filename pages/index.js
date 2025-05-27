@@ -556,14 +556,22 @@ export default function Home() {
 
   // Atualiza duração do áudio ao carregar
   const handleLoadedMetadata = () => {
+    if (!audioRef.current || !currentSong) return;
 
+    const duration = audioRef.current.duration || 0;
 
-    if (audioRef.current) {
-      const duration = audioRef.current.duration || 0;
-      setAudioDuration(duration);
+    // Verificar se a duração é válida
+    if (!duration || isNaN(duration) || duration < 10) {
+      setAudioError(true);
+      setMessage('Arquivo de áudio inválido ou muito curto.');
+      return;
+    }
 
-      let startTimeToUse;
+    setAudioDuration(duration);
 
+    let startTimeToUse;
+
+    try {
       if (isInfiniteMode) {
         // No modo infinito, gera um tempo aleatório
         startTimeToUse = Math.random() * Math.max(0, duration - 10);
@@ -572,8 +580,8 @@ export default function Home() {
         const savedStartTimeKey = `ludomusic_start_time_day_${currentDay}`;
         const savedStartTime = localStorage.getItem(savedStartTimeKey);
 
-        if (savedStartTime) {
-          // Usa o tempo salvo se existir
+        if (savedStartTime && !isNaN(parseFloat(savedStartTime))) {
+          // Usa o tempo salvo se existir e for válido
           startTimeToUse = parseFloat(savedStartTime);
         } else {
           // Gera um novo tempo determinístico baseado no dia e salva no localStorage
@@ -585,36 +593,38 @@ export default function Home() {
         startTimeToUse = Math.random() * Math.max(0, duration - 10);
       }
 
+      // Garantir que o startTime é válido
+      startTimeToUse = Math.max(0, Math.min(startTimeToUse, duration - 10));
+
       setStartTime(startTimeToUse);
       audioRef.current.currentTime = startTimeToUse;
+      setAudioProgress(0);
+    } catch (error) {
+      console.error('Erro ao definir tempo de início:', error);
+      // Fallback seguro
+      const fallbackTime = Math.random() * Math.max(0, duration - 10);
+      setStartTime(fallbackTime);
+      audioRef.current.currentTime = fallbackTime;
+      setAudioProgress(0);
+    }
 
-      // Debug temporário
-      console.log('🎵 Áudio carregado:', {
-        duration: duration,
-        startTime: startTimeToUse,
-        audioUrl: currentSong?.audioUrl
-      });
-
-
-
-      // Aplicar configurações de som
-      if (typeof window !== 'undefined') {
-        try {
-          const savedSettings = localStorage.getItem('bandle_settings');
-          if (savedSettings) {
-            const settings = JSON.parse(savedSettings);
-            audioRef.current.muted = !settings.sound;
-          }
-        } catch (error) {
-          // console.error('Erro ao aplicar configurações de som:', error);
+    // Aplicar configurações de som
+    if (typeof window !== 'undefined') {
+      try {
+        const savedSettings = localStorage.getItem('bandle_settings');
+        if (savedSettings) {
+          const settings = JSON.parse(savedSettings);
+          audioRef.current.muted = !settings.sound;
         }
+      } catch (error) {
+        console.error('Erro ao aplicar configurações de som:', error);
       }
+    }
 
-      // Limpa o estado de erro quando o áudio carrega com sucesso
-      setAudioError(false);
-      if (message === 'Erro ao carregar o áudio. Verifique se o arquivo existe.') {
-        setMessage('');
-      }
+    // Limpa o estado de erro quando o áudio carrega com sucesso
+    setAudioError(false);
+    if (message === 'Erro ao carregar o áudio. Verifique se o arquivo existe.') {
+      setMessage('');
     }
   };
 
@@ -633,52 +643,50 @@ export default function Home() {
 
     const updateProgress = () => {
       try {
-        if (!audio || audio.ended || !audio.duration || isNaN(audio.duration)) return;
-
-        const currentTime = audio.currentTime - startTime;
-
-        // Debug temporário
-        if (Math.random() < 0.1) { // Log apenas 10% das vezes para não spam
-          console.log('⏱️ Progress update:', {
-            audioCurrentTime: audio.currentTime,
-            startTime: startTime,
-            calculatedTime: currentTime,
-            isPlaying: !audio.paused,
-            maxDuration: maxDuration
-          });
+        // Verificações básicas
+        if (!audio || audio.ended || !audio.duration || isNaN(audio.duration) || startTime === null) {
+          return;
         }
 
-        // Sempre atualizar o progresso primeiro
-        setAudioProgress(Math.max(0, currentTime));
+        const currentTime = Math.max(0, audio.currentTime - startTime);
 
-        // Verificar se excedeu o tempo limite (apenas se estiver tocando)
-        if (!audio.paused && (!gameOver || isInfiniteMode) && currentTime >= maxDuration) {
-          // Para o áudio e volta para o início
-          audio.pause();
-          setIsPlaying(false);
-          audio.currentTime = startTime;
-          setAudioProgress(0);
-        } else if (!audio.paused && gameOver && !isInfiniteMode && currentTime >= MAX_PLAY_TIME) {
-          // FADE OUT após 15s se o jogo acabou
-          if (!fadeOutInterval) {
-            let step = 0;
-            originalVolumeRef.current = audio.volume;
-            fadeOutInterval = setInterval(() => {
-              step++;
-              audio.volume = originalVolumeRef.current * (1 - step / fadeOutSteps);
-              if (step >= fadeOutSteps) {
-                clearInterval(fadeOutInterval);
-                audio.pause();
-                setIsPlaying(false);
-                audio.currentTime = startTime;
-                setAudioProgress(0);
-                audio.volume = originalVolumeRef.current;
-              }
-            }, fadeOutStepTime * 1000);
+        // Atualizar progresso sempre
+        setAudioProgress(currentTime);
+
+        // Verificar limites apenas se estiver tocando
+        if (!audio.paused) {
+          const shouldStop = (!gameOver || isInfiniteMode)
+            ? currentTime >= maxDuration
+            : currentTime >= MAX_PLAY_TIME;
+
+          if (shouldStop) {
+            if (gameOver && !isInfiniteMode && currentTime >= MAX_PLAY_TIME && !fadeOutInterval) {
+              // FADE OUT após 15s se o jogo acabou
+              let step = 0;
+              originalVolumeRef.current = audio.volume;
+              fadeOutInterval = setInterval(() => {
+                step++;
+                audio.volume = originalVolumeRef.current * (1 - step / fadeOutSteps);
+                if (step >= fadeOutSteps) {
+                  clearInterval(fadeOutInterval);
+                  audio.pause();
+                  setIsPlaying(false);
+                  audio.currentTime = startTime;
+                  setAudioProgress(0);
+                  audio.volume = originalVolumeRef.current;
+                }
+              }, fadeOutStepTime * 1000);
+            } else {
+              // Para imediatamente
+              audio.pause();
+              setIsPlaying(false);
+              audio.currentTime = startTime;
+              setAudioProgress(0);
+            }
           }
         }
       } catch (error) {
-        // console.error('Erro ao atualizar progresso:', error);
+        console.error('Erro ao atualizar progresso:', error);
       }
     };
 
@@ -1267,8 +1275,6 @@ export default function Home() {
 
   // Já estamos usando isClient do contexto de idioma
 
-
-
   if (isLoading) {
     return (
       <div className={styles.container}>
@@ -1455,7 +1461,7 @@ export default function Home() {
                 <button
                   className={styles.audioPlayBtnCustom}
                   onClick={() => {
-                    if (!audioRef.current || isPlayButtonDisabled) {
+                    if (!audioRef.current || isPlayButtonDisabled || audioError) {
                       return;
                     }
 
@@ -1470,33 +1476,39 @@ export default function Home() {
                     }
 
                     // Verificar se o startTime está definido
-                    if (startTime === undefined) {
+                    if (startTime === null || startTime === undefined) {
                       return;
                     }
 
                     const currentTime = audioRef.current.currentTime - startTime;
                     const maxAllowed = (gameOver && !isInfiniteMode) ? MAX_PLAY_TIME : (maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1]);
 
-                    if (currentTime >= maxAllowed || currentTime < 0) {
-                      // Se já passou do limite ou está antes do início, volta para o início do trecho
-                      audioRef.current.currentTime = startTime;
-                      setAudioProgress(0);
-                    }
-
                     if (isPlaying) {
                       audioRef.current.pause();
                     } else {
-                      // Garantir que o áudio está no tempo correto antes de tocar
-                      if (audioRef.current.currentTime < startTime || audioRef.current.currentTime > startTime + maxAllowed) {
+                      // Verificar se precisa resetar o tempo
+                      if (currentTime >= maxAllowed || currentTime < 0 || audioRef.current.currentTime < startTime) {
                         audioRef.current.currentTime = startTime;
                         setAudioProgress(0);
                       }
 
-                      audioRef.current.play().catch(error => {
-                        console.error('Erro ao reproduzir áudio:', error);
-                        setAudioError(true);
-                        setMessage('Erro ao reproduzir o áudio. Tentando novamente...');
-                      });
+                      // Tentar reproduzir com melhor tratamento de erros
+                      const playPromise = audioRef.current.play();
+                      if (playPromise !== undefined) {
+                        playPromise.catch(error => {
+                          console.error('Erro ao reproduzir áudio:', error);
+                          if (error.name === 'NotAllowedError') {
+                            setMessage('Clique em qualquer lugar para permitir reprodução de áudio');
+                          } else if (error.name === 'NotSupportedError') {
+                            setAudioError(true);
+                            setMessage('Formato de áudio não suportado neste navegador');
+                          } else if (error.name === 'AbortError') {
+                            // Ignorar AbortError - é normal quando o usuário para/inicia rapidamente
+                          } else {
+                            setMessage('Erro ao reproduzir o áudio. Tentando novamente...');
+                          }
+                        });
+                      }
                     }
                   } }
                   disabled={audioError || (!audioDuration && !currentSong?.audioUrl) || isPlayButtonDisabled}
@@ -1531,40 +1543,35 @@ export default function Home() {
                 onLoadedMetadata={handleLoadedMetadata}
                 onEnded={handleAudioEnded}
                 onError={(e) => {
-                  // console.error('🚨 ERRO DE ÁUDIO:', {
-                  //   currentSong: currentSong,
-                  //   audioUrl: currentSong?.audioUrl,
-                  //   error: e,
-                  //   audioElement: audioRef.current,
-                  //   networkState: audioRef.current?.networkState,
-                  //   readyState: audioRef.current?.readyState
-                  // });
+                  console.error('Erro de áudio:', {
+                    currentSong: currentSong?.title,
+                    audioUrl: currentSong?.audioUrl,
+                    error: e.target.error
+                  });
                   setAudioError(true);
                   setMessage('Erro ao carregar o áudio. Tentando novamente...');
 
                   // Tentar recarregar o áudio após um pequeno delay
                   setTimeout(() => {
                     if (audioRef.current && currentSong?.audioUrl) {
-                      // console.log('🔄 Tentando recarregar áudio...');
                       audioRef.current.load();
                     }
                   }, 1000);
                 }}
                 onCanPlay={() => {
-                  // console.log('✅ ÁUDIO PODE SER REPRODUZIDO');
                   setAudioError(false);
                   if (message === 'Erro ao carregar o áudio. Tentando novamente...' || message === 'Erro ao carregar o áudio. Verifique se o arquivo existe.') {
                     setMessage('');
                   }
                 }}
                 onLoadStart={() => {
-                  // console.log('🔄 INICIANDO CARREGAMENTO DO ÁUDIO');
+                  // Áudio iniciando carregamento
                 }}
                 onLoadedData={() => {
-                  // console.log('📊 DADOS DO ÁUDIO CARREGADOS');
+                  // Dados do áudio carregados
                 }}
                 onCanPlayThrough={() => {
-                  // console.log('🎵 ÁUDIO TOTALMENTE CARREGADO');
+                  // Áudio totalmente carregado
                 }} />
             </div>
           </div>

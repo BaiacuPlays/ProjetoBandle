@@ -27,9 +27,13 @@ export const songs = musicData.map((song, index) => ({
 // Lista de músicas disponíveis (que têm arquivo de áudio)
 const checkSongAvailability = async (song) => {
   try {
-    const response = await fetch(song.audioUrl, { method: 'HEAD' });
+    const response = await fetch(song.audioUrl, {
+      method: 'HEAD',
+      cache: 'force-cache' // Usar cache para melhor performance
+    });
     return response.ok;
-  } catch {
+  } catch (error) {
+    console.warn(`Música não disponível: ${song.title} - ${song.audioUrl}`);
     return false;
   }
 };

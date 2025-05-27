@@ -120,20 +120,24 @@ const MultiplayerGame = ({ onBackToLobby }) => {
       );
     }
 
-
-
     if (songToUse && audioRef.current) {
       const handleLoadedMetadata = () => {
         const duration = audioRef.current.duration || 0;
+
+        // Verificar se a duração é válida
+        if (!duration || isNaN(duration) || duration < 10) {
+          console.error('Arquivo de áudio inválido:', songToUse.audioUrl);
+          return;
+        }
+
         const startTimeToUse = getDeterministicStartTime(duration, songToUse.id);
         setStartTime(startTimeToUse);
         audioRef.current.currentTime = startTimeToUse;
         setAudioProgress(0);
-
       };
 
-      const handleError = () => {
-
+      const handleError = (e) => {
+        console.error('Erro ao carregar áudio no multiplayer:', e);
       };
 
       audioRef.current.addEventListener('loadedmetadata', handleLoadedMetadata);
@@ -404,7 +408,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
   };
 
   const handlePlayPause = () => {
-    if (!audioRef.current || isPlayButtonDisabled) return;
+    if (!audioRef.current || isPlayButtonDisabled || startTime === null) return;
 
     // Desabilita o botão temporariamente para evitar duplo clique
     setIsPlayButtonDisabled(true);
@@ -415,15 +419,11 @@ const MultiplayerGame = ({ onBackToLobby }) => {
       ? 15
       : maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1];
 
-    if (currentTime >= 15 || (!iAmWinner && currentTime >= maxDuration)) {
-      audioRef.current.currentTime = startTime;
-      setAudioProgress(0);
-    }
-
     if (isPlaying) {
       audioRef.current.pause();
     } else {
-      if (audioRef.current.currentTime < startTime || audioRef.current.currentTime > startTime + maxDuration) {
+      // Verificar se precisa resetar o tempo
+      if (currentTime >= 15 || (!iAmWinner && currentTime >= maxDuration) || currentTime < 0) {
         audioRef.current.currentTime = startTime;
         setAudioProgress(0);
       }
@@ -437,8 +437,10 @@ const MultiplayerGame = ({ onBackToLobby }) => {
             actions.setError('Clique em qualquer lugar para permitir reprodução de áudio');
           } else if (error.name === 'NotSupportedError') {
             actions.setError('Formato de áudio não suportado neste navegador');
+          } else if (error.name !== 'AbortError') {
+            // Ignorar AbortError mas logar outros erros
+            console.error('Erro ao reproduzir áudio no multiplayer:', error);
           }
-          // Ignorar AbortError e outros erros temporários
         });
       }
     }
