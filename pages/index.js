@@ -588,6 +588,13 @@ export default function Home() {
       setStartTime(startTimeToUse);
       audioRef.current.currentTime = startTimeToUse;
 
+      // Debug temporário
+      console.log('🎵 Áudio carregado:', {
+        duration: duration,
+        startTime: startTimeToUse,
+        audioUrl: currentSong?.audioUrl
+      });
+
 
 
       // Aplicar configurações de som
@@ -626,21 +633,32 @@ export default function Home() {
 
     const updateProgress = () => {
       try {
-        if (!audio || audio.paused || audio.ended || !audio.duration || isNaN(audio.duration)) return;
+        if (!audio || audio.ended || !audio.duration || isNaN(audio.duration)) return;
 
         const currentTime = audio.currentTime - startTime;
+
+        // Debug temporário
+        if (Math.random() < 0.1) { // Log apenas 10% das vezes para não spam
+          console.log('⏱️ Progress update:', {
+            audioCurrentTime: audio.currentTime,
+            startTime: startTime,
+            calculatedTime: currentTime,
+            isPlaying: !audio.paused,
+            maxDuration: maxDuration
+          });
+        }
 
         // Sempre atualizar o progresso primeiro
         setAudioProgress(Math.max(0, currentTime));
 
-        // Verificar se excedeu o tempo limite
-        if ((!gameOver || isInfiniteMode) && currentTime >= maxDuration) {
+        // Verificar se excedeu o tempo limite (apenas se estiver tocando)
+        if (!audio.paused && (!gameOver || isInfiniteMode) && currentTime >= maxDuration) {
           // Para o áudio e volta para o início
           audio.pause();
           setIsPlaying(false);
           audio.currentTime = startTime;
           setAudioProgress(0);
-        } else if (gameOver && !isInfiniteMode && currentTime >= MAX_PLAY_TIME) {
+        } else if (!audio.paused && gameOver && !isInfiniteMode && currentTime >= MAX_PLAY_TIME) {
           // FADE OUT após 15s se o jogo acabou
           if (!fadeOutInterval) {
             let step = 0;
@@ -1468,6 +1486,12 @@ export default function Home() {
                     if (isPlaying) {
                       audioRef.current.pause();
                     } else {
+                      // Garantir que o áudio está no tempo correto antes de tocar
+                      if (audioRef.current.currentTime < startTime || audioRef.current.currentTime > startTime + maxAllowed) {
+                        audioRef.current.currentTime = startTime;
+                        setAudioProgress(0);
+                      }
+
                       audioRef.current.play().catch(error => {
                         console.error('Erro ao reproduzir áudio:', error);
                         setAudioError(true);
