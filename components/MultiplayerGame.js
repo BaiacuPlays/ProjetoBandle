@@ -59,6 +59,8 @@ const MultiplayerGame = ({ onBackToLobby }) => {
   const [isShaking, setIsShaking] = useState(false);
   const [startTime, setStartTime] = useState(0);
   const [isPlayButtonDisabled, setIsPlayButtonDisabled] = useState(false);
+  const [isPlayLoading, setIsPlayLoading] = useState(false);
+  const [pendingPlay, setPendingPlay] = useState(false);
 
   const audioRef = useRef(null);
   const inputRef = useRef(null);
@@ -437,7 +439,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
             actions.setError('Clique em qualquer lugar para permitir reprodução de áudio');
           } else if (error.name === 'NotSupportedError') {
             actions.setError('Formato de áudio não suportado neste navegador');
-          } else if (error.name !== 'AbortError') {
+          } else if (error.name === 'AbortError') {
             // Ignorar AbortError mas logar outros erros
             console.error('Erro ao reproduzir áudio no multiplayer:', error);
           }
@@ -607,10 +609,74 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                   <div className={gameStyles.audioVolumeRow}>
                     <button
                       className={gameStyles.audioPlayBtnCustom}
-                      onClick={handlePlayPause}
-                      disabled={!songToPlay || isPlayButtonDisabled}
+                      onClick={async (e) => {
+                        if (!songToPlay || isPlayButtonDisabled || isPlayLoading) return;
+                        setIsPlayButtonDisabled(true);
+                        setIsPlayLoading(true);
+                        setTimeout(() => setIsPlayButtonDisabled(false), 400);
+                        if (!audioRef.current.duration && songToPlay?.audioUrl) {
+                          setPendingPlay(true);
+                          audioRef.current.load();
+                          return;
+                        }
+                        if (startTime === null || startTime === undefined) {
+                          setIsPlayLoading(false);
+                          return;
+                        }
+                        const currentTime = audioRef.current.currentTime - startTime;
+                        const maxDuration = iAmWinner ? 15 : maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1];
+                        if (isPlaying) {
+                          audioRef.current.pause();
+                          setIsPlayLoading(false);
+                        } else {
+                          if (currentTime >= 15 || (!iAmWinner && currentTime >= maxDuration) || currentTime < 0) {
+                            audioRef.current.currentTime = startTime;
+                            setAudioProgress(0);
+                          }
+                          try {
+                            if (audioRef.current.paused) {
+                              const playPromise = audioRef.current.play();
+                              if (playPromise !== undefined) {
+                                await playPromise;
+                              }
+                            }
+                            setIsPlayLoading(false);
+                          } catch (error) {
+                            setIsPlayLoading(false);
+                            if (error.name === 'AbortError') {
+                              return;
+                            }
+                            if (error.name === 'NotAllowedError') {
+                              actions.setError('Clique em qualquer lugar para permitir reprodução de áudio');
+                            } else if (error.name === 'NotSupportedError') {
+                              actions.setError('Formato de áudio não suportado neste navegador');
+                            } else {
+                              actions.setError('Erro ao reproduzir o áudio. Tentando novamente...');
+                            }
+                          }
+                        }
+                      }}
+                      onKeyDown={e => {
+                        if (e.key === ' ' || e.key === 'Enter') {
+                          e.preventDefault();
+                          e.target.click();
+                        }
+                      }}
+                      aria-label={isPlaying ? (isClient ? t('pause') : 'Pausar') : (isClient ? t('play') : 'Reproduzir')}
+                      aria-pressed={isPlaying}
+                      tabIndex={0}
+                      role="button"
+                      disabled={!songToPlay || isPlayButtonDisabled || isPlayLoading}
+                      style={{
+                        position: 'relative',
+                        outline: 'none',
+                        transition: 'box-shadow 0.2s',
+                        boxShadow: isPlayLoading ? '0 0 0 3px #1DB95455' : undefined
+                      }}
                     >
-                      {isPlaying ? (
+                      {isPlayLoading ? (
+                        <span className={gameStyles.spinner} aria-label={isClient ? t('loading') : 'Carregando'} />
+                      ) : isPlaying ? (
                         <FaPause color="#fff" size={20} />
                       ) : (
                         <FaPlay color="#fff" size={20} />

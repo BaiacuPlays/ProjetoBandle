@@ -353,12 +353,14 @@
 }
 
 .spinner {
-  width: 20px;
-  height: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top: 2px solid #4ecdc4;
+  width: 1.3em;
+  height: 1.3em;
+  border: 3px solid #1db95444;
+  border-top: 3px solid #1db954;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 @keyframes spin {
@@ -571,4 +573,16 @@
   .gameHeader {
     margin-bottom: 15px;
   }
+}
+
+.audioPlayBtnCustom:focus {
+  outline: 2px solid #1DB954;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px #1DB95455;
+  transition: box-shadow 0.2s;
+}
+
+.audioPlayBtnCustom:active {
+  transform: scale(0.96);
+  transition: transform 0.1s;
 }

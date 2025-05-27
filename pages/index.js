@@ -46,6 +46,8 @@ export default function Home() {
   const [showStatistics, setShowStatistics] = useState(false);
   const [gameResult, setGameResult] = useState(null);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [isPlayLoading, setIsPlayLoading] = useState(false);
+  const [pendingPlay, setPendingPlay] = useState(false);
 
   // Estados do modo infinito
   const [isInfiniteMode, setIsInfiniteMode] = useState(false);
@@ -575,6 +577,16 @@ export default function Home() {
     if (message === 'Erro ao carregar o áudio. Verifique se o arquivo existe.') {
       setMessage('');
     }
+    // Se o usuário clicou play enquanto carregava, já inicia a reprodução
+    if (pendingPlay) {
+      setPendingPlay(false);
+      setTimeout(() => {
+        if (audioRef.current.paused) {
+          audioRef.current.play().catch(() => {});
+        }
+        setIsPlayLoading(false);
+      }, 0);
+    }
   };
 
   // Atualiza progresso e play/pause
@@ -687,6 +699,8 @@ export default function Home() {
   };
 
   // Guess
+  const [showSelectFromListError, setShowSelectFromListError] = useState(false);
+
   const handleGuess = (e) => {
     e.preventDefault();
     if (gameOver) return;
@@ -704,11 +718,13 @@ export default function Home() {
 
     if (!songExists) {
       setMessage(t('select_from_list'));
+      setShowSelectFromListError(true); // só mostra após submit
       setIsShaking(true);
       setTimeout(() => setIsShaking(false), 500);
       return;
     }
 
+    setShowSelectFromListError(false); // limpa erro ao acertar
     submitGuess(guess);
   };
 
@@ -851,6 +867,10 @@ export default function Home() {
     const value = e.target.value;
     setGuess(value);
     filterSuggestions(value);
+    // Força mostrar sugestões se for '?'
+    if (value.trim() === '?') {
+      setShowSuggestions(true);
+    }
   };
 
   const handleSuggestionClick = (suggestion) => {
@@ -914,9 +934,8 @@ export default function Home() {
     if (currentSong?.audioUrl) {
       // Reseta o estado de erro quando uma nova música é carregada
       setAudioError(false);
-      if (message === 'Erro ao carregar o áudio. Verifique se o arquivo existe.' ||
-          message === 'Erro ao carregar o áudio. Tentando novamente...' ||
-          message === 'Erro ao reproduzir o áudio. Tentando novamente...') {
+      if (message === 'Erro ao carregar o áudio. Tentando novamente...' ||
+          message === 'Erro ao carregar o áudio. Verifique se o arquivo existe.') {
         setMessage('');
       }
 
@@ -1238,24 +1257,10 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>LudoMusic - Adivinhe a Música dos Seus Jogos Favoritos | Jogo Musical Gratuito</title>
-        <meta name="description" content="🎮 Teste seus conhecimentos musicais dos videogames! Ouça trechos de mais de 1000 músicas de jogos famosos e adivinhe o nome. Jogue sozinho ou com amigos no modo multiplayer. Totalmente gratuito!" />
-        <meta name="keywords" content="jogo musical, videogame música, quiz musical, adivinhar música games, trilha sonora jogos, ludomusic, bandle, heardle games" />
+        <title>LudoMusic - Adivinhe a Música dos Seus Jogos Favoritos!</title>
+        <meta name="description" content="Teste seus conhecimentos musicais dos videogames! Ouça trechos de músicas de jogos famosos e adivinhe o nome. Jogue sozinho ou com amigos no modo multiplayer. Mais de 1000 músicas de games clássicos e modernos." />
+        <meta name="robots" content="index, follow" />
         <link rel="canonical" href="https://ludomusic.xyz" />
-
-        {/* Open Graph específico para a home */}
-        <meta property="og:title" content="LudoMusic - Adivinhe a Música dos Seus Jogos Favoritos" />
-        <meta property="og:description" content="🎮 Teste seus conhecimentos musicais dos videogames! Mais de 1000 músicas de jogos famosos. Jogue sozinho ou com amigos!" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://ludomusic.xyz" />
-        <meta property="og:image" content="https://ludomusic.xyz/Logo.png" />
-
-        {/* Twitter Card específico */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="LudoMusic - Jogo Musical de Videogames" />
-        <meta name="twitter:description" content="🎮 Teste seus conhecimentos musicais! Mais de 1000 músicas de jogos famosos." />
-
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎵</text></svg>" />
       </Head>
       <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <div className={styles.darkBg} style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -1409,64 +1414,82 @@ export default function Home() {
               <div className={styles.audioVolumeRow}>
                 <button
                   className={styles.audioPlayBtnCustom}
-                  onClick={() => {
-                    if (!audioRef.current || isPlayButtonDisabled || audioError) {
+                  onClick={async (e) => {
+                    if (!audioRef.current || isPlayButtonDisabled || audioError || isPlayLoading) {
                       return;
                     }
-
-                    // Desabilita o botão temporariamente para evitar duplo clique
                     setIsPlayButtonDisabled(true);
-                    setTimeout(() => setIsPlayButtonDisabled(false), 300);
-
-                    // Se não há duração mas há URL, tentar forçar carregamento
+                    setIsPlayLoading(true);
+                    setTimeout(() => setIsPlayButtonDisabled(false), 400);
                     if (!audioDuration && currentSong?.audioUrl) {
+                      setPendingPlay(true);
                       audioRef.current.load();
+                      // O play será chamado automaticamente no onLoadedMetadata
                       return;
                     }
-
-                    // Verificar se o startTime está definido
                     if (startTime === null || startTime === undefined) {
+                      setIsPlayLoading(false);
                       return;
                     }
-
                     const currentTime = audioRef.current.currentTime - startTime;
                     const maxAllowed = (gameOver && !isInfiniteMode) ? MAX_PLAY_TIME : (maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1]);
-
                     if (isPlaying) {
                       audioRef.current.pause();
+                      setIsPlayLoading(false);
                     } else {
-                      // Verificar se precisa resetar o tempo
                       if (currentTime >= maxAllowed || currentTime < 0 || audioRef.current.currentTime < startTime) {
                         audioRef.current.currentTime = startTime;
                         setAudioProgress(0);
                       }
-
-                      // Tentar reproduzir com melhor tratamento de erros
-                      const playPromise = audioRef.current.play();
-                      if (playPromise !== undefined) {
-                        playPromise.catch(error => {
-                          console.error('Erro ao reproduzir áudio:', error);
-                          if (error.name === 'NotAllowedError') {
-                            setMessage('Clique em qualquer lugar para permitir reprodução de áudio');
-                          } else if (error.name === 'NotSupportedError') {
-                            setAudioError(true);
-                            setMessage('Formato de áudio não suportado neste navegador');
-                          } else if (error.name === 'AbortError') {
-                            // Ignorar AbortError - é normal quando o usuário para/inicia rapidamente
-                          } else {
-                            setMessage('Erro ao reproduzir o áudio. Tentando novamente...');
+                      try {
+                        if (audioRef.current.paused) {
+                          const playPromise = audioRef.current.play();
+                          if (playPromise !== undefined) {
+                            await playPromise;
                           }
-                        });
+                        }
+                        setIsPlayLoading(false);
+                      } catch (error) {
+                        setIsPlayLoading(false);
+                        if (error.name === 'AbortError') {
+                          // Não mostra mensagem, é esperado se o usuário clicar rápido
+                          return;
+                        }
+                        console.error('Erro ao reproduzir áudio:', error);
+                        if (error.name === 'NotAllowedError') {
+                          setMessage('Clique em qualquer lugar para permitir reprodução de áudio');
+                        } else if (error.name === 'NotSupportedError') {
+                          setAudioError(true);
+                          setMessage('Formato de áudio não suportado neste navegador');
+                        } else {
+                          setMessage('Erro ao reproduzir o áudio. Tentando novamente...');
+                        }
                       }
                     }
-                  } }
-                  disabled={audioError || (!audioDuration && !currentSong?.audioUrl) || isPlayButtonDisabled}
+                  }}
+                  onKeyDown={e => {
+                    if (e.key === ' ' || e.key === 'Enter') {
+                      e.preventDefault();
+                      e.target.click();
+                    }
+                  }}
+                  aria-label={isPlaying ? (isClient ? t('pause') : 'Pausar') : (isClient ? t('play') : 'Reproduzir')}
+                  aria-pressed={isPlaying}
+                  tabIndex={0}
+                  role="button"
+                  disabled={audioError || (!audioDuration && !currentSong?.audioUrl) || isPlayButtonDisabled || isPlayLoading}
                   style={{
                     opacity: (audioError || !audioDuration) ? 0.5 : 1,
-                    cursor: (audioError || !audioDuration) ? 'not-allowed' : 'pointer'
+                    cursor: (audioError || !audioDuration) ? 'not-allowed' : 'pointer',
+                    position: 'relative',
+                    outline: 'none',
+                    transition: 'box-shadow 0.2s',
+                    boxShadow: isPlayLoading ? '0 0 0 3px #1DB95455' : undefined
                   }}
                 >
-                  {isPlaying ? (
+                  {isPlayLoading ? (
+                    <span className={styles.spinner} aria-label={isClient ? t('loading') : 'Carregando'} />
+                  ) : isPlaying ? (
                     <FaPause color="#fff" size={20} />
                   ) : (
                     <FaPlay color="#fff" size={20} />
@@ -1583,7 +1606,12 @@ export default function Home() {
             >
               {isClient ? t('guess') : 'Adivinhar'}
             </button>
-            {showSuggestions && filteredSuggestions.length > 0 && (
+            {showSelectFromListError && (
+              <div className={styles.messageModern + ' ' + styles.error}>
+                {t('select_from_list')}
+              </div>
+            )}
+            {showSuggestions && (filteredSuggestions.length > 0 || guess.trim() === '?') && (
               <ul className={styles.suggestionsListModern}>
                 {filteredSuggestions.map((suggestion, suggestionIndex) => (
                   <li
@@ -1594,19 +1622,22 @@ export default function Home() {
                     {suggestion.game} - {suggestion.title}
                   </li>
                 ))}
-                <li
-                  className={styles.suggestionItemModern}
-                  onMouseDown={triggerSacabambapis}
-                  style={{
-                    fontStyle: 'italic',
-                    opacity: 0.7,
-                    borderTop: '1px solid rgba(29, 185, 84, 0.3)',
-                    marginTop: '0.5rem',
-                    paddingTop: '0.75rem'
-                  }}
-                >
-                  ??? - ???
-                </li>
+                {/* Easter egg só aparece se o campo for exatamente '?' */}
+                {guess.trim() === '?' && (
+                  <li
+                    className={styles.suggestionItemModern}
+                    onMouseDown={triggerSacabambapis}
+                    style={{
+                      fontStyle: 'italic',
+                      opacity: 0.7,
+                      borderTop: '1px solid rgba(29, 185, 84, 0.3)',
+                      marginTop: '0.5rem',
+                      paddingTop: '0.75rem'
+                    }}
+                  >
+                    ??? - ???
+                  </li>
+                )}
               </ul>
             )}
           </form>

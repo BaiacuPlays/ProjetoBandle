@@ -1493,11 +1493,8 @@
 /* Efeito visual do sacabambapis */
 .sacabambapis {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.9);
+  inset: 0; /* Garante que o elemento cubra toda a viewport */
+  background: rgba(0, 0, 0, 1); /* Garante que o fundo seja totalmente opaco */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1506,8 +1503,8 @@
 }
 
 .sacabambapisImage {
-  max-width: 80vw;
-  max-height: 80vh;
+  max-width: 80vw; /* Reverte para o tamanho original */
+  max-height: 80vh; /* Reverte para o tamanho original */
   object-fit: contain;
   animation: sacabambapisZoom 2s ease-out;
   filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5));
@@ -2060,4 +2057,29 @@
   .tutorialSubtitle {
     font-size: 0.9rem;
   }
+}
+
+.spinner {
+  width: 1.3em;
+  height: 1.3em;
+  border: 3px solid #1DB95444;
+  border-top: 3px solid #1DB954;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.audioPlayBtnCustom:focus {
+  outline: 2px solid #1DB954;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px #1DB95455;
+  transition: box-shadow 0.2s;
+}
+.audioPlayBtnCustom:active {
+  transform: scale(0.96);
+  transition: transform 0.1s;
 }
