@@ -14,14 +14,14 @@ const TermsOfUse = () => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Terms of Use | Bandle</title>
-        <meta name="description" content="Terms of use for Bandle - video game music guessing game" />
+        <title>Terms of Use | Ludomusic</title>
+        <meta name="description" content="Terms of use for Ludomusic - video game music guessing game" />
       </Head>
 
       <main className={styles.main}>
         <div className={styles.header}>
           <Link href="/">
-            <img src="/Logo.png" alt="Bandle Logo" className={styles.logo} />
+            <img src="/Logo.png" alt="Ludomusic Logo" className={styles.logo} />
           </Link>
           <h1 className={styles.title}>Terms of Use</h1>
         </div>
@@ -30,7 +30,7 @@ const TermsOfUse = () => {
           <section className={styles.section}>
             <h2>1. Acceptance of Terms</h2>
             <p>
-              By accessing and using the Bandle website, you agree to comply with and be bound by these Terms of Use.
+              By accessing and using the Ludomusic website, you agree to comply with and be bound by these Terms of Use.
               If you do not agree with any part of these terms, you may not access or use our service.
             </p>
           </section>
@@ -38,7 +38,7 @@ const TermsOfUse = () => {
           <section className={styles.section}>
             <h2>2. Service Description</h2>
             <p>
-              Bandle is a video game music guessing game that allows users to listen to music snippets
+              Ludomusic is a video game music guessing game that allows users to listen to music snippets
               and try to identify them. The service is provided "as is" and "as available," without warranties of any kind.
             </p>
           </section>
@@ -46,7 +46,7 @@ const TermsOfUse = () => {
           <section className={styles.section}>
             <h2>3. Use of Service</h2>
             <p>
-              You agree to use Bandle only for lawful purposes and in accordance with these Terms. You must not:
+              You agree to use Ludomusic only for lawful purposes and in accordance with these Terms. You must not:
             </p>
             <ul>
               <li>Violate any applicable laws or regulations</li>
@@ -61,8 +61,8 @@ const TermsOfUse = () => {
           <section className={styles.section}>
             <h2>4. Intellectual Property</h2>
             <p>
-              The content of Bandle, including but not limited to text, graphics, logos, icons, images, audio clips,
-              digital downloads, and data compilations, is the property of Bandle or its licensors and is protected by
+              The content of Ludomusic, including but not limited to text, graphics, logos, icons, images, audio clips,
+              digital downloads, and data compilations, is the property of Ludomusic or its licensors and is protected by
               copyright and intellectual property laws.
             </p>
             <p>
@@ -74,7 +74,7 @@ const TermsOfUse = () => {
           <section className={styles.section}>
             <h2>5. Limitation of Liability</h2>
             <p>
-              Under no circumstances shall Bandle, its directors, employees, partners, or agents be liable for
+              Under no circumstances shall Ludomusic, its directors, employees, partners, or agents be liable for
               any direct, indirect, incidental, special, consequential, or punitive damages, including without limitation,
               loss of profits, data, use, goodwill, or other intangible losses, resulting from:
             </p>

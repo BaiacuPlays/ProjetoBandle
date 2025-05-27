@@ -26,8 +26,8 @@ function MultiplayerContent() {
         <meta
           name="description"
           content={isClient ?
-            "Jogue Bandle com seus amigos! Adivinhe músicas de videogames em modo multiplayer." :
-            "Play Bandle with your friends! Guess video game music in multiplayer mode."
+            "Jogue Ludomusic com seus amigos! Adivinhe músicas de videogames em modo multiplayer." :
+            "Play Ludomusic with your friends! Guess video game music in multiplayer mode."
           }
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

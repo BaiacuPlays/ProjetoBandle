@@ -7,7 +7,7 @@ export default function MyApp({ Component, pageProps }) {
   // Carregar configurações do localStorage ao iniciar a aplicação
   useEffect(() => {
     try {
-      const savedSettings = localStorage.getItem('bandle_settings');
+      const savedSettings = localStorage.getItem('ludomusic_settings');
       if (savedSettings) {
         try {
           const parsedSettings = JSON.parse(savedSettings);
@@ -18,7 +18,7 @@ export default function MyApp({ Component, pageProps }) {
           }
         } catch (e) {
           // JSON inválido, remover e usar padrão
-          localStorage.removeItem('bandle_settings');
+          localStorage.removeItem('ludomusic_settings');
         }
       }
     } catch (error) {

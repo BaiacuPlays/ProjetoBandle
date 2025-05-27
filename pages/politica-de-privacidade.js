@@ -8,14 +8,14 @@ const PoliticaDePrivacidade = () => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Política de Privacidade | Bandle</title>
-        <meta name="description" content="Política de privacidade do Bandle - jogo de adivinhação de músicas de videogames" />
+        <title>Política de Privacidade | Ludomusic</title>
+        <meta name="description" content="Política de privacidade do Ludomusic - jogo de adivinhação de músicas de videogames" />
       </Head>
 
       <main className={styles.main}>
         <div className={styles.header}>
           <Link href="/">
-            <img src="/Logo.png" alt="Logo Bandle" className={styles.logo} />
+            <img src="/Logo.png" alt="Logo Ludomusic" className={styles.logo} />
           </Link>
           <h1 className={styles.title}>Política de Privacidade</h1>
         </div>
@@ -24,11 +24,11 @@ const PoliticaDePrivacidade = () => {
           <section className={styles.section}>
             <h2>1. Introdução</h2>
             <p>
-              Esta Política de Privacidade descreve como o Bandle coleta, usa e compartilha informações quando você utiliza 
+              Esta Política de Privacidade descreve como o Ludomusic coleta, usa e compartilha informações quando você utiliza 
               nosso site. Respeitamos sua privacidade e estamos comprometidos em proteger seus dados pessoais.
             </p>
             <p>
-              Ao utilizar o Bandle, você concorda com a coleta e uso de informações de acordo com esta política.
+              Ao utilizar o Ludomusic, você concorda com a coleta e uso de informações de acordo com esta política.
             </p>
           </section>
 
@@ -40,7 +40,7 @@ const PoliticaDePrivacidade = () => {
             </p>
             <p>
               <strong>Informações do Dispositivo:</strong> Podemos coletar informações sobre o dispositivo que você usa 
-              para acessar o Bandle, incluindo o tipo de dispositivo, sistema operacional, navegador e configurações de idioma.
+              para acessar o Ludomusic, incluindo o tipo de dispositivo, sistema operacional, navegador e configurações de idioma.
             </p>
             <p>
               <strong>Cookies e Tecnologias Similares:</strong> Utilizamos cookies e tecnologias similares para melhorar 
@@ -58,7 +58,7 @@ const PoliticaDePrivacidade = () => {
               Utilizamos as informações coletadas para:
             </p>
             <ul>
-              <li>Fornecer, manter e melhorar o Bandle</li>
+              <li>Fornecer, manter e melhorar o Ludomusic</li>
               <li>Entender como os usuários interagem com o jogo</li>
               <li>Detectar, prevenir e resolver problemas técnicos</li>
               <li>Desenvolver novos recursos e funcionalidades</li>

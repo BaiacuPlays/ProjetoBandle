@@ -14,14 +14,14 @@ const ContentRemoval = () => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Content Removal | Bandle</title>
-        <meta name="description" content="Content removal policy for Bandle - video game music guessing game" />
+        <title>Content Removal | Ludomusic</title>
+        <meta name="description" content="Content removal policy for Ludomusic - video game music guessing game" />
       </Head>
 
       <main className={styles.main}>
         <div className={styles.header}>
           <Link href="/">
-            <img src="/Logo.png" alt="Bandle Logo" className={styles.logo} />
+            <img src="/Logo.png" alt="Ludomusic Logo" className={styles.logo} />
           </Link>
           <h1 className={styles.title}>Content Removal</h1>
         </div>
@@ -30,16 +30,16 @@ const ContentRemoval = () => {
           <section className={styles.section}>
             <h2>1. Content Removal Policy</h2>
             <p>
-              Bandle respects the intellectual property rights of others and expects its users to do the same.
+              Ludomusic respects the intellectual property rights of others and expects its users to do the same.
               We are committed to responding to notices of alleged copyright infringement that comply with
               applicable law.
             </p>
           </section>
 
           <section className={styles.section}>
-            <h2>2. Use of Content in Bandle</h2>
+            <h2>2. Use of Content in Ludomusic</h2>
             <p>
-              Bandle uses snippets of video game music for entertainment and educational purposes, under the
+              Ludomusic uses snippets of video game music for entertainment and educational purposes, under the
               principle of fair use. We believe that the limited use of these music snippets for a guessing game
               does not harm the potential market for or value of the original works, and may actually promote
               interest in video game soundtracks.
@@ -54,12 +54,12 @@ const ContentRemoval = () => {
             <h2>3. Content Removal Request</h2>
             <p>
               If you are a copyright owner or their authorized representative and believe that any content
-              on Bandle infringes your copyright, you may submit a removal request by providing the following
+              on Ludomusic infringes your copyright, you may submit a removal request by providing the following
               information:
             </p>
             <ol>
               <li>Identification of the copyrighted work you claim has been infringed</li>
-              <li>Identification of the material on Bandle that you claim is infringing your copyright</li>
+              <li>Identification of the material on Ludomusic that you claim is infringing your copyright</li>
               <li>Your contact information, including address, phone number, and email</li>
               <li>A statement that you have a good faith belief that the use of the material in the manner complained of is not authorized by the copyright owner, its agent, or the law</li>
               <li>A statement, under penalty of perjury, that the information in your notification is accurate and that you are the copyright owner or are authorized to act on behalf of the owner</li>

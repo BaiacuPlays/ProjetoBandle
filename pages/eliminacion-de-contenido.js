@@ -14,14 +14,14 @@ const EliminacionDeContenido = () => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Eliminación de Contenido | Bandle</title>
-        <meta name="description" content="Política de eliminación de contenido de Bandle - juego de adivinanza de música de videojuegos" />
+        <title>Eliminación de Contenido | Ludomusic</title>
+        <meta name="description" content="Política de eliminación de contenido de Ludomusic - juego de adivinanza de música de videojuegos" />
       </Head>
 
       <main className={styles.main}>
         <div className={styles.header}>
           <Link href="/">
-            <img src="/Logo.png" alt="Logo Bandle" className={styles.logo} />
+            <img src="/Logo.png" alt="Logo Ludomusic" className={styles.logo} />
           </Link>
           <h1 className={styles.title}>Eliminación de Contenido</h1>
         </div>
@@ -30,16 +30,16 @@ const EliminacionDeContenido = () => {
           <section className={styles.section}>
             <h2>1. Política de Eliminación de Contenido</h2>
             <p>
-              Bandle respeta los derechos de propiedad intelectual de terceros y espera que sus usuarios hagan lo mismo.
+              Ludomusic respeta los derechos de propiedad intelectual de terceros y espera que sus usuarios hagan lo mismo.
               Estamos comprometidos a responder a notificaciones de presuntas infracciones de derechos de autor que cumplan
               con la legislación aplicable.
             </p>
           </section>
 
           <section className={styles.section}>
-            <h2>2. Uso de Contenido en Bandle</h2>
+            <h2>2. Uso de Contenido en Ludomusic</h2>
             <p>
-              Bandle utiliza fragmentos de música de videojuegos con fines de entretenimiento y educativos, bajo el
+              Ludomusic utiliza fragmentos de música de videojuegos con fines de entretenimiento y educativos, bajo el
               principio de uso justo. Creemos que el uso limitado de estos fragmentos musicales para un juego de adivinanzas
               no perjudica el mercado potencial o el valor de las obras originales, y de hecho puede promover el
               interés en las bandas sonoras de videojuegos.
@@ -54,12 +54,12 @@ const EliminacionDeContenido = () => {
             <h2>3. Solicitud de Eliminación de Contenido</h2>
             <p>
               Si usted es un propietario de derechos de autor o su representante autorizado y cree que cualquier contenido
-              en Bandle infringe sus derechos de autor, puede enviar una solicitud de eliminación proporcionando la siguiente
+              en Ludomusic infringe sus derechos de autor, puede enviar una solicitud de eliminación proporcionando la siguiente
               información:
             </p>
             <ol>
               <li>Identificación de la obra protegida por derechos de autor que afirma ha sido infringida</li>
-              <li>Identificación del material en Bandle que afirma está infringiendo sus derechos de autor</li>
+              <li>Identificación del material en Ludomusic que afirma está infringiendo sus derechos de autor</li>
               <li>Su información de contacto, incluida dirección, número de teléfono y correo electrónico</li>
               <li>Una declaración de que cree de buena fe que el uso del material de la manera reclamada no está autorizado por el propietario de los derechos de autor, su agente o la ley</li>
               <li>Una declaración, bajo pena de perjurio, de que la información en su notificación es precisa y que usted es el propietario de los derechos de autor o está autorizado para actuar en nombre del propietario</li>

@@ -14,14 +14,14 @@ const PrivacyPolicy = () => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Privacy Policy | Bandle</title>
-        <meta name="description" content="Privacy policy for Bandle - video game music guessing game" />
+        <title>Privacy Policy | Ludomusic</title>
+        <meta name="description" content="Privacy policy for Ludomusic - video game music guessing game" />
       </Head>
 
       <main className={styles.main}>
         <div className={styles.header}>
           <Link href="/">
-            <img src="/Logo.png" alt="Bandle Logo" className={styles.logo} />
+            <img src="/Logo.png" alt="Ludomusic Logo" className={styles.logo} />
           </Link>
           <h1 className={styles.title}>Privacy Policy</h1>
         </div>
@@ -30,11 +30,11 @@ const PrivacyPolicy = () => {
           <section className={styles.section}>
             <h2>1. Introduction</h2>
             <p>
-              This Privacy Policy describes how Bandle collects, uses, and shares information when you use
+              This Privacy Policy describes how Ludomusic collects, uses, and shares information when you use
               our website. We respect your privacy and are committed to protecting your personal data.
             </p>
             <p>
-              By using Bandle, you agree to the collection and use of information in accordance with this policy.
+              By using Ludomusic, you agree to the collection and use of information in accordance with this policy.
             </p>
           </section>
 
@@ -46,7 +46,7 @@ const PrivacyPolicy = () => {
             </p>
             <p>
               <strong>Device Information:</strong> We may collect information about the device you use
-              to access Bandle, including device type, operating system, browser, and language settings.
+              to access Ludomusic, including device type, operating system, browser, and language settings.
             </p>
             <p>
               <strong>Cookies and Similar Technologies:</strong> We use cookies and similar technologies to enhance
@@ -64,7 +64,7 @@ const PrivacyPolicy = () => {
               We use the information we collect to:
             </p>
             <ul>
-              <li>Provide, maintain, and improve Bandle</li>
+              <li>Provide, maintain, and improve Ludomusic</li>
               <li>Understand how users interact with the game</li>
               <li>Detect, prevent, and address technical issues</li>
               <li>Develop new features and functionality</li>

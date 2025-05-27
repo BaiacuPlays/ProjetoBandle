@@ -1,7 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
 body {
   background: url('/fundo.png') center center/cover no-repeat fixed;
   min-height: 100vh;
   position: relative;
+  font-family: 'Poppins', sans-serif;
 }
 body::before {
   content: "";

@@ -14,14 +14,14 @@ const TerminosDeUso = () => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Términos de Uso | Bandle</title>
-        <meta name="description" content="Términos de uso de Bandle - juego de adivinanza de música de videojuegos" />
+        <title>Términos de Uso | Ludomusic</title>
+        <meta name="description" content="Términos de uso de Ludomusic - juego de adivinanza de música de videojuegos" />
       </Head>
 
       <main className={styles.main}>
         <div className={styles.header}>
           <Link href="/">
-            <img src="/Logo.png" alt="Logo Bandle" className={styles.logo} />
+            <img src="/Logo.png" alt="Logo Ludomusic" className={styles.logo} />
           </Link>
           <h1 className={styles.title}>Términos de Uso</h1>
         </div>
@@ -30,7 +30,7 @@ const TerminosDeUso = () => {
           <section className={styles.section}>
             <h2>1. Aceptación de Términos</h2>
             <p>
-              Al acceder y utilizar el sitio web de Bandle, usted acepta cumplir y estar sujeto a estos Términos de Uso.
+              Al acceder y utilizar el sitio web de Ludomusic, usted acepta cumplir y estar sujeto a estos Términos de Uso.
               Si no está de acuerdo con alguna parte de estos términos, no podrá acceder o utilizar nuestro servicio.
             </p>
           </section>
@@ -38,7 +38,7 @@ const TerminosDeUso = () => {
           <section className={styles.section}>
             <h2>2. Descripción del Servicio</h2>
             <p>
-              Bandle es un juego de adivinanza de música de videojuegos que permite a los usuarios escuchar fragmentos de música
+              Ludomusic es un juego de adivinanza de música de videojuegos que permite a los usuarios escuchar fragmentos de música
               e intentar identificarlos. El servicio se proporciona "tal cual" y "según disponibilidad", sin garantías de ningún tipo.
             </p>
           </section>
@@ -46,7 +46,7 @@ const TerminosDeUso = () => {
           <section className={styles.section}>
             <h2>3. Uso del Servicio</h2>
             <p>
-              Usted acepta utilizar Bandle solo para fines legales y de acuerdo con estos Términos. No debe:
+              Usted acepta utilizar Ludomusic solo para fines legales y de acuerdo con estos Términos. No debe:
             </p>
             <ul>
               <li>Violar cualquier ley o regulación aplicable</li>
@@ -61,8 +61,8 @@ const TerminosDeUso = () => {
           <section className={styles.section}>
             <h2>4. Propiedad Intelectual</h2>
             <p>
-              El contenido de Bandle, incluidos, entre otros, texto, gráficos, logotipos, iconos, imágenes, clips de audio,
-              descargas digitales y compilaciones de datos, es propiedad de Bandle o sus licenciantes y está protegido por
+              El contenido de Ludomusic, incluidos, entre otros, texto, gráficos, logotipos, iconos, imágenes, clips de audio,
+              descargas digitales y compilaciones de datos, es propiedad de Ludomusic o sus licenciantes y está protegido por
               derechos de autor y leyes de propiedad intelectual.
             </p>
             <p>
@@ -74,7 +74,7 @@ const TerminosDeUso = () => {
           <section className={styles.section}>
             <h2>5. Limitación de Responsabilidad</h2>
             <p>
-              Bajo ninguna circunstancia Bandle, sus directores, empleados, socios o agentes serán responsables por
+              Bajo ninguna circunstancia Ludomusic, sus directores, empleados, socios o agentes serán responsables por
               daños directos, indirectos, incidentales, especiales, consecuentes o punitivos, incluidos, entre otros,
               pérdida de ganancias, datos, uso, buena voluntad u otras pérdidas intangibles, resultantes de:
             </p>
