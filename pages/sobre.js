@@ -2,7 +2,6 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
-import styles from '../styles/styles.module.css';
 
 export default function Sobre() {
   const { t } = useLanguage();
@@ -16,18 +15,18 @@ export default function Sobre() {
     <>
       <Head>
         <title>Sobre o LudoMusic - Jogo Musical de Videogames</title>
-        <meta 
-          name="description" 
-          content="Conheça o LudoMusic, o jogo musical definitivo para fãs de videogames. Teste seus conhecimentos com mais de 1000 trilhas sonoras de jogos clássicos e modernos. Jogue sozinho ou com amigos!" 
+        <meta
+          name="description"
+          content="Conheça o LudoMusic, o jogo musical definitivo para fãs de videogames. Teste seus conhecimentos com mais de 1000 trilhas sonoras de jogos clássicos e modernos. Jogue sozinho ou com amigos!"
         />
         <meta name="keywords" content="sobre ludomusic, jogo musical, videogame música, quiz musical, trilha sonora jogos" />
         <link rel="canonical" href="https://ludomusic.xyz/sobre" />
-        
+
         {/* Open Graph */}
         <meta property="og:title" content="Sobre o LudoMusic - Jogo Musical de Videogames" />
         <meta property="og:description" content="Conheça o LudoMusic, o jogo musical definitivo para fãs de videogames. Teste seus conhecimentos com mais de 1000 trilhas sonoras." />
         <meta property="og:url" content="https://ludomusic.xyz/sobre" />
-        
+
         {/* JSON-LD para página sobre */}
         <script
           type="application/ld+json"
@@ -50,7 +49,7 @@ export default function Sobre() {
         />
       </Head>
 
-      <div className={styles.darkBg} style={{ minHeight: '100vh', padding: '20px' }}>
+      <div style={{ minHeight: '100vh', padding: '20px', background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}>
         <div style={{ maxWidth: '800px', margin: '0 auto', color: 'white' }}>
           {/* Header */}
           <div style={{ textAlign: 'center', marginBottom: '40px' }}>
@@ -69,8 +68,8 @@ export default function Sobre() {
                 O que é o LudoMusic?
               </h2>
               <p>
-                O <strong>LudoMusic</strong> é um jogo musical inovador que desafia seus conhecimentos sobre trilhas sonoras de videogames. 
-                Com mais de <strong>1000 músicas</strong> de jogos clássicos e modernos, oferecemos uma experiência única para 
+                O <strong>LudoMusic</strong> é um jogo musical inovador que desafia seus conhecimentos sobre trilhas sonoras de videogames.
+                Com mais de <strong>1000 músicas</strong> de jogos clássicos e modernos, oferecemos uma experiência única para
                 fãs de games e música.
               </p>
             </section>
@@ -152,13 +151,13 @@ export default function Sobre() {
             </section>
 
             <section style={{ textAlign: 'center', marginTop: '40px' }}>
-              <Link 
-                href="/" 
-                style={{ 
-                  background: '#4CAF50', 
-                  color: 'white', 
-                  padding: '15px 30px', 
-                  borderRadius: '8px', 
+              <Link
+                href="/"
+                style={{
+                  background: '#4CAF50',
+                  color: 'white',
+                  padding: '15px 30px',
+                  borderRadius: '8px',
                   textDecoration: 'none',
                   fontSize: '18px',
                   fontWeight: 'bold'

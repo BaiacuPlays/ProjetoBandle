@@ -13,8 +13,7 @@ const nextConfig = {
     outputFileTracingExcludes: {
       '*': ['./public/audio/**/*'],
       '/api/**': ['./public/audio/**/*']
-    },
-    outputFileTracingIgnores: ['./public/audio/**/*']
+    }
   },
   // Configuração para servir arquivos estáticos e SEO
   async headers() {

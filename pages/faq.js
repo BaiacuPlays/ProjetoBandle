@@ -2,7 +2,6 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
-import styles from '../styles/styles.module.css';
 
 export default function FAQ() {
   const { t } = useLanguage();
@@ -72,18 +71,18 @@ export default function FAQ() {
     <>
       <Head>
         <title>FAQ - Perguntas Frequentes sobre o LudoMusic</title>
-        <meta 
-          name="description" 
-          content="Tire suas dúvidas sobre o LudoMusic! Encontre respostas para as perguntas mais frequentes sobre nosso jogo musical de videogames. Como jogar, modos de jogo, músicas disponíveis e muito mais." 
+        <meta
+          name="description"
+          content="Tire suas dúvidas sobre o LudoMusic! Encontre respostas para as perguntas mais frequentes sobre nosso jogo musical de videogames. Como jogar, modos de jogo, músicas disponíveis e muito mais."
         />
         <meta name="keywords" content="ludomusic faq, perguntas frequentes, como jogar, jogo musical videogame, dúvidas ludomusic" />
         <link rel="canonical" href="https://ludomusic.xyz/faq" />
-        
+
         {/* Open Graph */}
         <meta property="og:title" content="FAQ - Perguntas Frequentes sobre o LudoMusic" />
         <meta property="og:description" content="Tire suas dúvidas sobre o LudoMusic! Encontre respostas para as perguntas mais frequentes sobre nosso jogo musical de videogames." />
         <meta property="og:url" content="https://ludomusic.xyz/faq" />
-        
+
         {/* JSON-LD para FAQ */}
         <script
           type="application/ld+json"
@@ -107,7 +106,7 @@ export default function FAQ() {
         />
       </Head>
 
-      <div className={styles.darkBg} style={{ minHeight: '100vh', padding: '20px' }}>
+      <div style={{ minHeight: '100vh', padding: '20px', background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}>
         <div style={{ maxWidth: '800px', margin: '0 auto', color: 'white' }}>
           {/* Header */}
           <div style={{ textAlign: 'center', marginBottom: '40px' }}>
@@ -125,9 +124,9 @@ export default function FAQ() {
           {/* FAQ Items */}
           <div style={{ marginBottom: '40px' }}>
             {faqs.map((faq, index) => (
-              <div 
+              <div
                 key={index}
-                style={{ 
+                style={{
                   marginBottom: '15px',
                   border: '1px solid rgba(76, 175, 80, 0.3)',
                   borderRadius: '8px',
@@ -157,9 +156,9 @@ export default function FAQ() {
                     {openQuestion === index ? '−' : '+'}
                   </span>
                 </button>
-                
+
                 {openQuestion === index && (
-                  <div style={{ 
+                  <div style={{
                     padding: '20px',
                     background: 'rgba(0, 0, 0, 0.3)',
                     lineHeight: '1.6'
@@ -176,13 +175,13 @@ export default function FAQ() {
             <p style={{ marginBottom: '20px', fontSize: '18px' }}>
               Ainda tem dúvidas? Comece a jogar e descubra!
             </p>
-            <Link 
-              href="/" 
-              style={{ 
-                background: '#4CAF50', 
-                color: 'white', 
-                padding: '15px 30px', 
-                borderRadius: '8px', 
+            <Link
+              href="/"
+              style={{
+                background: '#4CAF50',
+                color: 'white',
+                padding: '15px 30px',
+                borderRadius: '8px',
                 textDecoration: 'none',
                 fontSize: '18px',
                 fontWeight: 'bold'
