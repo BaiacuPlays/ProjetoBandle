@@ -1777,7 +1777,7 @@
   },
   {
     "id": 148,
-    "title": "Paranormal Order：Enigma of Fear",
+    "title": "Crowdfunding Single",
     "artist": "Guilherme Gama",
     "composer": "Guilherme Gama",
     "game": "Enigma do Medo",
@@ -6074,14 +6074,14 @@
   {
     "id": 526,
     "title": "Title Theme",
-    "artist": "Masato Nakamura",
-    "composer": "Masato Nakamura",
-    "game": "Sonic the Hedgehog 2",
-    "context": "Audio - Sonic the Hedgehog 2",
-    "audioUrl": "/audio/sonic/sonic-2/01 - Title Theme - Sonic the Hedgehog 2 - Masato Nakamura.mp3",
-    "year": 1992,
+    "artist": "David Wise",
+    "composer": "David Wise",
+    "game": "Donkey Kong Country",
+    "context": "Audio - Donkey Kong Country",
+    "audioUrl": "/audio/donkey-kong/donkey-kong-country/01 - Title Screen - Donkey Kong Country - David Wise.mp3",
+    "year": 1994,
     "genre": "Platform Game Soundtrack",
-    "console": "Sega Genesis"
+    "console": "SNES"
   },
   {
     "id": 527,
