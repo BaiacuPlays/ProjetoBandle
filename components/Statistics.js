@@ -4,7 +4,7 @@ import { getGlobalStatistics } from '../config/api';
 import styles from '../styles/Statistics.module.css';
 
 const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false }) => {
-  const { t, isClient } = useLanguage();
+  const { t, isClient, nickname } = useLanguage();
   const [stats, setStats] = useState({
     totalGames: 0,
     wins: 0,
@@ -54,6 +54,19 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
 
     fetchGlobalStats();
   }, []);
+
+  useEffect(() => {
+    async function fetchPlayerStats() {
+      const playerStatsKey = `stats:${nickname}`;
+      const playerStats = await kv.get(playerStatsKey);
+      setStats((prevStats) => ({
+        ...prevStats,
+        playerStats
+      }));
+    }
+
+    fetchPlayerStats();
+  }, [nickname]);
 
   const loadStatistics = () => {
     try {
