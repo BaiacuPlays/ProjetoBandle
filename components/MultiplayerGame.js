@@ -176,6 +176,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
         setAudioProgress(15);
         audio.pause();
         setIsPlaying(false);
+        audio.volume = volume;
         return;
       }
       // Fade out nos últimos 2 segundos
@@ -192,16 +193,18 @@ const MultiplayerGame = ({ onBackToLobby }) => {
         audio.currentTime = startTime;
         setAudioProgress(0);
         audio.volume = volume;
-      } else if (!iAmWinner && currentTime >= maxDuration) {
-        // Parar baseado nas tentativas apenas se EU não ganhei
+        return;
+      }
+      // Parar baseado nas tentativas apenas se EU não ganhei
+      if (!iAmWinner && currentTime >= maxDuration) {
         audio.pause();
         setIsPlaying(false);
         audio.currentTime = startTime;
         setAudioProgress(0);
         audio.volume = volume;
-      } else {
-        setAudioProgress(currentTime);
+        return;
       }
+      setAudioProgress(currentTime);
     };
 
     const updatePlay = () => {
