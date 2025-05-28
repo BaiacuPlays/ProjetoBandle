@@ -55,6 +55,10 @@ const MultiplayerContext = createContext();
 export function MultiplayerProvider({ children }) {
   const [state, dispatch] = useReducer(multiplayerReducer, initialState);
 
+  // Controle de loading para ações assíncronas (fora do React state)
+  let skipInProgress = false;
+  let nextRoundInProgress = false;
+
   // Polling para atualizar o estado da sala
   useEffect(() => {
     if (!state.roomCode || !state.isConnected) {

@@ -434,10 +434,10 @@ export default async function handler(req, res) {
           lobby.gameState.attempts = {};
           lobby.gameState.guesses = {};
 
-          // Atualizar música atual
+          // Atualizar música atual (objeto completo, não só o título)
           const currentRoundIndex = lobby.gameState.currentRound - 1;
           if (lobby.gameState.songs[currentRoundIndex]) {
-            lobby.gameState.currentSong = lobby.gameState.songs[currentRoundIndex].title;
+            lobby.gameState.currentSong = lobby.gameState.songs[currentRoundIndex];
           }
         }
 
@@ -515,6 +515,14 @@ export default async function handler(req, res) {
         }
 
 
+      }
+
+      // Garante que currentSong seja sempre o objeto completo da música
+      if (currentSong && typeof currentSong !== 'object') {
+        // Se por algum motivo currentSong não é um objeto, tenta buscar pelo título
+        const normalizeTitle = (title) => title.trim().toLowerCase();
+        const targetTitle = normalizeTitle(currentSong);
+        currentSong = songs.find(song => normalizeTitle(song.title) === targetTitle) || null;
       }
 
       const response = {

@@ -793,17 +793,15 @@ export default function Home() {
       if (newAttempts >= MAX_ATTEMPTS) {
         setMessage(`${t('game_over')} ${currentSong.game} - ${currentSong.title}`);
         if (isInfiniteMode) {
-          // No modo infinito, termina a sequência
           endInfiniteMode();
         } else {
-          // No modo normal, termina o jogo
           setGameOver(true);
           setGameResult({ won: false, attempts: newAttempts });
           setTimeout(() => setShowStatistics(true), 800);
         }
       }
     } finally {
-      setIsSkipLoading(false);
+      setTimeout(() => setIsSkipLoading(false), 100); // Garante atualização visual
     }
   };
 
