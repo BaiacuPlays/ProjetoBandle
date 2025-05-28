@@ -295,7 +295,8 @@ export function MultiplayerProvider({ children }) {
     // Próxima rodada (apenas host)
     nextRound: async () => {
       if (!state.roomCode) return { success: false, error: 'Dados inválidos' };
-
+      if (nextRoundInProgress) return { success: false, error: 'Ação em andamento' };
+      nextRoundInProgress = true;
       try {
         const response = await apiRequest('/api/lobby', {
           method: 'PATCH',
@@ -305,31 +306,30 @@ export function MultiplayerProvider({ children }) {
             nickname: state.playerNickname
           })
         });
-
         const data = await response.json();
-
         if (response.ok) {
           if (data.lobbyData) {
             dispatch({ type: ACTIONS.SET_LOBBY_DATA, payload: data.lobbyData });
           }
           return { success: true };
         } else {
-          // NÃO mostrar erro de "Sala não encontrada" no contexto - deixar para o polling lidar
           if (!data.error || !data.error.includes('Sala não encontrada')) {
             dispatch({ type: ACTIONS.SET_ERROR, payload: data.error || 'Erro ao avançar rodada' });
           }
           return { success: false, error: data.error };
         }
       } catch (err) {
-        // NÃO mostrar erros de conexão temporários no contexto
         return { success: false, error: 'Erro de conexão' };
+      } finally {
+        nextRoundInProgress = false;
       }
     },
 
     // Pular rodada
     skipRound: async () => {
       if (!state.roomCode || !state.playerNickname) return { success: false, error: 'Dados inválidos' };
-
+      if (skipInProgress) return { success: false, error: 'Ação em andamento' };
+      skipInProgress = true;
       try {
         const response = await apiRequest('/api/lobby', {
           method: 'PATCH',
@@ -339,24 +339,22 @@ export function MultiplayerProvider({ children }) {
             nickname: state.playerNickname
           })
         });
-
         const data = await response.json();
-
         if (response.ok) {
           if (data.lobbyData) {
             dispatch({ type: ACTIONS.SET_LOBBY_DATA, payload: data.lobbyData });
           }
           return { success: true };
         } else {
-          // NÃO mostrar erro de "Sala não encontrada" no contexto - deixar para o polling lidar
           if (!data.error || !data.error.includes('Sala não encontrada')) {
             dispatch({ type: ACTIONS.SET_ERROR, payload: data.error || 'Erro ao pular rodada' });
           }
           return { success: false, error: data.error };
         }
       } catch (err) {
-        // NÃO mostrar erros de conexão temporários no contexto
         return { success: false, error: 'Erro de conexão' };
+      } finally {
+        skipInProgress = false;
       }
     },
 

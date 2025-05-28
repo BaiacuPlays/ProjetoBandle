@@ -61,6 +61,8 @@ const MultiplayerGame = ({ onBackToLobby }) => {
   const [isPlayButtonDisabled, setIsPlayButtonDisabled] = useState(false);
   const [isPlayLoading, setIsPlayLoading] = useState(false);
   const [pendingPlay, setPendingPlay] = useState(false);
+  const [isSkipLoading, setIsSkipLoading] = useState(false);
+  const [isNextRoundLoading, setIsNextRoundLoading] = useState(false);
 
   const audioRef = useRef(null);
   const inputRef = useRef(null);
@@ -371,11 +373,17 @@ const MultiplayerGame = ({ onBackToLobby }) => {
   };
 
   const handleNextRound = async () => {
+    if (isNextRoundLoading) return;
+    setIsNextRoundLoading(true);
     await actions.nextRound();
+    setIsNextRoundLoading(false);
   };
 
   const handleSkip = async () => {
+    if (isSkipLoading) return;
+    setIsSkipLoading(true);
     await actions.skipRound();
+    setIsSkipLoading(false);
   };
 
   // Função para gerar dicas progressivas - IGUAL AO JOGO NORMAL
@@ -789,10 +797,10 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                   type="button"
                   className={`${gameStyles.attemptButton} ${gameStyles.attemptInactive}`}
                   onClick={handleSkip}
-                  disabled={roundFinished || myAttempts >= 6 || iAmWinner}
-                  style={{ marginLeft: '10px' }}
+                  disabled={roundFinished || myAttempts >= 6 || iAmWinner || isSkipLoading}
+                  style={{ marginLeft: '10px', opacity: isSkipLoading ? 0.6 : 1 }}
                 >
-                  {isClient ? t('skip') : 'Pular'} <FaFastForward style={{ marginLeft: 4, fontSize: '1em', verticalAlign: 'middle' }} />
+                  {isSkipLoading ? (isClient ? t('loading') : 'Carregando...') : (<>{isClient ? t('skip') : 'Pular'} <FaFastForward style={{ marginLeft: 4, fontSize: '1em', verticalAlign: 'middle' }} /></>)}
                 </button>
               </div>
 
@@ -1346,8 +1354,10 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                   <button
                     className={styles.primaryButton}
                     onClick={handleNextRound}
+                    disabled={isNextRoundLoading}
+                    style={{ opacity: isNextRoundLoading ? 0.6 : 1 }}
                   >
-                    {isClient ? t('next_round') : 'Próxima Rodada'}
+                    {isNextRoundLoading ? (isClient ? t('loading') : 'Carregando...') : (isClient ? t('next_round') : 'Próxima Rodada')}
                   </button>
                 </div>
               )}

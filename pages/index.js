@@ -482,11 +482,20 @@ export default function Home() {
       localStorage.setItem(savedDayKey, dayOfYear.toString());
       setCurrentDay(dayOfYear);
 
-      // SISTEMA DETERMINÍSTICO: A música é sempre a mesma para o mesmo dia
-      // Gera música determinística baseada APENAS no dia (sem localStorage)
-      const song = getDeterministicSongSimple(dayOfYear);
-
-      // Sistema determinístico não precisa de limpeza de localStorage para músicas
+      // --- OVERRIDE ESPECIAL PARA 28/05/2025 ---
+      // Se a data for 28/05/2025, força a música 'Crowdfunding Single'
+      let song;
+      if (
+        now.getFullYear() === 2025 &&
+        now.getMonth() === 4 && // Maio é mês 4 (zero-based)
+        now.getDate() === 28
+      ) {
+        song = songs.find(s => s.title === 'Crowdfunding Single');
+      } else {
+        // SISTEMA DETERMINÍSTICO: A música é sempre a mesma para o mesmo dia
+        // Gera música determinística baseada APENAS no dia (sem localStorage)
+        song = getDeterministicSongSimple(dayOfYear);
+      }
 
       // Usar URL original sem codificação - mais compatível com Vercel
       const songWithEncodedUrl = { ...song, audioUrl: song.audioUrl };
@@ -499,7 +508,7 @@ export default function Home() {
       setIsLoading(false);
     };
     loadMusicOfTheDay();
-  }, []);
+  }, []); // Remover dependência do isClient
 
   // Atualizar timer a cada segundo
   useEffect(() => {
