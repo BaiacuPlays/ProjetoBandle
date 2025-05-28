@@ -734,4 +734,18 @@ export async function getGlobalStatistics() {
   return await kv.get(globalStatsKey) || { totalGames: 0, wins: 0, losses: 0 };
 }
 
+// Chamar saveStatistics ao final da rodada
+lobby.players.forEach(player => {
+  const playerAttempts = gameState.attempts[player] || 0;
+  const playerWon = gameState.roundWinners.includes(player);
+
+  if (playerWon) {
+    // Jogador venceu, salvar estatísticas com base nas tentativas
+    saveStatistics(player, 'win', playerAttempts);
+  } else if (playerAttempts >= 6) {
+    // Jogador perdeu, salvar estatísticas como derrota
+    saveStatistics(player, 'loss', 7); // 7 representa erro
+  }
+});
+
 export default API_CONFIG;
