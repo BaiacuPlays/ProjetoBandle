@@ -717,7 +717,6 @@ export default function Home() {
     const songExists = songs.some(song => normalize(song.title) === normalizedGuess);
 
     if (!songExists) {
-      setMessage(t('select_from_list'));
       setShowSelectFromListError(true); // só mostra após submit
       setIsShaking(true);
       setTimeout(() => setIsShaking(false), 500);
@@ -1180,7 +1179,7 @@ export default function Home() {
           }
         }
       } catch (error) {
-        // console.error('Erro ao aplicar configurações:', error);
+        // Erro ao aplicar configurações
       }
     };
 

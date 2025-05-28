@@ -47,7 +47,7 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
         setStats(parsedStats);
       }
     } catch (error) {
-      console.error('Erro ao carregar estatísticas:', error);
+      // Erro ao carregar estatísticas
     }
   };
 
@@ -64,7 +64,7 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
         });
       }
     } catch (error) {
-      console.error('Erro ao carregar estatísticas do modo infinito:', error);
+      // Erro ao carregar estatísticas do modo infinito
     }
   };
 
@@ -112,7 +112,7 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
 
       localStorage.setItem('ludomusic_statistics', JSON.stringify(currentStats));
     } catch (error) {
-      console.error('Erro ao salvar resultado:', error);
+      // Erro ao salvar resultado
     }
   };
 

@@ -28,7 +28,7 @@ README*.md
 GUIA*.md
 DEPLOY*.md
 
-# Railway específico
+# Arquivos de configuração não utilizados
 railway-backend/
 railway.json
 Dockerfile

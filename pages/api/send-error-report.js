@@ -102,11 +102,11 @@ export default async function handler(req, res) {
 
           if (response.ok) {
             emailSent = true;
-            console.log('✅ Email enviado via Webhook');
+            // Email enviado via Webhook
           }
         }
       } catch (error) {
-        console.log('❌ Webhook falhou:', error.message);
+        // Webhook falhou
       }
     }
 
@@ -132,9 +132,9 @@ export default async function handler(req, res) {
                         `========================\n`;
 
         fs.appendFileSync(logFile, logEntry);
-        console.log('✅ Log salvo localmente');
+        // Log salvo localmente
       } catch (logError) {
-        console.error('❌ Erro ao salvar log:', logError);
+        // Erro ao salvar log
       }
     }
 

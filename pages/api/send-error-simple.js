@@ -20,16 +20,7 @@ export default async function handler(req, res) {
       ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress || 'Não informado'
     };
 
-    // SEMPRE logar no console do servidor (você pode ver isso no Vercel)
-    console.log('\n🐛 ===== NOVO RELATÓRIO DE ERRO =====');
-    console.log('📅 Data:', reportData.timestamp);
-    console.log('📧 Email:', reportData.userEmail);
-    console.log('🌐 URL:', reportData.pageUrl);
-    console.log('💻 Navegador:', reportData.userAgent);
-    console.log('🌍 IP:', reportData.ip);
-    console.log('📝 Descrição:');
-    console.log(reportData.description);
-    console.log('=====================================\n');
+    // Log do relatório de erro no servidor
 
     let emailSent = false;
     let method = 'log-only';
@@ -62,10 +53,10 @@ export default async function handler(req, res) {
         if (discordResponse.ok) {
           emailSent = true;
           method = 'discord';
-          console.log('✅ Relatório enviado via Discord webhook');
+          // Relatório enviado via Discord webhook
         }
       } catch (discordError) {
-        console.log('❌ Discord webhook falhou:', discordError.message);
+        // Discord webhook falhou
       }
     }
 
@@ -97,10 +88,9 @@ ${reportData.description}
         if (telegramResponse.ok) {
           emailSent = true;
           method = 'telegram';
-          console.log('✅ Relatório enviado via Telegram');
         }
       } catch (telegramError) {
-        console.log('❌ Telegram falhou:', telegramError.message);
+        // Telegram falhou
       }
     }
 
@@ -131,10 +121,9 @@ ${reportData.description}
         if (webhookResponse.ok) {
           emailSent = true;
           method = 'webhook';
-          console.log('✅ Relatório enviado via webhook genérico');
         }
       } catch (webhookError) {
-        console.log('❌ Webhook genérico falhou:', webhookError.message);
+        // Webhook genérico falhou
       }
     }
 
@@ -143,7 +132,7 @@ ${reportData.description}
       try {
         const fs = require('fs');
         const path = require('path');
-        
+
         const logDir = path.join(process.cwd(), 'logs');
         if (!fs.existsSync(logDir)) {
           fs.mkdirSync(logDir, { recursive: true });
@@ -164,17 +153,17 @@ Método de envio: ${method}
 `;
 
         fs.appendFileSync(logFile, logEntry);
-        console.log('✅ Log salvo em:', logFile);
+        // Log salvo em arquivo local
       } catch (logError) {
-        console.log('❌ Erro ao salvar log local:', logError.message);
+        // Erro ao salvar log local
       }
     }
 
     // SEMPRE retornar sucesso
     return res.status(200).json({
       success: true,
-      message: emailSent ? 
-        'Relatório enviado com sucesso!' : 
+      message: emailSent ?
+        'Relatório enviado com sucesso!' :
         'Relatório recebido e logado. Será processado manualmente.',
       emailSent: emailSent,
       method: method,
@@ -183,10 +172,10 @@ Método de envio: ${method}
 
   } catch (error) {
     console.error('❌ Erro geral na API:', error);
-    
+
     // Mesmo com erro, tentar logar o básico
     console.log('📝 Dados recebidos:', req.body);
-    
+
     return res.status(200).json({
       success: true,
       message: 'Relatório recebido com problemas técnicos. Será processado manualmente.',

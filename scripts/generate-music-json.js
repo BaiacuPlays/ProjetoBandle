@@ -1770,8 +1770,7 @@ function generateMusicJson() {
   const outputPath = path.join(__dirname, '..', 'data', 'music.json');
 
   fs.writeFileSync(outputPath, jsonContent, 'utf8');
-  console.log(`Generated music.json with ${musicData.length} tracks`);
-  console.log(`Saved to: ${outputPath}`);
+  // Generated music.json with tracks
 }
 
 // Função para verificar arquivos com nomes incorretos
@@ -1783,7 +1782,7 @@ function checkMissingFiles() {
   const musicJsonPath = path.join(__dirname, '..', 'data', 'music.json');
   const musicData = JSON.parse(fs.readFileSync(musicJsonPath, 'utf8'));
 
-  console.log('\n=== VERIFICANDO ARQUIVOS COM NOMES INCORRETOS ===\n');
+  // Verificando arquivos com nomes incorretos
 
   let missingCount = 0;
   let foundCount = 0;
@@ -1792,47 +1791,13 @@ function checkMissingFiles() {
     const audioPath = path.join(__dirname, '..', 'public', song.audioUrl);
 
     if (!fs.existsSync(audioPath)) {
-      console.log(`❌ ARQUIVO NÃO ENCONTRADO (ID ${song.id}):`);
-      console.log(`   Título: ${song.title}`);
-      console.log(`   Jogo: ${song.game}`);
-      console.log(`   Caminho esperado: ${song.audioUrl}`);
-      console.log(`   Caminho completo: ${audioPath}`);
-
-      // Tentar encontrar arquivos similares na mesma pasta
-      const dir = path.dirname(audioPath);
-      const fileName = path.basename(audioPath);
-
-      if (fs.existsSync(dir)) {
-        const filesInDir = fs.readdirSync(dir);
-        const similarFiles = filesInDir.filter(file =>
-          file.toLowerCase().includes(song.title.toLowerCase().split(' ')[0]) ||
-          file.toLowerCase().includes(song.title.toLowerCase().split(' ')[1] || '')
-        );
-
-        if (similarFiles.length > 0) {
-          console.log(`   Arquivos similares encontrados:`);
-          similarFiles.forEach(file => {
-            console.log(`     - ${file}`);
-          });
-        }
-      }
-      console.log('');
       missingCount++;
     } else {
       foundCount++;
     }
   });
 
-  console.log(`\n=== RESUMO ===`);
-  console.log(`✅ Arquivos encontrados: ${foundCount}`);
-  console.log(`❌ Arquivos não encontrados: ${missingCount}`);
-  console.log(`📊 Total de músicas: ${musicData.length}`);
-
-  if (missingCount > 0) {
-    console.log(`\n⚠️  ${missingCount} arquivos precisam ser corrigidos!`);
-  } else {
-    console.log(`\n🎉 Todos os arquivos estão corretos!`);
-  }
+  // Resumo da verificação de arquivos
 }
 
 // Executar verificação se o argumento --check for passado
