@@ -674,27 +674,39 @@ export const fetchMusicInfo = async (title, game) => {
 };
 
 // Função para salvar estatísticas
-export async function saveStatistics(userId, gameResult) {
+export async function saveStatistics(userId, gameResult, hintsUsed) {
   const statsKey = `stats:${userId}`;
   const globalStatsKey = 'stats:global';
 
   // Atualizar estatísticas do usuário
-  const userStats = await kv.get(statsKey) || { wins: 0, losses: 0 };
+  const userStats = await kv.get(statsKey) || {
+    wins: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 },
+    losses: 0
+  };
+
   if (gameResult === 'win') {
-    userStats.wins += 1;
+    userStats.wins[hintsUsed] = (userStats.wins[hintsUsed] || 0) + 1;
   } else {
     userStats.losses += 1;
   }
+
   await kv.set(statsKey, userStats);
 
   // Atualizar estatísticas globais
-  const globalStats = await kv.get(globalStatsKey) || { totalGames: 0, wins: 0, losses: 0 };
+  const globalStats = await kv.get(globalStatsKey) || {
+    totalGames: 0,
+    wins: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 },
+    losses: 0
+  };
+
   globalStats.totalGames += 1;
+
   if (gameResult === 'win') {
-    globalStats.wins += 1;
+    globalStats.wins[hintsUsed] = (globalStats.wins[hintsUsed] || 0) + 1;
   } else {
     globalStats.losses += 1;
   }
+
   await kv.set(globalStatsKey, globalStats);
 }
 
