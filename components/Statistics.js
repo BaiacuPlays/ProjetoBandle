@@ -1,15 +1,21 @@
 import { useState, useEffect } from 'react';
-import { useLanguage } from '../contexts/LanguageContext';
 import { getGlobalStatistics } from '../config/api';
 import styles from '../styles/Statistics.module.css';
 
+// Função para gerar UUID v4
+function generateUUID() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
 const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false }) => {
-  const { t, isClient, nickname } = useLanguage();
   const [stats, setStats] = useState({
     totalGames: 0,
     wins: 0,
     losses: 0,
-    attemptDistribution: [0, 0, 0, 0, 0, 0], // Tentativas 1-6
+    attemptDistribution: [0, 0, 0, 0, 0, 0],
     winPercentage: 0,
     averageAttempts: 0
   });
@@ -21,7 +27,69 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
     totalGamesPlayed: 0
   });
 
-  // Carregar estatísticas do localStorage
+  // Obter ou criar o identificador anônimo do usuário
+  function getUserId() {
+    if (typeof window === 'undefined') return null;
+    let id = localStorage.getItem('ludomusic_userid');
+    if (!id) {
+      id = generateUUID();
+      localStorage.setItem('ludomusic_userid', id);
+    }
+    return id;
+  }
+
+  // Carregar estatísticas do backend (modo diário)
+  const loadStatistics = async () => {
+    const userid = getUserId();
+    if (!userid) return;
+    try {
+      const res = await fetch(`/api/statistics?userid=${userid}`);
+      if (res.ok) {
+        const data = await res.json();
+        setStats(data);
+      }
+    } catch (error) {
+      // erro ao buscar estatísticas
+    }
+  };
+
+  // Salvar resultado do jogo atual no backend (modo diário)
+  const saveGameResult = async (result) => {
+    const userid = getUserId();
+    if (!userid) return;
+    try {
+      await fetch(`/api/statistics?userid=${userid}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          won: result.won,
+          attempts: result.attempts
+        })
+      });
+    } catch (error) {
+      // erro ao salvar estatísticas
+    }
+  };
+
+  // Carregar estatísticas do localStorage (modo infinito)
+  const loadInfiniteStatistics = () => {
+    try {
+      const savedStats = localStorage.getItem('ludomusic_infinite_stats');
+      if (savedStats) {
+        const parsedStats = JSON.parse(savedStats);
+        setInfiniteStats({
+          bestRecord: parsedStats.bestRecord || 0,
+          currentStreak: parsedStats.currentStreak || 0,
+          totalSongsCompleted: parsedStats.usedSongs ? parsedStats.usedSongs.length : 0,
+          totalGamesPlayed: parsedStats.totalGamesPlayed || 0
+        });
+      }
+    } catch (error) {
+      // erro ao carregar estatísticas do modo infinito
+    }
+  };
+
+  // Efeito para carregar estatísticas ao abrir o modal
   useEffect(() => {
     if (typeof window !== 'undefined') {
       if (isInfiniteMode) {
@@ -32,14 +100,14 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
     }
   }, [isOpen, isInfiniteMode]);
 
-  // Salvar resultado do jogo atual quando o modal abrir
+  // Efeito para salvar resultado do jogo atual ao abrir o modal (modo diário)
   useEffect(() => {
     if (isOpen && gameResult && !isInfiniteMode) {
-      saveGameResult(gameResult);
-      loadStatistics(); // Recarregar após salvar
+      saveGameResult(gameResult).then(() => loadStatistics());
     }
   }, [isOpen, gameResult, isInfiniteMode]);
 
+  // Estatísticas globais (opcional, se quiser manter)
   useEffect(() => {
     async function fetchGlobalStats() {
       const globalStats = await getGlobalStatistics();
@@ -54,96 +122,6 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
 
     fetchGlobalStats();
   }, []);
-
-  useEffect(() => {
-    async function fetchPlayerStats() {
-      const playerStatsKey = `stats:${nickname}`;
-      const playerStats = await kv.get(playerStatsKey);
-      setStats((prevStats) => ({
-        ...prevStats,
-        playerStats
-      }));
-    }
-
-    fetchPlayerStats();
-  }, [nickname]);
-
-  const loadStatistics = () => {
-    try {
-      const savedStats = localStorage.getItem('ludomusic_statistics');
-      if (savedStats) {
-        const parsedStats = JSON.parse(savedStats);
-        setStats(parsedStats);
-      }
-    } catch (error) {
-      // Erro ao carregar estatísticas
-    }
-  };
-
-  const loadInfiniteStatistics = () => {
-    try {
-      const savedStats = localStorage.getItem('ludomusic_infinite_stats');
-      if (savedStats) {
-        const parsedStats = JSON.parse(savedStats);
-        setInfiniteStats({
-          bestRecord: parsedStats.bestRecord || 0,
-          currentStreak: parsedStats.currentStreak || 0,
-          totalSongsCompleted: parsedStats.usedSongs ? parsedStats.usedSongs.length : 0,
-          totalGamesPlayed: parsedStats.totalGamesPlayed || 0
-        });
-      }
-    } catch (error) {
-      // Erro ao carregar estatísticas do modo infinito
-    }
-  };
-
-  const saveGameResult = (result) => {
-    try {
-      const savedStats = localStorage.getItem('ludomusic_statistics');
-      let currentStats = {
-        totalGames: 0,
-        wins: 0,
-        losses: 0,
-        attemptDistribution: [0, 0, 0, 0, 0, 0],
-        winPercentage: 0,
-        averageAttempts: 0
-      };
-
-      if (savedStats) {
-        currentStats = JSON.parse(savedStats);
-      }
-
-      // Atualizar estatísticas com o novo resultado
-      currentStats.totalGames++;
-
-      if (result.won) {
-        currentStats.wins++;
-        // result.attempts é o número de tentativas usadas (1-6)
-        const attemptIndex = Math.min(Math.max(result.attempts - 1, 0), 5);
-        currentStats.attemptDistribution[attemptIndex]++;
-      } else {
-        currentStats.losses++;
-      }
-
-      // Calcular percentuais
-      currentStats.winPercentage = currentStats.totalGames > 0
-        ? Math.round((currentStats.wins / currentStats.totalGames) * 100)
-        : 0;
-
-      // Calcular média de tentativas (apenas para vitórias)
-      if (currentStats.wins > 0) {
-        let totalAttempts = 0;
-        currentStats.attemptDistribution.forEach((count, index) => {
-          totalAttempts += count * (index + 1);
-        });
-        currentStats.averageAttempts = Math.round((totalAttempts / currentStats.wins) * 10) / 10;
-      }
-
-      localStorage.setItem('ludomusic_statistics', JSON.stringify(currentStats));
-    } catch (error) {
-      // Erro ao salvar resultado
-    }
-  };
 
   const getAttemptPercentage = (attemptIndex) => {
     if (stats.totalGames === 0) return 0;
@@ -163,8 +141,8 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
         <div className={styles.header}>
           <h2>
             {isInfiniteMode
-              ? (isClient ? t('infinite_statistics') : 'Estatísticas do Modo Infinito')
-              : (isClient ? t('statistics') : 'Estatísticas')
+              ? 'Estatísticas do Modo Infinito'
+              : 'Estatísticas'
             }
           </h2>
           <button className={styles.closeButton} onClick={onClose}>
@@ -178,21 +156,15 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
             <div className={styles.generalStats}>
               <div className={styles.statItem}>
                 <div className={styles.statNumber}>{infiniteStats.bestRecord}</div>
-                <div className={styles.statLabel}>
-                  {isClient ? t('best_record') : 'Melhor Recorde'}
-                </div>
+                <div className={styles.statLabel}>Melhor Recorde</div>
               </div>
               <div className={styles.statItem}>
                 <div className={styles.statNumber}>{infiniteStats.currentStreak}</div>
-                <div className={styles.statLabel}>
-                  {isClient ? t('current_streak') : 'Sequência Atual'}
-                </div>
+                <div className={styles.statLabel}>Sequência Atual</div>
               </div>
               <div className={styles.statItem}>
                 <div className={styles.statNumber}>{infiniteStats.totalSongsCompleted}</div>
-                <div className={styles.statLabel}>
-                  {isClient ? t('songs_completed') : 'Músicas Completadas'}
-                </div>
+                <div className={styles.statLabel}>Músicas Completadas</div>
               </div>
             </div>
           ) : (
@@ -200,21 +172,15 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
             <div className={styles.generalStats}>
               <div className={styles.statItem}>
                 <div className={styles.statNumber}>{stats.totalGames}</div>
-                <div className={styles.statLabel}>
-                  {isClient ? t('total_games') : 'Partidas Jogadas'}
-                </div>
+                <div className={styles.statLabel}>Partidas Jogadas</div>
               </div>
               <div className={styles.statItem}>
                 <div className={styles.statNumber}>{stats.winPercentage}%</div>
-                <div className={styles.statLabel}>
-                  {isClient ? t('win_percentage') : 'Taxa de Vitória'}
-                </div>
+                <div className={styles.statLabel}>Taxa de Vitória</div>
               </div>
               <div className={styles.statItem}>
                 <div className={styles.statNumber}>{stats.averageAttempts}</div>
-                <div className={styles.statLabel}>
-                  {isClient ? t('average_attempts') : 'Média de Tentativas'}
-                </div>
+                <div className={styles.statLabel}>Média de Tentativas</div>
               </div>
             </div>
           )}
@@ -222,7 +188,7 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
           {/* Distribuição de tentativas - apenas no modo normal */}
           {!isInfiniteMode && (
             <div className={styles.distributionSection}>
-              <h3>{isClient ? t('attempt_distribution') : 'Distribuição de Acertos'}</h3>
+              <h3>Distribuição de Acertos</h3>
               <div className={styles.distributionChart}>
                 {[1, 2, 3, 4, 5, 6].map((attempt, index) => {
                   const percentage = getAttemptPercentage(index);
@@ -263,11 +229,11 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
           {/* Resultado atual - apenas no modo normal */}
           {!isInfiniteMode && gameResult && (
             <div className={styles.currentResult}>
-              <h4>{isClient ? t('current_game') : 'Partida Atual'}</h4>
+              <h4>Partida Atual</h4>
               <div className={styles.resultText}>
                 {gameResult.won
-                  ? `${isClient ? t('won_in_attempts') : 'Acertou em'} ${gameResult.attempts} ${gameResult.attempts === 1 ? 'tentativa' : 'tentativas'}!`
-                  : `${isClient ? t('lost_game') : 'Não conseguiu acertar'} 😔`
+                  ? `Acertou em ${gameResult.attempts} ${gameResult.attempts === 1 ? 'tentativa' : 'tentativas'}!`
+                  : 'Não conseguiu acertar 😔'
                 }
               </div>
             </div>
@@ -276,7 +242,7 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
 
         <div className={styles.footer}>
           <button className={styles.continueButton} onClick={onClose}>
-            {isClient ? t('continue') : 'Continuar'}
+            Continuar
           </button>
         </div>
       </div>
