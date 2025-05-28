@@ -356,11 +356,29 @@ export const apiRequest = async (endpoint, options = {}) => {
             return playerAttempts >= 6 || playerWon;
           });
 
+          // Atualizar estado da rodada
           if (allPlayersFinished) {
             gameState.roundFinished = true;
             if (gameState.roundWinners.length === 0) {
               gameState.roundWinners = ['NONE']; // Ninguém acertou
             }
+          } else {
+            // Garantir que jogadores que erraram sejam registrados corretamente
+            lobby.players.forEach(player => {
+              const playerAttempts = gameState.attempts[player] || 0;
+              const playerWon = gameState.roundWinners.includes(player);
+              if (!playerWon && playerAttempts >= 6) {
+                gameState.guesses[player] = gameState.guesses[player] || [];
+                gameState.guesses[player].push({
+                  guess: 'FAILED',
+                  correct: false,
+                  gameCorrect: false,
+                  attempt: playerAttempts,
+                  type: 'fail',
+                  tooLate: false
+                });
+              }
+            });
           }
 
           // Salvar estado atualizado
