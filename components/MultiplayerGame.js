@@ -101,7 +101,8 @@ const MultiplayerGame = ({ onBackToLobby }) => {
 
   // Função para gerar tempo determinístico
   const getDeterministicStartTime = (duration, songId) => {
-    const maxStart = Math.max(0, duration - 10);
+    // Garante que sempre haja pelo menos 15 segundos restantes
+    const maxStart = Math.max(0, duration - 15);
     const seed = (songId * 31) % 997;
     const deterministicRandom = (seed / 997);
     return deterministicRandom * maxStart;
@@ -165,21 +166,39 @@ const MultiplayerGame = ({ onBackToLobby }) => {
       ? 15 // Se EU ganhei, posso tocar mais tempo
       : maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1];
 
+    let fadeOutTimeout = null;
+
     const updateProgress = () => {
       const currentTime = audio.currentTime - startTime;
-
+      // Limitar o seekbar para não passar de 15s
+      if (currentTime > 15) {
+        audio.currentTime = startTime + 15;
+        setAudioProgress(15);
+        audio.pause();
+        setIsPlaying(false);
+        return;
+      }
+      // Fade out nos últimos 2 segundos
+      if (currentTime >= 13 && currentTime <= 15) {
+        const fadeProgress = (15 - currentTime) / 2; // de 1 para 0
+        audio.volume = Math.max(0, volume * fadeProgress);
+      } else {
+        audio.volume = volume;
+      }
       // Sempre parar após 15 segundos, independente do status
       if (currentTime >= 15) {
         audio.pause();
         setIsPlaying(false);
         audio.currentTime = startTime;
         setAudioProgress(0);
+        audio.volume = volume;
       } else if (!iAmWinner && currentTime >= maxDuration) {
         // Parar baseado nas tentativas apenas se EU não ganhei
         audio.pause();
         setIsPlaying(false);
         audio.currentTime = startTime;
         setAudioProgress(0);
+        audio.volume = volume;
       } else {
         setAudioProgress(currentTime);
       }
@@ -197,8 +216,10 @@ const MultiplayerGame = ({ onBackToLobby }) => {
       audio.removeEventListener('timeupdate', updateProgress);
       audio.removeEventListener('play', updatePlay);
       audio.removeEventListener('pause', updatePlay);
+      // Garante que o volume volte ao normal ao desmontar
+      audio.volume = volume;
     };
-  }, [startTime, myAttempts, iAmWinner]);
+  }, [startTime, myAttempts, iAmWinner, volume]);
 
   // Reset do estado do áudio e interface quando a rodada muda
   useEffect(() => {
