@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { getGlobalStatistics } from '../config/api';
 import styles from '../styles/Statistics.module.css';
 
 const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false }) => {
@@ -38,6 +39,21 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
       loadStatistics(); // Recarregar após salvar
     }
   }, [isOpen, gameResult, isInfiniteMode]);
+
+  useEffect(() => {
+    async function fetchGlobalStats() {
+      const globalStats = await getGlobalStatistics();
+      setStats((prevStats) => ({
+        ...prevStats,
+        totalGames: globalStats.totalGames,
+        wins: globalStats.wins,
+        losses: globalStats.losses,
+        winPercentage: ((globalStats.wins / globalStats.totalGames) * 100).toFixed(2)
+      }));
+    }
+
+    fetchGlobalStats();
+  }, []);
 
   const loadStatistics = () => {
     try {

@@ -1,3 +1,5 @@
+import { kv } from '@vercel/kv';
+
 // Configuração da API local
 const API_CONFIG = {
   // URL base para APIs locais do Next.js
@@ -670,5 +672,36 @@ export const fetchMusicInfo = async (title, game) => {
     };
   }
 };
+
+// Função para salvar estatísticas
+export async function saveStatistics(userId, gameResult) {
+  const statsKey = `stats:${userId}`;
+  const globalStatsKey = 'stats:global';
+
+  // Atualizar estatísticas do usuário
+  const userStats = await kv.get(statsKey) || { wins: 0, losses: 0 };
+  if (gameResult === 'win') {
+    userStats.wins += 1;
+  } else {
+    userStats.losses += 1;
+  }
+  await kv.set(statsKey, userStats);
+
+  // Atualizar estatísticas globais
+  const globalStats = await kv.get(globalStatsKey) || { totalGames: 0, wins: 0, losses: 0 };
+  globalStats.totalGames += 1;
+  if (gameResult === 'win') {
+    globalStats.wins += 1;
+  } else {
+    globalStats.losses += 1;
+  }
+  await kv.set(globalStatsKey, globalStats);
+}
+
+// Função para buscar estatísticas globais
+export async function getGlobalStatistics() {
+  const globalStatsKey = 'stats:global';
+  return await kv.get(globalStatsKey) || { totalGames: 0, wins: 0, losses: 0 };
+}
 
 export default API_CONFIG;
