@@ -48,6 +48,7 @@ export default function Home() {
   const [showTutorial, setShowTutorial] = useState(false);
   const [isPlayLoading, setIsPlayLoading] = useState(false);
   const [pendingPlay, setPendingPlay] = useState(false);
+  const [isSkipLoading, setIsSkipLoading] = useState(false);
 
   // Estados do modo infinito
   const [isInfiniteMode, setIsInfiniteMode] = useState(false);
@@ -779,30 +780,32 @@ export default function Home() {
   };
 
   // Skip
-  const handleSkip = () => {
-    if (gameOver) return;
-    const newAttempts = attempts + 1;
-    setAttempts(newAttempts);
-    setShowHint(true);
-    setHistory(prev => [...prev, { type: 'skipped' }]);
-    setMessage(t('skipped'));
+  const handleSkip = async () => {
+    if (gameOver || isSkipLoading) return;
+    setIsSkipLoading(true);
+    try {
+      const newAttempts = attempts + 1;
+      setAttempts(newAttempts);
+      setShowHint(true);
+      setHistory(prev => [...prev, { type: 'skipped' }]);
+      setMessage(t('skipped'));
 
-    if (newAttempts >= MAX_ATTEMPTS) {
-      setMessage(`${t('game_over')} ${currentSong.game} - ${currentSong.title}`);
-
-      if (isInfiniteMode) {
-        // No modo infinito, termina a sequência
-        endInfiniteMode();
-      } else {
-        // No modo normal, termina o jogo
-        setGameOver(true);
-        setGameResult({ won: false, attempts: newAttempts });
-        setTimeout(() => setShowStatistics(true), 800);
+      if (newAttempts >= MAX_ATTEMPTS) {
+        setMessage(`${t('game_over')} ${currentSong.game} - ${currentSong.title}`);
+        if (isInfiniteMode) {
+          // No modo infinito, termina a sequência
+          endInfiniteMode();
+        } else {
+          // No modo normal, termina o jogo
+          setGameOver(true);
+          setGameResult({ won: false, attempts: newAttempts });
+          setTimeout(() => setShowStatistics(true), 800);
+        }
       }
+    } finally {
+      setIsSkipLoading(false);
     }
   };
-
-
 
   const normalize = str => str
     .normalize('NFD')
@@ -1592,9 +1595,9 @@ export default function Home() {
               type="button"
               className={styles.attemptButton + ' ' + styles.attemptInactive}
               onClick={handleSkip}
-              disabled={gameOver || audioError || attempts >= MAX_ATTEMPTS}
+              disabled={gameOver || audioError || attempts >= MAX_ATTEMPTS || isSkipLoading}
             >
-              {isClient ? t('skip') : 'Skip'} <FaFastForward style={{ marginLeft: 4, fontSize: '1em', verticalAlign: 'middle' }} />
+              {isSkipLoading ? (isClient ? t('loading') : 'Carregando...') : (isClient ? t('skip') : 'Skip')} <FaFastForward style={{ marginLeft: 4, fontSize: '1em', verticalAlign: 'middle' }} />
             </button>
           </div>
           <form onSubmit={handleGuess} className={styles.guessFormModern} autoComplete="off">
