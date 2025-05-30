@@ -2,6 +2,7 @@ import '../styles/styles.css';
 import '../styles/settings.css';
 import { LanguageProvider } from '../contexts/LanguageContext';
 import { useEffect } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 
 export default function MyApp({ Component, pageProps }) {
   // Carregar configurações do localStorage ao iniciar a aplicação
@@ -29,6 +30,7 @@ export default function MyApp({ Component, pageProps }) {
   return (
     <LanguageProvider>
       <Component {...pageProps} />
+      <Analytics />
     </LanguageProvider>
   );
 }

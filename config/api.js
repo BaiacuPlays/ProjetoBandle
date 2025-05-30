@@ -292,12 +292,33 @@ export const apiRequest = async (endpoint, options = {}) => {
             .toLowerCase()
             .replace(/[^a-z0-9]/g, '');
 
+          const normalizeString = (str) => str.trim().toLowerCase().replace(/\s+/g, ' ');
+
+          // Função para verificar títulos genéricos
+          const isGenericTitle = (title) => {
+            const genericTitles = [
+              'main title', 'main theme', 'title theme', 'opening theme', 'intro',
+              'menu theme', 'title screen', 'main menu', 'theme song', 'opening',
+              'title', 'theme', 'main', 'intro theme', 'title music'
+            ];
+            const normalized = normalizeString(title);
+            return genericTitles.some(generic => normalized === generic || normalized.includes(generic));
+          };
+
           const normalizedGuess = normalize(body.guess);
           const normalizedCorrect = normalize(currentSong?.title || '');
           const normalizedGame = normalize(currentSong?.game || '');
 
-          // Verificar se acertou a música CORRETA da rodada atual
-          const correct = normalizedGuess === normalizedCorrect;
+          // Verificação melhorada para títulos exatos e genéricos
+          let correct = normalizedGuess === normalizedCorrect;
+
+          // Se não acertou exato e ambos são títulos genéricos, verificar se são do mesmo jogo
+          if (!correct && isGenericTitle(body.guess) && isGenericTitle(currentSong?.title || '')) {
+            const guessedSong = songs.find(song => normalizeString(song.title) === normalizeString(body.guess));
+            if (guessedSong && normalizeString(guessedSong.game) === normalizeString(currentSong?.game || '')) {
+              correct = true;
+            }
+          }
 
           // Verificar se acertou o jogo correto (mas não a música específica)
           let gameCorrect = false;
@@ -309,8 +330,6 @@ export const apiRequest = async (endpoint, options = {}) => {
             gameCorrect = songsFromSameGame.some(song =>
               normalize(song.title) === normalizedGuess
             );
-
-
           }
 
           // Atualizar tentativas do jogador

@@ -290,7 +290,33 @@ export default async function handler(req, res) {
         const currentSong = lobby.gameState.songs[currentRoundIndex];
 
         const normalizeString = (str) => str.trim().toLowerCase().replace(/\s+/g, ' ');
-        const isCorrect = normalizeString(guess) === normalizeString(currentSong.title);
+
+        // Função melhorada para verificar títulos genéricos
+        const isGenericTitle = (title) => {
+          const genericTitles = [
+            'main title', 'main theme', 'title theme', 'opening theme', 'intro',
+            'menu theme', 'title screen', 'main menu', 'theme song', 'opening',
+            'title', 'theme', 'main', 'intro theme', 'title music'
+          ];
+          const normalized = normalizeString(title);
+          return genericTitles.some(generic => normalized === generic || normalized.includes(generic));
+        };
+
+        // Verificação melhorada para títulos exatos e genéricos
+        let isCorrect = false;
+        const normalizedGuess = normalizeString(guess);
+        const normalizedCurrentTitle = normalizeString(currentSong.title);
+
+        // Verificação exata primeiro
+        isCorrect = normalizedGuess === normalizedCurrentTitle;
+
+        // Se não acertou exato e ambos são títulos genéricos, verificar se são do mesmo jogo
+        if (!isCorrect && isGenericTitle(guess) && isGenericTitle(currentSong.title)) {
+          const guessedSong = songs.find(song => normalizeString(song.title) === normalizedGuess);
+          if (guessedSong && normalizeString(guessedSong.game) === normalizeString(currentSong.game)) {
+            isCorrect = true;
+          }
+        }
 
         // Verificar se a rodada já terminou
         if (lobby.gameState.roundFinished) {
@@ -300,9 +326,9 @@ export default async function handler(req, res) {
         // Incrementar tentativas APÓS verificações
         lobby.gameState.attempts[nickname]++;
 
-        // Verificar se acertou o jogo (mas não a música)
-        const guessedSong = songs.find(song => normalizeString(song.title) === normalizeString(guess));
-        const isFromCorrectGame = guessedSong && normalizeString(guessedSong.game) === normalizeString(currentSong.game);
+        // Verificar se acertou o jogo (mas não a música específica)
+        const guessedSong = songs.find(song => normalizeString(song.title) === normalizedGuess);
+        const isFromCorrectGame = guessedSong && normalizeString(guessedSong.game) === normalizeString(currentSong.game) && !isCorrect;
 
 
 

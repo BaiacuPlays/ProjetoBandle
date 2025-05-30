@@ -63,6 +63,9 @@ const MultiplayerGame = ({ onBackToLobby }) => {
   const [pendingPlay, setPendingPlay] = useState(false);
   const [isSkipLoading, setIsSkipLoading] = useState(false);
   const [isNextRoundLoading, setIsNextRoundLoading] = useState(false);
+  const [audioLoadError, setAudioLoadError] = useState(false);
+  const [audioLoadRetries, setAudioLoadRetries] = useState(0);
+  const [connectionError, setConnectionError] = useState(false);
 
   const audioRef = useRef(null);
   const inputRef = useRef(null);
@@ -132,8 +135,14 @@ const MultiplayerGame = ({ onBackToLobby }) => {
         // Verificar se a duração é válida
         if (!duration || isNaN(duration) || duration < 10) {
           console.error('Arquivo de áudio inválido:', songToUse.audioUrl);
+          setAudioLoadError(true);
           return;
         }
+
+        // Áudio carregado com sucesso
+        setAudioLoadError(false);
+        setAudioLoadRetries(0);
+        setConnectionError(false);
 
         const startTimeToUse = getDeterministicStartTime(duration, songToUse.id);
         setStartTime(startTimeToUse);
@@ -143,6 +152,19 @@ const MultiplayerGame = ({ onBackToLobby }) => {
 
       const handleError = (e) => {
         console.error('Erro ao carregar áudio no multiplayer:', e);
+        setAudioLoadError(true);
+
+        // Tentar recarregar automaticamente até 3 vezes
+        if (audioLoadRetries < 3) {
+          setTimeout(() => {
+            setAudioLoadRetries(prev => prev + 1);
+            if (audioRef.current) {
+              audioRef.current.load();
+            }
+          }, 2000 * (audioLoadRetries + 1)); // Delay progressivo
+        } else {
+          setConnectionError(true);
+        }
       };
 
       audioRef.current.addEventListener('loadedmetadata', handleLoadedMetadata);
@@ -750,6 +772,52 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                   />
                 </div>
               </div>
+
+              {/* Indicadores de estado de carregamento/erro */}
+              {audioLoadError && (
+                <div style={{
+                  background: 'linear-gradient(135deg, rgba(244, 67, 54, 0.15), rgba(229, 57, 53, 0.15))',
+                  border: '2px solid #f44336',
+                  borderRadius: '8px',
+                  padding: '12px',
+                  margin: '10px 0',
+                  textAlign: 'center',
+                  backdropFilter: 'blur(10px)'
+                }}>
+                  <div style={{ color: '#f44336', fontWeight: 'bold', marginBottom: '5px' }}>
+                    ⚠️ Erro ao carregar áudio
+                  </div>
+                  <div style={{ fontSize: '0.9rem', opacity: 0.8 }}>
+                    {connectionError
+                      ? 'Verifique sua conexão e recarregue a página'
+                      : `Tentando novamente... (${audioLoadRetries}/3)`
+                    }
+                  </div>
+                  {connectionError && (
+                    <button
+                      onClick={() => {
+                        setAudioLoadError(false);
+                        setAudioLoadRetries(0);
+                        setConnectionError(false);
+                        if (audioRef.current) {
+                          audioRef.current.load();
+                        }
+                      }}
+                      style={{
+                        marginTop: '8px',
+                        padding: '6px 12px',
+                        background: '#f44336',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Tentar Novamente
+                    </button>
+                  )}
+                </div>
+              )}
 
               {/* Informação de pontuação */}
               <div className={gameStyles.pointsInfo}>
@@ -1409,182 +1477,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                 </div>
               )}
 
-              {roundFinished && (
-                // Exibir estatísticas globais e individuais
-                <div style={{
-                  marginTop: '20px',
-                  padding: '15px',
-                  borderRadius: '8px',
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  backdropFilter: 'blur(10px)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.3)'
-                }}>
-                  <div style={{
-                    fontSize: '1rem',
-                    fontWeight: 'bold',
-                    color: '#4ecdc4',
-                    marginBottom: '10px',
-                    textAlign: 'center'
-                  }}>
-                    Estatísticas da Rodada
-                  </div>
 
-                  {/* Estatísticas globais - IGUAL AO JOGO NORMAL */}
-                  <div style={{
-                    marginBottom: '10px',
-                    padding: '10px',
-                    borderRadius: '6px',
-                    background: 'rgba(0, 0, 0, 0.4)',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                    backdropFilter: 'blur(10px)'
-                  }}>
-                    <div style={{
-                      fontSize: '0.9rem',
-                      fontWeight: '500',
-                      color: '#fff',
-                      marginBottom: '8px'
-                    }}>
-                      Estatísticas Gerais
-                    </div>
-                    <div style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '6px'
-                    }}>
-                      <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        padding: '8px',
-                        borderRadius: '4px',
-                        background: 'rgba(255, 255, 255, 0.1)',
-                        border: '1px solid rgba(255, 255, 255, 0.3)',
-                        backdropFilter: 'blur(10px)'
-                      }}>
-                        <span style={{ color: '#4caf50' }}>Total de Acertos:</span>
-                        <span style={{ color: '#fff' }}>{gameState?.totalCorrect || 0}</span>
-                      </div>
-                      <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        padding: '8px',
-                        borderRadius: '4px',
-                        background: 'rgba(255, 255, 255, 0.1)',
-                        border: '1px solid rgba(255, 255, 255, 0.3)',
-                        backdropFilter: 'blur(10px)'
-                      }}>
-                        <span style={{ color: '#ff9800' }}>Total de Erros:</span>
-                        <span style={{ color: '#fff' }}>{gameState?.totalWrong || 0}</span>
-                      </div>
-                      <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        padding: '8px',
-                        borderRadius: '4px',
-                        background: 'rgba(255, 255, 255, 0.1)',
-                        border: '1px solid rgba(255, 255, 255, 0.3)',
-                        backdropFilter: 'blur(10px)'
-                      }}>
-                        <span style={{ color: '#2196f3' }}>Total de Pulados:</span>
-                        <span style={{ color: '#fff' }}>{gameState?.totalSkipped || 0}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Estatísticas individuais - IGUAL AO JOGO NORMAL */}
-                  <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '10px'
-                  }}>
-                    {lobbyData.players.map((player) => {
-                      const playerAttempts = gameState?.attempts?.[player] || 0;
-                      const playerGuesses = gameState?.guesses?.[player] || [];
-                      const playerCorrect = playerGuesses.some(guess => guess.correct);
-                      const playerGameCorrect = playerGuesses.some(guess => guess.gameCorrect);
-
-                      return (
-                        <div key={player} style={{
-                          padding: '10px',
-                          borderRadius: '6px',
-                          background: 'rgba(255, 255, 255, 0.1)',
-                          border: '1px solid rgba(255, 255, 255, 0.3)',
-                          backdropFilter: 'blur(10px)',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: '4px'
-                        }}>
-                          <div style={{
-                            fontSize: '0.9rem',
-                            fontWeight: '500',
-                            color: '#fff',
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center'
-                          }}>
-                            <span>{player}</span>
-                            <span style={{
-                              fontSize: '0.8rem',
-                              color: playerCorrect ? '#4caf50' : playerGameCorrect ? '#ff9800' : '#fff',
-                              fontWeight: 'bold'
-                            }}>
-                              {playerCorrect ? 'Acertou' : playerGameCorrect ? 'Jogo Correto' : 'Não Acertou'}
-                            </span>
-                          </div>
-                          <div style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '2px'
-                          }}>
-                            <div style={{
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                              alignItems: 'center',
-                              padding: '6px',
-                              borderRadius: '4px',
-                              background: 'rgba(255, 255, 255, 0.2)',
-                              border: '1px solid rgba(255, 255, 255, 0.4)',
-                              backdropFilter: 'blur(10px)'
-                            }}>
-                              <span style={{ color: '#4caf50' }}>Acertos:</span>
-                              <span style={{ color: '#fff' }}>{playerGuesses.filter(guess => guess.correct).length}</span>
-                            </div>
-                            <div style={{
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                              alignItems: 'center',
-                              padding: '6px',
-                              borderRadius: '4px',
-                              background: 'rgba(255, 255, 255, 0.2)',
-                              border: '1px solid rgba(255, 255, 255, 0.4)',
-                              backdropFilter: 'blur(10px)'
-                            }}>
-                              <span style={{ color: '#ff9800' }}>Erros:</span>
-                              <span style={{ color: '#fff' }}>{playerGuesses.filter(guess => !guess.correct && !guess.gameCorrect).length}</span>
-                            </div>
-                            <div style={{
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                              alignItems: 'center',
-                              padding: '6px',
-                              borderRadius: '4px',
-                              background: 'rgba(255, 255, 255, 0.2)',
-                              border: '1px solid rgba(255, 255, 255, 0.4)',
-                              backdropFilter: 'blur(10px)'
-                            }}>
-                              <span style={{ color: '#2196f3' }}>Pulados:</span>
-                              <span style={{ color: '#fff' }}>{playerGuesses.filter(guess => guess.type === 'skipped').length}</span>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
             </>
           )}
 
