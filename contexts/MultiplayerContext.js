@@ -55,9 +55,9 @@ const MultiplayerContext = createContext();
 export function MultiplayerProvider({ children }) {
   const [state, dispatch] = useReducer(multiplayerReducer, initialState);
 
-  // Controle de loading para ações assíncronas (fora do React state)
-  let skipInProgress = false;
-  let nextRoundInProgress = false;
+  // Controle de loading para ações assíncronas usando useRef para evitar race conditions
+  const skipInProgressRef = useRef(false);
+  const nextRoundInProgressRef = useRef(false);
 
   // Polling para atualizar o estado da sala
   useEffect(() => {
@@ -299,8 +299,8 @@ export function MultiplayerProvider({ children }) {
     // Próxima rodada (apenas host)
     nextRound: async () => {
       if (!state.roomCode) return { success: false, error: 'Dados inválidos' };
-      if (nextRoundInProgress) return { success: false, error: 'Ação em andamento' };
-      nextRoundInProgress = true;
+      if (nextRoundInProgressRef.current) return { success: false, error: 'Ação em andamento' };
+      nextRoundInProgressRef.current = true;
       try {
         const response = await apiRequest('/api/lobby', {
           method: 'PATCH',
@@ -325,15 +325,15 @@ export function MultiplayerProvider({ children }) {
       } catch (err) {
         return { success: false, error: 'Erro de conexão' };
       } finally {
-        nextRoundInProgress = false;
+        nextRoundInProgressRef.current = false;
       }
     },
 
     // Pular rodada
     skipRound: async () => {
       if (!state.roomCode || !state.playerNickname) return { success: false, error: 'Dados inválidos' };
-      if (skipInProgress) return { success: false, error: 'Ação em andamento' };
-      skipInProgress = true;
+      if (skipInProgressRef.current) return { success: false, error: 'Ação em andamento' };
+      skipInProgressRef.current = true;
       try {
         const response = await apiRequest('/api/lobby', {
           method: 'PATCH',
@@ -358,7 +358,7 @@ export function MultiplayerProvider({ children }) {
       } catch (err) {
         return { success: false, error: 'Erro de conexão' };
       } finally {
-        skipInProgress = false;
+        skipInProgressRef.current = false;
       }
     },
 

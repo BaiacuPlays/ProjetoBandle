@@ -4144,6 +4144,18 @@
     "console": "Multi-platform"
   },
   {
+    "id": 347,
+    "title": "Nine Sols",
+    "artist": "Vivi Weng",
+    "composer": "Vivi Weng",
+    "game": "Nine Sols",
+    "context": "Audio - Nine Sols",
+    "audioUrl": "/audio/nine-sols/01. Nine Sols.mp3",
+    "year": 2024,
+    "genre": "Game Soundtrack",
+    "console": "Multi-platform"
+  },
+  {
     "id": 348,
     "title": "Awakening",
     "artist": "Vivi Weng",
@@ -5550,7 +5562,7 @@
   },
   {
     "id": 466,
-    "title": "Race to win",
+    "title": "Title Theme",
     "artist": "Chris Rezanso",
     "composer": "Chris Rezanso",
     "game": "Sonic Rivals 2",

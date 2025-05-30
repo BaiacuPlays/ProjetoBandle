@@ -316,7 +316,10 @@ export const apiRequest = async (endpoint, options = {}) => {
           if (!correct && isGenericTitle(body.guess) && isGenericTitle(currentSong?.title || '')) {
             const guessedSong = songs.find(song => normalizeString(song.title) === normalizeString(body.guess));
             if (guessedSong && normalizeString(guessedSong.game) === normalizeString(currentSong?.game || '')) {
-              correct = true;
+              // Verificar se é exatamente a mesma música usando ID
+              if (guessedSong.id === currentSong?.id) {
+                correct = true;
+              }
             }
           }
 

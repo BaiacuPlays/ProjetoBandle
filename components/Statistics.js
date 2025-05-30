@@ -12,7 +12,7 @@ function generateUUID() {
   });
 }
 
-const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false, currentSong = null }) => {
+const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false, isMultiplayerMode = false, currentSong = null }) => {
   const { t, isClient } = useLanguage();
   const [stats, setStats] = useState({
     totalGames: 0,
@@ -154,8 +154,8 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
         </div>
 
         <div className={styles.content}>
-          {/* Estatísticas Globais Simplificadas */}
-          {stats && (
+          {/* Estatísticas Globais Simplificadas - APENAS no modo diário */}
+          {stats && !isInfiniteMode && !isMultiplayerMode && (
             <div className={styles.simpleStatsSection}>
               <div className={styles.simpleStatsMessage}>
                 {isClient

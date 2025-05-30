@@ -94,10 +94,15 @@ const MultiplayerGame = ({ onBackToLobby }) => {
 
   // Garantir que temos uma música válida para tocar
   if (!songToPlay && gameState?.currentSong) {
-    // Tentar encontrar a música pelo título na lista de músicas
-    songToPlay = songs.find(song =>
-      song.title.trim().toLowerCase() === gameState.currentSong.trim().toLowerCase()
-    );
+    // Primeiro, tentar encontrar pelo ID se disponível
+    if (typeof gameState.currentSong === 'object' && gameState.currentSong.id !== undefined) {
+      songToPlay = songs.find(song => song.id === gameState.currentSong.id);
+    } else if (typeof gameState.currentSong === 'string') {
+      // Fallback: tentar encontrar pelo título na lista de músicas
+      songToPlay = songs.find(song =>
+        song.title.trim().toLowerCase() === gameState.currentSong.trim().toLowerCase()
+      );
+    }
   }
 
 
@@ -111,7 +116,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
     return deterministicRandom * maxStart;
   };
 
-  // Configurar áudio quando a música muda
+  // Configurar áudio quando a música muda - OTIMIZADO
   useEffect(() => {
     let songToUse = currentSong;
 
@@ -121,16 +126,27 @@ const MultiplayerGame = ({ onBackToLobby }) => {
       songToUse = gameState.songs[currentRoundIndex];
     }
 
-    // Se ainda não temos música, tentar buscar pelo título no gameState
+    // Se ainda não temos música, tentar buscar pelo ID ou título no gameState
     if (!songToUse && gameState?.currentSong) {
-      songToUse = songs.find(song =>
-        song.title.trim().toLowerCase() === gameState.currentSong.trim().toLowerCase()
-      );
+      // Primeiro, tentar encontrar pelo ID se disponível
+      if (typeof gameState.currentSong === 'object' && gameState.currentSong.id !== undefined) {
+        songToUse = songs.find(song => song.id === gameState.currentSong.id);
+      } else if (typeof gameState.currentSong === 'string') {
+        // Fallback: tentar encontrar pelo título
+        songToUse = songs.find(song =>
+          song.title.trim().toLowerCase() === gameState.currentSong.trim().toLowerCase()
+        );
+      }
     }
 
     if (songToUse && audioRef.current) {
+      // Limpar listeners anteriores antes de adicionar novos
+      const audio = audioRef.current;
+
       const handleLoadedMetadata = () => {
-        const duration = audioRef.current.duration || 0;
+        if (!audio || audio !== audioRef.current) return; // Verificação de segurança
+
+        const duration = audio.duration || 0;
 
         // Verificar se a duração é válida
         if (!duration || isNaN(duration) || duration < 10) {
@@ -146,40 +162,53 @@ const MultiplayerGame = ({ onBackToLobby }) => {
 
         const startTimeToUse = getDeterministicStartTime(duration, songToUse.id);
         setStartTime(startTimeToUse);
-        audioRef.current.currentTime = startTimeToUse;
-        setAudioProgress(0);
+
+        // Verificação adicional antes de definir currentTime
+        if (audio === audioRef.current && !isNaN(startTimeToUse)) {
+          audio.currentTime = startTimeToUse;
+          setAudioProgress(0);
+        }
       };
 
       const handleError = (e) => {
+        if (!audio || audio !== audioRef.current) return; // Verificação de segurança
+
         console.error('Erro ao carregar áudio no multiplayer:', e);
         setAudioLoadError(true);
 
-        // Tentar recarregar automaticamente até 3 vezes
+        // Tentar recarregar automaticamente até 3 vezes com debounce
         if (audioLoadRetries < 3) {
+          const retryDelay = Math.min(2000 * (audioLoadRetries + 1), 8000); // Max 8s
           setTimeout(() => {
-            setAudioLoadRetries(prev => prev + 1);
-            if (audioRef.current) {
-              audioRef.current.load();
+            if (audio === audioRef.current) { // Verificar se ainda é o mesmo elemento
+              setAudioLoadRetries(prev => prev + 1);
+              audio.load();
             }
-          }, 2000 * (audioLoadRetries + 1)); // Delay progressivo
+          }, retryDelay);
         } else {
           setConnectionError(true);
         }
       };
 
-      audioRef.current.addEventListener('loadedmetadata', handleLoadedMetadata);
-      audioRef.current.addEventListener('error', handleError);
+      // Remover listeners existentes primeiro
+      audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      audio.removeEventListener('error', handleError);
+
+      // Adicionar novos listeners
+      audio.addEventListener('loadedmetadata', handleLoadedMetadata);
+      audio.addEventListener('error', handleError);
 
       return () => {
-        if (audioRef.current) {
-          audioRef.current.removeEventListener('loadedmetadata', handleLoadedMetadata);
-          audioRef.current.removeEventListener('error', handleError);
+        // Cleanup mais robusto
+        if (audio) {
+          audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+          audio.removeEventListener('error', handleError);
         }
       };
     }
-  }, [currentSong, gameState?.songs, gameState?.currentRound, gameState?.currentSong]);
+  }, [currentSong, gameState?.songs, gameState?.currentRound, gameState?.currentSong, audioLoadRetries]);
 
-  // Controle de progresso do áudio
+  // Controle de progresso do áudio - OTIMIZADO
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -188,89 +217,140 @@ const MultiplayerGame = ({ onBackToLobby }) => {
       ? 15 // Se EU ganhei OU esgotei minhas tentativas, posso tocar mais tempo
       : maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1];
 
-    let fadeOutTimeout = null;
-
     const updateProgress = () => {
-      const currentTime = audio.currentTime - startTime;
-      // Limitar o seekbar para não passar de 15s
-      if (currentTime > 15) {
-        audio.currentTime = startTime + 15;
-        setAudioProgress(15);
-        audio.pause();
-        setIsPlaying(false);
-        audio.volume = volume;
-        return;
+      // Verificações de segurança mais robustas
+      if (!audio || audio !== audioRef.current || startTime === null || startTime === undefined) return;
+
+      try {
+        const currentTime = audio.currentTime - startTime;
+
+        // Limitar o seekbar para não passar de 15s
+        if (currentTime > 15) {
+          audio.currentTime = startTime + 15;
+          setAudioProgress(15);
+          audio.pause();
+          setIsPlaying(false);
+          audio.volume = volume;
+          return;
+        }
+
+        // Fade out nos últimos 2 segundos quando limitado a 15s
+        if ((iAmWinner || myAttempts >= 6) && currentTime >= 13 && currentTime < 15) {
+          const fadeProgress = (15 - currentTime) / 2; // de 1 para 0
+          audio.volume = Math.max(0, volume * fadeProgress);
+        } else {
+          audio.volume = volume;
+        }
+
+        // Sempre parar após 15 segundos, independente do status
+        if (currentTime >= 15) {
+          audio.pause();
+          setIsPlaying(false);
+          if (!isNaN(startTime)) {
+            audio.currentTime = startTime;
+          }
+          setAudioProgress(0);
+          audio.volume = volume;
+          return;
+        }
+
+        // Parar baseado nas tentativas apenas se EU não ganhei E não esgotei tentativas
+        if (!iAmWinner && myAttempts < 6 && currentTime >= maxDuration) {
+          audio.pause();
+          setIsPlaying(false);
+          if (!isNaN(startTime)) {
+            audio.currentTime = startTime;
+          }
+          setAudioProgress(0);
+          audio.volume = volume;
+          return;
+        }
+
+        setAudioProgress(currentTime);
+      } catch (error) {
+        console.error('Erro no updateProgress multiplayer:', error);
       }
-      // Fade out nos últimos 2 segundos quando limitado a 15s
-      if ((iAmWinner || myAttempts >= 6) && currentTime >= 13 && currentTime < 15) {
-        const fadeProgress = (15 - currentTime) / 2; // de 1 para 0
-        audio.volume = Math.max(0, volume * fadeProgress);
-      } else {
-        audio.volume = volume;
-      }
-      // Sempre parar após 15 segundos, independente do status
-      if (currentTime >= 15) {
-        audio.pause();
-        setIsPlaying(false);
-        audio.currentTime = startTime;
-        setAudioProgress(0);
-        audio.volume = volume;
-        return;
-      }
-      // Parar baseado nas tentativas apenas se EU não ganhei E não esgotei tentativas
-      if (!iAmWinner && myAttempts < 6 && currentTime >= maxDuration) {
-        audio.pause();
-        setIsPlaying(false);
-        audio.currentTime = startTime;
-        setAudioProgress(0);
-        audio.volume = volume;
-        return;
-      }
-      setAudioProgress(currentTime);
     };
 
     const updatePlay = () => {
-      setIsPlaying(!audio.paused);
+      if (audio === audioRef.current) {
+        setIsPlaying(!audio.paused && !audio.ended);
+      }
     };
 
+    // Remover listeners existentes primeiro
+    audio.removeEventListener('timeupdate', updateProgress);
+    audio.removeEventListener('play', updatePlay);
+    audio.removeEventListener('pause', updatePlay);
+
+    // Adicionar novos listeners
     audio.addEventListener('timeupdate', updateProgress);
     audio.addEventListener('play', updatePlay);
     audio.addEventListener('pause', updatePlay);
 
     return () => {
-      audio.removeEventListener('timeupdate', updateProgress);
-      audio.removeEventListener('play', updatePlay);
-      audio.removeEventListener('pause', updatePlay);
-      // Garante que o volume volte ao normal ao desmontar
-      audio.volume = volume;
+      if (audio) {
+        audio.removeEventListener('timeupdate', updateProgress);
+        audio.removeEventListener('play', updatePlay);
+        audio.removeEventListener('pause', updatePlay);
+        // Garante que o volume volte ao normal ao desmontar
+        try {
+          audio.volume = volume;
+        } catch (error) {
+          // Ignorar erros de volume
+        }
+      }
     };
   }, [startTime, myAttempts, iAmWinner, volume]);
 
-  // Reset do estado do áudio e interface quando a rodada muda
+  // Reset do estado do áudio e interface quando a rodada muda - OTIMIZADO
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-      setAudioProgress(0);
+    const audio = audioRef.current;
+    if (audio) {
+      try {
+        audio.pause();
+        setIsPlaying(false);
+        setAudioProgress(0);
 
-      if (startTime !== undefined) {
-        audioRef.current.currentTime = startTime;
+        if (startTime !== undefined && !isNaN(startTime)) {
+          audio.currentTime = startTime;
+        }
+      } catch (error) {
+        console.error('Erro ao resetar áudio na mudança de rodada:', error);
       }
     }
 
+    // Reset da interface
     setGuess('');
     setShowSuggestions(false);
     setFilteredSuggestions([]);
     setIsShaking(false);
+
+    // Reset dos estados de erro de áudio
+    setAudioLoadError(false);
+    setAudioLoadRetries(0);
   }, [gameState?.currentRound, startTime]);
 
-  // Garantir que o áudio seja configurado corretamente quando a URL muda
+  // Garantir que o áudio seja configurado corretamente quando a URL muda - OTIMIZADO
   useEffect(() => {
-    if (audioRef.current && songToPlay?.audioUrl) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-      setAudioProgress(0);
-      audioRef.current.load();
+    const audio = audioRef.current;
+    if (audio && songToPlay?.audioUrl) {
+      try {
+        audio.pause();
+        setIsPlaying(false);
+        setAudioProgress(0);
+
+        // Debounce para evitar múltiplos loads
+        const loadTimeout = setTimeout(() => {
+          if (audio === audioRef.current && songToPlay?.audioUrl) {
+            audio.load();
+          }
+        }, 100);
+
+        return () => clearTimeout(loadTimeout);
+      } catch (error) {
+        console.error('Erro ao configurar áudio com nova URL:', error);
+      }
     }
   }, [songToPlay?.audioUrl]);
 
@@ -464,41 +544,61 @@ const MultiplayerGame = ({ onBackToLobby }) => {
   };
 
   const handlePlayPause = () => {
-    if (!audioRef.current || isPlayButtonDisabled || startTime === null) return;
+    const audio = audioRef.current;
+    if (!audio || isPlayButtonDisabled || startTime === null || startTime === undefined) return;
 
     // Desabilita o botão temporariamente para evitar duplo clique
     setIsPlayButtonDisabled(true);
     setTimeout(() => setIsPlayButtonDisabled(false), 300);
 
-    const currentTime = audioRef.current.currentTime - startTime;
-    const maxDuration = (iAmWinner || myAttempts >= 6)
-      ? 15
-      : maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1];
+    try {
+      const currentTime = audio.currentTime - startTime;
+      const maxDuration = (iAmWinner || myAttempts >= 6)
+        ? 15
+        : maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1];
 
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      // Verificar se precisa resetar o tempo
-      if (currentTime >= 15 || (!iAmWinner && myAttempts < 6 && currentTime >= maxDuration) || currentTime < 0) {
-        audioRef.current.currentTime = startTime;
-        setAudioProgress(0);
-      }
-
-      // Melhor compatibilidade com navegadores
-      const playPromise = audioRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(error => {
-          // Apenas erros importantes para o usuário
-          if (error.name === 'NotAllowedError') {
-            actions.setError('Clique em qualquer lugar para permitir reprodução de áudio');
-          } else if (error.name === 'NotSupportedError') {
-            actions.setError('Formato de áudio não suportado neste navegador');
-          } else if (error.name === 'AbortError') {
-            // Ignorar AbortError mas logar outros erros
-            console.error('Erro ao reproduzir áudio no multiplayer:', error);
+      if (isPlaying) {
+        audio.pause();
+      } else {
+        // Verificar se precisa resetar o tempo
+        if (currentTime >= 15 || (!iAmWinner && myAttempts < 6 && currentTime >= maxDuration) || currentTime < 0) {
+          if (!isNaN(startTime)) {
+            audio.currentTime = startTime;
+            setAudioProgress(0);
           }
-        });
+        }
+
+        // Verificar se o áudio está pronto para tocar
+        if (audio.readyState >= 2) { // HAVE_CURRENT_DATA
+          // Melhor compatibilidade com navegadores
+          const playPromise = audio.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(error => {
+              // Apenas erros importantes para o usuário
+              if (error.name === 'NotAllowedError') {
+                actions.setError('Clique em qualquer lugar para permitir reprodução de áudio');
+              } else if (error.name === 'NotSupportedError') {
+                actions.setError('Formato de áudio não suportado neste navegador');
+              } else if (error.name === 'AbortError') {
+                // Ignorar AbortError mas logar outros erros
+                console.error('Erro ao reproduzir áudio no multiplayer:', error);
+              } else {
+                console.error('Erro desconhecido ao reproduzir áudio:', error);
+                actions.setError('Erro ao reproduzir áudio. Tente novamente.');
+              }
+            });
+          }
+        } else {
+          // Áudio não está pronto, tentar carregar
+          audio.load();
+          actions.setError('Carregando áudio...');
+          setTimeout(() => actions.setError(''), 2000);
+        }
       }
+    } catch (error) {
+      console.error('Erro na função handlePlayPause:', error);
+      actions.setError('Erro ao controlar reprodução de áudio');
+      setTimeout(() => actions.setError(''), 3000);
     }
   };
 
@@ -762,12 +862,44 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                     preload="auto"
                     crossOrigin="anonymous"
                     onError={(e) => {
-                      // Log apenas erros críticos
-                      if (e.target.error?.code === 4) {
+                      // Tratamento de erro mais robusto
+                      const errorCode = e.target.error?.code;
+                      const errorMessage = e.target.error?.message;
+
+                      console.error('Erro de áudio no multiplayer:', { errorCode, errorMessage, url: songToPlay?.audioUrl });
+
+                      if (errorCode === 4) {
                         actions.setError('Formato de áudio não suportado');
-                      } else if (e.target.error?.code === 2) {
+                      } else if (errorCode === 2) {
                         actions.setError('Erro de rede ao carregar áudio');
+                      } else if (errorCode === 3) {
+                        actions.setError('Áudio corrompido ou incompleto');
+                      } else if (errorCode === 1) {
+                        actions.setError('Carregamento de áudio foi interrompido');
+                      } else {
+                        actions.setError('Erro desconhecido ao carregar áudio');
                       }
+
+                      // Marcar erro para tentar novamente
+                      setAudioLoadError(true);
+                    }}
+                    onCanPlay={() => {
+                      // Áudio pronto para tocar
+                      setAudioLoadError(false);
+                      setConnectionError(false);
+                      setAudioLoadRetries(0);
+                    }}
+                    onLoadStart={() => {
+                      // Começou a carregar
+                      setAudioLoadError(false);
+                    }}
+                    onWaiting={() => {
+                      // Aguardando dados
+                      console.log('Áudio aguardando dados...');
+                    }}
+                    onStalled={() => {
+                      // Carregamento travou
+                      console.warn('Carregamento de áudio travou');
                     }}
                   />
                 </div>

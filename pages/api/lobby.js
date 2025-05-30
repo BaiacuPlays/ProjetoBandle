@@ -230,7 +230,7 @@ export default async function handler(req, res) {
           totalRounds: 10,
           songs: selectedSongs,
           scores: scores,
-          currentSong: selectedSongs[0]?.title || null,
+          currentSong: selectedSongs[0] || null, // Armazenar objeto completo em vez de só o título
           roundStartTime: Date.now(),
           roundWinners: [], // Array de vencedores em vez de um único
           roundFinished: false, // Flag para indicar se a rodada terminou
@@ -314,7 +314,10 @@ export default async function handler(req, res) {
         if (!isCorrect && isGenericTitle(guess) && isGenericTitle(currentSong.title)) {
           const guessedSong = songs.find(song => normalizeString(song.title) === normalizedGuess);
           if (guessedSong && normalizeString(guessedSong.game) === normalizeString(currentSong.game)) {
-            isCorrect = true;
+            // Verificar se é exatamente a mesma música usando ID
+            if (guessedSong.id === currentSong.id) {
+              isCorrect = true;
+            }
           }
         }
 
@@ -700,14 +703,19 @@ export default async function handler(req, res) {
 
         // Se não encontrar e temos currentSong no gameState, tentar buscar
         if (!currentSong && lobby.gameState.currentSong) {
-          // Primeiro, tentar buscar pelo título exato
-          currentSong = songs.find(song => song.title === lobby.gameState.currentSong);
+          // Primeiro, tentar buscar pelo ID se disponível
+          if (typeof lobby.gameState.currentSong === 'object' && lobby.gameState.currentSong.id !== undefined) {
+            currentSong = songs.find(song => song.id === lobby.gameState.currentSong.id);
+          } else if (typeof lobby.gameState.currentSong === 'string') {
+            // Fallback: buscar pelo título exato
+            currentSong = songs.find(song => song.title === lobby.gameState.currentSong);
 
-          // Se não encontrar, tentar buscar pelo título normalizado
-          if (!currentSong) {
-            const normalizeTitle = (title) => title.trim().toLowerCase();
-            const targetTitle = normalizeTitle(lobby.gameState.currentSong);
-            currentSong = songs.find(song => normalizeTitle(song.title) === targetTitle);
+            // Se não encontrar, tentar buscar pelo título normalizado
+            if (!currentSong) {
+              const normalizeTitle = (title) => title.trim().toLowerCase();
+              const targetTitle = normalizeTitle(lobby.gameState.currentSong);
+              currentSong = songs.find(song => normalizeTitle(song.title) === targetTitle);
+            }
           }
         }
 

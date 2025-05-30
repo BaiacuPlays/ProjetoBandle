@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { songs } from '../data/songs';
 import styles from '../styles/Home.module.css';
 import { FaPlay, FaPause, FaVolumeUp, FaFastForward, FaQuestionCircle, FaBars } from 'react-icons/fa';
-import MusicInfoFetcher from '../components/MusicInfoFetcher';
+
 import Footer from '../components/Footer';
 import GameMenu from '../components/GameMenu';
 import Statistics from '../components/Statistics';
@@ -13,10 +13,10 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { fetchTimezone } from '../config/api';
 
 const MAX_ATTEMPTS = 6;
-const GAME_INTERVAL = 24 * 60 * 60 * 1000; // 24h em ms
+
 
 export default function Home() {
-  const { t, language, isClient } = useLanguage();
+  const { t, isClient } = useLanguage();
   const [currentSong, setCurrentSong] = useState(null);
   const [guess, setGuess] = useState('');
   const [message, setMessage] = useState('');
@@ -64,10 +64,7 @@ export default function Home() {
 
   // Limite máximo de reprodução em segundos
   const MAX_PLAY_TIME = 15;
-  const fadeOutDuration = 1; // segundos
-  const fadeOutSteps = 10;
-  const fadeOutStepTime = fadeOutDuration / fadeOutSteps;
-  const originalVolumeRef = useRef(volume);
+
 
   // Função para gerar um número determinístico baseado no dia
   const getDeterministicRandom = (day, seed = 0) => {
@@ -96,65 +93,9 @@ export default function Home() {
     return songs[index];
   };
 
-  // Função para selecionar música determinística baseada no dia (versão com histórico para modo infinito)
-  const getDeterministicSong = (day) => {
-    // Obter histórico de músicas dos últimos 30 dias
-    const musicHistory = getMusicHistory();
 
-    // Filtrar músicas que não foram tocadas nos últimos 30 dias
-    const availableSongs = songs.filter(song => {
-      const lastPlayedDay = musicHistory[song.id];
-      return !lastPlayedDay || (day - lastPlayedDay) >= 30;
-    });
 
-    // Se não há músicas disponíveis (todas foram tocadas recentemente), usar todas as músicas
-    const songsToChooseFrom = availableSongs.length > 0 ? availableSongs : songs;
 
-    // Usar função determinística para selecionar da lista filtrada
-    const deterministicRandom = getDeterministicRandom(day, 0);
-    const index = Math.floor(deterministicRandom * songsToChooseFrom.length);
-    const selectedSong = songsToChooseFrom[index];
-
-    // Registrar no histórico apenas se for uma nova seleção para este dia
-    const savedSongKey = `ludomusic_daily_song_day_${day}`;
-    const existingSongId = localStorage.getItem(savedSongKey);
-
-    if (!existingSongId || existingSongId !== selectedSong.id.toString()) {
-      saveMusicHistory(selectedSong.id, day);
-    }
-
-    return selectedSong;
-  };
-
-  // Função para obter histórico de músicas tocadas
-  const getMusicHistory = () => {
-    try {
-      const history = localStorage.getItem('ludomusic_daily_history');
-      return history ? JSON.parse(history) : {};
-    } catch {
-      return {};
-    }
-  };
-
-  // Função para salvar música no histórico
-  const saveMusicHistory = (songId, day) => {
-    try {
-      const history = getMusicHistory();
-      history[songId] = day;
-
-      // Limpar entradas muito antigas (mais de 60 dias para ter margem)
-      const cutoffDay = day - 60;
-      Object.keys(history).forEach(id => {
-        if (history[id] < cutoffDay) {
-          delete history[id];
-        }
-      });
-
-      localStorage.setItem('ludomusic_daily_history', JSON.stringify(history));
-    } catch (error) {
-      console.warn('Erro ao salvar histórico de músicas:', error);
-    }
-  };
 
   // Função para calcular o dia do ano
   const getDayOfYear = () => {
@@ -258,8 +199,18 @@ export default function Home() {
       setCurrentClipDuration(savedGameState.currentClipDuration || 0.3);
       setCurrentSong(savedGameState.currentSong);
 
-      // Limpa o estado salvo já que foi restaurado
-      saveInfiniteStats(infiniteStreak, infiniteBestRecord, infiniteUsedSongs, null);
+      // Limpa o estado salvo já que foi restaurado, usando os valores do localStorage
+      if (savedStats) {
+        try {
+          const stats = JSON.parse(savedStats);
+          saveInfiniteStats(stats.currentStreak || 0, stats.bestRecord || 0, stats.usedSongs || [], null);
+        } catch (error) {
+          console.error('Erro ao limpar estado salvo:', error);
+          saveInfiniteStats(infiniteStreak, infiniteBestRecord, infiniteUsedSongs, null);
+        }
+      } else {
+        saveInfiniteStats(infiniteStreak, infiniteBestRecord, infiniteUsedSongs, null);
+      }
     } else {
       // Inicia um novo jogo
       setAttempts(0);
@@ -340,6 +291,7 @@ export default function Home() {
     }
 
     // Reseta a sequência atual mas mantém as músicas usadas
+    setInfiniteStreak(0); // Atualiza o estado local também
     saveInfiniteStats(0, finalBestRecord, infiniteUsedSongs);
 
     // Mostra estatísticas após um delay
@@ -458,9 +410,8 @@ export default function Home() {
     const loadMusicOfTheDay = async () => {
       setIsLoading(true);
 
-      // Primeiro, verificar se já temos dados salvos para hoje
+      // Chave para salvar o dia atual
       const savedDayKey = 'ludomusic_current_day';
-      const savedDay = localStorage.getItem(savedDayKey);
 
       let timeData;
       try {
@@ -477,8 +428,7 @@ export default function Home() {
       const diff = now - start + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
       const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-      // Verificar se o dia mudou desde a última visita
-      const dayChanged = savedDay && parseInt(savedDay) !== dayOfYear;
+      // Verificar se o dia mudou desde a última visita (para futuras funcionalidades)
 
       // Salvar o dia atual
       localStorage.setItem(savedDayKey, dayOfYear.toString());
@@ -624,7 +574,7 @@ export default function Home() {
           if (gameOver && !isInfiniteMode) {
             // Quando o jogo terminou no modo diário, sempre permitir 15 segundos
             maxDuration = MAX_PLAY_TIME;
-          } else if (gameOver && isInfiniteMode && infiniteGameOver) {
+          } else if (gameOver && isInfiniteMode) {
             // Quando o modo infinito terminou (perdeu), também permitir 15 segundos
             maxDuration = MAX_PLAY_TIME;
           } else {
@@ -672,8 +622,7 @@ export default function Home() {
       }
     };
 
-    const handleAudioError = (e) => {
-      // console.error('❌ ERRO NO ELEMENTO DE ÁUDIO:', e);
+    const handleAudioError = () => {
       setAudioError(true);
       setMessage('Erro ao carregar o áudio. Tentando novamente...');
     };
@@ -722,7 +671,19 @@ export default function Home() {
 
     // Verifica se a música existe na lista
     const normalizedGuess = normalize(guess);
-    const songExists = songs.some(song => normalize(song.title) === normalizedGuess);
+    let songExists;
+
+    if (guess.includes(' - ')) {
+      // Formato "Jogo - Título"
+      const [gameGuess, titleGuess] = guess.split(' - ');
+      songExists = songs.some(song =>
+        normalize(song.game) === normalize(gameGuess) &&
+        normalize(song.title) === normalize(titleGuess)
+      );
+    } else {
+      // Formato tradicional - apenas título
+      songExists = songs.some(song => normalize(song.title) === normalizedGuess);
+    }
 
     if (!songExists) {
       setShowSelectFromListError(true); // só mostra após submit
@@ -758,7 +719,7 @@ export default function Home() {
       ],
       // Pokemon franchise
       'pokemon': [
-        'pokemon', 'pokémon'
+        'pokemon', 'pokémon', 'pokémon black white', 'pokémon diamond/pearl', 'pokémon heartgold soulsilver', 'pokémon fire red leaf green', 'pokémon ruby sapphire', 'pokémon emerald', 'pokémon crystal', 'pokémon red blue', 'pokémon yellow', 'pokémon gold silver', 'pokémon x y', 'pokémon sun moon', 'pokémon sword shield', 'pokémon scarlet violet'
       ],
       // Final Fantasy franchise
       'final fantasy': [
@@ -819,30 +780,99 @@ export default function Home() {
   // Função para verificar o tipo de acerto
   const checkGuessType = (guess, currentSong) => {
     const normalizeString = (str) => str.trim().toLowerCase();
-    const guessedSong = songs.find(song => normalizeString(song.title) === normalizeString(guess));
 
-    if (!guessedSong) {
-      return { type: 'fail', subtype: 'not_found' };
+    // Verificar se o guess está no formato "Jogo - Título"
+    let guessedSong;
+    if (guess.includes(' - ')) {
+      const [gameGuess, titleGuess] = guess.split(' - ');
+      guessedSong = songs.find(song =>
+        normalizeString(song.game) === normalizeString(gameGuess) &&
+        normalizeString(song.title) === normalizeString(titleGuess)
+      );
+    } else {
+      // Formato tradicional - apenas título
+      guessedSong = songs.find(song => normalizeString(song.title) === normalizeString(guess));
     }
 
-    // Acertou a música exata
-    if (normalizeString(guess) === normalizeString(currentSong.title)) {
-      return { type: 'success', subtype: 'exact' };
-    }
-
-    const currentGameNormalized = normalizeString(currentSong.game);
-    const guessedGameNormalized = normalizeString(guessedSong.game);
-
-    // Função para verificar títulos genéricos
-    const isGenericTitle = (title) => {
+    // Procurar por título genérico em qualquer música da franquia
+    const isGenericTitle = (title, internalTitle) => {
       const genericTitles = [
         'main title', 'main theme', 'title theme', 'opening theme', 'intro',
         'menu theme', 'title screen', 'main menu', 'theme song', 'opening',
         'title', 'theme', 'main', 'intro theme', 'title music'
       ];
-      const normalized = normalizeString(title);
-      return genericTitles.some(generic => normalized === generic || normalized.includes(generic));
+      const normalizedTitle = normalizeString(title);
+      const normalizedInternalTitle = internalTitle ? normalizeString(internalTitle) : '';
+
+      return genericTitles.some(generic =>
+        normalizedTitle === generic || normalizedTitle.includes(generic) ||
+        normalizedInternalTitle.includes(generic)
+      );
     };
+    if (!guessedSong) {
+      return { type: 'fail', subtype: 'not_found' };
+    }
+
+    // Verificar se acertou a música exata
+    let isExactMatch = false;
+
+    if (guess.includes(' - ')) {
+      // Formato "Jogo - Título" - verificar se é exatamente a mesma música
+      if (guessedSong && guessedSong.id === currentSong.id) {
+        isExactMatch = true;
+      }
+    } else {
+      // Formato tradicional - apenas título
+      if (normalizeString(guess) === normalizeString(currentSong.title)) {
+        // Só considera correto se o jogo também for o mesmo
+        if (normalizeString(guessedSong.game) === normalizeString(currentSong.game)) {
+          isExactMatch = true;
+        }
+      }
+    }
+
+    if (isExactMatch) {
+      return { type: 'success', subtype: 'exact' };
+    }
+
+    // Se não é match exato, mas é mesmo título e jogo diferente
+    if (!guess.includes(' - ') && normalizeString(guess) === normalizeString(currentSong.title)) {
+      // Mesmo título, mas jogo diferente: franquia ou errado
+      const currentFranchise = detectFranchise(currentSong.game);
+      const guessedFranchise = detectFranchise(guessedSong.game);
+      if (currentFranchise === guessedFranchise && currentFranchise.length > 2) {
+        return { type: 'fail', subtype: 'same_franchise' };
+      } else {
+        return { type: 'fail', subtype: 'wrong' };
+      }
+    }
+
+    const currentGameNormalized = normalizeString(currentSong.game);
+    const guessedGameNormalized = normalizeString(guessedSong.game);
+    const currentFranchise = detectFranchise(currentSong.game);
+    const guessedFranchise = detectFranchise(guessedSong.game);
+
+    // NOVO ajuste: se o título do palpite é genérico E a música atual também é genérica
+    if (isGenericTitle(guess, currentSong.internalTitle) && isGenericTitle(currentSong.title, currentSong.internalTitle)) {
+      const currentFranchise = detectFranchise(currentSong.game);
+      const guessedFranchise = detectFranchise(guessedSong.game);
+
+      if (currentFranchise === guessedFranchise && currentFranchise.length > 2) {
+        // Verifica se o título genérico corresponde exatamente à música correta usando ID
+        if (normalizeString(guess) === normalizeString(currentSong.title)) {
+          // Verificar se é exatamente a mesma música usando ID
+          if (guessedSong.id === currentSong.id) {
+            return { type: 'success', subtype: 'generic_title_exact_match' };
+          } else {
+            return { type: 'fail', subtype: 'generic_title_wrong_song' };
+          }
+        } else {
+          return { type: 'fail', subtype: 'generic_title_wrong_song' };
+        }
+      } else {
+        return { type: 'fail', subtype: 'generic_title_wrong_franchise' };
+      }
+    }
 
     // Verificação para mesmo jogo (incluindo títulos genéricos)
     if (currentGameNormalized === guessedGameNormalized) {
@@ -851,9 +881,6 @@ export default function Home() {
     }
 
     // Verificar se são da mesma franquia usando a nova lógica
-    const currentFranchise = detectFranchise(currentSong.game);
-    const guessedFranchise = detectFranchise(guessedSong.game);
-
     if (currentFranchise === guessedFranchise && currentFranchise.length > 2) {
       // Mesma franquia, jogo diferente - LARANJA
       return { type: 'fail', subtype: 'same_franchise' };
@@ -1018,7 +1045,27 @@ export default function Home() {
   };
 
   const handleSuggestionClick = (suggestion) => {
-    setGuess(suggestion.title);
+    // Para músicas com nomes genéricos, usar formato "Jogo - Título"
+    // Para músicas únicas, usar apenas o título
+    const isGenericTitle = (title) => {
+      const genericTitles = [
+        'main title', 'main theme', 'title theme', 'opening theme', 'intro',
+        'menu theme', 'title screen', 'main menu', 'theme song', 'opening',
+        'title', 'theme', 'main', 'intro theme', 'title music', 'tower'
+      ];
+      const normalizedTitle = title.trim().toLowerCase();
+      return genericTitles.some(generic =>
+        normalizedTitle === generic || normalizedTitle.includes(generic)
+      );
+    };
+
+    if (isGenericTitle(suggestion.title)) {
+      // Para títulos genéricos, usar formato completo
+      setGuess(`${suggestion.game} - ${suggestion.title}`);
+    } else {
+      // Para títulos únicos, usar apenas o título
+      setGuess(suggestion.title);
+    }
     setShowSuggestions(false);
   };
 
@@ -1050,28 +1097,27 @@ export default function Home() {
 
   useEffect(() => {
     setCurrentClipDuration(0.3 + activeHint * 0.2);
-    if (audioRef.current && startTime !== undefined) {
+    // No modo infinito, não reseta o áudio quando activeHint muda (apenas quando startTime muda)
+    if (audioRef.current && startTime !== undefined && !isInfiniteMode) {
       audioRef.current.currentTime = startTime;
       audioRef.current.pause();
       setAudioProgress(0);
       setIsPlaying(false);
     }
-  }, [activeHint, startTime]);
+  }, [activeHint, startTime, isInfiniteMode]);
 
   useEffect(() => {
     setActiveHint(attempts);
-    if (audioRef.current && startTime !== undefined) {
+    // No modo infinito, não reseta o áudio quando faz um palpite (apenas quando startTime muda)
+    if (audioRef.current && startTime !== undefined && !isInfiniteMode) {
       audioRef.current.currentTime = startTime;
       audioRef.current.pause();
       setAudioProgress(0);
       setIsPlaying(false);
     }
-  }, [attempts, startTime]);
+  }, [attempts, startTime, isInfiniteMode]);
 
-  // Função para atualizar as informações da música
-  const handleMusicInfoLoaded = (updatedSong) => {
-    setCurrentSong(updatedSong);
-  };
+
 
   // Limpa erros de áudio quando a música muda
   useEffect(() => {
@@ -1084,6 +1130,7 @@ export default function Home() {
       }
 
       // No modo infinito, força o recarregamento do áudio com um pequeno delay
+      // APENAS quando a URL da música muda, não quando o modo muda
       if (isInfiniteMode && audioRef.current) {
         setIsPlaying(false); // Reset play state only in infinite mode
         setTimeout(() => {
@@ -1093,7 +1140,7 @@ export default function Home() {
         }, 100);
       }
     }
-  }, [currentSong?.audioUrl, isInfiniteMode]);
+  }, [currentSong?.audioUrl]); // Removido isInfiniteMode das dependências
 
   // Funções para lidar com o tutorial
   const handleCloseTutorial = () => {
@@ -1528,7 +1575,7 @@ export default function Home() {
                 <input
                   type="range"
                   min={0}
-                  max={(gameOver && !isInfiniteMode) || (gameOver && isInfiniteMode && infiniteGameOver) ? MAX_PLAY_TIME : (maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1])}
+                  max={gameOver ? MAX_PLAY_TIME : (maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1])}
                   step={0.01}
                   value={audioProgress}
                   onChange={e => {
@@ -1541,19 +1588,19 @@ export default function Home() {
                       setAudioProgress(0);
                       return;
                     }
-                    const maxAllowed = (gameOver && !isInfiniteMode) || (gameOver && isInfiniteMode && infiniteGameOver) ? MAX_PLAY_TIME : (maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1]);
+                    const maxAllowed = gameOver ? MAX_PLAY_TIME : (maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1]);
                     if (value > maxAllowed) value = maxAllowed;
                     if (audioRef.current) {
                       audioRef.current.currentTime = startTime + value;
                       setAudioProgress(value);
                     }
-                  } }
+                  }}
                   className={styles.audioSeekbarCustom}
                   disabled={audioError || !audioDuration} />
                 <span className={styles.audioTime} style={{ marginLeft: 10 }}>
                   {audioDuration
                     ? new Date(
-                        ((gameOver && !isInfiniteMode) || (gameOver && isInfiniteMode && infiniteGameOver) ? MAX_PLAY_TIME : (maxClipDurations[attempts] ?? maxClipDurations[maxClipDurations.length - 1])) * 1000
+                        (gameOver ? MAX_PLAY_TIME : (maxClipDurations[attempts] ?? maxClipDurations[maxClipDurations.length - 1])) * 1000
                       ).toISOString().substring(14, 19)
                     : '00:00'}
                 </span>
@@ -1561,7 +1608,7 @@ export default function Home() {
               <div className={styles.audioVolumeRow}>
                 <button
                   className={styles.audioPlayBtnCustom}
-                  onClick={async (e) => {
+                  onClick={async () => {
                     if (!audioRef.current || isPlayButtonDisabled || audioError || isPlayLoading) {
                       return;
                     }
@@ -1863,7 +1910,7 @@ export default function Home() {
                 {isClient ? t('play_again_infinite') : 'Jogar Novamente'}
               </button>
             </div>
-          )}
+          ) }
         </div>
 
 
@@ -1894,6 +1941,7 @@ export default function Home() {
         />
 
         {/* Tutorial de boas-vindas */}
+
         <Tutorial
           isOpen={showTutorial}
           onClose={handleCloseTutorial}
