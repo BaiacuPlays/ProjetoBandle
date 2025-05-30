@@ -48,6 +48,7 @@ export const translations = {
     'footer_developed': 'Desenvolvido com ❤️ para a comunidade gamer',
     'footer_background': 'Background feito por',
     'footer_logo': 'Logo feita por',
+    'footer_inspired': 'Inspirado por',
     'footer_disclaimer': 'Este site utiliza trechos de áudio com fins de entretenimento. Todos os direitos sobre as músicas pertencem aos seus respectivos detentores.',
     'footer_terms': 'Termos de Uso',
     'footer_privacy': 'Política de Privacidade',
@@ -86,6 +87,16 @@ export const translations = {
     'waiting_for_others': 'Aguardando outros jogadores...',
     'round_of': 'Rodada {current} de {total}',
     'no_one_guessed': 'Ninguém acertou a música!',
+
+    // Sharing functionality
+    'share_result': 'Compartilhar Resultado',
+    'share_text_won': 'Acertei a música em {attempts} tentativas no LudoMusic! 🎵',
+    'share_text_lost': 'Não consegui acertar esta música no LudoMusic! 🎵',
+    'share_url_text': 'Teste seus conhecimentos musicais de videogames:',
+    'copy_result': 'Copiar Resultado',
+    'result_copied': 'Resultado copiado!',
+    'global_stats_message': '{totalPlayers} pessoas já adivinharam / {averageAttempts} tentativas médias',
+    'no_stats_yet': 'Seja o primeiro a jogar!',
 
     // Estatísticas
     'statistics': 'Estatísticas',
@@ -187,6 +198,7 @@ export const translations = {
     'footer_developed': 'Developed with ❤️ for the gaming community',
     'footer_background': 'Background made by',
     'footer_logo': 'Logo made by',
+    'footer_inspired': 'Inspired by',
     'footer_disclaimer': 'This site uses audio snippets for entertainment purposes. All rights to the songs belong to their respective owners.',
     'footer_terms': 'Terms of Use',
     'footer_privacy': 'Privacy Policy',
@@ -224,6 +236,17 @@ export const translations = {
     'your_turn': 'Your turn to try!',
     'waiting_for_others': 'Waiting for other players...',
     'round_of': 'Round {current} of {total}',
+    'no_one_guessed': 'No one guessed the song!',
+
+    // Sharing functionality
+    'share_result': 'Share Result',
+    'share_text_won': 'I guessed the song in {attempts} attempts on LudoMusic! 🎵',
+    'share_text_lost': 'I couldn\'t guess this song on LudoMusic! 🎵',
+    'share_url_text': 'Test your video game music knowledge:',
+    'copy_result': 'Copy Result',
+    'result_copied': 'Result copied!',
+    'global_stats_message': '{totalPlayers} people have already guessed / {averageAttempts} average attempts',
+    'no_stats_yet': 'Be the first to play!',
 
     // Statistics
     'statistics': 'Statistics',
@@ -325,6 +348,7 @@ export const translations = {
     'footer_developed': 'Desarrollado con ❤️ para la comunidad gamer',
     'footer_background': 'Fondo hecho por',
     'footer_logo': 'Logo hecho por',
+    'footer_inspired': 'Inspirado por',
     'footer_disclaimer': 'Este sitio utiliza fragmentos de audio con fines de entretenimiento. Todos los derechos de las canciones pertenecen a sus respectivos propietarios.',
     'footer_terms': 'Términos de Uso',
     'footer_privacy': 'Política de Privacidad',
@@ -362,6 +386,17 @@ export const translations = {
     'your_turn': '¡Tu turno de intentar!',
     'waiting_for_others': 'Esperando otros jugadores...',
     'round_of': 'Ronda {current} de {total}',
+    'no_one_guessed': '¡Nadie adivinó la canción!',
+
+    // Funcionalidad de compartir
+    'share_result': 'Compartir Resultado',
+    'share_text_won': '¡Adiviné la canción en {attempts} intentos en LudoMusic! 🎵',
+    'share_text_lost': '¡No pude adivinar esta canción en LudoMusic! 🎵',
+    'share_url_text': 'Pon a prueba tus conocimientos musicales de videojuegos:',
+    'copy_result': 'Copiar Resultado',
+    'result_copied': '¡Resultado copiado!',
+    'global_stats_message': '{totalPlayers} personas ya han adivinado / {averageAttempts} intentos promedio',
+    'no_stats_yet': '¡Sé el primero en jugar!',
 
     // Estadísticas
     'statistics': 'Estadísticas',

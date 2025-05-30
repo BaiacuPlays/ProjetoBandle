@@ -15,6 +15,7 @@ const Footer = () => {
         <p>{isClient ? t('footer_developed') : 'Desenvolvido com ❤️ para a comunidade gamer'}</p>
         <p>{isClient ? t('footer_background') : 'Background feito por'} <a href='https://x.com/Azzy_JP'>@Azzy_JP</a></p>
         <p>{isClient ? t('footer_logo') : 'Logo feita por'} <a href='https://x.com/IvanBaroni_'>@IvanBaroni_</a></p>
+        <p>{isClient ? t('footer_inspired') : 'Inspirado por'} <a href='https://gamedle.wtf' target='_blank' rel='noopener noreferrer'>Gamedle</a></p>
         <p>{isClient ? t('footer_disclaimer') : 'Este site utiliza trechos de áudio com fins de entretenimento. Todos os direitos sobre as músicas pertencem aos seus respectivos detentores.'}</p>
         <p>
           {language === 'pt-BR' && (

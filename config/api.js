@@ -1,5 +1,9 @@
 import { kv } from '@vercel/kv';
 
+// Verificar se estamos em ambiente de desenvolvimento
+const isDevelopment = process.env.NODE_ENV === 'development';
+const hasKVConfig = process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN;
+
 // Configuração da API local
 const API_CONFIG = {
   // URL base para APIs locais do Next.js
@@ -693,45 +697,96 @@ export const fetchMusicInfo = async (title, game) => {
 
 // Função para salvar estatísticas
 export async function saveStatistics(userId, gameResult, hintsUsed) {
+  // Pular em desenvolvimento local sem KV configurado
+  if (isDevelopment && !hasKVConfig) {
+    console.log('Desenvolvimento local: estatísticas não salvas (KV não configurado)');
+    return;
+  }
+
   const statsKey = `stats:${userId}`;
   const globalStatsKey = 'stats:global';
 
-  // Atualizar estatísticas do usuário
-  const userStats = await kv.get(statsKey) || {
-    wins: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 },
-    losses: 0
-  };
+  try {
+    // Atualizar estatísticas do usuário
+    const userStats = await kv.get(statsKey) || {
+      wins: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 },
+      losses: 0
+    };
 
-  if (gameResult === 'win') {
-    userStats.wins[hintsUsed] = (userStats.wins[hintsUsed] || 0) + 1;
-  } else {
-    userStats.losses += 1;
+    if (gameResult === 'win') {
+      userStats.wins[hintsUsed] = (userStats.wins[hintsUsed] || 0) + 1;
+    } else {
+      userStats.losses += 1;
+    }
+
+    await kv.set(statsKey, userStats);
+
+    // Atualizar estatísticas globais
+    const globalStats = await kv.get(globalStatsKey) || {
+      totalGames: 0,
+      wins: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 },
+      losses: 0
+    };
+
+    globalStats.totalGames += 1;
+
+    if (gameResult === 'win') {
+      globalStats.wins[hintsUsed] = (globalStats.wins[hintsUsed] || 0) + 1;
+    } else {
+      globalStats.losses += 1;
+    }
+
+    await kv.set(globalStatsKey, globalStats);
+  } catch (error) {
+    console.error('Erro ao salvar estatísticas:', error);
   }
-
-  await kv.set(statsKey, userStats);
-
-  // Atualizar estatísticas globais
-  const globalStats = await kv.get(globalStatsKey) || {
-    totalGames: 0,
-    wins: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 },
-    losses: 0
-  };
-
-  globalStats.totalGames += 1;
-
-  if (gameResult === 'win') {
-    globalStats.wins[hintsUsed] = (globalStats.wins[hintsUsed] || 0) + 1;
-  } else {
-    globalStats.losses += 1;
-  }
-
-  await kv.set(globalStatsKey, globalStats);
 }
 
 // Função para buscar estatísticas globais
 export async function getGlobalStatistics() {
+  // Retornar dados padrão em desenvolvimento local sem KV configurado
+  if (isDevelopment && !hasKVConfig) {
+    return {
+      totalGames: 8446,
+      wins: 0,
+      losses: 0,
+      averageAttempts: 3.2
+    };
+  }
+
   const globalStatsKey = 'stats:global';
-  return await kv.get(globalStatsKey) || { totalGames: 0, wins: 0, losses: 0 };
+  try {
+    const stats = await kv.get(globalStatsKey) || {
+      totalGames: 0,
+      wins: 0,
+      losses: 0,
+      averageAttempts: 0
+    };
+
+    // Calcular média de tentativas se não existir
+    if (!stats.averageAttempts && stats.wins && typeof stats.wins === 'object') {
+      let totalAttempts = 0;
+      let totalWins = 0;
+
+      for (let i = 1; i <= 6; i++) {
+        const winsAtAttempt = stats.wins[i] || 0;
+        totalAttempts += winsAtAttempt * i;
+        totalWins += winsAtAttempt;
+      }
+
+      stats.averageAttempts = totalWins > 0 ? Math.round((totalAttempts / totalWins) * 10) / 10 : 0;
+    }
+
+    return stats;
+  } catch (error) {
+    console.error('Erro ao buscar estatísticas globais:', error);
+    return {
+      totalGames: 0,
+      wins: 0,
+      losses: 0,
+      averageAttempts: 0
+    };
+  }
 }
 
 // Encapsular lógica de salvar estatísticas em uma função

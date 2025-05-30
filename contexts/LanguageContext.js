@@ -11,6 +11,27 @@ export function useLanguage() {
 
 // Provedor do contexto
 export function LanguageProvider({ children }) {
+  // Detectar idioma do navegador
+  const detectBrowserLanguage = () => {
+    if (typeof window === 'undefined') {
+      return 'pt-BR'; // Idioma padrão para SSR
+    }
+
+    const browserLang = navigator.language || navigator.languages?.[0] || 'pt-BR';
+
+    // Mapear códigos de idioma do navegador para os suportados
+    if (browserLang.startsWith('en')) {
+      return 'en-US';
+    } else if (browserLang.startsWith('es')) {
+      return 'es';
+    } else if (browserLang.startsWith('pt')) {
+      return 'pt-BR';
+    }
+
+    // Fallback para português se o idioma não for suportado
+    return 'pt-BR';
+  };
+
   // Tentar carregar o idioma do localStorage apenas no cliente
   const getSavedLanguage = () => {
     // Verificar se estamos no cliente (browser)
@@ -29,7 +50,9 @@ export function LanguageProvider({ children }) {
     } catch (error) {
       console.error('Erro ao carregar idioma inicial:', error);
     }
-    return 'pt-BR'; // Idioma padrão
+
+    // Se não há idioma salvo, detectar do navegador
+    return detectBrowserLanguage();
   };
 
   const [language, setLanguage] = useState('pt-BR'); // Inicializar com padrão

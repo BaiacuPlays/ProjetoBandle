@@ -175,6 +175,76 @@
   text-align: center;
 }
 
+.footerButtons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Estatísticas Simplificadas */
+.simpleStatsSection {
+  padding: 1.5rem 0;
+  text-align: center;
+}
+
+.simpleStatsMessage {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* Resultado da Partida */
+.gameResultSection {
+  padding: 1rem 0;
+  text-align: center;
+}
+
+.resultText {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+  padding: 0.5rem;
+}
+
+/* Estatísticas do Modo Infinito */
+.infiniteStatsSection {
+  padding: 1rem 0;
+}
+
+.infiniteStatsGrid {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.infiniteStatItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 120px;
+}
+
+.infiniteStatNumber {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.infiniteStatLabel {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+}
+
 .continueButton {
   background: #1DB954;
   color: white;

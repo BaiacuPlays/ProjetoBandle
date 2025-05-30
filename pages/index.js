@@ -8,6 +8,7 @@ import Footer from '../components/Footer';
 import GameMenu from '../components/GameMenu';
 import Statistics from '../components/Statistics';
 import Tutorial from '../components/Tutorial';
+import GlobalStats from '../components/GlobalStats';
 import { useLanguage } from '../contexts/LanguageContext';
 import { fetchTimezone } from '../config/api';
 
@@ -1556,6 +1557,10 @@ export default function Home() {
                 }} />
             </div>
           </div>
+
+          {/* Estatísticas Globais sempre visíveis */}
+          <GlobalStats />
+
           <div className={styles.attemptsRow}>
             {[...Array(MAX_ATTEMPTS)].map((_, idx) => {
               let statusClass = styles.attemptInactive;
@@ -1741,6 +1746,7 @@ export default function Home() {
           onClose={() => setShowStatistics(false)}
           gameResult={gameResult}
           isInfiniteMode={isInfiniteMode}
+          currentSong={currentSong}
         />
 
         {/* Tutorial de boas-vindas */}
@@ -1750,6 +1756,7 @@ export default function Home() {
           onStartPlaying={handleStartPlaying}
         />
         </div>
+
         <Footer />
       </div>
     </>

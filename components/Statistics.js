@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getGlobalStatistics } from '../config/api';
+import { useLanguage } from '../contexts/LanguageContext';
+import ShareButton from './ShareButton';
 import styles from '../styles/Statistics.module.css';
 
 // Função para gerar UUID v4
@@ -10,7 +12,8 @@ function generateUUID() {
   });
 }
 
-const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false }) => {
+const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false, currentSong = null }) => {
+  const { t, isClient } = useLanguage();
   const [stats, setStats] = useState({
     totalGames: 0,
     wins: 0,
@@ -141,8 +144,8 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
         <div className={styles.header}>
           <h2>
             {isInfiniteMode
-              ? 'Estatísticas do Modo Infinito'
-              : 'Estatísticas'
+              ? (isClient ? t('infinite_statistics') : 'Estatísticas do Modo Infinito')
+              : (isClient ? t('statistics') : 'Estatísticas')
             }
           </h2>
           <button className={styles.closeButton} onClick={onClose}>
@@ -151,99 +154,65 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
         </div>
 
         <div className={styles.content}>
-          {isInfiniteMode ? (
-            /* Estatísticas do modo infinito */
-            <div className={styles.generalStats}>
-              <div className={styles.statItem}>
-                <div className={styles.statNumber}>{infiniteStats.bestRecord}</div>
-                <div className={styles.statLabel}>Melhor Recorde</div>
-              </div>
-              <div className={styles.statItem}>
-                <div className={styles.statNumber}>{infiniteStats.currentStreak}</div>
-                <div className={styles.statLabel}>Sequência Atual</div>
-              </div>
-              <div className={styles.statItem}>
-                <div className={styles.statNumber}>{infiniteStats.totalSongsCompleted}</div>
-                <div className={styles.statLabel}>Músicas Completadas</div>
-              </div>
-            </div>
-          ) : (
-            /* Estatísticas do modo normal */
-            <div className={styles.generalStats}>
-              <div className={styles.statItem}>
-                <div className={styles.statNumber}>{stats.totalGames}</div>
-                <div className={styles.statLabel}>Partidas Jogadas</div>
-              </div>
-              <div className={styles.statItem}>
-                <div className={styles.statNumber}>{stats.winPercentage}%</div>
-                <div className={styles.statLabel}>Taxa de Vitória</div>
-              </div>
-              <div className={styles.statItem}>
-                <div className={styles.statNumber}>{stats.averageAttempts}</div>
-                <div className={styles.statLabel}>Média de Tentativas</div>
+          {/* Estatísticas Globais Simplificadas */}
+          {stats && (
+            <div className={styles.simpleStatsSection}>
+              <div className={styles.simpleStatsMessage}>
+                {isClient
+                  ? t('global_stats_message')
+                    .replace('{totalPlayers}', stats.totalGames || 0)
+                    .replace('{averageAttempts}', stats.averageAttempts || 3.2)
+                  : `${stats.totalGames || 0} pessoas já adivinharam / ${stats.averageAttempts || 3.2} tentativas médias`
+                }
               </div>
             </div>
           )}
 
-          {/* Distribuição de tentativas - apenas no modo normal */}
-          {!isInfiniteMode && (
-            <div className={styles.distributionSection}>
-              <h3>Distribuição de Acertos</h3>
-              <div className={styles.distributionChart}>
-                {[1, 2, 3, 4, 5, 6].map((attempt, index) => {
-                  const percentage = getAttemptPercentage(index);
-                  const count = stats.attemptDistribution[index];
-                  return (
-                    <div key={attempt} className={styles.chartRow}>
-                      <div className={styles.attemptNumber}>{attempt}</div>
-                      <div className={styles.progressBar}>
-                        <div
-                          className={styles.progressFill}
-                          style={{ width: `${percentage}%` }}
-                        ></div>
-                      </div>
-                      <div className={styles.percentageText}>
-                        {percentage}% ({count})
-                      </div>
-                    </div>
-                  );
-                })}
-
-                {/* Linha para derrotas */}
-                <div className={styles.chartRow}>
-                  <div className={styles.attemptNumber}>❌</div>
-                  <div className={styles.progressBar}>
-                    <div
-                      className={`${styles.progressFill} ${styles.lossBar}`}
-                      style={{ width: `${getLossPercentage()}%` }}
-                    ></div>
-                  </div>
-                  <div className={styles.percentageText}>
-                    {getLossPercentage()}% ({stats.losses})
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Resultado atual - apenas no modo normal */}
-          {!isInfiniteMode && gameResult && (
-            <div className={styles.currentResult}>
-              <h4>Partida Atual</h4>
+          {/* Resultado da Partida Atual */}
+          {gameResult && (
+            <div className={styles.gameResultSection}>
               <div className={styles.resultText}>
                 {gameResult.won
-                  ? `Acertou em ${gameResult.attempts} ${gameResult.attempts === 1 ? 'tentativa' : 'tentativas'}!`
-                  : 'Não conseguiu acertar 😔'
+                  ? `${isClient ? t('won_in_attempts') : 'Acertou em'} ${gameResult.attempts} ${gameResult.attempts === 1 ? 'tentativa' : 'tentativas'}!`
+                  : `${isClient ? t('lost_game') : 'Não conseguiu acertar'} 😔`
                 }
+              </div>
+            </div>
+          )}
+
+          {/* Estatísticas do Modo Infinito */}
+          {isInfiniteMode && infiniteStats && (
+            <div className={styles.infiniteStatsSection}>
+              <div className={styles.infiniteStatsGrid}>
+                <div className={styles.infiniteStatItem}>
+                  <span className={styles.infiniteStatNumber}>{infiniteStats.bestRecord}</span>
+                  <span className={styles.infiniteStatLabel}>
+                    {isClient ? t('best_record') : 'Melhor Recorde'}
+                  </span>
+                </div>
+                <div className={styles.infiniteStatItem}>
+                  <span className={styles.infiniteStatNumber}>{infiniteStats.currentStreak}</span>
+                  <span className={styles.infiniteStatLabel}>
+                    {isClient ? t('current_streak') : 'Sequência Atual'}
+                  </span>
+                </div>
               </div>
             </div>
           )}
         </div>
 
         <div className={styles.footer}>
-          <button className={styles.continueButton} onClick={onClose}>
-            Continuar
-          </button>
+          <div className={styles.footerButtons}>
+            <ShareButton
+              gameResult={gameResult}
+              currentSong={currentSong}
+              isInfiniteMode={isInfiniteMode}
+              infiniteStats={infiniteStats}
+            />
+            <button className={styles.continueButton} onClick={onClose}>
+              {isClient ? t('continue') : 'Continuar'}
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,58 @@
 import songs from '../../data/music.json';
 import { kv } from '@vercel/kv';
+
+// Fallback para desenvolvimento local - armazenamento em memória
+const localLobbies = new Map();
+
+// Verificar se estamos em ambiente de desenvolvimento
+const isDevelopment = process.env.NODE_ENV === 'development';
+const hasKVConfig = process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN;
+
+// Funções auxiliares para gerenciar dados com fallback
+async function getLobby(roomCode) {
+  const key = `lobby:${roomCode}`;
+
+  if (isDevelopment && !hasKVConfig) {
+    return localLobbies.get(key);
+  }
+
+  try {
+    return await kv.get(key);
+  } catch (error) {
+    console.error('Erro ao acessar KV:', error);
+    return null;
+  }
+}
+
+async function setLobby(roomCode, data) {
+  const key = `lobby:${roomCode}`;
+
+  if (isDevelopment && !hasKVConfig) {
+    localLobbies.set(key, data);
+    return;
+  }
+
+  try {
+    await kv.set(key, data);
+  } catch (error) {
+    console.error('Erro ao salvar no KV:', error);
+  }
+}
+
+async function deleteLobby(roomCode) {
+  const key = `lobby:${roomCode}`;
+
+  if (isDevelopment && !hasKVConfig) {
+    localLobbies.delete(key);
+    return;
+  }
+
+  try {
+    await kv.del(key);
+  } catch (error) {
+    console.error('Erro ao deletar do KV:', error);
+  }
+}
 function generateRoomCode() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   let code = '';
@@ -90,7 +143,7 @@ export default async function handler(req, res) {
       let existingLobby;
       do {
         roomCode = generateRoomCode();
-        existingLobby = await kv.get(`lobby:${roomCode}`);
+        existingLobby = await getLobby(roomCode);
       } while (existingLobby);
 
       const lobby = {
@@ -104,7 +157,7 @@ export default async function handler(req, res) {
         currentSong: null
       };
 
-      await kv.set(`lobby:${roomCode}`, lobby);
+      await setLobby(roomCode, lobby);
       return res.status(200).json({ roomCode });
     }
 
@@ -121,7 +174,7 @@ export default async function handler(req, res) {
       if (!nickname || !roomCode) {
         return res.status(400).json({ error: 'Nickname e código da sala são obrigatórios.' });
       }
-      const lobby = await kv.get(`lobby:${roomCode}`);
+      const lobby = await getLobby(roomCode);
 
       if (!lobby) {
         return res.status(404).json({ error: 'Sala não encontrada.' });
@@ -129,7 +182,7 @@ export default async function handler(req, res) {
 
       if (!lobby.players.includes(nickname)) {
         lobby.players.push(nickname);
-        await kv.set(`lobby:${roomCode}`, lobby);
+        await setLobby(roomCode, lobby);
       }
 
       return res.status(200).json({ success: true, lobbyData: lobby });
@@ -151,7 +204,7 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Código da sala é obrigatório.' });
       }
 
-      const lobby = await kv.get(`lobby:${roomCode}`);
+      const lobby = await getLobby(roomCode);
       if (!lobby) {
         return res.status(404).json({ error: 'Sala não encontrada.' });
       }
@@ -186,7 +239,7 @@ export default async function handler(req, res) {
           guesses: {}
         };
 
-        await kv.set(`lobby:${roomCode}`, lobby);
+        await setLobby(roomCode, lobby);
         return res.status(200).json({ success: true });
       }
 
@@ -196,13 +249,13 @@ export default async function handler(req, res) {
         }
         lobby.players = lobby.players.filter(p => p !== nickname);
         if (lobby.players.length === 0) {
-          await kv.del(`lobby:${roomCode}`);
+          await deleteLobby(roomCode);
           return res.status(200).json({ success: true, message: 'Sala fechada.' });
         }
         if (nickname === lobby.host) {
           lobby.host = lobby.players[0];
         }
-        await kv.set(`lobby:${roomCode}`, lobby);
+        await setLobby(roomCode, lobby);
         return res.status(200).json({ success: true });
       }
 
@@ -316,7 +369,7 @@ export default async function handler(req, res) {
           }
         }
 
-        await kv.set(`lobby:${roomCode}`, lobby);
+        await setLobby(roomCode, lobby);
 
         return res.status(200).json({
           success: true,
@@ -395,7 +448,7 @@ export default async function handler(req, res) {
           }
         }
 
-        await kv.set(`lobby:${roomCode}`, lobby);
+        await setLobby(roomCode, lobby);
 
         return res.status(200).json({
           success: true,
@@ -441,7 +494,7 @@ export default async function handler(req, res) {
           }
         }
 
-        await kv.set(`lobby:${roomCode}`, lobby);
+        await setLobby(roomCode, lobby);
 
         return res.status(200).json({
           success: true,
@@ -464,7 +517,7 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Código da sala é obrigatório.' });
       }
 
-      const lobby = await kv.get(`lobby:${roomCode}`);
+      const lobby = await getLobby(roomCode);
 
       if (!lobby) {
         // Retornar dados vazios em vez de erro para evitar spam no console
