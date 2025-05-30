@@ -205,7 +205,7 @@
   },
   {
     "id": 17,
-    "title": "Ezio'S Family",
+    "title": "Ezio's Family",
     "artist": "Jesper Kyd",
     "composer": "Jesper Kyd",
     "game": "Assassin's Creed II",
@@ -277,7 +277,7 @@
   },
   {
     "id": 23,
-    "title": "Raphael'S Final Act",
+    "title": "Raphael's Final Act",
     "artist": "Borislav Slavov",
     "composer": "Borislav Slavov",
     "game": "Baldur's Gate 3",
@@ -325,7 +325,7 @@
   },
   {
     "id": 27,
-    "title": "Mumbo'S Mountain",
+    "title": "Mumbo's Mountain",
     "artist": "Grant Kirkhope",
     "composer": "Grant Kirkhope",
     "game": "Banjo-Kazooie",
@@ -337,7 +337,7 @@
   },
   {
     "id": 28,
-    "title": "Brentilda'S Theme",
+    "title": "Brentilda's Theme",
     "artist": "Grant Kirkhope",
     "composer": "Grant Kirkhope",
     "game": "Banjo-Kazooie",
@@ -1081,7 +1081,7 @@
   },
   {
     "id": 90,
-    "title": "Prisoner'S Awakening",
+    "title": "Prisoner's Awakening",
     "artist": "Yoann Laulan",
     "composer": "Yoann Laulan",
     "game": "Dead Cells",
@@ -1657,7 +1657,7 @@
   },
   {
     "id": 138,
-    "title": "At Doom'S Gate",
+    "title": "At Doom's Gate",
     "artist": "Mick Gordon",
     "composer": "Mick Gordon",
     "game": "DOOM",
@@ -1957,7 +1957,7 @@
   },
   {
     "id": 164,
-    "title": "Faye'S Theme",
+    "title": "Faye's Theme",
     "artist": "Kan Gao",
     "composer": "Kan Gao",
     "game": "Finding Paradise",
@@ -4165,7 +4165,7 @@
   },
   {
     "id": 349,
-    "title": "The Puppeteer ~Goumang'S Theme~",
+    "title": "The Puppeteer ~Goumang's Theme~",
     "artist": "Vivi Weng",
     "composer": "Vivi Weng",
     "game": "Nine Sols",
@@ -4573,7 +4573,7 @@
   },
   {
     "id": 384,
-    "title": "World'S End Valentine",
+    "title": "World's End Valentine",
     "artist": "Pedro Silva",
     "composer": "Pedro Silva",
     "game": "OMORI",
@@ -6799,7 +6799,7 @@
     "game": "The Sims 4",
     "context": "Audio - The Sims 4",
     "audioUrl": "/audio/the-sims/01 - It's the Sims.mp3",
-    "year": 2000,
+    "year": 2014,
     "genre": "Simulation Game Soundtrack",
     "console": "Multi-platform"
   },
@@ -6829,7 +6829,7 @@
   },
   {
     "id": 589,
-    "title": "Everything'S Alright",
+    "title": "Everything's Alright",
     "artist": "Kan Gao",
     "composer": "Kan Gao",
     "game": "To the Moon",

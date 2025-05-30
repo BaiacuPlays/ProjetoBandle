@@ -326,9 +326,44 @@ export default async function handler(req, res) {
         // Incrementar tentativas APÓS verificações
         lobby.gameState.attempts[nickname]++;
 
-        // Verificar se acertou o jogo (mas não a música específica)
-        const guessedSong = songs.find(song => normalizeString(song.title) === normalizedGuess);
-        const isFromCorrectGame = guessedSong && normalizeString(guessedSong.game) === normalizeString(currentSong.game) && !isCorrect;
+        // Função para verificar o tipo de acerto (igual ao jogo principal)
+        const checkGuessType = (guess, currentSong) => {
+          const guessedSong = songs.find(song => normalizeString(song.title) === normalizeString(guess));
+
+          if (!guessedSong) {
+            return { type: 'fail', subtype: 'not_found' };
+          }
+
+          // Acertou a música exata
+          if (isCorrect) {
+            return { type: 'success', subtype: 'exact' };
+          }
+
+          const currentGameNormalized = normalizeString(currentSong.game);
+          const guessedGameNormalized = normalizeString(guessedSong.game);
+
+          // Verificação para mesmo jogo (incluindo títulos genéricos)
+          if (currentGameNormalized === guessedGameNormalized) {
+            // Mesmo jogo, música diferente - AMARELO
+            return { type: 'fail', subtype: 'same_game' };
+          }
+
+          // Verificar se são da mesma franquia (primeiro nível)
+          const currentFranchise = currentGameNormalized.split(' ')[0]; // Ex: "mario" de "mario kart"
+          const guessedFranchise = guessedGameNormalized.split(' ')[0];
+
+          if (currentFranchise === guessedFranchise && currentFranchise.length > 3) {
+            // Mesma franquia, jogo diferente - LARANJA
+            return { type: 'fail', subtype: 'same_franchise' };
+          } else {
+            // Completamente errado - VERMELHO
+            return { type: 'fail', subtype: 'wrong' };
+          }
+        };
+
+        const guessResult = checkGuessType(guess, currentSong);
+        const isFromCorrectGame = guessResult.subtype === 'same_game';
+        const isFromCorrectFranchise = guessResult.subtype === 'same_franchise';
 
 
 
@@ -368,6 +403,8 @@ export default async function handler(req, res) {
           guess: guess,
           correct: correct,
           gameCorrect: gameCorrect,
+          franchiseCorrect: isFromCorrectFranchise,
+          subtype: guessResult.subtype,
           attempt: lobby.gameState.attempts[nickname],
           tooLate: false // Não chegou tarde se chegou até aqui
         };

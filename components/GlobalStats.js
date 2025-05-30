@@ -2,10 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import styles from '../styles/GlobalStats.module.css';
 
-const GlobalStats = () => {
+const GlobalStats = ({ showInDailyMode = true }) => {
   const { t, isClient } = useLanguage();
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  // Se showInDailyMode for false, não renderizar
+  if (!showInDailyMode) {
+    return null;
+  }
 
   useEffect(() => {
     const fetchGlobalStats = async () => {

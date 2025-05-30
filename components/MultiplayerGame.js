@@ -184,8 +184,8 @@ const MultiplayerGame = ({ onBackToLobby }) => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const maxDuration = iAmWinner
-      ? 15 // Se EU ganhei, posso tocar mais tempo
+    const maxDuration = (iAmWinner || myAttempts >= 6)
+      ? 15 // Se EU ganhei OU esgotei minhas tentativas, posso tocar mais tempo
       : maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1];
 
     let fadeOutTimeout = null;
@@ -201,8 +201,8 @@ const MultiplayerGame = ({ onBackToLobby }) => {
         audio.volume = volume;
         return;
       }
-      // Fade out nos últimos 2 segundos
-      if (currentTime >= 13 && currentTime <= 15) {
+      // Fade out nos últimos 2 segundos quando limitado a 15s
+      if ((iAmWinner || myAttempts >= 6) && currentTime >= 13 && currentTime < 15) {
         const fadeProgress = (15 - currentTime) / 2; // de 1 para 0
         audio.volume = Math.max(0, volume * fadeProgress);
       } else {
@@ -217,8 +217,8 @@ const MultiplayerGame = ({ onBackToLobby }) => {
         audio.volume = volume;
         return;
       }
-      // Parar baseado nas tentativas apenas se EU não ganhei
-      if (!iAmWinner && currentTime >= maxDuration) {
+      // Parar baseado nas tentativas apenas se EU não ganhei E não esgotei tentativas
+      if (!iAmWinner && myAttempts < 6 && currentTime >= maxDuration) {
         audio.pause();
         setIsPlaying(false);
         audio.currentTime = startTime;
@@ -471,7 +471,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
     setTimeout(() => setIsPlayButtonDisabled(false), 300);
 
     const currentTime = audioRef.current.currentTime - startTime;
-    const maxDuration = iAmWinner
+    const maxDuration = (iAmWinner || myAttempts >= 6)
       ? 15
       : maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1];
 
@@ -479,7 +479,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
       audioRef.current.pause();
     } else {
       // Verificar se precisa resetar o tempo
-      if (currentTime >= 15 || (!iAmWinner && currentTime >= maxDuration) || currentTime < 0) {
+      if (currentTime >= 15 || (!iAmWinner && myAttempts < 6 && currentTime >= maxDuration) || currentTime < 0) {
         audioRef.current.currentTime = startTime;
         setAudioProgress(0);
       }
@@ -641,7 +641,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                     <input
                       type="range"
                       min={0}
-                      max={Math.min(15, iAmWinner ? 15 : (maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1]))}
+                      max={Math.min(15, (iAmWinner || myAttempts >= 6) ? 15 : (maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1]))}
                       step={0.01}
                       value={audioProgress}
                       onChange={e => {
@@ -657,7 +657,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                       disabled={!songToPlay}
                     />
                     <span className={gameStyles.audioTime}>
-                      {new Date(Math.min(15, iAmWinner ? 15 : (maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1])) * 1000).toISOString().substring(14, 19)}
+                      {new Date(Math.min(15, (iAmWinner || myAttempts >= 6) ? 15 : (maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1])) * 1000).toISOString().substring(14, 19)}
                     </span>
                   </div>
                   <div className={gameStyles.audioVolumeRow}>
@@ -678,12 +678,12 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                           return;
                         }
                         const currentTime = audioRef.current.currentTime - startTime;
-                        const maxDuration = iAmWinner ? 15 : maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1];
+                        const maxDuration = (iAmWinner || myAttempts >= 6) ? 15 : maxClipDurations[myAttempts] || maxClipDurations[maxClipDurations.length - 1];
                         if (isPlaying) {
                           audioRef.current.pause();
                           setIsPlayLoading(false);
                         } else {
-                          if (currentTime >= 15 || (!iAmWinner && currentTime >= maxDuration) || currentTime < 0) {
+                          if (currentTime >= 15 || (!iAmWinner && myAttempts < 6 && currentTime >= maxDuration) || currentTime < 0) {
                             audioRef.current.currentTime = startTime;
                             setAudioProgress(0);
                           }
@@ -846,9 +846,12 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                     if (attemptGuess.correct && !attemptGuess.tooLate) {
                       // Acertou a música e foi o primeiro - VERDE
                       buttonClass = gameStyles.attemptSuccess;
-                    } else if (attemptGuess.gameCorrect && !attemptGuess.correct) {
-                      // Acertou o jogo mas não a música - AMARELO
+                    } else if (attemptGuess.subtype === 'same_game') {
+                      // Mesmo jogo, música diferente - AMARELO
                       buttonClass = gameStyles.attemptGame;
+                    } else if (attemptGuess.subtype === 'same_franchise') {
+                      // Mesma franquia, jogo diferente - LARANJA
+                      buttonClass = gameStyles.attemptFranchise;
                     } else if (attemptGuess.type === 'skipped') {
                       // Skip - VERMELHO
                       buttonClass = gameStyles.attemptFail;
@@ -1039,19 +1042,23 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                         borderRadius: '6px',
                         background: guessData.correct
                           ? 'rgba(46, 125, 50, 0.8)'
-                          : guessData.gameCorrect
-                            ? 'rgba(245, 124, 0, 0.8)'
-                            : guessData.type === 'skipped'
-                              ? 'rgba(97, 97, 97, 0.8)'
-                              : 'rgba(198, 40, 40, 0.8)',
+                          : guessData.subtype === 'same_game'
+                            ? 'rgba(255, 215, 0, 0.8)'
+                            : guessData.subtype === 'same_franchise'
+                              ? 'rgba(255, 152, 0, 0.8)'
+                              : guessData.type === 'skipped'
+                                ? 'rgba(97, 97, 97, 0.8)'
+                                : 'rgba(198, 40, 40, 0.8)',
                         border: `2px solid ${
                           guessData.correct
                             ? '#4caf50'
-                            : guessData.gameCorrect
-                              ? '#ff9800'
-                              : guessData.type === 'skipped'
-                                ? '#757575'
-                                : '#f44336'
+                            : guessData.subtype === 'same_game'
+                              ? '#ffd700'
+                              : guessData.subtype === 'same_franchise'
+                                ? '#ff9800'
+                                : guessData.type === 'skipped'
+                                  ? '#757575'
+                                  : '#f44336'
                         }`,
                         fontSize: '0.9rem'
                       }}>
@@ -1067,7 +1074,8 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                           filter: 'drop-shadow(1px 1px 1px rgba(0,0,0,0.8))'
                         }}>
                           {guessData.correct ? '✅' :
-                           guessData.gameCorrect ? '🎮' :
+                           guessData.subtype === 'same_game' ? '🎮' :
+                           guessData.subtype === 'same_franchise' ? '🔶' :
                            guessData.type === 'skipped' ? '⏭️' : '❌'}
                         </span>
                       </div>
@@ -1185,35 +1193,42 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                             borderRadius: '4px',
                             background: guessData.correct
                               ? 'rgba(76, 175, 80, 0.2)'
-                              : guessData.gameCorrect
-                                ? 'rgba(255, 193, 7, 0.2)'
-                                : guessData.type === 'skipped'
-                                  ? 'rgba(158, 158, 158, 0.2)'
-                                  : 'rgba(244, 67, 54, 0.2)',
+                              : guessData.subtype === 'same_game'
+                                ? 'rgba(255, 215, 0, 0.2)'
+                                : guessData.subtype === 'same_franchise'
+                                  ? 'rgba(255, 152, 0, 0.2)'
+                                  : guessData.type === 'skipped'
+                                    ? 'rgba(158, 158, 158, 0.2)'
+                                    : 'rgba(244, 67, 54, 0.2)',
                             border: `1px solid ${
                               guessData.correct
                                 ? 'rgba(76, 175, 80, 0.4)'
-                                : guessData.gameCorrect
-                                  ? 'rgba(255, 193, 7, 0.4)'
-                                  : guessData.type === 'skipped'
-                                    ? 'rgba(158, 158, 158, 0.4)'
-                                    : 'rgba(244, 67, 54, 0.4)'
+                                : guessData.subtype === 'same_game'
+                                  ? 'rgba(255, 215, 0, 0.4)'
+                                  : guessData.subtype === 'same_franchise'
+                                    ? 'rgba(255, 152, 0, 0.4)'
+                                    : guessData.type === 'skipped'
+                                      ? 'rgba(158, 158, 158, 0.4)'
+                                      : 'rgba(244, 67, 54, 0.4)'
                             }`
                           }}>
                             <span style={{
                               color: guessData.correct
                                 ? '#4caf50'
-                                : guessData.gameCorrect
-                                  ? '#ffc107'
-                                  : guessData.type === 'skipped'
-                                    ? '#9e9e9e'
-                                    : '#f44336'
+                                : guessData.subtype === 'same_game'
+                                  ? '#ffd700'
+                                  : guessData.subtype === 'same_franchise'
+                                    ? '#ff9800'
+                                    : guessData.type === 'skipped'
+                                      ? '#9e9e9e'
+                                      : '#f44336'
                             }}>
                               {guessData.type === 'skipped' ? '⏭️ Pulou' : guessData.guess}
                             </span>
                             <span style={{ fontSize: '0.75rem', opacity: 0.8 }}>
                               {guessData.correct ? '✅' :
-                               guessData.gameCorrect ? '🎮' :
+                               guessData.subtype === 'same_game' ? '🎮' :
+                               guessData.subtype === 'same_franchise' ? '🔶' :
                                guessData.type === 'skipped' ? '⏭️' : '❌'}
                             </span>
                           </div>
@@ -1407,21 +1422,25 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                             borderRadius: '3px',
                             background: guessData.correct
                               ? 'rgba(76, 175, 80, 0.2)'
-                              : guessData.gameCorrect
-                                ? 'rgba(255, 193, 7, 0.2)'
-                                : guessData.type === 'skipped'
-                                  ? 'rgba(158, 158, 158, 0.2)'
-                                  : 'rgba(244, 67, 54, 0.2)',
+                              : guessData.subtype === 'same_game'
+                                ? 'rgba(255, 215, 0, 0.2)'
+                                : guessData.subtype === 'same_franchise'
+                                  ? 'rgba(255, 152, 0, 0.2)'
+                                  : guessData.type === 'skipped'
+                                    ? 'rgba(158, 158, 158, 0.2)'
+                                    : 'rgba(244, 67, 54, 0.2)',
                             fontSize: '0.8rem'
                           }}>
                             <span style={{
                               color: guessData.correct
                                 ? '#4caf50'
-                                : guessData.gameCorrect
-                                  ? '#ffc107'
-                                  : guessData.type === 'skipped'
-                                    ? '#9e9e9e'
-                                    : '#f44336',
+                                : guessData.subtype === 'same_game'
+                                  ? '#ffd700'
+                                  : guessData.subtype === 'same_franchise'
+                                    ? '#ff9800'
+                                    : guessData.type === 'skipped'
+                                      ? '#9e9e9e'
+                                      : '#f44336',
                               fontWeight: 'bold',
                               textShadow: '1px 1px 2px rgba(0, 0, 0, 0.8)'
                             }}>
@@ -1429,7 +1448,8 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                             </span>
                             <span style={{ fontSize: '0.7rem' }}>
                               {guessData.correct ? '✅' :
-                               guessData.gameCorrect ? '🎮' :
+                               guessData.subtype === 'same_game' ? '🎮' :
+                               guessData.subtype === 'same_franchise' ? '🔶' :
                                guessData.type === 'skipped' ? '⏭️' : '❌'}
                             </span>
                           </div>

@@ -605,14 +605,6 @@ export default function Home() {
     const audio = audioRef.current;
     if (!audio) return;
 
-    // Tempo máximo para a tentativa atual
-    const maxDuration = (gameOver && !isInfiniteMode)
-      ? MAX_PLAY_TIME
-      : maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1];
-
-    let fadeOutTimeout = null;
-    let fadeOutInterval = null;
-
     const updateProgress = () => {
       try {
         // Verificações básicas
@@ -627,34 +619,40 @@ export default function Home() {
 
         // Verificar limites apenas se estiver tocando
         if (!audio.paused) {
-          const shouldStop = (!gameOver || isInfiniteMode)
-            ? currentTime >= maxDuration
-            : currentTime >= MAX_PLAY_TIME;
+          // Determinar duração máxima baseada no estado do jogo
+          let maxDuration;
+          if (gameOver && !isInfiniteMode) {
+            // Quando o jogo terminou no modo diário, sempre permitir 15 segundos
+            maxDuration = MAX_PLAY_TIME;
+          } else if (gameOver && isInfiniteMode && infiniteGameOver) {
+            // Quando o modo infinito terminou (perdeu), também permitir 15 segundos
+            maxDuration = MAX_PLAY_TIME;
+          } else {
+            // Durante o jogo, usar duração baseada nas tentativas
+            maxDuration = maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1];
+          }
+
+          const shouldStop = currentTime >= maxDuration;
+
+          // Fade out nos últimos 2 segundos quando limitado a 15s
+          if ((gameOver && !isInfiniteMode) || (gameOver && isInfiniteMode && infiniteGameOver)) {
+            if (currentTime >= 13 && currentTime < 15) {
+              const fadeProgress = (15 - currentTime) / 2; // de 1 para 0
+              audio.volume = Math.max(0, volume * fadeProgress);
+            } else {
+              audio.volume = volume;
+            }
+          } else {
+            audio.volume = volume;
+          }
 
           if (shouldStop) {
-            if (gameOver && !isInfiniteMode && currentTime >= MAX_PLAY_TIME && !fadeOutInterval) {
-              // FADE OUT após 15s se o jogo acabou
-              let step = 0;
-              originalVolumeRef.current = audio.volume;
-              fadeOutInterval = setInterval(() => {
-                step++;
-                audio.volume = originalVolumeRef.current * (1 - step / fadeOutSteps);
-                if (step >= fadeOutSteps) {
-                  clearInterval(fadeOutInterval);
-                  audio.pause();
-                  setIsPlaying(false);
-                  audio.currentTime = startTime;
-                  setAudioProgress(0);
-                  audio.volume = originalVolumeRef.current;
-                }
-              }, fadeOutStepTime * 1000);
-            } else {
-              // Para imediatamente
-              audio.pause();
-              setIsPlaying(false);
-              audio.currentTime = startTime;
-              setAudioProgress(0);
-            }
+            // Para imediatamente e reseta
+            audio.pause();
+            setIsPlaying(false);
+            audio.currentTime = startTime;
+            setAudioProgress(0);
+            audio.volume = volume; // Restaura volume original
           }
         }
       } catch (error) {
@@ -692,10 +690,9 @@ export default function Home() {
       audio.removeEventListener('pause', updatePlay);
       audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
       audio.removeEventListener('error', handleAudioError);
-      if (fadeOutInterval) clearInterval(fadeOutInterval);
-      if (fadeOutTimeout) clearTimeout(fadeOutTimeout);
+
     };
-  }, [startTime, gameOver, attempts, isInfiniteMode, maxClipDurations]);
+  }, [startTime, gameOver, attempts, isInfiniteMode, volume]);
 
   // Atualiza volume
   useEffect(() => {
@@ -738,6 +735,53 @@ export default function Home() {
     submitGuess(guess);
   };
 
+  // Função para verificar o tipo de acerto
+  const checkGuessType = (guess, currentSong) => {
+    const normalizeString = (str) => str.trim().toLowerCase();
+    const guessedSong = songs.find(song => normalizeString(song.title) === normalizeString(guess));
+
+    if (!guessedSong) {
+      return { type: 'fail', subtype: 'not_found' };
+    }
+
+    // Acertou a música exata
+    if (normalizeString(guess) === normalizeString(currentSong.title)) {
+      return { type: 'success', subtype: 'exact' };
+    }
+
+    const currentGameNormalized = normalizeString(currentSong.game);
+    const guessedGameNormalized = normalizeString(guessedSong.game);
+
+    // Função para verificar títulos genéricos
+    const isGenericTitle = (title) => {
+      const genericTitles = [
+        'main title', 'main theme', 'title theme', 'opening theme', 'intro',
+        'menu theme', 'title screen', 'main menu', 'theme song', 'opening',
+        'title', 'theme', 'main', 'intro theme', 'title music'
+      ];
+      const normalized = normalizeString(title);
+      return genericTitles.some(generic => normalized === generic || normalized.includes(generic));
+    };
+
+    // Verificação para mesmo jogo (incluindo títulos genéricos)
+    if (currentGameNormalized === guessedGameNormalized) {
+      // Mesmo jogo, música diferente - AMARELO
+      return { type: 'fail', subtype: 'same_game' };
+    }
+
+    // Verificar se são da mesma franquia (primeiro nível)
+    const currentFranchise = currentGameNormalized.split(' ')[0]; // Ex: "mario" de "mario kart"
+    const guessedFranchise = guessedGameNormalized.split(' ')[0];
+
+    if (currentFranchise === guessedFranchise && currentFranchise.length > 3) {
+      // Mesma franquia, jogo diferente - LARANJA
+      return { type: 'fail', subtype: 'same_franchise' };
+    } else {
+      // Completamente errado - VERMELHO
+      return { type: 'fail', subtype: 'wrong' };
+    }
+  };
+
   const submitGuess = (selectedGuess) => {
     const newAttempts = attempts + 1;
     setAttempts(newAttempts);
@@ -745,9 +789,11 @@ export default function Home() {
     setGuess('');
     let result = null;
 
-    if (selectedGuess.toLowerCase() === currentSong.title.toLowerCase()) {
+    const guessResult = checkGuessType(selectedGuess, currentSong);
+
+    if (guessResult.type === 'success') {
       setMessage(t('congratulations'));
-      result = { type: 'success', value: selectedGuess };
+      result = { type: 'success', value: selectedGuess, subtype: guessResult.subtype };
 
       if (isInfiniteMode) {
         // No modo infinito, mostra botão para próxima música
@@ -761,7 +807,7 @@ export default function Home() {
       }
     } else if (newAttempts >= MAX_ATTEMPTS) {
       setMessage(`${t('game_over')} ${currentSong.game} - ${currentSong.title}`);
-      result = { type: 'fail', value: selectedGuess };
+      result = { type: 'fail', value: selectedGuess, subtype: guessResult.subtype };
 
       if (isInfiniteMode) {
         // No modo infinito, termina a sequência
@@ -773,9 +819,16 @@ export default function Home() {
         setTimeout(() => setShowStatistics(true), 800);
       }
     } else {
-      setMessage(t('try_again'));
+      // Mensagens específicas baseadas no tipo de erro
+      if (guessResult.subtype === 'same_game') {
+        setMessage('Jogo correto! Tente adivinhar a música específica.');
+      } else if (guessResult.subtype === 'same_franchise') {
+        setMessage('Franquia correta! Mas é de outro jogo da série.');
+      } else {
+        setMessage(t('try_again'));
+      }
       setShowHint(true);
-      result = { type: 'fail', value: selectedGuess };
+      result = { type: 'fail', value: selectedGuess, subtype: guessResult.subtype };
     }
     setHistory(prev => [...prev, result]);
   };
@@ -1368,13 +1421,16 @@ export default function Home() {
                 <p>Aviso: Após dar play na musica, ela pode demorar um pouco para carregar, é normal</p>
                 <div className={styles.legendBox}>
                   <div className={styles.legendItem}>
-                    <span className={styles.legendCorrect}>✅</span> = Correto
+                    <span className={styles.legendCorrect}>✅ Verde</span> = Acertou a música
                   </div>
                   <div className={styles.legendItem}>
-                    <span className={styles.legendIncorrect}>❌</span> = Incorreto
+                    <span style={{ color: '#ffd700' }}>🎮 Amarelo</span> = Franquia certa e jogo certo, mas música errada
                   </div>
                   <div className={styles.legendItem}>
-                    <span className={styles.legendFromGame}>▲</span> = Música errada, mas do jogo correto
+                    <span style={{ color: '#ff9800' }}>🔶 Laranja</span> = Franquia certa, mas jogo errado
+                  </div>
+                  <div className={styles.legendItem}>
+                    <span className={styles.legendIncorrect}>❌ Vermelho</span> = Completamente errado
                   </div>
                 </div>
                 <p className={styles.goodLuck}>Boa Sorte!</p>
@@ -1391,7 +1447,7 @@ export default function Home() {
                 <input
                   type="range"
                   min={0}
-                  max={(gameOver && !isInfiniteMode) ? MAX_PLAY_TIME : (maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1])}
+                  max={(gameOver && !isInfiniteMode) || (gameOver && isInfiniteMode && infiniteGameOver) ? MAX_PLAY_TIME : (maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1])}
                   step={0.01}
                   value={audioProgress}
                   onChange={e => {
@@ -1404,7 +1460,7 @@ export default function Home() {
                       setAudioProgress(0);
                       return;
                     }
-                    const maxAllowed = (gameOver && !isInfiniteMode) ? MAX_PLAY_TIME : (maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1]);
+                    const maxAllowed = (gameOver && !isInfiniteMode) || (gameOver && isInfiniteMode && infiniteGameOver) ? MAX_PLAY_TIME : (maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1]);
                     if (value > maxAllowed) value = maxAllowed;
                     if (audioRef.current) {
                       audioRef.current.currentTime = startTime + value;
@@ -1412,11 +1468,11 @@ export default function Home() {
                     }
                   } }
                   className={styles.audioSeekbarCustom}
-                  disabled={gameOver || audioError || !audioDuration} />
+                  disabled={audioError || !audioDuration} />
                 <span className={styles.audioTime} style={{ marginLeft: 10 }}>
                   {audioDuration
                     ? new Date(
-                        ((gameOver && !isInfiniteMode) ? MAX_PLAY_TIME : (maxClipDurations[attempts] ?? maxClipDurations[maxClipDurations.length - 1])) * 1000
+                        ((gameOver && !isInfiniteMode) || (gameOver && isInfiniteMode && infiniteGameOver) ? MAX_PLAY_TIME : (maxClipDurations[attempts] ?? maxClipDurations[maxClipDurations.length - 1])) * 1000
                       ).toISOString().substring(14, 19)
                     : '00:00'}
                 </span>
@@ -1442,7 +1498,7 @@ export default function Home() {
                       return;
                     }
                     const currentTime = audioRef.current.currentTime - startTime;
-                    const maxAllowed = (gameOver && !isInfiniteMode) ? MAX_PLAY_TIME : (maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1]);
+                    const maxAllowed = (gameOver && !isInfiniteMode) || (gameOver && isInfiniteMode && infiniteGameOver) ? MAX_PLAY_TIME : (maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1]);
                     if (isPlaying) {
                       audioRef.current.pause();
                       setIsPlayLoading(false);
@@ -1558,26 +1614,30 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Estatísticas Globais sempre visíveis */}
-          <GlobalStats />
+          {/* Estatísticas Globais apenas no modo diário */}
+          {!isInfiniteMode && <GlobalStats showInDailyMode={true} />}
 
           <div className={styles.attemptsRow}>
             {[...Array(MAX_ATTEMPTS)].map((_, idx) => {
               let statusClass = styles.attemptInactive;
               if (history[idx]) {
                 if (history[idx].type === 'success') {
+                  // Verde - Acertou a música
                   statusClass = styles.attemptSuccess;
                 } else if (history[idx].type === 'fail') {
-                  // Checa se o jogo está correto
-                  const isFromCorrectGame = history[idx]?.type === 'fail' &&
-                    currentSong?.game &&
-                    songs.find(s => s.title === history[idx].value)?.game === currentSong.game;
-                  if (isFromCorrectGame) {
+                  // Usar o subtype para determinar a cor
+                  if (history[idx].subtype === 'same_game') {
+                    // Amarelo - Mesmo jogo, música diferente
                     statusClass = styles.attemptGame;
+                  } else if (history[idx].subtype === 'same_franchise') {
+                    // Laranja - Mesma franquia, jogo diferente (vamos usar uma nova classe)
+                    statusClass = styles.attemptFranchise;
                   } else {
+                    // Vermelho - Completamente errado
                     statusClass = styles.attemptFail;
                   }
                 } else if (history[idx].type === 'skipped') {
+                  // Vermelho - Pulou
                   statusClass = styles.attemptFail;
                 }
               }
@@ -1657,15 +1717,18 @@ export default function Home() {
           </form>
           <div className={styles.historyBox}>
             {history.map((item, idx) => {
-              const isFromCorrectGame = item?.type === 'fail' &&
-                currentSong?.game &&
-                songs.find(s => s.title === item.value)?.game === currentSong.game;
               return (
                 <div key={`history-${idx}-${item.type || 'unknown'}`} className={styles.historyItem}>
-                  {item?.type === 'skipped' && <span className={styles.historySkipped}>❌ Skipped!</span>}
+                  {item?.type === 'skipped' && <span className={styles.historySkipped}>❌ Pulou!</span>}
                   {item?.type === 'fail' && (
-                    <span className={isFromCorrectGame ? styles.historyFailButCorrectGame : styles.historyFail}>
-                      {isFromCorrectGame ? '▲' : '❌'} {item.value}
+                    <span className={
+                      item.subtype === 'same_game' ? styles.historyFailButCorrectGame :
+                      item.subtype === 'same_franchise' ? styles.historyFailButCorrectFranchise :
+                      styles.historyFail
+                    }>
+                      {item.subtype === 'same_game' ? '🎮' :
+                       item.subtype === 'same_franchise' ? '🔶' :
+                       '❌'} {item.value}
                     </span>
                   )}
                   {item?.type === 'success' && <span className={styles.historySuccess}>✅ {item.value}</span>}

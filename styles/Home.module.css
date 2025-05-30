@@ -834,6 +834,10 @@
   background-color: #ffd700 !important;
   color: #222;
 }
+.attemptButton.attemptFranchise {
+  background-color: #ff9800 !important;
+  color: #fff;
+}
 
 .attemptButton {
   border: none;
@@ -907,6 +911,9 @@
 }
 .historyFailButCorrectGame {
   color: #ffd700;
+}
+.historyFailButCorrectFranchise {
+  color: #ff9800;
 }
 .historySuccess {
   color: #1DB954;
