@@ -1,3 +1,4 @@
+import React from 'react';
 import Head from 'next/head';
 import { useLanguage } from '../contexts/LanguageContext';
 import { MultiplayerProvider, useMultiplayerContext } from '../contexts/MultiplayerContext';
