@@ -326,6 +326,87 @@ export default async function handler(req, res) {
         // Incrementar tentativas APÓS verificações
         lobby.gameState.attempts[nickname]++;
 
+        // Função para detectar franquia de um jogo
+        const detectFranchise = (gameName) => {
+          const normalized = gameName.trim().toLowerCase();
+
+          // Mapeamento de franquias conhecidas
+          const franchiseMap = {
+            // Mario franchise
+            'mario': [
+              'super mario', 'mario kart', 'mario party', 'mario paint', 'paper mario',
+              'mario tennis', 'mario golf', 'mario strikers', 'mario baseball',
+              'new super mario bros', 'super mario bros', 'mario vs donkey kong'
+            ],
+            // Zelda franchise
+            'zelda': [
+              'the legend of zelda', 'legend of zelda', 'zelda'
+            ],
+            // Sonic franchise
+            'sonic': [
+              'sonic the hedgehog', 'sonic', 'sonic adventure', 'sonic unleashed',
+              'sonic generations', 'sonic forces', 'sonic mania', 'sonic colors'
+            ],
+            // Pokemon franchise
+            'pokemon': [
+              'pokemon', 'pokémon'
+            ],
+            // Final Fantasy franchise
+            'final fantasy': [
+              'final fantasy'
+            ],
+            // Assassin's Creed franchise
+            'assassins creed': [
+              "assassin's creed", 'assassins creed'
+            ],
+            // Call of Duty franchise
+            'call of duty': [
+              'call of duty'
+            ],
+            // Grand Theft Auto franchise
+            'gta': [
+              'grand theft auto', 'gta'
+            ],
+            // Dark Souls franchise
+            'souls': [
+              'dark souls', 'demon souls', 'bloodborne', 'elden ring', 'sekiro'
+            ],
+            // Metroid franchise
+            'metroid': [
+              'metroid', 'super metroid'
+            ],
+            // Donkey Kong franchise
+            'donkey kong': [
+              'donkey kong'
+            ],
+            // Street Fighter franchise
+            'street fighter': [
+              'street fighter'
+            ],
+            // Tekken franchise
+            'tekken': [
+              'tekken'
+            ],
+            // Mortal Kombat franchise
+            'mortal kombat': [
+              'mortal kombat'
+            ]
+          };
+
+          // Procura por correspondências nas franquias
+          for (const [franchise, patterns] of Object.entries(franchiseMap)) {
+            for (const pattern of patterns) {
+              if (normalized.includes(pattern)) {
+                return franchise;
+              }
+            }
+          }
+
+          // Se não encontrou uma franquia específica, usa a primeira palavra significativa
+          const words = normalized.split(' ').filter(word => word.length > 2);
+          return words.length > 0 ? words[0] : normalized;
+        };
+
         // Função para verificar o tipo de acerto (igual ao jogo principal)
         const checkGuessType = (guess, currentSong) => {
           const guessedSong = songs.find(song => normalizeString(song.title) === normalizeString(guess));
@@ -348,11 +429,11 @@ export default async function handler(req, res) {
             return { type: 'fail', subtype: 'same_game' };
           }
 
-          // Verificar se são da mesma franquia (primeiro nível)
-          const currentFranchise = currentGameNormalized.split(' ')[0]; // Ex: "mario" de "mario kart"
-          const guessedFranchise = guessedGameNormalized.split(' ')[0];
+          // Verificar se são da mesma franquia usando a nova lógica
+          const currentFranchise = detectFranchise(currentSong.game);
+          const guessedFranchise = detectFranchise(guessedSong.game);
 
-          if (currentFranchise === guessedFranchise && currentFranchise.length > 3) {
+          if (currentFranchise === guessedFranchise && currentFranchise.length > 2) {
             // Mesma franquia, jogo diferente - LARANJA
             return { type: 'fail', subtype: 'same_franchise' };
           } else {
