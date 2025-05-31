@@ -2,14 +2,16 @@ import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { songs } from '../data/songs';
 import styles from '../styles/Home.module.css';
-import { FaPlay, FaPause, FaVolumeUp, FaFastForward, FaQuestionCircle, FaBars } from 'react-icons/fa';
+import { FaPlay, FaPause, FaVolumeUp, FaFastForward, FaQuestionCircle, FaBars, FaUser } from 'react-icons/fa';
 
 import Footer from '../components/Footer';
 import GameMenu from '../components/GameMenu';
 import Statistics from '../components/Statistics';
 import Tutorial from '../components/Tutorial';
+import UserProfile from '../components/UserProfile';
 import GlobalStats from '../components/GlobalStats';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useUserProfile } from '../contexts/UserProfileContext';
 import { fetchTimezone } from '../config/api';
 import { audioCache } from '../utils/audioCache';
 import { useServiceWorker } from '../hooks/useServiceWorker';
@@ -34,6 +36,7 @@ const MAX_ATTEMPTS = 6;
 
 export default function Home() {
   const { t, isClient } = useLanguage();
+  const { updateGameStats } = useUserProfile();
 
   // Hooks de performance
   const { debounce, throttle } = usePerformanceOptimization();
@@ -94,6 +97,9 @@ export default function Home() {
   const [infiniteUsedSongs, setInfiniteUsedSongs] = useState([]);
   const [infiniteGameOver, setInfiniteGameOver] = useState(false);
   const [showNextSongButton, setShowNextSongButton] = useState(false);
+
+  // Estados do perfil
+  const [showProfile, setShowProfile] = useState(false);
 
   // Tempos máximos de reprodução por tentativa
   const maxClipDurations = [0.6, 1.2, 2.0, 3.0, 3.5, 4.2];
@@ -961,10 +967,32 @@ export default function Home() {
         // No modo infinito, mostra botão para próxima música
         setGameOver(true);
         setShowNextSongButton(true);
+
+        // Atualizar estatísticas do perfil para modo infinito
+        const profileResult = updateGameStats({
+          won: true,
+          attempts: newAttempts,
+          mode: 'infinite',
+          song: currentSong,
+          streak: infiniteStreak + 1,
+          songsCompleted: 1,
+          playTime: Math.floor(audioProgress)
+        });
       } else {
         // No modo normal, termina o jogo
         setGameOver(true);
-        setGameResult({ won: true, attempts: newAttempts });
+        const gameResultData = { won: true, attempts: newAttempts };
+        setGameResult(gameResultData);
+
+        // Atualizar estatísticas do perfil
+        const profileResult = updateGameStats({
+          won: true,
+          attempts: newAttempts,
+          mode: 'daily',
+          song: currentSong,
+          playTime: Math.floor(audioProgress) // tempo aproximado jogado
+        });
+
         // Incrementar contador de jogos para anúncios
         setGamesPlayedCount(prev => prev + 1);
         setTimeout(() => setShowStatistics(true), 800);
@@ -975,11 +1003,33 @@ export default function Home() {
 
       if (isInfiniteMode) {
         // No modo infinito, termina a sequência
+        // Atualizar estatísticas do perfil para fim do modo infinito
+        const profileResult = updateGameStats({
+          won: false,
+          attempts: newAttempts,
+          mode: 'infinite',
+          song: currentSong,
+          streak: infiniteStreak,
+          songsCompleted: infiniteUsedSongs.length,
+          playTime: Math.floor(audioProgress)
+        });
+
         endInfiniteMode();
       } else {
         // No modo normal, termina o jogo
         setGameOver(true);
-        setGameResult({ won: false, attempts: newAttempts });
+        const gameResultData = { won: false, attempts: newAttempts };
+        setGameResult(gameResultData);
+
+        // Atualizar estatísticas do perfil
+        const profileResult = updateGameStats({
+          won: false,
+          attempts: newAttempts,
+          mode: 'daily',
+          song: currentSong,
+          playTime: Math.floor(audioProgress) // tempo aproximado jogado
+        });
+
         // Incrementar contador de jogos para anúncios
         setGamesPlayedCount(prev => prev + 1);
         setTimeout(() => setShowStatistics(true), 800);
@@ -1016,7 +1066,18 @@ export default function Home() {
           endInfiniteMode();
         } else {
           setGameOver(true);
-          setGameResult({ won: false, attempts: newAttempts });
+          const gameResultData = { won: false, attempts: newAttempts };
+          setGameResult(gameResultData);
+
+          // Atualizar estatísticas do perfil
+          const profileResult = updateGameStats({
+            won: false,
+            attempts: newAttempts,
+            mode: 'daily',
+            song: currentSong,
+            playTime: Math.floor(audioProgress) // tempo aproximado jogado
+          });
+
           // Incrementar contador de jogos para anúncios
           setGamesPlayedCount(prev => prev + 1);
           setTimeout(() => setShowStatistics(true), 800);
@@ -1549,6 +1610,13 @@ export default function Home() {
               <DonationButton />
               <button
                 className={styles.helpButton}
+                onClick={() => setShowProfile(true)}
+                aria-label="Perfil"
+              >
+                <FaUser size={24} />
+              </button>
+              <button
+                className={styles.helpButton}
                 onClick={() => setShowInstructions(true)}
                 aria-label="Ajuda"
               >
@@ -1998,6 +2066,12 @@ export default function Home() {
           isOpen={showTutorial}
           onClose={handleCloseTutorial}
           onStartPlaying={handleStartPlaying}
+        />
+
+        {/* Perfil do usuário */}
+        <UserProfile
+          isOpen={showProfile}
+          onClose={() => setShowProfile(false)}
         />
 
         {/* Componentes de monetização */}

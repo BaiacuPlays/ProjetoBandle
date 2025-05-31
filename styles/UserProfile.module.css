@@ -1,0 +1,629 @@
+/* Modal do perfil */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.profileModal {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(29, 185, 84, 0.3);
+}
+
+.profileHeader {
+  background: linear-gradient(90deg, #1db954 0%, #1ed760 100%);
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+
+.profileHeader h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.profileContent {
+  padding: 30px;
+  overflow-y: auto;
+  max-height: calc(90vh - 80px);
+  color: white;
+}
+
+/* Informações básicas */
+.profileBasicInfo {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 30px;
+  align-items: flex-start;
+}
+
+.avatarSection {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 4px solid #1db954;
+  object-fit: cover;
+}
+
+.levelBadge {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(45deg, #1db954, #1ed760);
+  color: white;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.userInfo {
+  flex: 1;
+}
+
+.userInfo h3 {
+  margin: 0 0 10px 0;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.editButton {
+  background: none;
+  border: none;
+  color: #1db954;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.2s;
+  font-size: 1rem;
+}
+
+.editButton:hover {
+  background: rgba(29, 185, 84, 0.2);
+  transform: scale(1.1);
+}
+
+.bio {
+  color: #b3b3b3;
+  margin: 10px 0;
+  line-height: 1.5;
+}
+
+.joinDate {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+/* Formulário de edição */
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.editInput, .editTextarea {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(29, 185, 84, 0.3);
+  border-radius: 10px;
+  padding: 12px;
+  color: white;
+  font-size: 1rem;
+  resize: vertical;
+}
+
+.editInput:focus, .editTextarea:focus {
+  outline: none;
+  border-color: #1db954;
+  box-shadow: 0 0 0 2px rgba(29, 185, 84, 0.2);
+}
+
+.editButtons {
+  display: flex;
+  gap: 10px;
+}
+
+.saveButton, .cancelButton {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.saveButton {
+  background: #1db954;
+  color: white;
+}
+
+.saveButton:hover {
+  background: #1ed760;
+  transform: translateY(-2px);
+}
+
+.cancelButton {
+  background: transparent;
+  color: #888;
+  border: 1px solid #888;
+}
+
+.cancelButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* Barra de XP */
+.xpSection {
+  margin-bottom: 30px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 15px;
+  border: 1px solid rgba(29, 185, 84, 0.2);
+}
+
+.xpInfo {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  color: #b3b3b3;
+}
+
+.xpBar {
+  background: rgba(255, 255, 255, 0.1);
+  height: 12px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.xpProgress {
+  background: linear-gradient(90deg, #1db954, #1ed760);
+  height: 100%;
+  transition: width 0.3s ease;
+  border-radius: 6px;
+}
+
+/* Navegação das abas */
+.tabNavigation {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 30px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 5px;
+  border-radius: 15px;
+}
+
+.tab {
+  flex: 1;
+  background: none;
+  border: none;
+  color: #b3b3b3;
+  padding: 15px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.tab:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.tab.active {
+  background: #1db954;
+  color: white;
+}
+
+/* Conteúdo das abas */
+.tabContent {
+  min-height: 300px;
+}
+
+/* Aba de visão geral */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.statCard {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 25px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border: 1px solid rgba(29, 185, 84, 0.2);
+  transition: transform 0.2s;
+}
+
+.statCard:hover {
+  transform: translateY(-5px);
+  border-color: #1db954;
+}
+
+.statIcon {
+  font-size: 2rem;
+  color: #1db954;
+}
+
+.statInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.statValue {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: white;
+}
+
+.statLabel {
+  font-size: 0.9rem;
+  color: #b3b3b3;
+}
+
+/* Estatísticas por modo */
+.modeStats {
+  margin-bottom: 30px;
+}
+
+.modeStats h4 {
+  margin-bottom: 20px;
+  color: #1db954;
+  font-size: 1.3rem;
+}
+
+.modeCard {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  border: 1px solid rgba(29, 185, 84, 0.2);
+}
+
+.modeCard h5 {
+  margin: 0 0 15px 0;
+  color: white;
+  font-size: 1.1rem;
+}
+
+.modeInfo {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  color: #b3b3b3;
+  font-size: 0.9rem;
+}
+
+/* Estatísticas de franquias */
+.franchiseStats h4 {
+  margin-bottom: 20px;
+  color: #1db954;
+  font-size: 1.3rem;
+}
+
+.franchiseList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.franchiseItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 15px 20px;
+  border-radius: 10px;
+  border: 1px solid rgba(29, 185, 84, 0.2);
+}
+
+.franchiseName {
+  font-weight: 600;
+  color: white;
+}
+
+.franchiseWinRate {
+  color: #1db954;
+  font-weight: 600;
+}
+
+/* Aba de conquistas */
+.achievementsSummary {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.achievementsSummary h4 {
+  color: #1db954;
+  font-size: 1.3rem;
+}
+
+.nearAchievements {
+  margin-bottom: 30px;
+}
+
+.nearAchievements h5 {
+  color: #1db954;
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+}
+
+.achievementItem {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  border: 1px solid rgba(29, 185, 84, 0.2);
+}
+
+.achievementIcon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.achievementInfo {
+  flex: 1;
+}
+
+.achievementTitle {
+  display: block;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 5px;
+}
+
+.achievementDesc {
+  display: block;
+  color: #b3b3b3;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+.achievementProgress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.progressBar {
+  flex: 1;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressBar::before {
+  content: '';
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #1db954, #1ed760);
+  border-radius: 4px;
+}
+
+.unlockedAchievements h5 {
+  color: #1db954;
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+}
+
+.achievementGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.achievementCard {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  border: 2px solid;
+  transition: transform 0.2s;
+}
+
+.achievementCard:hover {
+  transform: translateY(-5px);
+}
+
+.achievementCard .achievementIcon {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.achievementCard .achievementTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 8px;
+}
+
+.achievementCard .achievementDesc {
+  font-size: 0.9rem;
+  color: #b3b3b3;
+  margin-bottom: 10px;
+}
+
+.achievementRarity {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Aba de histórico */
+.gameHistory {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.gameItem {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(29, 185, 84, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.gameResult {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.resultIcon {
+  font-size: 1.5rem;
+}
+
+.resultIcon.win {
+  color: #1db954;
+}
+
+.resultIcon.loss {
+  color: #e22134;
+}
+
+.gameInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.gameMode {
+  font-weight: 600;
+  color: white;
+}
+
+.gameDate {
+  font-size: 0.9rem;
+  color: #b3b3b3;
+}
+
+.songInfo {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.songTitle {
+  font-weight: 600;
+  color: white;
+}
+
+.songGame {
+  font-size: 0.9rem;
+  color: #b3b3b3;
+}
+
+.gameStats {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  font-size: 0.9rem;
+  color: #b3b3b3;
+}
+
+.noHistory {
+  text-align: center;
+  color: #888;
+  font-style: italic;
+  padding: 40px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .profileModal {
+    margin: 10px;
+    max-height: 95vh;
+  }
+  
+  .profileContent {
+    padding: 20px;
+  }
+  
+  .profileBasicInfo {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .modeInfo {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .achievementGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .gameItem {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .tab {
+    padding: 12px 8px;
+    font-size: 0.9rem;
+  }
+}
