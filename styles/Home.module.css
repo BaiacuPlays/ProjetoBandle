@@ -1472,6 +1472,12 @@
   }
 }
 
+.headerButtons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .menuButton, .helpButton {
   background: none;
   border: none;

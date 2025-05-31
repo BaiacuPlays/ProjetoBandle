@@ -25,6 +25,10 @@ import {
   MemoizedTimer
 } from '../components/MemoizedComponents';
 
+// Componentes de monetização
+import DonationButton from '../components/DonationButton';
+import { HeaderAd, BetweenGamesAd, SimpleInterstitialAd } from '../components/AdBanner';
+
 const MAX_ATTEMPTS = 6;
 
 
@@ -77,6 +81,11 @@ export default function Home() {
   const [isPlayLoading, setIsPlayLoading] = useState(false);
   const [pendingPlay, setPendingPlay] = useState(false);
   const [isSkipLoading, setIsSkipLoading] = useState(false);
+
+  // Estados de monetização
+  const [showDonationModal, setShowDonationModal] = useState(false);
+  const [showInterstitialAd, setShowInterstitialAd] = useState(false);
+  const [gamesPlayedCount, setGamesPlayedCount] = useState(0);
 
   // Estados do modo infinito
   const [isInfiniteMode, setIsInfiniteMode] = useState(false);
@@ -415,6 +424,24 @@ export default function Home() {
   useEffect(() => {
     loadInfiniteStats();
   }, []);
+
+  // Listener para abrir modal de doação
+  useEffect(() => {
+    const handleOpenDonationModal = () => {
+      setShowDonationModal(true);
+    };
+
+    window.addEventListener('openDonationModal', handleOpenDonationModal);
+    return () => window.removeEventListener('openDonationModal', handleOpenDonationModal);
+  }, []);
+
+  // Controle de anúncios intersticiais
+  useEffect(() => {
+    // Mostrar anúncio intersticial a cada 5 jogos
+    if (gamesPlayedCount > 0 && gamesPlayedCount % 5 === 0) {
+      setShowInterstitialAd(true);
+    }
+  }, [gamesPlayedCount]);
 
   // Verificar se é a primeira visita do usuário
   useEffect(() => {
@@ -938,6 +965,8 @@ export default function Home() {
         // No modo normal, termina o jogo
         setGameOver(true);
         setGameResult({ won: true, attempts: newAttempts });
+        // Incrementar contador de jogos para anúncios
+        setGamesPlayedCount(prev => prev + 1);
         setTimeout(() => setShowStatistics(true), 800);
       }
     } else if (newAttempts >= MAX_ATTEMPTS) {
@@ -951,6 +980,8 @@ export default function Home() {
         // No modo normal, termina o jogo
         setGameOver(true);
         setGameResult({ won: false, attempts: newAttempts });
+        // Incrementar contador de jogos para anúncios
+        setGamesPlayedCount(prev => prev + 1);
         setTimeout(() => setShowStatistics(true), 800);
       }
     } else {
@@ -986,6 +1017,8 @@ export default function Home() {
         } else {
           setGameOver(true);
           setGameResult({ won: false, attempts: newAttempts });
+          // Incrementar contador de jogos para anúncios
+          setGamesPlayedCount(prev => prev + 1);
           setTimeout(() => setShowStatistics(true), 800);
         }
       }
@@ -1479,6 +1512,26 @@ export default function Home() {
         <meta name="description" content="Teste seus conhecimentos musicais dos videogames! Ouça trechos de músicas de jogos famosos e adivinhe o nome. Jogue sozinho ou com amigos no modo multiplayer. Mais de 1000 músicas de games clássicos e modernos." />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href="https://ludomusic.xyz" />
+
+        {/* Google AdSense */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1007836460713451"
+          crossOrigin="anonymous"
+        ></script>
+
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'GA_MEASUREMENT_ID');
+            `,
+          }}
+        />
       </Head>
       <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <div className={styles.darkBg} style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -1492,13 +1545,16 @@ export default function Home() {
               <FaBars size={24} />
             </button>
             <img src="/Logo.png" alt="Logo" className={styles.logo} />
-            <button
-              className={styles.helpButton}
-              onClick={() => setShowInstructions(true)}
-              aria-label="Ajuda"
-            >
-              <FaQuestionCircle size={24} />
-            </button>
+            <div className={styles.headerButtons}>
+              <DonationButton />
+              <button
+                className={styles.helpButton}
+                onClick={() => setShowInstructions(true)}
+                aria-label="Ajuda"
+              >
+                <FaQuestionCircle size={24} />
+              </button>
+            </div>
           </div>
 
           {/* Seletor de modo */}
@@ -1938,14 +1994,23 @@ export default function Home() {
         />
 
         {/* Tutorial de boas-vindas */}
-
         <Tutorial
           isOpen={showTutorial}
           onClose={handleCloseTutorial}
           onStartPlaying={handleStartPlaying}
         />
+
+        {/* Componentes de monetização */}
+        <SimpleInterstitialAd
+          isOpen={showInterstitialAd}
+          onClose={() => setShowInterstitialAd(false)}
+        />
+
+        {/* Anúncios */}
+        <HeaderAd />
         </div>
 
+        <BetweenGamesAd />
         <Footer />
       </div>
     </>

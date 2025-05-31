@@ -1,0 +1,308 @@
+/* Botão de doação */
+.donateButton {
+  background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.donateButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+  background: linear-gradient(45deg, #ff5252, #ff7979);
+}
+
+/* Modal */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border-radius: 20px;
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  border: 1px solid #333;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 2rem 1rem 2rem;
+  border-bottom: 1px solid #333;
+}
+
+.modalHeader h2 {
+  color: #fff;
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.closeButton:hover {
+  background: #333;
+  color: #fff;
+}
+
+.modalContent {
+  padding: 2rem;
+}
+
+.thankYou {
+  color: #fff;
+  font-size: 1.2rem;
+  text-align: center;
+  margin: 0 0 1rem 0;
+  font-weight: bold;
+}
+
+.description {
+  color: #ccc;
+  text-align: center;
+  margin: 0 0 2rem 0;
+  line-height: 1.5;
+}
+
+/* Grid de opções de doação */
+.donationGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.donationOption {
+  background: #2a2a2a;
+  border: 2px solid #333;
+  border-radius: 15px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.donationOption:hover {
+  border-color: #ff6b6b;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(255, 107, 107, 0.2);
+}
+
+.optionLabel {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.optionAmount {
+  color: #ff6b6b;
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.optionDescription {
+  color: #999;
+  font-size: 0.9rem;
+}
+
+/* Valor personalizado */
+.customAmount {
+  background: #2a2a2a;
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.customAmount p {
+  color: #ccc;
+  margin: 0 0 1rem 0;
+}
+
+.customInput {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.amountInput {
+  background: #1a1a1a;
+  border: 2px solid #333;
+  border-radius: 10px;
+  padding: 0.75rem;
+  color: #fff;
+  font-size: 1rem;
+  width: 100px;
+  text-align: center;
+}
+
+.amountInput:focus {
+  outline: none;
+  border-color: #ff6b6b;
+}
+
+.customButton {
+  background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.customButton:hover {
+  background: linear-gradient(45deg, #ff5252, #ff7979);
+  transform: translateY(-1px);
+}
+
+/* Métodos de pagamento */
+.paymentMethods {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.paymentMethods p {
+  color: #ccc;
+  margin: 0 0 1rem 0;
+  font-weight: bold;
+}
+
+.methods {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.methods span {
+  background: #333;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+/* Garantia */
+.guarantee {
+  text-align: center;
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.guarantee p {
+  margin: 0.5rem 0;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .modal {
+    margin: 1rem;
+    max-height: 95vh;
+  }
+
+  .modalHeader {
+    padding: 1.5rem;
+  }
+
+  .modalHeader h2 {
+    font-size: 1.5rem;
+  }
+
+  .modalContent {
+    padding: 1.5rem;
+  }
+
+  .donationGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .donationOption {
+    padding: 1rem;
+  }
+
+  .optionAmount {
+    font-size: 1.5rem;
+  }
+
+  .customInput {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .amountInput {
+    width: 100%;
+  }
+
+  .customButton {
+    width: 100%;
+  }
+
+  .methods {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .donateButton {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.8rem;
+  }
+
+  .modalHeader {
+    padding: 1rem;
+  }
+
+  .modalContent {
+    padding: 1rem;
+  }
+
+  .donationOption {
+    padding: 1rem;
+  }
+
+  .optionLabel {
+    font-size: 1.2rem;
+  }
+
+  .optionAmount {
+    font-size: 1.3rem;
+  }
+}
