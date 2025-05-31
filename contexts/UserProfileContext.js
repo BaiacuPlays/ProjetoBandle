@@ -116,18 +116,13 @@ export const UserProfileProvider = ({ children }) => {
     if (isAuthenticated && profile && userId) {
       const authenticatedUser = getAuthenticatedUser();
 
-      console.log('🔄 Verificando se perfil precisa ser atualizado após login...');
-      console.log('🔍 Usuário autenticado:', authenticatedUser);
-      console.log('🔍 Perfil atual:', {
-        username: profile.username,
-        displayName: profile.displayName
-      });
+
 
       if (authenticatedUser && (
         profile.username !== authenticatedUser.username ||
         profile.displayName !== authenticatedUser.displayName
       )) {
-        console.log('🔄 Atualizando perfil com dados de autenticação...');
+
 
         const updatedProfile = {
           ...profile,
@@ -139,9 +134,7 @@ export const UserProfileProvider = ({ children }) => {
         localStorage.setItem(`ludomusic_profile_${userId}`, JSON.stringify(updatedProfile));
 
         // Salvar no servidor
-        saveProfileToServer(updatedProfile).then(() => {
-          console.log('✅ Perfil atualizado e sincronizado com servidor');
-        }).catch(error => {
+        saveProfileToServer(updatedProfile).catch(error => {
           console.warn('Erro ao sincronizar perfil:', error);
         });
       }
@@ -173,12 +166,7 @@ export const UserProfileProvider = ({ children }) => {
         const authenticatedUser = getAuthenticatedUser();
         let updatedProfile = serverProfile;
 
-        // Debug: verificar dados de autenticação
-        console.log('🔍 Debug - Dados de autenticação:', authenticatedUser);
-        console.log('🔍 Debug - Perfil do servidor:', {
-          username: serverProfile.username,
-          displayName: serverProfile.displayName
-        });
+
 
         // Se usuário está autenticado e o perfil não tem os dados corretos, atualizar
         if (authenticatedUser && (
@@ -208,11 +196,7 @@ export const UserProfileProvider = ({ children }) => {
         const authenticatedUser = getAuthenticatedUser();
         let updatedProfile = localProfile;
 
-        console.log('🔍 Debug LOCAL - Dados de autenticação:', authenticatedUser);
-        console.log('🔍 Debug LOCAL - Perfil local:', {
-          username: localProfile.username,
-          displayName: localProfile.displayName
-        });
+
 
         // Se usuário está autenticado e o perfil não tem os dados corretos, atualizar
         if (authenticatedUser && (
@@ -225,14 +209,11 @@ export const UserProfileProvider = ({ children }) => {
             displayName: authenticatedUser.displayName
           };
 
-          console.log('🔄 Perfil LOCAL atualizado com dados de autenticação');
-
           // Salvar perfil atualizado localmente e no servidor
           localStorage.setItem(`ludomusic_profile_${userId}`, JSON.stringify(updatedProfile));
 
           try {
             await saveProfileToServer(updatedProfile);
-            console.log('💾 Perfil LOCAL sincronizado com servidor');
           } catch (error) {
             console.warn('Não foi possível sincronizar perfil local com servidor:', error);
           }
@@ -252,8 +233,7 @@ export const UserProfileProvider = ({ children }) => {
         // Criar novo perfil
         const authenticatedUser = getAuthenticatedUser();
 
-        console.log('🆕 Criando novo perfil...');
-        console.log('🔍 Dados de autenticação disponíveis:', authenticatedUser);
+
 
         const newProfile = {
           id: userId,
@@ -378,26 +358,13 @@ export const UserProfileProvider = ({ children }) => {
   const checkAchievements = (updatedProfile) => {
     const newAchievements = [];
 
-    console.log('🏆 Verificando conquistas para perfil:', {
-      totalGames: updatedProfile.stats.totalGames,
-      wins: updatedProfile.stats.wins,
-      level: updatedProfile.level,
-      currentAchievements: updatedProfile.achievements.length
-    });
-
     Object.values(achievements).forEach(achievement => {
       if (!updatedProfile.achievements.includes(achievement.id)) {
         const progress = calculateAchievementProgress(achievement.id, updatedProfile.stats, updatedProfile);
 
-        // Log para conquistas básicas
-        if (['first_game', 'first_win', 'veteran'].includes(achievement.id)) {
-          console.log(`🎯 ${achievement.id}: ${progress}% (${achievement.title})`);
-        }
-
         if (progress >= 100) {
           newAchievements.push(achievement.id);
           updatedProfile.xp += achievement.xpReward;
-          console.log(`✅ Conquista desbloqueada: ${achievement.title} (+${achievement.xpReward} XP)`);
         }
       }
     });

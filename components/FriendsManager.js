@@ -17,6 +17,7 @@ const FriendsManager = ({ isOpen, onClose }) => {
     friendRequests,
     sentRequests,
     isLoading,
+    currentUserId,
     searchUserByCode,
     sendFriendRequest,
     acceptFriendRequest,
@@ -28,6 +29,26 @@ const FriendsManager = ({ isOpen, onClose }) => {
 
   const { sendMultiplayerInvite } = useNotifications();
   const { profile } = useUserProfile();
+
+  // Gerar código de amigo fixo baseado no perfil
+  const getFriendCode = () => {
+    // Tentar usar o ID do perfil primeiro, depois o currentUserId
+    let baseId = profile?.id || currentUserId;
+
+    // Se ainda não tiver ID, usar um padrão temporário
+    if (!baseId) {
+      return 'LOADING...';
+    }
+
+    // Usar o ID para gerar um código consistente
+    const hash = baseId.split('').reduce((a, b) => {
+      a = ((a << 5) - a) + b.charCodeAt(0);
+      return a & a;
+    }, 0);
+
+    const code = Math.abs(hash).toString(36).toUpperCase().substr(0, 6);
+    return `PLAYER${code.padEnd(6, '0')}`;
+  };
 
   const [activeTab, setActiveTab] = useState('friends');
   const [searchCode, setSearchCode] = useState('');
@@ -348,11 +369,11 @@ const FriendsManager = ({ isOpen, onClose }) => {
                 <h4>Seu Código de Amigo</h4>
                 <p>Compartilhe este código para que outros possam te adicionar:</p>
                 <div className={styles.friendCode}>
-                  <span>PLAYER{Math.random().toString(36).substr(2, 6).toUpperCase()}</span>
+                  <span>{getFriendCode()}</span>
                   <button
                     className={styles.copyButton}
                     onClick={() => {
-                      navigator.clipboard.writeText(`PLAYER${Math.random().toString(36).substr(2, 6).toUpperCase()}`);
+                      navigator.clipboard.writeText(getFriendCode());
                       alert('Código copiado!');
                     }}
                   >
