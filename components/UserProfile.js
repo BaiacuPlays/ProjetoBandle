@@ -6,7 +6,6 @@ import { FaTimes, FaEdit, FaTrophy, FaGamepad, FaClock, FaFire, FaStar, FaChartL
 import styles from '../styles/UserProfile.module.css';
 
 const UserProfile = ({ isOpen, onClose }) => {
-  const { profile, updateProfile } = useUserProfile();
   const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState('overview');
   const [isEditing, setIsEditing] = useState(false);
@@ -14,6 +13,17 @@ const UserProfile = ({ isOpen, onClose }) => {
     displayName: '',
     bio: ''
   });
+
+  // Hook do perfil com verificação de segurança
+  let profile = null;
+  let updateProfile = null;
+  try {
+    const userProfile = useUserProfile();
+    profile = userProfile?.profile;
+    updateProfile = userProfile?.updateProfile;
+  } catch (error) {
+    console.warn('UserProfile context not available:', error);
+  }
 
   if (!isOpen || !profile) return null;
 
@@ -28,10 +38,12 @@ const UserProfile = ({ isOpen, onClose }) => {
   }, [profile]);
 
   const handleSaveProfile = () => {
-    updateProfile({
-      displayName: editForm.displayName,
-      bio: editForm.bio
-    });
+    if (updateProfile) {
+      updateProfile({
+        displayName: editForm.displayName,
+        bio: editForm.bio
+      });
+    }
     setIsEditing(false);
   };
 

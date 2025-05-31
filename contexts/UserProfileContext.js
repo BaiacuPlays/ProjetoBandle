@@ -90,8 +90,18 @@ export const UserProfileProvider = ({ children }) => {
   const loadProfile = () => {
     try {
       setIsLoading(true);
+
+      // Verificar se localStorage está disponível
+      if (typeof window === 'undefined' || !window.localStorage) {
+        console.warn('localStorage não disponível, usando perfil temporário');
+        const newProfile = createDefaultProfile();
+        setProfile(newProfile);
+        setIsLoading(false);
+        return;
+      }
+
       const savedProfile = localStorage.getItem('ludomusic_user_profile');
-      
+
       if (savedProfile) {
         const parsedProfile = JSON.parse(savedProfile);
         // Verificar se o perfil tem todas as propriedades necessárias
@@ -134,6 +144,12 @@ export const UserProfileProvider = ({ children }) => {
   // Salvar perfil no localStorage
   const saveProfile = (profileData) => {
     try {
+      // Verificar se localStorage está disponível
+      if (typeof window === 'undefined' || !window.localStorage) {
+        console.warn('localStorage não disponível, não é possível salvar perfil');
+        return;
+      }
+
       localStorage.setItem('ludomusic_user_profile', JSON.stringify(profileData));
     } catch (error) {
       console.error('Erro ao salvar perfil:', error);
