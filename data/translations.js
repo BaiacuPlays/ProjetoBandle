@@ -97,8 +97,8 @@ export const translations = {
     'share_url_text': 'Teste seus conhecimentos musicais de videogames:',
     'copy_result': 'Copiar Resultado',
     'result_copied': 'Resultado copiado!',
-    'global_stats_message': '{totalPlayers} pessoas já adivinharam / {averageAttempts} tentativas médias',
-    'no_stats_yet': 'Seja o primeiro a jogar!',
+    'global_stats_message': '{totalPlayers} pessoas já adivinharam hoje / {averageAttempts} tentativas médias',
+    'no_stats_yet': 'Seja o primeiro a jogar hoje!',
 
     // Action buttons
     'report_error': 'Reportar Erro',
@@ -255,8 +255,8 @@ export const translations = {
     'share_url_text': 'Test your video game music knowledge:',
     'copy_result': 'Copy Result',
     'result_copied': 'Result copied!',
-    'global_stats_message': '{totalPlayers} people have already guessed / {averageAttempts} average attempts',
-    'no_stats_yet': 'Be the first to play!',
+    'global_stats_message': '{totalPlayers} people have already guessed today / {averageAttempts} average attempts',
+    'no_stats_yet': 'Be the first to play today!',
 
     // Action buttons
     'report_error': 'Report Error',
@@ -413,8 +413,8 @@ export const translations = {
     'share_url_text': 'Pon a prueba tus conocimientos musicales de videojuegos:',
     'copy_result': 'Copiar Resultado',
     'result_copied': '¡Resultado copiado!',
-    'global_stats_message': '{totalPlayers} personas ya han adivinado / {averageAttempts} intentos promedio',
-    'no_stats_yet': '¡Sé el primero en jugar!',
+    'global_stats_message': '{totalPlayers} personas ya han adivinado hoy / {averageAttempts} intentos promedio',
+    'no_stats_yet': '¡Sé el primero en jugar hoy!',
 
     // Botones de acción
     'report_error': 'Reportar Error',

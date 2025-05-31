@@ -62,11 +62,11 @@ const GlobalStats = ({ showInDailyMode = true }) => {
             ? t('global_stats_message')
               .replace('{totalPlayers}', stats.totalGames)
               .replace('{averageAttempts}', Math.round(stats.averageAttempts))
-            : `${stats.totalGames} pessoas já adivinharam / ${Math.round(stats.averageAttempts)} tentativas médias`
+            : `${stats.totalGames} pessoas já adivinharam hoje / ${Math.round(stats.averageAttempts)} tentativas médias`
         ) : (
           isClient
-            ? t('no_stats_yet') || 'Seja o primeiro a jogar!'
-            : 'Seja o primeiro a jogar!'
+            ? t('no_stats_yet') || 'Seja o primeiro a jogar hoje!'
+            : 'Seja o primeiro a jogar hoje!'
         )}
       </div>
     </div>

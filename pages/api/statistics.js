@@ -112,75 +112,88 @@ export default async function handler(req, res) {
   return res.status(405).json({ error: 'Método não suportado' });
 }
 
-// Função para atualizar estatísticas globais
+// Função para obter o dia atual (UTC)
+const getCurrentDay = () => {
+  const now = new Date();
+  const year = now.getUTCFullYear();
+  const month = String(now.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(now.getUTCDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+// Função para atualizar estatísticas globais diárias
 async function updateGlobalStats(won, attempts) {
   try {
-    const globalStatsKey = 'stats:global';
+    const currentDay = getCurrentDay();
+    const dailyStatsKey = `stats:daily:${currentDay}`;
 
-    // Buscar estatísticas globais atuais
-    let globalStats;
+    // Buscar estatísticas diárias atuais
+    let dailyStats;
     if (isDevelopment && !hasKVConfig) {
       // Usar armazenamento local em desenvolvimento
-      globalStats = localStats.get(globalStatsKey) || {
+      dailyStats = localStats.get(dailyStatsKey) || {
         totalGames: 0,
         totalWins: 0,
         totalLosses: 0,
         attemptDistribution: [0, 0, 0, 0, 0, 0], // tentativas 1-6
         totalAttempts: 0,
-        averageAttempts: 0
+        averageAttempts: 0,
+        date: currentDay
       };
     } else {
       // Usar Vercel KV em produção
-      globalStats = await kv.get(globalStatsKey) || {
+      dailyStats = await kv.get(dailyStatsKey) || {
         totalGames: 0,
         totalWins: 0,
         totalLosses: 0,
         attemptDistribution: [0, 0, 0, 0, 0, 0], // tentativas 1-6
         totalAttempts: 0,
-        averageAttempts: 0
+        averageAttempts: 0,
+        date: currentDay
       };
     }
 
     // Incrementar total de jogos
-    globalStats.totalGames += 1;
+    dailyStats.totalGames += 1;
 
     if (won) {
-      globalStats.totalWins += 1;
+      dailyStats.totalWins += 1;
       // Incrementar distribuição de tentativas (attempts é 1-based, array é 0-based)
       if (attempts >= 1 && attempts <= 6) {
-        globalStats.attemptDistribution[attempts - 1] += 1;
+        dailyStats.attemptDistribution[attempts - 1] += 1;
       }
-      globalStats.totalAttempts += attempts;
+      dailyStats.totalAttempts += attempts;
     } else {
-      globalStats.totalLosses += 1;
+      dailyStats.totalLosses += 1;
       // Para derrotas, consideramos 6 tentativas para o cálculo da média
-      globalStats.totalAttempts += 6;
+      dailyStats.totalAttempts += 6;
     }
 
     // Calcular nova média de tentativas
-    globalStats.averageAttempts = globalStats.totalGames > 0
-      ? Math.round((globalStats.totalAttempts / globalStats.totalGames) * 10) / 10
+    dailyStats.averageAttempts = dailyStats.totalGames > 0
+      ? Math.round((dailyStats.totalAttempts / dailyStats.totalGames) * 10) / 10
       : 0;
 
-    // Salvar estatísticas globais atualizadas
+    // Salvar estatísticas diárias atualizadas
     if (isDevelopment && !hasKVConfig) {
-      localStats.set(globalStatsKey, globalStats);
+      localStats.set(dailyStatsKey, dailyStats);
     } else {
       try {
-        await kv.set(globalStatsKey, globalStats);
+        await kv.set(dailyStatsKey, dailyStats);
       } catch (error) {
-        console.error('Erro ao salvar estatísticas globais no KV:', error);
+        console.error('Erro ao salvar estatísticas diárias no KV:', error);
       }
     }
 
-    console.log('Estatísticas globais atualizadas:', {
-      totalGames: globalStats.totalGames,
-      averageAttempts: globalStats.averageAttempts,
+    console.log('Estatísticas diárias atualizadas:', {
+      date: currentDay,
+      totalGames: dailyStats.totalGames,
+      averageAttempts: dailyStats.averageAttempts,
       won,
       attempts
     });
 
   } catch (error) {
-    console.error('Erro ao atualizar estatísticas globais:', error);
+    console.error('Erro ao atualizar estatísticas diárias:', error);
   }
 }

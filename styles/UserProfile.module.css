@@ -25,46 +25,16 @@
   width: 100%;
   max-width: 900px;
   max-height: calc(100vh - 120px);
-  overflow-y: auto;
+  overflow: hidden;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(29, 185, 84, 0.3);
   margin: 60px auto 60px auto;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
 }
 
-/* SCROLLBAR CUSTOMIZADA VERDE - APENAS UMA */
-.profileModal {
-  /* Firefox */
-  scrollbar-width: thin;
-  scrollbar-color: rgba(29, 185, 84, 0.5) rgba(255, 255, 255, 0.1);
-  /* IE e Edge */
-  -ms-overflow-style: auto;
-}
-
-/* Webkit (Chrome, Safari, Edge) - SCROLLBAR VERDE CUSTOMIZADA */
-.profileModal::-webkit-scrollbar {
-  width: 8px;
-  background: transparent;
-}
-
-.profileModal::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-}
-
-.profileModal::-webkit-scrollbar-thumb {
-  background: rgba(29, 185, 84, 0.5);
-  border-radius: 4px;
-  transition: background 0.3s ease;
-}
-
-.profileModal::-webkit-scrollbar-thumb:hover {
-  background: rgba(29, 185, 84, 0.7);
-}
-
-.profileModal::-webkit-scrollbar-corner {
-  background: transparent;
-}
+/* SCROLLBAR AGORA APENAS NO CONTEÚDO DO PERFIL */
 
 .profileHeader {
   background: linear-gradient(90deg, #1db954 0%, #1ed760 100%);
@@ -73,6 +43,7 @@
   justify-content: space-between;
   align-items: center;
   color: white;
+  flex-shrink: 0;
 }
 
 .profileHeader h2 {
@@ -99,8 +70,32 @@
 .profileContent {
   padding: 30px;
   overflow-y: auto;
-  max-height: calc(90vh - 80px);
+  flex: 1;
   color: white;
+  /* Scrollbar customizada verde */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(29, 185, 84, 0.5) rgba(255, 255, 255, 0.1);
+}
+
+/* Webkit scrollbar para o conteúdo do perfil */
+.profileContent::-webkit-scrollbar {
+  width: 8px;
+  background: transparent;
+}
+
+.profileContent::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.profileContent::-webkit-scrollbar-thumb {
+  background: rgba(29, 185, 84, 0.5);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.profileContent::-webkit-scrollbar-thumb:hover {
+  background: rgba(29, 185, 84, 0.7);
 }
 
 /* Informações básicas */
@@ -637,7 +632,7 @@
     margin: 10px;
     max-height: 95vh;
   }
-  
+
   .profileContent {
     padding: 20px;
   }
@@ -1128,8 +1123,6 @@
 
   .tabContent {
     padding: 15px;
-    max-height: 60vh;
-    overflow-y: auto;
   }
 
   .statsGrid {

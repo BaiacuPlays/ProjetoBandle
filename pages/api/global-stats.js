@@ -13,23 +13,33 @@ const localGlobalStats = {
 const isDevelopment = process.env.NODE_ENV === 'development';
 const hasKVConfig = process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN;
 
+// Função para obter o dia atual (UTC)
+const getCurrentDay = () => {
+  const now = new Date();
+  const year = now.getUTCFullYear();
+  const month = String(now.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(now.getUTCDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Método não permitido' });
   }
 
   try {
+    const currentDay = getCurrentDay();
     let stats;
 
     if (isDevelopment && !hasKVConfig) {
       // Buscar dados do armazenamento local em desenvolvimento
-      const globalStatsKey = 'stats:global';
-      const localGlobalData = localStats.get(globalStatsKey);
+      const dailyStatsKey = `stats:daily:${currentDay}`;
+      const localDailyData = localStats.get(dailyStatsKey);
 
-      if (localGlobalData && localGlobalData.totalGames > 0) {
+      if (localDailyData && localDailyData.totalGames > 0) {
         stats = {
-          totalGames: localGlobalData.totalGames,
-          averageAttempts: localGlobalData.averageAttempts || 3.2
+          totalGames: localDailyData.totalGames,
+          averageAttempts: localDailyData.averageAttempts || 3.2
         };
       } else {
         // Fallback para dados iniciais
@@ -39,10 +49,10 @@ export default async function handler(req, res) {
         };
       }
     } else {
-      // Buscar dados reais do Vercel KV
+      // Buscar dados reais do Vercel KV para o dia atual
       try {
-        const globalStatsKey = 'stats:global';
-        const rawStats = await kv.get(globalStatsKey);
+        const dailyStatsKey = `stats:daily:${currentDay}`;
+        const rawStats = await kv.get(dailyStatsKey);
 
         if (rawStats && rawStats.totalGames >= 0) {
           stats = {

@@ -168,7 +168,7 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
                   ? t('global_stats_message')
                     .replace('{totalPlayers}', stats.totalGames || 0)
                     .replace('{averageAttempts}', Math.round(stats.averageAttempts || 3))
-                  : `${stats.totalGames || 0} pessoas já adivinharam / ${Math.round(stats.averageAttempts || 3)} tentativas médias`
+                  : `${stats.totalGames || 0} pessoas já adivinharam hoje / ${Math.round(stats.averageAttempts || 3)} tentativas médias`
                 }
               </div>
             </div>
