@@ -17,19 +17,29 @@ export function LanguageProvider({ children }) {
       return 'pt-BR'; // Idioma padrão para SSR
     }
 
-    const browserLang = navigator.language || navigator.languages?.[0] || 'pt-BR';
+    // Tentar múltiplas fontes de idioma
+    const browserLang = navigator.language ||
+                       navigator.languages?.[0] ||
+                       navigator.userLanguage ||
+                       navigator.browserLanguage ||
+                       'pt-BR';
+
+    console.log('🌍 Idioma do navegador detectado:', browserLang);
 
     // Mapear códigos de idioma do navegador para os suportados
-    if (browserLang.startsWith('en')) {
+    const langCode = browserLang.toLowerCase();
+
+    if (langCode.startsWith('en')) {
       return 'en-US';
-    } else if (browserLang.startsWith('es')) {
+    } else if (langCode.startsWith('es')) {
       return 'es';
-    } else if (browserLang.startsWith('pt')) {
+    } else if (langCode.startsWith('pt')) {
       return 'pt-BR';
     }
 
-    // Fallback para português se o idioma não for suportado
-    return 'pt-BR';
+    // Para outros idiomas, usar inglês como fallback internacional
+    // (mais provável que um usuário internacional entenda inglês que português)
+    return 'en-US';
   };
 
   // Tentar carregar o idioma do localStorage apenas no cliente
@@ -56,11 +66,27 @@ export function LanguageProvider({ children }) {
   };
 
   const [language, setLanguage] = useState('pt-BR'); // Inicializar com padrão
+  const [isClient, setIsClient] = useState(false);
 
-  // Aplicar o idioma ao montar o componente
+  // Detectar quando estamos no cliente e carregar idioma salvo
   useEffect(() => {
+    setIsClient(true);
+
+    // Carregar idioma salvo ou detectar do navegador
+    const savedLanguage = getSavedLanguage();
+    setLanguage(savedLanguage);
+
     // Aplicar o idioma ao elemento HTML
-    document.documentElement.lang = language;
+    document.documentElement.lang = savedLanguage;
+
+    console.log('🌍 Idioma detectado:', savedLanguage);
+  }, []);
+
+  // Aplicar o idioma quando mudar
+  useEffect(() => {
+    if (isClient) {
+      document.documentElement.lang = language;
+    }
 
     // Escutar eventos de mudança de configurações
     const handleSettingsChanged = (event) => {
@@ -76,20 +102,7 @@ export function LanguageProvider({ children }) {
     return () => {
       document.removeEventListener('ludomusicSettingsChanged', handleSettingsChanged);
     };
-  }, []);
-
-  // Estado para controlar se estamos no cliente
-  const [isClient, setIsClient] = useState(false);
-
-  // Detectar quando estamos no cliente e carregar idioma salvo
-  useEffect(() => {
-    setIsClient(true);
-    // Carregar idioma salvo quando estivermos no cliente
-    const savedLanguage = getSavedLanguage();
-    if (savedLanguage !== language) {
-      setLanguage(savedLanguage);
-    }
-  }, []);
+  }, [language, isClient]);
 
   // Função para traduzir textos
   const t = (key) => {
