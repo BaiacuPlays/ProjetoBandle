@@ -17,11 +17,11 @@ const API_CONFIG = {
   },
 
   // Configurações de timeout
-  TIMEOUT: 8000, // Otimizado para 8 segundos
+  TIMEOUT: 5000, // Reduzido para 5 segundos para melhor responsividade
 
   // Configurações de retry
-  RETRY_ATTEMPTS: 1, // Sem retry para melhor performance
-  RETRY_DELAY: 300
+  RETRY_ATTEMPTS: 2, // Máximo 2 tentativas
+  RETRY_DELAY: 500
 };
 
 // 🚨 SISTEMA DE FALLBACK COMPLETO USANDO LOCALSTORAGE

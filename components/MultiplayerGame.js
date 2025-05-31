@@ -340,12 +340,12 @@ const MultiplayerGame = ({ onBackToLobby }) => {
         setIsPlaying(false);
         setAudioProgress(0);
 
-        // Debounce para evitar múltiplos loads
+        // Debounce para evitar múltiplos loads - aumentado para melhor performance
         const loadTimeout = setTimeout(() => {
           if (audio === audioRef.current && songToPlay?.audioUrl) {
             audio.load();
           }
-        }, 100);
+        }, 300);
 
         return () => clearTimeout(loadTimeout);
       } catch (error) {
@@ -859,7 +859,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                     ref={audioRef}
                     src={songToPlay?.audioUrl}
                     style={{ display: 'none' }}
-                    preload="auto"
+                    preload="metadata"
                     crossOrigin="anonymous"
                     onError={(e) => {
                       // Tratamento de erro mais robusto

@@ -11,12 +11,39 @@ import Tutorial from '../components/Tutorial';
 import GlobalStats from '../components/GlobalStats';
 import { useLanguage } from '../contexts/LanguageContext';
 import { fetchTimezone } from '../config/api';
+import { audioCache } from '../utils/audioCache';
+import { useServiceWorker } from '../hooks/useServiceWorker';
+import { usePerformanceOptimization } from '../hooks/usePerformanceOptimization';
+import { useUltraAdvancedOptimizations, useOptimizationsStatus } from '../hooks/useUltraAdvancedOptimizations';
+// import { useUniversalCompatibility, useDeviceInfo, useResponsive, useBrowserCapabilities } from '../hooks/useUniversalCompatibility';
+import {
+  MemoizedPlayButton,
+  MemoizedVolumeControl,
+  MemoizedAudioProgress,
+  MemoizedAttempts,
+  MemoizedHistory,
+  MemoizedTimer
+} from '../components/MemoizedComponents';
 
 const MAX_ATTEMPTS = 6;
 
 
 export default function Home() {
   const { t, isClient } = useLanguage();
+
+  // Hooks de performance
+  const { debounce, throttle } = usePerformanceOptimization();
+  const { isRegistered: swRegistered } = useServiceWorker();
+
+  // Hooks ultra-avançados (carregamento dinâmico)
+  const ultraOptimizations = useUltraAdvancedOptimizations();
+  const optimizationsStatus = useOptimizationsStatus();
+
+  // Hooks de compatibilidade universal (carregamento dinâmico)
+  // const compatibility = useUniversalCompatibility();
+  // const deviceInfo = useDeviceInfo();
+  // const responsive = useResponsive();
+  // const browserCapabilities = useBrowserCapabilities();
   const [currentSong, setCurrentSong] = useState(null);
   const [guess, setGuess] = useState('');
   const [message, setMessage] = useState('');
@@ -1606,9 +1633,12 @@ export default function Home() {
                 </span>
               </div>
               <div className={styles.audioVolumeRow}>
-                <button
+                <MemoizedPlayButton
+                  isPlaying={isPlaying}
+                  isLoading={isPlayLoading}
+                  disabled={audioError || (!audioDuration && !currentSong?.audioUrl) || isPlayButtonDisabled || isPlayLoading}
                   className={styles.audioPlayBtnCustom}
-                  onClick={async () => {
+                  onClick={debounce(async () => {
                     if (!audioRef.current || isPlayButtonDisabled || audioError || isPlayLoading) {
                       return;
                     }
@@ -1618,7 +1648,6 @@ export default function Home() {
                     if (!audioDuration && currentSong?.audioUrl) {
                       setPendingPlay(true);
                       audioRef.current.load();
-                      // O play será chamado automaticamente no onLoadedMetadata
                       return;
                     }
                     if (startTime === null || startTime === undefined) {
@@ -1646,7 +1675,6 @@ export default function Home() {
                       } catch (error) {
                         setIsPlayLoading(false);
                         if (error.name === 'AbortError') {
-                          // Não mostra mensagem, é esperado se o usuário clicar rápido
                           return;
                         }
                         console.error('Erro ao reproduzir áudio:', error);
@@ -1660,51 +1688,20 @@ export default function Home() {
                         }
                       }
                     }
-                  }}
-                  onKeyDown={e => {
-                    if (e.key === ' ' || e.key === 'Enter') {
-                      e.preventDefault();
-                      e.target.click();
-                    }
-                  }}
-                  aria-label={isPlaying ? (isClient ? t('pause') : 'Pausar') : (isClient ? t('play') : 'Reproduzir')}
-                  aria-pressed={isPlaying}
-                  tabIndex={0}
-                  role="button"
-                  disabled={audioError || (!audioDuration && !currentSong?.audioUrl) || isPlayButtonDisabled || isPlayLoading}
-                  style={{
-                    opacity: (audioError || !audioDuration) ? 0.5 : 1,
-                    cursor: (audioError || !audioDuration) ? 'not-allowed' : 'pointer',
-                    position: 'relative',
-                    outline: 'none',
-                    transition: 'box-shadow 0.2s',
-                    boxShadow: isPlayLoading ? '0 0 0 3px #1DB95455' : undefined
-                  }}
-                >
-                  {isPlayLoading ? (
-                    <span className={styles.spinner} aria-label={isClient ? t('loading') : 'Carregando'} />
-                  ) : isPlaying ? (
-                    <FaPause color="#fff" size={20} />
-                  ) : (
-                    <FaPlay color="#fff" size={20} />
-                  )}
-                </button>
-                <FaVolumeUp color="#fff" style={{ marginRight: 8 }} />
-                <input
-                  type="range"
-                  min={0}
-                  max={1}
-                  step={0.01}
-                  value={volume}
-                  onChange={e => setVolume(Number(e.target.value))}
+                  }, 200, 'play_button')}
+                />
+                <MemoizedVolumeControl
+                  volume={volume}
+                  onChange={throttle(e => setVolume(Number(e.target.value)), 50, 'volume')}
+                  disabled={audioError}
                   className={styles.audioVolumeCustom}
-                  disabled={audioError} />
+                />
               </div>
               <audio
                 ref={audioRef}
                 src={currentSong?.audioUrl}
                 style={{ display: 'none' }}
-                preload="auto"
+                preload="metadata"
                 crossOrigin="anonymous"
                 onLoadedMetadata={handleLoadedMetadata}
                 onEnded={handleAudioEnded}
@@ -1717,12 +1714,12 @@ export default function Home() {
                   setAudioError(true);
                   setMessage('Erro ao carregar o áudio. Tentando novamente...');
 
-                  // Tentar recarregar o áudio após um pequeno delay
+                  // Tentar recarregar o áudio após um delay maior
                   setTimeout(() => {
                     if (audioRef.current && currentSong?.audioUrl) {
                       audioRef.current.load();
                     }
-                  }, 1000);
+                  }, 2000);
                 }}
                 onCanPlay={() => {
                   setAudioError(false);

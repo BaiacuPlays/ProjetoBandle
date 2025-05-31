@@ -10,24 +10,139 @@
   color: white;
   position: relative;
   box-sizing: border-box;
+
+  /* Suporte a safe areas para iOS */
+  padding-top: max(2rem, env(safe-area-inset-top));
+  padding-bottom: max(2rem, env(safe-area-inset-bottom));
+  padding-left: max(2rem, env(safe-area-inset-left));
+  padding-right: max(2rem, env(safe-area-inset-right));
+
+  /* Variáveis CSS responsivas */
+  --container-padding: 2rem;
+  --font-scale: 1;
+  --spacing-scale: 1;
+  --animation-duration: 0.3s;
+  --transition-duration: 0.3s;
+  --touch-target-size: 44px;
 }
 
-/* 📱 RESPONSIVIDADE MOBILE */
-@media (max-width: 768px) {
+/* 📱 RESPONSIVIDADE AVANÇADA */
+
+/* Classes de otimização por dispositivo aplicadas via JavaScript */
+.mobileOptimized {
+  --animation-duration: 0.1s;
+  --transition-duration: 0.1s;
+  --font-scale: 0.9;
+  --spacing-scale: 0.8;
+}
+
+.tabletOptimized {
+  --animation-duration: 0.2s;
+  --transition-duration: 0.2s;
+  --font-scale: 1;
+  --spacing-scale: 0.9;
+}
+
+.desktopOptimized {
+  --animation-duration: 0.3s;
+  --transition-duration: 0.3s;
+  --font-scale: 1.1;
+  --spacing-scale: 1.1;
+}
+
+.touchOptimized {
+  --touch-target-size: 48px;
+  --touch-spacing: 8px;
+}
+
+.noAnimations * {
+  animation-duration: 0s !important;
+  transition-duration: 0s !important;
+}
+
+.noShadows * {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+/* Breakpoints específicos */
+@media (max-width: 575px) {
   .container {
-    padding: 1rem 0.8rem;
+    --container-padding: 0.5rem;
+    --font-scale: 0.85;
+    --spacing-scale: 0.7;
+    padding: var(--container-padding);
   }
 }
 
-@media (max-width: 480px) {
+@media (min-width: 576px) and (max-width: 767px) {
   .container {
-    padding: 0.8rem 0.5rem;
+    --container-padding: 1rem;
+    --font-scale: 0.9;
+    --spacing-scale: 0.8;
+    padding: var(--container-padding);
   }
 }
 
-@media (max-width: 360px) {
+@media (min-width: 768px) and (max-width: 991px) {
   .container {
-    padding: 0.5rem 0.3rem;
+    --container-padding: 1.5rem;
+    --font-scale: 1;
+    --spacing-scale: 0.9;
+    padding: var(--container-padding);
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .container {
+    --container-padding: 2rem;
+    --font-scale: 1.05;
+    --spacing-scale: 1;
+    padding: var(--container-padding);
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    --container-padding: 2.5rem;
+    --font-scale: 1.1;
+    --spacing-scale: 1.1;
+    padding: var(--container-padding);
+  }
+}
+
+/* Orientação landscape em mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+  .container {
+    min-height: 100vh;
+    padding: 0.5rem;
+    justify-content: flex-start;
+  }
+
+  .gameAreaModern {
+    margin: 1rem auto 0 auto;
+    padding: 1rem;
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .container {
+    --border-width: 0.5px;
+    --shadow-blur: 0.5px;
+  }
+}
+
+/* Dispositivos com pouca altura */
+@media (max-height: 600px) {
+  .container {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .title {
+    font-size: calc(2rem * var(--font-scale));
+    margin-bottom: calc(1rem * var(--spacing-scale));
   }
 }
 

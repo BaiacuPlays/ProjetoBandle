@@ -169,7 +169,7 @@
   },
   {
     "id": 14,
-    "title": "Main Theme",
+    "title": "Animal Crossing Main Theme",
     "artist": "Kazumi Totaka",
     "composer": "Kazumi Totaka",
     "game": "Animal Crossing: New Horizons",
@@ -217,7 +217,7 @@
   },
   {
     "id": 18,
-    "title": "Main Theme",
+    "title": "Baldur's Gate Main Theme",
     "artist": "Borislav Slavov",
     "composer": "Borislav Slavov",
     "game": "Baldur's Gate 3",
@@ -301,7 +301,7 @@
   },
   {
     "id": 25,
-    "title": "Main Title",
+    "title": "Banjo Main Title",
     "artist": "Grant Kirkhope",
     "composer": "Grant Kirkhope",
     "game": "Banjo-Kazooie",
@@ -625,7 +625,7 @@
   },
   {
     "id": 52,
-    "title": "Main Theme",
+    "title": "Clair Main Theme",
     "artist": "Yasunori Mitsuda",
     "composer": "Yasunori Mitsuda",
     "game": "Clair Obscur: Expedition 33",
@@ -721,7 +721,7 @@
   },
   {
       "id": 60,
-      "title": "Main Menu",
+      "title": "Crash Main Menu",
       "internalTitle": "Crash Team Racing",
       "artist": "Josh Mancell",
       "composer": "Josh Mancell",
@@ -1034,7 +1034,7 @@
   },
   {
     "id": 86,
-    "title": "Main Theme",
+    "title": "Dark Souls Main Theme",
     "artist": "Motoi Sakuraba",
     "composer": "Motoi Sakuraba",
     "game": "Dark Souls III",
@@ -2066,7 +2066,7 @@
   },
   {
       "id": 174,
-      "title": "Main Menu",
+      "title": "Geometry Dash Main Menu",
       "internalTitle": "Geometry Dash",
       "artist": "ForeverBound",
       "composer": "ForeverBound",
@@ -3279,7 +3279,7 @@
   },
   {
       "id": 275,
-      "title": "Main Menu",
+      "title": "Mario Kart DS Main Menu",
       "internalTitle": "Mario Kart DS",
       "artist": "Asuka Ohta",
       "composer": "Asuka Ohta",
@@ -3316,7 +3316,7 @@
   },
   {
       "id": 278,
-      "title": "Main Menu",
+      "title": "Mario Kart Wii Main Menu",
       "internalTitle": "Mario Kart Wii",
       "artist": "Asuka Ohta",
       "composer": "Asuka Ohta",
@@ -3593,7 +3593,7 @@
   },
   {
     "id": 301,
-    "title": "Main Title",
+    "title": "Paper Mario Main Title",
     "artist": "Yuka Tsujiyoko",
     "composer": "Yuka Tsujiyoko",
     "game": "Paper Mario",
@@ -3953,7 +3953,7 @@
   },
   {
     "id": 331,
-    "title": "Intro",
+    "title": "Metroid Intro",
     "artist": "Hirokazu Tanaka",
     "composer": "Hirokazu Tanaka",
     "game": "Metroid",
@@ -4091,13 +4091,13 @@
     "game": "Minecraft",
     "context": "Audio - Minecraft",
     "audioUrl": "/audio/minecraft/18 - Sweden - Minecraft - C418.mp3",
-    "year": 2011,
+    "year": 2011, 
     "genre": "Ambient",
     "console": "Multi-platform"
   },
   {
     "id": 343,
-    "title": "Title",
+    "title": "Night in the Woods Title",
     "artist": "Alec Holowka",
     "composer": "Alec Holowka",
     "game": "Night in the Woods",
@@ -4253,7 +4253,7 @@
   },
   {
     "id": 357,
-    "title": "Prologue",
+    "title": "Okami Prologue",
     "artist": "Hiroshi Yamaguchi",
     "composer": "Hiroshi Yamaguchi",
     "game": "Ōkami",
@@ -4625,7 +4625,7 @@
   },
   {
     "id": 389,
-    "title": "Main Theme",
+    "title": "Ori Main Theme",
     "artist": "Gareth Coker",
     "composer": "Gareth Coker",
     "game": "Ori and the Blind Forest",
@@ -4685,7 +4685,7 @@
   },
   {
     "id": 394,
-    "title": "Main Title",
+    "title": "Outer Wilds Main Title",
     "artist": "Andrew Prahlow",
     "composer": "Andrew Prahlow",
     "game": "Outer Wilds",
@@ -4781,7 +4781,7 @@
   },
   {
     "id": 402,
-    "title": "Title",
+    "title": "Pokémon Black White Title",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
     "game": "Pokémon Black White",
@@ -4805,7 +4805,7 @@
   },
   {
     "id": 404,
-    "title": "Opening Demo",
+    "title": "Pokémon Diamond/Pearl Opening Demo",
     "artist": "Go Ichinose",
     "composer": "Go Ichinose",
     "game": "Pokémon Diamond/Pearl",
@@ -4853,7 +4853,7 @@
   },
   {
     "id": 408,
-    "title": "Opening Demo",
+    "title": "Pokémon Heartgold Soulsilver Opening Demo",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
     "game": "Pokémon Heartgold Soulsilver",
@@ -4865,7 +4865,7 @@
   },
   {
     "id": 409,
-    "title": "Title",
+    "title": "Pokémon Heartgold Soulsilver Title",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
     "game": "Pokémon Heartgold Soulsilver",
@@ -4889,7 +4889,7 @@
   },
   {
     "id": 411,
-    "title": "Opening",
+    "title": "Pokémon Fire Red Leaf Green Opening",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
     "game": "Pokémon Fire Red Leaf Green",
@@ -4949,7 +4949,7 @@
   },
   {
     "id": 416,
-    "title": "Title Screen",
+    "title": "Pokémon X Y Title Screen",
     "artist": "Junichi Masuda",
     "composer": "Junichi Masuda",
     "game": "Pokémon X Y",
@@ -4997,7 +4997,7 @@
   },
   {
     "id": 420,
-    "title": "Opening Selection",
+    "title": "Pokémon Ruby/Sapphire Opening Selection",
     "artist": "Go Ichinose",
     "composer": "Go Ichinose",
     "game": "Pokémon Ruby/Sapphire",
@@ -5141,7 +5141,7 @@
   },
   {
     "id": 432,
-    "title": "Intro",
+    "title": "Rayman Origins Intro",
     "artist": "Christophe Héral",
     "composer": "Christophe Héral",
     "game": "Rayman Origins",
@@ -5453,7 +5453,7 @@
   },
   {
     "id": 458,
-    "title": "Intro",
+    "title": "Smash Bros Intro",
     "artist": "Hirokazu Ando",
     "composer": "Hirokazu Ando",
     "game": "Super Smash Bros.",
@@ -5465,7 +5465,7 @@
   },
   {
       "id": 459,
-      "title": "Main Menu",
+      "title": "Smash Main Menu",
       "internalTitle": true,
       "artist": "Hirokazu Ando",
       "composer": "Hirokazu Ando",
@@ -6426,7 +6426,7 @@
   },
   {
     "id": 556,
-    "title": "Main Theme",
+    "title": "Star Fox Main Theme",
     "artist": "Hajime Hirasawa",
     "composer": "Hajime Hirasawa",
     "game": "Star Fox",
@@ -6798,7 +6798,7 @@
   },
   {
     "id": 587,
-    "title": "Main Theme",
+    "title": "The Sims Main Theme",
     "artist": "Jerry Martin",
     "composer": "Jerry Martin",
     "game": "The Sims",
@@ -6870,7 +6870,7 @@
   },
   {
     "id": 593,
-    "title": "Main Theme",
+    "title": "To the Moon Main Theme",
     "artist": "Kan Gao",
     "composer": "Kan Gao",
     "game": "To the Moon",
@@ -7386,7 +7386,7 @@
   },
   {
     "id": 636,
-    "title": "Main Theme",
+    "title": "Breath of the Wild Main Theme",
     "artist": "Yasuaki Iwata",
     "composer": "Yasuaki Iwata",
     "game": "The Legend of Zelda: Breath of the Wild",

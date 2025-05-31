@@ -24,16 +24,27 @@ export const songs = musicData.map((song, index) => ({
   hint: `${song.title.trim()} - ${song.artist} (${song.game}, ${song.year})`
 }));
 
+// Cache de disponibilidade de músicas
+const availabilityCache = new Map();
+
 // Lista de músicas disponíveis (que têm arquivo de áudio)
 const checkSongAvailability = async (song) => {
+  // Verificar cache primeiro
+  if (availabilityCache.has(song.audioUrl)) {
+    return availabilityCache.get(song.audioUrl);
+  }
+
   try {
     const response = await fetch(song.audioUrl, {
       method: 'HEAD',
       cache: 'force-cache' // Usar cache para melhor performance
     });
-    return response.ok;
+    const isAvailable = response.ok;
+    availabilityCache.set(song.audioUrl, isAvailable);
+    return isAvailable;
   } catch (error) {
     console.warn(`Música não disponível: ${song.title} - ${song.audioUrl}`);
+    availabilityCache.set(song.audioUrl, false);
     return false;
   }
 };
