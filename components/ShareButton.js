@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useUserProfile } from '../contexts/UserProfileContext';
 import { FaShare, FaTwitter, FaFacebook, FaCopy, FaCheck } from 'react-icons/fa';
 import styles from '../styles/ShareButton.module.css';
 
 const ShareButton = ({ gameResult, currentSong, isInfiniteMode = false, infiniteStats = null }) => {
   const { t, isClient } = useLanguage();
+  const { updateSocialStats } = useUserProfile();
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -54,6 +56,15 @@ const ShareButton = ({ gameResult, currentSong, isInfiniteMode = false, infinite
 
   const handleShare = (platform) => {
     const text = generateShareText();
+
+    // Atualizar estatísticas sociais do perfil
+    if (updateSocialStats) {
+      try {
+        updateSocialStats('share_game');
+      } catch (error) {
+        console.warn('Erro ao atualizar estatísticas sociais:', error);
+      }
+    }
 
     switch (platform) {
       case 'twitter':

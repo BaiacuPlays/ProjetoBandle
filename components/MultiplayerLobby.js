@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useMultiplayerContext } from '../contexts/MultiplayerContext';
+import { useFriends } from '../contexts/FriendsContext';
+import { FaUserPlus, FaUsers } from 'react-icons/fa';
+import MultiplayerInviteModal from './MultiplayerInviteModal';
 import styles from '../styles/Multiplayer.module.css';
 
 const MultiplayerLobby = ({ onGameStart }) => {
   const { t, isClient } = useLanguage();
   const { state, actions } = useMultiplayerContext();
+  const { friends } = useFriends();
   const {
     roomCode,
     playerNickname: nickname,
@@ -19,6 +23,7 @@ const MultiplayerLobby = ({ onGameStart }) => {
     roomCode: ''
   });
   const [mode, setMode] = useState('menu'); // 'menu', 'create', 'join', 'waiting'
+  const [showInviteModal, setShowInviteModal] = useState(false);
 
   // Detectar quando o jogo foi iniciado (backup do polling)
   useEffect(() => {
@@ -304,6 +309,29 @@ const MultiplayerLobby = ({ onGameStart }) => {
 
             <p>Compartilhe este código com outros jogadores</p>
 
+            {/* Botão para convidar amigos */}
+            {friends.length > 0 && (
+              <div style={{ margin: '20px 0' }}>
+                <button
+                  className={styles.secondaryButton}
+                  onClick={() => setShowInviteModal(true)}
+                  style={{
+                    background: 'linear-gradient(135deg, #1DB954, #1ed760)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    width: '100%',
+                    maxWidth: '300px',
+                    margin: '0 auto'
+                  }}
+                >
+                  <FaUserPlus />
+                  {isClient ? t('invite_friends') : 'Convidar Amigos'}
+                </button>
+              </div>
+            )}
+
             <div className={styles.playersList}>
               <h3 className={styles.playersTitle}>
                 {isClient ? t('players_in_room') : 'Jogadores na sala'} ({lobbyData?.players?.length || 0})
@@ -380,6 +408,13 @@ const MultiplayerLobby = ({ onGameStart }) => {
             )}
           </div>
         </div>
+
+        {/* Modal de convite de amigos */}
+        <MultiplayerInviteModal
+          isOpen={showInviteModal}
+          onClose={() => setShowInviteModal(false)}
+          roomCode={roomCode}
+        />
       </div>
     );
   }

@@ -87,6 +87,7 @@ export const translations = {
     'waiting_for_others': 'Aguardando outros jogadores...',
     'round_of': 'Rodada {current} de {total}',
     'no_one_guessed': 'Ninguém acertou a música!',
+    'invite_friends': 'Convidar Amigos',
 
     // Sharing functionality
     'share_result': 'Compartilhar Resultado',
@@ -244,6 +245,7 @@ export const translations = {
     'waiting_for_others': 'Waiting for other players...',
     'round_of': 'Round {current} of {total}',
     'no_one_guessed': 'No one guessed the song!',
+    'invite_friends': 'Invite Friends',
 
     // Sharing functionality
     'share_result': 'Share Result',
@@ -401,6 +403,7 @@ export const translations = {
     'waiting_for_others': 'Esperando otros jugadores...',
     'round_of': 'Ronda {current} de {total}',
     'no_one_guessed': '¡Nadie adivinó la canción!',
+    'invite_friends': 'Invitar Amigos',
 
     // Funcionalidad de compartir
     'share_result': 'Compartir Resultado',

@@ -1,9 +1,13 @@
 import React from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useModalScrollLock } from '../hooks/useModalScrollLock';
 import styles from '../styles/Home.module.css';
 
 const Tutorial = ({ isOpen, onClose, onStartPlaying }) => {
   const { t, isClient } = useLanguage();
+
+  // Bloquear/desbloquear scroll da página
+  useModalScrollLock(isOpen);
 
   if (!isOpen) return null;
 

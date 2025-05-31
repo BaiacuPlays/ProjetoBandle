@@ -1,0 +1,406 @@
+/* Container principal */
+.notificationCenter {
+  position: relative;
+  display: inline-block;
+}
+
+/* Botão do sino */
+.bellButton {
+  position: relative;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bellButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
+}
+
+/* Badge de notificações */
+.badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: #ef4444;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Dropdown */
+.dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 400px;
+  max-height: 500px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border: 2px solid #1db954;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+  z-index: 10000;
+  overflow: hidden;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid rgba(29, 185, 84, 0.3);
+}
+
+.header h3 {
+  color: #1db954;
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.markAllRead {
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: color 0.2s;
+}
+
+.markAllRead:hover {
+  color: #1db954;
+}
+
+/* Abas */
+.tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(29, 185, 84, 0.3);
+}
+
+.tab {
+  flex: 1;
+  background: none;
+  border: none;
+  color: #888;
+  padding: 12px 15px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-bottom: 2px solid transparent;
+}
+
+.tab:hover {
+  background: rgba(29, 185, 84, 0.1);
+  color: #1db954;
+}
+
+.tab.active {
+  color: #1db954;
+  border-bottom-color: #1db954;
+  background: rgba(29, 185, 84, 0.1);
+}
+
+/* Conteúdo */
+.content {
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+/* Lista de notificações */
+.notificationsList,
+.invitesList {
+  padding: 10px;
+}
+
+.notificationItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.notificationItem:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(29, 185, 84, 0.3);
+}
+
+.notificationItem.unread {
+  background: rgba(29, 185, 84, 0.1);
+  border-color: rgba(29, 185, 84, 0.3);
+}
+
+.notificationIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.iconMultiplayer {
+  color: #1db954;
+}
+
+.iconFriend {
+  color: #3b82f6;
+}
+
+.iconAchievement {
+  color: #f59e0b;
+}
+
+.iconInfo {
+  color: #6b7280;
+}
+
+.notificationContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.notificationTitle {
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.notificationMessage {
+  color: #b3b3b3;
+  font-size: 0.8rem;
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+
+.notificationTime {
+  color: #666;
+  font-size: 0.7rem;
+}
+
+.removeButton {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.removeButton:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+/* Convites */
+.inviteItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  background: rgba(29, 185, 84, 0.1);
+  border: 1px solid rgba(29, 185, 84, 0.3);
+}
+
+.inviteIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(29, 185, 84, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.inviteContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.inviteTitle {
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.inviteMessage {
+  color: #b3b3b3;
+  font-size: 0.8rem;
+  margin-bottom: 4px;
+}
+
+.inviteRoom {
+  color: #1db954;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.inviteTime {
+  color: #666;
+  font-size: 0.7rem;
+}
+
+.inviteActions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.acceptButton,
+.declineButton {
+  background: none;
+  border: 1px solid;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.acceptButton {
+  border-color: #22c55e;
+  color: #22c55e;
+}
+
+.acceptButton:hover {
+  background: #22c55e;
+  color: white;
+}
+
+.declineButton {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.declineButton:hover {
+  background: #ef4444;
+  color: white;
+}
+
+/* Estado vazio */
+.empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+}
+
+.emptyIcon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  opacity: 0.5;
+}
+
+.empty p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .dropdown {
+    width: 350px;
+    right: -50px;
+  }
+
+  .inviteActions {
+    flex-direction: row;
+  }
+
+  .acceptButton,
+  .declineButton {
+    padding: 4px 8px;
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dropdown {
+    width: 300px;
+    right: -100px;
+  }
+
+  .header {
+    padding: 12px 15px;
+  }
+
+  .header h3 {
+    font-size: 1rem;
+  }
+
+  .markAllRead {
+    font-size: 0.7rem;
+  }
+
+  .tab {
+    padding: 10px 12px;
+    font-size: 0.8rem;
+  }
+
+  .notificationItem,
+  .inviteItem {
+    padding: 10px;
+  }
+
+  .inviteActions {
+    flex-direction: column;
+    gap: 4px;
+  }
+}

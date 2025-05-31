@@ -2,6 +2,8 @@ import '../styles/styles.css';
 import '../styles/settings.css';
 import { LanguageProvider } from '../contexts/LanguageContext';
 import { UserProfileProvider } from '../contexts/UserProfileContext';
+import { FriendsProvider } from '../contexts/FriendsContext';
+import { NotificationProvider } from '../contexts/NotificationContext';
 import { useEffect } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -32,9 +34,13 @@ export default function MyApp({ Component, pageProps }) {
   return (
     <LanguageProvider>
       <UserProfileProvider>
-        <Component {...pageProps} />
-        <Analytics />
-        <SpeedInsights />
+        <FriendsProvider>
+          <NotificationProvider>
+            <Component {...pageProps} />
+            <Analytics />
+            <SpeedInsights />
+          </NotificationProvider>
+        </FriendsProvider>
       </UserProfileProvider>
     </LanguageProvider>
   );

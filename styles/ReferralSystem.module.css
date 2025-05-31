@@ -1,0 +1,464 @@
+/* Overlay do sistema de referência */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+  padding: 20px;
+}
+
+/* Modal principal */
+.modal {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border-radius: 20px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+  border: 2px solid #1db954;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 25px;
+  border-bottom: 1px solid rgba(29, 185, 84, 0.3);
+}
+
+.header h2 {
+  color: #1db954;
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 50%;
+  transition: all 0.2s;
+  font-size: 1.2rem;
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* Conteúdo */
+.content {
+  padding: 25px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* Introdução */
+.intro {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: rgba(29, 185, 84, 0.1);
+  border-radius: 15px;
+  border: 1px solid rgba(29, 185, 84, 0.3);
+}
+
+.intro h3 {
+  color: #1db954;
+  margin: 0 0 15px;
+  font-size: 1.2rem;
+}
+
+.intro p {
+  color: #b3b3b3;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Recompensas */
+.rewards {
+  margin-bottom: 25px;
+}
+
+.rewards h4 {
+  color: white;
+  margin: 0 0 15px;
+  font-size: 1.1rem;
+}
+
+.rewardsList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rewardItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e0e0e0;
+}
+
+.rewardIcon {
+  font-size: 1.2rem;
+}
+
+/* Código de referência */
+.referralInfo {
+  margin-bottom: 25px;
+}
+
+.referralInfo h4 {
+  color: white;
+  margin: 0 0 15px;
+  font-size: 1.1rem;
+}
+
+.referralCode {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(29, 185, 84, 0.1);
+  padding: 15px 20px;
+  border-radius: 10px;
+  border: 1px solid rgba(29, 185, 84, 0.3);
+}
+
+.referralCode span {
+  flex: 1;
+  color: #1db954;
+  font-weight: 600;
+  font-size: 1.2rem;
+  font-family: 'Courier New', monospace;
+}
+
+.copyCodeButton {
+  background: #1db954;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.copyCodeButton:hover {
+  background: #1ed760;
+}
+
+/* Link de convite */
+.linkSection {
+  margin-bottom: 25px;
+}
+
+.linkSection h4 {
+  color: white;
+  margin: 0 0 15px;
+  font-size: 1.1rem;
+}
+
+.linkBox {
+  display: flex;
+  gap: 10px;
+}
+
+.linkInput {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 12px 15px;
+  color: white;
+  font-size: 0.9rem;
+  font-family: 'Courier New', monospace;
+}
+
+.linkInput:focus {
+  outline: none;
+  border-color: #1db954;
+}
+
+.copyButton {
+  background: #1db954;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 15px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 50px;
+}
+
+.copyButton:hover {
+  background: #1ed760;
+}
+
+.copiedMessage {
+  color: #22c55e;
+  font-size: 0.9rem;
+  margin: 10px 0 0;
+  text-align: center;
+}
+
+/* Email */
+.emailSection {
+  margin-bottom: 25px;
+}
+
+.emailSection h4 {
+  color: white;
+  margin: 0 0 15px;
+  font-size: 1.1rem;
+}
+
+.emailBox {
+  display: flex;
+  gap: 10px;
+}
+
+.emailInput {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 12px 15px;
+  color: white;
+  font-size: 1rem;
+}
+
+.emailInput::placeholder {
+  color: #888;
+}
+
+.emailInput:focus {
+  outline: none;
+  border-color: #1db954;
+}
+
+.sendButton {
+  background: #1db954;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 15px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 50px;
+}
+
+.sendButton:hover:not(:disabled) {
+  background: #1ed760;
+}
+
+.sendButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sentMessage {
+  color: #22c55e;
+  font-size: 0.9rem;
+  margin: 10px 0 0;
+  text-align: center;
+}
+
+/* Redes sociais */
+.socialSection {
+  margin-bottom: 25px;
+}
+
+.socialSection h4 {
+  color: white;
+  margin: 0 0 15px;
+  font-size: 1.1rem;
+}
+
+.socialButtons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.socialButton {
+  background: none;
+  border: 1px solid;
+  padding: 12px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.socialButton.whatsapp {
+  border-color: #25d366;
+  color: #25d366;
+}
+
+.socialButton.whatsapp:hover {
+  background: #25d366;
+  color: white;
+}
+
+.socialButton.telegram {
+  border-color: #0088cc;
+  color: #0088cc;
+}
+
+.socialButton.telegram:hover {
+  background: #0088cc;
+  color: white;
+}
+
+.socialButton.twitter {
+  border-color: #1da1f2;
+  color: #1da1f2;
+}
+
+.socialButton.twitter:hover {
+  background: #1da1f2;
+  color: white;
+}
+
+.socialButton.facebook {
+  border-color: #1877f2;
+  color: #1877f2;
+}
+
+.socialButton.facebook:hover {
+  background: #1877f2;
+  color: white;
+}
+
+/* Estatísticas */
+.stats h4 {
+  color: white;
+  margin: 0 0 15px;
+  font-size: 1.1rem;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+}
+
+.statItem {
+  text-align: center;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.statNumber {
+  display: block;
+  color: #1db954;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.statLabel {
+  color: #b3b3b3;
+  font-size: 0.9rem;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .overlay {
+    padding: 10px;
+  }
+
+  .modal {
+    max-width: 100%;
+    max-height: 95vh;
+  }
+
+  .content {
+    padding: 20px;
+  }
+
+  .socialButtons {
+    grid-template-columns: 1fr;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .linkBox,
+  .emailBox {
+    flex-direction: column;
+  }
+
+  .referralCode {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal {
+    border-radius: 15px;
+  }
+
+  .content {
+    padding: 15px;
+  }
+
+  .header {
+    padding: 15px 20px;
+  }
+
+  .header h2 {
+    font-size: 1.1rem;
+  }
+
+  .intro {
+    padding: 15px;
+  }
+
+  .intro h3 {
+    font-size: 1.1rem;
+  }
+
+  .statNumber {
+    font-size: 1.5rem;
+  }
+}

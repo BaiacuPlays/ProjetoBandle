@@ -8,9 +8,11 @@
   background: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   z-index: 1000;
   padding: 20px;
+  padding-top: 5vh;
+  overflow-y: auto;
 }
 
 .profileModal {
@@ -18,10 +20,12 @@
   border-radius: 20px;
   width: 100%;
   max-width: 900px;
-  max-height: 90vh;
+  max-height: 85vh;
   overflow: hidden;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(29, 185, 84, 0.3);
+  margin-top: 0;
+  flex-shrink: 0;
 }
 
 .profileHeader {
@@ -72,6 +76,7 @@
 .avatarSection {
   position: relative;
   flex-shrink: 0;
+  margin-bottom: 20px;
 }
 
 .avatar {
@@ -84,7 +89,7 @@
 
 .levelBadge {
   position: absolute;
-  bottom: -10px;
+  bottom: -15px;
   left: 50%;
   transform: translateX(-50%);
   background: linear-gradient(45deg, #1db954, #1ed760);
@@ -94,6 +99,7 @@
   font-size: 0.9rem;
   font-weight: 600;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  z-index: 1;
 }
 
 .userInfo {
@@ -625,5 +631,592 @@
   .tab {
     padding: 12px 8px;
     font-size: 0.9rem;
+  }
+
+  .dataActions {
+    flex-direction: column;
+  }
+
+  .confirmButtons {
+    flex-direction: column;
+  }
+}
+
+/* Aba de configurações */
+.settingsTab h4 {
+  color: #1db954;
+  margin-bottom: 30px;
+  font-size: 1.3rem;
+}
+
+.settingsSection {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 25px;
+  border-radius: 15px;
+  margin-bottom: 25px;
+  border: 1px solid rgba(29, 185, 84, 0.2);
+}
+
+.settingsSection h5 {
+  color: white;
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.settingItem {
+  margin-bottom: 15px;
+}
+
+.settingItem label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #b3b3b3;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.settingItem input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #1db954;
+}
+
+.dataActions {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.exportButton,
+.importButton {
+  background: #1db954;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.exportButton:hover,
+.importButton:hover {
+  background: #1ed760;
+  transform: translateY(-2px);
+}
+
+.profileStats {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.statItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.statItem:last-child {
+  border-bottom: none;
+}
+
+.statItem span:first-child {
+  color: #b3b3b3;
+}
+
+.statItem span:last-child {
+  color: white;
+  font-weight: 600;
+}
+
+.dangerZone {
+  color: #ef4444 !important;
+}
+
+.resetButton {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.resetButton:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+}
+
+.confirmReset {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid #ef4444;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.confirmReset p {
+  color: #ef4444;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.confirmButtons {
+  display: flex;
+  gap: 10px;
+}
+
+.confirmResetButton {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.confirmResetButton:hover {
+  background: #dc2626;
+}
+
+.cancelResetButton {
+  background: transparent;
+  color: #888;
+  border: 1px solid #888;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.cancelResetButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* Aba de badges */
+.badgesTab h4 {
+  color: #1db954;
+  margin-bottom: 30px;
+  font-size: 1.3rem;
+}
+
+.currentTitleSection {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 25px;
+  border: 1px solid rgba(29, 185, 84, 0.2);
+  text-align: center;
+}
+
+.currentTitleSection h5 {
+  color: white;
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+}
+
+.currentTitle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(45deg, #1db954, #1ed760);
+  padding: 15px 25px;
+  border-radius: 25px;
+  color: white;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.titleIcon {
+  font-size: 1.5rem;
+}
+
+.titlesSection {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 25px;
+  border: 1px solid rgba(29, 185, 84, 0.2);
+}
+
+.titlesSection h5 {
+  color: white;
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+}
+
+.titlesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.titleOption {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 12px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+  text-align: center;
+}
+
+.titleOption:hover {
+  background: rgba(29, 185, 84, 0.2);
+  border-color: rgba(29, 185, 84, 0.5);
+}
+
+.titleOption.selected {
+  background: rgba(29, 185, 84, 0.3);
+  border-color: #1db954;
+}
+
+.titleOptionText {
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.badgesSection,
+.nextBadgesSection {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 25px;
+  border: 1px solid rgba(29, 185, 84, 0.2);
+}
+
+.badgesSection h5,
+.nextBadgesSection h5 {
+  color: white;
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+}
+
+.badgesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 15px;
+}
+
+.badgeItem {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s;
+}
+
+.badgeItem:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.badgeIcon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: white;
+  font-weight: bold;
+}
+
+.badgeInfo {
+  flex: 1;
+}
+
+.badgeTitle {
+  color: white;
+  font-weight: 600;
+  margin-bottom: 5px;
+  font-size: 1rem;
+}
+
+.badgeDescription {
+  color: #b3b3b3;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.badgeRarity {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 12px;
+  display: inline-block;
+}
+
+.badgeRarity.common {
+  background: rgba(156, 163, 175, 0.3);
+  color: #9CA3AF;
+}
+
+.badgeRarity.uncommon {
+  background: rgba(34, 197, 94, 0.3);
+  color: #22C55E;
+}
+
+.badgeRarity.rare {
+  background: rgba(59, 130, 246, 0.3);
+  color: #3B82F6;
+}
+
+.badgeRarity.epic {
+  background: rgba(168, 85, 247, 0.3);
+  color: #A855F7;
+}
+
+.badgeRarity.legendary {
+  background: rgba(245, 158, 11, 0.3);
+  color: #F59E0B;
+}
+
+.noBadges {
+  color: #888;
+  text-align: center;
+  padding: 40px 20px;
+  font-style: italic;
+}
+
+.nextBadgesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 12px;
+}
+
+.nextBadgeItem {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 12px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  opacity: 0.7;
+}
+
+.nextBadgeIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: white;
+  opacity: 0.6;
+}
+
+.nextBadgeInfo {
+  flex: 1;
+}
+
+.nextBadgeTitle {
+  color: #ccc;
+  font-weight: 600;
+  margin-bottom: 3px;
+  font-size: 0.9rem;
+}
+
+.nextBadgeDescription {
+  color: #888;
+  font-size: 0.8rem;
+  line-height: 1.2;
+}
+
+/* Responsividade melhorada */
+@media (max-width: 768px) {
+  .modalOverlay {
+    padding: 5px;
+    padding-top: 2vh;
+    align-items: flex-start;
+  }
+
+  .profileModal {
+    max-width: 100%;
+    max-height: 95vh;
+    margin: 0;
+    border-radius: 15px;
+  }
+
+  .profileContent {
+    padding: 15px;
+  }
+
+  .profileBasicInfo {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 15px;
+    padding: 15px;
+  }
+
+  .tabNavigation {
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 10px;
+  }
+
+  .tab {
+    flex: 1;
+    min-width: 100px;
+    padding: 10px 8px;
+    font-size: 0.8rem;
+  }
+
+  .tabContent {
+    padding: 15px;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .achievementGrid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .badgesGrid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .titlesGrid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .nextBadgesGrid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .modeInfo {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .gameItem {
+    flex-direction: column;
+    text-align: center;
+    padding: 10px;
+  }
+
+  .dataActions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .confirmButtons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .settingsSection,
+  .badgesSection,
+  .nextBadgesSection,
+  .titlesSection,
+  .currentTitleSection {
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+
+  .badgeItem {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+
+  .nextBadgeItem {
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
+
+  .profileHeader h3 {
+    font-size: 1.3rem;
+  }
+
+  .levelBadge {
+    font-size: 0.9rem;
+    padding: 6px 12px;
+  }
+
+  .xpProgress {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .profileModal {
+    border-radius: 10px;
+  }
+
+  .profileContent {
+    padding: 10px;
+  }
+
+  .tabNavigation {
+    padding: 5px;
+  }
+
+  .tab {
+    min-width: 80px;
+    padding: 8px 6px;
+    font-size: 0.7rem;
+  }
+
+  .tabContent {
+    padding: 10px;
+  }
+
+  .settingsSection,
+  .badgesSection,
+  .nextBadgesSection,
+  .titlesSection,
+  .currentTitleSection {
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  .profileHeader h3 {
+    font-size: 1.1rem;
+  }
+
+  .statCard h4 {
+    font-size: 0.9rem;
+  }
+
+  .statCard .value {
+    font-size: 1.3rem;
   }
 }

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useUserProfile } from '../contexts/UserProfileContext';
 import { FaShare, FaBug, FaHeart, FaCopy, FaYoutube, FaTwitter, FaFacebook, FaCheck } from 'react-icons/fa';
 import ErrorReportModal from './ErrorReportModal';
 import styles from '../styles/ActionButtons.module.css';
 
 const ActionButtons = ({ gameResult, currentSong, isInfiniteMode = false, infiniteStats = null }) => {
   const { t, isClient } = useLanguage();
+  const { updateSocialStats } = useUserProfile();
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [showErrorReport, setShowErrorReport] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -56,6 +58,15 @@ const ActionButtons = ({ gameResult, currentSong, isInfiniteMode = false, infini
   const handleShare = (platform) => {
     const text = generateShareText();
     const shareUrl = 'https://ludomusic.xyz';
+
+    // Atualizar estatísticas sociais do perfil
+    if (updateSocialStats) {
+      try {
+        updateSocialStats('share_game');
+      } catch (error) {
+        console.warn('Erro ao atualizar estatísticas sociais:', error);
+      }
+    }
 
     switch (platform) {
       case 'twitter':

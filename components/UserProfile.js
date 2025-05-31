@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { useUserProfile } from '../contexts/UserProfileContext';
 import { useLanguage } from '../contexts/LanguageContext';
-import { achievements, rarityColors, getAchievement, getNearAchievements } from '../data/achievements';
-import { FaTimes, FaEdit, FaTrophy, FaGamepad, FaClock, FaFire, FaStar, FaChartLine } from 'react-icons/fa';
+import { achievements, rarityColors, getAchievement, getNearAchievements, getAchievementStats } from '../data/achievements';
+import { badges, titles, getBadge, getTitle, getAvailableTitles } from '../data/badges';
+import { FaTimes, FaEdit, FaTrophy, FaGamepad, FaClock, FaFire, FaStar, FaChartLine, FaCog, FaDownload, FaUpload, FaTrash, FaMedal } from 'react-icons/fa';
+import ProfileTutorial from './ProfileTutorial';
+import AvatarSelector from './AvatarSelector';
+import UserAvatar from './UserAvatar';
 import styles from '../styles/UserProfile.module.css';
 
 const UserProfile = ({ isOpen, onClose }) => {
@@ -13,21 +17,53 @@ const UserProfile = ({ isOpen, onClose }) => {
     displayName: '',
     bio: ''
   });
+  const [showConfirmReset, setShowConfirmReset] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
+  const [showAvatarSelector, setShowAvatarSelector] = useState(false);
 
   // Hook do perfil com verificação de segurança
   let profile = null;
   let updateProfile = null;
   let isLoading = true;
+  let resetProfile = null;
+  let exportProfile = null;
+  let importProfile = null;
+  let updatePreferences = null;
+  let markTutorialAsSeen = null;
+  let setCurrentTitle = null;
+  let updateAvatar = null;
 
   try {
     const userProfile = useUserProfile();
     profile = userProfile?.profile;
     updateProfile = userProfile?.updateProfile;
     isLoading = userProfile?.isLoading || false;
+    resetProfile = userProfile?.resetProfile;
+    exportProfile = userProfile?.exportProfile;
+    importProfile = userProfile?.importProfile;
+    updatePreferences = userProfile?.updatePreferences;
+    markTutorialAsSeen = userProfile?.markTutorialAsSeen;
+    setCurrentTitle = userProfile?.setCurrentTitle;
+    updateAvatar = userProfile?.updateAvatar;
   } catch (error) {
     console.warn('UserProfile context not available:', error);
     isLoading = false;
   }
+
+  // Inicializar formulário de edição - SEMPRE antes dos returns
+  React.useEffect(() => {
+    if (profile) {
+      setEditForm({
+        displayName: profile.displayName || '',
+        bio: profile.bio || ''
+      });
+
+      // Verificar se deve mostrar o tutorial
+      if (!profile.preferences?.hasSeenProfileTutorial && isOpen) {
+        setShowTutorial(true);
+      }
+    }
+  }, [profile, isOpen]);
 
   if (!isOpen) return null;
 
@@ -73,16 +109,6 @@ const UserProfile = ({ isOpen, onClose }) => {
     );
   }
 
-  // Inicializar formulário de edição
-  React.useEffect(() => {
-    if (profile) {
-      setEditForm({
-        displayName: profile.displayName || '',
-        bio: profile.bio || ''
-      });
-    }
-  }, [profile]);
-
   const handleSaveProfile = () => {
     if (updateProfile) {
       updateProfile({
@@ -91,6 +117,72 @@ const UserProfile = ({ isOpen, onClose }) => {
       });
     }
     setIsEditing(false);
+  };
+
+  const handleExportProfile = () => {
+    if (exportProfile) {
+      const profileData = exportProfile();
+      if (profileData) {
+        const dataStr = JSON.stringify(profileData, null, 2);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(dataBlob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `ludomusic_profile_${new Date().toISOString().split('T')[0]}.json`;
+        link.click();
+        URL.revokeObjectURL(url);
+      }
+    }
+  };
+
+  const handleImportProfile = (event) => {
+    const file = event.target.files[0];
+    if (file && importProfile) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const profileData = JSON.parse(e.target.result);
+          const success = importProfile(profileData);
+          if (success) {
+            alert('Perfil importado com sucesso!');
+          } else {
+            alert('Erro ao importar perfil. Verifique se o arquivo é válido.');
+          }
+        } catch (error) {
+          alert('Erro ao ler arquivo. Verifique se é um arquivo JSON válido.');
+        }
+      };
+      reader.readAsText(file);
+    }
+    // Limpar o input
+    event.target.value = '';
+  };
+
+  const handleResetProfile = () => {
+    if (resetProfile) {
+      resetProfile();
+      setShowConfirmReset(false);
+      alert('Perfil resetado com sucesso!');
+    }
+  };
+
+  const handlePreferenceChange = (key, value) => {
+    if (updatePreferences) {
+      updatePreferences({ [key]: value });
+    }
+  };
+
+  const handleCloseTutorial = () => {
+    setShowTutorial(false);
+    if (markTutorialAsSeen) {
+      markTutorialAsSeen();
+    }
+  };
+
+  const handleAvatarChange = (avatarData) => {
+    if (updateAvatar) {
+      updateAvatar(avatarData);
+    }
   };
 
   const formatTime = (seconds) => {
@@ -115,6 +207,7 @@ const UserProfile = ({ isOpen, onClose }) => {
   };
 
   const getLevelProgress = () => {
+    if (!profile) return 0;
     const currentLevelXP = getCurrentLevelXP(profile.level);
     const nextLevelXP = getXPForNextLevel(profile.level);
     const progressXP = profile.xp - currentLevelXP;
@@ -122,8 +215,9 @@ const UserProfile = ({ isOpen, onClose }) => {
     return (progressXP / neededXP) * 100;
   };
 
-  const unlockedAchievements = profile.achievements.map(id => getAchievement(id)).filter(Boolean);
-  const nearAchievements = getNearAchievements(profile.stats, profile.achievements);
+  // Só calcular se profile existir
+  const unlockedAchievements = profile?.achievements ? profile.achievements.map(id => getAchievement(id)).filter(Boolean) : [];
+  const nearAchievements = profile?.stats ? getNearAchievements(profile.stats, profile.achievements || [], profile) : [];
 
   return (
     <div className={styles.modalOverlay}>
@@ -139,13 +233,12 @@ const UserProfile = ({ isOpen, onClose }) => {
           {/* Informações básicas */}
           <div className={styles.profileBasicInfo}>
             <div className={styles.avatarSection}>
-              <img 
-                src={profile.avatar} 
-                alt="Avatar" 
-                className={styles.avatar}
-                onError={(e) => {
-                  e.target.src = '/default-avatar.png';
-                }}
+              <UserAvatar
+                avatar={profile.avatar}
+                size="xlarge"
+                editable={true}
+                showEditIcon={true}
+                onClick={() => setShowAvatarSelector(true)}
               />
               <div className={styles.levelBadge}>
                 Nível {profile.level}
@@ -214,23 +307,35 @@ const UserProfile = ({ isOpen, onClose }) => {
 
           {/* Abas */}
           <div className={styles.tabNavigation}>
-            <button 
+            <button
               className={`${styles.tab} ${activeTab === 'overview' ? styles.active : ''}`}
               onClick={() => setActiveTab('overview')}
             >
               <FaChartLine /> Visão Geral
             </button>
-            <button 
+            <button
               className={`${styles.tab} ${activeTab === 'achievements' ? styles.active : ''}`}
               onClick={() => setActiveTab('achievements')}
             >
               <FaTrophy /> Conquistas
             </button>
-            <button 
+            <button
+              className={`${styles.tab} ${activeTab === 'badges' ? styles.active : ''}`}
+              onClick={() => setActiveTab('badges')}
+            >
+              <FaMedal /> Badges
+            </button>
+            <button
               className={`${styles.tab} ${activeTab === 'history' ? styles.active : ''}`}
               onClick={() => setActiveTab('history')}
             >
               <FaClock /> Histórico
+            </button>
+            <button
+              className={`${styles.tab} ${activeTab === 'settings' ? styles.active : ''}`}
+              onClick={() => setActiveTab('settings')}
+            >
+              <FaCog /> Configurações
             </button>
           </div>
 
@@ -372,6 +477,108 @@ const UserProfile = ({ isOpen, onClose }) => {
               </div>
             )}
 
+            {activeTab === 'badges' && (
+              <div className={styles.badgesTab}>
+                <h4>Badges e Títulos</h4>
+
+                {/* Título Atual */}
+                {profile?.currentTitle && (
+                  <div className={styles.currentTitleSection}>
+                    <h5>Título Atual</h5>
+                    <div className={styles.currentTitle}>
+                      <span className={styles.titleIcon}>👑</span>
+                      <span className={styles.titleText}>
+                        {getTitle(profile.currentTitle)?.title || 'Título Desconhecido'}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Títulos Disponíveis */}
+                {profile && (
+                  <div className={styles.titlesSection}>
+                    <h5>Títulos Disponíveis</h5>
+                    <div className={styles.titlesGrid}>
+                      <div
+                        className={`${styles.titleOption} ${!profile.currentTitle ? styles.selected : ''}`}
+                        onClick={() => setCurrentTitle && setCurrentTitle(null)}
+                      >
+                        <span className={styles.titleOptionText}>Sem Título</span>
+                      </div>
+                      {getAvailableTitles(profile).map(title => (
+                        <div
+                          key={title.id}
+                          className={`${styles.titleOption} ${profile.currentTitle === title.id ? styles.selected : ''}`}
+                          onClick={() => setCurrentTitle && setCurrentTitle(title.id)}
+                        >
+                          <span className={styles.titleOptionText}>{title.title}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Badges Desbloqueados */}
+                <div className={styles.badgesSection}>
+                  <h5>Badges Desbloqueados ({profile?.badges?.length || 0})</h5>
+                  {profile?.badges && profile.badges.length > 0 ? (
+                    <div className={styles.badgesGrid}>
+                      {profile.badges.map(badgeId => {
+                        const badge = getBadge(badgeId);
+                        if (!badge) return null;
+
+                        return (
+                          <div key={badgeId} className={styles.badgeItem}>
+                            <div
+                              className={styles.badgeIcon}
+                              style={{ backgroundColor: badge.color }}
+                            >
+                              {badge.icon}
+                            </div>
+                            <div className={styles.badgeInfo}>
+                              <div className={styles.badgeTitle}>{badge.title}</div>
+                              <div className={styles.badgeDescription}>{badge.description}</div>
+                              <div className={`${styles.badgeRarity} ${styles[badge.rarity]}`}>
+                                {badge.rarity.charAt(0).toUpperCase() + badge.rarity.slice(1)}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <p className={styles.noBadges}>Nenhum badge desbloqueado ainda. Continue jogando para conquistar seus primeiros badges!</p>
+                  )}
+                </div>
+
+                {/* Próximos Badges */}
+                <div className={styles.nextBadgesSection}>
+                  <h5>Próximos Badges</h5>
+                  <div className={styles.nextBadgesGrid}>
+                    {Object.values(badges).slice(0, 6).map(badge => {
+                      const isUnlocked = profile?.badges?.includes(badge.id);
+                      if (isUnlocked) return null;
+
+                      return (
+                        <div key={badge.id} className={styles.nextBadgeItem}>
+                          <div
+                            className={styles.nextBadgeIcon}
+                            style={{ backgroundColor: badge.color }}
+                          >
+                            {badge.icon}
+                          </div>
+                          <div className={styles.nextBadgeInfo}>
+                            <div className={styles.nextBadgeTitle}>{badge.title}</div>
+                            <div className={styles.nextBadgeDescription}>{badge.description}</div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            )}
+
             {activeTab === 'history' && (
               <div className={styles.historyTab}>
                 <h4>Jogos Recentes</h4>
@@ -411,9 +618,135 @@ const UserProfile = ({ isOpen, onClose }) => {
                 )}
               </div>
             )}
+
+            {activeTab === 'settings' && (
+              <div className={styles.settingsTab}>
+                <h4>Configurações do Perfil</h4>
+
+                {/* Preferências */}
+                <div className={styles.settingsSection}>
+                  <h5>Preferências</h5>
+
+                  <div className={styles.settingItem}>
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={profile?.preferences?.showAchievementPopups || false}
+                        onChange={(e) => handlePreferenceChange('showAchievementPopups', e.target.checked)}
+                      />
+                      Mostrar notificações de conquistas
+                    </label>
+                  </div>
+
+                  <div className={styles.settingItem}>
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={profile?.preferences?.notifications || false}
+                        onChange={(e) => handlePreferenceChange('notifications', e.target.checked)}
+                      />
+                      Receber notificações
+                    </label>
+                  </div>
+                </div>
+
+                {/* Dados do Perfil */}
+                <div className={styles.settingsSection}>
+                  <h5>Gerenciar Dados</h5>
+
+                  <div className={styles.dataActions}>
+                    <button
+                      className={styles.exportButton}
+                      onClick={handleExportProfile}
+                    >
+                      <FaDownload /> Exportar Perfil
+                    </button>
+
+                    <label className={styles.importButton}>
+                      <FaUpload /> Importar Perfil
+                      <input
+                        type="file"
+                        accept=".json"
+                        onChange={handleImportProfile}
+                        style={{ display: 'none' }}
+                      />
+                    </label>
+                  </div>
+                </div>
+
+                {/* Estatísticas do Perfil */}
+                <div className={styles.settingsSection}>
+                  <h5>Estatísticas do Perfil</h5>
+                  <div className={styles.profileStats}>
+                    <div className={styles.statItem}>
+                      <span>Criado em:</span>
+                      <span>{formatDate(profile?.createdAt)}</span>
+                    </div>
+                    <div className={styles.statItem}>
+                      <span>Último acesso:</span>
+                      <span>{formatDate(profile?.lastLogin)}</span>
+                    </div>
+                    <div className={styles.statItem}>
+                      <span>Total de XP:</span>
+                      <span>{profile?.xp || 0}</span>
+                    </div>
+                    <div className={styles.statItem}>
+                      <span>Conquistas desbloqueadas:</span>
+                      <span>{unlockedAchievements.length}/{Object.keys(achievements).length}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Zona de Perigo */}
+                <div className={styles.settingsSection}>
+                  <h5 className={styles.dangerZone}>Zona de Perigo</h5>
+
+                  {!showConfirmReset ? (
+                    <button
+                      className={styles.resetButton}
+                      onClick={() => setShowConfirmReset(true)}
+                    >
+                      <FaTrash /> Resetar Perfil
+                    </button>
+                  ) : (
+                    <div className={styles.confirmReset}>
+                      <p>⚠️ Esta ação não pode ser desfeita! Todos os seus dados serão perdidos.</p>
+                      <div className={styles.confirmButtons}>
+                        <button
+                          className={styles.confirmResetButton}
+                          onClick={handleResetProfile}
+                        >
+                          Sim, resetar tudo
+                        </button>
+                        <button
+                          className={styles.cancelResetButton}
+                          onClick={() => setShowConfirmReset(false)}
+                        >
+                          Cancelar
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
+
+      {/* Tutorial do perfil */}
+      {showTutorial && (
+        <ProfileTutorial onClose={handleCloseTutorial} />
+      )}
+
+      {/* Seletor de avatar */}
+      {showAvatarSelector && (
+        <AvatarSelector
+          currentAvatar={profile?.avatar}
+          onAvatarChange={handleAvatarChange}
+          onClose={() => setShowAvatarSelector(false)}
+        />
+      )}
     </div>
   );
 };

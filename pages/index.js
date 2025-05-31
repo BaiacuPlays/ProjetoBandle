@@ -2,14 +2,17 @@ import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { songs } from '../data/songs';
 import styles from '../styles/Home.module.css';
-import { FaPlay, FaPause, FaVolumeUp, FaFastForward, FaQuestionCircle, FaBars, FaUser } from 'react-icons/fa';
+import { FaPlay, FaPause, FaVolumeUp, FaFastForward, FaQuestionCircle, FaBars, FaUser, FaUsers } from 'react-icons/fa';
 
 import Footer from '../components/Footer';
 import GameMenu from '../components/GameMenu';
 import Statistics from '../components/Statistics';
 import Tutorial from '../components/Tutorial';
 import UserProfile from '../components/UserProfile';
+import FriendsManager from '../components/FriendsManager';
+import NotificationCenter from '../components/NotificationCenter';
 import GlobalStats from '../components/GlobalStats';
+import AchievementNotification from '../components/AchievementNotification';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useUserProfile } from '../contexts/UserProfileContext';
 import { fetchTimezone } from '../config/api';
@@ -110,6 +113,7 @@ export default function Home() {
 
   // Estados do perfil
   const [showProfile, setShowProfile] = useState(false);
+  const [showFriends, setShowFriends] = useState(false);
 
 
 
@@ -1644,12 +1648,20 @@ export default function Home() {
             <img src="/Logo.png" alt="Logo" className={styles.logo} />
             <div className={styles.headerButtons}>
               <DonationButton />
+              <NotificationCenter />
               <button
                 className={styles.helpButton}
                 onClick={() => setShowProfile(true)}
                 aria-label="Perfil"
               >
                 <FaUser size={24} />
+              </button>
+              <button
+                className={styles.helpButton}
+                onClick={() => setShowFriends(true)}
+                aria-label="Amigos"
+              >
+                <FaUsers size={24} />
               </button>
               <button
                 className={styles.helpButton}
@@ -2110,6 +2122,12 @@ export default function Home() {
           onClose={() => setShowProfile(false)}
         />
 
+        {/* Gerenciador de amigos */}
+        <FriendsManager
+          isOpen={showFriends}
+          onClose={() => setShowFriends(false)}
+        />
+
         {/* Componentes de monetização */}
         <SimpleInterstitialAd
           isOpen={showInterstitialAd}
@@ -2122,6 +2140,9 @@ export default function Home() {
 
         <BetweenGamesAd />
         <Footer />
+
+        {/* Sistema de notificações */}
+        <AchievementNotification />
       </div>
     </>
   );

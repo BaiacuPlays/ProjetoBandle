@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useModalScrollLock } from '../hooks/useModalScrollLock';
 import { FaTimes, FaPaperPlane, FaBug } from 'react-icons/fa';
 import styles from '../styles/ErrorReportModal.module.css';
 
@@ -14,6 +15,9 @@ const ErrorReportModal = ({ isOpen, onClose, currentSong = null, gameResult = nu
     error: null,
     successMessage: null
   });
+
+  // Bloquear/desbloquear scroll da página
+  useModalScrollLock(isOpen);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
