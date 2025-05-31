@@ -13,6 +13,7 @@ export const useUserProfile = () => {
 export const UserProfileProvider = ({ children }) => {
   const [profile, setProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isClient, setIsClient] = useState(false);
 
   // Estrutura padrão do perfil
   const createDefaultProfile = () => {
@@ -82,10 +83,17 @@ export const UserProfileProvider = ({ children }) => {
     };
   };
 
+  // Verificar se está no cliente
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   // Carregar perfil do localStorage
   useEffect(() => {
-    loadProfile();
-  }, []);
+    if (isClient) {
+      loadProfile();
+    }
+  }, [isClient]);
 
   const loadProfile = () => {
     try {

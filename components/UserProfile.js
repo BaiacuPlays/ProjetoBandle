@@ -17,15 +17,61 @@ const UserProfile = ({ isOpen, onClose }) => {
   // Hook do perfil com verificação de segurança
   let profile = null;
   let updateProfile = null;
+  let isLoading = true;
+
   try {
     const userProfile = useUserProfile();
     profile = userProfile?.profile;
     updateProfile = userProfile?.updateProfile;
+    isLoading = userProfile?.isLoading || false;
   } catch (error) {
     console.warn('UserProfile context not available:', error);
+    isLoading = false;
   }
 
-  if (!isOpen || !profile) return null;
+  if (!isOpen) return null;
+
+  // Mostrar loading se ainda estiver carregando
+  if (isLoading) {
+    return (
+      <div className={styles.modalOverlay}>
+        <div className={styles.profileModal}>
+          <div className={styles.profileHeader}>
+            <button className={styles.closeButton} onClick={onClose}>
+              <FaTimes />
+            </button>
+            <h2>Carregando Perfil...</h2>
+          </div>
+          <div className={styles.profileContent}>
+            <div style={{ textAlign: 'center', padding: '2rem' }}>
+              <p>Carregando dados do perfil...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Se não há perfil após carregar, mostrar erro
+  if (!profile) {
+    return (
+      <div className={styles.modalOverlay}>
+        <div className={styles.profileModal}>
+          <div className={styles.profileHeader}>
+            <button className={styles.closeButton} onClick={onClose}>
+              <FaTimes />
+            </button>
+            <h2>Erro no Perfil</h2>
+          </div>
+          <div className={styles.profileContent}>
+            <div style={{ textAlign: 'center', padding: '2rem' }}>
+              <p>Não foi possível carregar o perfil. Tente novamente mais tarde.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Inicializar formulário de edição
   React.useEffect(() => {

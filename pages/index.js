@@ -2,14 +2,16 @@ import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { songs } from '../data/songs';
 import styles from '../styles/Home.module.css';
-import { FaPlay, FaPause, FaVolumeUp, FaFastForward, FaQuestionCircle, FaBars } from 'react-icons/fa';
+import { FaPlay, FaPause, FaVolumeUp, FaFastForward, FaQuestionCircle, FaBars, FaUser } from 'react-icons/fa';
 
 import Footer from '../components/Footer';
 import GameMenu from '../components/GameMenu';
 import Statistics from '../components/Statistics';
 import Tutorial from '../components/Tutorial';
+import UserProfile from '../components/UserProfile';
 import GlobalStats from '../components/GlobalStats';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useUserProfile } from '../contexts/UserProfileContext';
 import { fetchTimezone } from '../config/api';
 import { audioCache } from '../utils/audioCache';
 import { useServiceWorker } from '../hooks/useServiceWorker';
@@ -35,8 +37,16 @@ const MAX_ATTEMPTS = 6;
 export default function Home() {
   const { t, isClient } = useLanguage();
 
-  // Função vazia para compatibilidade
-  const updateGameStats = () => {};
+  // Hook do perfil com verificação de segurança
+  let updateGameStats = () => {};
+  try {
+    const userProfile = useUserProfile();
+    if (userProfile?.updateGameStats) {
+      updateGameStats = userProfile.updateGameStats;
+    }
+  } catch (error) {
+    console.warn('UserProfile context not available:', error);
+  }
 
   // Hooks de performance
   const { debounce, throttle } = usePerformanceOptimization();
@@ -97,6 +107,9 @@ export default function Home() {
   const [infiniteUsedSongs, setInfiniteUsedSongs] = useState([]);
   const [infiniteGameOver, setInfiniteGameOver] = useState(false);
   const [showNextSongButton, setShowNextSongButton] = useState(false);
+
+  // Estados do perfil
+  const [showProfile, setShowProfile] = useState(false);
 
 
 
@@ -1633,6 +1646,13 @@ export default function Home() {
               <DonationButton />
               <button
                 className={styles.helpButton}
+                onClick={() => setShowProfile(true)}
+                aria-label="Perfil"
+              >
+                <FaUser size={24} />
+              </button>
+              <button
+                className={styles.helpButton}
                 onClick={() => setShowInstructions(true)}
                 aria-label="Ajuda"
               >
@@ -2084,7 +2104,11 @@ export default function Home() {
           onStartPlaying={handleStartPlaying}
         />
 
-
+        {/* Perfil do usuário */}
+        <UserProfile
+          isOpen={showProfile}
+          onClose={() => setShowProfile(false)}
+        />
 
         {/* Componentes de monetização */}
         <SimpleInterstitialAd
