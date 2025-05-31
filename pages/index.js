@@ -14,7 +14,7 @@ import { fetchTimezone } from '../config/api';
 import { audioCache } from '../utils/audioCache';
 import { useServiceWorker } from '../hooks/useServiceWorker';
 import { usePerformanceOptimization } from '../hooks/usePerformanceOptimization';
-import { useUltraAdvancedOptimizations, useOptimizationsStatus } from '../hooks/useUltraAdvancedOptimizations';
+// import { useUltraAdvancedOptimizations, useOptimizationsStatus } from '../hooks/useUltraAdvancedOptimizations';
 // import { useUniversalCompatibility, useDeviceInfo, useResponsive, useBrowserCapabilities } from '../hooks/useUniversalCompatibility';
 import {
   MemoizedPlayButton,
@@ -35,9 +35,9 @@ export default function Home() {
   const { debounce, throttle } = usePerformanceOptimization();
   const { isRegistered: swRegistered } = useServiceWorker();
 
-  // Hooks ultra-avançados (carregamento dinâmico)
-  const ultraOptimizations = useUltraAdvancedOptimizations();
-  const optimizationsStatus = useOptimizationsStatus();
+  // Hooks ultra-avançados (carregamento dinâmico) - temporariamente desabilitados
+  // const ultraOptimizations = useUltraAdvancedOptimizations();
+  // const optimizationsStatus = useOptimizationsStatus();
 
   // Hooks de compatibilidade universal (carregamento dinâmico)
   // const compatibility = useUniversalCompatibility();
