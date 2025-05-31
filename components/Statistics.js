@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { getGlobalStatistics } from '../config/api';
 import { useLanguage } from '../contexts/LanguageContext';
 import ShareButton from './ShareButton';
+import ActionButtons from './ActionButtons';
 import styles from '../styles/Statistics.module.css';
 
 // Função para gerar UUID v4
@@ -161,8 +162,8 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
                 {isClient
                   ? t('global_stats_message')
                     .replace('{totalPlayers}', stats.totalGames || 0)
-                    .replace('{averageAttempts}', stats.averageAttempts || 3.2)
-                  : `${stats.totalGames || 0} pessoas já adivinharam / ${stats.averageAttempts || 3.2} tentativas médias`
+                    .replace('{averageAttempts}', Math.round(stats.averageAttempts || 3))
+                  : `${stats.totalGames || 0} pessoas já adivinharam / ${Math.round(stats.averageAttempts || 3)} tentativas médias`
                 }
               </div>
             </div>
@@ -201,14 +202,27 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
           )}
         </div>
 
+        {/* Botões de Ação - Aparecem após acertar */}
+        {gameResult && gameResult.won && (
+          <ActionButtons
+            gameResult={gameResult}
+            currentSong={currentSong}
+            isInfiniteMode={isInfiniteMode}
+            infiniteStats={infiniteStats}
+          />
+        )}
+
         <div className={styles.footer}>
           <div className={styles.footerButtons}>
-            <ShareButton
-              gameResult={gameResult}
-              currentSong={currentSong}
-              isInfiniteMode={isInfiniteMode}
-              infiniteStats={infiniteStats}
-            />
+            {/* Manter o ShareButton original como fallback */}
+            {(!gameResult || !gameResult.won) && (
+              <ShareButton
+                gameResult={gameResult}
+                currentSong={currentSong}
+                isInfiniteMode={isInfiniteMode}
+                infiniteStats={infiniteStats}
+              />
+            )}
             <button className={styles.continueButton} onClick={onClose}>
               {isClient ? t('continue') : 'Continuar'}
             </button>

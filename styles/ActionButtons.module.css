@@ -1,0 +1,244 @@
+.actionButtonsContainer {
+  margin: 20px 0;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.actionButtonsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.actionButtonWrapper {
+  position: relative;
+}
+
+.actionButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 12px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  min-height: 80px;
+  width: 100%;
+  backdrop-filter: blur(5px);
+  position: relative;
+  overflow: hidden;
+}
+
+.actionButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.actionButton:hover::before {
+  left: 100%;
+}
+
+.actionButton:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.actionButton:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.actionButton svg {
+  font-size: 1.5rem;
+  opacity: 0.9;
+  transition: all 0.3s ease;
+}
+
+.actionButton:hover svg {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.actionButton span {
+  font-size: 0.8rem;
+  text-align: center;
+  line-height: 1.2;
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+}
+
+.actionButton:hover span {
+  opacity: 1;
+}
+
+/* Cores específicas para cada tipo de botão */
+.actionButton[data-action="share"] {
+  background: linear-gradient(135deg, rgba(29, 185, 84, 0.2), rgba(29, 185, 84, 0.1));
+  border-color: rgba(29, 185, 84, 0.3);
+}
+
+.actionButton[data-action="share"]:hover {
+  background: linear-gradient(135deg, rgba(29, 185, 84, 0.3), rgba(29, 185, 84, 0.15));
+  border-color: rgba(29, 185, 84, 0.5);
+}
+
+.actionButton[data-action="error"] {
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.2), rgba(255, 152, 0, 0.1));
+  border-color: rgba(255, 152, 0, 0.3);
+}
+
+.actionButton[data-action="error"]:hover {
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.3), rgba(255, 152, 0, 0.15));
+  border-color: rgba(255, 152, 0, 0.5);
+}
+
+.actionButton[data-action="copy"] {
+  background: linear-gradient(135deg, rgba(33, 150, 243, 0.2), rgba(33, 150, 243, 0.1));
+  border-color: rgba(33, 150, 243, 0.3);
+}
+
+.actionButton[data-action="copy"]:hover {
+  background: linear-gradient(135deg, rgba(33, 150, 243, 0.3), rgba(33, 150, 243, 0.15));
+  border-color: rgba(33, 150, 243, 0.5);
+}
+
+.actionButton[data-action="support"] {
+  background: linear-gradient(135deg, rgba(233, 30, 99, 0.2), rgba(233, 30, 99, 0.1));
+  border-color: rgba(233, 30, 99, 0.3);
+}
+
+.actionButton[data-action="support"]:hover {
+  background: linear-gradient(135deg, rgba(233, 30, 99, 0.3), rgba(233, 30, 99, 0.15));
+  border-color: rgba(233, 30, 99, 0.5);
+}
+
+.actionButton[data-action="youtube"] {
+  background: linear-gradient(135deg, rgba(255, 0, 0, 0.2), rgba(255, 0, 0, 0.1));
+  border-color: rgba(255, 0, 0, 0.3);
+}
+
+.actionButton[data-action="youtube"]:hover {
+  background: linear-gradient(135deg, rgba(255, 0, 0, 0.3), rgba(255, 0, 0, 0.15));
+  border-color: rgba(255, 0, 0, 0.5);
+}
+
+/* Menu de compartilhamento */
+.shareMenuWrapper {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  margin-top: 8px;
+}
+
+.shareMenu {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  padding: 8px;
+  backdrop-filter: blur(20px);
+  min-width: 200px;
+}
+
+.shareOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.shareOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  width: 100%;
+  text-align: left;
+}
+
+.shareOption:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateX(2px);
+}
+
+.shareOption svg {
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .actionButtonsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .actionButton {
+    padding: 12px 8px;
+    min-height: 70px;
+    font-size: 0.8rem;
+  }
+
+  .actionButton svg {
+    font-size: 1.3rem;
+  }
+
+  .actionButton span {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .actionButtonsContainer {
+    margin: 15px 0;
+    padding: 12px;
+  }
+
+  .actionButtonsGrid {
+    gap: 8px;
+  }
+
+  .actionButton {
+    padding: 10px 6px;
+    min-height: 60px;
+    font-size: 0.75rem;
+  }
+
+  .actionButton svg {
+    font-size: 1.2rem;
+  }
+
+  .actionButton span {
+    font-size: 0.7rem;
+  }
+}

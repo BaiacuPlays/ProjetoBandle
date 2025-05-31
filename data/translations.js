@@ -90,6 +90,7 @@ export const translations = {
 
     // Sharing functionality
     'share_result': 'Compartilhar Resultado',
+    'share': 'Compartilhar',
     'share_text_won': 'Acertei a música em {attempts} tentativas no LudoMusic! 🎵',
     'share_text_lost': 'Não consegui acertar esta música no LudoMusic! 🎵',
     'share_url_text': 'Teste seus conhecimentos musicais de videogames:',
@@ -97,6 +98,12 @@ export const translations = {
     'result_copied': 'Resultado copiado!',
     'global_stats_message': '{totalPlayers} pessoas já adivinharam / {averageAttempts} tentativas médias',
     'no_stats_yet': 'Seja o primeiro a jogar!',
+
+    // Action buttons
+    'report_error': 'Reportar Erro',
+    'copy_link': 'Copiar Link',
+    'support_project': 'Apoiar',
+    'youtube': 'YouTube',
 
     // Estatísticas
     'statistics': 'Estatísticas',
@@ -240,6 +247,7 @@ export const translations = {
 
     // Sharing functionality
     'share_result': 'Share Result',
+    'share': 'Share',
     'share_text_won': 'I guessed the song in {attempts} attempts on LudoMusic! 🎵',
     'share_text_lost': 'I couldn\'t guess this song on LudoMusic! 🎵',
     'share_url_text': 'Test your video game music knowledge:',
@@ -247,6 +255,12 @@ export const translations = {
     'result_copied': 'Result copied!',
     'global_stats_message': '{totalPlayers} people have already guessed / {averageAttempts} average attempts',
     'no_stats_yet': 'Be the first to play!',
+
+    // Action buttons
+    'report_error': 'Report Error',
+    'copy_link': 'Copy Link',
+    'support_project': 'Support',
+    'youtube': 'YouTube',
 
     // Statistics
     'statistics': 'Statistics',
@@ -390,6 +404,7 @@ export const translations = {
 
     // Funcionalidad de compartir
     'share_result': 'Compartir Resultado',
+    'share': 'Compartir',
     'share_text_won': '¡Adiviné la canción en {attempts} intentos en LudoMusic! 🎵',
     'share_text_lost': '¡No pude adivinar esta canción en LudoMusic! 🎵',
     'share_url_text': 'Pon a prueba tus conocimientos musicales de videojuegos:',
@@ -397,6 +412,12 @@ export const translations = {
     'result_copied': '¡Resultado copiado!',
     'global_stats_message': '{totalPlayers} personas ya han adivinado / {averageAttempts} intentos promedio',
     'no_stats_yet': '¡Sé el primero en jugar!',
+
+    // Botones de acción
+    'report_error': 'Reportar Error',
+    'copy_link': 'Copiar Enlace',
+    'support_project': 'Apoyar',
+    'youtube': 'YouTube',
 
     // Estadísticas
     'statistics': 'Estadísticas',
