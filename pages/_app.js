@@ -4,6 +4,7 @@ import '../styles/global-scrollbar.css';
 import { LanguageProvider } from '../contexts/LanguageContext';
 import { UserProfileProvider } from '../contexts/UserProfileContext';
 import { FriendsProvider } from '../contexts/FriendsContext';
+import { AuthProvider } from '../contexts/AuthContext';
 import { NotificationProvider } from '../contexts/NotificationContext';
 import { useEffect } from 'react';
 import { Analytics } from '@vercel/analytics/react';
@@ -34,15 +35,17 @@ export default function MyApp({ Component, pageProps }) {
 
   return (
     <LanguageProvider>
-      <UserProfileProvider>
-        <FriendsProvider>
-          <NotificationProvider>
-            <Component {...pageProps} />
-            <Analytics />
-            <SpeedInsights />
-          </NotificationProvider>
-        </FriendsProvider>
-      </UserProfileProvider>
+      <AuthProvider>
+        <UserProfileProvider>
+          <FriendsProvider>
+            <NotificationProvider>
+              <Component {...pageProps} />
+              <Analytics />
+              <SpeedInsights />
+            </NotificationProvider>
+          </FriendsProvider>
+        </UserProfileProvider>
+      </AuthProvider>
     </LanguageProvider>
   );
 }

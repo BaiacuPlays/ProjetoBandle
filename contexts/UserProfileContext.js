@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { achievements, calculateAchievementProgress } from '../data/achievements';
 import { getUnlockedBadges, getAvailableTitles } from '../data/badges';
+import { useAuth } from './AuthContext';
 
 const UserProfileContext = createContext();
 
@@ -19,6 +20,7 @@ export const useUserProfile = () => {
 };
 
 export const UserProfileProvider = ({ children }) => {
+  const { isAuthenticated, getAuthenticatedUserId, getAuthenticatedUser, isLoading: authLoading } = useAuth();
   const [profile, setProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isClient, setIsClient] = useState(false);
@@ -27,7 +29,14 @@ export const UserProfileProvider = ({ children }) => {
   // Gerar ou recuperar ID do usuário
   const getUserId = () => {
     if (typeof window === 'undefined') return null;
-    
+
+    // Se usuário está autenticado, usar ID autenticado
+    if (isAuthenticated) {
+      const authId = getAuthenticatedUserId();
+      if (authId) return authId;
+    }
+
+    // Caso contrário, usar ID anônimo
     let storedUserId = localStorage.getItem('ludomusic_user_id');
     if (!storedUserId) {
       storedUserId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -36,36 +45,220 @@ export const UserProfileProvider = ({ children }) => {
     return storedUserId;
   };
 
+  // Salvar perfil no servidor
+  const saveProfileToServer = async (profileData) => {
+    try {
+      const response = await fetch('/api/profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: profileData.id,
+          profileData
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log('✅ Perfil salvo no servidor:', result);
+      return result;
+    } catch (error) {
+      console.error('❌ Erro ao salvar perfil no servidor:', error);
+      throw error;
+    }
+  };
+
+  // Carregar perfil do servidor
+  const loadProfileFromServer = async (userId) => {
+    try {
+      const response = await fetch(`/api/profile?userId=${userId}`);
+
+      if (response.status === 404) {
+        return null; // Perfil não existe no servidor
+      }
+
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log('✅ Perfil carregado do servidor:', result);
+      return result.profile;
+    } catch (error) {
+      console.error('❌ Erro ao carregar perfil do servidor:', error);
+      throw error;
+    }
+  };
+
   // Verificar se está no cliente
   useEffect(() => {
     setIsClient(true);
-    const id = getUserId();
-    setUserId(id);
   }, []);
 
-  // Carregar perfil quando o componente montar
+  // Aguardar autenticação e então carregar perfil
   useEffect(() => {
-    if (isClient && userId) {
-      loadProfile();
-    }
-  }, [isClient, userId]);
+    if (!authLoading && isClient) {
+      const id = getUserId();
+      setUserId(id);
 
-  const loadProfile = () => {
+      if (id) {
+        loadProfile();
+      }
+    }
+  }, [authLoading, isAuthenticated, isClient]);
+
+  // Atualizar perfil quando usuário faz login
+  useEffect(() => {
+    if (isAuthenticated && profile && userId) {
+      const authenticatedUser = getAuthenticatedUser();
+
+      console.log('🔄 Verificando se perfil precisa ser atualizado após login...');
+      console.log('🔍 Usuário autenticado:', authenticatedUser);
+      console.log('🔍 Perfil atual:', {
+        username: profile.username,
+        displayName: profile.displayName
+      });
+
+      if (authenticatedUser && (
+        profile.username !== authenticatedUser.username ||
+        profile.displayName !== authenticatedUser.displayName
+      )) {
+        console.log('🔄 Atualizando perfil com dados de autenticação...');
+
+        const updatedProfile = {
+          ...profile,
+          username: authenticatedUser.username,
+          displayName: authenticatedUser.displayName
+        };
+
+        setProfile(updatedProfile);
+        localStorage.setItem(`ludomusic_profile_${userId}`, JSON.stringify(updatedProfile));
+
+        // Salvar no servidor
+        saveProfileToServer(updatedProfile).then(() => {
+          console.log('✅ Perfil atualizado e sincronizado com servidor');
+        }).catch(error => {
+          console.warn('Erro ao sincronizar perfil:', error);
+        });
+      }
+    }
+  }, [isAuthenticated, profile, userId]);
+
+  const loadProfile = async () => {
     try {
       setIsLoading(true);
 
-      // Tentar carregar do localStorage
-      const savedProfile = localStorage.getItem(`ludomusic_profile_${userId}`);
+      // 1. Tentar carregar do servidor primeiro
+      let serverProfile = null;
+      try {
+        serverProfile = await loadProfileFromServer(userId);
+      } catch (error) {
+        console.warn('Não foi possível carregar do servidor, tentando localStorage');
+      }
 
+      // 2. Se não encontrou no servidor, tentar localStorage
+      let localProfile = null;
+      const savedProfile = localStorage.getItem(`ludomusic_profile_${userId}`);
       if (savedProfile) {
-        const parsedProfile = JSON.parse(savedProfile);
-        setProfile(parsedProfile);
+        localProfile = JSON.parse(savedProfile);
+      }
+
+      // 3. Decidir qual perfil usar
+      if (serverProfile) {
+        // Usar perfil do servidor, mas atualizar com dados de autenticação se necessário
+        const authenticatedUser = getAuthenticatedUser();
+        let updatedProfile = serverProfile;
+
+        // Debug: verificar dados de autenticação
+        console.log('🔍 Debug - Dados de autenticação:', authenticatedUser);
+        console.log('🔍 Debug - Perfil do servidor:', {
+          username: serverProfile.username,
+          displayName: serverProfile.displayName
+        });
+
+        // Se usuário está autenticado e o perfil não tem os dados corretos, atualizar
+        if (authenticatedUser && (
+          serverProfile.username !== authenticatedUser.username ||
+          serverProfile.displayName !== authenticatedUser.displayName
+        )) {
+          updatedProfile = {
+            ...serverProfile,
+            username: authenticatedUser.username,
+            displayName: authenticatedUser.displayName
+          };
+
+          // Salvar perfil atualizado no servidor
+          try {
+            await saveProfileToServer(updatedProfile);
+            console.log('🔄 Perfil atualizado com dados de autenticação');
+          } catch (error) {
+            console.warn('Não foi possível salvar perfil atualizado no servidor:', error);
+          }
+        }
+
+        setProfile(updatedProfile);
+        localStorage.setItem(`ludomusic_profile_${userId}`, JSON.stringify(updatedProfile));
+        console.log('📥 Perfil carregado do servidor');
+      } else if (localProfile) {
+        // Usar perfil local, mas verificar se precisa atualizar com dados de autenticação
+        const authenticatedUser = getAuthenticatedUser();
+        let updatedProfile = localProfile;
+
+        console.log('🔍 Debug LOCAL - Dados de autenticação:', authenticatedUser);
+        console.log('🔍 Debug LOCAL - Perfil local:', {
+          username: localProfile.username,
+          displayName: localProfile.displayName
+        });
+
+        // Se usuário está autenticado e o perfil não tem os dados corretos, atualizar
+        if (authenticatedUser && (
+          localProfile.username !== authenticatedUser.username ||
+          localProfile.displayName !== authenticatedUser.displayName
+        )) {
+          updatedProfile = {
+            ...localProfile,
+            username: authenticatedUser.username,
+            displayName: authenticatedUser.displayName
+          };
+
+          console.log('🔄 Perfil LOCAL atualizado com dados de autenticação');
+
+          // Salvar perfil atualizado localmente e no servidor
+          localStorage.setItem(`ludomusic_profile_${userId}`, JSON.stringify(updatedProfile));
+
+          try {
+            await saveProfileToServer(updatedProfile);
+            console.log('💾 Perfil LOCAL sincronizado com servidor');
+          } catch (error) {
+            console.warn('Não foi possível sincronizar perfil local com servidor:', error);
+          }
+        }
+
+        setProfile(updatedProfile);
+        console.log('📱 Perfil carregado do localStorage');
+
+        // Tentar migrar para servidor em background
+        try {
+          await saveProfileToServer(localProfile);
+          console.log('🔄 Perfil migrado para servidor');
+        } catch (error) {
+          console.warn('Não foi possível migrar perfil para servidor:', error);
+        }
       } else {
         // Criar novo perfil
+        const authenticatedUser = getAuthenticatedUser();
+
+        console.log('🆕 Criando novo perfil...');
+        console.log('🔍 Dados de autenticação disponíveis:', authenticatedUser);
+
         const newProfile = {
           id: userId,
-          username: `Jogador_${userId?.slice(-6) || '000000'}`,
-          displayName: '',
+          username: authenticatedUser?.username || `Jogador_${userId?.slice(-6) || '000000'}`,
+          displayName: authenticatedUser?.displayName || '',
           bio: '',
           avatar: '/default-avatar.svg',
           level: 1,
@@ -135,6 +328,14 @@ export const UserProfileProvider = ({ children }) => {
 
         setProfile(newProfile);
         localStorage.setItem(`ludomusic_profile_${userId}`, JSON.stringify(newProfile));
+
+        // Salvar novo perfil no servidor
+        try {
+          await saveProfileToServer(newProfile);
+          console.log('✨ Novo perfil criado e salvo no servidor');
+        } catch (error) {
+          console.warn('Não foi possível salvar novo perfil no servidor:', error);
+        }
       }
     } catch (error) {
       console.error('Erro ao carregar perfil:', error);
@@ -144,7 +345,7 @@ export const UserProfileProvider = ({ children }) => {
   };
 
   // Atualizar perfil
-  const updateProfile = (updates) => {
+  const updateProfile = async (updates) => {
     if (!profile || !userId) return;
 
     try {
@@ -153,6 +354,14 @@ export const UserProfileProvider = ({ children }) => {
 
       // Salvar no localStorage
       localStorage.setItem(`ludomusic_profile_${userId}`, JSON.stringify(updatedProfile));
+
+      // Salvar no servidor
+      try {
+        await saveProfileToServer(updatedProfile);
+        console.log('💾 Perfil atualizado no servidor');
+      } catch (error) {
+        console.warn('Não foi possível atualizar perfil no servidor:', error);
+      }
 
       return updatedProfile;
     } catch (error) {
@@ -169,12 +378,26 @@ export const UserProfileProvider = ({ children }) => {
   const checkAchievements = (updatedProfile) => {
     const newAchievements = [];
 
+    console.log('🏆 Verificando conquistas para perfil:', {
+      totalGames: updatedProfile.stats.totalGames,
+      wins: updatedProfile.stats.wins,
+      level: updatedProfile.level,
+      currentAchievements: updatedProfile.achievements.length
+    });
+
     Object.values(achievements).forEach(achievement => {
       if (!updatedProfile.achievements.includes(achievement.id)) {
         const progress = calculateAchievementProgress(achievement.id, updatedProfile.stats, updatedProfile);
+
+        // Log para conquistas básicas
+        if (['first_game', 'first_win', 'veteran'].includes(achievement.id)) {
+          console.log(`🎯 ${achievement.id}: ${progress}% (${achievement.title})`);
+        }
+
         if (progress >= 100) {
           newAchievements.push(achievement.id);
           updatedProfile.xp += achievement.xpReward;
+          console.log(`✅ Conquista desbloqueada: ${achievement.title} (+${achievement.xpReward} XP)`);
         }
       }
     });
@@ -226,7 +449,7 @@ export const UserProfileProvider = ({ children }) => {
   };
 
   // Atualizar estatísticas do jogo (VERSÃO AVANÇADA)
-  const updateGameStats = (gameStats) => {
+  const updateGameStats = async (gameStats) => {
     if (!profile || !userId) return;
 
     try {
@@ -385,6 +608,14 @@ export const UserProfileProvider = ({ children }) => {
       setProfile(updatedProfile);
       localStorage.setItem(`ludomusic_profile_${userId}`, JSON.stringify(updatedProfile));
 
+      // Salvar no servidor
+      try {
+        await saveProfileToServer(updatedProfile);
+        console.log('📊 Estatísticas atualizadas no servidor');
+      } catch (error) {
+        console.warn('Não foi possível atualizar estatísticas no servidor:', error);
+      }
+
       return updatedProfile;
     } catch (error) {
       console.error('Erro ao atualizar estatísticas:', error);
@@ -400,6 +631,40 @@ export const UserProfileProvider = ({ children }) => {
     loadProfile();
   };
 
+  // Função para deletar conta permanentemente
+  const deleteAccount = async () => {
+    if (!userId || !profile) return false;
+
+    try {
+      // Deletar do servidor
+      const response = await fetch('/api/profile', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
+
+      // Deletar dados locais
+      localStorage.removeItem(`ludomusic_profile_${userId}`);
+      localStorage.removeItem('ludomusic_user_id');
+
+      // Limpar estado
+      setProfile(null);
+      setUserId(null);
+
+      console.log('🗑️ Conta deletada com sucesso');
+      return true;
+    } catch (error) {
+      console.error('❌ Erro ao deletar conta:', error);
+      return false;
+    }
+  };
+
   // Função para exportar dados do perfil
   const exportProfile = () => {
     if (!profile) return null;
@@ -412,7 +677,7 @@ export const UserProfileProvider = ({ children }) => {
   };
 
   // Função para importar dados do perfil
-  const importProfile = (profileData) => {
+  const importProfile = async (profileData) => {
     if (!profileData || !userId) return false;
 
     try {
@@ -431,6 +696,14 @@ export const UserProfileProvider = ({ children }) => {
       setProfile(importedProfile);
       localStorage.setItem(`ludomusic_profile_${userId}`, JSON.stringify(importedProfile));
 
+      // Salvar no servidor
+      try {
+        await saveProfileToServer(importedProfile);
+        console.log('📥 Perfil importado e salvo no servidor');
+      } catch (error) {
+        console.warn('Não foi possível salvar perfil importado no servidor:', error);
+      }
+
       return true;
     } catch (error) {
       console.error('Erro ao importar perfil:', error);
@@ -439,7 +712,7 @@ export const UserProfileProvider = ({ children }) => {
   };
 
   // Função para atualizar preferências
-  const updatePreferences = (newPreferences) => {
+  const updatePreferences = async (newPreferences) => {
     if (!profile || !userId) return;
 
     const updatedProfile = {
@@ -453,11 +726,19 @@ export const UserProfileProvider = ({ children }) => {
     setProfile(updatedProfile);
     localStorage.setItem(`ludomusic_profile_${userId}`, JSON.stringify(updatedProfile));
 
+    // Salvar no servidor
+    try {
+      await saveProfileToServer(updatedProfile);
+      console.log('⚙️ Preferências atualizadas no servidor');
+    } catch (error) {
+      console.warn('Não foi possível atualizar preferências no servidor:', error);
+    }
+
     return updatedProfile;
   };
 
   // Função para adicionar estatísticas sociais
-  const updateSocialStats = (action, data = {}) => {
+  const updateSocialStats = async (action, data = {}) => {
     if (!profile || !userId) return;
 
     let updatedProfile = { ...profile };
@@ -528,11 +809,19 @@ export const UserProfileProvider = ({ children }) => {
     setProfile(updatedProfile);
     localStorage.setItem(`ludomusic_profile_${userId}`, JSON.stringify(updatedProfile));
 
+    // Salvar no servidor
+    try {
+      await saveProfileToServer(updatedProfile);
+      console.log('🤝 Estatísticas sociais atualizadas no servidor');
+    } catch (error) {
+      console.warn('Não foi possível atualizar estatísticas sociais no servidor:', error);
+    }
+
     return updatedProfile;
   };
 
   // Função para marcar tutorial como visto
-  const markTutorialAsSeen = () => {
+  const markTutorialAsSeen = async () => {
     if (!profile || !userId) return;
 
     const updatedProfile = {
@@ -546,11 +835,19 @@ export const UserProfileProvider = ({ children }) => {
     setProfile(updatedProfile);
     localStorage.setItem(`ludomusic_profile_${userId}`, JSON.stringify(updatedProfile));
 
+    // Salvar no servidor
+    try {
+      await saveProfileToServer(updatedProfile);
+      console.log('📚 Tutorial marcado como visto no servidor');
+    } catch (error) {
+      console.warn('Não foi possível atualizar tutorial no servidor:', error);
+    }
+
     return updatedProfile;
   };
 
   // Função para alterar título atual
-  const setCurrentTitle = (titleId) => {
+  const setCurrentTitle = async (titleId) => {
     if (!profile || !userId) return;
 
     const availableTitles = getAvailableTitles(profile);
@@ -566,11 +863,19 @@ export const UserProfileProvider = ({ children }) => {
     setProfile(updatedProfile);
     localStorage.setItem(`ludomusic_profile_${userId}`, JSON.stringify(updatedProfile));
 
+    // Salvar no servidor
+    try {
+      await saveProfileToServer(updatedProfile);
+      console.log('🏆 Título atualizado no servidor');
+    } catch (error) {
+      console.warn('Não foi possível atualizar título no servidor:', error);
+    }
+
     return updatedProfile;
   };
 
   // Função para atualizar avatar
-  const updateAvatar = (avatarData) => {
+  const updateAvatar = async (avatarData) => {
     if (!profile || !userId) return;
 
     const updatedProfile = {
@@ -581,6 +886,14 @@ export const UserProfileProvider = ({ children }) => {
     setProfile(updatedProfile);
     localStorage.setItem(`ludomusic_profile_${userId}`, JSON.stringify(updatedProfile));
 
+    // Salvar no servidor
+    try {
+      await saveProfileToServer(updatedProfile);
+      console.log('🖼️ Avatar atualizado no servidor');
+    } catch (error) {
+      console.warn('Não foi possível atualizar avatar no servidor:', error);
+    }
+
     return updatedProfile;
   };
 
@@ -590,6 +903,7 @@ export const UserProfileProvider = ({ children }) => {
     updateProfile,
     updateGameStats,
     resetProfile,
+    deleteAccount,
     exportProfile,
     importProfile,
     updatePreferences,

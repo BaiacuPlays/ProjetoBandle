@@ -8,6 +8,8 @@ import { FaTimes, FaEdit, FaTrophy, FaGamepad, FaClock, FaFire, FaStar, FaChartL
 import ProfileTutorial from './ProfileTutorial';
 import AvatarSelector from './AvatarSelector';
 import UserAvatar from './UserAvatar';
+import LoginModal from './LoginModal';
+import { useAuth } from '../contexts/AuthContext';
 import styles from '../styles/UserProfile.module.css';
 
 const UserProfile = ({ isOpen, onClose }) => {
@@ -23,8 +25,12 @@ const UserProfile = ({ isOpen, onClose }) => {
     bio: ''
   });
   const [showConfirmReset, setShowConfirmReset] = useState(false);
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
   const [showAvatarSelector, setShowAvatarSelector] = useState(false);
+
+  // Hook de autenticação
+  const { isAuthenticated } = useAuth();
 
   // Hook do perfil com verificação de segurança
   // Destructure directly to avoid unnecessary intermediate variables and potential null issues
@@ -33,6 +39,7 @@ const UserProfile = ({ isOpen, onClose }) => {
     updateProfile,
     isLoading, // isLoading comes directly from the hook
     resetProfile,
+    deleteAccount,
     exportProfile,
     importProfile,
     updatePreferences,
@@ -50,16 +57,48 @@ const UserProfile = ({ isOpen, onClose }) => {
       });
 
       // Verificar se deve mostrar o tutorial
-      // Ensure isOpen is also checked, as tutorial should only show when the profile modal is open
+      // Mostrar na primeira vez que qualquer usuário abre o perfil
       if (!profile.preferences?.hasSeenProfileTutorial && isOpen) {
         setShowTutorial(true);
       }
     }
   }, [profile, isOpen]); // Depend on profile and isOpen
 
+  // Definir função handleCloseTutorial antes de usar
+  const handleCloseTutorial = () => {
+    setShowTutorial(false);
+    if (markTutorialAsSeen) {
+      markTutorialAsSeen();
+    }
+
+    // Se usuário não está autenticado após o tutorial, fechar o modal
+    // O componente irá automaticamente mostrar o login na próxima renderização
+  };
+
   // If the modal is not open, don't render anything
   if (!isOpen) {
     return null;
+  }
+
+  // Se deve mostrar tutorial, mostrar primeiro (independente de autenticação)
+  if (showTutorial) {
+    return (
+      <ProfileTutorial onClose={handleCloseTutorial} />
+    );
+  }
+
+  // Se não está autenticado, mostrar apenas o modal de login
+  if (!isAuthenticated) {
+    return (
+      <LoginModal
+        isOpen={true}
+        onClose={onClose}
+        onSuccess={(user) => {
+          console.log('✅ Login realizado com sucesso:', user.displayName);
+          // O perfil será automaticamente recarregado pelo contexto
+        }}
+      />
+    );
   }
 
   // Show loading state first, if still loading
@@ -161,22 +200,33 @@ const UserProfile = ({ isOpen, onClose }) => {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    if (deleteAccount) {
+      const success = await deleteAccount();
+      setShowConfirmDelete(false);
+
+      if (success) {
+        alert('Conta deletada com sucesso! Você será redirecionado para a página inicial.');
+        // Fechar modal e redirecionar
+        onClose();
+        // Recarregar a página para limpar todos os estados
+        window.location.reload();
+      } else {
+        alert('Erro ao deletar conta. Tente novamente.');
+      }
+    }
+  };
+
   const handlePreferenceChange = (key, value) => {
     if (updatePreferences) {
       updatePreferences({ [key]: value });
     }
   };
 
-  const handleCloseTutorial = () => {
-    setShowTutorial(false);
-    if (markTutorialAsSeen) {
-      markTutorialAsSeen();
-    }
-  };
-
   const handleAvatarChange = (avatarData) => {
     if (updateAvatar) {
       updateAvatar(avatarData);
+      setShowAvatarSelector(false);
     }
   };
 
@@ -219,8 +269,8 @@ const UserProfile = ({ isOpen, onClose }) => {
 
   return (
     <>
-      {/* Only render the profile modal if the tutorial is not being shown */}
-      {!showTutorial && (
+      {/* Renderizar o modal de perfil */}
+      {(
         <div className={styles.modalOverlay}>
           <div className={styles.profileModal}>
             <div className={styles.profileHeader}>
@@ -728,6 +778,35 @@ const UserProfile = ({ isOpen, onClose }) => {
                           </div>
                         </div>
                       )}
+
+                      {/* Botão Deletar Conta */}
+                      {!showConfirmDelete ? (
+                        <button
+                          className={styles.deleteButton}
+                          onClick={() => setShowConfirmDelete(true)}
+                        >
+                          <FaTrash /> Deletar Conta Permanentemente
+                        </button>
+                      ) : (
+                        <div className={styles.confirmDelete}>
+                          <p>🚨 ATENÇÃO: Esta ação é IRREVERSÍVEL!</p>
+                          <p>Sua conta e todos os dados serão deletados permanentemente do servidor.</p>
+                          <div className={styles.confirmButtons}>
+                            <button
+                              className={styles.confirmDeleteButton}
+                              onClick={handleDeleteAccount}
+                            >
+                              Sim, deletar conta
+                            </button>
+                            <button
+                              className={styles.cancelDeleteButton}
+                              onClick={() => setShowConfirmDelete(false)}
+                            >
+                              Cancelar
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
@@ -744,11 +823,6 @@ const UserProfile = ({ isOpen, onClose }) => {
             </div>
           </div>
         </div>
-      )}
-
-      {/* Tutorial do perfil - renderizado fora do modal principal */}
-      {showTutorial && (
-        <ProfileTutorial onClose={handleCloseTutorial} />
       )}
     </>
   );

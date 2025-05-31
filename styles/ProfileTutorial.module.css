@@ -119,8 +119,30 @@
   padding: 30px;
   color: white;
   line-height: 1.6;
-  max-height: 400px;
+  max-height: 450px;
   overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #4ade80 rgba(255, 255, 255, 0.1);
+}
+
+/* Scrollbar customizada para o corpo do tutorial */
+.tutorialBody::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tutorialBody::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.tutorialBody::-webkit-scrollbar-thumb {
+  background: #4ade80;
+  border-radius: 3px;
+  transition: background 0.3s ease;
+}
+
+.tutorialBody::-webkit-scrollbar-thumb:hover {
+  background: #22c55e;
 }
 
 .stepContent {

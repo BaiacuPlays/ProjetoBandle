@@ -24,11 +24,11 @@
   border-radius: 20px;
   width: 100%;
   max-width: 900px;
-  max-height: calc(100vh - 120px);
+  max-height: calc(100vh - 40px); /* Reduzido para dar mais espaço */
   overflow: hidden;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(29, 185, 84, 0.3);
-  margin: 60px auto 60px auto;
+  margin: 20px auto; /* Reduzido para dar mais espaço */
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -69,9 +69,11 @@
 
 .profileContent {
   padding: 30px;
-  overflow-y: auto;
+  overflow-y: auto !important; /* Forçar scroll */
   flex: 1;
   color: white;
+  height: 0; /* Força o flex a calcular altura corretamente */
+  min-height: 400px; /* Altura mínima para garantir scroll */
   /* Scrollbar customizada verde */
   scrollbar-width: thin;
   scrollbar-color: rgba(29, 185, 84, 0.5) rgba(255, 255, 255, 0.1);
@@ -109,7 +111,8 @@
 .avatarSection {
   position: relative;
   flex-shrink: 0;
-  margin-bottom: 20px;
+  margin-bottom: 40px; /* Aumentado ainda mais para dar espaço ao badge */
+  padding-bottom: 20px; /* Padding extra aumentado para o badge */
 }
 
 .avatar {
@@ -122,17 +125,19 @@
 
 .levelBadge {
   position: absolute;
-  bottom: -15px;
+  bottom: -15px; /* Movido mais para baixo para não ser cortado */
   left: 50%;
   transform: translateX(-50%);
   background: linear-gradient(45deg, #1db954, #1ed760);
   color: white;
-  padding: 5px 15px;
-  border-radius: 20px;
-  font-size: 0.9rem;
+  padding: 8px 18px; /* Padding aumentado para melhor visual */
+  border-radius: 25px; /* Mais arredondado */
+  font-size: 0.85rem;
   font-weight: 600;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  z-index: 1;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* Sombra mais forte */
+  z-index: 2; /* Z-index maior */
+  white-space: nowrap; /* Evita quebra de linha */
+  border: 2px solid rgba(255, 255, 255, 0.1); /* Borda sutil */
 }
 
 .userInfo {
@@ -839,6 +844,72 @@
 }
 
 .cancelResetButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* Botão Deletar Conta */
+.deleteButton {
+  background: #7c2d12; /* Marrom escuro mais perigoso */
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+  margin-top: 15px;
+}
+
+.deleteButton:hover {
+  background: #991b1b; /* Vermelho escuro */
+  transform: translateY(-2px);
+}
+
+.confirmDelete {
+  background: rgba(124, 45, 18, 0.1);
+  border: 1px solid #7c2d12;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 15px;
+}
+
+.confirmDelete p {
+  color: #dc2626;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.confirmDeleteButton {
+  background: #7c2d12;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.confirmDeleteButton:hover {
+  background: #991b1b;
+}
+
+.cancelDeleteButton {
+  background: transparent;
+  color: #888;
+  border: 1px solid #888;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.cancelDeleteButton:hover {
   background: rgba(255, 255, 255, 0.1);
   color: white;
 }
