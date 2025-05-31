@@ -2,16 +2,14 @@ import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { songs } from '../data/songs';
 import styles from '../styles/Home.module.css';
-import { FaPlay, FaPause, FaVolumeUp, FaFastForward, FaQuestionCircle, FaBars, FaUser } from 'react-icons/fa';
+import { FaPlay, FaPause, FaVolumeUp, FaFastForward, FaQuestionCircle, FaBars } from 'react-icons/fa';
 
 import Footer from '../components/Footer';
 import GameMenu from '../components/GameMenu';
 import Statistics from '../components/Statistics';
 import Tutorial from '../components/Tutorial';
-import UserProfile from '../components/UserProfile';
 import GlobalStats from '../components/GlobalStats';
 import { useLanguage } from '../contexts/LanguageContext';
-import { useUserProfile } from '../contexts/UserProfileContext';
 import { fetchTimezone } from '../config/api';
 import { audioCache } from '../utils/audioCache';
 import { useServiceWorker } from '../hooks/useServiceWorker';
@@ -37,15 +35,8 @@ const MAX_ATTEMPTS = 6;
 export default function Home() {
   const { t, isClient } = useLanguage();
 
-  // Hook do perfil com verificação de segurança
-  let updateGameStats = null;
-  try {
-    const userProfile = useUserProfile();
-    updateGameStats = userProfile?.updateGameStats;
-  } catch (error) {
-    console.warn('UserProfile context not available:', error);
-    updateGameStats = () => {}; // função vazia como fallback
-  }
+  // Função vazia para compatibilidade
+  const updateGameStats = () => {};
 
   // Hooks de performance
   const { debounce, throttle } = usePerformanceOptimization();
@@ -107,8 +98,7 @@ export default function Home() {
   const [infiniteGameOver, setInfiniteGameOver] = useState(false);
   const [showNextSongButton, setShowNextSongButton] = useState(false);
 
-  // Estados do perfil
-  const [showProfile, setShowProfile] = useState(false);
+
 
   // Tempos máximos de reprodução por tentativa
   const maxClipDurations = [0.6, 1.2, 2.0, 3.0, 3.5, 4.2];
@@ -1643,13 +1633,6 @@ export default function Home() {
               <DonationButton />
               <button
                 className={styles.helpButton}
-                onClick={() => setShowProfile(true)}
-                aria-label="Perfil"
-              >
-                <FaUser size={24} />
-              </button>
-              <button
-                className={styles.helpButton}
                 onClick={() => setShowInstructions(true)}
                 aria-label="Ajuda"
               >
@@ -2101,11 +2084,7 @@ export default function Home() {
           onStartPlaying={handleStartPlaying}
         />
 
-        {/* Perfil do usuário */}
-        <UserProfile
-          isOpen={showProfile}
-          onClose={() => setShowProfile(false)}
-        />
+
 
         {/* Componentes de monetização */}
         <SimpleInterstitialAd

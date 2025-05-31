@@ -1,4 +1,4 @@
-// Service Worker para LudoMusic - Cache Offline Inteligente
+// Service Worker DESABILITADO - Correção de bugs
 const CACHE_NAME = 'ludomusic-v1.2';
 const AUDIO_CACHE_NAME = 'ludomusic-audio-v1.2';
 const STATIC_CACHE_NAME = 'ludomusic-static-v1.2';
@@ -40,68 +40,22 @@ const CACHE_CONFIG = {
   }
 };
 
-// Instalar Service Worker
+// Instalar Service Worker (DESABILITADO)
 self.addEventListener('install', (event) => {
-  console.log('Service Worker instalando...');
-  
-  event.waitUntil(
-    caches.open(STATIC_CACHE_NAME)
-      .then((cache) => {
-        console.log('Cache estático criado');
-        return cache.addAll(STATIC_RESOURCES);
-      })
-      .then(() => {
-        console.log('Recursos estáticos cacheados');
-        return self.skipWaiting();
-      })
-  );
+  console.log('Service Worker: DESABILITADO para correção');
+  self.skipWaiting();
 });
 
-// Ativar Service Worker
+// Ativar Service Worker (DESABILITADO)
 self.addEventListener('activate', (event) => {
-  console.log('Service Worker ativando...');
-  
-  event.waitUntil(
-    caches.keys()
-      .then((cacheNames) => {
-        return Promise.all(
-          cacheNames.map((cacheName) => {
-            // Remover caches antigos
-            if (cacheName !== CACHE_NAME && 
-                cacheName !== AUDIO_CACHE_NAME && 
-                cacheName !== STATIC_CACHE_NAME) {
-              console.log('Removendo cache antigo:', cacheName);
-              return caches.delete(cacheName);
-            }
-          })
-        );
-      })
-      .then(() => {
-        console.log('Service Worker ativado');
-        return self.clients.claim();
-      })
-  );
+  console.log('Service Worker: DESABILITADO para correção');
+  self.clients.claim();
 });
 
-// Interceptar requisições
+// Interceptar requisições (DESABILITADO)
 self.addEventListener('fetch', (event) => {
-  const { request } = event;
-  const url = new URL(request.url);
-  
-  // Ignorar requisições não-GET
-  if (request.method !== 'GET') return;
-  
-  // Ignorar requisições de outros domínios (exceto áudio)
-  if (url.origin !== self.location.origin && !url.pathname.includes('/audio/')) {
-    return;
-  }
-  
-  // Determinar estratégia de cache
-  const cacheConfig = getCacheConfig(url.pathname);
-  
-  if (cacheConfig) {
-    event.respondWith(handleRequest(request, cacheConfig));
-  }
+  // Não interceptar nenhuma requisição - deixar passar normalmente
+  return;
 });
 
 // Obter configuração de cache para um caminho
