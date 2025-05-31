@@ -48,120 +48,111 @@ export const UserProfileProvider = ({ children }) => {
     }
   }, [isClient, userId]);
 
-  const loadProfile = async () => {
+  const loadProfile = () => {
     try {
       setIsLoading(true);
-      
-      const response = await fetch(`/api/profile?userId=${userId}`);
-      const data = await response.json();
-      
-      if (data.profile) {
-        setProfile(data.profile);
+
+      // Tentar carregar do localStorage
+      const savedProfile = localStorage.getItem(`ludomusic_profile_${userId}`);
+
+      if (savedProfile) {
+        const parsedProfile = JSON.parse(savedProfile);
+        setProfile(parsedProfile);
+      } else {
+        // Criar novo perfil
+        const newProfile = {
+          id: userId,
+          username: `Jogador_${userId?.slice(-6) || '000000'}`,
+          displayName: '',
+          bio: '',
+          avatar: '/default-avatar.svg',
+          level: 1,
+          xp: 0,
+          createdAt: new Date().toISOString(),
+          stats: {
+            totalGames: 0,
+            wins: 0,
+            losses: 0,
+            winRate: 0,
+            currentStreak: 0,
+            bestStreak: 0,
+            totalPlayTime: 0,
+            modeStats: {
+              daily: { games: 0, wins: 0 },
+              infinite: { games: 0, wins: 0, bestStreak: 0 }
+            }
+          },
+          achievements: [],
+          gameHistory: []
+        };
+
+        setProfile(newProfile);
+        localStorage.setItem(`ludomusic_profile_${userId}`, JSON.stringify(newProfile));
       }
     } catch (error) {
       console.error('Erro ao carregar perfil:', error);
-      // Em caso de erro, criar perfil local temporário
-      const tempProfile = {
-        id: userId,
-        username: `Jogador_${userId?.slice(-6) || '000000'}`,
-        displayName: '',
-        bio: '',
-        avatar: '/default-avatar.png',
-        level: 1,
-        xp: 0,
-        stats: {
-          totalGames: 0,
-          wins: 0,
-          losses: 0,
-          winRate: 0,
-          currentStreak: 0,
-          bestStreak: 0
-        },
-        achievements: [],
-        gameHistory: []
-      };
-      setProfile(tempProfile);
     } finally {
       setIsLoading(false);
     }
   };
 
   // Atualizar perfil
-  const updateProfile = async (updates) => {
+  const updateProfile = (updates) => {
     if (!profile || !userId) return;
 
     try {
-      const response = await fetch('/api/profile', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId,
-          updates
-        }),
-      });
+      const updatedProfile = { ...profile, ...updates };
+      setProfile(updatedProfile);
 
-      const data = await response.json();
-      
-      if (data.profile) {
-        setProfile(data.profile);
-      }
+      // Salvar no localStorage
+      localStorage.setItem(`ludomusic_profile_${userId}`, JSON.stringify(updatedProfile));
+
+      return updatedProfile;
     } catch (error) {
       console.error('Erro ao atualizar perfil:', error);
-      // Fallback: atualizar localmente
-      setProfile(prev => ({ ...prev, ...updates }));
     }
   };
 
   // Atualizar estatísticas do jogo
-  const updateGameStats = async (gameStats) => {
+  const updateGameStats = (gameStats) => {
     if (!profile || !userId) return;
 
     try {
-      const response = await fetch('/api/profile', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId,
-          gameStats
-        }),
-      });
+      let updatedProfile;
 
-      const data = await response.json();
-      
-      if (data.profile) {
-        setProfile(data.profile);
+      if (gameStats.won) {
+        updatedProfile = {
+          ...profile,
+          stats: {
+            ...profile.stats,
+            totalGames: profile.stats.totalGames + 1,
+            wins: profile.stats.wins + 1,
+            currentStreak: profile.stats.currentStreak + 1,
+            bestStreak: Math.max(profile.stats.bestStreak, profile.stats.currentStreak + 1),
+            winRate: ((profile.stats.wins + 1) / (profile.stats.totalGames + 1)) * 100
+          },
+          xp: profile.xp + 50
+        };
+      } else {
+        updatedProfile = {
+          ...profile,
+          stats: {
+            ...profile.stats,
+            totalGames: profile.stats.totalGames + 1,
+            losses: profile.stats.losses + 1,
+            currentStreak: 0,
+            winRate: (profile.stats.wins / (profile.stats.totalGames + 1)) * 100
+          },
+          xp: profile.xp + 10
+        };
       }
+
+      setProfile(updatedProfile);
+      localStorage.setItem(`ludomusic_profile_${userId}`, JSON.stringify(updatedProfile));
+
+      return updatedProfile;
     } catch (error) {
       console.error('Erro ao atualizar estatísticas:', error);
-      // Fallback: atualizar localmente
-      if (gameStats.won) {
-        setProfile(prev => ({
-          ...prev,
-          stats: {
-            ...prev.stats,
-            totalGames: prev.stats.totalGames + 1,
-            wins: prev.stats.wins + 1,
-            currentStreak: prev.stats.currentStreak + 1,
-            bestStreak: Math.max(prev.stats.bestStreak, prev.stats.currentStreak + 1)
-          },
-          xp: prev.xp + 50
-        }));
-      } else {
-        setProfile(prev => ({
-          ...prev,
-          stats: {
-            ...prev.stats,
-            totalGames: prev.stats.totalGames + 1,
-            losses: prev.stats.losses + 1,
-            currentStreak: 0
-          },
-          xp: prev.xp + 10
-        }));
-      }
     }
   };
 
