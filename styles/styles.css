@@ -12,18 +12,24 @@ body {
   color: #fff;
   font-family: 'Segoe UI', Arial, sans-serif;
   margin: 0;
-  transform: scale(var(--interface-scale));
-  transform-origin: top left;
-  transition: transform 0.3s ease;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-/* BLOQUEIO DE SCROLL PARA MODAIS - VERSÃO ULTRA AGRESSIVA */
+/* Aplicar transform apenas quando não há modais abertos */
+body:not(.modal-open) {
+  transform: scale(var(--interface-scale));
+  transform-origin: top left;
+  transition: transform 0.3s ease;
+}
+
+/* BLOQUEIO DE SCROLL PARA MODAIS - VERSÃO ULTRA ESPECÍFICA */
 html.modal-open,
 body.modal-open {
   overflow: hidden !important;
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
   height: 100vh !important;
   width: 100vw !important;
   position: fixed !important;
@@ -35,42 +41,154 @@ body.modal-open {
   padding: 0 !important;
   max-height: 100vh !important;
   max-width: 100vw !important;
+  /* Garantir que não há transform quando modal está aberto */
+  transform: none !important;
 }
 
-/* REMOVER TODAS AS SCROLLBARS POSSÍVEIS */
+/* REMOVER SCROLLBARS DA PÁGINA PRINCIPAL - WEBKIT (Chrome, Safari, Edge) */
 html.modal-open::-webkit-scrollbar,
-body.modal-open::-webkit-scrollbar,
-html.modal-open *::-webkit-scrollbar,
-body.modal-open *::-webkit-scrollbar {
+body.modal-open::-webkit-scrollbar {
   display: none !important;
-  width: 0 !important;
-  height: 0 !important;
+  width: 0px !important;
+  height: 0px !important;
+  background: transparent !important;
+  -webkit-appearance: none !important;
+}
+
+/* REMOVER SCROLLBARS DA PÁGINA PRINCIPAL - FIREFOX */
+html.modal-open,
+body.modal-open {
+  scrollbar-width: none !important;
+  -moz-appearance: none !important;
+}
+
+/* REMOVER SCROLLBARS DA PÁGINA PRINCIPAL - INTERNET EXPLORER/EDGE */
+html.modal-open,
+body.modal-open {
+  -ms-overflow-style: none !important;
+}
+
+/* SCROLLBARS CUSTOMIZADAS APENAS NOS MODAIS */
+body.modal-open .tutorialModal,
+body.modal-open .profileModal,
+body.modal-open .menuContainer,
+body.modal-open .modal,
+body.modal-open .friendsModal,
+body.modal-open .inviteModal,
+body.modal-open .errorModal,
+body.modal-open .avatarModal,
+body.modal-open .referralModal {
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(29, 185, 84, 0.5) rgba(255, 255, 255, 0.1) !important;
+  -ms-overflow-style: auto !important;
+}
+
+/* WEBKIT SCROLLBARS CUSTOMIZADAS PARA MODAIS */
+body.modal-open .tutorialModal::-webkit-scrollbar,
+body.modal-open .profileModal::-webkit-scrollbar,
+body.modal-open .menuContainer::-webkit-scrollbar,
+body.modal-open .modal::-webkit-scrollbar,
+body.modal-open .friendsModal::-webkit-scrollbar,
+body.modal-open .inviteModal::-webkit-scrollbar,
+body.modal-open .errorModal::-webkit-scrollbar,
+body.modal-open .avatarModal::-webkit-scrollbar,
+body.modal-open .referralModal::-webkit-scrollbar {
+  width: 8px !important;
   background: transparent !important;
 }
 
-/* Para Firefox e outros navegadores */
-html.modal-open,
-body.modal-open,
-html.modal-open *,
-body.modal-open * {
+body.modal-open .tutorialModal::-webkit-scrollbar-track,
+body.modal-open .profileModal::-webkit-scrollbar-track,
+body.modal-open .menuContainer::-webkit-scrollbar-track,
+body.modal-open .modal::-webkit-scrollbar-track,
+body.modal-open .friendsModal::-webkit-scrollbar-track,
+body.modal-open .inviteModal::-webkit-scrollbar-track,
+body.modal-open .errorModal::-webkit-scrollbar-track,
+body.modal-open .avatarModal::-webkit-scrollbar-track,
+body.modal-open .referralModal::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 4px !important;
+}
+
+body.modal-open .tutorialModal::-webkit-scrollbar-thumb,
+body.modal-open .profileModal::-webkit-scrollbar-thumb,
+body.modal-open .menuContainer::-webkit-scrollbar-thumb,
+body.modal-open .modal::-webkit-scrollbar-thumb,
+body.modal-open .friendsModal::-webkit-scrollbar-thumb,
+body.modal-open .inviteModal::-webkit-scrollbar-thumb,
+body.modal-open .errorModal::-webkit-scrollbar-thumb,
+body.modal-open .avatarModal::-webkit-scrollbar-thumb,
+body.modal-open .referralModal::-webkit-scrollbar-thumb {
+  background: rgba(29, 185, 84, 0.5) !important;
+  border-radius: 4px !important;
+  transition: background 0.3s ease !important;
+}
+
+body.modal-open .tutorialModal::-webkit-scrollbar-thumb:hover,
+body.modal-open .profileModal::-webkit-scrollbar-thumb:hover,
+body.modal-open .menuContainer::-webkit-scrollbar-thumb:hover,
+body.modal-open .modal::-webkit-scrollbar-thumb:hover,
+body.modal-open .friendsModal::-webkit-scrollbar-thumb:hover,
+body.modal-open .inviteModal::-webkit-scrollbar-thumb:hover,
+body.modal-open .errorModal::-webkit-scrollbar-thumb:hover,
+body.modal-open .avatarModal::-webkit-scrollbar-thumb:hover,
+body.modal-open .referralModal::-webkit-scrollbar-thumb:hover {
+  background: rgba(29, 185, 84, 0.7) !important;
+}
+
+/* REMOVER SCROLLBAR PADRÃO DE TODOS OS ELEMENTOS EXCETO MODAIS */
+body.modal-open *:not(.tutorialModal):not(.profileModal):not(.menuContainer):not(.modal):not(.friendsModal):not(.inviteModal):not(.errorModal):not(.avatarModal):not(.referralModal)::-webkit-scrollbar {
+  display: none !important;
+  width: 0px !important;
+  height: 0px !important;
+  background: transparent !important;
+}
+
+body.modal-open *:not(.tutorialModal):not(.profileModal):not(.menuContainer):not(.modal):not(.friendsModal):not(.inviteModal):not(.errorModal):not(.avatarModal):not(.referralModal) {
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
 }
 
-/* Garantir que NENHUM elemento cause scroll */
-body.modal-open *:not([class*="modal"]):not([class*="overlay"]):not([class*="tutorial"]):not([class*="Modal"]):not([class*="Overlay"]):not([class*="Tutorial"]) {
+/* FORÇAR OVERFLOW HIDDEN EM TODOS OS ELEMENTOS EXCETO MODAIS */
+body.modal-open,
+body.modal-open *:not(.tutorialModal):not(.profileModal):not(.menuContainer):not(.modal):not(.friendsModal):not(.inviteModal):not(.errorModal):not(.avatarModal):not(.referralModal),
+html.modal-open,
+html.modal-open *:not(.tutorialModal):not(.profileModal):not(.menuContainer):not(.modal):not(.friendsModal):not(.inviteModal):not(.errorModal):not(.avatarModal):not(.referralModal) {
   overflow: hidden !important;
-  position: relative !important;
-  max-height: 100vh !important;
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
 }
 
-/* Forçar container principal a não ter scroll */
+/* EXCEÇÕES ESPECÍFICAS PARA ELEMENTOS DO MODAL QUE PRECISAM DE SCROLL */
+body.modal-open .tutorialModal,
+body.modal-open [class*="modal"][class*="Modal"],
+body.modal-open [class*="tutorial"][class*="Content"],
+body.modal-open [class*="Modal"][class*="Content"] {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+/* GARANTIR QUE NENHUM OUTRO ELEMENTO TENHA SCROLL */
+body.modal-open > *:not([class*="modal"]):not([class*="tutorial"]):not([class*="overlay"]),
 body.modal-open #__next,
 body.modal-open .main-container,
 body.modal-open main {
   overflow: hidden !important;
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
+}
+
+/* FORÇAR CONTAINERS PRINCIPAIS */
+body.modal-open #__next,
+body.modal-open .main-container,
+body.modal-open main,
+body.modal-open .container {
+  overflow: hidden !important;
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
   height: 100vh !important;
   position: fixed !important;
+  width: 100% !important;
 }
 
 .main-content {

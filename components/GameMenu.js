@@ -9,11 +9,16 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import styles from '../styles/GameMenu.module.css';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useModalScrollLock } from '../hooks/useModalScrollLock';
 import { useRouter } from 'next/router';
 
 const GameMenu = ({ isOpen, onClose }) => {
   const { t, language, changeLanguage, isClient } = useLanguage();
   const router = useRouter();
+
+  // Bloquear/desbloquear scroll da página
+  useModalScrollLock(isOpen);
+
   const [expandedSections, setExpandedSections] = useState({
     howToPlay: false,
     settings: false,

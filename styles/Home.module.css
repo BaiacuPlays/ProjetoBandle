@@ -1896,6 +1896,8 @@
   left: 0 !important;
   right: 0 !important;
   bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
   background: rgba(0, 0, 0, 0.9) !important;
   display: flex !important;
   justify-content: center !important;
@@ -1904,9 +1906,9 @@
   padding: 1rem !important;
   backdrop-filter: blur(10px);
   overflow-y: auto !important;
-  /* Garantir centralização perfeita */
-  min-height: 100vh !important;
-  min-width: 100vw !important;
+  /* Garantir posicionamento correto */
+  transform: none !important;
+  margin: 0 !important;
 }
 
 .tutorialModal {
@@ -1916,15 +1918,42 @@
   position: relative !important;
   max-width: 700px !important;
   width: 100% !important;
-  max-height: 90vh !important;
+  max-height: calc(100vh - 120px) !important; /* Deixa espaço para margem */
   overflow-y: auto !important;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5) !important;
   border: 1px solid rgba(29, 185, 84, 0.2) !important;
   animation: tutorialSlideIn 0.5s ease-out !important;
   /* Posicionamento no topo - FORÇADO */
-  margin: 80px auto 0 auto !important;
+  margin: 60px auto 60px auto !important; /* Margem simétrica */
   transform: translateZ(0) !important; /* Força aceleração de hardware */
+  /* Scroll customizado */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(29, 185, 84, 0.5) rgba(255, 255, 255, 0.1);
 }
+
+/* Scrollbar customizada para Webkit */
+.tutorialModal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tutorialModal::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.tutorialModal::-webkit-scrollbar-thumb {
+  background: rgba(29, 185, 84, 0.5);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.tutorialModal::-webkit-scrollbar-thumb:hover {
+  background: rgba(29, 185, 84, 0.7);
+}
+
+
+
+
 
 @keyframes tutorialSlideIn {
   from {
@@ -2150,12 +2179,14 @@
 
   .tutorialModal {
     padding: 1.5rem;
-    margin: 60px auto 0 auto;
-    max-height: 95vh;
+    margin: 40px auto 40px auto;
+    max-height: calc(100vh - 80px);
     /* Centralização perfeita em mobile */
     width: calc(100% - 1rem);
     max-width: calc(100vw - 1rem);
   }
+
+
 
   .tutorialTitle {
     font-size: 1.8rem;
@@ -2194,11 +2225,14 @@
 
   .tutorialModal {
     padding: 1rem;
-    margin: 40px auto 0 auto;
+    margin: 20px auto 20px auto;
+    max-height: calc(100vh - 40px);
     width: calc(100% - 0.5rem);
     max-width: calc(100vw - 0.5rem);
     border-radius: 1rem;
   }
+
+
 
   .tutorialTitle {
     font-size: 1.6rem;

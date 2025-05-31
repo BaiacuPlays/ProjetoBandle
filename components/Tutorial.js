@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useModalScrollLock } from '../hooks/useModalScrollLock';
 import styles from '../styles/Home.module.css';
 
 const Tutorial = ({ isOpen, onClose, onStartPlaying }) => {
   const { t, isClient } = useLanguage();
+  const modalRef = useRef(null);
 
   // Bloquear/desbloquear scroll da página
   useModalScrollLock(isOpen);
@@ -18,7 +19,7 @@ const Tutorial = ({ isOpen, onClose, onStartPlaying }) => {
 
   return (
     <div className={styles.tutorialOverlay}>
-      <div className={styles.tutorialModal}>
+      <div className={styles.tutorialModal} ref={modalRef}>
         <button
           className={styles.tutorialCloseButton}
           onClick={onClose}

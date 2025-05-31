@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { FaTimes, FaArrowLeft, FaArrowRight, FaTrophy, FaChartLine, FaCog, FaStar } from 'react-icons/fa';
-import { useModalScrollLockAlways } from '../hooks/useModalScrollLock';
+import { useModalScrollLock } from '../hooks/useModalScrollLock';
 import styles from '../styles/ProfileTutorial.module.css';
 
 const ProfileTutorial = ({ onClose }) => {
   const [currentStep, setCurrentStep] = useState(0);
 
   // Bloquear/desbloquear scroll da página
-  useModalScrollLockAlways();
+  useModalScrollLock(true);
 
   const tutorialSteps = [
     {

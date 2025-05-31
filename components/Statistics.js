@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getGlobalStatistics } from '../config/api';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useModalScrollLock } from '../hooks/useModalScrollLock';
 import ShareButton from './ShareButton';
 import ActionButtons from './ActionButtons';
 import styles from '../styles/Statistics.module.css';
@@ -15,6 +16,10 @@ function generateUUID() {
 
 const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false, isMultiplayerMode = false, currentSong = null }) => {
   const { t, isClient } = useLanguage();
+
+  // Bloquear/desbloquear scroll da página
+  useModalScrollLock(isOpen);
+
   const [stats, setStats] = useState({
     totalGames: 0,
     wins: 0,

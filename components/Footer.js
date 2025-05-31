@@ -20,6 +20,8 @@ const Footer = () => {
         <p>
           {language === 'pt-BR' && (
             <>
+              <a href="/about">{isClient ? t('footer_about') : 'Sobre'}</a> |
+              <a href="/faq">{isClient ? t('footer_faq') : 'FAQ'}</a> |
               <a href="/termos-de-uso">{isClient ? t('footer_terms') : 'Termos de Uso'}</a> |
               <a href="/politica-de-privacidade">{isClient ? t('footer_privacy') : 'Política de Privacidade'}</a> |
               <a href="/remocao-de-conteudo">{isClient ? t('footer_removal') : 'Remoção de Conteúdo'}</a>
@@ -27,6 +29,8 @@ const Footer = () => {
           )}
           {language === 'en-US' && (
             <>
+              <a href="/about">{isClient ? t('footer_about') : 'About'}</a> |
+              <a href="/faq">{isClient ? t('footer_faq') : 'FAQ'}</a> |
               <a href="/terms-of-use">{isClient ? t('footer_terms') : 'Terms of Use'}</a> |
               <a href="/privacy-policy">{isClient ? t('footer_privacy') : 'Privacy Policy'}</a> |
               <a href="/content-removal">{isClient ? t('footer_removal') : 'Content Removal'}</a>
@@ -34,6 +38,8 @@ const Footer = () => {
           )}
           {language === 'es' && (
             <>
+              <a href="/about">{isClient ? t('footer_about') : 'Acerca de'}</a> |
+              <a href="/faq">{isClient ? t('footer_faq') : 'FAQ'}</a> |
               <a href="/terminos-de-uso">{isClient ? t('footer_terms') : 'Términos de Uso'}</a> |
               <a href="/politica-de-privacidad">{isClient ? t('footer_privacy') : 'Política de Privacidad'}</a> |
               <a href="/eliminacion-de-contenido">{isClient ? t('footer_removal') : 'Eliminación de Contenido'}</a>

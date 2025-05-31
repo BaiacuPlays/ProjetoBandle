@@ -1,181 +1,140 @@
 import { useEffect } from 'react';
 
-// Função para forçar remoção de scroll de forma ultra agressiva
-const forceRemoveScroll = () => {
-  // Método 1: CSS inline direto
-  document.documentElement.style.setProperty('overflow', 'hidden', 'important');
-  document.documentElement.style.setProperty('overflow-x', 'hidden', 'important');
-  document.documentElement.style.setProperty('overflow-y', 'hidden', 'important');
-  document.body.style.setProperty('overflow', 'hidden', 'important');
-  document.body.style.setProperty('overflow-x', 'hidden', 'important');
-  document.body.style.setProperty('overflow-y', 'hidden', 'important');
-
-  // Método 2: Remover scrollbars via CSS
-  const existingStyle = document.getElementById('ultra-scroll-lock');
-  if (!existingStyle) {
-    const style = document.createElement('style');
-    style.id = 'ultra-scroll-lock';
-    style.innerHTML = `
-      html, body {
-        overflow: hidden !important;
-        overflow-x: hidden !important;
-        overflow-y: hidden !important;
-        position: fixed !important;
-        width: 100% !important;
-        height: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-      }
-      html::-webkit-scrollbar,
-      body::-webkit-scrollbar,
-      *::-webkit-scrollbar {
-        display: none !important;
-        width: 0px !important;
-        height: 0px !important;
-        background: transparent !important;
-      }
-      html, body, * {
-        scrollbar-width: none !important;
-        -ms-overflow-style: none !important;
-      }
-      #__next {
-        overflow: hidden !important;
-        position: fixed !important;
-        width: 100% !important;
-        height: 100% !important;
-      }
-    `;
-    document.head.appendChild(style);
-  }
-
-  // Método 3: Forçar via atributos
-  document.documentElement.setAttribute('style',
-    document.documentElement.getAttribute('style') + '; overflow: hidden !important; overflow-x: hidden !important; overflow-y: hidden !important;'
-  );
-  document.body.setAttribute('style',
-    document.body.getAttribute('style') + '; overflow: hidden !important; overflow-x: hidden !important; overflow-y: hidden !important;'
-  );
-};
-
 /**
  * Hook personalizado para bloquear o scroll da página quando um modal está aberto
  * @param {boolean} isOpen - Se o modal está aberto ou não
  */
 export const useModalScrollLock = (isOpen) => {
   useEffect(() => {
-    let intervalId;
-    let mutationObserver;
-
     if (isOpen) {
       // Salvar posição atual do scroll
       const scrollY = window.scrollY;
 
-      // Salvar valores originais
-      const originalBodyOverflow = document.body.style.overflow;
-      const originalHtmlOverflow = document.documentElement.style.overflow;
-      const originalBodyPosition = document.body.style.position;
-      const originalBodyTop = document.body.style.top;
+      // Salvar valores originais ANTES de modificar
+      const originalBodyOverflow = document.body.style.overflow || '';
+      const originalHtmlOverflow = document.documentElement.style.overflow || '';
+      const originalBodyPosition = document.body.style.position || '';
+      const originalBodyTop = document.body.style.top || '';
+      const originalBodyWidth = document.body.style.width || '';
+      const originalBodyHeight = document.body.style.height || '';
+      const originalBodyLeft = document.body.style.left || '';
+      const originalBodyRight = document.body.style.right || '';
 
-      // Salvar valores originais
-      document.body.setAttribute('data-scroll-y', scrollY);
+      // APLICAR BLOQUEIO ULTRA AGRESSIVO
+      // Forçar overflow hidden em múltiplas propriedades
+      document.body.style.setProperty('overflow', 'hidden', 'important');
+      document.body.style.setProperty('overflow-x', 'hidden', 'important');
+      document.body.style.setProperty('overflow-y', 'hidden', 'important');
+      document.body.style.setProperty('position', 'fixed', 'important');
+      document.body.style.setProperty('top', `-${scrollY}px`, 'important');
+      document.body.style.setProperty('width', '100%', 'important');
+      document.body.style.setProperty('height', '100vh', 'important');
+      document.body.style.setProperty('left', '0', 'important');
+      document.body.style.setProperty('right', '0', 'important');
+
+      document.documentElement.style.setProperty('overflow', 'hidden', 'important');
+      document.documentElement.style.setProperty('overflow-x', 'hidden', 'important');
+      document.documentElement.style.setProperty('overflow-y', 'hidden', 'important');
+
+      // CSS simples para bloquear scroll da página
+      const styleElement = document.createElement('style');
+      styleElement.id = 'modal-scroll-lock';
+      styleElement.innerHTML = `
+        html, body {
+          overflow: hidden !important;
+          height: 100% !important;
+        }
+
+        /* Permitir scroll apenas nos modais */
+        .tutorialModal,
+        .profileModal,
+        .menuContainer,
+        .modal,
+        .friendsModal,
+        .inviteModal,
+        .errorModal,
+        .avatarModal,
+        .referralModal {
+          overflow-y: auto !important;
+          overflow-x: hidden !important;
+        }
+
+        /* Permitir scroll apenas nos modais - sem customização duplicada */
+      `;
+      document.head.appendChild(styleElement);
+
+      // Salvar valores para restaurar
+      document.body.setAttribute('data-scroll-y', scrollY.toString());
       document.body.setAttribute('data-original-overflow', originalBodyOverflow);
       document.body.setAttribute('data-original-position', originalBodyPosition);
       document.body.setAttribute('data-original-top', originalBodyTop);
+      document.body.setAttribute('data-original-width', originalBodyWidth);
+      document.body.setAttribute('data-original-height', originalBodyHeight);
+      document.body.setAttribute('data-original-left', originalBodyLeft);
+      document.body.setAttribute('data-original-right', originalBodyRight);
       document.documentElement.setAttribute('data-original-overflow', originalHtmlOverflow);
 
-      // MÉTODO ULTRA AGRESSIVO - FORÇAR CONTINUAMENTE
-      const applyScrollLock = () => {
-        // Aplicar posição fixa
-        document.body.style.position = 'fixed';
-        document.body.style.top = `-${scrollY}px`;
-        document.body.style.left = '0';
-        document.body.style.right = '0';
-        document.body.style.width = '100%';
-        document.body.style.height = '100vh';
-
-        // Forçar remoção de scroll
-        forceRemoveScroll();
-
-        // Adicionar classes
-        document.body.classList.add('modal-open');
-        document.documentElement.classList.add('modal-open');
-      };
-
-      // Aplicar imediatamente
-      applyScrollLock();
-
-      // Forçar aplicação a cada 50ms para garantir que funcione
-      intervalId = setInterval(applyScrollLock, 50);
-
-      // Observar mudanças no DOM e reaplicar
-      mutationObserver = new MutationObserver(() => {
-        applyScrollLock();
-      });
-
-      mutationObserver.observe(document.body, {
-        attributes: true,
-        attributeFilter: ['style', 'class'],
-        childList: true,
-        subtree: false
-      });
-
-      mutationObserver.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ['style', 'class'],
-        childList: false,
-        subtree: false
-      });
+      // Adicionar classes
+      document.body.classList.add('modal-open');
+      document.documentElement.classList.add('modal-open');
 
     } else {
-      // Parar interval e observer
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-      if (mutationObserver) {
-        mutationObserver.disconnect();
-      }
-
       // Restaurar tudo
       const scrollY = document.body.getAttribute('data-scroll-y') || '0';
       const originalBodyOverflow = document.body.getAttribute('data-original-overflow') || '';
       const originalHtmlOverflow = document.documentElement.getAttribute('data-original-overflow') || '';
       const originalBodyPosition = document.body.getAttribute('data-original-position') || '';
       const originalBodyTop = document.body.getAttribute('data-original-top') || '';
+      const originalBodyWidth = document.body.getAttribute('data-original-width') || '';
+      const originalBodyHeight = document.body.getAttribute('data-original-height') || '';
+      const originalBodyLeft = document.body.getAttribute('data-original-left') || '';
+      const originalBodyRight = document.body.getAttribute('data-original-right') || '';
 
-      // Remover estilos inline
+      // Remover estilos inline forçados
+      document.body.style.removeProperty('overflow');
+      document.body.style.removeProperty('overflow-x');
+      document.body.style.removeProperty('overflow-y');
+      document.body.style.removeProperty('position');
+      document.body.style.removeProperty('top');
+      document.body.style.removeProperty('width');
+      document.body.style.removeProperty('height');
+      document.body.style.removeProperty('left');
+      document.body.style.removeProperty('right');
+
+      document.documentElement.style.removeProperty('overflow');
+      document.documentElement.style.removeProperty('overflow-x');
+      document.documentElement.style.removeProperty('overflow-y');
+
+      // Restaurar valores originais
       document.body.style.overflow = originalBodyOverflow;
       document.body.style.position = originalBodyPosition;
       document.body.style.top = originalBodyTop;
-      document.body.style.left = '';
-      document.body.style.right = '';
-      document.body.style.width = '';
-      document.body.style.height = '';
-
+      document.body.style.width = originalBodyWidth;
+      document.body.style.height = originalBodyHeight;
+      document.body.style.left = originalBodyLeft;
+      document.body.style.right = originalBodyRight;
       document.documentElement.style.overflow = originalHtmlOverflow;
-      document.documentElement.style.position = '';
-      document.documentElement.style.height = '';
-      document.documentElement.style.width = '';
 
       // Remover classes
       document.body.classList.remove('modal-open');
       document.documentElement.classList.remove('modal-open');
+
+      // Remover CSS dinâmico
+      const styleElement = document.getElementById('modal-scroll-lock');
+      if (styleElement) {
+        styleElement.remove();
+      }
 
       // Remover atributos
       document.body.removeAttribute('data-scroll-y');
       document.body.removeAttribute('data-original-overflow');
       document.body.removeAttribute('data-original-position');
       document.body.removeAttribute('data-original-top');
+      document.body.removeAttribute('data-original-width');
+      document.body.removeAttribute('data-original-height');
+      document.body.removeAttribute('data-original-left');
+      document.body.removeAttribute('data-original-right');
       document.documentElement.removeAttribute('data-original-overflow');
-
-      // Remover style tags
-      const styleTag = document.getElementById('modal-scroll-lock');
-      if (styleTag) {
-        styleTag.remove();
-      }
-      const ultraStyleTag = document.getElementById('ultra-scroll-lock');
-      if (ultraStyleTag) {
-        ultraStyleTag.remove();
-      }
 
       // Restaurar posição do scroll
       window.scrollTo(0, parseInt(scrollY));
@@ -183,50 +142,59 @@ export const useModalScrollLock = (isOpen) => {
 
     // Cleanup quando o componente é desmontado
     return () => {
-      // Parar interval e observer
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-      if (mutationObserver) {
-        mutationObserver.disconnect();
-      }
-
       const scrollY = document.body.getAttribute('data-scroll-y') || '0';
       const originalBodyOverflow = document.body.getAttribute('data-original-overflow') || '';
       const originalHtmlOverflow = document.documentElement.getAttribute('data-original-overflow') || '';
       const originalBodyPosition = document.body.getAttribute('data-original-position') || '';
       const originalBodyTop = document.body.getAttribute('data-original-top') || '';
+      const originalBodyWidth = document.body.getAttribute('data-original-width') || '';
+      const originalBodyHeight = document.body.getAttribute('data-original-height') || '';
+      const originalBodyLeft = document.body.getAttribute('data-original-left') || '';
+      const originalBodyRight = document.body.getAttribute('data-original-right') || '';
 
+      // Remover estilos inline forçados
+      document.body.style.removeProperty('overflow');
+      document.body.style.removeProperty('overflow-x');
+      document.body.style.removeProperty('overflow-y');
+      document.body.style.removeProperty('position');
+      document.body.style.removeProperty('top');
+      document.body.style.removeProperty('width');
+      document.body.style.removeProperty('height');
+      document.body.style.removeProperty('left');
+      document.body.style.removeProperty('right');
+
+      document.documentElement.style.removeProperty('overflow');
+      document.documentElement.style.removeProperty('overflow-x');
+      document.documentElement.style.removeProperty('overflow-y');
+
+      // Restaurar valores originais
       document.body.style.overflow = originalBodyOverflow;
       document.body.style.position = originalBodyPosition;
       document.body.style.top = originalBodyTop;
-      document.body.style.left = '';
-      document.body.style.right = '';
-      document.body.style.width = '';
-      document.body.style.height = '';
-
+      document.body.style.width = originalBodyWidth;
+      document.body.style.height = originalBodyHeight;
+      document.body.style.left = originalBodyLeft;
+      document.body.style.right = originalBodyRight;
       document.documentElement.style.overflow = originalHtmlOverflow;
-      document.documentElement.style.position = '';
-      document.documentElement.style.height = '';
-      document.documentElement.style.width = '';
 
       document.body.classList.remove('modal-open');
       document.documentElement.classList.remove('modal-open');
+
+      // Remover CSS dinâmico
+      const styleElement = document.getElementById('modal-scroll-lock');
+      if (styleElement) {
+        styleElement.remove();
+      }
 
       document.body.removeAttribute('data-scroll-y');
       document.body.removeAttribute('data-original-overflow');
       document.body.removeAttribute('data-original-position');
       document.body.removeAttribute('data-original-top');
+      document.body.removeAttribute('data-original-width');
+      document.body.removeAttribute('data-original-height');
+      document.body.removeAttribute('data-original-left');
+      document.body.removeAttribute('data-original-right');
       document.documentElement.removeAttribute('data-original-overflow');
-
-      const styleTag = document.getElementById('modal-scroll-lock');
-      if (styleTag) {
-        styleTag.remove();
-      }
-      const ultraStyleTag = document.getElementById('ultra-scroll-lock');
-      if (ultraStyleTag) {
-        ultraStyleTag.remove();
-      }
 
       if (scrollY !== '0') {
         window.scrollTo(0, parseInt(scrollY));
@@ -240,72 +208,33 @@ export const useModalScrollLock = (isOpen) => {
  */
 export const useModalScrollLockAlways = () => {
   useEffect(() => {
-    // Salvar posição atual do scroll
+    // VERSÃO SIMPLES E SEGURA - SEM INTERVALS OU OBSERVERS
     const scrollY = window.scrollY;
 
-    // MÉTODO EXTREMAMENTE AGRESSIVO - FORÇAR TUDO
+    // Salvar valores originais
     const originalBodyOverflow = document.body.style.overflow;
     const originalHtmlOverflow = document.documentElement.style.overflow;
     const originalBodyPosition = document.body.style.position;
     const originalBodyTop = document.body.style.top;
-    const originalBodyWidth = document.body.style.width;
-    const originalBodyHeight = document.body.style.height;
 
-    // Aplicar estilos inline com máxima prioridade
-    document.body.style.cssText += `
-      overflow: hidden !important;
-      position: fixed !important;
-      top: -${scrollY}px !important;
-      left: 0 !important;
-      right: 0 !important;
-      width: 100% !important;
-      height: 100vh !important;
-      margin: 0 !important;
-      padding: 0 !important;
-    `;
+    // Aplicar bloqueio de scroll simples
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = '100%';
 
-    document.documentElement.style.cssText += `
-      overflow: hidden !important;
-      position: fixed !important;
-      height: 100vh !important;
-      width: 100% !important;
-      margin: 0 !important;
-      padding: 0 !important;
-    `;
+    document.documentElement.style.overflow = 'hidden';
 
-    // Adicionar classes também
-    document.body.classList.add('modal-open');
-    document.documentElement.classList.add('modal-open');
-
-    // Salvar valores originais e posição do scroll
+    // Salvar valores para restaurar
     document.body.setAttribute('data-scroll-y', scrollY);
     document.body.setAttribute('data-original-overflow', originalBodyOverflow);
     document.body.setAttribute('data-original-position', originalBodyPosition);
     document.body.setAttribute('data-original-top', originalBodyTop);
-    document.body.setAttribute('data-original-width', originalBodyWidth);
-    document.body.setAttribute('data-original-height', originalBodyHeight);
     document.documentElement.setAttribute('data-original-overflow', originalHtmlOverflow);
 
-    // Forçar remoção de scrollbars via JavaScript também
-    const style = document.createElement('style');
-    style.id = 'modal-scroll-lock-always';
-    style.innerHTML = `
-      html, body {
-        overflow: hidden !important;
-        position: fixed !important;
-        width: 100% !important;
-        height: 100vh !important;
-      }
-      html::-webkit-scrollbar, body::-webkit-scrollbar {
-        display: none !important;
-        width: 0 !important;
-      }
-      html *, body * {
-        scrollbar-width: none !important;
-        -ms-overflow-style: none !important;
-      }
-    `;
-    document.head.appendChild(style);
+    // Adicionar classes
+    document.body.classList.add('modal-open');
+    document.documentElement.classList.add('modal-open');
 
     // Cleanup quando o componente é desmontado
     return () => {
@@ -314,25 +243,13 @@ export const useModalScrollLockAlways = () => {
       const originalHtmlOverflow = document.documentElement.getAttribute('data-original-overflow') || '';
       const originalBodyPosition = document.body.getAttribute('data-original-position') || '';
       const originalBodyTop = document.body.getAttribute('data-original-top') || '';
-      const originalBodyWidth = document.body.getAttribute('data-original-width') || '';
-      const originalBodyHeight = document.body.getAttribute('data-original-height') || '';
 
       document.body.style.overflow = originalBodyOverflow;
       document.body.style.position = originalBodyPosition;
       document.body.style.top = originalBodyTop;
-      document.body.style.left = '';
-      document.body.style.right = '';
-      document.body.style.width = originalBodyWidth;
-      document.body.style.height = originalBodyHeight;
-      document.body.style.margin = '';
-      document.body.style.padding = '';
+      document.body.style.width = '';
 
       document.documentElement.style.overflow = originalHtmlOverflow;
-      document.documentElement.style.position = '';
-      document.documentElement.style.height = '';
-      document.documentElement.style.width = '';
-      document.documentElement.style.margin = '';
-      document.documentElement.style.padding = '';
 
       document.body.classList.remove('modal-open');
       document.documentElement.classList.remove('modal-open');
@@ -341,14 +258,7 @@ export const useModalScrollLockAlways = () => {
       document.body.removeAttribute('data-original-overflow');
       document.body.removeAttribute('data-original-position');
       document.body.removeAttribute('data-original-top');
-      document.body.removeAttribute('data-original-width');
-      document.body.removeAttribute('data-original-height');
       document.documentElement.removeAttribute('data-original-overflow');
-
-      const styleTag = document.getElementById('modal-scroll-lock-always');
-      if (styleTag) {
-        styleTag.remove();
-      }
 
       if (scrollY !== '0') {
         window.scrollTo(0, parseInt(scrollY));

@@ -46,5 +46,23 @@
     <changefreq>monthly</changefreq>
     <priority>0.2</priority>
   </url>
+  <url>
+    <loc>https://ludomusic.xyz/about</loc>
+    <lastmod>2025-05-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://ludomusic.xyz/privacy-policy</loc>
+    <lastmod>2025-05-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://ludomusic.xyz/terms-of-service</loc>
+    <lastmod>2025-05-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
 
 </urlset>

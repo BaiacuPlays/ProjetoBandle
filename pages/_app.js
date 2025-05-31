@@ -1,5 +1,6 @@
 import '../styles/styles.css';
 import '../styles/settings.css';
+import '../styles/global-scrollbar.css';
 import { LanguageProvider } from '../contexts/LanguageContext';
 import { UserProfileProvider } from '../contexts/UserProfileContext';
 import { FriendsProvider } from '../contexts/FriendsContext';

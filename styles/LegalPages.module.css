@@ -1,0 +1,174 @@
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+}
+
+.content {
+  max-width: 800px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  padding: 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  line-height: 1.6;
+}
+
+.content h1 {
+  color: #333;
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 2.5em;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.lastUpdated {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #eee;
+}
+
+.section {
+  margin-bottom: 30px;
+}
+
+.section h2 {
+  color: #444;
+  border-left: 4px solid #667eea;
+  padding-left: 15px;
+  margin-bottom: 15px;
+  font-size: 1.4em;
+}
+
+.section h3 {
+  color: #555;
+  margin-bottom: 10px;
+  font-size: 1.2em;
+}
+
+.section p {
+  color: #666;
+  margin-bottom: 15px;
+  text-align: justify;
+}
+
+.section ul {
+  color: #666;
+  padding-left: 20px;
+  margin-bottom: 15px;
+}
+
+.section li {
+  margin-bottom: 8px;
+}
+
+.section a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.section a:hover {
+  text-decoration: underline;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.feature {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  border-left: 4px solid #667eea;
+}
+
+.feature h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.gamesList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.gamesList span {
+  background: #667eea;
+  color: white;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+.backButton {
+  text-align: center;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 2px solid #eee;
+}
+
+.backButton button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.backButton button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+  
+  .content {
+    padding: 20px;
+  }
+  
+  .content h1 {
+    font-size: 2em;
+  }
+  
+  .features {
+    grid-template-columns: 1fr;
+  }
+  
+  .gamesList {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    padding: 15px;
+  }
+  
+  .content h1 {
+    font-size: 1.8em;
+  }
+  
+  .section h2 {
+    font-size: 1.2em;
+  }
+}

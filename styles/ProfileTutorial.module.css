@@ -5,13 +5,18 @@
   left: 0 !important;
   right: 0 !important;
   bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
   background: rgba(0, 0, 0, 0.9) !important;
   display: flex !important;
   align-items: flex-start !important;
   justify-content: center !important;
-  z-index: 10000 !important;
+  z-index: 10001 !important;
   padding: 20px !important;
   overflow-y: auto !important;
+  /* Garantir posicionamento correto */
+  transform: none !important;
+  margin: 0 !important;
 }
 
 /* Modal do tutorial */
@@ -20,15 +25,38 @@
   border-radius: 20px !important;
   max-width: 600px !important;
   width: 100% !important;
-  max-height: 90vh !important;
-  overflow: hidden !important;
+  max-height: calc(100vh - 120px) !important;
+  overflow-y: auto !important;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8) !important;
   border: 2px solid #1db954 !important;
   position: relative !important;
   animation: slideIn 0.3s ease-out !important;
   /* Posicionamento no topo - FORÇADO */
-  margin: 80px auto 0 auto !important;
+  margin: 60px auto 60px auto !important;
   flex-shrink: 0 !important;
+  /* Scroll customizado */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(29, 185, 84, 0.5) rgba(255, 255, 255, 0.1);
+}
+
+/* Scrollbar customizada para Webkit */
+.tutorialModal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tutorialModal::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.tutorialModal::-webkit-scrollbar-thumb {
+  background: rgba(29, 185, 84, 0.5);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.tutorialModal::-webkit-scrollbar-thumb:hover {
+  background: rgba(29, 185, 84, 0.7);
 }
 
 @keyframes slideIn {
@@ -398,8 +426,8 @@
 /* Responsividade */
 @media (max-width: 768px) {
   .tutorialModal {
-    margin: 60px 10px 0 10px !important;
-    max-height: 95vh !important;
+    margin: 40px 10px 40px 10px !important;
+    max-height: calc(100vh - 80px) !important;
   }
 
   .tutorialHeader,

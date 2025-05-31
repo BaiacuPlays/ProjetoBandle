@@ -1,18 +1,22 @@
 /* Modal do perfil */
 .modalOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
   background: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
   align-items: flex-start;
   z-index: 1000;
   padding: 20px;
-  padding-top: 5vh;
   overflow-y: auto;
+  /* Garantir posicionamento correto */
+  transform: none !important;
+  margin: 0 !important;
 }
 
 .profileModal {
@@ -20,12 +24,46 @@
   border-radius: 20px;
   width: 100%;
   max-width: 900px;
-  max-height: 85vh;
-  overflow: hidden;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(29, 185, 84, 0.3);
-  margin-top: 0;
+  margin: 60px auto 60px auto;
   flex-shrink: 0;
+}
+
+/* SCROLLBAR CUSTOMIZADA VERDE - APENAS UMA */
+.profileModal {
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(29, 185, 84, 0.5) rgba(255, 255, 255, 0.1);
+  /* IE e Edge */
+  -ms-overflow-style: auto;
+}
+
+/* Webkit (Chrome, Safari, Edge) - SCROLLBAR VERDE CUSTOMIZADA */
+.profileModal::-webkit-scrollbar {
+  width: 8px;
+  background: transparent;
+}
+
+.profileModal::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.profileModal::-webkit-scrollbar-thumb {
+  background: rgba(29, 185, 84, 0.5);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.profileModal::-webkit-scrollbar-thumb:hover {
+  background: rgba(29, 185, 84, 0.7);
+}
+
+.profileModal::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 .profileHeader {
@@ -1053,14 +1091,13 @@
 @media (max-width: 768px) {
   .modalOverlay {
     padding: 5px;
-    padding-top: 2vh;
     align-items: flex-start;
   }
 
   .profileModal {
     max-width: 100%;
-    max-height: 95vh;
-    margin: 0;
+    max-height: calc(100vh - 80px);
+    margin: 40px auto 40px auto;
     border-radius: 15px;
   }
 
@@ -1178,6 +1215,8 @@
 
 @media (max-width: 480px) {
   .profileModal {
+    max-height: calc(100vh - 40px);
+    margin: 20px auto 20px auto;
     border-radius: 10px;
   }
 

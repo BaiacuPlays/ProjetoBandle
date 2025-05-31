@@ -470,8 +470,10 @@ export default function Home() {
     if (typeof window !== 'undefined') {
       try {
         const hasSeenTutorial = localStorage.getItem('ludomusic_tutorial_seen');
+        console.log('🔍 Tutorial check:', hasSeenTutorial);
         if (!hasSeenTutorial || hasSeenTutorial !== 'true') {
           // É a primeira visita, mostrar tutorial
+          console.log('✅ Mostrando tutorial para novo usuário');
           setShowTutorial(true);
         }
       } catch (error) {
@@ -480,6 +482,8 @@ export default function Home() {
       }
     }
   }, []); // Remover dependência do isClient
+
+
 
   // Carregar música do minuto ao montar
   useEffect(() => {
