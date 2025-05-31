@@ -36,7 +36,16 @@ const MAX_ATTEMPTS = 6;
 
 export default function Home() {
   const { t, isClient } = useLanguage();
-  const { updateGameStats } = useUserProfile();
+
+  // Hook do perfil com verificação de segurança
+  let updateGameStats = null;
+  try {
+    const userProfile = useUserProfile();
+    updateGameStats = userProfile?.updateGameStats;
+  } catch (error) {
+    console.warn('UserProfile context not available:', error);
+    updateGameStats = () => {}; // função vazia como fallback
+  }
 
   // Hooks de performance
   const { debounce, throttle } = usePerformanceOptimization();
@@ -969,15 +978,21 @@ export default function Home() {
         setShowNextSongButton(true);
 
         // Atualizar estatísticas do perfil para modo infinito
-        const profileResult = updateGameStats({
-          won: true,
-          attempts: newAttempts,
-          mode: 'infinite',
-          song: currentSong,
-          streak: infiniteStreak + 1,
-          songsCompleted: 1,
-          playTime: Math.floor(audioProgress)
-        });
+        if (updateGameStats) {
+          try {
+            const profileResult = updateGameStats({
+              won: true,
+              attempts: newAttempts,
+              mode: 'infinite',
+              song: currentSong,
+              streak: infiniteStreak + 1,
+              songsCompleted: 1,
+              playTime: Math.floor(audioProgress)
+            });
+          } catch (error) {
+            console.warn('Erro ao atualizar estatísticas do perfil:', error);
+          }
+        }
       } else {
         // No modo normal, termina o jogo
         setGameOver(true);
@@ -985,13 +1000,19 @@ export default function Home() {
         setGameResult(gameResultData);
 
         // Atualizar estatísticas do perfil
-        const profileResult = updateGameStats({
-          won: true,
-          attempts: newAttempts,
-          mode: 'daily',
-          song: currentSong,
-          playTime: Math.floor(audioProgress) // tempo aproximado jogado
-        });
+        if (updateGameStats) {
+          try {
+            const profileResult = updateGameStats({
+              won: true,
+              attempts: newAttempts,
+              mode: 'daily',
+              song: currentSong,
+              playTime: Math.floor(audioProgress) // tempo aproximado jogado
+            });
+          } catch (error) {
+            console.warn('Erro ao atualizar estatísticas do perfil:', error);
+          }
+        }
 
         // Incrementar contador de jogos para anúncios
         setGamesPlayedCount(prev => prev + 1);
@@ -1004,15 +1025,21 @@ export default function Home() {
       if (isInfiniteMode) {
         // No modo infinito, termina a sequência
         // Atualizar estatísticas do perfil para fim do modo infinito
-        const profileResult = updateGameStats({
-          won: false,
-          attempts: newAttempts,
-          mode: 'infinite',
-          song: currentSong,
-          streak: infiniteStreak,
-          songsCompleted: infiniteUsedSongs.length,
-          playTime: Math.floor(audioProgress)
-        });
+        if (updateGameStats) {
+          try {
+            const profileResult = updateGameStats({
+              won: false,
+              attempts: newAttempts,
+              mode: 'infinite',
+              song: currentSong,
+              streak: infiniteStreak,
+              songsCompleted: infiniteUsedSongs.length,
+              playTime: Math.floor(audioProgress)
+            });
+          } catch (error) {
+            console.warn('Erro ao atualizar estatísticas do perfil:', error);
+          }
+        }
 
         endInfiniteMode();
       } else {
@@ -1070,13 +1097,19 @@ export default function Home() {
           setGameResult(gameResultData);
 
           // Atualizar estatísticas do perfil
-          const profileResult = updateGameStats({
-            won: false,
-            attempts: newAttempts,
-            mode: 'daily',
-            song: currentSong,
-            playTime: Math.floor(audioProgress) // tempo aproximado jogado
-          });
+          if (updateGameStats) {
+            try {
+              const profileResult = updateGameStats({
+                won: false,
+                attempts: newAttempts,
+                mode: 'daily',
+                song: currentSong,
+                playTime: Math.floor(audioProgress) // tempo aproximado jogado
+              });
+            } catch (error) {
+              console.warn('Erro ao atualizar estatísticas do perfil:', error);
+            }
+          }
 
           // Incrementar contador de jogos para anúncios
           setGamesPlayedCount(prev => prev + 1);
