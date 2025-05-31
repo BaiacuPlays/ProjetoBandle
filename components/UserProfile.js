@@ -251,7 +251,7 @@ const UserProfile = ({ isOpen, onClose }) => {
                   <div className={styles.statCard}>
                     <FaTrophy className={styles.statIcon} />
                     <div className={styles.statInfo}>
-                      <span className={styles.statValue}>{profile.stats.winRate.toFixed(1)}%</span>
+                      <span className={styles.statValue}>{(profile.stats.winRate || 0).toFixed(1)}%</span>
                       <span className={styles.statLabel}>Taxa de Vitória</span>
                     </div>
                   </div>
@@ -267,7 +267,7 @@ const UserProfile = ({ isOpen, onClose }) => {
                   <div className={styles.statCard}>
                     <FaClock className={styles.statIcon} />
                     <div className={styles.statInfo}>
-                      <span className={styles.statValue}>{formatTime(profile.stats.totalPlayTime)}</span>
+                      <span className={styles.statValue}>{formatTime(profile.stats.totalPlayTime || 0)}</span>
                       <span className={styles.statLabel}>Tempo Jogado</span>
                     </div>
                   </div>
@@ -280,24 +280,23 @@ const UserProfile = ({ isOpen, onClose }) => {
                   <div className={styles.modeCard}>
                     <h5>Modo Diário</h5>
                     <div className={styles.modeInfo}>
-                      <span>Jogos: {profile.stats.dailyMode.gamesPlayed}</span>
-                      <span>Vitórias: {profile.stats.dailyMode.wins}</span>
-                      <span>Melhor Sequência: {profile.stats.dailyMode.bestStreak}</span>
+                      <span>Jogos: {profile.stats.modeStats?.daily?.games || 0}</span>
+                      <span>Vitórias: {profile.stats.modeStats?.daily?.wins || 0}</span>
+                      <span>Melhor Sequência: {profile.stats.bestStreak || 0}</span>
                     </div>
                   </div>
-                  
+
                   <div className={styles.modeCard}>
                     <h5>Modo Infinito</h5>
                     <div className={styles.modeInfo}>
-                      <span>Sessões: {profile.stats.infiniteMode.gamesPlayed}</span>
-                      <span>Músicas Completadas: {profile.stats.infiniteMode.totalSongs}</span>
-                      <span>Melhor Sequência: {profile.stats.infiniteMode.bestStreak}</span>
+                      <span>Sessões: {profile.stats.modeStats?.infinite?.games || 0}</span>
+                      <span>Melhor Sequência: {profile.stats.modeStats?.infinite?.bestStreak || 0}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Top franquias */}
-                {Object.keys(profile.franchiseStats).length > 0 && (
+                {profile.franchiseStats && Object.keys(profile.franchiseStats).length > 0 && (
                   <div className={styles.franchiseStats}>
                     <h4>Franquias Favoritas</h4>
                     <div className={styles.franchiseList}>
@@ -376,9 +375,9 @@ const UserProfile = ({ isOpen, onClose }) => {
             {activeTab === 'history' && (
               <div className={styles.historyTab}>
                 <h4>Jogos Recentes</h4>
-                {profile.recentGames.length > 0 ? (
+                {(profile.gameHistory || profile.recentGames || []).length > 0 ? (
                   <div className={styles.gameHistory}>
-                    {profile.recentGames.map(game => (
+                    {(profile.gameHistory || profile.recentGames || []).map(game => (
                       <div key={game.id} className={styles.gameItem}>
                         <div className={styles.gameResult}>
                           <span className={`${styles.resultIcon} ${game.won ? styles.win : styles.loss}`}>
