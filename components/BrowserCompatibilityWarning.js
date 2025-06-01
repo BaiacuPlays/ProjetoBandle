@@ -31,11 +31,11 @@ const BrowserCompatibilityWarning = () => {
     }
   };
 
-  const getBrowserDisplayName = (name) => {
+  const getBrowserDisplayName = (name, variant) => {
     switch (name) {
       case 'safari': return 'Safari';
       case 'edge': return 'Microsoft Edge';
-      case 'opera': return 'Opera';
+      case 'opera': return variant === 'gx' ? 'Opera GX' : 'Opera';
       case 'firefox': return 'Firefox';
       case 'chrome': return 'Chrome';
       default: return 'seu navegador';
@@ -69,7 +69,7 @@ const BrowserCompatibilityWarning = () => {
         <div className={styles.content}>
           <div className={styles.warning}>
             <p>
-              Detectamos que você está usando <strong>{getBrowserDisplayName(browserInfo.name)}</strong>.
+              Detectamos que você está usando <strong>{getBrowserDisplayName(browserInfo.name, browserInfo.variant)}</strong>.
               Este navegador pode ter problemas de compatibilidade com o player de áudio do jogo.
             </p>
           </div>
@@ -102,7 +102,7 @@ const BrowserCompatibilityWarning = () => {
           </div>
 
           <div className={styles.tips}>
-            <h4>Se você continuar com {getBrowserDisplayName(browserInfo.name)}:</h4>
+            <h4>Se você continuar com {getBrowserDisplayName(browserInfo.name, browserInfo.variant)}:</h4>
             <ul>
               <li>🔄 Use o botão "Resetar Áudio" se o carregamento travar</li>
               <li>🔃 Recarregue a página se o site ficar lento</li>

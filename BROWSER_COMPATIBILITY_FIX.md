@@ -6,7 +6,7 @@ O sistema de áudio estava apresentando problemas críticos de compatibilidade e
 
 - **Chrome**: Funcionava bem (mais estável)
 - **Firefox**: Funcionava sem problemas
-- **Safari/Edge/Opera**: Problemas significativos com travamentos e carregamento infinito
+- **Safari/Edge/Opera/Opera GX**: Problemas significativos com travamentos e carregamento infinito
 
 ### Sintomas Reportados:
 - ▶️ Botão play às vezes não funcionava
@@ -58,12 +58,23 @@ O sistema de áudio estava apresentando problemas críticos de compatibilidade e
 }
 ```
 
-#### Edge/Opera (Problemáticos)
+#### Edge (Problemático)
 ```javascript
 {
   useWebWorker: false,    // Sem Web Workers
   timeout: 7000,          // Timeout maior
   playTimeout: 4000,      // Mais tempo para play
+  maxRetries: 2           // Menos tentativas
+}
+```
+
+#### Opera/Opera GX (Problemáticos)
+```javascript
+{
+  useWebWorker: false,    // Sem Web Workers
+  timeout: 6000-7000,     // Opera GX precisa de mais tempo (7s)
+  playTimeout: 4000-5000, // Opera GX precisa de mais tempo (5s)
+  loadDelay: 200-300,     // Opera GX precisa de mais delay (300ms)
   maxRetries: 2           // Menos tentativas
 }
 ```
@@ -142,6 +153,7 @@ await browserCompatibility.playAudio(audio);
 - Safari
 - Microsoft Edge
 - Opera
+- Opera GX
 - Versões antigas do Chrome/Firefox
 
 ## 🎮 Aplicação nos Modos de Jogo

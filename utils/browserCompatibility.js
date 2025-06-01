@@ -36,7 +36,13 @@ class BrowserCompatibility {
       browser.isProblematic = true; // Edge pode ter problemas
     } else if (userAgent.includes('Opera') || userAgent.includes('OPR')) {
       browser.name = 'opera';
-      browser.isProblematic = true; // Opera pode ter problemas
+      // Detectar Opera GX especificamente
+      if (userAgent.includes('GX')) {
+        browser.variant = 'gx';
+      }
+      const match = userAgent.match(/(Opera|OPR)\/(\d+)/);
+      browser.version = match ? parseInt(match[2]) : 0;
+      browser.isProblematic = true; // Opera/Opera GX podem ter problemas
     }
 
     // Detectar versões antigas problemáticas
@@ -91,9 +97,10 @@ class BrowserCompatibility {
         return {
           ...config,
           useWebWorker: false,
-          timeout: 6000,
-          playTimeout: 4000,
-          loadDelay: 200
+          timeout: this.browserInfo.variant === 'gx' ? 7000 : 6000, // Opera GX pode precisar de mais tempo
+          playTimeout: this.browserInfo.variant === 'gx' ? 5000 : 4000,
+          loadDelay: this.browserInfo.variant === 'gx' ? 300 : 200,
+          maxRetries: 2
         };
 
       case 'firefox':
