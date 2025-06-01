@@ -66,6 +66,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
   const [audioLoadError, setAudioLoadError] = useState(false);
   const [audioLoadRetries, setAudioLoadRetries] = useState(0);
   const [connectionError, setConnectionError] = useState(false);
+  const [activeHint, setActiveHint] = useState(0); // CORREÇÃO: Estado para navegar entre dicas
 
   const audioRef = useRef(null);
   const inputRef = useRef(null);
@@ -351,7 +352,15 @@ const MultiplayerGame = ({ onBackToLobby }) => {
     setPendingPlay(false);
     setIsPlayButtonDisabled(false);
     setIsSkipLoading(false);
+
+    // CORREÇÃO: Reset do activeHint para nova rodada
+    setActiveHint(0);
   }, [gameState?.currentRound, startTime]);
+
+  // CORREÇÃO: Sincronizar activeHint com tentativas (igual ao modo diário)
+  useEffect(() => {
+    setActiveHint(myAttempts);
+  }, [myAttempts]);
 
   // Garantir que o áudio seja configurado corretamente quando a URL muda - OTIMIZADO
   useEffect(() => {
@@ -700,10 +709,33 @@ const MultiplayerGame = ({ onBackToLobby }) => {
             </div>
           </div>
 
-          {/* Dicas progressivas - IGUAL AO JOGO NORMAL */}
-          {getProgressiveHint(songToPlay, myAttempts) && !gameFinished && !roundFinished && (
+          {/* Dicas progressivas - CORREÇÃO: Usar activeHint para permitir navegação */}
+          {getProgressiveHint(songToPlay, activeHint) && !gameFinished && !roundFinished && (
             <div className={styles.hintBox}>
-              <strong>Dica:</strong> {getProgressiveHint(songToPlay, myAttempts)}
+              <strong>Dica:</strong> {getProgressiveHint(songToPlay, activeHint)}
+              {activeHint !== myAttempts && (
+                <span style={{
+                  marginLeft: '10px',
+                  fontSize: '0.8rem',
+                  opacity: 0.7,
+                  fontStyle: 'italic'
+                }}>
+                  (Tentativa {activeHint + 1})
+                </span>
+              )}
+            </div>
+          )}
+
+          {/* CORREÇÃO: Instrução sobre navegação entre dicas */}
+          {myAttempts > 0 && !gameFinished && !roundFinished && (
+            <div style={{
+              fontSize: '0.75rem',
+              opacity: 0.6,
+              textAlign: 'center',
+              marginTop: '5px',
+              fontStyle: 'italic'
+            }}>
+              💡 Clique nos números das tentativas para rever dicas anteriores
             </div>
           )}
 
@@ -1163,9 +1195,20 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                       key={idx}
                       type="button"
                       className={`${gameStyles.attemptButton} ${buttonClass}`}
-                      disabled
-                      title={tooltipText}
-                      style={{ cursor: tooltipText ? 'help' : 'default' }}
+                      disabled={idx > myAttempts} // CORREÇÃO: Só desabilitar se ainda não chegou nessa tentativa
+                      title={tooltipText || (idx <= myAttempts ? 'Clique para ver a dica desta tentativa' : '')}
+                      style={{
+                        cursor: idx <= myAttempts ? 'pointer' : 'default',
+                        opacity: activeHint === idx ? 1 : (idx <= myAttempts ? 0.8 : 0.5),
+                        transform: activeHint === idx ? 'scale(1.1)' : 'scale(1)',
+                        transition: 'all 0.2s ease'
+                      }}
+                      onClick={() => {
+                        if (idx <= myAttempts) {
+                          console.log(`🔍 [MULTIPLAYER] Navegando para dica da tentativa ${idx + 1}`);
+                          setActiveHint(idx);
+                        }
+                      }}
                     >
                       {idx + 1}
                     </button>
