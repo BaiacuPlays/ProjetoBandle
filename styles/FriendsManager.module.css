@@ -191,6 +191,7 @@
   gap: 10px;
 }
 
+.viewProfileButton,
 .inviteButton,
 .removeButton {
   background: none;
@@ -202,6 +203,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.viewProfileButton {
+  border-color: #2196F3;
+  color: #2196F3;
+}
+
+.viewProfileButton:hover {
+  background: #2196F3;
+  color: white;
 }
 
 .inviteButton {

@@ -61,20 +61,20 @@ export const AuthProvider = ({ children }) => {
         const errorData = await response.json().catch(() => ({}));
         console.log('❌ Erro na verificação de sessão:', response.status, errorData.error);
 
-        // Só remover token se for erro 401 (não autorizado) ou 404 (não encontrado)
-        if (response.status === 401 || response.status === 404) {
+        // Só remover token se for erro 401 (não autorizado) e especificamente "Sessão inválida ou expirada"
+        if (response.status === 401 && (errorData.error === 'Sessão inválida ou expirada' || errorData.error === 'Sessão expirada')) {
           localStorage.removeItem('ludomusic_session_token');
           localStorage.removeItem('ludomusic_user_data');
-          console.log('❌ Sessão inválida, removendo token');
+          console.log('❌ Sessão realmente inválida, removendo token');
         } else {
-          // Para outros erros, tentar carregar dados do localStorage como fallback
+          // Para outros erros (500, timeout, etc.), tentar carregar dados do localStorage como fallback
           const savedUserData = localStorage.getItem('ludomusic_user_data');
           if (savedUserData) {
             try {
               const userData = JSON.parse(savedUserData);
               setUser(userData);
               setIsAuthenticated(true);
-              console.log('📱 Usando dados salvos localmente como fallback');
+              console.log('📱 Usando dados salvos localmente como fallback (erro temporário)');
             } catch (e) {
               console.error('Erro ao parsear dados salvos:', e);
               localStorage.removeItem('ludomusic_user_data');
@@ -123,8 +123,9 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
 
       if (response.ok) {
-        // Salvar token de sessão
+        // Salvar token de sessão e dados do usuário
         localStorage.setItem('ludomusic_session_token', data.sessionToken);
+        localStorage.setItem('ludomusic_user_data', JSON.stringify(data.user));
         setUser(data.user);
         setIsAuthenticated(true);
         console.log('✅ Usuário registrado:', data.user.displayName);

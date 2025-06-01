@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
+import { usePresence } from '../hooks/usePresence';
 
 const FriendsContext = createContext();
 
@@ -13,6 +14,7 @@ export const useFriends = () => {
 
 export const FriendsProvider = ({ children }) => {
   const { isAuthenticated, user } = useAuth();
+  const { getFriendsPresence } = usePresence();
 
   const [friends, setFriends] = useState([]);
   const [friendRequests, setFriendRequests] = useState([]);
@@ -40,7 +42,23 @@ export const FriendsProvider = ({ children }) => {
 
       if (friendsResponse.ok) {
         const friendsData = await friendsResponse.json();
-        setFriends(friendsData.friends || []);
+        const friendsList = friendsData.friends || [];
+
+        // Buscar status de presença dos amigos
+        if (friendsList.length > 0) {
+          const friendIds = friendsList.map(friend => friend.id);
+          const presenceStatus = await getFriendsPresence(friendIds);
+
+          // Atualizar status dos amigos
+          const friendsWithStatus = friendsList.map(friend => ({
+            ...friend,
+            status: presenceStatus[friend.id] || 'offline'
+          }));
+
+          setFriends(friendsWithStatus);
+        } else {
+          setFriends(friendsList);
+        }
       }
 
       // Carregar solicitações recebidas
@@ -70,6 +88,25 @@ export const FriendsProvider = ({ children }) => {
       }
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // Atualizar apenas status de presença dos amigos
+  const updateFriendsPresence = async () => {
+    if (!currentUserId || !isAuthenticated || friends.length === 0) return;
+
+    try {
+      const friendIds = friends.map(friend => friend.id);
+      const presenceStatus = await getFriendsPresence(friendIds);
+
+      setFriends(prevFriends =>
+        prevFriends.map(friend => ({
+          ...friend,
+          status: presenceStatus[friend.id] || 'offline'
+        }))
+      );
+    } catch (error) {
+      console.error('Erro ao atualizar presença dos amigos:', error);
     }
   };
 
@@ -349,6 +386,17 @@ export const FriendsProvider = ({ children }) => {
     return () => clearInterval(interval);
   }, [isAuthenticated, currentUserId]);
 
+  // Polling para atualizar presença dos amigos a cada 15 segundos
+  useEffect(() => {
+    if (!isAuthenticated || !currentUserId) return;
+
+    const presenceInterval = setInterval(() => {
+      updateFriendsPresence();
+    }, 15000); // 15 segundos
+
+    return () => clearInterval(presenceInterval);
+  }, [isAuthenticated, currentUserId, friends.length]);
+
   const value = {
     friends,
     friendRequests,
@@ -365,6 +413,7 @@ export const FriendsProvider = ({ children }) => {
     getOnlineFriends,
     inviteToMultiplayer,
     loadFriendsData,
+    updateFriendsPresence,
     referFriend,
     getReferralLink,
     processReferral

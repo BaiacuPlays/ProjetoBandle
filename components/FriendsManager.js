@@ -3,9 +3,10 @@ import { useFriends } from '../contexts/FriendsContext';
 import { useNotifications } from '../contexts/NotificationContext';
 import { useUserProfile } from '../contexts/UserProfileContext';
 import { useModalScrollLock } from '../hooks/useModalScrollLock';
-import { FaTimes, FaUserPlus, FaSearch, FaUsers, FaUserFriends, FaPaperPlane, FaCheck, FaTimes as FaReject, FaTrash, FaGamepad, FaShare } from 'react-icons/fa';
+import { FaTimes, FaUserPlus, FaSearch, FaUsers, FaUserFriends, FaPaperPlane, FaCheck, FaTimes as FaReject, FaTrash, FaGamepad, FaShare, FaEye } from 'react-icons/fa';
 import UserAvatar from './UserAvatar';
 import MultiplayerInviteModal from './MultiplayerInviteModal';
+import PublicProfileModal from './PublicProfileModal';
 import ReferralSystem from './ReferralSystem';
 import styles from '../styles/FriendsManager.module.css';
 
@@ -58,6 +59,8 @@ const FriendsManager = ({ isOpen, onClose }) => {
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [showReferralSystem, setShowReferralSystem] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState(null);
 
   if (!isOpen) return null;
 
@@ -135,6 +138,11 @@ const FriendsManager = ({ isOpen, onClose }) => {
   const handleInviteToGame = (friendId, friendName) => {
     setSelectedFriend({ id: friendId, name: friendName });
     setShowInviteModal(true);
+  };
+
+  const handleViewProfile = (friend) => {
+    setSelectedProfile({ userId: friend.id, username: friend.username });
+    setShowProfileModal(true);
   };
 
   const handleCreateRoomAndInvite = async () => {
@@ -216,6 +224,13 @@ const FriendsManager = ({ isOpen, onClose }) => {
                       </div>
                     </div>
                     <div className={styles.friendActions}>
+                      <button
+                        className={styles.viewProfileButton}
+                        onClick={() => handleViewProfile(friend)}
+                        title="Ver perfil"
+                      >
+                        <FaEye />
+                      </button>
                       <button
                         className={styles.inviteButton}
                         onClick={() => handleInviteToGame(friend.id, friend.displayName)}
@@ -428,6 +443,17 @@ const FriendsManager = ({ isOpen, onClose }) => {
           setSelectedFriend(null);
         }}
         onCreateRoom={handleCreateRoomAndInvite}
+      />
+
+      {/* Modal de perfil público */}
+      <PublicProfileModal
+        isOpen={showProfileModal}
+        onClose={() => {
+          setShowProfileModal(false);
+          setSelectedProfile(null);
+        }}
+        userId={selectedProfile?.userId}
+        username={selectedProfile?.username}
       />
 
       {/* Sistema de referência */}
