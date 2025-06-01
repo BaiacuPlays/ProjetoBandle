@@ -251,9 +251,51 @@ export default async function handler(req, res) {
           await kv.set(friendsKey2, friends2);
         }
 
+        // NOVO: Remover a solicitação da lista de "enviadas" do remetente
+        const fromSentKey = `sent_requests:${request.fromUserId}`;
+        let sentRequests = [];
+
+        if (isDevelopment && !hasKVConfig) {
+          sentRequests = localFriendRequests.get(fromSentKey) || [];
+        } else {
+          sentRequests = await kv.get(fromSentKey) || [];
+        }
+
+        // Filtrar para remover a solicitação aceita
+        const updatedSentRequests = sentRequests.filter(req => req.id !== requestId);
+
+        if (isDevelopment && !hasKVConfig) {
+          localFriendRequests.set(fromSentKey, updatedSentRequests);
+        } else {
+          await kv.set(fromSentKey, updatedSentRequests);
+        }
+
+        console.log(`✅ Solicitação removida da lista de enviadas do usuário ${request.fromUserId}`);
+
       } else if (action === 'reject') {
         // Marcar como rejeitada
         requests[requestIndex].status = 'rejected';
+
+        // NOVO: Remover a solicitação da lista de "enviadas" do remetente também quando rejeitada
+        const fromSentKey = `sent_requests:${request.fromUserId}`;
+        let sentRequests = [];
+
+        if (isDevelopment && !hasKVConfig) {
+          sentRequests = localFriendRequests.get(fromSentKey) || [];
+        } else {
+          sentRequests = await kv.get(fromSentKey) || [];
+        }
+
+        // Filtrar para remover a solicitação rejeitada
+        const updatedSentRequests = sentRequests.filter(req => req.id !== requestId);
+
+        if (isDevelopment && !hasKVConfig) {
+          localFriendRequests.set(fromSentKey, updatedSentRequests);
+        } else {
+          await kv.set(fromSentKey, updatedSentRequests);
+        }
+
+        console.log(`✅ Solicitação rejeitada removida da lista de enviadas do usuário ${request.fromUserId}`);
       }
 
       // Atualizar lista de solicitações

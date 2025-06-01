@@ -389,6 +389,9 @@ export const FriendsProvider = ({ children }) => {
 
       // Recarregar dados do servidor
       await loadFriendsData();
+
+      // Verificar se há mudanças nas solicitações enviadas também
+      await checkForNewFriendRequests();
     } catch (error) {
       console.error('Erro ao aceitar solicitação:', error);
       throw error;
@@ -698,15 +701,33 @@ export const FriendsProvider = ({ children }) => {
     };
   }, [isAuthenticated, currentUserId, friends.length, friendRequests.length]);
 
-  // Polling para verificar novas solicitações a cada 30 segundos
+  // Polling para verificar novas solicitações a cada 15 segundos (mais frequente)
   useEffect(() => {
     if (!isAuthenticated || !currentUserId) return;
 
-    const interval = setInterval(() => {
-      loadFriendsData();
-    }, 30000); // 30 segundos
+    // Verificação inicial após 2 segundos
+    const initialTimeout = setTimeout(() => {
+      checkForNewFriendRequests();
+    }, 2000);
 
-    return () => clearInterval(interval);
+    // Polling regular a cada 15 segundos
+    const interval = setInterval(() => {
+      checkForNewFriendRequests();
+    }, 15000); // 15 segundos para ser mais responsivo
+
+    // Verificar quando a janela ganha foco (usuário volta para a aba)
+    const handleFocus = () => {
+      console.log('🔍 Janela ganhou foco - verificando solicitações...');
+      checkForNewFriendRequests();
+    };
+
+    window.addEventListener('focus', handleFocus);
+
+    return () => {
+      clearTimeout(initialTimeout);
+      clearInterval(interval);
+      window.removeEventListener('focus', handleFocus);
+    };
   }, [isAuthenticated, currentUserId]);
 
   // Função para verificar novas solicitações de amizade (com debounce)
@@ -717,16 +738,17 @@ export const FriendsProvider = ({ children }) => {
       const sessionToken = localStorage.getItem('ludomusic_session_token');
       if (!sessionToken) return;
 
-      const response = await fetch('/api/friend-requests', {
+      // Verificar solicitações recebidas
+      const receivedResponse = await fetch('/api/friend-requests', {
         headers: {
           'Authorization': `Bearer ${sessionToken}`,
           'Cache-Control': 'no-cache'
         }
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        const newRequests = data.requests || [];
+      if (receivedResponse.ok) {
+        const receivedData = await receivedResponse.json();
+        const newRequests = receivedData.requests || [];
 
         // Verificar se há novas solicitações comparando com o estado atual
         const currentRequestIds = friendRequests.map(req => req.id);
@@ -735,22 +757,52 @@ export const FriendsProvider = ({ children }) => {
         if (actualNewRequests.length > 0) {
           console.log(`🔔 ${actualNewRequests.length} nova(s) solicitação(ões) de amizade encontrada(s)`);
 
-          // Atualizar estado
-          setFriendRequests(newRequests);
-
           // Log para cada nova solicitação
           actualNewRequests.forEach(request => {
             console.log('Nova solicitação de amizade recebida:', request.fromUser?.displayName || request.fromUser?.username);
           });
-
-          // Atualizar localStorage
-          localStorage.setItem(`ludomusic_friend_requests_${currentUserId}`, JSON.stringify(newRequests));
         }
+
+        // Atualizar estado sempre (para remover solicitações processadas)
+        setFriendRequests(newRequests);
+
+        // Atualizar localStorage
+        localStorage.setItem(`ludomusic_friend_requests_${currentUserId}`, JSON.stringify(newRequests));
       }
+
+      // Verificar solicitações enviadas (para remover as que foram aceitas/rejeitadas)
+      const sentResponse = await fetch('/api/friend-requests?type=sent', {
+        headers: {
+          'Authorization': `Bearer ${sessionToken}`,
+          'Cache-Control': 'no-cache'
+        }
+      });
+
+      if (sentResponse.ok) {
+        const sentData = await sentResponse.json();
+        const updatedSentRequests = sentData.requests || [];
+
+        // Verificar se alguma solicitação enviada foi removida (aceita/rejeitada)
+        const currentSentIds = sentRequests.map(req => req.id);
+        const removedSentRequests = currentSentIds.filter(id =>
+          !updatedSentRequests.some(req => req.id === id)
+        );
+
+        if (removedSentRequests.length > 0) {
+          console.log(`✅ ${removedSentRequests.length} solicitação(ões) enviada(s) foi(ram) processada(s)`);
+        }
+
+        // Atualizar estado das solicitações enviadas
+        setSentRequests(updatedSentRequests);
+
+        // Atualizar localStorage
+        localStorage.setItem(`ludomusic_sent_requests_${currentUserId}`, JSON.stringify(updatedSentRequests));
+      }
+
     } catch (error) {
       console.error('Erro ao verificar novas solicitações:', error);
     }
-  }, [isAuthenticated, currentUserId, friendRequests]);
+  }, [isAuthenticated, currentUserId, friendRequests, sentRequests]);
 
   // Polling para atualizar presença dos amigos a cada 15 segundos
   useEffect(() => {
@@ -763,16 +815,7 @@ export const FriendsProvider = ({ children }) => {
     return () => clearInterval(presenceInterval);
   }, [isAuthenticated, currentUserId, friends.length]);
 
-  // Polling para verificar novas solicitações de amizade a cada 30 segundos
-  useEffect(() => {
-    if (!isAuthenticated || !currentUserId) return;
-
-    const friendRequestsInterval = setInterval(() => {
-      checkForNewFriendRequests();
-    }, 30000); // 30 segundos
-
-    return () => clearInterval(friendRequestsInterval);
-  }, [isAuthenticated, currentUserId]); // Removido friendRequests.length para evitar re-criação desnecessária
+  // Polling duplicado removido - já está sendo feito no useEffect anterior
 
 
 
