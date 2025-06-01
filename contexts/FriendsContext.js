@@ -22,24 +22,58 @@ export const FriendsProvider = ({ children }) => {
   // ID do usuário atual (apenas se autenticado)
   const currentUserId = isAuthenticated && user ? `auth_${user.username}` : null;
 
-  // Carregar dados dos amigos do localStorage
-  const loadFriendsData = () => {
-    if (!currentUserId) return;
+  // Carregar dados dos amigos do servidor
+  const loadFriendsData = async () => {
+    if (!currentUserId || !isAuthenticated) return;
+
+    setIsLoading(true);
 
     try {
-      const savedFriends = localStorage.getItem(`ludomusic_friends_${currentUserId}`);
-      const savedRequests = localStorage.getItem(`ludomusic_friend_requests_${currentUserId}`);
-      const savedSentRequests = localStorage.getItem(`ludomusic_sent_requests_${currentUserId}`);
+      const sessionToken = localStorage.getItem('ludomusic_session_token');
 
-      if (savedFriends) setFriends(JSON.parse(savedFriends));
-      if (savedRequests) setFriendRequests(JSON.parse(savedRequests));
-      if (savedSentRequests) setSentRequests(JSON.parse(savedSentRequests));
+      // Carregar amigos
+      const friendsResponse = await fetch('/api/friends', {
+        headers: {
+          'Authorization': `Bearer ${sessionToken}`
+        }
+      });
+
+      if (friendsResponse.ok) {
+        const friendsData = await friendsResponse.json();
+        setFriends(friendsData.friends || []);
+      }
+
+      // Carregar solicitações recebidas
+      const requestsResponse = await fetch('/api/friend-requests', {
+        headers: {
+          'Authorization': `Bearer ${sessionToken}`
+        }
+      });
+
+      if (requestsResponse.ok) {
+        const requestsData = await requestsResponse.json();
+        setFriendRequests(requestsData.requests || []);
+      }
+
+      console.log('✅ Dados de amigos carregados do servidor');
     } catch (error) {
       console.error('Erro ao carregar dados dos amigos:', error);
+      // Fallback para localStorage em caso de erro
+      try {
+        const savedFriends = localStorage.getItem(`ludomusic_friends_${currentUserId}`);
+        const savedRequests = localStorage.getItem(`ludomusic_friend_requests_${currentUserId}`);
+
+        if (savedFriends) setFriends(JSON.parse(savedFriends));
+        if (savedRequests) setFriendRequests(JSON.parse(savedRequests));
+      } catch (localError) {
+        console.error('Erro ao carregar dados locais:', localError);
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // Salvar dados dos amigos no localStorage
+  // Salvar dados dos amigos no localStorage (backup)
   const saveFriendsData = () => {
     if (!currentUserId) return;
 
@@ -89,61 +123,149 @@ export const FriendsProvider = ({ children }) => {
       throw new Error('Você já enviou uma solicitação para este usuário');
     }
 
-    const request = {
-      id: Date.now().toString(),
-      fromUserId: currentUserId,
-      toUserId: user.id,
-      fromUser: {
-        username: user.username,
-        displayName: user.displayName,
-        avatar: user.avatar
-      },
-      timestamp: new Date().toISOString(),
-      status: 'pending'
-    };
+    try {
+      const sessionToken = localStorage.getItem('ludomusic_session_token');
 
-    setSentRequests(prev => [...prev, request]);
-    return request;
+      const response = await fetch('/api/friend-requests', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${sessionToken}`
+        },
+        body: JSON.stringify({
+          toUserId: user.id,
+          toUser: {
+            username: user.username,
+            displayName: user.displayName,
+            avatar: user.avatar
+          }
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Erro ao enviar solicitação');
+      }
+
+      const data = await response.json();
+      const request = data.request;
+
+      // Adicionar à lista local de solicitações enviadas
+      setSentRequests(prev => [...prev, request]);
+
+      console.log('✅ Solicitação enviada com sucesso');
+      return request;
+    } catch (error) {
+      console.error('Erro ao enviar solicitação:', error);
+      throw error;
+    }
   };
 
   // Aceitar solicitação de amizade
-  const acceptFriendRequest = (requestId) => {
+  const acceptFriendRequest = async (requestId) => {
     if (!isAuthenticated) {
       throw new Error('Você precisa estar logado para aceitar solicitações de amizade');
     }
 
-    const request = friendRequests.find(req => req.id === requestId);
-    if (request) {
-      // Adicionar aos amigos
-      const newFriend = {
-        id: request.fromUserId,
-        username: request.fromUser.username,
-        displayName: request.fromUser.displayName,
-        avatar: request.fromUser.avatar,
-        status: 'offline'
-      };
+    try {
+      const sessionToken = localStorage.getItem('ludomusic_session_token');
 
-      setFriends(prev => [...prev, newFriend]);
-      setFriendRequests(prev => prev.filter(req => req.id !== requestId));
+      const response = await fetch('/api/friend-requests', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${sessionToken}`
+        },
+        body: JSON.stringify({
+          requestId: requestId,
+          action: 'accept'
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Erro ao aceitar solicitação');
+      }
+
+      // Recarregar dados do servidor
+      await loadFriendsData();
+
+      console.log('✅ Solicitação aceita com sucesso');
+    } catch (error) {
+      console.error('Erro ao aceitar solicitação:', error);
+      throw error;
     }
   };
 
   // Rejeitar solicitação de amizade
-  const rejectFriendRequest = (requestId) => {
+  const rejectFriendRequest = async (requestId) => {
     if (!isAuthenticated) {
       throw new Error('Você precisa estar logado para rejeitar solicitações de amizade');
     }
 
-    setFriendRequests(prev => prev.filter(req => req.id !== requestId));
+    try {
+      const sessionToken = localStorage.getItem('ludomusic_session_token');
+
+      const response = await fetch('/api/friend-requests', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${sessionToken}`
+        },
+        body: JSON.stringify({
+          requestId: requestId,
+          action: 'reject'
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Erro ao rejeitar solicitação');
+      }
+
+      // Remover da lista local
+      setFriendRequests(prev => prev.filter(req => req.id !== requestId));
+
+      console.log('✅ Solicitação rejeitada com sucesso');
+    } catch (error) {
+      console.error('Erro ao rejeitar solicitação:', error);
+      throw error;
+    }
   };
 
   // Remover amigo
-  const removeFriend = (friendId) => {
+  const removeFriend = async (friendId) => {
     if (!isAuthenticated) {
       throw new Error('Você precisa estar logado para remover amigos');
     }
 
-    setFriends(prev => prev.filter(friend => friend.id !== friendId));
+    try {
+      const sessionToken = localStorage.getItem('ludomusic_session_token');
+
+      const response = await fetch('/api/friends', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${sessionToken}`
+        },
+        body: JSON.stringify({
+          friendId: friendId
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Erro ao remover amigo');
+      }
+
+      // Remover da lista local
+      setFriends(prev => prev.filter(friend => friend.id !== friendId));
+
+      console.log('✅ Amigo removido com sucesso');
+    } catch (error) {
+      console.error('Erro ao remover amigo:', error);
+      throw error;
+    }
   };
 
   // Cancelar solicitação enviada
@@ -209,12 +331,23 @@ export const FriendsProvider = ({ children }) => {
     }
   }, [isAuthenticated, currentUserId]);
 
-  // Salvar dados quando houver mudanças
+  // Salvar dados quando houver mudanças (backup local)
   useEffect(() => {
-    if (isAuthenticated && currentUserId) {
+    if (isAuthenticated && currentUserId && (friends.length > 0 || friendRequests.length > 0)) {
       saveFriendsData();
     }
   }, [friends, friendRequests, sentRequests, isAuthenticated, currentUserId]);
+
+  // Polling para verificar novas solicitações a cada 30 segundos
+  useEffect(() => {
+    if (!isAuthenticated || !currentUserId) return;
+
+    const interval = setInterval(() => {
+      loadFriendsData();
+    }, 30000); // 30 segundos
+
+    return () => clearInterval(interval);
+  }, [isAuthenticated, currentUserId]);
 
   const value = {
     friends,
