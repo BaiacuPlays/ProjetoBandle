@@ -16,6 +16,13 @@ export default async function handler(req, res) {
     const { invitation, currentUserId } = req.body;
 
     console.log('📤 Recebendo convite:', { invitation, currentUserId });
+    console.log('📤 DETALHES DO CONVITE:');
+    console.log('📤 - De (fromUserId):', invitation.fromUserId);
+    console.log('📤 - Para (toUserId):', invitation.toUserId);
+    console.log('📤 - Host:', invitation.hostName);
+    console.log('📤 - Amigo:', invitation.friendName);
+    console.log('📤 - Sala:', invitation.roomCode);
+    console.log('📤 - Usuário atual (currentUserId):', currentUserId);
 
     if (!invitation || !currentUserId) {
       return res.status(400).json({ error: 'Dados obrigatórios não fornecidos' });
@@ -29,7 +36,18 @@ export default async function handler(req, res) {
 
     // Verificar se o usuário não está tentando convidar a si mesmo
     if (invitation.toUserId === currentUserId) {
+      console.log('❌ ERRO: Usuário tentando convidar a si mesmo!');
+      console.log('❌ toUserId:', invitation.toUserId);
+      console.log('❌ currentUserId:', currentUserId);
       return res.status(400).json({ error: 'Você não pode convidar a si mesmo' });
+    }
+
+    // Verificação adicional de segurança
+    if (invitation.fromUserId === invitation.toUserId) {
+      console.log('❌ ERRO: fromUserId igual a toUserId!');
+      console.log('❌ fromUserId:', invitation.fromUserId);
+      console.log('❌ toUserId:', invitation.toUserId);
+      return res.status(400).json({ error: 'IDs de usuário inválidos' });
     }
 
     // Chave para armazenar convites do usuário destinatário

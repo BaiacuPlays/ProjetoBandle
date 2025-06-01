@@ -59,16 +59,29 @@ export const NotificationProvider = ({ children }) => {
         const serverInvites = result.invites || [];
         console.log(`📊 Total de convites no servidor: ${serverInvites.length}`);
 
-        if (serverInvites.length > 0) {
+        // IMPORTANTE: Filtrar apenas convites onde o usuário atual é o DESTINATÁRIO
+        const receivedInvites = serverInvites.filter(invite => {
+          const isRecipient = invite.toUserId === currentUserId;
+          const isNotSender = invite.fromUserId !== currentUserId;
+
+          console.log(`📋 Convite ${invite.id}: toUserId=${invite.toUserId}, fromUserId=${invite.fromUserId}, currentUserId=${currentUserId}`);
+          console.log(`📋 É destinatário: ${isRecipient}, Não é remetente: ${isNotSender}`);
+
+          return isRecipient && isNotSender;
+        });
+
+        console.log(`📊 Convites válidos RECEBIDOS: ${receivedInvites.length} de ${serverInvites.length} total`);
+
+        if (receivedInvites.length > 0) {
           // Mesclar convites do servidor com os locais
           const localInviteIds = invitations.map(inv => inv.id);
           console.log(`📊 Convites locais existentes: ${localInviteIds.length}`);
 
           // Adicionar apenas convites novos
-          const newInvites = serverInvites.filter(inv => !localInviteIds.includes(inv.id));
+          const newInvites = receivedInvites.filter(inv => !localInviteIds.includes(inv.id));
 
           if (newInvites.length > 0) {
-            console.log(`📨 ${newInvites.length} novos convites encontrados:`, newInvites);
+            console.log(`📨 ${newInvites.length} novos convites RECEBIDOS encontrados:`, newInvites);
 
             const updatedInvitations = [...invitations, ...newInvites];
             setInvitations(updatedInvitations);
@@ -76,7 +89,7 @@ export const NotificationProvider = ({ children }) => {
 
             // Adicionar notificações para os novos convites
             newInvites.forEach(invite => {
-              console.log(`🔔 Criando notificação para convite de ${invite.hostName}`);
+              console.log(`🔔 Criando notificação para convite RECEBIDO de ${invite.hostName}`);
 
               addNotification({
                 type: 'multiplayer_invite',
@@ -101,7 +114,7 @@ export const NotificationProvider = ({ children }) => {
             console.log('📥 Nenhum convite novo encontrado');
           }
         } else {
-          console.log('📥 Nenhum convite no servidor');
+          console.log('📥 Nenhum convite RECEBIDO no servidor');
         }
       } else {
         console.error('❌ API retornou erro:', result.error);
@@ -293,10 +306,8 @@ export const NotificationProvider = ({ children }) => {
       const result = await response.json();
 
       if (result.success) {
-        // Adicionar à nossa lista de convites enviados
-        const updatedInvitations = [...invitations, invitation];
-        setInvitations(updatedInvitations);
-        saveInvitations(updatedInvitations);
+        // NÃO adicionar à nossa lista de convites - apenas convites RECEBIDOS devem aparecer aqui
+        // O convite foi enviado com sucesso, mas não deve aparecer nas nossas notificações
 
         console.log('✅ Convite enviado com sucesso para:', friendName);
 

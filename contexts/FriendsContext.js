@@ -31,18 +31,25 @@ export const FriendsProvider = ({ children }) => {
   useEffect(() => {
     if (isAuthenticated && currentUserId) {
       console.log('🔐 Usuário autenticado detectado:', currentUserId);
-      console.log('🍪 DEBUG - Verificando cookies...');
+      console.log('🍪 DEBUG - Verificando cookies para usuário:', currentUserId);
 
       // 1. Carregar dados dos cookies SINCRONAMENTE (sem await/delay)
       const savedFriends = FriendsCookies.getFriendsData();
       const savedRequests = FriendsCookies.getFriendRequests();
 
-      console.log('🍪 DEBUG - Amigos dos cookies:', savedFriends);
-      console.log('🍪 DEBUG - Solicitações dos cookies:', savedRequests);
+      console.log('🍪 DEBUG - Amigos dos cookies:', savedFriends?.length || 0, 'encontrados');
+      console.log('🍪 DEBUG - Solicitações dos cookies:', savedRequests?.length || 0, 'encontradas');
 
       // Verificar integridade dos dados
       const integrity = FriendsCookies.checkDataIntegrity();
       console.log('🔍 DEBUG - Integridade dos cookies:', integrity);
+
+      // Log detalhado dos dados encontrados
+      if (savedFriends && savedFriends.length > 0) {
+        console.log('👥 DEBUG - Lista de amigos encontrada:', savedFriends.map(f => f.displayName || f.username));
+      } else {
+        console.log('👥 DEBUG - Nenhum amigo encontrado nos cookies');
+      }
 
 
 
@@ -62,6 +69,7 @@ export const FriendsProvider = ({ children }) => {
         setFriendRequests(savedRequests || []);
         console.log('⚡ Dados dos amigos carregados INSTANTANEAMENTE dos cookies');
         console.log('⚡ Estado definido - friends.length:', friendsWithDefaults.length);
+        console.log('⚡ Amigos carregados:', friendsWithDefaults.map(f => f.displayName || f.username));
 
         // 3. Atualizar presença em background (não bloqueia)
         setTimeout(() => {
@@ -70,12 +78,19 @@ export const FriendsProvider = ({ children }) => {
 
         // 4. Salvar novamente para reforçar os cookies (proteção contra F5 rápido)
         setTimeout(() => {
+          console.log('🔄 Reforçando salvamento dos cookies...');
           FriendsCookies.saveFriendsData(friendsWithDefaults, savedRequests || []);
         }, 500);
+
+        // 5. Verificar dados do servidor em background para sincronização
+        setTimeout(() => {
+          console.log('🔄 Verificando sincronização com servidor em background...');
+          loadFriendsData(true); // Modo background
+        }, 2000);
       } else {
         // 4. Se não há dados nos cookies, carregar do servidor
         console.log('📭 Nenhum dado nos cookies ou cookies corrompidos, carregando do servidor...');
-        loadFriendsData();
+        loadFriendsData(false); // Modo foreground
       }
     } else {
       // Limpar dados quando não autenticado
@@ -110,18 +125,23 @@ export const FriendsProvider = ({ children }) => {
   };
 
   // Carregar dados dos amigos do servidor
-  const loadFriendsData = async () => {
+  const loadFriendsData = async (backgroundMode = false) => {
     if (!currentUserId || !isAuthenticated) {
       console.log('❌ Não é possível carregar dados: usuário não autenticado ou ID não definido');
       return;
     }
 
     // Verificar se já está carregando para evitar múltiplas chamadas simultâneas
-    if (isLoading) {
+    if (isLoading && !backgroundMode) {
+      console.log('⏳ Carregamento já em andamento, ignorando...');
       return;
     }
 
-    setIsLoading(true);
+    if (!backgroundMode) {
+      setIsLoading(true);
+    }
+
+    console.log(`🔄 Carregando dados dos amigos do servidor (modo: ${backgroundMode ? 'background' : 'foreground'})...`);
 
     try {
       const sessionToken = localStorage.getItem('ludomusic_session_token');
@@ -248,7 +268,10 @@ export const FriendsProvider = ({ children }) => {
         console.error('❌ Erro ao carregar dados locais:', localError);
       }
     } finally {
-      setIsLoading(false);
+      if (!backgroundMode) {
+        setIsLoading(false);
+      }
+      console.log(`✅ Carregamento concluído (modo: ${backgroundMode ? 'background' : 'foreground'})`);
     }
   };
 

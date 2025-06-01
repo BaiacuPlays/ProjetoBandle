@@ -205,8 +205,9 @@ export const FriendsCookies = {
         sameSite: 'lax' // Mais permissivo para evitar problemas de CORS
       };
 
-      console.log('💾 DEBUG - Salvando amigos nos cookies:', friends);
-      console.log('💾 DEBUG - Salvando solicitações nos cookies:', friendRequests);
+      console.log('💾 DEBUG - Salvando amigos nos cookies:', friends?.length || 0, 'amigos');
+      console.log('💾 DEBUG - Salvando solicitações nos cookies:', friendRequests?.length || 0, 'solicitações');
+      console.log('💾 DEBUG - Lista de amigos:', friends?.map(f => f.displayName || f.username) || []);
 
       // Salvar lista de amigos com múltiplas tentativas
       const friendsData = JSON.stringify(friends);
@@ -303,9 +304,10 @@ export const FriendsCookies = {
         console.log('🔍 DEBUG - localStorage encontrado:', friendsData ? 'SIM' : 'NÃO');
       }
 
-      console.log('🔍 DEBUG - Conteúdo final:', friendsData);
+      console.log('🔍 DEBUG - Conteúdo final:', friendsData ? 'DADOS ENCONTRADOS' : 'NENHUM DADO');
       const parsed = friendsData ? JSON.parse(friendsData) : [];
-      console.log('🔍 DEBUG - Dados parseados:', parsed);
+      console.log('🔍 DEBUG - Dados parseados:', parsed?.length || 0, 'amigos encontrados');
+      console.log('🔍 DEBUG - Lista de amigos:', parsed?.map(f => f.displayName || f.username) || []);
       return parsed;
     } catch (error) {
       console.error('❌ Erro ao parsear dados dos amigos:', error);
