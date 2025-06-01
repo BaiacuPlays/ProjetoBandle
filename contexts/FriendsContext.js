@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { useAuth } from './AuthContext';
 import { usePresence } from '../hooks/usePresence';
 import { FriendsCookies } from '../utils/cookies';
@@ -22,63 +22,90 @@ export const FriendsProvider = ({ children }) => {
   const [sentRequests, setSentRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  // ID do usuário atual (apenas se autenticado)
-  const currentUserId = isAuthenticated && user ? `auth_${user.username}` : null;
+  // ID do usuário atual (apenas se autenticado) - memoizado para performance
+  const currentUserId = useMemo(() => {
+    return isAuthenticated && user ? `auth_${user.username}` : null;
+  }, [isAuthenticated, user]);
 
-  // SISTEMA SIMPLIFICADO: Carregar dados quando usuário está autenticado
+  // SISTEMA OTIMIZADO: Carregar dados instantaneamente quando usuário está autenticado
   useEffect(() => {
     if (isAuthenticated && currentUserId) {
       console.log('🔐 Usuário autenticado detectado:', currentUserId);
+      console.log('🍪 DEBUG - Verificando cookies...');
 
-      // 1. Carregar dados dos cookies IMEDIATAMENTE
+      // 1. Carregar dados dos cookies SINCRONAMENTE (sem await/delay)
       const savedFriends = FriendsCookies.getFriendsData();
       const savedRequests = FriendsCookies.getFriendRequests();
 
-      console.log('🍪 Carregando dos cookies:', savedFriends.length, 'amigos,', savedRequests.length, 'solicitações');
+      console.log('🍪 DEBUG - Amigos dos cookies:', savedFriends);
+      console.log('🍪 DEBUG - Solicitações dos cookies:', savedRequests);
 
-      // 2. Definir dados imediatamente (sem delay)
-      if (savedFriends.length > 0 || savedRequests.length > 0) {
-        setFriends(savedFriends);
-        setFriendRequests(savedRequests);
-        console.log('✅ Dados dos amigos carregados dos cookies');
+      // Verificar integridade dos dados
+      const integrity = FriendsCookies.checkDataIntegrity();
+      console.log('🔍 DEBUG - Integridade dos cookies:', integrity);
 
-        // 3. Atualizar presença em background
-        if (savedFriends.length > 0) {
-          updateFriendsPresenceFromCookies(savedFriends);
-        }
+
+
+      // 2. Definir dados IMEDIATAMENTE (operação síncrona) - com verificação mais robusta
+      if (savedFriends && savedFriends.length > 0 && integrity && integrity.anySourceWorking) {
+        // Garantir que os amigos têm todos os campos necessários
+        const friendsWithDefaults = savedFriends.map(friend => ({
+          ...friend,
+          avatar: friend.avatar || '👤',
+          level: friend.level || 1,
+          displayName: friend.displayName || friend.username || 'Jogador',
+          status: friend.status || 'offline'
+        }));
+
+        // Definir estado SINCRONAMENTE
+        setFriends(friendsWithDefaults);
+        setFriendRequests(savedRequests || []);
+        console.log('⚡ Dados dos amigos carregados INSTANTANEAMENTE dos cookies');
+        console.log('⚡ Estado definido - friends.length:', friendsWithDefaults.length);
+
+        // 3. Atualizar presença em background (não bloqueia)
+        setTimeout(() => {
+          updateFriendsPresenceInBackground(friendsWithDefaults);
+        }, 100); // Pequeno delay para não interferir na renderização inicial
+
+        // 4. Salvar novamente para reforçar os cookies (proteção contra F5 rápido)
+        setTimeout(() => {
+          FriendsCookies.saveFriendsData(friendsWithDefaults, savedRequests || []);
+        }, 500);
       } else {
         // 4. Se não há dados nos cookies, carregar do servidor
-        console.log('📭 Nenhum dado nos cookies, carregando do servidor...');
+        console.log('📭 Nenhum dado nos cookies ou cookies corrompidos, carregando do servidor...');
         loadFriendsData();
       }
     } else {
       // Limpar dados quando não autenticado
-      console.log('❌ Usuário não autenticado - limpando dados');
       setFriends([]);
       setFriendRequests([]);
       setSentRequests([]);
     }
   }, [isAuthenticated, currentUserId]);
 
-  // Função para atualizar presença dos amigos carregados dos cookies
-  const updateFriendsPresenceFromCookies = async (friendsList) => {
-    if (!isAuthenticated || friendsList.length === 0) return;
+  // Função para atualizar presença em background (sem bloquear exibição)
+  const updateFriendsPresenceInBackground = async (currentFriendsList) => {
+    if (!isAuthenticated || currentFriendsList.length === 0) return;
 
     try {
-      const friendIds = friendsList.map(friend => friend.id);
+      console.log('🔄 Atualizando presença em background...');
+      const friendIds = currentFriendsList.map(friend => friend.id);
       const presenceStatus = await getFriendsPresence(friendIds);
 
-      // Atualizar status dos amigos
-      const friendsWithStatus = friendsList.map(friend => ({
-        ...friend,
-        status: presenceStatus[friend.id] || 'offline'
-      }));
+      // Atualizar apenas o status, mantendo todos os outros dados
+      setFriends(prevFriends =>
+        prevFriends.map(friend => ({
+          ...friend,
+          status: presenceStatus[friend.id] || friend.status || 'offline'
+        }))
+      );
 
-      setFriends(friendsWithStatus);
-      console.log('✅ Status de presença atualizado para amigos dos cookies');
+      console.log('✅ Status de presença atualizado em background');
     } catch (error) {
-      console.warn('Erro ao buscar presença dos amigos dos cookies:', error);
-      // Manter dados dos cookies mesmo sem status de presença
+      console.warn('⚠️ Erro ao buscar presença em background (não afeta exibição):', error);
+      // Não fazer nada - manter dados existentes
     }
   };
 
@@ -91,24 +118,20 @@ export const FriendsProvider = ({ children }) => {
 
     // Verificar se já está carregando para evitar múltiplas chamadas simultâneas
     if (isLoading) {
-      console.log('⏳ Carregamento já em andamento, ignorando nova solicitação');
       return;
     }
 
     setIsLoading(true);
 
     try {
-      console.log(`🔄 Carregando dados dos amigos do servidor para: ${currentUserId}`);
       const sessionToken = localStorage.getItem('ludomusic_session_token');
 
       if (!sessionToken) {
-        console.log('❌ Token de sessão não encontrado');
         setIsLoading(false);
         return;
       }
 
       // Carregar amigos
-      console.log('📥 Buscando lista de amigos...');
       const friendsResponse = await fetch('/api/friends', {
         headers: {
           'Authorization': `Bearer ${sessionToken}`,
@@ -118,10 +141,7 @@ export const FriendsProvider = ({ children }) => {
 
       if (friendsResponse.ok) {
         const friendsData = await friendsResponse.json();
-        console.log('📊 Resposta da API de amigos:', friendsData);
         const friendsList = friendsData.friends || [];
-
-        console.log(`✅ ${friendsList.length} amigos carregados do servidor`);
 
         // Salvar no localStorage como backup
         localStorage.setItem(`ludomusic_friends_${currentUserId}`, JSON.stringify(friendsList));
@@ -143,7 +163,6 @@ export const FriendsProvider = ({ children }) => {
             }));
 
             setFriends(friendsWithStatus);
-            console.log('✅ Status de presença atualizado para', friendsWithStatus.length, 'amigos');
 
             // Salvar nos cookies após carregar com sucesso
             FriendsCookies.saveFriendsData(friendsWithStatus, friendRequests);
@@ -167,12 +186,9 @@ export const FriendsProvider = ({ children }) => {
           // Salvar nos cookies
           FriendsCookies.saveFriendsData(friendsList, friendRequests);
         }
-      } else {
-        console.error('❌ Erro ao carregar amigos:', friendsResponse.status);
       }
 
       // Carregar solicitações recebidas
-      console.log('📥 Buscando solicitações recebidas...');
       const requestsResponse = await fetch('/api/friend-requests', {
         headers: {
           'Authorization': `Bearer ${sessionToken}`,
@@ -182,9 +198,7 @@ export const FriendsProvider = ({ children }) => {
 
       if (requestsResponse.ok) {
         const requestsData = await requestsResponse.json();
-        console.log('📊 Resposta da API de solicitações:', requestsData);
         const requestsList = requestsData.requests || [];
-        console.log(`✅ ${requestsList.length} solicitações carregadas do servidor`);
         setFriendRequests(requestsList);
 
         // Salvar nos cookies (atualizar com as solicitações mais recentes)
@@ -192,27 +206,20 @@ export const FriendsProvider = ({ children }) => {
 
         // Salvar no localStorage como backup
         localStorage.setItem(`ludomusic_friend_requests_${currentUserId}`, JSON.stringify(requestsList));
-      } else {
-        console.error('❌ Erro ao carregar solicitações:', requestsResponse.status);
       }
-
-      console.log('✅ Dados de amigos carregados do servidor com sucesso');
     } catch (error) {
       console.error('❌ Erro ao carregar dados dos amigos:', error);
       // Fallback para localStorage em caso de erro
       try {
-        console.log('🔄 Tentando carregar dados do localStorage como fallback...');
         const savedFriends = localStorage.getItem(`ludomusic_friends_${currentUserId}`);
         const savedRequests = localStorage.getItem(`ludomusic_friend_requests_${currentUserId}`);
 
         if (savedFriends) {
           const friendsList = JSON.parse(savedFriends);
-          console.log(`📦 ${friendsList.length} amigos carregados do localStorage`);
           setFriends(friendsList);
         }
         if (savedRequests) {
           const requestsList = JSON.parse(savedRequests);
-          console.log(`📦 ${requestsList.length} solicitações carregadas do localStorage`);
           setFriendRequests(requestsList);
         }
       } catch (localError) {
@@ -325,8 +332,6 @@ export const FriendsProvider = ({ children }) => {
 
       // Adicionar à lista local de solicitações enviadas
       setSentRequests(prev => [...prev, request]);
-
-      console.log('✅ Solicitação enviada com sucesso');
       return request;
     } catch (error) {
       console.error('Erro ao enviar solicitação:', error);
@@ -362,8 +367,6 @@ export const FriendsProvider = ({ children }) => {
 
       // Recarregar dados do servidor
       await loadFriendsData();
-
-      console.log('✅ Solicitação aceita com sucesso');
     } catch (error) {
       console.error('Erro ao aceitar solicitação:', error);
       throw error;
@@ -403,8 +406,6 @@ export const FriendsProvider = ({ children }) => {
         FriendsCookies.saveFriendsData(friends, updatedRequests);
         return updatedRequests;
       });
-
-      console.log('✅ Solicitação rejeitada com sucesso');
     } catch (error) {
       console.error('Erro ao rejeitar solicitação:', error);
       throw error;
@@ -443,8 +444,6 @@ export const FriendsProvider = ({ children }) => {
         FriendsCookies.saveFriendsData(updatedFriends, friendRequests);
         return updatedFriends;
       });
-
-      console.log('✅ Amigo removido com sucesso');
     } catch (error) {
       console.error('Erro ao remover amigo:', error);
       throw error;
@@ -500,10 +499,6 @@ export const FriendsProvider = ({ children }) => {
     }
 
     try {
-      console.log(`📤 Enviando convite para ${friendName} (${friendId}) para sala ${roomCode}`);
-      console.log(`👤 Remetente: ${currentUserId} (${hostName})`);
-      console.log(`🎯 Destinatário: ${friendId} (${friendName})`);
-
       const invitation = {
         id: `invite_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         type: 'multiplayer_invite',
@@ -515,15 +510,6 @@ export const FriendsProvider = ({ children }) => {
         timestamp: Date.now(),
         status: 'pending'
       };
-
-      console.log('📋 Dados completos do convite:', {
-        id: invitation.id,
-        from: invitation.fromUserId,
-        to: invitation.toUserId,
-        hostName: invitation.hostName,
-        friendName: invitation.friendName,
-        roomCode: invitation.roomCode
-      });
 
       const sessionToken = localStorage.getItem('ludomusic_session_token');
 
@@ -543,16 +529,11 @@ export const FriendsProvider = ({ children }) => {
         })
       });
 
-      console.log('📡 Status da resposta:', response.status);
-
       if (response.ok) {
         const data = await response.json();
-        console.log('✅ Convite enviado com sucesso:', data);
-        console.log(`🎉 Convite ${invitation.id} enviado de ${currentUserId} para ${friendId}`);
         return { success: true, inviteId: data.inviteId };
       } else {
         const errorData = await response.json();
-        console.error('❌ Erro ao enviar convite:', errorData);
         throw new Error(errorData.error || 'Erro ao enviar convite');
       }
     } catch (error) {
@@ -585,7 +566,6 @@ export const FriendsProvider = ({ children }) => {
     if (!isAuthenticated || !currentUserId) return;
 
     const handleFocus = () => {
-      console.log('👁️ Página ganhou foco, recarregando dados dos amigos...');
       loadFriendsData();
     };
 
@@ -599,6 +579,75 @@ export const FriendsProvider = ({ children }) => {
       saveFriendsData();
     }
   }, [friends, friendRequests, sentRequests, isAuthenticated, currentUserId]);
+
+  // Sistema de monitoramento de cookies - verificar a cada 5 segundos
+  useEffect(() => {
+    if (!isAuthenticated || !currentUserId) return;
+
+    const monitorCookies = () => {
+      const integrity = FriendsCookies.checkDataIntegrity();
+
+      if (integrity) {
+        console.log('🔍 Monitoramento de cookies:', integrity);
+
+        // Se temos amigos no estado mas não nos cookies, recriar cookies
+        if (friends.length > 0 && !integrity.cookiesWorking && !integrity.backupWorking) {
+          console.log('⚠️ DETECTADO: Amigos no estado mas cookies perdidos! Recriando...');
+          FriendsCookies.saveFriendsData(friends, friendRequests);
+        }
+
+        // Se não temos amigos no estado mas temos nos cookies, recarregar
+        if (friends.length === 0 && integrity.anySourceWorking) {
+          console.log('⚠️ DETECTADO: Cookies existem mas estado vazio! Recarregando...');
+          const savedFriends = FriendsCookies.getFriendsData();
+          const savedRequests = FriendsCookies.getFriendRequests();
+
+          if (savedFriends.length > 0) {
+            const friendsWithDefaults = savedFriends.map(friend => ({
+              ...friend,
+              avatar: friend.avatar || '👤',
+              level: friend.level || 1,
+              displayName: friend.displayName || friend.username || 'Jogador',
+              status: friend.status || 'offline'
+            }));
+            setFriends(friendsWithDefaults);
+            setFriendRequests(savedRequests);
+
+            // Reforçar salvamento
+            FriendsCookies.saveFriendsData(friendsWithDefaults, savedRequests);
+          }
+        }
+      }
+    };
+
+    // Verificar imediatamente
+    monitorCookies();
+
+    // Verificar mais frequentemente para detectar problemas rapidamente
+    const interval = setInterval(monitorCookies, 2000); // A cada 2 segundos
+
+    // Verificação adicional após eventos de foco/blur da janela
+    const handleFocus = () => {
+      console.log('🔍 Janela focada - verificando cookies...');
+      setTimeout(monitorCookies, 100);
+    };
+
+    const handleBeforeUnload = () => {
+      // Salvar dados antes de sair da página
+      if (friends.length > 0) {
+        FriendsCookies.saveFriendsData(friends, friendRequests);
+      }
+    };
+
+    window.addEventListener('focus', handleFocus);
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('focus', handleFocus);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [isAuthenticated, currentUserId, friends.length, friendRequests.length]);
 
   // Polling para verificar novas solicitações a cada 30 segundos
   useEffect(() => {

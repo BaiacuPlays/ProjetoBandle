@@ -9,7 +9,7 @@ import { getBadge } from '../data/badges';
 import { FaTimes, FaUserPlus, FaGamepad, FaTrophy, FaMedal, FaStar, FaMusic, FaClock, FaFire } from 'react-icons/fa';
 import styles from '../styles/PublicProfileModal.module.css';
 
-const PublicProfileModal = ({ isOpen, onClose, userId, username }) => {
+const PublicProfileModal = ({ isOpen, onClose, userId, username, friendData }) => {
   useModalScrollLock(isOpen);
   const { t } = useLanguage();
   const { isAuthenticated } = useAuth();
@@ -22,18 +22,52 @@ const PublicProfileModal = ({ isOpen, onClose, userId, username }) => {
   // Carregar perfil quando modal abrir
   useEffect(() => {
     if (isOpen && (userId || username)) {
-      loadProfile();
+      // Se temos dados do amigo, usar eles primeiro
+      if (friendData) {
+        setProfile({
+          id: friendData.id,
+          username: friendData.username,
+          displayName: friendData.displayName || friendData.username,
+          avatar: friendData.avatar || '👤',
+          bio: friendData.bio || '',
+          level: friendData.level || 1,
+          xp: friendData.xp || 0,
+          isFriend: true,
+          isOnline: friendData.status === 'online',
+          lastSeen: friendData.status === 'online' ? 'Agora' : 'Offline',
+          // Dados básicos para estatísticas (serão carregados da API se necessário)
+          stats: {
+            totalGames: 0,
+            totalWins: 0,
+            totalScore: 0,
+            averageScore: 0,
+            bestStreak: 0,
+            perfectGames: 0
+          },
+          achievements: {},
+          badges: {}
+        });
+        setIsLoading(false);
+
+        // Carregar dados completos em background
+        loadProfile();
+      } else {
+        loadProfile();
+      }
     }
-  }, [isOpen, userId, username]);
+  }, [isOpen, userId, username, friendData]);
 
   const loadProfile = async () => {
-    setIsLoading(true);
+    // Se não temos dados do amigo, mostrar loading
+    if (!friendData) {
+      setIsLoading(true);
+    }
     setError(null);
 
     try {
       const sessionToken = localStorage.getItem('ludomusic_session_token');
       const params = new URLSearchParams();
-      
+
       if (userId) params.append('userId', userId);
       if (username) params.append('username', username);
 
@@ -48,16 +82,37 @@ const PublicProfileModal = ({ isOpen, onClose, userId, username }) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('🔍 Dados recebidos no PublicProfileModal:', data.profile);
-        console.log('📊 Estatísticas recebidas:', data.profile?.stats);
-        setProfile(data.profile);
+        console.log('🔍 Dados da API public-profile:', data.profile);
+        console.log('📊 Estatísticas da API:', data.profile?.stats);
+
+        // Se já temos dados do amigo, mesclar com os dados da API
+        if (friendData) {
+          setProfile(prevProfile => ({
+            ...prevProfile,
+            ...data.profile,
+            // Manter dados básicos do amigo se a API não retornar
+            avatar: data.profile.avatar || prevProfile.avatar,
+            bio: data.profile.bio || prevProfile.bio,
+            displayName: data.profile.displayName || prevProfile.displayName,
+            level: data.profile.level || prevProfile.level,
+            xp: data.profile.xp || prevProfile.xp
+          }));
+        } else {
+          setProfile(data.profile);
+        }
       } else {
         const errorData = await response.json();
-        setError(errorData.error || 'Erro ao carregar perfil');
+        // Se temos dados do amigo, não mostrar erro
+        if (!friendData) {
+          setError(errorData.error || 'Erro ao carregar perfil');
+        }
       }
     } catch (error) {
       console.error('Erro ao carregar perfil público:', error);
-      setError('Erro de conexão');
+      // Se temos dados do amigo, não mostrar erro
+      if (!friendData) {
+        setError('Erro de conexão');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -237,6 +292,8 @@ const PublicProfileModal = ({ isOpen, onClose, userId, username }) => {
               </div>
 
               {/* Seção de estatísticas principais - estilo Steam */}
+              {console.log('🔍 DEBUG - Verificando stats:', profile.stats)}
+              {console.log('🔍 DEBUG - Condição stats:', !!profile.stats)}
               {profile.stats && (
                 <div className={styles.statsShowcase}>
                   <h3 className={styles.sectionTitle}>

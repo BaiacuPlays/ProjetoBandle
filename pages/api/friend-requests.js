@@ -118,7 +118,8 @@ export default async function handler(req, res) {
         fromUser: {
           username: authResult.username,
           displayName: currentUserProfile?.displayName || authResult.username,
-          avatar: currentUserProfile?.avatar || '👤'
+          avatar: currentUserProfile?.avatar || '👤',
+          bio: currentUserProfile?.bio || ''
         },
         toUser: toUser,
         timestamp: new Date().toISOString(),
@@ -223,6 +224,7 @@ export default async function handler(req, res) {
           username: request.fromUser.username,
           displayName: request.fromUser.displayName,
           avatar: request.fromUser.avatar,
+          bio: request.fromUser.bio || '',
           addedAt: new Date().toISOString(),
           status: 'offline'
         });
@@ -240,6 +242,7 @@ export default async function handler(req, res) {
           username: authResult.username,
           displayName: request.toUser.displayName,
           avatar: request.toUser.avatar,
+          bio: request.toUser.bio || '',
           addedAt: new Date().toISOString(),
           status: 'offline'
         });

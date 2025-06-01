@@ -10,11 +10,12 @@ import Statistics from '../components/Statistics';
 import Tutorial from '../components/Tutorial';
 import UserProfile from '../components/UserProfile';
 import FriendsManager from '../components/FriendsManager';
+import UserProfileViewer from '../components/UserProfileViewer';
 import NotificationCenter from '../components/NotificationCenter';
 import GlobalStats from '../components/GlobalStats';
 import AchievementNotification from '../components/AchievementNotification';
 import InfiniteGameOverModal from '../components/InfiniteGameOverModal';
-import ProfileDebug from '../components/ProfileDebug';
+
 import { useLanguage } from '../contexts/LanguageContext';
 import { useUserProfile } from '../contexts/UserProfileContext';
 import { fetchTimezone } from '../config/api';
@@ -120,6 +121,8 @@ export default function Home() {
   // Estados do perfil
   const [showProfile, setShowProfile] = useState(false);
   const [showFriends, setShowFriends] = useState(false);
+  const [showUserProfileViewer, setShowUserProfileViewer] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
 
 
 
@@ -2366,6 +2369,20 @@ export default function Home() {
         <FriendsManager
           isOpen={showFriends}
           onClose={() => setShowFriends(false)}
+          onViewProfile={(userId) => {
+            setSelectedUserId(userId);
+            setShowUserProfileViewer(true);
+          }}
+        />
+
+        {/* Visualizador de perfil de usuário */}
+        <UserProfileViewer
+          isOpen={showUserProfileViewer}
+          onClose={() => {
+            setShowUserProfileViewer(false);
+            setSelectedUserId(null);
+          }}
+          userId={selectedUserId}
         />
 
         {/* Componentes de monetização */}
@@ -2398,8 +2415,7 @@ export default function Home() {
         />
       </div>
 
-      {/* Componente de debug temporário */}
-      <ProfileDebug />
+
     </>
   );
 };

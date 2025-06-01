@@ -6,11 +6,11 @@ import { useModalScrollLock } from '../hooks/useModalScrollLock';
 import { FaTimes, FaUserPlus, FaSearch, FaUsers, FaUserFriends, FaPaperPlane, FaCheck, FaTimes as FaReject, FaTrash, FaGamepad, FaShare, FaEye } from 'react-icons/fa';
 import UserAvatar from './UserAvatar';
 import MultiplayerInviteModal from './MultiplayerInviteModal';
-import PublicProfileModal from './PublicProfileModal';
+
 import ReferralSystem from './ReferralSystem';
 import styles from '../styles/FriendsManager.module.css';
 
-const FriendsManager = ({ isOpen, onClose }) => {
+const FriendsManager = ({ isOpen, onClose, onViewProfile }) => {
   // Bloquear/desbloquear scroll da página
   useModalScrollLock(isOpen);
   const {
@@ -27,6 +27,16 @@ const FriendsManager = ({ isOpen, onClose }) => {
     cancelSentRequest,
     inviteToMultiplayer
   } = useFriends();
+
+  // Debug: Log quando o estado dos amigos muda
+  React.useEffect(() => {
+    console.log('🔍 FriendsManager - Estado dos amigos atualizado:', {
+      friendsLength: friends.length,
+      friends: friends,
+      isLoading: isLoading,
+      currentUserId: currentUserId
+    });
+  }, [friends, isLoading, currentUserId]);
 
   const { sendMultiplayerInvite } = useNotifications();
   const { profile } = useUserProfile();
@@ -59,8 +69,6 @@ const FriendsManager = ({ isOpen, onClose }) => {
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [showReferralSystem, setShowReferralSystem] = useState(false);
-  const [showProfileModal, setShowProfileModal] = useState(false);
-  const [selectedProfile, setSelectedProfile] = useState(null);
 
   if (!isOpen) return null;
 
@@ -156,8 +164,9 @@ const FriendsManager = ({ isOpen, onClose }) => {
   };
 
   const handleViewProfile = (friend) => {
-    setSelectedProfile({ userId: friend.id, username: friend.username });
-    setShowProfileModal(true);
+    if (onViewProfile) {
+      onViewProfile(friend.id);
+    }
   };
 
   const handleCreateRoomAndInvite = async () => {
@@ -462,16 +471,7 @@ const FriendsManager = ({ isOpen, onClose }) => {
         onCreateRoom={handleCreateRoomAndInvite}
       />
 
-      {/* Modal de perfil público */}
-      <PublicProfileModal
-        isOpen={showProfileModal}
-        onClose={() => {
-          setShowProfileModal(false);
-          setSelectedProfile(null);
-        }}
-        userId={selectedProfile?.userId}
-        username={selectedProfile?.username}
-      />
+
 
       {/* Sistema de referência */}
       <ReferralSystem

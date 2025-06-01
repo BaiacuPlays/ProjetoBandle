@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { FaUser, FaEdit } from 'react-icons/fa';
 import styles from '../styles/UserAvatar.module.css';
 
@@ -10,6 +10,8 @@ const UserAvatar = ({
   showEditIcon = false,
   className = ''
 }) => {
+  const [imageError, setImageError] = useState(false);
+
   // Função para determinar o tipo de avatar
   const getAvatarType = (avatarValue) => {
     if (!avatarValue || avatarValue === '👤') return 'default';
@@ -23,26 +25,35 @@ const UserAvatar = ({
 
   const avatarType = getAvatarType(avatar);
 
+  // Reset error state when avatar changes
+  React.useEffect(() => {
+    setImageError(false);
+  }, [avatar]);
+
   const handleClick = () => {
     if (onClick) {
       onClick();
     }
   };
 
+  const handleImageError = useCallback(() => {
+    setImageError(true);
+  }, []);
+
   const renderAvatar = () => {
     switch (avatarType) {
       case 'image':
       case 'url':
+        if (imageError) {
+          return <FaUser className={styles.defaultIcon} />;
+        }
         return (
           <img
             src={avatar}
             alt="Avatar"
             className={styles.avatarImage}
-            onError={(e) => {
-              // Se a imagem falhar ao carregar, mostrar ícone padrão
-              e.target.style.display = 'none';
-              e.target.nextSibling.style.display = 'block';
-            }}
+            onError={handleImageError}
+            style={{ display: imageError ? 'none' : 'block' }}
           />
         );
       case 'emoji':
@@ -61,10 +72,6 @@ const UserAvatar = ({
     >
       <div className={styles.avatar}>
         {renderAvatar()}
-        {/* Fallback para imagens que falharam */}
-        {(avatarType === 'image' || avatarType === 'url') && (
-          <FaUser className={styles.defaultIcon} style={{ display: 'none' }} />
-        )}
       </div>
 
       {showEditIcon && editable && (

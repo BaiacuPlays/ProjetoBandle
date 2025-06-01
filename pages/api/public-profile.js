@@ -202,7 +202,11 @@ export default async function handler(req, res) {
       publicProfile.bio = (cleanBio && cleanBio !== 'Usuário' && cleanBio.trim() !== '') ? cleanBio : null;
       
       // Estatísticas públicas (se existirem)
+      console.log('🔍 DEBUG - profileData completo:', JSON.stringify(profileData, null, 2));
+      console.log('🔍 DEBUG - profileData.stats:', profileData.stats);
+
       if (profileData.stats) {
+        console.log('📊 DEBUG - Estatísticas encontradas:', profileData.stats);
         publicProfile.stats = {
           totalGames: profileData.stats.totalGames || 0,
           totalWins: profileData.stats.wins || profileData.stats.totalWins || 0,
@@ -213,6 +217,21 @@ export default async function handler(req, res) {
           bestStreak: profileData.stats.bestStreak || 0,
           perfectGames: profileData.stats.perfectGames || 0,
           winRate: profileData.stats.winRate || (profileData.stats.wins && profileData.stats.totalGames ? (profileData.stats.wins / profileData.stats.totalGames * 100) : 0)
+        };
+        console.log('📊 DEBUG - Estatísticas processadas:', publicProfile.stats);
+      } else {
+        console.log('❌ DEBUG - Nenhuma estatística encontrada no profileData');
+        // Criar estrutura vazia para evitar erros
+        publicProfile.stats = {
+          totalGames: 0,
+          totalWins: 0,
+          gamesWon: 0,
+          wins: 0,
+          totalScore: 0,
+          averageScore: 0,
+          bestStreak: 0,
+          perfectGames: 0,
+          winRate: 0
         };
       }
 
@@ -293,15 +312,7 @@ export default async function handler(req, res) {
     publicProfile.isOnline = isOnline;
     publicProfile.lastSeen = isOnline ? 'Agora' : (userData.lastLoginAt ? new Date(userData.lastLoginAt).toLocaleDateString('pt-BR') : 'Nunca');
 
-    console.log(`👤 Perfil público visualizado: ${publicProfile.displayName}`);
-    console.log('📤 Dados do perfil público retornados:', {
-      id: publicProfile.id,
-      username: publicProfile.username,
-      displayName: publicProfile.displayName,
-      level: publicProfile.level,
-      xp: publicProfile.xp,
-      stats: publicProfile.stats
-    });
+
 
     return res.status(200).json({
       success: true,

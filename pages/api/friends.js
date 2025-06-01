@@ -93,6 +93,7 @@ export default async function handler(req, res) {
           const enrichedFriend = {
             ...friend,
             avatar: friendProfile?.avatar || friend.avatar || '👤',
+            bio: friendProfile?.bio || friend.bio || '',
             level: friendProfile?.level || friend.level || 1,
             xp: friendProfile?.xp || 0,
             lastActiveAt: friendProfile?.lastLogin || friend.lastActiveAt,

@@ -100,25 +100,7 @@ export default async function handler(req, res) {
       const isOwnProfile = authResult.authenticated && authResult.userId === targetUserId;
       const isAuthenticated = authResult.authenticated;
 
-      console.log('🔍 Dados encontrados:', {
-        userProfile: !!userProfile,
-        userData: !!userData,
-        isAuthenticated,
-        isOwnProfile,
-        profileData: {
-          username: userProfile?.username,
-          displayName: userProfile?.displayName,
-          bio: userProfile?.bio,
-          avatar: userProfile?.avatar,
-          level: userProfile?.level,
-          xp: userProfile?.xp,
-          stats: userProfile?.stats,
-          totalGames: userProfile?.totalGames,
-          gamesWon: userProfile?.gamesWon,
-          currentStreak: userProfile?.currentStreak,
-          bestStreak: userProfile?.bestStreak
-        }
-      });
+
 
       // Preparar dados do perfil para retorno
       const publicProfile = {
@@ -146,8 +128,31 @@ export default async function handler(req, res) {
           perfectGames: userProfile.stats?.perfectGames || 0
         },
 
+        // Incluir stats diretamente também para compatibilidade
+        stats: {
+          totalGames: userProfile.stats?.totalGames || userProfile.totalGames || 0,
+          wins: userProfile.stats?.wins || userProfile.gamesWon || 0,
+          winRate: userProfile.stats?.winRate || (userProfile.stats?.wins && userProfile.stats?.totalGames ? (userProfile.stats.wins / userProfile.stats.totalGames * 100) : 0),
+          currentStreak: userProfile.stats?.currentStreak || userProfile.currentStreak || 0,
+          bestStreak: userProfile.stats?.bestStreak || userProfile.bestStreak || 0,
+          perfectGames: userProfile.stats?.perfectGames || 0
+        },
+
         // Conquistas públicas (apenas desbloqueadas)
-        achievements: (userProfile.achievements || []).filter(achievement => achievement.unlockedAt),
+        achievements: (() => {
+          const achievements = userProfile.achievements || [];
+
+          if (Array.isArray(achievements)) {
+            // Se for array de strings (IDs), retornar como está
+            if (achievements.length > 0 && typeof achievements[0] === 'string') {
+              return achievements;
+            }
+            // Se for array de objetos, filtrar por unlockedAt
+            return achievements.filter(achievement => achievement.unlockedAt);
+          }
+
+          return [];
+        })(),
         
         // Badges públicos
         badges: userProfile.badges || [],
@@ -211,18 +216,7 @@ export default async function handler(req, res) {
         }
       }
 
-      console.log(`👤 Perfil visualizado: ${userProfile.displayName} por ${authResult.authenticated ? authResult.username : 'anônimo'}`);
-      console.log('📤 Perfil retornado:', {
-        id: publicProfile.id,
-        username: publicProfile.username,
-        displayName: publicProfile.displayName,
-        level: publicProfile.level,
-        xp: publicProfile.xp,
-        statistics: publicProfile.statistics,
-        isAuthenticated: isAuthenticated,
-        isOwnProfile: isOwnProfile,
-        requestedBy: authResult.authenticated ? authResult.username : 'anônimo'
-      });
+
 
       return res.status(200).json({
         success: true,

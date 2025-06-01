@@ -1,18 +1,31 @@
 /* Estilos para o visualizador de perfil de usuário */
 
+/* Reset global para o modal */
+.overlay * {
+  box-sizing: border-box;
+}
+
 .overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
   background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 999999 !important;
   padding: 20px;
   backdrop-filter: blur(5px);
+  overflow-y: auto;
+  margin: 0 !important;
+  transform: none !important;
+  inset: 0 !important;
+  min-height: 100vh !important;
+  min-width: 100vw !important;
 }
 
 .modal {
@@ -20,11 +33,15 @@
   border-radius: 20px;
   width: 100%;
   max-width: 500px;
-  max-height: 90vh;
+  max-height: 85vh;
   overflow-y: auto;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  position: relative;
+  position: relative !important;
+  margin: 0 auto !important;
+  transform: none !important;
+  top: auto !important;
+  left: auto !important;
 }
 
 .header {
@@ -294,6 +311,13 @@
   padding: 12px;
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+  cursor: help;
+}
+
+.achievementItem:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
 }
 
 .achievementIcon {
@@ -325,6 +349,18 @@
   font-size: 12px;
 }
 
+.noAchievements,
+.noBadges {
+  color: #666666;
+  text-align: center;
+  font-style: italic;
+  font-size: 14px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 8px;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
 /* Badges */
 .badges {
   margin-bottom: 25px;
@@ -351,6 +387,13 @@
   padding: 8px 12px;
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+  cursor: help;
+}
+
+.badgeItem:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
 }
 
 .badgeIcon {
