@@ -25,32 +25,35 @@ export const FriendsProvider = ({ children }) => {
   // ID do usuário atual (apenas se autenticado)
   const currentUserId = isAuthenticated && user ? `auth_${user.username}` : null;
 
-  // Carregar dados dos cookies imediatamente quando autenticado
+  // SISTEMA SIMPLIFICADO: Carregar dados quando usuário está autenticado
   useEffect(() => {
     if (isAuthenticated && currentUserId) {
-      console.log('🍪 Usuário autenticado - carregando dados dos amigos dos cookies...');
+      console.log('🔐 Usuário autenticado detectado:', currentUserId);
 
-      // Carregar dados dos cookies
+      // 1. Carregar dados dos cookies IMEDIATAMENTE
       const savedFriends = FriendsCookies.getFriendsData();
       const savedRequests = FriendsCookies.getFriendRequests();
 
-      console.log('📦 Dados carregados dos cookies:', savedFriends.length, 'amigos,', savedRequests.length, 'solicitações');
+      console.log('🍪 Carregando dos cookies:', savedFriends.length, 'amigos,', savedRequests.length, 'solicitações');
 
-      // Definir dados imediatamente
-      setFriends(savedFriends);
-      setFriendRequests(savedRequests);
+      // 2. Definir dados imediatamente (sem delay)
+      if (savedFriends.length > 0 || savedRequests.length > 0) {
+        setFriends(savedFriends);
+        setFriendRequests(savedRequests);
+        console.log('✅ Dados dos amigos carregados dos cookies');
 
-      // Se não há dados nos cookies, carregar do servidor
-      if (savedFriends.length === 0 && savedRequests.length === 0) {
+        // 3. Atualizar presença em background
+        if (savedFriends.length > 0) {
+          updateFriendsPresenceFromCookies(savedFriends);
+        }
+      } else {
+        // 4. Se não há dados nos cookies, carregar do servidor
         console.log('📭 Nenhum dado nos cookies, carregando do servidor...');
         loadFriendsData();
-      } else {
-        // Atualizar status de presença dos amigos carregados dos cookies
-        updateFriendsPresenceFromCookies(savedFriends);
       }
-    } else if (!isAuthenticated) {
+    } else {
       // Limpar dados quando não autenticado
-      console.log('❌ Usuário não autenticado - limpando dados dos amigos');
+      console.log('❌ Usuário não autenticado - limpando dados');
       setFriends([]);
       setFriendRequests([]);
       setSentRequests([]);
@@ -575,27 +578,7 @@ export const FriendsProvider = ({ children }) => {
     return false;
   };
 
-  // Listener para evento de login bem-sucedido (para carregar dados do servidor quando necessário)
-  useEffect(() => {
-    const handleUserLoggedIn = (event) => {
-      console.log('🎉 Evento de login detectado, verificando se precisa carregar dados do servidor...');
-      // Verificar se já há dados nos cookies
-      const savedFriends = FriendsCookies.getFriendsData();
-      const savedRequests = FriendsCookies.getFriendRequests();
 
-      if (savedFriends.length === 0 && savedRequests.length === 0) {
-        console.log('📭 Nenhum dado nos cookies após login, carregando do servidor...');
-        setTimeout(() => {
-          loadFriendsData();
-        }, 300);
-      } else {
-        console.log('✅ Dados já disponíveis nos cookies após login');
-      }
-    };
-
-    window.addEventListener('userLoggedIn', handleUserLoggedIn);
-    return () => window.removeEventListener('userLoggedIn', handleUserLoggedIn);
-  }, []);
 
   // Recarregar dados quando a página ganha foco (usuário volta para a aba)
   useEffect(() => {

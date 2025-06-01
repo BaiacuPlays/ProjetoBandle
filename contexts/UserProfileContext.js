@@ -778,6 +778,47 @@ export const UserProfileProvider = ({ children }) => {
       return null;
     }
 
+    // 🔒 VALIDAÇÃO CRÍTICA: Para modo diário, verificar no servidor se já jogou hoje
+    if (gameStats.mode === 'daily') {
+      try {
+        const sessionToken = localStorage.getItem('ludomusic_session_token');
+        const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+
+        console.log('🔒 Verificando se usuário já jogou hoje no servidor...');
+
+        const validationResponse = await fetch('/api/validate-daily-game', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${sessionToken}`
+          },
+          body: JSON.stringify({
+            date: today,
+            gameStats: gameStats
+          })
+        });
+
+        if (!validationResponse.ok) {
+          const errorData = await validationResponse.json();
+          console.warn('⚠️ Validação do servidor falhou:', errorData.error);
+
+          if (errorData.error === 'Jogo diário já completado hoje') {
+            console.warn('🚫 Usuário já jogou hoje - bloqueando atualização de XP');
+            return null;
+          }
+
+          // Para outros erros, continuar mas com log
+          console.warn('⚠️ Erro na validação, mas continuando:', errorData.error);
+        } else {
+          console.log('✅ Validação do servidor passou - permitindo atualização');
+        }
+      } catch (error) {
+        console.error('❌ Erro na validação do servidor:', error);
+        // Em caso de erro de rede, continuar mas com log
+        console.warn('⚠️ Erro de rede na validação, continuando com atualização local');
+      }
+    }
+
     try {
       const {
         won,

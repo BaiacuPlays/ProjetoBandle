@@ -50,18 +50,27 @@ export const CookieManager = {
 
   // Obter um cookie
   get(name) {
-    if (typeof window === 'undefined') return null; // SSR safety
+    if (typeof window === 'undefined') {
+      console.log('🔍 CookieManager.get: window undefined (SSR)');
+      return null; // SSR safety
+    }
 
     const nameEQ = encodeURIComponent(name) + '=';
     const cookies = document.cookie.split(';');
-    
+
+    console.log(`🔍 CookieManager.get(${name}): procurando por "${nameEQ}"`);
+    console.log('🔍 Cookies disponíveis:', document.cookie);
+
     for (let cookie of cookies) {
       let c = cookie.trim();
       if (c.indexOf(nameEQ) === 0) {
         const value = c.substring(nameEQ.length);
-        return decodeURIComponent(value);
+        const decoded = decodeURIComponent(value);
+        console.log(`✅ CookieManager.get(${name}): encontrado`);
+        return decoded;
       }
     }
+    console.log(`❌ CookieManager.get(${name}): não encontrado`);
     return null;
   },
 
@@ -189,24 +198,36 @@ export const FriendsCookies = {
 
   // Salvar dados dos amigos
   saveFriendsData(friends, friendRequests = []) {
-    const options = { maxAge: 30 * 24 * 60 * 60 }; // 30 dias
+    try {
+      const options = { maxAge: 30 * 24 * 60 * 60 }; // 30 dias
 
-    // Salvar lista de amigos
-    CookieManager.set(this.FRIENDS_DATA, JSON.stringify(friends), options);
+      // Salvar lista de amigos
+      CookieManager.set(this.FRIENDS_DATA, JSON.stringify(friends), options);
 
-    // Salvar solicitações de amizade
-    CookieManager.set(this.FRIEND_REQUESTS, JSON.stringify(friendRequests), options);
+      // Salvar solicitações de amizade
+      CookieManager.set(this.FRIEND_REQUESTS, JSON.stringify(friendRequests), options);
 
-    console.log('👥 Dados dos amigos salvos nos cookies:', friends.length, 'amigos,', friendRequests.length, 'solicitações');
+      console.log('👥 Dados dos amigos salvos nos cookies:', friends.length, 'amigos,', friendRequests.length, 'solicitações');
+
+      // Verificar se foi salvo corretamente
+      const testFriends = this.getFriendsData();
+      const testRequests = this.getFriendRequests();
+      console.log('🔍 Verificação pós-salvamento:', testFriends.length, 'amigos,', testRequests.length, 'solicitações');
+    } catch (error) {
+      console.error('❌ Erro ao salvar dados dos amigos nos cookies:', error);
+    }
   },
 
   // Obter lista de amigos
   getFriendsData() {
     try {
       const friendsData = CookieManager.get(this.FRIENDS_DATA);
-      return friendsData ? JSON.parse(friendsData) : [];
+      console.log('🔍 Dados brutos dos amigos do cookie:', friendsData ? 'encontrado' : 'não encontrado');
+      const parsed = friendsData ? JSON.parse(friendsData) : [];
+      console.log('📦 Amigos parseados dos cookies:', parsed.length);
+      return parsed;
     } catch (error) {
-      console.error('Erro ao parsear dados dos amigos:', error);
+      console.error('❌ Erro ao parsear dados dos amigos:', error);
       return [];
     }
   },
@@ -215,9 +236,12 @@ export const FriendsCookies = {
   getFriendRequests() {
     try {
       const requestsData = CookieManager.get(this.FRIEND_REQUESTS);
-      return requestsData ? JSON.parse(requestsData) : [];
+      console.log('🔍 Dados brutos das solicitações do cookie:', requestsData ? 'encontrado' : 'não encontrado');
+      const parsed = requestsData ? JSON.parse(requestsData) : [];
+      console.log('📦 Solicitações parseadas dos cookies:', parsed.length);
+      return parsed;
     } catch (error) {
-      console.error('Erro ao parsear solicitações de amizade:', error);
+      console.error('❌ Erro ao parsear solicitações de amizade:', error);
       return [];
     }
   },
