@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useFriends } from '../contexts/FriendsContext';
-import useModalScrollLock from '../hooks/useModalScrollLock';
+import { useModalScrollLock } from '../hooks/useModalScrollLock';
 import styles from '../styles/PublicProfileModal.module.css';
 
 const PublicProfileModal = ({ isOpen, onClose, userId, username }) => {

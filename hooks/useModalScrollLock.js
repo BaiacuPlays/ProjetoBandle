@@ -110,4 +110,5 @@ export const useModalScrollLockAlways = () => {
   }, []);
 };
 
-
+// Export default para compatibilidade
+export default useModalScrollLock;
