@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useMultiplayerContext } from '../contexts/MultiplayerContext';
+import { useUserProfile } from '../contexts/UserProfileContext';
 import { songs } from '../data/songs';
 import styles from '../styles/Multiplayer.module.css';
 import gameStyles from '../styles/Home.module.css';
@@ -12,6 +13,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
 
   const { t, isClient } = useLanguage();
   const { state, actions } = useMultiplayerContext();
+  const { updateSocialStats } = useUserProfile();
   const {
     playerNickname: nickname,
     lobbyData,
@@ -408,6 +410,33 @@ const MultiplayerGame = ({ onBackToLobby }) => {
       }
     };
   }, [isPlayLoading, pendingPlay]);
+
+  // Detectar fim do jogo e distribuir XP
+  useEffect(() => {
+    if (gameFinished && gameState && updateSocialStats) {
+      // Verificar se o jogador atual é um dos vencedores
+      const finalScores = Object.entries(gameState.scores || {})
+        .map(([player, score]) => ({ player, score }))
+        .sort((a, b) => b.score - a.score);
+
+      const maxScore = finalScores.length > 0 ? finalScores[0].score : 0;
+      const winners = finalScores.filter(item => item.score === maxScore);
+      const isWinner = winners.some(winner => winner.player === nickname);
+
+      // Distribuir XP baseado no resultado e número de rodadas
+      updateSocialStats('multiplayer_game', {
+        won: isWinner,
+        totalRounds: gameState.totalRounds || 10
+      });
+
+      console.log('🎮 [MULTIPLAYER] XP distribuído:', {
+        player: nickname,
+        isWinner,
+        totalRounds: gameState.totalRounds,
+        finalScore: gameState.scores?.[nickname] || 0
+      });
+    }
+  }, [gameFinished, gameState?.scores, nickname, updateSocialStats, gameState?.totalRounds]);
 
   // Normalizar string para comparação - IGUAL AO JOGO NORMAL
   const normalize = str => str

@@ -71,6 +71,7 @@ export default function FAQ() {
     <>
       <Head>
         <title>FAQ - Perguntas Frequentes sobre o LudoMusic</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <meta
           name="description"
           content="Tire suas dúvidas sobre o LudoMusic! Encontre respostas para as perguntas mais frequentes sobre nosso jogo musical de videogames. Como jogar, modos de jogo, músicas disponíveis e muito mais."

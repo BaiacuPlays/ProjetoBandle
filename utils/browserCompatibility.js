@@ -2,62 +2,11 @@
 class BrowserCompatibility {
   constructor() {
     this.browserInfo = this.detectBrowser();
-    this.audioConfig = this.getAudioConfig();
+    this.audioConfig = this._initializeAudioConfig();
   }
 
-  // Detectar navegador e versão
-  detectBrowser() {
-    if (typeof window === 'undefined') {
-      return { name: 'unknown', version: 0, isProblematic: false };
-    }
-    
-    const userAgent = window.navigator.userAgent;
-    let browser = { name: 'unknown', version: 0, isProblematic: false };
-
-    if (userAgent.includes('Chrome') && !userAgent.includes('Edg')) {
-      browser.name = 'chrome';
-      const match = userAgent.match(/Chrome\/(\d+)/);
-      browser.version = match ? parseInt(match[1]) : 0;
-      browser.isProblematic = false; // Chrome é o mais estável
-    } else if (userAgent.includes('Firefox')) {
-      browser.name = 'firefox';
-      const match = userAgent.match(/Firefox\/(\d+)/);
-      browser.version = match ? parseInt(match[1]) : 0;
-      browser.isProblematic = false; // Firefox funciona bem
-    } else if (userAgent.includes('Safari') && !userAgent.includes('Chrome')) {
-      browser.name = 'safari';
-      const match = userAgent.match(/Version\/(\d+)/);
-      browser.version = match ? parseInt(match[1]) : 0;
-      browser.isProblematic = true; // Safari tem problemas com áudio
-    } else if (userAgent.includes('Edg')) {
-      browser.name = 'edge';
-      const match = userAgent.match(/Edg\/(\d+)/);
-      browser.version = match ? parseInt(match[1]) : 0;
-      browser.isProblematic = true; // Edge pode ter problemas
-    } else if (userAgent.includes('Opera') || userAgent.includes('OPR')) {
-      browser.name = 'opera';
-      // Detectar Opera GX especificamente
-      if (userAgent.includes('GX')) {
-        browser.variant = 'gx';
-      }
-      const match = userAgent.match(/(Opera|OPR)\/(\d+)/);
-      browser.version = match ? parseInt(match[2]) : 0;
-      browser.isProblematic = true; // Opera/Opera GX podem ter problemas
-    }
-
-    // Detectar versões antigas problemáticas
-    if (browser.name === 'chrome' && browser.version < 80) {
-      browser.isProblematic = true;
-    }
-    if (browser.name === 'firefox' && browser.version < 75) {
-      browser.isProblematic = true;
-    }
-
-    return browser;
-  }
-
-  // Configurações específicas por navegador
-  getAudioConfig() {
+  // Inicializar configuração de áudio
+  _initializeAudioConfig() {
     const config = {
       preload: 'metadata',
       crossOrigin: 'anonymous',
@@ -116,6 +65,59 @@ class BrowserCompatibility {
         return config; // Chrome usa configuração padrão
     }
   }
+
+  // Detectar navegador e versão
+  detectBrowser() {
+    if (typeof window === 'undefined') {
+      return { name: 'unknown', version: 0, isProblematic: false };
+    }
+    
+    const userAgent = window.navigator.userAgent;
+    let browser = { name: 'unknown', version: 0, isProblematic: false };
+
+    if (userAgent.includes('Chrome') && !userAgent.includes('Edg')) {
+      browser.name = 'chrome';
+      const match = userAgent.match(/Chrome\/(\d+)/);
+      browser.version = match ? parseInt(match[1]) : 0;
+      browser.isProblematic = false; // Chrome é o mais estável
+    } else if (userAgent.includes('Firefox')) {
+      browser.name = 'firefox';
+      const match = userAgent.match(/Firefox\/(\d+)/);
+      browser.version = match ? parseInt(match[1]) : 0;
+      browser.isProblematic = false; // Firefox funciona bem
+    } else if (userAgent.includes('Safari') && !userAgent.includes('Chrome')) {
+      browser.name = 'safari';
+      const match = userAgent.match(/Version\/(\d+)/);
+      browser.version = match ? parseInt(match[1]) : 0;
+      browser.isProblematic = true; // Safari tem problemas com áudio
+    } else if (userAgent.includes('Edg')) {
+      browser.name = 'edge';
+      const match = userAgent.match(/Edg\/(\d+)/);
+      browser.version = match ? parseInt(match[1]) : 0;
+      browser.isProblematic = true; // Edge pode ter problemas
+    } else if (userAgent.includes('Opera') || userAgent.includes('OPR')) {
+      browser.name = 'opera';
+      // Detectar Opera GX especificamente
+      if (userAgent.includes('GX')) {
+        browser.variant = 'gx';
+      }
+      const match = userAgent.match(/(Opera|OPR)\/(\d+)/);
+      browser.version = match ? parseInt(match[2]) : 0;
+      browser.isProblematic = true; // Opera/Opera GX podem ter problemas
+    }
+
+    // Detectar versões antigas problemáticas
+    if (browser.name === 'chrome' && browser.version < 80) {
+      browser.isProblematic = true;
+    }
+    if (browser.name === 'firefox' && browser.version < 75) {
+      browser.isProblematic = true;
+    }
+
+    return browser;
+  }
+
+
 
   // Configurar elemento de áudio com configurações específicas do navegador
   configureAudioElement(audio) {

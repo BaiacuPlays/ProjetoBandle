@@ -24,6 +24,7 @@ const MultiplayerLobby = ({ onGameStart }) => {
   });
   const [mode, setMode] = useState('menu'); // 'menu', 'create', 'join', 'waiting'
   const [showInviteModal, setShowInviteModal] = useState(false);
+  const [selectedRounds, setSelectedRounds] = useState(10); // Número de rodadas selecionado
 
   // Detectar quando o jogo foi iniciado (backup do polling)
   useEffect(() => {
@@ -85,7 +86,7 @@ const MultiplayerLobby = ({ onGameStart }) => {
     if (isLoading) return;
 
     try {
-      await actions.startGame();
+      await actions.startGame(selectedRounds);
       onGameStart();
     } catch (err) {
       // Erro já foi tratado no contexto
@@ -329,6 +330,63 @@ const MultiplayerLobby = ({ onGameStart }) => {
                   <FaUserPlus />
                   {isClient ? t('invite_friends') : 'Convidar Amigos'}
                 </button>
+              </div>
+            )}
+
+            {/* Configuração de rodadas (apenas para anfitrião) */}
+            {isHost && (
+              <div style={{ margin: '20px 0' }}>
+                <h3 style={{
+                  color: '#4ecdc4',
+                  fontSize: '1rem',
+                  marginBottom: '10px',
+                  textAlign: 'center'
+                }}>
+                  Configurações da Partida
+                </h3>
+                <div style={{
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  borderRadius: '12px',
+                  padding: '15px',
+                  backdropFilter: 'blur(10px)'
+                }}>
+                  <label style={{
+                    display: 'block',
+                    marginBottom: '8px',
+                    color: '#fff',
+                    fontSize: '0.9rem'
+                  }}>
+                    Número de Rodadas:
+                  </label>
+                  <select
+                    value={selectedRounds}
+                    onChange={(e) => setSelectedRounds(parseInt(e.target.value))}
+                    style={{
+                      width: '100%',
+                      padding: '10px',
+                      borderRadius: '8px',
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      background: 'rgba(255, 255, 255, 0.1)',
+                      color: '#fff',
+                      fontSize: '1rem',
+                      backdropFilter: 'blur(10px)'
+                    }}
+                  >
+                    <option value={5} style={{ background: '#2a2a2a', color: '#fff' }}>5 Rodadas</option>
+                    <option value={10} style={{ background: '#2a2a2a', color: '#fff' }}>10 Rodadas (Padrão)</option>
+                    <option value={15} style={{ background: '#2a2a2a', color: '#fff' }}>15 Rodadas</option>
+                    <option value={20} style={{ background: '#2a2a2a', color: '#fff' }}>20 Rodadas</option>
+                  </select>
+                  <p style={{
+                    fontSize: '0.8rem',
+                    color: 'rgba(255, 255, 255, 0.7)',
+                    marginTop: '8px',
+                    textAlign: 'center'
+                  }}>
+                    XP será distribuído proporcionalmente ao número de rodadas
+                  </p>
+                </div>
               </div>
             )}
 

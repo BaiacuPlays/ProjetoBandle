@@ -10,8 +10,7 @@ class MyDocument extends Document {
     return (
       <Html lang="pt-BR">
         <Head>
-          {/* SEO Meta Tags */}
-          <title>LudoMusic - Adivinhe a Música dos Seus Jogos Favoritos!</title>
+          {/* SEO Meta Tags - Removido title e viewport conforme Next.js guidelines */}
           <meta name="description" content="Teste seus conhecimentos musicais dos videogames! Ouça trechos de músicas de jogos famosos e adivinhe o nome. Jogue sozinho ou com amigos no modo multiplayer. Mais de 1000 músicas de games clássicos e modernos." />
           <meta name="keywords" content="jogo musical, videogame, música de jogos, quiz musical, adivinhar música, games, soundtrack, trilha sonora, multiplayer, puzzle musical" />
           <meta name="author" content="LudoMusic" />
@@ -73,8 +72,7 @@ class MyDocument extends Document {
             }}
           />
 
-          {/* Meta tags para responsividade mobile */}
-          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          {/* Meta tags para responsividade mobile - Removido viewport conforme Next.js guidelines */}
           <meta name="mobile-web-app-capable" content="yes" />
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />

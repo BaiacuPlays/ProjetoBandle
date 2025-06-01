@@ -1183,11 +1183,18 @@ export const UserProfileProvider = ({ children }) => {
         break;
       case 'multiplayer_game':
         updatedProfile.socialStats.multiplayerGamesPlayed += 1;
+
+        // XP baseado no número de rodadas e resultado
+        const totalRounds = data.totalRounds || 10;
+        const baseXP = Math.floor(totalRounds * 2.5); // 2.5 XP por rodada base
+
         if (data.won) {
           updatedProfile.socialStats.multiplayerWins += 1;
-          xpGained = 75;
+          // Vencedor ganha XP base + bônus de 50%
+          xpGained = Math.floor(baseXP * 1.5);
         } else {
-          xpGained = 25;
+          // Perdedor ganha XP base
+          xpGained = baseXP;
         }
         break;
       case 'helpful_action':

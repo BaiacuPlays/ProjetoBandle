@@ -1735,6 +1735,7 @@ export default function Home() {
     <>
       <Head>
         <title>LudoMusic - Adivinhe a Música dos Seus Jogos Favoritos!</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <meta name="description" content="Teste seus conhecimentos musicais dos videogames! Ouça trechos de músicas de jogos famosos e adivinhe o nome. Jogue sozinho ou com amigos no modo multiplayer. Mais de 1000 músicas de games clássicos e modernos." />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href="https://ludomusic.xyz" />

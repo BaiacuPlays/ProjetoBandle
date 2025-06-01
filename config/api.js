@@ -225,12 +225,15 @@ export const apiRequest = async (endpoint, options = {}) => {
             return { ok: false, json: async () => ({ error: 'Sala não encontrada' }) };
           }
 
+          // Obter número de rodadas (padrão: 10)
+          const totalRounds = body.totalRounds || 10;
+
           // Importar músicas dinamicamente
           const { songs } = await import('../data/songs.js');
 
-          // Selecionar músicas aleatórias
+          // Selecionar músicas aleatórias baseado no número de rodadas
           const shuffledSongs = [...songs].sort(() => Math.random() - 0.5);
-          const selectedSongs = shuffledSongs.slice(0, 10);
+          const selectedSongs = shuffledSongs.slice(0, totalRounds);
 
 
 
@@ -241,7 +244,7 @@ export const apiRequest = async (endpoint, options = {}) => {
 
           const gameState = {
             currentRound: 1,
-            totalRounds: 10,
+            totalRounds: totalRounds,
             songs: selectedSongs,
             scores: scores,
             currentSong: selectedSongs[0]?.title || null,

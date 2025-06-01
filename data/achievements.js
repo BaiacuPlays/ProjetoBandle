@@ -197,6 +197,14 @@ export const achievements = {
     rarity: 'rare',
     xpReward: 500
   },
+  multiplayer_dominator: {
+    id: 'multiplayer_dominator',
+    title: 'Dominador Multiplayer',
+    description: 'Vença 10 jogos multiplayer',
+    icon: '👑',
+    rarity: 'epic',
+    xpReward: 750
+  },
 
   // Conquistas de XP e nível
   level_5: {
@@ -429,6 +437,8 @@ export const calculateAchievementProgress = (achievementId, userStats, profile =
       return Math.min(100, (userStats.modeStats?.multiplayer?.roomsCreated / 5) * 100);
     case 'multiplayer_champion':
       return Math.min(100, (userStats.modeStats?.multiplayer?.wins / 10) * 100);
+    case 'multiplayer_dominator':
+      return Math.min(100, ((profile?.socialStats?.multiplayerWins || 0) / 10) * 100);
 
     // Conquistas de nível
     case 'level_5':

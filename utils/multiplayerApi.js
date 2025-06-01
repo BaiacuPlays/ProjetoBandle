@@ -97,8 +97,23 @@ export const performLobbyAction = async (roomCode, action, nickname, guess = nul
 };
 
 // Funções específicas para ações do jogo
-export const startGame = async (roomCode, nickname) => {
-  return performLobbyAction(roomCode, 'start', nickname);
+export const startGame = async (roomCode, nickname, totalRounds = 10) => {
+  try {
+    const response = await apiRequest('/api/lobby', {
+      method: 'PATCH',
+      body: JSON.stringify({
+        roomCode,
+        action: 'start',
+        nickname,
+        totalRounds
+      })
+    });
+
+    const data = await response.json();
+    return { success: response.ok, data, error: data.error };
+  } catch (error) {
+    return { success: false, error: 'Erro de conexão' };
+  }
 };
 
 export const makeGuess = async (roomCode, nickname, guess) => {

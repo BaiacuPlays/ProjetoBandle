@@ -214,9 +214,12 @@ export default async function handler(req, res) {
           return res.status(400).json({ error: 'Mínimo 2 jogadores para iniciar.' });
         }
 
+        // Obter número de rodadas (padrão: 10)
+        const totalRounds = req.body.totalRounds || 10;
+
         // Inicializar o jogo
         lobby.gameStarted = true;
-        const selectedSongs = selectGameSongs(roomCode, 10);
+        const selectedSongs = selectGameSongs(roomCode, totalRounds);
 
         // Inicializar pontuações
         const scores = {};
@@ -227,7 +230,7 @@ export default async function handler(req, res) {
         // Criar gameState estruturado
         lobby.gameState = {
           currentRound: 1,
-          totalRounds: 10,
+          totalRounds: totalRounds,
           songs: selectedSongs,
           scores: scores,
           currentSong: selectedSongs[0] || null, // Armazenar objeto completo em vez de só o título

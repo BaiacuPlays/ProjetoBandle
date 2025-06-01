@@ -222,7 +222,7 @@ export function MultiplayerProvider({ children }) {
     },
 
     // Iniciar jogo
-    startGame: async () => {
+    startGame: async (totalRounds = 10) => {
       if (!state.roomCode) return;
 
       dispatch({ type: ACTIONS.SET_LOADING, payload: true });
@@ -231,7 +231,11 @@ export function MultiplayerProvider({ children }) {
       try {
         const response = await apiRequest('/api/lobby', {
           method: 'PATCH',
-          body: JSON.stringify({ roomCode: state.roomCode, action: 'start' })
+          body: JSON.stringify({
+            roomCode: state.roomCode,
+            action: 'start',
+            totalRounds: totalRounds
+          })
         });
 
         if (response.ok) {

@@ -7,6 +7,7 @@ const About = () => {
     <>
       <Head>
         <title>Sobre o LudoMusic - Jogo Musical de Videogames</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <meta name="description" content="Conheça o LudoMusic - O melhor jogo musical de videogames online. Teste seus conhecimentos com mais de 1000 trilhas sonoras!" />
         <meta name="robots" content="index, follow" />
       </Head>
