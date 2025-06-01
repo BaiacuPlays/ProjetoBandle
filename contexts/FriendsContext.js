@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
 import { usePresence } from '../hooks/usePresence';
+import { FriendsCookies } from '../utils/cookies';
 
 const FriendsContext = createContext();
 
@@ -24,15 +25,59 @@ export const FriendsProvider = ({ children }) => {
   // ID do usuário atual (apenas se autenticado)
   const currentUserId = isAuthenticated && user ? `auth_${user.username}` : null;
 
-  // Log para debug
-  console.log('🔍 FriendsProvider estado atual:', {
-    isAuthenticated,
-    user: user ? user.username : 'null',
-    currentUserId,
-    friendsCount: friends.length,
-    requestsCount: friendRequests.length,
-    isLoading
-  });
+  // Carregar dados dos cookies imediatamente quando autenticado
+  useEffect(() => {
+    if (isAuthenticated && currentUserId) {
+      console.log('🍪 Usuário autenticado - carregando dados dos amigos dos cookies...');
+
+      // Carregar dados dos cookies
+      const savedFriends = FriendsCookies.getFriendsData();
+      const savedRequests = FriendsCookies.getFriendRequests();
+
+      console.log('📦 Dados carregados dos cookies:', savedFriends.length, 'amigos,', savedRequests.length, 'solicitações');
+
+      // Definir dados imediatamente
+      setFriends(savedFriends);
+      setFriendRequests(savedRequests);
+
+      // Se não há dados nos cookies, carregar do servidor
+      if (savedFriends.length === 0 && savedRequests.length === 0) {
+        console.log('📭 Nenhum dado nos cookies, carregando do servidor...');
+        loadFriendsData();
+      } else {
+        // Atualizar status de presença dos amigos carregados dos cookies
+        updateFriendsPresenceFromCookies(savedFriends);
+      }
+    } else if (!isAuthenticated) {
+      // Limpar dados quando não autenticado
+      console.log('❌ Usuário não autenticado - limpando dados dos amigos');
+      setFriends([]);
+      setFriendRequests([]);
+      setSentRequests([]);
+    }
+  }, [isAuthenticated, currentUserId]);
+
+  // Função para atualizar presença dos amigos carregados dos cookies
+  const updateFriendsPresenceFromCookies = async (friendsList) => {
+    if (!isAuthenticated || friendsList.length === 0) return;
+
+    try {
+      const friendIds = friendsList.map(friend => friend.id);
+      const presenceStatus = await getFriendsPresence(friendIds);
+
+      // Atualizar status dos amigos
+      const friendsWithStatus = friendsList.map(friend => ({
+        ...friend,
+        status: presenceStatus[friend.id] || 'offline'
+      }));
+
+      setFriends(friendsWithStatus);
+      console.log('✅ Status de presença atualizado para amigos dos cookies');
+    } catch (error) {
+      console.warn('Erro ao buscar presença dos amigos dos cookies:', error);
+      // Manter dados dos cookies mesmo sem status de presença
+    }
+  };
 
   // Carregar dados dos amigos do servidor
   const loadFriendsData = async () => {
@@ -96,6 +141,9 @@ export const FriendsProvider = ({ children }) => {
 
             setFriends(friendsWithStatus);
             console.log('✅ Status de presença atualizado para', friendsWithStatus.length, 'amigos');
+
+            // Salvar nos cookies após carregar com sucesso
+            FriendsCookies.saveFriendsData(friendsWithStatus, friendRequests);
           } catch (presenceError) {
             console.warn('Erro ao buscar presença dos amigos:', presenceError);
             // Usar dados básicos sem status de presença
@@ -107,9 +155,14 @@ export const FriendsProvider = ({ children }) => {
               status: 'offline'
             }));
             setFriends(friendsWithDefaults);
+
+            // Salvar nos cookies mesmo sem status de presença
+            FriendsCookies.saveFriendsData(friendsWithDefaults, friendRequests);
           }
         } else {
           setFriends(friendsList);
+          // Salvar nos cookies
+          FriendsCookies.saveFriendsData(friendsList, friendRequests);
         }
       } else {
         console.error('❌ Erro ao carregar amigos:', friendsResponse.status);
@@ -130,6 +183,10 @@ export const FriendsProvider = ({ children }) => {
         const requestsList = requestsData.requests || [];
         console.log(`✅ ${requestsList.length} solicitações carregadas do servidor`);
         setFriendRequests(requestsList);
+
+        // Salvar nos cookies (atualizar com as solicitações mais recentes)
+        FriendsCookies.saveFriendsData(friends, requestsList);
+
         // Salvar no localStorage como backup
         localStorage.setItem(`ludomusic_friend_requests_${currentUserId}`, JSON.stringify(requestsList));
       } else {
@@ -182,11 +239,15 @@ export const FriendsProvider = ({ children }) => {
     }
   };
 
-  // Salvar dados dos amigos no localStorage (backup)
+  // Salvar dados dos amigos nos cookies
   const saveFriendsData = () => {
-    if (!currentUserId) return;
+    if (!currentUserId || !isAuthenticated) return;
 
     try {
+      // Salvar nos cookies
+      FriendsCookies.saveFriendsData(friends, friendRequests);
+
+      // Manter backup no localStorage
       localStorage.setItem(`ludomusic_friends_${currentUserId}`, JSON.stringify(friends));
       localStorage.setItem(`ludomusic_friend_requests_${currentUserId}`, JSON.stringify(friendRequests));
       localStorage.setItem(`ludomusic_sent_requests_${currentUserId}`, JSON.stringify(sentRequests));
@@ -333,7 +394,12 @@ export const FriendsProvider = ({ children }) => {
       }
 
       // Remover da lista local
-      setFriendRequests(prev => prev.filter(req => req.id !== requestId));
+      setFriendRequests(prev => {
+        const updatedRequests = prev.filter(req => req.id !== requestId);
+        // Salvar nos cookies
+        FriendsCookies.saveFriendsData(friends, updatedRequests);
+        return updatedRequests;
+      });
 
       console.log('✅ Solicitação rejeitada com sucesso');
     } catch (error) {
@@ -368,7 +434,12 @@ export const FriendsProvider = ({ children }) => {
       }
 
       // Remover da lista local
-      setFriends(prev => prev.filter(friend => friend.id !== friendId));
+      setFriends(prev => {
+        const updatedFriends = prev.filter(friend => friend.id !== friendId);
+        // Salvar nos cookies
+        FriendsCookies.saveFriendsData(updatedFriends, friendRequests);
+        return updatedFriends;
+      });
 
       console.log('✅ Amigo removido com sucesso');
     } catch (error) {
@@ -504,90 +575,22 @@ export const FriendsProvider = ({ children }) => {
     return false;
   };
 
-  // Carregar dados quando o usuário fizer login
-  useEffect(() => {
-    if (isAuthenticated && currentUserId) {
-      console.log('🔄 Usuário autenticado detectado, carregando dados dos amigos...');
-      // Pequeno delay para garantir que a autenticação foi completamente processada
-      const timer = setTimeout(() => {
-        loadFriendsData();
-      }, 100);
-      return () => clearTimeout(timer);
-    } else {
-      console.log('❌ Usuário não autenticado ou ID não definido');
-      // Limpar dados quando usuário não está autenticado
-      setFriends([]);
-      setFriendRequests([]);
-      setSentRequests([]);
-    }
-  }, [isAuthenticated, currentUserId]);
-
-  // Carregar dados imediatamente quando o componente monta (para casos de refresh)
-  useEffect(() => {
-    const sessionToken = localStorage.getItem('ludomusic_session_token');
-
-    // Se já está autenticado quando o componente monta, carregar dados imediatamente
-    if (isAuthenticated && currentUserId && sessionToken) {
-      console.log('🔄 Usuário já autenticado na montagem, carregando dados dos amigos...');
-      const timer = setTimeout(() => {
-        loadFriendsData();
-      }, 100);
-      return () => clearTimeout(timer);
-    }
-
-    // Se tem token mas ainda não está autenticado, aguardar autenticação
-    if (sessionToken && !isAuthenticated) {
-      console.log('🔄 Token de sessão encontrado após refresh, aguardando autenticação...');
-      // Aguardar um pouco para o contexto de autenticação processar
-      const timer = setTimeout(() => {
-        if (isAuthenticated && currentUserId) {
-          console.log('🔄 Autenticação processada após refresh, carregando dados...');
-          loadFriendsData();
-        }
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, []);
-
-  // Monitorar mudanças no estado de autenticação (especialmente quando carrega já logado)
-  useEffect(() => {
-    // Aguardar um pouco após a autenticação ser definida para garantir que tudo está pronto
-    if (isAuthenticated && currentUserId) {
-      console.log('🔐 Estado de autenticação confirmado, verificando se dados dos amigos precisam ser carregados...');
-
-      // Verificar se já temos dados dos amigos carregados
-      if (friends.length === 0 && friendRequests.length === 0) {
-        console.log('📭 Nenhum dado de amigos encontrado, carregando do servidor...');
-        const timer = setTimeout(() => {
-          loadFriendsData();
-        }, 150);
-        return () => clearTimeout(timer);
-      } else {
-        console.log('✅ Dados dos amigos já carregados:', friends.length, 'amigos,', friendRequests.length, 'solicitações');
-      }
-    }
-  }, [isAuthenticated, currentUserId, friends.length, friendRequests.length]);
-
-  // Listener para mudanças no usuário (login/logout)
-  useEffect(() => {
-    if (isAuthenticated && user && currentUserId) {
-      console.log('👤 Mudança no usuário detectada, recarregando dados dos amigos...');
-      // Forçar recarregamento quando há mudança no usuário
-      const timer = setTimeout(() => {
-        loadFriendsData();
-      }, 200);
-      return () => clearTimeout(timer);
-    }
-  }, [user]);
-
-  // Listener para evento de login bem-sucedido
+  // Listener para evento de login bem-sucedido (para carregar dados do servidor quando necessário)
   useEffect(() => {
     const handleUserLoggedIn = (event) => {
-      console.log('🎉 Evento de login detectado, carregando dados dos amigos...');
-      // Aguardar um pouco para garantir que tudo foi processado
-      setTimeout(() => {
-        loadFriendsData();
-      }, 300);
+      console.log('🎉 Evento de login detectado, verificando se precisa carregar dados do servidor...');
+      // Verificar se já há dados nos cookies
+      const savedFriends = FriendsCookies.getFriendsData();
+      const savedRequests = FriendsCookies.getFriendRequests();
+
+      if (savedFriends.length === 0 && savedRequests.length === 0) {
+        console.log('📭 Nenhum dado nos cookies após login, carregando do servidor...');
+        setTimeout(() => {
+          loadFriendsData();
+        }, 300);
+      } else {
+        console.log('✅ Dados já disponíveis nos cookies após login');
+      }
     };
 
     window.addEventListener('userLoggedIn', handleUserLoggedIn);

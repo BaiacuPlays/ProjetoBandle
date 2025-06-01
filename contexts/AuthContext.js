@@ -1,6 +1,6 @@
 // Contexto de autenticação
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { AuthCookies } from '../utils/cookies';
+import { AuthCookies, FriendsCookies } from '../utils/cookies';
 
 const AuthContext = createContext();
 
@@ -226,15 +226,17 @@ export const AuthProvider = ({ children }) => {
 
       // Limpar dados dos cookies e localStorage
       AuthCookies.clearAuth();
+      FriendsCookies.clearFriendsData(); // Limpar dados dos amigos também
       setUser(null);
       setIsAuthenticated(false);
-      console.log('✅ Logout realizado');
+      console.log('✅ Logout realizado - dados de autenticação e amigos limpos');
 
       return { success: true };
     } catch (error) {
       console.error('❌ Erro no logout:', error);
       // Mesmo com erro, limpar dados locais
       AuthCookies.clearAuth();
+      FriendsCookies.clearFriendsData(); // Limpar dados dos amigos também
       setUser(null);
       setIsAuthenticated(false);
       return { success: false, error: 'Erro de conexão' };

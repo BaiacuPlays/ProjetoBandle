@@ -180,3 +180,57 @@ export const AuthCookies = {
     return this.getSessionToken() !== null && this.getUserData() !== null;
   }
 };
+
+// Funções específicas para dados dos amigos
+export const FriendsCookies = {
+  // Nomes dos cookies
+  FRIENDS_DATA: 'ludomusic_friends',
+  FRIEND_REQUESTS: 'ludomusic_friend_requests',
+
+  // Salvar dados dos amigos
+  saveFriendsData(friends, friendRequests = []) {
+    const options = { maxAge: 30 * 24 * 60 * 60 }; // 30 dias
+
+    // Salvar lista de amigos
+    CookieManager.set(this.FRIENDS_DATA, JSON.stringify(friends), options);
+
+    // Salvar solicitações de amizade
+    CookieManager.set(this.FRIEND_REQUESTS, JSON.stringify(friendRequests), options);
+
+    console.log('👥 Dados dos amigos salvos nos cookies:', friends.length, 'amigos,', friendRequests.length, 'solicitações');
+  },
+
+  // Obter lista de amigos
+  getFriendsData() {
+    try {
+      const friendsData = CookieManager.get(this.FRIENDS_DATA);
+      return friendsData ? JSON.parse(friendsData) : [];
+    } catch (error) {
+      console.error('Erro ao parsear dados dos amigos:', error);
+      return [];
+    }
+  },
+
+  // Obter solicitações de amizade
+  getFriendRequests() {
+    try {
+      const requestsData = CookieManager.get(this.FRIEND_REQUESTS);
+      return requestsData ? JSON.parse(requestsData) : [];
+    } catch (error) {
+      console.error('Erro ao parsear solicitações de amizade:', error);
+      return [];
+    }
+  },
+
+  // Limpar dados dos amigos
+  clearFriendsData() {
+    CookieManager.remove(this.FRIENDS_DATA);
+    CookieManager.remove(this.FRIEND_REQUESTS);
+    console.log('🧹 Dados dos amigos limpos dos cookies');
+  },
+
+  // Verificar se há dados dos amigos salvos
+  hasFriendsData() {
+    return CookieManager.get(this.FRIENDS_DATA) !== null;
+  }
+};

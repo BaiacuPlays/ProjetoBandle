@@ -25,8 +25,7 @@ const FriendsManager = ({ isOpen, onClose }) => {
     rejectFriendRequest,
     removeFriend,
     cancelSentRequest,
-    inviteToMultiplayer,
-    loadFriendsData
+    inviteToMultiplayer
   } = useFriends();
 
   const { sendMultiplayerInvite } = useNotifications();
@@ -225,24 +224,6 @@ const FriendsManager = ({ isOpen, onClose }) => {
                   <FaUsers className={styles.emptyIcon} />
                   <p>Você ainda não tem amigos adicionados.</p>
                   <p>Use a aba "Adicionar" para encontrar e adicionar amigos!</p>
-                  <button
-                    onClick={() => {
-                      console.log('🔄 Botão de debug clicado - forçando carregamento...');
-                      loadFriendsData();
-                    }}
-                    style={{
-                      background: '#4CAF50',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '8px',
-                      padding: '8px 16px',
-                      marginTop: '10px',
-                      cursor: 'pointer',
-                      fontSize: '14px'
-                    }}
-                  >
-                    🔄 Recarregar Amigos (Debug)
-                  </button>
                 </div>
               ) : (
                 friends.map(friend => (
