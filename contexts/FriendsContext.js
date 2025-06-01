@@ -31,6 +31,12 @@ export const FriendsProvider = ({ children }) => {
       return;
     }
 
+    // Verificar se já está carregando para evitar múltiplas chamadas simultâneas
+    if (isLoading) {
+      console.log('⏳ Carregamento já em andamento, ignorando nova solicitação');
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -492,9 +498,17 @@ export const FriendsProvider = ({ children }) => {
   useEffect(() => {
     if (isAuthenticated && currentUserId) {
       console.log('🔄 Usuário autenticado detectado, carregando dados dos amigos...');
-      loadFriendsData();
+      // Pequeno delay para garantir que a autenticação foi completamente processada
+      const timer = setTimeout(() => {
+        loadFriendsData();
+      }, 100);
+      return () => clearTimeout(timer);
     } else {
       console.log('❌ Usuário não autenticado ou ID não definido');
+      // Limpar dados quando usuário não está autenticado
+      setFriends([]);
+      setFriendRequests([]);
+      setSentRequests([]);
     }
   }, [isAuthenticated, currentUserId]);
 
@@ -512,6 +526,32 @@ export const FriendsProvider = ({ children }) => {
       }, 1000);
       return () => clearTimeout(timer);
     }
+  }, []);
+
+  // Listener para mudanças no usuário (login/logout)
+  useEffect(() => {
+    if (isAuthenticated && user && currentUserId) {
+      console.log('👤 Mudança no usuário detectada, recarregando dados dos amigos...');
+      // Forçar recarregamento quando há mudança no usuário
+      const timer = setTimeout(() => {
+        loadFriendsData();
+      }, 200);
+      return () => clearTimeout(timer);
+    }
+  }, [user]);
+
+  // Listener para evento de login bem-sucedido
+  useEffect(() => {
+    const handleUserLoggedIn = (event) => {
+      console.log('🎉 Evento de login detectado, carregando dados dos amigos...');
+      // Aguardar um pouco para garantir que tudo foi processado
+      setTimeout(() => {
+        loadFriendsData();
+      }, 300);
+    };
+
+    window.addEventListener('userLoggedIn', handleUserLoggedIn);
+    return () => window.removeEventListener('userLoggedIn', handleUserLoggedIn);
   }, []);
 
   // Recarregar dados quando a página ganha foco (usuário volta para a aba)
@@ -556,18 +596,7 @@ export const FriendsProvider = ({ children }) => {
     return () => clearInterval(presenceInterval);
   }, [isAuthenticated, currentUserId, friends.length]);
 
-  // Função para forçar recarregamento completo dos dados
-  const forceReloadFriendsData = async () => {
-    console.log('🔄 Forçando recarregamento completo dos dados de amigos...');
 
-    // Limpar dados locais
-    setFriends([]);
-    setFriendRequests([]);
-    setSentRequests([]);
-
-    // Recarregar do servidor
-    await loadFriendsData();
-  };
 
   const value = {
     friends,
@@ -585,7 +614,6 @@ export const FriendsProvider = ({ children }) => {
     getOnlineFriends,
     inviteToMultiplayer,
     loadFriendsData,
-    forceReloadFriendsData,
     updateFriendsPresence,
     referFriend,
     getReferralLink,

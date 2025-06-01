@@ -149,6 +149,12 @@ export const AuthProvider = ({ children }) => {
         setUser(data.user);
         setIsAuthenticated(true);
         console.log('✅ Usuário registrado:', data.user.displayName);
+
+        // Disparar evento customizado para notificar outros componentes sobre o registro
+        window.dispatchEvent(new CustomEvent('userLoggedIn', {
+          detail: { user: data.user }
+        }));
+
         return { success: true, user: data.user };
       } else {
         console.error('❌ Erro no registro:', data.error);
@@ -183,6 +189,12 @@ export const AuthProvider = ({ children }) => {
         setUser(data.user);
         setIsAuthenticated(true);
         console.log('✅ Login realizado:', data.user.displayName);
+
+        // Disparar evento customizado para notificar outros componentes sobre o login
+        window.dispatchEvent(new CustomEvent('userLoggedIn', {
+          detail: { user: data.user }
+        }));
+
         return { success: true, user: data.user };
       } else {
         console.error('❌ Erro no login:', data.error);
