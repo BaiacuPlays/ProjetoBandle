@@ -75,7 +75,8 @@ const ResetNotification = () => {
               <p>
                 Se você criou uma conta no dia <strong>31 de maio</strong>,
                 será necessário criar uma nova conta, pois os dados anteriores
-                foram removidos durante os testes de segurança.
+                foram removidos durante os testes de segurança, limpe os cookies ou o cache
+                do seu navegador e crie a conta novamente, peço desculpas por qualquer inconveniente.
               </p>
             </div>
           </div>
