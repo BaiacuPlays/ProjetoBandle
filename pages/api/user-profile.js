@@ -104,7 +104,20 @@ export default async function handler(req, res) {
         userProfile: !!userProfile,
         userData: !!userData,
         isAuthenticated,
-        isOwnProfile
+        isOwnProfile,
+        profileData: {
+          username: userProfile?.username,
+          displayName: userProfile?.displayName,
+          bio: userProfile?.bio,
+          avatar: userProfile?.avatar,
+          level: userProfile?.level,
+          xp: userProfile?.xp,
+          stats: userProfile?.stats,
+          totalGames: userProfile?.totalGames,
+          gamesWon: userProfile?.gamesWon,
+          currentStreak: userProfile?.currentStreak,
+          bestStreak: userProfile?.bestStreak
+        }
       });
 
       // Preparar dados do perfil para retorno
@@ -112,6 +125,7 @@ export default async function handler(req, res) {
         id: targetUserId,
         username: userProfile.username || (userData ? userData.username : 'Usuário'),
         displayName: userProfile.displayName || (userData ? userData.displayName : 'Jogador'),
+        bio: userProfile.bio || '',
         avatar: userProfile.avatar || '👤',
         level: userProfile.level || 1,
         xp: userProfile.xp || 0,
@@ -121,14 +135,14 @@ export default async function handler(req, res) {
         bestStreak: userProfile.bestStreak || 0,
         createdAt: userProfile.createdAt || new Date().toISOString(),
         lastActiveAt: userProfile.lastActiveAt || userProfile.createdAt || new Date().toISOString(),
-        
+
         // Estatísticas públicas
         statistics: {
-          totalGames: userProfile.stats?.totalGames || 0,
-          gamesWon: userProfile.stats?.wins || 0,
-          winRate: userProfile.stats?.winRate || 0,
-          currentStreak: userProfile.stats?.currentStreak || 0,
-          bestStreak: userProfile.stats?.bestStreak || 0,
+          totalGames: userProfile.stats?.totalGames || userProfile.totalGames || 0,
+          gamesWon: userProfile.stats?.wins || userProfile.gamesWon || 0,
+          winRate: userProfile.stats?.winRate || (userProfile.stats?.wins && userProfile.stats?.totalGames ? (userProfile.stats.wins / userProfile.stats.totalGames * 100) : 0),
+          currentStreak: userProfile.stats?.currentStreak || userProfile.currentStreak || 0,
+          bestStreak: userProfile.stats?.bestStreak || userProfile.bestStreak || 0,
           perfectGames: userProfile.stats?.perfectGames || 0
         },
 
@@ -198,6 +212,17 @@ export default async function handler(req, res) {
       }
 
       console.log(`👤 Perfil visualizado: ${userProfile.displayName} por ${authResult.authenticated ? authResult.username : 'anônimo'}`);
+      console.log('📤 Perfil retornado:', {
+        id: publicProfile.id,
+        username: publicProfile.username,
+        displayName: publicProfile.displayName,
+        level: publicProfile.level,
+        xp: publicProfile.xp,
+        statistics: publicProfile.statistics,
+        isAuthenticated: isAuthenticated,
+        isOwnProfile: isOwnProfile,
+        requestedBy: authResult.authenticated ? authResult.username : 'anônimo'
+      });
 
       return res.status(200).json({
         success: true,

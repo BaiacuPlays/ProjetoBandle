@@ -193,18 +193,26 @@ export default async function handler(req, res) {
       publicProfile.avatar = sanitizeAvatar(profileData.avatar);
       publicProfile.level = typeof profileData.level === 'number' && profileData.level > 0 ? profileData.level : 1;
       publicProfile.xp = typeof profileData.xp === 'number' && profileData.xp >= 0 ? profileData.xp : 0;
-      publicProfile.title = sanitizeString(profileData.title) !== 'Usuário' ? sanitizeString(profileData.title) : null;
-      publicProfile.bio = sanitizeString(profileData.bio) !== 'Usuário' ? sanitizeString(profileData.bio) : null;
+
+      // Melhor tratamento para título e bio
+      const cleanTitle = sanitizeString(profileData.title);
+      const cleanBio = sanitizeString(profileData.bio);
+
+      publicProfile.title = (cleanTitle && cleanTitle !== 'Usuário' && cleanTitle.trim() !== '') ? cleanTitle : null;
+      publicProfile.bio = (cleanBio && cleanBio !== 'Usuário' && cleanBio.trim() !== '') ? cleanBio : null;
       
       // Estatísticas públicas (se existirem)
       if (profileData.stats) {
         publicProfile.stats = {
           totalGames: profileData.stats.totalGames || 0,
-          totalWins: profileData.stats.totalWins || 0,
+          totalWins: profileData.stats.wins || profileData.stats.totalWins || 0,
+          gamesWon: profileData.stats.wins || profileData.stats.totalWins || 0,
+          wins: profileData.stats.wins || profileData.stats.totalWins || 0,
           totalScore: profileData.stats.totalScore || 0,
           averageScore: profileData.stats.averageScore || 0,
           bestStreak: profileData.stats.bestStreak || 0,
-          perfectGames: profileData.stats.perfectGames || 0
+          perfectGames: profileData.stats.perfectGames || 0,
+          winRate: profileData.stats.winRate || (profileData.stats.wins && profileData.stats.totalGames ? (profileData.stats.wins / profileData.stats.totalGames * 100) : 0)
         };
       }
 
@@ -220,7 +228,7 @@ export default async function handler(req, res) {
             };
             return acc;
           }, {});
-        
+
         publicProfile.achievements = unlockedAchievements;
       }
 
@@ -235,7 +243,7 @@ export default async function handler(req, res) {
             };
             return acc;
           }, {});
-        
+
         publicProfile.badges = activeBadges;
       }
     }
@@ -285,7 +293,15 @@ export default async function handler(req, res) {
     publicProfile.isOnline = isOnline;
     publicProfile.lastSeen = isOnline ? 'Agora' : (userData.lastLoginAt ? new Date(userData.lastLoginAt).toLocaleDateString('pt-BR') : 'Nunca');
 
-    console.log(`👁️ Perfil público visualizado: ${targetUsername} por ${authResult.username || 'anônimo'}`);
+    console.log(`👤 Perfil público visualizado: ${publicProfile.displayName}`);
+    console.log('📤 Dados do perfil público retornados:', {
+      id: publicProfile.id,
+      username: publicProfile.username,
+      displayName: publicProfile.displayName,
+      level: publicProfile.level,
+      xp: publicProfile.xp,
+      stats: publicProfile.stats
+    });
 
     return res.status(200).json({
       success: true,

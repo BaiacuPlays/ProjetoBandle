@@ -26,25 +26,41 @@ export const FriendsProvider = ({ children }) => {
 
   // Carregar dados dos amigos do servidor
   const loadFriendsData = async () => {
-    if (!currentUserId || !isAuthenticated) return;
+    if (!currentUserId || !isAuthenticated) {
+      console.log('❌ Não é possível carregar dados: usuário não autenticado ou ID não definido');
+      return;
+    }
 
     setIsLoading(true);
 
     try {
+      console.log(`🔄 Carregando dados dos amigos do servidor para: ${currentUserId}`);
       const sessionToken = localStorage.getItem('ludomusic_session_token');
 
+      if (!sessionToken) {
+        console.log('❌ Token de sessão não encontrado');
+        setIsLoading(false);
+        return;
+      }
+
       // Carregar amigos
+      console.log('📥 Buscando lista de amigos...');
       const friendsResponse = await fetch('/api/friends', {
         headers: {
-          'Authorization': `Bearer ${sessionToken}`
+          'Authorization': `Bearer ${sessionToken}`,
+          'Cache-Control': 'no-cache'
         }
       });
 
       if (friendsResponse.ok) {
         const friendsData = await friendsResponse.json();
+        console.log('📊 Resposta da API de amigos:', friendsData);
         const friendsList = friendsData.friends || [];
 
-        console.log('👥 Amigos carregados:', friendsList.length);
+        console.log(`✅ ${friendsList.length} amigos carregados do servidor`);
+
+        // Salvar no localStorage como backup
+        localStorage.setItem(`ludomusic_friends_${currentUserId}`, JSON.stringify(friendsList));
 
         // Buscar status de presença dos amigos
         if (friendsList.length > 0) {
@@ -80,33 +96,51 @@ export const FriendsProvider = ({ children }) => {
           setFriends(friendsList);
         }
       } else {
-        console.error('Erro ao carregar amigos:', friendsResponse.status);
+        console.error('❌ Erro ao carregar amigos:', friendsResponse.status);
       }
 
       // Carregar solicitações recebidas
+      console.log('📥 Buscando solicitações recebidas...');
       const requestsResponse = await fetch('/api/friend-requests', {
         headers: {
-          'Authorization': `Bearer ${sessionToken}`
+          'Authorization': `Bearer ${sessionToken}`,
+          'Cache-Control': 'no-cache'
         }
       });
 
       if (requestsResponse.ok) {
         const requestsData = await requestsResponse.json();
-        setFriendRequests(requestsData.requests || []);
+        console.log('📊 Resposta da API de solicitações:', requestsData);
+        const requestsList = requestsData.requests || [];
+        console.log(`✅ ${requestsList.length} solicitações carregadas do servidor`);
+        setFriendRequests(requestsList);
+        // Salvar no localStorage como backup
+        localStorage.setItem(`ludomusic_friend_requests_${currentUserId}`, JSON.stringify(requestsList));
+      } else {
+        console.error('❌ Erro ao carregar solicitações:', requestsResponse.status);
       }
 
-      console.log('✅ Dados de amigos carregados do servidor');
+      console.log('✅ Dados de amigos carregados do servidor com sucesso');
     } catch (error) {
-      console.error('Erro ao carregar dados dos amigos:', error);
+      console.error('❌ Erro ao carregar dados dos amigos:', error);
       // Fallback para localStorage em caso de erro
       try {
+        console.log('🔄 Tentando carregar dados do localStorage como fallback...');
         const savedFriends = localStorage.getItem(`ludomusic_friends_${currentUserId}`);
         const savedRequests = localStorage.getItem(`ludomusic_friend_requests_${currentUserId}`);
 
-        if (savedFriends) setFriends(JSON.parse(savedFriends));
-        if (savedRequests) setFriendRequests(JSON.parse(savedRequests));
+        if (savedFriends) {
+          const friendsList = JSON.parse(savedFriends);
+          console.log(`📦 ${friendsList.length} amigos carregados do localStorage`);
+          setFriends(friendsList);
+        }
+        if (savedRequests) {
+          const requestsList = JSON.parse(savedRequests);
+          console.log(`📦 ${requestsList.length} solicitações carregadas do localStorage`);
+          setFriendRequests(requestsList);
+        }
       } catch (localError) {
-        console.error('Erro ao carregar dados locais:', localError);
+        console.error('❌ Erro ao carregar dados locais:', localError);
       }
     } finally {
       setIsLoading(false);
@@ -366,22 +400,46 @@ export const FriendsProvider = ({ children }) => {
       throw new Error('Dados do convite incompletos');
     }
 
+    // Validar IDs antes de enviar
+    if (!currentUserId) {
+      throw new Error('ID do usuário atual não encontrado');
+    }
+
+    if (friendId === currentUserId) {
+      throw new Error('Você não pode convidar a si mesmo');
+    }
+
     try {
       console.log(`📤 Enviando convite para ${friendName} (${friendId}) para sala ${roomCode}`);
+      console.log(`👤 Remetente: ${currentUserId} (${hostName})`);
+      console.log(`🎯 Destinatário: ${friendId} (${friendName})`);
 
       const invitation = {
         id: `invite_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         type: 'multiplayer_invite',
-        fromUserId: currentUserId,
-        toUserId: friendId,
-        hostName: hostName,
-        friendName: friendName,
+        fromUserId: currentUserId,  // Quem está enviando (host)
+        toUserId: friendId,         // Quem vai receber (amigo)
+        hostName: hostName,         // Nome do host
+        friendName: friendName,     // Nome do amigo
         roomCode: roomCode,
         timestamp: Date.now(),
         status: 'pending'
       };
 
+      console.log('📋 Dados completos do convite:', {
+        id: invitation.id,
+        from: invitation.fromUserId,
+        to: invitation.toUserId,
+        hostName: invitation.hostName,
+        friendName: invitation.friendName,
+        roomCode: invitation.roomCode
+      });
+
       const sessionToken = localStorage.getItem('ludomusic_session_token');
+
+      if (!sessionToken) {
+        throw new Error('Token de sessão não encontrado');
+      }
 
       const response = await fetch('/api/send-invite', {
         method: 'POST',
@@ -395,9 +453,12 @@ export const FriendsProvider = ({ children }) => {
         })
       });
 
+      console.log('📡 Status da resposta:', response.status);
+
       if (response.ok) {
         const data = await response.json();
         console.log('✅ Convite enviado com sucesso:', data);
+        console.log(`🎉 Convite ${invitation.id} enviado de ${currentUserId} para ${friendId}`);
         return { success: true, inviteId: data.inviteId };
       } else {
         const errorData = await response.json();
@@ -430,8 +491,40 @@ export const FriendsProvider = ({ children }) => {
   // Carregar dados quando o usuário fizer login
   useEffect(() => {
     if (isAuthenticated && currentUserId) {
+      console.log('🔄 Usuário autenticado detectado, carregando dados dos amigos...');
       loadFriendsData();
+    } else {
+      console.log('❌ Usuário não autenticado ou ID não definido');
     }
+  }, [isAuthenticated, currentUserId]);
+
+  // Carregar dados imediatamente quando o componente monta (para casos de refresh)
+  useEffect(() => {
+    const sessionToken = localStorage.getItem('ludomusic_session_token');
+    if (sessionToken && !isAuthenticated) {
+      console.log('🔄 Token de sessão encontrado após refresh, aguardando autenticação...');
+      // Aguardar um pouco para o contexto de autenticação processar
+      const timer = setTimeout(() => {
+        if (isAuthenticated && currentUserId) {
+          console.log('🔄 Autenticação processada após refresh, carregando dados...');
+          loadFriendsData();
+        }
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  // Recarregar dados quando a página ganha foco (usuário volta para a aba)
+  useEffect(() => {
+    if (!isAuthenticated || !currentUserId) return;
+
+    const handleFocus = () => {
+      console.log('👁️ Página ganhou foco, recarregando dados dos amigos...');
+      loadFriendsData();
+    };
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
   }, [isAuthenticated, currentUserId]);
 
   // Salvar dados quando houver mudanças (backup local)
@@ -463,6 +556,19 @@ export const FriendsProvider = ({ children }) => {
     return () => clearInterval(presenceInterval);
   }, [isAuthenticated, currentUserId, friends.length]);
 
+  // Função para forçar recarregamento completo dos dados
+  const forceReloadFriendsData = async () => {
+    console.log('🔄 Forçando recarregamento completo dos dados de amigos...');
+
+    // Limpar dados locais
+    setFriends([]);
+    setFriendRequests([]);
+    setSentRequests([]);
+
+    // Recarregar do servidor
+    await loadFriendsData();
+  };
+
   const value = {
     friends,
     friendRequests,
@@ -479,6 +585,7 @@ export const FriendsProvider = ({ children }) => {
     getOnlineFriends,
     inviteToMultiplayer,
     loadFriendsData,
+    forceReloadFriendsData,
     updateFriendsPresence,
     referFriend,
     getReferralLink,

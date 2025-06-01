@@ -13,6 +13,8 @@ import FriendsManager from '../components/FriendsManager';
 import NotificationCenter from '../components/NotificationCenter';
 import GlobalStats from '../components/GlobalStats';
 import AchievementNotification from '../components/AchievementNotification';
+import InfiniteGameOverModal from '../components/InfiniteGameOverModal';
+import ProfileDebug from '../components/ProfileDebug';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useUserProfile } from '../contexts/UserProfileContext';
 import { fetchTimezone } from '../config/api';
@@ -97,6 +99,8 @@ export default function Home() {
   const [isPlayLoading, setIsPlayLoading] = useState(false);
   const [pendingPlay, setPendingPlay] = useState(false);
   const [isSkipLoading, setIsSkipLoading] = useState(false);
+  const [audioLoadTimeout, setAudioLoadTimeout] = useState(null);
+  const [playPromiseRef, setPlayPromiseRef] = useState(null);
 
   // Estados de monetização
   const [showDonationModal, setShowDonationModal] = useState(false);
@@ -110,6 +114,8 @@ export default function Home() {
   const [infiniteUsedSongs, setInfiniteUsedSongs] = useState([]);
   const [infiniteGameOver, setInfiniteGameOver] = useState(false);
   const [showNextSongButton, setShowNextSongButton] = useState(false);
+  const [isNewRecord, setIsNewRecord] = useState(false);
+  const [finalStreak, setFinalStreak] = useState(0);
 
   // Estados do perfil
   const [showProfile, setShowProfile] = useState(false);
@@ -179,13 +185,40 @@ export default function Home() {
   };
 
   const resetAudioState = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-      setIsPlaying(false);
-      setAudioProgress(0);
-      setAudioError(false);
+    console.log('🔄 Resetando estado do áudio...');
+
+    // Limpar timeouts pendentes
+    if (audioLoadTimeout) {
+      clearTimeout(audioLoadTimeout);
+      setAudioLoadTimeout(null);
     }
+
+    // Cancelar promise de play pendente
+    if (playPromiseRef) {
+      try {
+        playPromiseRef.catch(() => {}); // Silenciar erros da promise cancelada
+      } catch (e) {}
+      setPlayPromiseRef(null);
+    }
+
+    // Resetar estados de loading
+    setIsPlayLoading(false);
+    setPendingPlay(false);
+    setIsPlayButtonDisabled(false);
+
+    // Resetar áudio
+    if (audioRef.current) {
+      try {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+        setIsPlaying(false);
+        setAudioProgress(0);
+      } catch (error) {
+        console.error('Erro ao resetar áudio:', error);
+      }
+    }
+
+    console.log('✅ Estado do áudio resetado');
   };
 
   const loadInfiniteStats = () => {
@@ -341,19 +374,25 @@ export default function Home() {
     setInfiniteGameOver(true);
     setGameOver(true);
 
+    // Salva o streak final antes de resetar
+    setFinalStreak(infiniteStreak);
+
     // Salva o recorde final
     let finalBestRecord = infiniteBestRecord;
-    if (infiniteStreak > infiniteBestRecord) {
+    const isNewRecord = infiniteStreak > infiniteBestRecord;
+    if (isNewRecord) {
       finalBestRecord = infiniteStreak;
       setInfiniteBestRecord(finalBestRecord);
     }
+
+    // Salva se é novo recorde para o modal
+    setIsNewRecord(isNewRecord);
 
     // Reseta a sequência atual mas mantém as músicas usadas
     setInfiniteStreak(0); // Atualiza o estado local também
     saveInfiniteStats(0, finalBestRecord, infiniteUsedSongs);
 
-    // Mostra estatísticas após um delay
-    setTimeout(() => setShowStatistics(true), 800);
+    // Não mostra estatísticas automaticamente, deixa o modal decidir
   };
 
   const resetInfiniteMode = () => {
@@ -560,12 +599,22 @@ export default function Home() {
   const handleLoadedMetadata = () => {
     if (!audioRef.current || !currentSong) return;
 
+    console.log('📊 Metadata carregada:', {
+      duration: audioRef.current.duration,
+      readyState: audioRef.current.readyState,
+      url: currentSong.audioUrl
+    });
+
     const duration = audioRef.current.duration || 0;
 
     // Verificar se a duração é válida
     if (!duration || isNaN(duration) || duration < 10) {
+      console.error('❌ Arquivo de áudio inválido:', currentSong.audioUrl);
       setAudioError(true);
       setMessage('Arquivo de áudio inválido ou muito curto.');
+      // Resetar estados de loading em caso de erro
+      setIsPlayLoading(false);
+      setPendingPlay(false);
       return;
     }
 
@@ -729,6 +778,38 @@ export default function Home() {
       audioRef.current.volume = volume;
     }
   }, [volume]);
+
+  // Cleanup quando o componente desmonta
+  useEffect(() => {
+    return () => {
+      console.log('🧹 Limpando recursos de áudio...');
+
+      // Limpar timeouts
+      if (audioLoadTimeout) {
+        clearTimeout(audioLoadTimeout);
+      }
+
+      // Cancelar promise de play pendente
+      if (playPromiseRef) {
+        try {
+          playPromiseRef.catch(() => {}); // Silenciar erros da promise cancelada
+        } catch (e) {}
+      }
+
+      // Parar e limpar áudio
+      if (audioRef.current) {
+        try {
+          audioRef.current.pause();
+          audioRef.current.currentTime = 0;
+          audioRef.current.src = '';
+        } catch (error) {
+          console.error('Erro no cleanup do áudio:', error);
+        }
+      }
+
+      console.log('✅ Cleanup concluído');
+    };
+  }, []);
 
   // Quando áudio termina
   const handleAudioEnded = () => {
@@ -1850,45 +1931,104 @@ export default function Home() {
                   disabled={audioError || (!audioDuration && !currentSong?.audioUrl) || isPlayButtonDisabled || isPlayLoading}
                   className={styles.audioPlayBtnCustom}
                   onClick={debounce(async () => {
+                    console.log('🎵 Botão play clicado', {
+                      isPlayButtonDisabled,
+                      audioError,
+                      isPlayLoading,
+                      audioDuration,
+                      startTime,
+                      currentSong: currentSong?.title
+                    });
+
                     if (!audioRef.current || isPlayButtonDisabled || audioError || isPlayLoading) {
+                      console.log('❌ Play bloqueado:', { isPlayButtonDisabled, audioError, isPlayLoading });
                       return;
                     }
+
+                    // Desabilitar botão temporariamente
                     setIsPlayButtonDisabled(true);
                     setIsPlayLoading(true);
+
+                    // Timeout de segurança para resetar loading
+                    const safetyTimeout = setTimeout(() => {
+                      console.log('⚠️ Timeout de segurança ativado - resetando loading');
+                      setIsPlayLoading(false);
+                      setIsPlayButtonDisabled(false);
+                      setPendingPlay(false);
+                    }, 5000);
+
+                    setAudioLoadTimeout(safetyTimeout);
+
+                    // Reabilitar botão após delay normal
                     setTimeout(() => setIsPlayButtonDisabled(false), 400);
+
+                    // Se áudio não carregou ainda, aguardar carregamento
                     if (!audioDuration && currentSong?.audioUrl) {
+                      console.log('🔄 Áudio sem duração, carregando...');
                       setPendingPlay(true);
-                      audioRef.current.load();
+                      try {
+                        audioRef.current.load();
+                      } catch (error) {
+                        console.error('❌ Erro ao carregar áudio:', error);
+                        clearTimeout(safetyTimeout);
+                        setIsPlayLoading(false);
+                        setPendingPlay(false);
+                      }
                       return;
                     }
+
+                    // Limpar timeout se chegou até aqui
+                    clearTimeout(safetyTimeout);
+                    setAudioLoadTimeout(null);
+
                     if (startTime === null || startTime === undefined) {
+                      console.log('❌ StartTime inválido');
                       setIsPlayLoading(false);
                       return;
                     }
+
                     const currentTime = audioRef.current.currentTime - startTime;
                     const maxAllowed = (gameOver && !isInfiniteMode) || (gameOver && isInfiniteMode && infiniteGameOver) ? MAX_PLAY_TIME : (maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1]);
+
                     if (isPlaying) {
-                      audioRef.current.pause();
+                      // Pausar
+                      try {
+                        audioRef.current.pause();
+                        console.log('⏸️ Áudio pausado');
+                      } catch (error) {
+                        console.error('Erro ao pausar:', error);
+                      }
                       setIsPlayLoading(false);
                     } else {
+                      // Reproduzir
                       if (currentTime >= maxAllowed || currentTime < 0 || audioRef.current.currentTime < startTime) {
                         audioRef.current.currentTime = startTime;
                         setAudioProgress(0);
                       }
+
                       try {
                         if (audioRef.current.paused) {
+                          console.log('▶️ Iniciando reprodução...');
                           const playPromise = audioRef.current.play();
+                          setPlayPromiseRef(playPromise);
+
                           if (playPromise !== undefined) {
                             await playPromise;
+                            console.log('✅ Reprodução iniciada com sucesso');
                           }
                         }
                         setIsPlayLoading(false);
+                        setPlayPromiseRef(null);
                       } catch (error) {
+                        console.error('❌ Erro ao reproduzir áudio:', error);
                         setIsPlayLoading(false);
+                        setPlayPromiseRef(null);
+
                         if (error.name === 'AbortError') {
+                          console.log('🔄 Play cancelado (AbortError)');
                           return;
                         }
-                        console.error('Erro ao reproduzir áudio:', error);
+
                         if (error.name === 'NotAllowedError') {
                           setMessage('Clique em qualquer lugar para permitir reprodução de áudio');
                         } else if (error.name === 'NotSupportedError') {
@@ -1899,7 +2039,7 @@ export default function Home() {
                         }
                       }
                     }
-                  }, 200, 'play_button')}
+                  }, 300, 'play_button')}
                 />
                 <MemoizedVolumeControl
                   volume={volume}
@@ -1917,25 +2057,63 @@ export default function Home() {
                 onLoadedMetadata={handleLoadedMetadata}
                 onEnded={handleAudioEnded}
                 onError={(e) => {
-                  console.error('Erro de áudio:', {
+                  console.error('❌ Erro de áudio:', {
                     currentSong: currentSong?.title,
                     audioUrl: currentSong?.audioUrl,
-                    error: e.target.error
+                    error: e.target.error,
+                    errorCode: e.target.error?.code,
+                    errorMessage: e.target.error?.message
                   });
+
+                  // Resetar estados de loading em caso de erro
+                  setIsPlayLoading(false);
+                  setPendingPlay(false);
+                  setIsPlayButtonDisabled(false);
+
+                  // Limpar timeout se existir
+                  if (audioLoadTimeout) {
+                    clearTimeout(audioLoadTimeout);
+                    setAudioLoadTimeout(null);
+                  }
+
                   setAudioError(true);
                   setMessage('Erro ao carregar o áudio. Tentando novamente...');
 
-                  // Tentar recarregar o áudio após um delay maior
+                  // Tentar recarregar o áudio após um delay maior, mas apenas uma vez
                   setTimeout(() => {
-                    if (audioRef.current && currentSong?.audioUrl) {
+                    if (audioRef.current && currentSong?.audioUrl && !audioError) {
+                      console.log('🔄 Tentando recarregar áudio...');
                       audioRef.current.load();
                     }
-                  }, 2000);
+                  }, 3000);
                 }}
                 onCanPlay={() => {
+                  console.log('✅ Áudio pronto para tocar');
                   setAudioError(false);
+
+                  // Limpar timeout se existir
+                  if (audioLoadTimeout) {
+                    clearTimeout(audioLoadTimeout);
+                    setAudioLoadTimeout(null);
+                  }
+
                   if (message === 'Erro ao carregar o áudio. Tentando novamente...' || message === 'Erro ao carregar o áudio. Verifique se o arquivo existe.') {
                     setMessage('');
+                  }
+
+                  // Se havia um play pendente, executar agora
+                  if (pendingPlay) {
+                    console.log('🔄 Executando play pendente');
+                    setPendingPlay(false);
+                    setIsPlayLoading(false);
+                    setTimeout(() => {
+                      if (audioRef.current && audioRef.current.paused) {
+                        audioRef.current.play().catch(error => {
+                          console.error('❌ Erro no play pendente:', error);
+                          setIsPlayLoading(false);
+                        });
+                      }
+                    }, 100);
                   }
                 }}
                 onLoadStart={() => {
@@ -1948,6 +2126,50 @@ export default function Home() {
                   // Áudio totalmente carregado
                 }} />
             </div>
+
+            {/* Botão de emergência para resetar áudio travado */}
+            {(isPlayLoading || pendingPlay) && (
+              <div style={{
+                background: 'linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 152, 0, 0.15))',
+                border: '2px solid #ff9800',
+                borderRadius: '8px',
+                padding: '12px',
+                margin: '10px 0',
+                textAlign: 'center',
+                backdropFilter: 'blur(10px)'
+              }}>
+                <div style={{ color: '#ff9800', fontWeight: 'bold', marginBottom: '5px' }}>
+                  🔄 Carregando áudio...
+                </div>
+                <div style={{ fontSize: '0.9rem', opacity: 0.8, marginBottom: '8px' }}>
+                  Se o carregamento não terminar, clique no botão abaixo
+                </div>
+                <button
+                  onClick={() => {
+                    console.log('🚨 Reset de emergência ativado');
+                    resetAudioState();
+                    if (currentSong?.audioUrl) {
+                      setTimeout(() => {
+                        if (audioRef.current) {
+                          audioRef.current.load();
+                        }
+                      }, 500);
+                    }
+                  }}
+                  style={{
+                    background: '#ff9800',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '6px',
+                    padding: '8px 16px',
+                    cursor: 'pointer',
+                    fontWeight: 'bold'
+                  }}
+                >
+                  🔧 Resetar Áudio
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Estatísticas Globais apenas no modo diário */}
@@ -2097,28 +2319,7 @@ export default function Home() {
             </div>
           )}
 
-          {isInfiniteMode && infiniteGameOver && (
-            <div className={styles.infiniteGameOverBox}>
-              <h3>{isClient ? t('infinite_game_over') : 'Fim da Sequência!'}</h3>
-              {infiniteStreak > infiniteBestRecord && (
-                <p className={styles.newRecord}>
-                  {isClient ? t('new_record') : 'Novo Recorde!'}
-                </p>
-              )}
-              <p>
-                {isClient
-                  ? t('streak_of').replace('{count}', infiniteStreak)
-                  : `Sequência de ${infiniteStreak} músicas`
-                }
-              </p>
-              <button
-                className={styles.playAgainButton}
-                onClick={resetInfiniteMode}
-              >
-                {isClient ? t('play_again_infinite') : 'Jogar Novamente'}
-              </button>
-            </div>
-          ) }
+
         </div>
 
 
@@ -2182,7 +2383,23 @@ export default function Home() {
 
         {/* Sistema de notificações */}
         <AchievementNotification />
+
+        {/* Modal de fim de jogo infinito */}
+        <InfiniteGameOverModal
+          isOpen={isInfiniteMode && infiniteGameOver}
+          onClose={() => {
+            setInfiniteGameOver(false);
+            setShowStatistics(true);
+          }}
+          onPlayAgain={resetInfiniteMode}
+          infiniteStreak={finalStreak}
+          infiniteBestRecord={infiniteBestRecord}
+          isNewRecord={isNewRecord}
+        />
       </div>
+
+      {/* Componente de debug temporário */}
+      <ProfileDebug />
     </>
   );
 };

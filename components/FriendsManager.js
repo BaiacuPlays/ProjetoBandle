@@ -25,7 +25,8 @@ const FriendsManager = ({ isOpen, onClose }) => {
     rejectFriendRequest,
     removeFriend,
     cancelSentRequest,
-    inviteToMultiplayer
+    inviteToMultiplayer,
+    forceReloadFriendsData
   } = useFriends();
 
   const { sendMultiplayerInvite } = useNotifications();
@@ -182,9 +183,28 @@ const FriendsManager = ({ isOpen, onClose }) => {
       <div className={styles.modal}>
         <div className={styles.header}>
           <h2>Amigos</h2>
-          <button className={styles.closeButton} onClick={onClose}>
-            <FaTimes />
-          </button>
+          <div className={styles.headerButtons}>
+            <button
+              className={styles.debugButton}
+              onClick={forceReloadFriendsData}
+              title="Recarregar dados dos amigos"
+              style={{
+                background: '#ff6b6b',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                padding: '4px 8px',
+                fontSize: '12px',
+                marginRight: '8px',
+                cursor: 'pointer'
+              }}
+            >
+              🔄 Debug
+            </button>
+            <button className={styles.closeButton} onClick={onClose}>
+              <FaTimes />
+            </button>
+          </div>
         </div>
 
         <div className={styles.tabNavigation}>

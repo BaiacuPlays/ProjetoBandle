@@ -45,6 +45,7 @@ const UserProfileViewer = ({ userId, username, onClose }) => {
 
       if (response.ok) {
         const data = await response.json();
+        console.log('🔍 Dados recebidos no UserProfileViewer:', data.profile);
         setProfile(data.profile);
       } else {
         const errorData = await response.json();
@@ -193,18 +194,25 @@ const UserProfileViewer = ({ userId, username, onClose }) => {
           <div className={styles.basicInfo}>
             <div className={styles.avatar}>
               {/* Renderizar avatar de forma segura */}
-              {profile.avatar && typeof profile.avatar === 'string' && profile.avatar.length < 10 ?
-                profile.avatar : '👤'
-              }
+              {profile.avatar && typeof profile.avatar === 'string' ? (
+                profile.avatar.startsWith('http') || profile.avatar.startsWith('/') || profile.avatar.startsWith('data:') ? (
+                  <img src={profile.avatar} alt="Avatar" className={styles.avatarImage} />
+                ) : (
+                  profile.avatar
+                )
+              ) : '👤'}
             </div>
             <div className={styles.userInfo}>
               <h3 className={styles.displayName}>{profile.displayName}</h3>
               <p className={styles.username}>@{profile.username}</p>
+              {profile.bio && (
+                <p className={styles.bio}>{profile.bio}</p>
+              )}
               <div className={styles.level}>
                 <span className={styles.levelBadge}>Nível {profile.level}</span>
                 <div className={styles.xpBar}>
-                  <div 
-                    className={styles.xpProgress} 
+                  <div
+                    className={styles.xpProgress}
                     style={{ width: `${getXPProgress()}%` }}
                   ></div>
                 </div>
@@ -220,30 +228,31 @@ const UserProfileViewer = ({ userId, username, onClose }) => {
 
           {/* Estatísticas */}
           <div className={styles.statistics}>
-            <h4>📊 Estatísticas</h4>
+            <h4>📊 Estatísticas de Jogo</h4>
+            {console.log('🎯 Renderizando estatísticas:', profile.statistics)}
             <div className={styles.statsGrid}>
               <div className={styles.statItem}>
-                <span className={styles.statValue}>{profile.statistics.totalGames}</span>
-                <span className={styles.statLabel}>Jogos</span>
+                <span className={styles.statValue}>{profile.statistics?.totalGames || 0}</span>
+                <span className={styles.statLabel}>Partidas Jogadas</span>
               </div>
               <div className={styles.statItem}>
-                <span className={styles.statValue}>{profile.statistics.gamesWon}</span>
+                <span className={styles.statValue}>{profile.statistics?.gamesWon || profile.statistics?.wins || 0}</span>
                 <span className={styles.statLabel}>Vitórias</span>
               </div>
               <div className={styles.statItem}>
-                <span className={styles.statValue}>{profile.statistics.winRate}%</span>
+                <span className={styles.statValue}>{Math.round(profile.statistics?.winRate || 0)}%</span>
                 <span className={styles.statLabel}>Taxa de Vitória</span>
               </div>
               <div className={styles.statItem}>
-                <span className={styles.statValue}>{profile.statistics.bestStreak}</span>
+                <span className={styles.statValue}>{profile.statistics?.bestStreak || 0}</span>
                 <span className={styles.statLabel}>Melhor Sequência</span>
               </div>
               <div className={styles.statItem}>
-                <span className={styles.statValue}>{profile.statistics.currentStreak}</span>
+                <span className={styles.statValue}>{profile.statistics?.currentStreak || 0}</span>
                 <span className={styles.statLabel}>Sequência Atual</span>
               </div>
               <div className={styles.statItem}>
-                <span className={styles.statValue}>{profile.statistics.perfectGames}</span>
+                <span className={styles.statValue}>{profile.statistics?.perfectGames || 0}</span>
                 <span className={styles.statLabel}>Jogos Perfeitos</span>
               </div>
             </div>

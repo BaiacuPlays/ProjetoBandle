@@ -1,0 +1,251 @@
+/* Modal de fim de jogo do modo infinito */
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+  backdrop-filter: blur(5px);
+  /* Posicionamento específico do topo */
+  padding-top: 120px;
+  overflow-y: auto;
+}
+
+.modal {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border-radius: 20px;
+  padding: 30px;
+  width: 100%;
+  max-width: 500px;
+  max-height: calc(100vh - 140px);
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(29, 185, 84, 0.3);
+  position: relative;
+  flex-shrink: 0;
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.title {
+  color: #1DB954;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 0 2px 10px rgba(29, 185, 84, 0.3);
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeButton:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Conteúdo */
+.content {
+  text-align: center;
+}
+
+.newRecord {
+  background: linear-gradient(45deg, #FFD700, #FFA500);
+  color: #000;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 25px;
+  animation: pulse 1.5s infinite;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Estatísticas */
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 25px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.statItem {
+  text-align: center;
+}
+
+.statValue {
+  font-size: 32px;
+  font-weight: bold;
+  color: #1DB954;
+  margin-bottom: 5px;
+  text-shadow: 0 2px 10px rgba(29, 185, 84, 0.3);
+}
+
+.statLabel {
+  font-size: 14px;
+  color: #cccccc;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Mensagem */
+.message {
+  color: #ffffff;
+  font-size: 16px;
+  line-height: 1.5;
+  margin-bottom: 30px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  border-left: 4px solid #1DB954;
+}
+
+/* Ações */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.playAgainButton {
+  background: linear-gradient(45deg, #1DB954, #1ed760);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 16px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(29, 185, 84, 0.3);
+}
+
+.playAgainButton:hover {
+  background: linear-gradient(45deg, #1ed760, #1DB954);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(29, 185, 84, 0.4);
+}
+
+.closeModalButton {
+  background: transparent;
+  color: #1DB954;
+  border: 2px solid #1DB954;
+  border-radius: 12px;
+  padding: 14px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.closeModalButton:hover {
+  background: rgba(29, 185, 84, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+  .overlay {
+    padding-top: 60px;
+  }
+
+  .modal {
+    padding: 20px;
+    margin: 10px;
+    max-width: none;
+    max-height: calc(100vh - 80px);
+  }
+  
+  .title {
+    font-size: 20px;
+  }
+
+  .stats {
+    gap: 20px;
+    padding: 15px;
+  }
+
+  .statValue {
+    font-size: 24px;
+  }
+
+  .statLabel {
+    font-size: 12px;
+  }
+
+  .actions {
+    gap: 12px;
+  }
+
+  .playAgainButton,
+  .closeModalButton {
+    padding: 14px 20px;
+    font-size: 15px;
+  }
+}
+
+/* Animações */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Scrollbar customizada */
+.modal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.modal::-webkit-scrollbar-thumb {
+  background: #1DB954;
+  border-radius: 3px;
+}
+
+.modal::-webkit-scrollbar-thumb:hover {
+  background: #1ed760;
+}
