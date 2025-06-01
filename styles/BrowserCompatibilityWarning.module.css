@@ -1,0 +1,258 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  backdrop-filter: blur(5px);
+  padding: 20px;
+}
+
+.modal {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border: 2px solid #ff9800;
+  border-radius: 16px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  animation: modalAppear 0.3s ease-out;
+}
+
+@keyframes modalAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid rgba(255, 152, 0, 0.3);
+}
+
+.title {
+  color: #ff9800;
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+
+.content {
+  padding: 20px 24px 24px;
+  color: #fff;
+}
+
+.warning {
+  background: rgba(255, 152, 0, 0.1);
+  border: 1px solid rgba(255, 152, 0, 0.3);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.warning p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.issues, .recommendations, .tips {
+  margin-bottom: 20px;
+}
+
+.issues h4, .recommendations h4, .tips h4 {
+  color: #4ecdc4;
+  font-size: 1.1rem;
+  margin: 0 0 12px 0;
+  font-weight: 600;
+}
+
+.issues ul, .tips ul {
+  margin: 0;
+  padding-left: 20px;
+  list-style: none;
+}
+
+.issues li, .tips li {
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  position: relative;
+}
+
+.issues li::before, .tips li::before {
+  content: '';
+  position: absolute;
+  left: -16px;
+  top: 8px;
+  width: 4px;
+  height: 4px;
+  background: #4ecdc4;
+  border-radius: 50%;
+}
+
+.browserList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.browserItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.browserItem:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(78, 205, 196, 0.3);
+}
+
+.browserIcon {
+  font-size: 1.2rem;
+}
+
+.browserName {
+  font-weight: 600;
+  flex: 1;
+}
+
+.browserStatus {
+  font-size: 0.85rem;
+  color: #4ecdc4;
+  background: rgba(78, 205, 196, 0.1);
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(78, 205, 196, 0.3);
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.primaryButton {
+  background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+}
+
+.primaryButton:hover {
+  background: linear-gradient(135deg, #f57c00 0%, #ef6c00 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 152, 0, 0.4);
+}
+
+.primaryButton:active {
+  transform: translateY(0);
+}
+
+.note {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .overlay {
+    padding: 10px;
+  }
+  
+  .modal {
+    max-height: 95vh;
+  }
+  
+  .header {
+    padding: 16px 20px 12px;
+  }
+  
+  .title {
+    font-size: 1.2rem;
+  }
+  
+  .content {
+    padding: 16px 20px 20px;
+  }
+  
+  .browserList {
+    gap: 8px;
+  }
+  
+  .browserItem {
+    padding: 10px 12px;
+  }
+}
+
+/* Scrollbar customizada */
+.modal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.modal::-webkit-scrollbar-thumb {
+  background: rgba(78, 205, 196, 0.6);
+  border-radius: 4px;
+}
+
+.modal::-webkit-scrollbar-thumb:hover {
+  background: rgba(78, 205, 196, 0.8);
+}

@@ -1,18 +1,54 @@
-// Sistema de cache inteligente para áudio
+// Sistema de cache inteligente para áudio com melhor compatibilidade entre navegadores
 class AudioCache {
   constructor() {
     this.cache = new Map();
     this.preloadQueue = [];
     this.isPreloading = false;
-    this.maxCacheSize = 15; // Aumentado para 15 áudios
+    this.maxCacheSize = 10; // Reduzido para melhor performance
     this.availabilityCache = new Map();
     this.lastUsed = new Map();
     this.preloadWorker = null;
+    this.loadingPromises = new Map(); // Para evitar carregamentos duplicados
+    this.browserInfo = this.detectBrowser();
     this.initializeWorker();
   }
 
-  // Inicializar Web Worker para preload em background
+  // Detectar navegador para ajustes específicos
+  detectBrowser() {
+    if (typeof window === 'undefined') return { name: 'unknown', version: 0 };
+
+    const userAgent = window.navigator.userAgent;
+    let browser = { name: 'unknown', version: 0 };
+
+    if (userAgent.includes('Chrome') && !userAgent.includes('Edg')) {
+      browser.name = 'chrome';
+      const match = userAgent.match(/Chrome\/(\d+)/);
+      browser.version = match ? parseInt(match[1]) : 0;
+    } else if (userAgent.includes('Firefox')) {
+      browser.name = 'firefox';
+      const match = userAgent.match(/Firefox\/(\d+)/);
+      browser.version = match ? parseInt(match[1]) : 0;
+    } else if (userAgent.includes('Safari') && !userAgent.includes('Chrome')) {
+      browser.name = 'safari';
+      const match = userAgent.match(/Version\/(\d+)/);
+      browser.version = match ? parseInt(match[1]) : 0;
+    } else if (userAgent.includes('Edg')) {
+      browser.name = 'edge';
+      const match = userAgent.match(/Edg\/(\d+)/);
+      browser.version = match ? parseInt(match[1]) : 0;
+    }
+
+    return browser;
+  }
+
+  // Inicializar Web Worker para preload em background (com fallback)
   initializeWorker() {
+    // Desabilitar Web Worker em navegadores problemáticos
+    if (this.browserInfo.name === 'safari' || this.browserInfo.name === 'firefox') {
+      console.log('Web Worker desabilitado para melhor compatibilidade');
+      return;
+    }
+
     if (typeof window !== 'undefined' && window.Worker) {
       try {
         const workerCode = `
@@ -20,7 +56,11 @@ class AudioCache {
             const { type, url } = e.data;
 
             if (type === 'preload') {
-              fetch(url, { method: 'HEAD', cache: 'force-cache' })
+              fetch(url, {
+                method: 'HEAD',
+                cache: 'force-cache',
+                mode: 'cors'
+              })
                 .then(response => {
                   self.postMessage({
                     type: 'preload_complete',
@@ -48,8 +88,14 @@ class AudioCache {
             this.availabilityCache.set(url, success);
           }
         };
+
+        this.preloadWorker.onerror = (error) => {
+          console.warn('Erro no Web Worker:', error);
+          this.preloadWorker = null;
+        };
       } catch (error) {
         console.warn('Web Worker não disponível:', error);
+        this.preloadWorker = null;
       }
     }
   }
@@ -79,7 +125,7 @@ class AudioCache {
     this.lastUsed.set(url, Date.now());
   }
 
-  // Remover item menos usado
+  // Remover item menos usado com cleanup adequado
   evictLeastUsed() {
     let oldestUrl = null;
     let oldestTime = Date.now();
@@ -94,66 +140,120 @@ class AudioCache {
     if (oldestUrl) {
       const audio = this.cache.get(oldestUrl);
       if (audio) {
-        audio.src = '';
-        audio.load();
+        try {
+          // Cleanup mais robusto
+          audio.pause();
+          audio.removeAttribute('src');
+          audio.load();
+        } catch (error) {
+          console.warn('Erro ao limpar áudio do cache:', error);
+        }
       }
       this.cache.delete(oldestUrl);
       this.lastUsed.delete(oldestUrl);
+      this.loadingPromises.delete(oldestUrl);
     }
   }
 
-  // Pré-carregar áudio
+  // Pré-carregar áudio com melhor tratamento de erros e compatibilidade
   async preload(url) {
     if (this.has(url)) return this.get(url);
 
-    return new Promise((resolve, reject) => {
-      const audio = new Audio();
-      audio.preload = 'metadata'; // Só metadata, não o arquivo completo
-      audio.crossOrigin = 'anonymous';
+    // Evitar carregamentos duplicados
+    if (this.loadingPromises.has(url)) {
+      return this.loadingPromises.get(url);
+    }
 
+    const loadPromise = new Promise((resolve, reject) => {
+      const audio = new Audio();
+
+      // Configurações específicas por navegador
+      if (this.browserInfo.name === 'safari') {
+        audio.preload = 'none'; // Safari tem problemas com preload
+      } else {
+        audio.preload = 'metadata';
+      }
+
+      // CrossOrigin apenas se necessário
+      if (this.browserInfo.name !== 'firefox') {
+        audio.crossOrigin = 'anonymous';
+      }
+
+      // Timeout mais conservador para navegadores lentos
+      const timeoutDuration = this.browserInfo.name === 'safari' ? 8000 : 5000;
       const timeout = setTimeout(() => {
+        this.loadingPromises.delete(url);
         reject(new Error('Timeout ao carregar áudio'));
-      }, 5000);
+      }, timeoutDuration);
+
+      const cleanup = () => {
+        clearTimeout(timeout);
+        this.loadingPromises.delete(url);
+      };
 
       audio.oncanplay = () => {
-        clearTimeout(timeout);
+        cleanup();
         this.set(url, audio);
         resolve(audio);
       };
 
-      audio.onerror = () => {
-        clearTimeout(timeout);
+      audio.onerror = (e) => {
+        cleanup();
+        console.warn('Erro ao pré-carregar áudio:', url, e);
         reject(new Error('Erro ao carregar áudio'));
       };
 
-      audio.src = url;
+      audio.onabort = () => {
+        cleanup();
+        reject(new Error('Carregamento abortado'));
+      };
+
+      try {
+        audio.src = url;
+      } catch (error) {
+        cleanup();
+        reject(error);
+      }
     });
+
+    this.loadingPromises.set(url, loadPromise);
+    return loadPromise;
   }
 
-  // Verificar disponibilidade com cache
+  // Verificar disponibilidade com cache e melhor tratamento de erros
   async checkAvailability(url) {
     if (this.availabilityCache.has(url)) {
       return this.availabilityCache.get(url);
     }
 
-    // Usar Web Worker se disponível
-    if (this.preloadWorker) {
+    // Usar Web Worker se disponível (apenas para Chrome)
+    if (this.preloadWorker && this.browserInfo.name === 'chrome') {
       this.preloadWorker.postMessage({ type: 'preload', url });
       // Retornar true temporariamente, será atualizado pelo worker
       return true;
     }
 
     try {
+      // Timeout mais curto para verificação de disponibilidade
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3000);
+
       const response = await fetch(url, {
         method: 'HEAD',
-        cache: 'force-cache'
+        cache: 'force-cache',
+        mode: 'cors',
+        signal: controller.signal
       });
+
+      clearTimeout(timeoutId);
       const isAvailable = response.ok;
       this.availabilityCache.set(url, isAvailable);
       return isAvailable;
     } catch (error) {
-      this.availabilityCache.set(url, false);
-      return false;
+      console.warn('Erro ao verificar disponibilidade:', url, error.name);
+      // Em caso de erro, assumir que está disponível para não bloquear
+      this.availabilityCache.set(url, true);
+      return true;
     }
   }
 
@@ -200,14 +300,47 @@ class AudioCache {
     // (seria necessário acesso à lista de músicas aqui)
   }
 
-  // Limpar cache
+  // Limpar cache com cleanup robusto
   clear() {
     for (const audio of this.cache.values()) {
-      audio.src = '';
-      audio.load();
+      try {
+        audio.pause();
+        audio.removeAttribute('src');
+        audio.load();
+      } catch (error) {
+        console.warn('Erro ao limpar áudio:', error);
+      }
     }
     this.cache.clear();
     this.lastUsed.clear();
+    this.loadingPromises.clear();
+    this.availabilityCache.clear();
+  }
+
+  // Método para obter informações do navegador
+  getBrowserInfo() {
+    return this.browserInfo;
+  }
+
+  // Método para forçar limpeza de recursos
+  forceCleanup() {
+    // Cancelar todas as promises de carregamento
+    for (const [url, promise] of this.loadingPromises) {
+      promise.catch(() => {}); // Ignorar erros
+    }
+    this.loadingPromises.clear();
+
+    // Limpar worker se existir
+    if (this.preloadWorker) {
+      try {
+        this.preloadWorker.terminate();
+        this.preloadWorker = null;
+      } catch (error) {
+        console.warn('Erro ao terminar worker:', error);
+      }
+    }
+
+    this.clear();
   }
 }
 

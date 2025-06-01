@@ -5,6 +5,8 @@ import { songs } from '../data/songs';
 import styles from '../styles/Multiplayer.module.css';
 import gameStyles from '../styles/Home.module.css';
 import { FaPlay, FaPause, FaVolumeUp, FaFastForward } from 'react-icons/fa';
+import { browserCompatibility } from '../utils/browserCompatibility';
+import BrowserCompatibilityWarning from './BrowserCompatibilityWarning';
 
 const MultiplayerGame = ({ onBackToLobby }) => {
 
@@ -894,10 +896,8 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                           }
                           try {
                             if (audioRef.current.paused) {
-                              const playPromise = audioRef.current.play();
-                              if (playPromise !== undefined) {
-                                await playPromise;
-                              }
+                              // Usar sistema de compatibilidade para reproduzir
+                              await browserCompatibility.playAudio(audioRef.current);
                             }
                             setIsPlayLoading(false);
                           } catch (error) {
@@ -905,13 +905,8 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                             if (error.name === 'AbortError') {
                               return;
                             }
-                            if (error.name === 'NotAllowedError') {
-                              actions.setError('Clique em qualquer lugar para permitir reprodução de áudio');
-                            } else if (error.name === 'NotSupportedError') {
-                              actions.setError('Formato de áudio não suportado neste navegador');
-                            } else {
-                              actions.setError('Erro ao reproduzir o áudio. Tentando novamente...');
-                            }
+                            // Usar mensagem de erro específica do sistema de compatibilidade
+                            actions.setError(error.message || 'Erro ao reproduzir o áudio. Tentando novamente...');
                           }
                         }
                       }}
@@ -961,11 +956,15 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                     />
                   </div>
                   <audio
-                    ref={audioRef}
+                    ref={(el) => {
+                      if (el) {
+                        audioRef.current = el;
+                        // Configurar elemento com compatibilidade específica do navegador
+                        browserCompatibility.configureAudioElement(el);
+                      }
+                    }}
                     src={songToPlay?.audioUrl}
                     style={{ display: 'none' }}
-                    preload="metadata"
-                    crossOrigin="anonymous"
                     onError={(e) => {
                       // Tratamento de erro mais robusto
                       const errorCode = e.target.error?.code;
@@ -1836,6 +1835,9 @@ const MultiplayerGame = ({ onBackToLobby }) => {
           )}
         </div>
       </div>
+
+      {/* Aviso de compatibilidade do navegador */}
+      <BrowserCompatibilityWarning />
     </div>
   );
 };

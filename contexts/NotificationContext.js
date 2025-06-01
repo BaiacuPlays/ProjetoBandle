@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useAuth } from './AuthContext';
 
 const NotificationContext = createContext();
 
@@ -14,24 +15,25 @@ export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
   const [invitations, setInvitations] = useState([]);
 
-  // Simular ID do usuário atual
-  const currentUserId = typeof window !== 'undefined' ? 
-    localStorage.getItem('ludomusic_user_id') || 'user_' + Math.random().toString(36).substr(2, 9) : 
-    null;
+  // Usar o sistema de autenticação adequado
+  const { isAuthenticated, getAuthenticatedUserId } = useAuth();
+  const currentUserId = isAuthenticated ? getAuthenticatedUserId() : null;
 
   useEffect(() => {
-    if (currentUserId && typeof window !== 'undefined') {
-      localStorage.setItem('ludomusic_user_id', currentUserId);
+    if (currentUserId && isAuthenticated) {
+      console.log('🔐 NotificationContext: Usuário autenticado detectado:', currentUserId);
       loadNotifications();
       loadInvitations();
       loadServerInvites(); // Carregar convites do servidor
     }
-  }, [currentUserId]);
+  }, [currentUserId, isAuthenticated]);
 
   // Carregar convites do servidor
   const loadServerInvites = async () => {
-    if (!currentUserId) {
-      console.log('❌ Não é possível carregar convites: currentUserId não definido');
+    if (!currentUserId || !isAuthenticated) {
+      console.log('❌ Não é possível carregar convites: usuário não autenticado ou currentUserId não definido');
+      console.log('❌ currentUserId:', currentUserId);
+      console.log('❌ isAuthenticated:', isAuthenticated);
       return;
     }
 
@@ -126,18 +128,18 @@ export const NotificationProvider = ({ children }) => {
 
   // Polling para verificar novos convites a cada 3 segundos
   useEffect(() => {
-    if (!currentUserId) return;
+    if (!currentUserId || !isAuthenticated) return;
 
     // Verificação inicial
     loadServerInvites();
 
     const interval = setInterval(loadServerInvites, 3000); // 3 segundos para convites mais responsivos
     return () => clearInterval(interval);
-  }, [currentUserId]);
+  }, [currentUserId, isAuthenticated]);
 
   // Polling adicional quando a página ganha foco
   useEffect(() => {
-    if (!currentUserId) return;
+    if (!currentUserId || !isAuthenticated) return;
 
     const handleFocus = () => {
       console.log('🔍 Página ganhou foco, verificando novos convites...');
@@ -146,7 +148,7 @@ export const NotificationProvider = ({ children }) => {
 
     window.addEventListener('focus', handleFocus);
     return () => window.removeEventListener('focus', handleFocus);
-  }, [currentUserId]);
+  }, [currentUserId, isAuthenticated]);
 
   // Carregar notificações salvas
   const loadNotifications = () => {
@@ -268,10 +270,14 @@ export const NotificationProvider = ({ children }) => {
 
       while (attempts < maxAttempts) {
         try {
+          // Obter token de sessão para autenticação
+          const sessionToken = localStorage.getItem('ludomusic_session_token');
+
           response = await fetch('/api/send-invite', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
+              'Authorization': sessionToken ? `Bearer ${sessionToken}` : undefined
             },
             body: JSON.stringify({
               invitation,

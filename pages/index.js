@@ -15,11 +15,13 @@ import NotificationCenter from '../components/NotificationCenter';
 import GlobalStats from '../components/GlobalStats';
 import AchievementNotification from '../components/AchievementNotification';
 import InfiniteGameOverModal from '../components/InfiniteGameOverModal';
+import BrowserCompatibilityWarning from '../components/BrowserCompatibilityWarning';
 
 import { useLanguage } from '../contexts/LanguageContext';
 import { useUserProfile } from '../contexts/UserProfileContext';
 import { fetchTimezone } from '../config/api';
 import { audioCache } from '../utils/audioCache';
+import { browserCompatibility } from '../utils/browserCompatibility';
 import { useServiceWorker } from '../hooks/useServiceWorker';
 import { usePerformanceOptimization } from '../hooks/usePerformanceOptimization';
 // import { useUltraAdvancedOptimizations, useOptimizationsStatus } from '../hooks/useUltraAdvancedOptimizations';
@@ -2012,13 +2014,9 @@ export default function Home() {
                       try {
                         if (audioRef.current.paused) {
                           console.log('▶️ Iniciando reprodução...');
-                          const playPromise = audioRef.current.play();
-                          setPlayPromiseRef(playPromise);
-
-                          if (playPromise !== undefined) {
-                            await playPromise;
-                            console.log('✅ Reprodução iniciada com sucesso');
-                          }
+                          // Usar sistema de compatibilidade para reproduzir
+                          await browserCompatibility.playAudio(audioRef.current);
+                          console.log('✅ Reprodução iniciada com sucesso');
                         }
                         setIsPlayLoading(false);
                         setPlayPromiseRef(null);
@@ -2032,13 +2030,14 @@ export default function Home() {
                           return;
                         }
 
-                        if (error.name === 'NotAllowedError') {
-                          setMessage('Clique em qualquer lugar para permitir reprodução de áudio');
-                        } else if (error.name === 'NotSupportedError') {
+                        // Usar mensagem de erro específica do sistema de compatibilidade
+                        if (error.message.includes('Clique em qualquer lugar')) {
+                          setMessage(error.message);
+                        } else if (error.message.includes('não suportado')) {
                           setAudioError(true);
-                          setMessage('Formato de áudio não suportado neste navegador');
+                          setMessage(error.message);
                         } else {
-                          setMessage('Erro ao reproduzir o áudio. Tentando novamente...');
+                          setMessage(error.message || 'Erro ao reproduzir o áudio. Tentando novamente...');
                         }
                       }
                     }
@@ -2052,11 +2051,15 @@ export default function Home() {
                 />
               </div>
               <audio
-                ref={audioRef}
+                ref={(el) => {
+                  if (el) {
+                    audioRef.current = el;
+                    // Configurar elemento com compatibilidade específica do navegador
+                    browserCompatibility.configureAudioElement(el);
+                  }
+                }}
                 src={currentSong?.audioUrl}
                 style={{ display: 'none' }}
-                preload="metadata"
-                crossOrigin="anonymous"
                 onLoadedMetadata={handleLoadedMetadata}
                 onEnded={handleAudioEnded}
                 onError={(e) => {
@@ -2109,14 +2112,16 @@ export default function Home() {
                     console.log('🔄 Executando play pendente');
                     setPendingPlay(false);
                     setIsPlayLoading(false);
-                    setTimeout(() => {
+                    setTimeout(async () => {
                       if (audioRef.current && audioRef.current.paused) {
-                        audioRef.current.play().catch(error => {
+                        try {
+                          await browserCompatibility.playAudio(audioRef.current);
+                        } catch (error) {
                           console.error('❌ Erro no play pendente:', error);
                           setIsPlayLoading(false);
-                        });
+                        }
                       }
-                    }, 100);
+                    }, browserCompatibility.getAudioConfig().loadDelay || 100);
                   }
                 }}
                 onLoadStart={() => {
@@ -2400,6 +2405,9 @@ export default function Home() {
 
         {/* Sistema de notificações */}
         <AchievementNotification />
+
+        {/* Aviso de compatibilidade do navegador */}
+        <BrowserCompatibilityWarning />
 
         {/* Modal de fim de jogo infinito */}
         <InfiniteGameOverModal
