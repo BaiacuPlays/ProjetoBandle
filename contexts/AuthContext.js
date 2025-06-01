@@ -61,22 +61,66 @@ export const AuthProvider = ({ children }) => {
         const errorData = await response.json().catch(() => ({}));
         console.log('❌ Erro na verificação de sessão:', response.status, errorData.error);
 
-        // Só remover token se for erro 401 (não autorizado) e especificamente "Sessão inválida ou expirada"
-        if (response.status === 401 && (errorData.error === 'Sessão inválida ou expirada' || errorData.error === 'Sessão expirada')) {
-          localStorage.removeItem('ludomusic_session_token');
-          localStorage.removeItem('ludomusic_user_data');
-          console.log('❌ Sessão realmente inválida, removendo token');
+        // Só remover token em casos específicos de sessão realmente inválida
+        if (response.status === 401 &&
+            (errorData.error === 'Sessão inválida ou expirada' ||
+             errorData.error === 'Sessão expirada' ||
+             errorData.error === 'Token de sessão não fornecido')) {
+
+          // Tentar múltiplas verificações antes de remover definitivamente
+          console.log('🔄 Tentando verificações adicionais antes de remover sessão...');
+
+          let sessionValid = false;
+          const maxRetries = 3;
+
+          for (let attempt = 1; attempt <= maxRetries; attempt++) {
+            try {
+              // Aguardar um pouco entre tentativas
+              if (attempt > 1) {
+                await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+              }
+
+              console.log(`🔄 Tentativa ${attempt}/${maxRetries}...`);
+
+              const retryResponse = await fetch(`/api/auth?sessionToken=${sessionToken}`, {
+                method: 'GET',
+                headers: {
+                  'Cache-Control': 'no-cache',
+                  'Pragma': 'no-cache'
+                }
+              });
+
+              if (retryResponse.ok) {
+                const retryData = await retryResponse.json();
+                setUser(retryData.user);
+                setIsAuthenticated(true);
+                console.log(`✅ Sessão válida na tentativa ${attempt}:`, retryData.user.displayName);
+                sessionValid = true;
+                break;
+              }
+            } catch (retryError) {
+              console.log(`❌ Tentativa ${attempt} falhou:`, retryError.message);
+            }
+          }
+
+          // Só remover se todas as tentativas falharam
+          if (!sessionValid) {
+            localStorage.removeItem('ludomusic_session_token');
+            localStorage.removeItem('ludomusic_user_data');
+            console.log('❌ Sessão realmente inválida após múltiplas tentativas, removendo token');
+          }
         } else {
-          // Para outros erros (500, timeout, etc.), tentar carregar dados do localStorage como fallback
+          // Para outros erros (500, timeout, etc.), usar dados do localStorage como fallback
           const savedUserData = localStorage.getItem('ludomusic_user_data');
           if (savedUserData) {
             try {
               const userData = JSON.parse(savedUserData);
               setUser(userData);
               setIsAuthenticated(true);
-              console.log('📱 Usando dados salvos localmente como fallback (erro temporário)');
+              console.log('📱 Usando dados salvos localmente como fallback (erro temporário de rede)');
             } catch (e) {
               console.error('Erro ao parsear dados salvos:', e);
+              // Só remover se os dados estão corrompidos
               localStorage.removeItem('ludomusic_user_data');
             }
           }

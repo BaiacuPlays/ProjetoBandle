@@ -30,52 +30,110 @@ export const NotificationProvider = ({ children }) => {
 
   // Carregar convites do servidor
   const loadServerInvites = async () => {
-    if (!currentUserId) return;
+    if (!currentUserId) {
+      console.log('❌ Não é possível carregar convites: currentUserId não definido');
+      return;
+    }
 
     try {
-      const response = await fetch(`/api/get-invites?userId=${currentUserId}`);
+      console.log(`🔍 Verificando convites para usuário: ${currentUserId}`);
+
+      const response = await fetch(`/api/get-invites?userId=${currentUserId}`, {
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
+        }
+      });
+
+      if (!response.ok) {
+        console.error('❌ Erro ao buscar convites:', response.status);
+        const errorData = await response.json().catch(() => ({}));
+        console.error('❌ Detalhes do erro:', errorData);
+        return;
+      }
+
       const result = await response.json();
+      console.log(`📥 Resposta da API de convites:`, result);
 
-      if (result.success && result.invites.length > 0) {
-        // Mesclar convites do servidor com os locais
-        const serverInvites = result.invites;
-        const localInviteIds = invitations.map(inv => inv.id);
+      if (result.success) {
+        const serverInvites = result.invites || [];
+        console.log(`📊 Total de convites no servidor: ${serverInvites.length}`);
 
-        // Adicionar apenas convites novos
-        const newInvites = serverInvites.filter(inv => !localInviteIds.includes(inv.id));
+        if (serverInvites.length > 0) {
+          // Mesclar convites do servidor com os locais
+          const localInviteIds = invitations.map(inv => inv.id);
+          console.log(`📊 Convites locais existentes: ${localInviteIds.length}`);
 
-        if (newInvites.length > 0) {
-          const updatedInvitations = [...invitations, ...newInvites];
-          setInvitations(updatedInvitations);
-          saveInvitations(updatedInvitations);
+          // Adicionar apenas convites novos
+          const newInvites = serverInvites.filter(inv => !localInviteIds.includes(inv.id));
 
-          // Adicionar notificações para os novos convites
-          newInvites.forEach(invite => {
-            addNotification({
-              type: 'multiplayer_invite',
-              title: 'Novo Convite para Multiplayer!',
-              message: `${invite.hostName} te convidou para jogar`,
-              data: {
-                roomCode: invite.roomCode,
-                hostName: invite.hostName,
-                inviteId: invite.id
+          if (newInvites.length > 0) {
+            console.log(`📨 ${newInvites.length} novos convites encontrados:`, newInvites);
+
+            const updatedInvitations = [...invitations, ...newInvites];
+            setInvitations(updatedInvitations);
+            saveInvitations(updatedInvitations);
+
+            // Adicionar notificações para os novos convites
+            newInvites.forEach(invite => {
+              console.log(`🔔 Criando notificação para convite de ${invite.hostName}`);
+
+              addNotification({
+                type: 'multiplayer_invite',
+                title: 'Novo Convite para Multiplayer!',
+                message: `${invite.hostName} te convidou para jogar`,
+                data: {
+                  roomCode: invite.roomCode,
+                  hostName: invite.hostName,
+                  inviteId: invite.id
+                }
+              });
+
+              // Mostrar notificação do navegador se permitido
+              if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted') {
+                new Notification('Novo Convite para Multiplayer!', {
+                  body: `${invite.hostName} te convidou para jogar`,
+                  icon: '/favicon.ico'
+                });
               }
             });
-          });
+          } else {
+            console.log('📥 Nenhum convite novo encontrado');
+          }
+        } else {
+          console.log('📥 Nenhum convite no servidor');
         }
+      } else {
+        console.error('❌ API retornou erro:', result.error);
       }
     } catch (error) {
-      console.error('Erro ao carregar convites do servidor:', error);
+      console.error('❌ Erro de rede ao carregar convites do servidor:', error);
     }
   };
 
-  // Polling para verificar novos convites a cada 30 segundos
+  // Polling para verificar novos convites a cada 3 segundos
   useEffect(() => {
     if (!currentUserId) return;
 
-    const interval = setInterval(loadServerInvites, 30000);
+    // Verificação inicial
+    loadServerInvites();
+
+    const interval = setInterval(loadServerInvites, 3000); // 3 segundos para convites mais responsivos
     return () => clearInterval(interval);
-  }, [currentUserId, invitations]);
+  }, [currentUserId]);
+
+  // Polling adicional quando a página ganha foco
+  useEffect(() => {
+    if (!currentUserId) return;
+
+    const handleFocus = () => {
+      console.log('🔍 Página ganhou foco, verificando novos convites...');
+      loadServerInvites();
+    };
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
+  }, [currentUserId]);
 
   // Carregar notificações salvas
   const loadNotifications = () => {
@@ -187,18 +245,50 @@ export const NotificationProvider = ({ children }) => {
       status: 'pending' // 'pending', 'accepted', 'declined', 'expired'
     };
 
+    console.log('📤 Enviando convite:', invitation);
+
     try {
-      // Enviar convite via API
-      const response = await fetch('/api/send-invite', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          invitation,
-          currentUserId
-        })
-      });
+      // Enviar convite via API com retry
+      let response;
+      let attempts = 0;
+      const maxAttempts = 3;
+
+      while (attempts < maxAttempts) {
+        try {
+          response = await fetch('/api/send-invite', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              invitation,
+              currentUserId
+            })
+          });
+
+          if (response.ok) {
+            break; // Sucesso, sair do loop
+          } else if (response.status >= 500 && attempts < maxAttempts - 1) {
+            // Erro do servidor, tentar novamente
+            attempts++;
+            console.log(`⚠️ Tentativa ${attempts} falhou, tentando novamente...`);
+            await new Promise(resolve => setTimeout(resolve, 1000 * attempts)); // Delay progressivo
+            continue;
+          } else {
+            // Erro do cliente ou última tentativa
+            break;
+          }
+        } catch (fetchError) {
+          attempts++;
+          if (attempts < maxAttempts) {
+            console.log(`⚠️ Erro de rede na tentativa ${attempts}, tentando novamente...`);
+            await new Promise(resolve => setTimeout(resolve, 1000 * attempts));
+            continue;
+          } else {
+            throw fetchError;
+          }
+        }
+      }
 
       const result = await response.json();
 
@@ -207,6 +297,8 @@ export const NotificationProvider = ({ children }) => {
         const updatedInvitations = [...invitations, invitation];
         setInvitations(updatedInvitations);
         saveInvitations(updatedInvitations);
+
+        console.log('✅ Convite enviado com sucesso para:', friendName);
 
         // Notificar sucesso
         addNotification({
@@ -220,11 +312,11 @@ export const NotificationProvider = ({ children }) => {
         throw new Error(result.error || 'Erro ao enviar convite');
       }
     } catch (error) {
-      console.error('Erro ao enviar convite:', error);
+      console.error('❌ Erro ao enviar convite:', error);
       addNotification({
         type: 'error',
         title: 'Erro ao Enviar Convite',
-        message: 'Não foi possível enviar o convite. Tente novamente.'
+        message: `Não foi possível enviar o convite para ${friendName}. Tente novamente.`
       });
       return null;
     }

@@ -192,7 +192,10 @@ const UserProfileViewer = ({ userId, username, onClose }) => {
           {/* Informações básicas */}
           <div className={styles.basicInfo}>
             <div className={styles.avatar}>
-              {profile.avatar}
+              {/* Renderizar avatar de forma segura */}
+              {profile.avatar && typeof profile.avatar === 'string' && profile.avatar.length < 10 ?
+                profile.avatar : '👤'
+              }
             </div>
             <div className={styles.userInfo}>
               <h3 className={styles.displayName}>{profile.displayName}</h3>

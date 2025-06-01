@@ -1,6 +1,7 @@
 // API para buscar perfis públicos de outros usuários
 import { kv } from '@vercel/kv';
 import { localUsers, localProfiles } from '../../utils/storage';
+import { sanitizeProfile, repairCorruptedProfile } from '../../utils/profileUtils';
 
 // Verificar se estamos em ambiente de desenvolvimento
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -100,22 +101,55 @@ export default async function handler(req, res) {
       profileData = await kv.get(profileKey);
     }
 
-    // Dados públicos básicos do usuário
+    // Verificar e reparar dados corrompidos
+    if (profileData) {
+      profileData = repairCorruptedProfile(profileData);
+      if (!profileData) {
+        console.warn(`Perfil corrompido removido para usuário: ${targetUserId}`);
+      }
+    }
+
+    // Dados públicos básicos do usuário - sanitizar dados corrompidos
     const publicProfile = {
       id: targetUserId,
-      username: userData.username,
-      displayName: userData.displayName || userData.username,
+      username: sanitizeString(userData.username),
+      displayName: sanitizeString(userData.displayName || userData.username),
       createdAt: userData.createdAt,
       lastLoginAt: userData.lastLoginAt
     };
 
+    // Função para sanitizar strings corrompidas
+    function sanitizeString(str) {
+      if (!str || typeof str !== 'string') return 'Usuário';
+
+      // Verificar se é uma string muito longa ou contém caracteres estranhos
+      if (str.length > 50 || /[+/=]{10,}/.test(str)) {
+        console.warn('String corrompida detectada:', str.substring(0, 50) + '...');
+        return 'Usuário';
+      }
+
+      // Verificar se parece ser base64 ou hash
+      if (/^[A-Za-z0-9+/=]{20,}$/.test(str)) {
+        console.warn('String suspeita (base64/hash) detectada:', str.substring(0, 20) + '...');
+        return 'Usuário';
+      }
+
+      // Verificar se contém caracteres de controle ou não-ASCII suspeitos
+      if (/[\x00-\x1F\x7F-\x9F]/.test(str) || /[^\x20-\x7E\u00A0-\uFFFF]/.test(str)) {
+        console.warn('String com caracteres suspeitos detectada:', str.substring(0, 20) + '...');
+        return 'Usuário';
+      }
+
+      return str;
+    }
+
     // Se tem perfil, adicionar dados públicos do perfil
     if (profileData) {
-      publicProfile.avatar = profileData.avatar || '👤';
-      publicProfile.level = profileData.level || 1;
-      publicProfile.xp = profileData.xp || 0;
-      publicProfile.title = profileData.title || null;
-      publicProfile.bio = profileData.bio || null;
+      publicProfile.avatar = sanitizeAvatar(profileData.avatar);
+      publicProfile.level = typeof profileData.level === 'number' && profileData.level > 0 ? profileData.level : 1;
+      publicProfile.xp = typeof profileData.xp === 'number' && profileData.xp >= 0 ? profileData.xp : 0;
+      publicProfile.title = sanitizeString(profileData.title) !== 'Usuário' ? sanitizeString(profileData.title) : null;
+      publicProfile.bio = sanitizeString(profileData.bio) !== 'Usuário' ? sanitizeString(profileData.bio) : null;
       
       // Estatísticas públicas (se existirem)
       if (profileData.stats) {

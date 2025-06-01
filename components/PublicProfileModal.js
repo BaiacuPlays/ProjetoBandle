@@ -117,7 +117,10 @@ const PublicProfileModal = ({ isOpen, onClose, userId, username }) => {
               <div className={styles.profileHeader}>
                 <div className={styles.avatarSection}>
                   <div className={styles.avatar}>
-                    {profile.avatar}
+                    {/* Renderizar avatar de forma segura */}
+                    {profile.avatar && typeof profile.avatar === 'string' && profile.avatar.length < 10 ?
+                      profile.avatar : '👤'
+                    }
                   </div>
                   <div className={styles.onlineStatus}>
                     <span className={`${styles.statusDot} ${profile.isOnline ? styles.online : styles.offline}`}></span>
