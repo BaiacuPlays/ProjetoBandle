@@ -1,6 +1,7 @@
 // API para gerenciar solicitações de amizade
 import { kv } from '@vercel/kv';
 import { localUsers, localProfiles } from '../../utils/storage';
+import { verifyAuthentication, sanitizeInput } from '../../utils/auth';
 
 // Verificar se estamos em ambiente de desenvolvimento
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -8,48 +9,6 @@ const hasKVConfig = process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN
 
 // Storage local para desenvolvimento
 const localFriendRequests = new Map();
-
-// Função para verificar autenticação
-const verifyAuthentication = async (req) => {
-  const sessionToken = req.headers.authorization?.replace('Bearer ', '') ||
-                      req.headers['x-session-token'] ||
-                      req.query.sessionToken;
-
-  if (!sessionToken) {
-    return { authenticated: false, error: 'Token de sessão não fornecido' };
-  }
-
-  const sessionKey = `session:${sessionToken}`;
-  let sessionData = null;
-
-  try {
-    if (isDevelopment && !hasKVConfig) {
-      // Buscar no storage local
-      const { localSessions } = require('./auth');
-      sessionData = localSessions.get(sessionKey);
-    } else {
-      sessionData = await kv.get(sessionKey);
-    }
-
-    if (!sessionData) {
-      return { authenticated: false, error: 'Sessão inválida ou expirada' };
-    }
-
-    // Verificar se sessão expirou
-    if (new Date() > new Date(sessionData.expiresAt)) {
-      return { authenticated: false, error: 'Sessão expirada' };
-    }
-
-    return {
-      authenticated: true,
-      userId: `auth_${sessionData.username}`,
-      username: sessionData.username
-    };
-  } catch (error) {
-    console.error('Erro ao verificar autenticação:', error);
-    return { authenticated: false, error: 'Erro interno de autenticação' };
-  }
-};
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -64,29 +23,57 @@ export default async function handler(req, res) {
     const currentUserId = authResult.userId;
 
     if (method === 'GET') {
-      // Buscar solicitações recebidas
-      const requestsKey = `friend_requests:${currentUserId}`;
-      let requests = [];
+      const { type } = req.query; // 'received' ou 'sent'
 
-      if (isDevelopment && !hasKVConfig) {
-        requests = localFriendRequests.get(requestsKey) || [];
+      if (type === 'sent') {
+        // Buscar solicitações enviadas
+        const sentRequestsKey = `sent_requests:${currentUserId}`;
+        let sentRequests = [];
+
+        if (isDevelopment && !hasKVConfig) {
+          sentRequests = localFriendRequests.get(sentRequestsKey) || [];
+        } else {
+          sentRequests = await kv.get(sentRequestsKey) || [];
+        }
+
+        // Filtrar apenas solicitações pendentes e não expiradas (últimos 7 dias)
+        const now = Date.now();
+        const sevenDaysAgo = now - (7 * 24 * 60 * 60 * 1000);
+
+        const validSentRequests = sentRequests.filter(request =>
+          request.status === 'pending' &&
+          new Date(request.timestamp).getTime() > sevenDaysAgo
+        );
+
+        return res.status(200).json({
+          success: true,
+          requests: validSentRequests
+        });
       } else {
-        requests = await kv.get(requestsKey) || [];
+        // Buscar solicitações recebidas (comportamento padrão)
+        const requestsKey = `friend_requests:${currentUserId}`;
+        let requests = [];
+
+        if (isDevelopment && !hasKVConfig) {
+          requests = localFriendRequests.get(requestsKey) || [];
+        } else {
+          requests = await kv.get(requestsKey) || [];
+        }
+
+        // Filtrar apenas solicitações pendentes e não expiradas (últimos 7 dias)
+        const now = Date.now();
+        const sevenDaysAgo = now - (7 * 24 * 60 * 60 * 1000);
+
+        const validRequests = requests.filter(request =>
+          request.status === 'pending' &&
+          new Date(request.timestamp).getTime() > sevenDaysAgo
+        );
+
+        return res.status(200).json({
+          success: true,
+          requests: validRequests
+        });
       }
-
-      // Filtrar apenas solicitações pendentes e não expiradas (últimos 7 dias)
-      const now = Date.now();
-      const sevenDaysAgo = now - (7 * 24 * 60 * 60 * 1000);
-      
-      const validRequests = requests.filter(request => 
-        request.status === 'pending' && 
-        new Date(request.timestamp).getTime() > sevenDaysAgo
-      );
-
-      return res.status(200).json({
-        success: true,
-        requests: validRequests
-      });
 
     } else if (method === 'POST') {
       // Enviar solicitação de amizade
@@ -96,8 +83,16 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Dados da solicitação incompletos' });
       }
 
+      // Validar e sanitizar dados de entrada
+      const sanitizedToUserId = sanitizeInput(toUserId, 100);
+      const sanitizedToUser = {
+        username: sanitizeInput(toUser.username, 50),
+        displayName: sanitizeInput(toUser.displayName, 100),
+        avatar: sanitizeInput(toUser.avatar, 10)
+      };
+
       // Verificar se não está tentando adicionar a si mesmo
-      if (toUserId === currentUserId) {
+      if (sanitizedToUserId === currentUserId) {
         return res.status(400).json({ error: 'Você não pode adicionar a si mesmo' });
       }
 
@@ -114,20 +109,20 @@ export default async function handler(req, res) {
       const request = {
         id: `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         fromUserId: currentUserId,
-        toUserId: toUserId,
+        toUserId: sanitizedToUserId,
         fromUser: {
           username: authResult.username,
-          displayName: currentUserProfile?.displayName || authResult.username,
-          avatar: currentUserProfile?.avatar || '👤',
-          bio: currentUserProfile?.bio || ''
+          displayName: sanitizeInput(currentUserProfile?.displayName || authResult.username, 100),
+          avatar: sanitizeInput(currentUserProfile?.avatar || '👤', 10),
+          bio: sanitizeInput(currentUserProfile?.bio || '', 500)
         },
-        toUser: toUser,
+        toUser: sanitizedToUser,
         timestamp: new Date().toISOString(),
         status: 'pending'
       };
 
       // Salvar na lista de solicitações do destinatário
-      const toRequestsKey = `friend_requests:${toUserId}`;
+      const toRequestsKey = `friend_requests:${sanitizedToUserId}`;
       let toRequests = [];
 
       if (isDevelopment && !hasKVConfig) {
@@ -273,6 +268,65 @@ export default async function handler(req, res) {
       return res.status(200).json({
         success: true,
         message: `Solicitação ${action === 'accept' ? 'aceita' : 'rejeitada'} com sucesso`
+      });
+
+    } else if (method === 'DELETE') {
+      // Cancelar solicitação enviada
+      const { requestId } = req.body;
+
+      if (!requestId) {
+        return res.status(400).json({ error: 'ID da solicitação é obrigatório' });
+      }
+
+      // Remover da lista de solicitações enviadas
+      const sentRequestsKey = `sent_requests:${currentUserId}`;
+      let sentRequests = [];
+
+      if (isDevelopment && !hasKVConfig) {
+        sentRequests = localFriendRequests.get(sentRequestsKey) || [];
+      } else {
+        sentRequests = await kv.get(sentRequestsKey) || [];
+      }
+
+      const requestIndex = sentRequests.findIndex(req => req.id === requestId);
+      if (requestIndex === -1) {
+        return res.status(404).json({ error: 'Solicitação não encontrada' });
+      }
+
+      const request = sentRequests[requestIndex];
+
+      // Remover da lista de solicitações enviadas
+      sentRequests.splice(requestIndex, 1);
+
+      // Remover da lista de solicitações recebidas do destinatário
+      const toRequestsKey = `friend_requests:${request.toUserId}`;
+      let toRequests = [];
+
+      if (isDevelopment && !hasKVConfig) {
+        toRequests = localFriendRequests.get(toRequestsKey) || [];
+      } else {
+        toRequests = await kv.get(toRequestsKey) || [];
+      }
+
+      const toRequestIndex = toRequests.findIndex(req => req.id === requestId);
+      if (toRequestIndex !== -1) {
+        toRequests.splice(toRequestIndex, 1);
+      }
+
+      // Salvar listas atualizadas
+      if (isDevelopment && !hasKVConfig) {
+        localFriendRequests.set(sentRequestsKey, sentRequests);
+        localFriendRequests.set(toRequestsKey, toRequests);
+      } else {
+        await kv.set(sentRequestsKey, sentRequests);
+        await kv.set(toRequestsKey, toRequests);
+      }
+
+      console.log(`✅ Solicitação cancelada: ${requestId}`);
+
+      return res.status(200).json({
+        success: true,
+        message: 'Solicitação cancelada com sucesso'
       });
 
     } else {

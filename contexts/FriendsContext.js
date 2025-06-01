@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuth } from './AuthContext';
 import { usePresence } from '../hooks/usePresence';
+import { useNotifications } from './NotificationContext';
 import { FriendsCookies } from '../utils/cookies';
 
 const FriendsContext = createContext();
@@ -16,6 +17,7 @@ export const useFriends = () => {
 export const FriendsProvider = ({ children }) => {
   const { isAuthenticated, user } = useAuth();
   const { getFriendsPresence } = usePresence();
+  const { addNotification } = useNotifications();
 
   const [friends, setFriends] = useState([]);
   const [friendRequests, setFriendRequests] = useState([]);
@@ -207,12 +209,30 @@ export const FriendsProvider = ({ children }) => {
         // Salvar no localStorage como backup
         localStorage.setItem(`ludomusic_friend_requests_${currentUserId}`, JSON.stringify(requestsList));
       }
+
+      // Carregar solicitações enviadas
+      const sentRequestsResponse = await fetch('/api/friend-requests?type=sent', {
+        headers: {
+          'Authorization': `Bearer ${sessionToken}`,
+          'Cache-Control': 'no-cache'
+        }
+      });
+
+      if (sentRequestsResponse.ok) {
+        const sentRequestsData = await sentRequestsResponse.json();
+        const sentRequestsList = sentRequestsData.requests || [];
+        setSentRequests(sentRequestsList);
+
+        // Salvar no localStorage como backup
+        localStorage.setItem(`ludomusic_sent_requests_${currentUserId}`, JSON.stringify(sentRequestsList));
+      }
     } catch (error) {
       console.error('❌ Erro ao carregar dados dos amigos:', error);
       // Fallback para localStorage em caso de erro
       try {
         const savedFriends = localStorage.getItem(`ludomusic_friends_${currentUserId}`);
         const savedRequests = localStorage.getItem(`ludomusic_friend_requests_${currentUserId}`);
+        const savedSentRequests = localStorage.getItem(`ludomusic_sent_requests_${currentUserId}`);
 
         if (savedFriends) {
           const friendsList = JSON.parse(savedFriends);
@@ -221,6 +241,10 @@ export const FriendsProvider = ({ children }) => {
         if (savedRequests) {
           const requestsList = JSON.parse(savedRequests);
           setFriendRequests(requestsList);
+        }
+        if (savedSentRequests) {
+          const sentRequestsList = JSON.parse(savedSentRequests);
+          setSentRequests(sentRequestsList);
         }
       } catch (localError) {
         console.error('❌ Erro ao carregar dados locais:', localError);
@@ -451,12 +475,39 @@ export const FriendsProvider = ({ children }) => {
   };
 
   // Cancelar solicitação enviada
-  const cancelSentRequest = (requestId) => {
+  const cancelSentRequest = async (requestId) => {
     if (!isAuthenticated) {
       throw new Error('Você precisa estar logado para cancelar solicitações');
     }
 
-    setSentRequests(prev => prev.filter(req => req.id !== requestId));
+    try {
+      const sessionToken = localStorage.getItem('ludomusic_session_token');
+
+      const response = await fetch('/api/friend-requests', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${sessionToken}`
+        },
+        body: JSON.stringify({ requestId })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Erro ao cancelar solicitação');
+      }
+
+      // Remover da lista local
+      setSentRequests(prev => prev.filter(req => req.id !== requestId));
+
+      // Atualizar localStorage
+      const updatedSentRequests = sentRequests.filter(req => req.id !== requestId);
+      localStorage.setItem(`ludomusic_sent_requests_${currentUserId}`, JSON.stringify(updatedSentRequests));
+
+    } catch (error) {
+      console.error('Erro ao cancelar solicitação:', error);
+      throw error;
+    }
   };
 
   // Gerar código de amigo
@@ -660,6 +711,59 @@ export const FriendsProvider = ({ children }) => {
     return () => clearInterval(interval);
   }, [isAuthenticated, currentUserId]);
 
+  // Função para verificar novas solicitações de amizade (com debounce)
+  const checkForNewFriendRequests = useCallback(async () => {
+    if (!isAuthenticated || !currentUserId) return;
+
+    try {
+      const sessionToken = localStorage.getItem('ludomusic_session_token');
+      if (!sessionToken) return;
+
+      const response = await fetch('/api/friend-requests', {
+        headers: {
+          'Authorization': `Bearer ${sessionToken}`,
+          'Cache-Control': 'no-cache'
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const newRequests = data.requests || [];
+
+        // Verificar se há novas solicitações comparando com o estado atual
+        const currentRequestIds = friendRequests.map(req => req.id);
+        const actualNewRequests = newRequests.filter(req => !currentRequestIds.includes(req.id));
+
+        if (actualNewRequests.length > 0) {
+          console.log(`🔔 ${actualNewRequests.length} nova(s) solicitação(ões) de amizade encontrada(s)`);
+
+          // Atualizar estado
+          setFriendRequests(newRequests);
+
+          // Criar notificações para cada nova solicitação
+          actualNewRequests.forEach(request => {
+            if (addNotification) {
+              addNotification({
+                type: 'friend_request',
+                title: 'Nova Solicitação de Amizade!',
+                message: `${request.fromUser?.displayName || request.fromUser?.username} quer ser seu amigo`,
+                data: {
+                  requestId: request.id,
+                  fromUser: request.fromUser
+                }
+              });
+            }
+          });
+
+          // Atualizar localStorage
+          localStorage.setItem(`ludomusic_friend_requests_${currentUserId}`, JSON.stringify(newRequests));
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao verificar novas solicitações:', error);
+    }
+  }, [isAuthenticated, currentUserId, friendRequests, addNotification]);
+
   // Polling para atualizar presença dos amigos a cada 15 segundos
   useEffect(() => {
     if (!isAuthenticated || !currentUserId) return;
@@ -670,6 +774,17 @@ export const FriendsProvider = ({ children }) => {
 
     return () => clearInterval(presenceInterval);
   }, [isAuthenticated, currentUserId, friends.length]);
+
+  // Polling para verificar novas solicitações de amizade a cada 30 segundos
+  useEffect(() => {
+    if (!isAuthenticated || !currentUserId) return;
+
+    const friendRequestsInterval = setInterval(() => {
+      checkForNewFriendRequests();
+    }, 30000); // 30 segundos
+
+    return () => clearInterval(friendRequestsInterval);
+  }, [isAuthenticated, currentUserId, addNotification]); // Removido friendRequests.length para evitar re-criação desnecessária
 
 
 

@@ -296,7 +296,7 @@ const FriendsManager = ({ isOpen, onClose, onViewProfile }) => {
                           <span className={styles.requestName}>{request.fromUser?.displayName}</span>
                           <span className={styles.requestUsername}>@{request.fromUser?.username}</span>
                           <span className={styles.requestDate}>
-                            {new Date(request.sentAt).toLocaleDateString()}
+                            {new Date(request.timestamp).toLocaleDateString()}
                           </span>
                         </div>
                       </div>
@@ -328,14 +328,14 @@ const FriendsManager = ({ isOpen, onClose, onViewProfile }) => {
                     <div key={request.id} className={styles.requestItem}>
                       <div className={styles.requestInfo}>
                         <UserAvatar
-                          avatar={request.targetUser?.avatar}
+                          avatar={request.toUser?.avatar}
                           size="medium"
                         />
                         <div className={styles.requestDetails}>
-                          <span className={styles.requestName}>{request.targetUser?.displayName}</span>
-                          <span className={styles.requestUsername}>@{request.targetUser?.username}</span>
+                          <span className={styles.requestName}>{request.toUser?.displayName}</span>
+                          <span className={styles.requestUsername}>@{request.toUser?.username}</span>
                           <span className={styles.requestDate}>
-                            Enviada em {new Date(request.sentAt).toLocaleDateString()}
+                            Enviada em {new Date(request.timestamp).toLocaleDateString()}
                           </span>
                         </div>
                       </div>
