@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuth } from './AuthContext';
 import { usePresence } from '../hooks/usePresence';
-import { useNotifications } from './NotificationContext';
 import { FriendsCookies } from '../utils/cookies';
 
 const FriendsContext = createContext();
@@ -17,7 +16,6 @@ export const useFriends = () => {
 export const FriendsProvider = ({ children }) => {
   const { isAuthenticated, user } = useAuth();
   const { getFriendsPresence } = usePresence();
-  const { addNotification } = useNotifications();
 
   const [friends, setFriends] = useState([]);
   const [friendRequests, setFriendRequests] = useState([]);
@@ -740,19 +738,9 @@ export const FriendsProvider = ({ children }) => {
           // Atualizar estado
           setFriendRequests(newRequests);
 
-          // Criar notificações para cada nova solicitação
+          // Log para cada nova solicitação
           actualNewRequests.forEach(request => {
-            if (addNotification) {
-              addNotification({
-                type: 'friend_request',
-                title: 'Nova Solicitação de Amizade!',
-                message: `${request.fromUser?.displayName || request.fromUser?.username} quer ser seu amigo`,
-                data: {
-                  requestId: request.id,
-                  fromUser: request.fromUser
-                }
-              });
-            }
+            console.log('Nova solicitação de amizade recebida:', request.fromUser?.displayName || request.fromUser?.username);
           });
 
           // Atualizar localStorage
@@ -762,7 +750,7 @@ export const FriendsProvider = ({ children }) => {
     } catch (error) {
       console.error('Erro ao verificar novas solicitações:', error);
     }
-  }, [isAuthenticated, currentUserId, friendRequests, addNotification]);
+  }, [isAuthenticated, currentUserId, friendRequests]);
 
   // Polling para atualizar presença dos amigos a cada 15 segundos
   useEffect(() => {
@@ -784,7 +772,7 @@ export const FriendsProvider = ({ children }) => {
     }, 30000); // 30 segundos
 
     return () => clearInterval(friendRequestsInterval);
-  }, [isAuthenticated, currentUserId, addNotification]); // Removido friendRequests.length para evitar re-criação desnecessária
+  }, [isAuthenticated, currentUserId]); // Removido friendRequests.length para evitar re-criação desnecessária
 
 
 
