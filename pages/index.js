@@ -2338,6 +2338,8 @@ export default function Home() {
           onClose={() => setShowMenu(false)}
         />
 
+
+
         {/* Efeito visual do sacabambapis */}
         {showSacabambapis && (
           <div className={styles.sacabambapis}>
