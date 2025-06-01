@@ -1,27 +1,88 @@
 // API para gerenciar perfis de usuário no servidor
 import { kv } from '@vercel/kv';
-
-// Fallback para desenvolvimento local - armazenamento em memória
-const localProfiles = new Map();
+import { localProfiles, localSessions } from '../../utils/storage';
 
 // Verificar se estamos em ambiente de desenvolvimento
 const isDevelopment = process.env.NODE_ENV === 'development';
 const hasKVConfig = process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN;
 
+// 🔒 Função para verificar se o usuário está autenticado
+const verifyAuthentication = async (req) => {
+  const sessionToken = req.headers.authorization?.replace('Bearer ', '') ||
+                      req.headers['x-session-token'] ||
+                      req.query.sessionToken;
+
+  if (!sessionToken) {
+    return { authenticated: false, error: 'Token de sessão não fornecido' };
+  }
+
+  const sessionKey = `session:${sessionToken}`;
+  let sessionData = null;
+
+  try {
+    if (isDevelopment && !hasKVConfig) {
+      sessionData = localSessions.get(sessionKey);
+    } else {
+      sessionData = await kv.get(sessionKey);
+    }
+
+    if (!sessionData) {
+      return { authenticated: false, error: 'Sessão inválida ou expirada' };
+    }
+
+    // Verificar se sessão expirou
+    if (new Date() > new Date(sessionData.expiresAt)) {
+      return { authenticated: false, error: 'Sessão expirada' };
+    }
+
+    return {
+      authenticated: true,
+      userId: sessionData.userId,
+      username: sessionData.username
+    };
+  } catch (error) {
+    console.error('Erro ao verificar autenticação:', error);
+    return { authenticated: false, error: 'Erro interno de autenticação' };
+  }
+};
+
 // Função para validar dados do perfil
 const validateProfile = (profileData) => {
+  console.log('🔍 Validando perfil:', JSON.stringify(profileData, null, 2));
+
   if (!profileData || typeof profileData !== 'object') {
+    console.error('❌ Dados de perfil inválidos:', typeof profileData);
     throw new Error('Dados de perfil inválidos');
   }
 
   if (!profileData.id || typeof profileData.id !== 'string') {
+    console.error('❌ ID do usuário inválido:', profileData.id);
     throw new Error('ID do usuário é obrigatório');
   }
 
+  // Validação mais flexível para stats
   if (!profileData.stats || typeof profileData.stats !== 'object') {
-    throw new Error('Estatísticas do perfil são obrigatórias');
+    console.warn('⚠️ Estatísticas ausentes, criando estrutura padrão');
+    profileData.stats = {
+      totalGames: 0,
+      wins: 0,
+      losses: 0,
+      winRate: 0,
+      currentStreak: 0,
+      bestStreak: 0,
+      totalPlayTime: 0,
+      perfectGames: 0,
+      averageAttempts: 0,
+      fastestWin: null,
+      modeStats: {
+        daily: { games: 0, wins: 0, bestStreak: 0, averageAttempts: 0, perfectGames: 0 },
+        infinite: { games: 0, wins: 0, bestStreak: 0, totalSongsCompleted: 0, longestSession: 0 },
+        multiplayer: { games: 0, wins: 0, roomsCreated: 0, totalPoints: 0, bestRoundScore: 0 }
+      }
+    };
   }
 
+  console.log('✅ Perfil validado com sucesso');
   return true;
 };
 
@@ -70,18 +131,44 @@ export default async function handler(req, res) {
       });
 
     } else if (method === 'POST') {
+      // 🔒 VERIFICAR AUTENTICAÇÃO ANTES DE SALVAR PERFIL
+      const authResult = await verifyAuthentication(req);
+      if (!authResult.authenticated) {
+        console.warn('⚠️ Tentativa de salvar perfil sem autenticação:', authResult.error);
+        return res.status(401).json({ error: authResult.error });
+      }
+
       // Criar ou atualizar perfil
+      console.log('📝 Recebendo dados para salvar perfil:', req.body);
+
       const { userId, profileData } = req.body;
 
+      // Verificar se o userId corresponde ao usuário autenticado
+      const expectedUserId = `auth_${authResult.username}`;
+      if (userId !== expectedUserId) {
+        console.warn('⚠️ Tentativa de salvar perfil de outro usuário:', { userId, expectedUserId });
+        return res.status(403).json({ error: 'Não autorizado a modificar este perfil' });
+      }
+
       if (!userId) {
+        console.error('❌ ID do usuário não fornecido');
         return res.status(400).json({ error: 'ID do usuário é obrigatório' });
+      }
+
+      if (!profileData) {
+        console.error('❌ Dados do perfil não fornecidos');
+        return res.status(400).json({ error: 'Dados do perfil são obrigatórios' });
       }
 
       // Validar dados do perfil
       try {
         validateProfile(profileData);
       } catch (error) {
-        return res.status(400).json({ error: error.message });
+        console.error('❌ Erro na validação:', error.message);
+        return res.status(400).json({
+          error: error.message,
+          receivedData: isDevelopment ? profileData : undefined
+        });
       }
 
       // Adicionar timestamp de atualização

@@ -45,30 +45,47 @@ const UserProfile = ({ isOpen, onClose }) => {
     updatePreferences,
     markTutorialAsSeen,
     setCurrentTitle,
-    updateAvatar
+    updateAvatar,
+    userId // Adicionar userId do contexto
   } = useUserProfile() || {}; // Add || {} to safely destructure if context is null/undefined
 
   // Inicializar formulário de edição e verificar tutorial
   useEffect(() => {
-    if (profile) {
+    if (profile && userId) {
       setEditForm({
         displayName: profile.displayName || '',
         bio: profile.bio || ''
       });
 
       // Verificar se deve mostrar o tutorial
-      // Mostrar na primeira vez que qualquer usuário abre o perfil
-      if (!profile.preferences?.hasSeenProfileTutorial && isOpen) {
+      // Verificar tanto no perfil quanto no localStorage
+      const hasSeenInProfile = profile.preferences?.hasSeenProfileTutorial;
+      const hasSeenInStorage = localStorage.getItem(`ludomusic_tutorial_seen_${userId}`) === 'true';
+
+      // Mostrar tutorial apenas se:
+      // 1. Modal está aberto
+      // 2. Usuário está autenticado
+      // 3. Não viu o tutorial (nem no perfil nem no localStorage)
+      // 4. Tutorial não está sendo mostrado atualmente
+      if (isOpen && isAuthenticated && !hasSeenInProfile && !hasSeenInStorage && !showTutorial) {
+        console.log('📚 Mostrando tutorial do perfil pela primeira vez');
         setShowTutorial(true);
       }
     }
-  }, [profile, isOpen]); // Depend on profile and isOpen
+  }, [profile, isOpen, isAuthenticated, userId, showTutorial]); // Depend on all relevant variables
 
   // Definir função handleCloseTutorial antes de usar
-  const handleCloseTutorial = () => {
+  const handleCloseTutorial = async () => {
     setShowTutorial(false);
+
+    // Marcar tutorial como visto
     if (markTutorialAsSeen) {
-      markTutorialAsSeen();
+      try {
+        await markTutorialAsSeen();
+        console.log('✅ Tutorial do perfil marcado como visto');
+      } catch (error) {
+        console.error('❌ Erro ao marcar tutorial como visto:', error);
+      }
     }
 
     // Se usuário não está autenticado após o tutorial, fechar o modal
@@ -122,6 +139,15 @@ const UserProfile = ({ isOpen, onClose }) => {
     );
   }
 
+  // Debug: verificar estado do perfil
+  console.log('🔍 UserProfile - Estado atual:', {
+    isAuthenticated,
+    isLoading,
+    profile: !!profile,
+    userId,
+    profileData: profile ? 'existe' : 'null'
+  });
+
   // If there's no profile after loading (e.g., error in context), show an error message
   if (!profile) {
     return (
@@ -136,6 +162,44 @@ const UserProfile = ({ isOpen, onClose }) => {
           <div className={styles.profileContent}>
             <div style={{ textAlign: 'center', padding: '2rem' }}>
               <p>Não foi possível carregar o perfil. Tente novamente mais tarde.</p>
+              <div style={{ marginTop: '1rem' }}>
+                <button
+                  onClick={() => window.location.reload()}
+                  style={{
+                    padding: '0.5rem 1rem',
+                    backgroundColor: '#4CAF50',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    marginRight: '0.5rem'
+                  }}
+                >
+                  Recarregar Página
+                </button>
+                <button
+                  onClick={() => {
+                    localStorage.clear();
+                    window.location.reload();
+                  }}
+                  style={{
+                    padding: '0.5rem 1rem',
+                    backgroundColor: '#f44336',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Limpar Cache
+                </button>
+              </div>
+              <div style={{ marginTop: '1rem', fontSize: '0.8rem', color: '#666' }}>
+                <p>Se o problema persistir, tente:</p>
+                <p>1. Recarregar a página</p>
+                <p>2. Limpar o cache do navegador</p>
+                <p>3. Fazer logout e login novamente</p>
+              </div>
             </div>
           </div>
         </div>

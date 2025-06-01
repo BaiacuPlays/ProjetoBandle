@@ -24,8 +24,58 @@ export const NotificationProvider = ({ children }) => {
       localStorage.setItem('ludomusic_user_id', currentUserId);
       loadNotifications();
       loadInvitations();
+      loadServerInvites(); // Carregar convites do servidor
     }
   }, [currentUserId]);
+
+  // Carregar convites do servidor
+  const loadServerInvites = async () => {
+    if (!currentUserId) return;
+
+    try {
+      const response = await fetch(`/api/get-invites?userId=${currentUserId}`);
+      const result = await response.json();
+
+      if (result.success && result.invites.length > 0) {
+        // Mesclar convites do servidor com os locais
+        const serverInvites = result.invites;
+        const localInviteIds = invitations.map(inv => inv.id);
+
+        // Adicionar apenas convites novos
+        const newInvites = serverInvites.filter(inv => !localInviteIds.includes(inv.id));
+
+        if (newInvites.length > 0) {
+          const updatedInvitations = [...invitations, ...newInvites];
+          setInvitations(updatedInvitations);
+          saveInvitations(updatedInvitations);
+
+          // Adicionar notificações para os novos convites
+          newInvites.forEach(invite => {
+            addNotification({
+              type: 'multiplayer_invite',
+              title: 'Novo Convite para Multiplayer!',
+              message: `${invite.hostName} te convidou para jogar`,
+              data: {
+                roomCode: invite.roomCode,
+                hostName: invite.hostName,
+                inviteId: invite.id
+              }
+            });
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao carregar convites do servidor:', error);
+    }
+  };
+
+  // Polling para verificar novos convites a cada 30 segundos
+  useEffect(() => {
+    if (!currentUserId) return;
+
+    const interval = setInterval(loadServerInvites, 30000);
+    return () => clearInterval(interval);
+  }, [currentUserId, invitations]);
 
   // Carregar notificações salvas
   const loadNotifications = () => {
@@ -124,7 +174,7 @@ export const NotificationProvider = ({ children }) => {
   };
 
   // Enviar convite para multiplayer
-  const sendMultiplayerInvite = (friendId, friendName, roomCode, hostName) => {
+  const sendMultiplayerInvite = async (friendId, friendName, roomCode, hostName) => {
     const invitation = {
       id: `invite_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       type: 'multiplayer_invite',
@@ -137,37 +187,47 @@ export const NotificationProvider = ({ children }) => {
       status: 'pending' // 'pending', 'accepted', 'declined', 'expired'
     };
 
-    // Em produção, isso seria enviado via API para o servidor
-    // Por enquanto, vamos simular adicionando diretamente às notificações do amigo
-    
-    // Simular recebimento do convite pelo amigo
-    const friendNotification = {
-      type: 'multiplayer_invite',
-      title: 'Convite para Multiplayer!',
-      message: `${hostName} te convidou para jogar`,
-      data: {
-        roomCode: roomCode,
-        hostName: hostName,
-        inviteId: invitation.id
-      }
-    };
-
-    // Adicionar à nossa lista de convites enviados
-    const updatedInvitations = [...invitations, invitation];
-    setInvitations(updatedInvitations);
-    saveInvitations(updatedInvitations);
-
-    // Simular notificação para o amigo (em produção seria via WebSocket/Push)
-    setTimeout(() => {
-      // Simular que o amigo recebeu o convite
-      addNotification({
-        type: 'info',
-        title: 'Convite Enviado!',
-        message: `Convite enviado para ${friendName}`
+    try {
+      // Enviar convite via API
+      const response = await fetch('/api/send-invite', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          invitation,
+          currentUserId
+        })
       });
-    }, 500);
 
-    return invitation.id;
+      const result = await response.json();
+
+      if (result.success) {
+        // Adicionar à nossa lista de convites enviados
+        const updatedInvitations = [...invitations, invitation];
+        setInvitations(updatedInvitations);
+        saveInvitations(updatedInvitations);
+
+        // Notificar sucesso
+        addNotification({
+          type: 'success',
+          title: 'Convite Enviado!',
+          message: `Convite enviado para ${friendName}`
+        });
+
+        return invitation.id;
+      } else {
+        throw new Error(result.error || 'Erro ao enviar convite');
+      }
+    } catch (error) {
+      console.error('Erro ao enviar convite:', error);
+      addNotification({
+        type: 'error',
+        title: 'Erro ao Enviar Convite',
+        message: 'Não foi possível enviar o convite. Tente novamente.'
+      });
+      return null;
+    }
   };
 
   // Aceitar convite de multiplayer

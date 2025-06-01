@@ -1,10 +1,7 @@
 // API para autenticação de usuários
 import { kv } from '@vercel/kv';
 import bcrypt from 'bcryptjs';
-
-// Fallback para desenvolvimento local
-const localUsers = new Map();
-const localSessions = new Map();
+import { localUsers, localSessions } from '../../utils/storage';
 
 // Verificar se estamos em ambiente de desenvolvimento
 const isDevelopment = process.env.NODE_ENV === 'development';

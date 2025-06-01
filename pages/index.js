@@ -1363,26 +1363,31 @@ export default function Home() {
   // Função para salvar o estado completo do jogo
   const saveGameState = (gameState) => {
     if (currentDay !== null && typeof window !== 'undefined') {
-      const stateToSave = {
-        day: currentDay,
-        attempts: gameState.attempts,
-        history: gameState.history,
-        message: gameState.message,
-        gameOver: gameState.gameOver,
-        showHint: gameState.showHint,
-        activeHint: gameState.activeHint,
-        currentClipDuration: gameState.currentClipDuration,
-        timestamp: Date.now()
-      };
+      try {
+        const stateToSave = {
+          day: currentDay,
+          attempts: gameState.attempts,
+          history: gameState.history,
+          message: gameState.message,
+          gameOver: gameState.gameOver,
+          showHint: gameState.showHint,
+          activeHint: gameState.activeHint,
+          currentClipDuration: gameState.currentClipDuration,
+          timestamp: Date.now()
+        };
 
+        const stateKey = `ludomusic_game_state_day_${currentDay}`;
+        localStorage.setItem(stateKey, JSON.stringify(stateToSave));
+        console.log('💾 Estado do jogo salvo:', stateToSave);
 
-      localStorage.setItem(`ludomusic_game_state_day_${currentDay}`, JSON.stringify(stateToSave));
-
-      // Manter compatibilidade com o sistema antigo para jogos terminados
-      if (gameState.gameOver) {
-        localStorage.setItem('ludomusic_gameover_day', currentDay);
-        localStorage.setItem('ludomusic_gameover_history', JSON.stringify(gameState.history));
-        localStorage.setItem('ludomusic_gameover_message', gameState.message);
+        // Manter compatibilidade com o sistema antigo para jogos terminados
+        if (gameState.gameOver) {
+          localStorage.setItem('ludomusic_gameover_day', currentDay.toString());
+          localStorage.setItem('ludomusic_gameover_history', JSON.stringify(gameState.history));
+          localStorage.setItem('ludomusic_gameover_message', gameState.message);
+        }
+      } catch (error) {
+        console.error('❌ Erro ao salvar estado do jogo:', error);
       }
     }
   };
@@ -1405,6 +1410,22 @@ export default function Home() {
         currentClipDuration
       };
       saveGameState(gameState);
+
+      // Backup adicional para dados críticos
+      if (typeof window !== 'undefined') {
+        try {
+          const backupData = {
+            day: currentDay,
+            attempts,
+            history,
+            gameOver,
+            timestamp: Date.now()
+          };
+          localStorage.setItem('ludomusic_backup_state', JSON.stringify(backupData));
+        } catch (error) {
+          console.error('❌ Erro ao salvar backup:', error);
+        }
+      }
     }
   }, [attempts, history, message, gameOver, showHint, activeHint, currentClipDuration, currentDay, hasLoadedSavedState, isInfiniteMode]);
 
@@ -1464,6 +1485,7 @@ export default function Home() {
             const parsedState = JSON.parse(savedState);
 
             if (parsedState.day === currentDay) {
+              console.log('📱 Carregando estado salvo do jogo diário:', parsedState);
               setAttempts(parsedState.attempts || 0);
               setHistory(parsedState.history || []);
               setMessage(parsedState.message || '');
@@ -1471,11 +1493,24 @@ export default function Home() {
               setShowHint(parsedState.showHint || false);
               setActiveHint(parsedState.activeHint || 0);
               setCurrentClipDuration(parsedState.currentClipDuration || 0.3);
+
+              // Se o jogo estava terminado, definir o resultado
+              if (parsedState.gameOver) {
+                const won = parsedState.history && parsedState.history.some(h => h.correct);
+                setGameResult({ won, attempts: parsedState.attempts || 0 });
+              }
+
               return true; // Estado carregado com sucesso
+            } else {
+              console.log('⚠️ Estado salvo é de um dia diferente, ignorando');
             }
+          } else {
+            console.log('🔍 Nenhum estado salvo encontrado para o dia atual');
           }
         } catch (error) {
-          // console.error('❌ Erro ao carregar estado do jogo:', error);
+          console.error('❌ Erro ao carregar estado do jogo:', error);
+          // Limpar estado corrompido
+          localStorage.removeItem(`ludomusic_game_state_day_${currentDay}`);
         }
         return false; // Nenhum estado carregado
       };

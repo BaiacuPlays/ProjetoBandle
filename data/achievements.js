@@ -454,7 +454,8 @@ export const calculateAchievementProgress = (achievementId, userStats, profile =
     case 'completionist':
       // Precisa verificar contra total de franquias disponíveis
       if (!profile?.franchiseStats) return 0;
-      const totalFranchises = new Set(Object.values(achievements).map(a => a.franchise)).size;
+      // Por enquanto, usar um número fixo de franquias (será atualizado quando tivermos a lista completa)
+      const totalFranchises = 50; // Número estimado de franquias no jogo
       const playedFranchises = Object.keys(profile.franchiseStats).length;
       return Math.min(100, (playedFranchises / totalFranchises) * 100);
 

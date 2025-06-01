@@ -1533,9 +1533,11 @@
   background: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   z-index: 1000;
   padding: 1rem;
+  overflow-y: auto;
+  backdrop-filter: blur(5px);
 }
 
 .modal {
@@ -1545,7 +1547,12 @@
   position: relative;
   max-width: 500px;
   width: 100%;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  margin: 60px auto 60px auto;
+  animation: slideInFromTop 0.3s ease-out;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .closeButton {
@@ -1619,6 +1626,31 @@
   margin-top: 1.5rem !important;
 }
 
+/* Scrollbar customizada para o modal */
+.modal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.modal::-webkit-scrollbar-thumb {
+  background: rgba(29, 185, 84, 0.5);
+  border-radius: 4px;
+}
+
+.modal::-webkit-scrollbar-thumb:hover {
+  background: rgba(29, 185, 84, 0.7);
+}
+
+/* Scrollbar para Firefox */
+.modal {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(29, 185, 84, 0.5) rgba(255, 255, 255, 0.1);
+}
+
 @media (max-width: 600px) {
   .modal {
     margin: 1rem;
@@ -1634,6 +1666,17 @@
 
 .shake {
   animation: shakeAnimation 0.4s ease-in-out;
+}
+
+@keyframes slideInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* Efeito visual do sacabambapis */
@@ -1901,7 +1944,7 @@
   background: rgba(0, 0, 0, 0.9) !important;
   display: flex !important;
   justify-content: center !important;
-  align-items: flex-start !important;
+  align-items: center !important; /* Centralizar verticalmente */
   z-index: 2000 !important;
   padding: 1rem !important;
   backdrop-filter: blur(10px);
@@ -1923,8 +1966,8 @@
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5) !important;
   border: 1px solid rgba(29, 185, 84, 0.2) !important;
   animation: tutorialSlideIn 0.5s ease-out !important;
-  /* Posicionamento no topo - FORÇADO */
-  margin: 60px auto 60px auto !important; /* Margem simétrica */
+  /* Posicionamento centralizado */
+  margin: 0 auto !important; /* Sem margem para centralização perfeita */
   transform: translateZ(0) !important; /* Força aceleração de hardware */
   /* Scroll customizado */
   scrollbar-width: thin;

@@ -6,36 +6,47 @@ const AchievementNotification = () => {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
+    // Contador para garantir IDs únicos
+    let notificationCounter = 0;
+
     // Registrar funções globais para mostrar notificações
     window.showAchievementToast = (achievement) => {
+      const uniqueId = `achievement_${Date.now()}_${++notificationCounter}_${Math.random().toString(36).substr(2, 9)}`;
+
       const notification = {
-        id: Date.now(),
+        id: uniqueId,
         type: 'achievement',
         achievement,
         timestamp: Date.now()
       };
-      
+
+      console.log('🏆 Mostrando notificação de conquista:', achievement.title, 'ID:', uniqueId);
+
       setNotifications(prev => [...prev, notification]);
-      
+
       // Auto-remover após 5 segundos
       setTimeout(() => {
-        removeNotification(notification.id);
+        removeNotification(uniqueId);
       }, 5000);
     };
 
     window.showLevelUpToast = (newLevel) => {
+      const uniqueId = `levelup_${Date.now()}_${++notificationCounter}_${Math.random().toString(36).substr(2, 9)}`;
+
       const notification = {
-        id: Date.now(),
+        id: uniqueId,
         type: 'levelup',
         level: newLevel,
         timestamp: Date.now()
       };
-      
+
+      console.log('⭐ Mostrando notificação de level up:', newLevel, 'ID:', uniqueId);
+
       setNotifications(prev => [...prev, notification]);
-      
+
       // Auto-remover após 4 segundos
       setTimeout(() => {
-        removeNotification(notification.id);
+        removeNotification(uniqueId);
       }, 4000);
     };
 
@@ -47,7 +58,12 @@ const AchievementNotification = () => {
   }, []);
 
   const removeNotification = (id) => {
-    setNotifications(prev => prev.filter(notif => notif.id !== id));
+    console.log('🗑️ Removendo notificação:', id);
+    setNotifications(prev => {
+      const filtered = prev.filter(notif => notif.id !== id);
+      console.log('📋 Notificações restantes:', filtered.length);
+      return filtered;
+    });
   };
 
   const getRarityColor = (rarity) => {

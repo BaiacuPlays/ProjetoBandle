@@ -72,8 +72,6 @@
   overflow-y: auto !important; /* Forçar scroll */
   flex: 1;
   color: white;
-  height: 0; /* Força o flex a calcular altura corretamente */
-  min-height: 400px; /* Altura mínima para garantir scroll */
   /* Scrollbar customizada verde */
   scrollbar-width: thin;
   scrollbar-color: rgba(29, 185, 84, 0.5) rgba(255, 255, 255, 0.1);
