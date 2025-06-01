@@ -146,16 +146,26 @@ const MultiplayerGame = ({ onBackToLobby }) => {
       const handleLoadedMetadata = () => {
         if (!audio || audio !== audioRef.current) return; // Verificação de segurança
 
+        console.log('📊 [MULTIPLAYER] Metadata carregada', {
+          duration: audio.duration,
+          readyState: audio.readyState,
+          url: songToUse.audioUrl
+        });
+
         const duration = audio.duration || 0;
 
         // Verificar se a duração é válida
         if (!duration || isNaN(duration) || duration < 10) {
-          console.error('Arquivo de áudio inválido:', songToUse.audioUrl);
+          console.error('❌ [MULTIPLAYER] Arquivo de áudio inválido:', songToUse.audioUrl);
           setAudioLoadError(true);
+          // CORREÇÃO: Resetar estados de loading em caso de erro
+          setIsPlayLoading(false);
+          setPendingPlay(false);
           return;
         }
 
         // Áudio carregado com sucesso
+        console.log('✅ [MULTIPLAYER] Áudio carregado com sucesso');
         setAudioLoadError(false);
         setAudioLoadRetries(0);
         setConnectionError(false);
@@ -173,12 +183,17 @@ const MultiplayerGame = ({ onBackToLobby }) => {
       const handleError = (e) => {
         if (!audio || audio !== audioRef.current) return; // Verificação de segurança
 
-        console.error('Erro ao carregar áudio no multiplayer:', e);
+        console.error('❌ [MULTIPLAYER] Erro ao carregar áudio:', e);
         setAudioLoadError(true);
+
+        // CORREÇÃO: Resetar estados de loading em caso de erro
+        setIsPlayLoading(false);
+        setPendingPlay(false);
 
         // Tentar recarregar automaticamente até 3 vezes com debounce
         if (audioLoadRetries < 3) {
           const retryDelay = Math.min(2000 * (audioLoadRetries + 1), 8000); // Max 8s
+          console.log(`🔄 [MULTIPLAYER] Tentativa ${audioLoadRetries + 1}/3 em ${retryDelay}ms`);
           setTimeout(() => {
             if (audio === audioRef.current) { // Verificar se ainda é o mesmo elemento
               setAudioLoadRetries(prev => prev + 1);
@@ -186,6 +201,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
             }
           }, retryDelay);
         } else {
+          console.error('❌ [MULTIPLAYER] Máximo de tentativas excedido');
           setConnectionError(true);
         }
       };
@@ -329,6 +345,12 @@ const MultiplayerGame = ({ onBackToLobby }) => {
     // Reset dos estados de erro de áudio
     setAudioLoadError(false);
     setAudioLoadRetries(0);
+
+    // CORREÇÃO: Reset dos estados de loading que podem ficar travados
+    setIsPlayLoading(false);
+    setPendingPlay(false);
+    setIsPlayButtonDisabled(false);
+    setIsSkipLoading(false);
   }, [gameState?.currentRound, startTime]);
 
   // Garantir que o áudio seja configurado corretamente quando a URL muda - OTIMIZADO
@@ -353,6 +375,28 @@ const MultiplayerGame = ({ onBackToLobby }) => {
       }
     }
   }, [songToPlay?.audioUrl]);
+
+  // CORREÇÃO: Monitor de segurança para resetar estados travados
+  useEffect(() => {
+    let safetyTimer;
+
+    if (isPlayLoading || pendingPlay) {
+      console.log('🔍 [MULTIPLAYER] Monitorando estados de loading...', { isPlayLoading, pendingPlay });
+
+      safetyTimer = setTimeout(() => {
+        console.log('⚠️ [MULTIPLAYER] Estados de loading travados detectados - forçando reset');
+        setIsPlayLoading(false);
+        setPendingPlay(false);
+        setIsPlayButtonDisabled(false);
+      }, 10000); // 10 segundos de timeout de segurança
+    }
+
+    return () => {
+      if (safetyTimer) {
+        clearTimeout(safetyTimer);
+      }
+    };
+  }, [isPlayLoading, pendingPlay]);
 
   // Normalizar string para comparação - IGUAL AO JOGO NORMAL
   const normalize = str => str
@@ -765,14 +809,43 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                       className={gameStyles.audioPlayBtnCustom}
                       onClick={async (e) => {
                         if (!songToPlay || isPlayButtonDisabled || isPlayLoading) return;
+
+                        console.log('🎵 [MULTIPLAYER] Botão play clicado', {
+                          songUrl: songToPlay?.audioUrl,
+                          duration: audioRef.current?.duration,
+                          readyState: audioRef.current?.readyState
+                        });
+
                         setIsPlayButtonDisabled(true);
                         setIsPlayLoading(true);
+
+                        // CORREÇÃO: Timeout de segurança para resetar estados de loading
+                        const safetyTimeout = setTimeout(() => {
+                          console.log('⚠️ [MULTIPLAYER] Timeout de segurança ativado - resetando estados');
+                          setIsPlayLoading(false);
+                          setIsPlayButtonDisabled(false);
+                          setPendingPlay(false);
+                        }, 5000); // 5 segundos de timeout
+
+                        // Timeout normal para desabilitar botão
                         setTimeout(() => setIsPlayButtonDisabled(false), 400);
+
                         if (!audioRef.current.duration && songToPlay?.audioUrl) {
+                          console.log('🔄 [MULTIPLAYER] Áudio sem duração, carregando...');
                           setPendingPlay(true);
-                          audioRef.current.load();
+                          try {
+                            audioRef.current.load();
+                          } catch (error) {
+                            console.error('❌ [MULTIPLAYER] Erro ao carregar áudio:', error);
+                            clearTimeout(safetyTimeout);
+                            setIsPlayLoading(false);
+                            setPendingPlay(false);
+                          }
                           return;
                         }
+
+                        // Limpar timeout se chegou até aqui
+                        clearTimeout(safetyTimeout);
                         if (startTime === null || startTime === undefined) {
                           setIsPlayLoading(false);
                           return;
@@ -884,22 +957,56 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                       setAudioLoadError(true);
                     }}
                     onCanPlay={() => {
+                      console.log('✅ [MULTIPLAYER] Áudio pronto para tocar');
                       // Áudio pronto para tocar
                       setAudioLoadError(false);
                       setConnectionError(false);
                       setAudioLoadRetries(0);
+
+                      // CORREÇÃO: Se havia um play pendente, executar agora
+                      if (pendingPlay) {
+                        console.log('🔄 [MULTIPLAYER] Executando play pendente');
+                        setPendingPlay(false);
+                        setIsPlayLoading(false);
+                        setTimeout(() => {
+                          if (audioRef.current && audioRef.current.paused) {
+                            audioRef.current.play().catch(error => {
+                              console.error('❌ [MULTIPLAYER] Erro no play pendente:', error);
+                              setIsPlayLoading(false);
+                            });
+                          }
+                        }, 100);
+                      }
                     }}
                     onLoadStart={() => {
+                      console.log('🔄 [MULTIPLAYER] Começou a carregar áudio');
                       // Começou a carregar
                       setAudioLoadError(false);
                     }}
                     onWaiting={() => {
                       // Aguardando dados
-                      console.log('Áudio aguardando dados...');
+                      console.log('⏳ [MULTIPLAYER] Áudio aguardando dados...');
                     }}
                     onStalled={() => {
                       // Carregamento travou
-                      console.warn('Carregamento de áudio travou');
+                      console.warn('⚠️ [MULTIPLAYER] Carregamento de áudio travou');
+
+                      // CORREÇÃO: Resetar estados se o carregamento travou
+                      setTimeout(() => {
+                        if (isPlayLoading || pendingPlay) {
+                          console.log('🔧 [MULTIPLAYER] Resetando estados após travamento');
+                          setIsPlayLoading(false);
+                          setPendingPlay(false);
+                        }
+                      }, 3000);
+                    }}
+                    onSuspend={() => {
+                      console.log('⏸️ [MULTIPLAYER] Download suspenso');
+                    }}
+                    onAbort={() => {
+                      console.log('🛑 [MULTIPLAYER] Carregamento abortado');
+                      setIsPlayLoading(false);
+                      setPendingPlay(false);
                     }}
                   />
                 </div>
@@ -928,9 +1035,12 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                   {connectionError && (
                     <button
                       onClick={() => {
+                        console.log('🔧 [MULTIPLAYER] Botão tentar novamente clicado');
                         setAudioLoadError(false);
                         setAudioLoadRetries(0);
                         setConnectionError(false);
+                        setIsPlayLoading(false);
+                        setPendingPlay(false);
                         if (audioRef.current) {
                           audioRef.current.load();
                         }
@@ -948,6 +1058,49 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                       Tentar Novamente
                     </button>
                   )}
+                </div>
+              )}
+
+              {/* CORREÇÃO: Botão de emergência para resetar áudio travado */}
+              {(isPlayLoading || pendingPlay) && (
+                <div style={{
+                  background: 'linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 152, 0, 0.15))',
+                  border: '2px solid #ff9800',
+                  borderRadius: '8px',
+                  padding: '12px',
+                  margin: '10px 0',
+                  textAlign: 'center',
+                  backdropFilter: 'blur(10px)'
+                }}>
+                  <div style={{ color: '#ff9800', fontWeight: 'bold', marginBottom: '5px' }}>
+                    🔄 Carregando áudio...
+                  </div>
+                  <div style={{ fontSize: '0.9rem', opacity: 0.8, marginBottom: '8px' }}>
+                    Se o carregamento não terminar, clique no botão abaixo
+                  </div>
+                  <button
+                    onClick={() => {
+                      console.log('🚨 [MULTIPLAYER] Reset de emergência ativado');
+                      setIsPlayLoading(false);
+                      setPendingPlay(false);
+                      setIsPlayButtonDisabled(false);
+                      setAudioLoadError(false);
+                      if (audioRef.current) {
+                        audioRef.current.pause();
+                        audioRef.current.load();
+                      }
+                    }}
+                    style={{
+                      padding: '6px 12px',
+                      background: '#ff9800',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '4px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Resetar Áudio
+                  </button>
                 </div>
               )}
 
