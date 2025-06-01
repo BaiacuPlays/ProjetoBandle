@@ -24,6 +24,16 @@ export const FriendsProvider = ({ children }) => {
   // ID do usuário atual (apenas se autenticado)
   const currentUserId = isAuthenticated && user ? `auth_${user.username}` : null;
 
+  // Log para debug
+  console.log('🔍 FriendsProvider estado atual:', {
+    isAuthenticated,
+    user: user ? user.username : 'null',
+    currentUserId,
+    friendsCount: friends.length,
+    requestsCount: friendRequests.length,
+    isLoading
+  });
+
   // Carregar dados dos amigos do servidor
   const loadFriendsData = async () => {
     if (!currentUserId || !isAuthenticated) {
@@ -515,6 +525,17 @@ export const FriendsProvider = ({ children }) => {
   // Carregar dados imediatamente quando o componente monta (para casos de refresh)
   useEffect(() => {
     const sessionToken = localStorage.getItem('ludomusic_session_token');
+
+    // Se já está autenticado quando o componente monta, carregar dados imediatamente
+    if (isAuthenticated && currentUserId && sessionToken) {
+      console.log('🔄 Usuário já autenticado na montagem, carregando dados dos amigos...');
+      const timer = setTimeout(() => {
+        loadFriendsData();
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+
+    // Se tem token mas ainda não está autenticado, aguardar autenticação
     if (sessionToken && !isAuthenticated) {
       console.log('🔄 Token de sessão encontrado após refresh, aguardando autenticação...');
       // Aguardar um pouco para o contexto de autenticação processar
@@ -527,6 +548,25 @@ export const FriendsProvider = ({ children }) => {
       return () => clearTimeout(timer);
     }
   }, []);
+
+  // Monitorar mudanças no estado de autenticação (especialmente quando carrega já logado)
+  useEffect(() => {
+    // Aguardar um pouco após a autenticação ser definida para garantir que tudo está pronto
+    if (isAuthenticated && currentUserId) {
+      console.log('🔐 Estado de autenticação confirmado, verificando se dados dos amigos precisam ser carregados...');
+
+      // Verificar se já temos dados dos amigos carregados
+      if (friends.length === 0 && friendRequests.length === 0) {
+        console.log('📭 Nenhum dado de amigos encontrado, carregando do servidor...');
+        const timer = setTimeout(() => {
+          loadFriendsData();
+        }, 150);
+        return () => clearTimeout(timer);
+      } else {
+        console.log('✅ Dados dos amigos já carregados:', friends.length, 'amigos,', friendRequests.length, 'solicitações');
+      }
+    }
+  }, [isAuthenticated, currentUserId, friends.length, friendRequests.length]);
 
   // Listener para mudanças no usuário (login/logout)
   useEffect(() => {
