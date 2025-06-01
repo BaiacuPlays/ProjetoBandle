@@ -180,6 +180,69 @@
   text-align: center;
 }
 
+/* Checkbox "Lembrar de mim" */
+.checkboxGroup {
+  margin: 15px 0;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  color: #cccccc;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.checkboxLabel:hover {
+  color: #ffffff;
+}
+
+.checkbox {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.checkbox:checked {
+  background: linear-gradient(45deg, #4ade80, #22c55e);
+  border-color: #4ade80;
+}
+
+.checkbox:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.checkbox:hover {
+  border-color: #4ade80;
+  background: rgba(74, 222, 128, 0.1);
+}
+
+.checkbox:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.checkboxText {
+  user-select: none;
+}
+
 /* Seção de esqueci senha */
 .forgotPasswordSection {
   text-align: center;

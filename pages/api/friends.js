@@ -73,9 +73,48 @@ export default async function handler(req, res) {
         friends = await kv.get(friendsKey) || [];
       }
 
+      // Enriquecer dados dos amigos com informações de perfil
+      const enrichedFriends = [];
+
+      for (const friend of friends) {
+        try {
+          // Buscar perfil completo do amigo
+          const profileKey = `profile:${friend.id}`;
+          let friendProfile = null;
+
+          if (isDevelopment && !hasKVConfig) {
+            const { localProfiles } = require('./profile');
+            friendProfile = localProfiles?.get?.(profileKey);
+          } else {
+            friendProfile = await kv.get(profileKey);
+          }
+
+          // Combinar dados básicos com dados do perfil
+          const enrichedFriend = {
+            ...friend,
+            avatar: friendProfile?.avatar || friend.avatar || '👤',
+            level: friendProfile?.level || friend.level || 1,
+            xp: friendProfile?.xp || 0,
+            lastActiveAt: friendProfile?.lastLogin || friend.lastActiveAt,
+            status: friend.status || 'offline' // Será atualizado pelo sistema de presença
+          };
+
+          enrichedFriends.push(enrichedFriend);
+        } catch (error) {
+          console.warn(`Erro ao buscar perfil do amigo ${friend.id}:`, error);
+          // Usar dados básicos se não conseguir buscar o perfil
+          enrichedFriends.push({
+            ...friend,
+            avatar: friend.avatar || '👤',
+            level: friend.level || 1,
+            status: 'offline'
+          });
+        }
+      }
+
       return res.status(200).json({
         success: true,
-        friends: friends
+        friends: enrichedFriends
       });
 
     } else if (method === 'DELETE') {

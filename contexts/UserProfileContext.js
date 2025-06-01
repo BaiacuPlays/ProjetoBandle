@@ -674,8 +674,22 @@ export const UserProfileProvider = ({ children }) => {
   };
 
   // Calcular nível baseado no XP
+  // Fórmula: Level = floor(sqrt(XP / 100)) + 1
+  // XP necessário para level N = (N-1)² * 100
   const calculateLevel = (xp) => {
+    if (xp < 0) return 1;
     return Math.floor(Math.sqrt(xp / 100)) + 1;
+  };
+
+  // Calcular XP necessário para um nível específico
+  const getXPForLevel = (level) => {
+    if (level <= 1) return 0;
+    return Math.pow(level - 1, 2) * 100;
+  };
+
+  // Calcular XP necessário para o próximo nível
+  const getXPForNextLevel = (currentLevel) => {
+    return Math.pow(currentLevel, 2) * 100;
   };
 
   // Verificar e desbloquear conquistas
@@ -902,19 +916,45 @@ export const UserProfileProvider = ({ children }) => {
       updatedProfile.gameHistory = [gameRecord, ...updatedProfile.gameHistory].slice(0, 100); // Manter apenas os últimos 100 jogos
 
       // Atualizar nível
+      const oldLevel = updatedProfile.level;
       const newLevel = calculateLevel(updatedProfile.xp);
-      console.log(`🔢 XP: ${updatedProfile.xp}, Nível atual: ${updatedProfile.level}, Novo nível: ${newLevel}`);
+      const xpForCurrentLevel = getXPForLevel(oldLevel);
+      const xpForNextLevel = getXPForNextLevel(oldLevel);
+
+      console.log(`🔢 Debug Level Up:`, {
+        currentXP: updatedProfile.xp,
+        oldLevel: oldLevel,
+        newLevel: newLevel,
+        xpForCurrentLevel: xpForCurrentLevel,
+        xpForNextLevel: xpForNextLevel,
+        xpNeededForNext: xpForNextLevel - updatedProfile.xp
+      });
+
       if (newLevel > updatedProfile.level) {
         updatedProfile.level = newLevel;
-        console.log(`🆙 Level up! Novo nível: ${newLevel}`);
+        console.log(`🆙 LEVEL UP! ${oldLevel} → ${newLevel}`);
         // Mostrar notificação de level up
         if (typeof window !== 'undefined' && window.showLevelUpToast) {
           window.showLevelUpToast(newLevel);
         }
+      } else if (newLevel < updatedProfile.level) {
+        // Isso não deveria acontecer, mas vamos corrigir se acontecer
+        console.warn(`⚠️ Level inconsistente detectado! XP: ${updatedProfile.xp}, Level atual: ${updatedProfile.level}, Level calculado: ${newLevel}`);
+        updatedProfile.level = newLevel;
       }
 
-      // Verificar conquistas
+      // Verificar conquistas ANTES do level up final (conquistas podem dar XP adicional)
       updatedProfile = checkAchievements(updatedProfile);
+
+      // Recalcular level após XP das conquistas
+      const finalLevel = calculateLevel(updatedProfile.xp);
+      if (finalLevel > updatedProfile.level) {
+        console.log(`🆙 LEVEL UP POR CONQUISTAS! ${updatedProfile.level} → ${finalLevel}`);
+        updatedProfile.level = finalLevel;
+        if (typeof window !== 'undefined' && window.showLevelUpToast) {
+          window.showLevelUpToast(finalLevel);
+        }
+      }
 
       // Verificar e atualizar badges
       updatedProfile = checkAndUpdateBadges(updatedProfile);
@@ -1140,17 +1180,39 @@ export const UserProfileProvider = ({ children }) => {
       updatedProfile.xp += xpGained;
 
       // Verificar level up
+      const oldLevel = updatedProfile.level;
       const newLevel = calculateLevel(updatedProfile.xp);
+
+      console.log(`🔢 Debug Social Level Up:`, {
+        action: action,
+        xpGained: xpGained,
+        currentXP: updatedProfile.xp,
+        oldLevel: oldLevel,
+        newLevel: newLevel
+      });
+
       if (newLevel > updatedProfile.level) {
         updatedProfile.level = newLevel;
+        console.log(`🆙 SOCIAL LEVEL UP! ${oldLevel} → ${newLevel}`);
         if (typeof window !== 'undefined' && window.showLevelUpToast) {
           window.showLevelUpToast(newLevel);
         }
       }
     }
 
-    // Verificar conquistas sociais
+    // Verificar conquistas sociais (podem dar XP adicional)
     updatedProfile = checkAchievements(updatedProfile);
+
+    // Recalcular level após XP das conquistas sociais
+    const finalSocialLevel = calculateLevel(updatedProfile.xp);
+    if (finalSocialLevel > updatedProfile.level) {
+      console.log(`🆙 SOCIAL LEVEL UP POR CONQUISTAS! ${updatedProfile.level} → ${finalSocialLevel}`);
+      updatedProfile.level = finalSocialLevel;
+      if (typeof window !== 'undefined' && window.showLevelUpToast) {
+        window.showLevelUpToast(finalSocialLevel);
+      }
+    }
+
     updatedProfile = checkAndUpdateBadges(updatedProfile);
 
     setProfile(updatedProfile);
@@ -1261,6 +1323,8 @@ export const UserProfileProvider = ({ children }) => {
     updatePreferences,
     updateSocialStats,
     calculateLevel,
+    getXPForLevel,
+    getXPForNextLevel,
     markTutorialAsSeen,
     setCurrentTitle,
     updateAvatar

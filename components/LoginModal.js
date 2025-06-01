@@ -20,6 +20,7 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
     confirmPassword: '',
     email: ''
   });
+  const [rememberMe, setRememberMe] = useState(true); // Lembrar por padrão
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -87,7 +88,7 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
       let result;
       
       if (isLoginMode) {
-        result = await login(formData.username, formData.password);
+        result = await login(formData.username, formData.password, rememberMe);
       } else {
         // Passar ID do perfil anônimo para migração
         const anonymousUserId = profile?.id || null;
@@ -127,6 +128,7 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
       confirmPassword: '',
       email: ''
     });
+    setRememberMe(true); // Reset para padrão
   };
 
   return (
@@ -250,6 +252,24 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
                   {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
               </div>
+            </div>
+          )}
+
+          {/* Checkbox Lembrar de mim (apenas no login) */}
+          {isLoginMode && (
+            <div className={styles.checkboxGroup}>
+              <label className={styles.checkboxLabel}>
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className={styles.checkbox}
+                  disabled={isLoading}
+                />
+                <span className={styles.checkboxText}>
+                  Lembrar de mim por 30 dias
+                </span>
+              </label>
             </div>
           )}
 

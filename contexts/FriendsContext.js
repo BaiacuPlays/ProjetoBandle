@@ -44,21 +44,43 @@ export const FriendsProvider = ({ children }) => {
         const friendsData = await friendsResponse.json();
         const friendsList = friendsData.friends || [];
 
+        console.log('👥 Amigos carregados:', friendsList.length);
+
         // Buscar status de presença dos amigos
         if (friendsList.length > 0) {
-          const friendIds = friendsList.map(friend => friend.id);
-          const presenceStatus = await getFriendsPresence(friendIds);
+          try {
+            const friendIds = friendsList.map(friend => friend.id);
+            const presenceStatus = await getFriendsPresence(friendIds);
 
-          // Atualizar status dos amigos
-          const friendsWithStatus = friendsList.map(friend => ({
-            ...friend,
-            status: presenceStatus[friend.id] || 'offline'
-          }));
+            // Atualizar status dos amigos
+            const friendsWithStatus = friendsList.map(friend => ({
+              ...friend,
+              // Garantir que avatar e level estão presentes
+              avatar: friend.avatar || '👤',
+              level: friend.level || 1,
+              displayName: friend.displayName || friend.username || 'Jogador',
+              status: presenceStatus[friend.id] || 'offline'
+            }));
 
-          setFriends(friendsWithStatus);
+            setFriends(friendsWithStatus);
+            console.log('✅ Status de presença atualizado para', friendsWithStatus.length, 'amigos');
+          } catch (presenceError) {
+            console.warn('Erro ao buscar presença dos amigos:', presenceError);
+            // Usar dados básicos sem status de presença
+            const friendsWithDefaults = friendsList.map(friend => ({
+              ...friend,
+              avatar: friend.avatar || '👤',
+              level: friend.level || 1,
+              displayName: friend.displayName || friend.username || 'Jogador',
+              status: 'offline'
+            }));
+            setFriends(friendsWithDefaults);
+          }
         } else {
           setFriends(friendsList);
         }
+      } else {
+        console.error('Erro ao carregar amigos:', friendsResponse.status);
       }
 
       // Carregar solicitações recebidas
@@ -335,13 +357,57 @@ export const FriendsProvider = ({ children }) => {
   };
 
   // Convidar para multiplayer
-  const inviteToMultiplayer = (friendId, roomCode) => {
+  const inviteToMultiplayer = async (friendId, friendName, roomCode, hostName) => {
     if (!isAuthenticated) {
       throw new Error('Você precisa estar logado para convidar amigos');
     }
 
-    // Implementar lógica de convite
-    console.log(`Convidando amigo ${friendId} para sala ${roomCode}`);
+    if (!friendId || !roomCode || !hostName) {
+      throw new Error('Dados do convite incompletos');
+    }
+
+    try {
+      console.log(`📤 Enviando convite para ${friendName} (${friendId}) para sala ${roomCode}`);
+
+      const invitation = {
+        id: `invite_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        type: 'multiplayer_invite',
+        fromUserId: currentUserId,
+        toUserId: friendId,
+        hostName: hostName,
+        friendName: friendName,
+        roomCode: roomCode,
+        timestamp: Date.now(),
+        status: 'pending'
+      };
+
+      const sessionToken = localStorage.getItem('ludomusic_session_token');
+
+      const response = await fetch('/api/send-invite', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${sessionToken}`
+        },
+        body: JSON.stringify({
+          invitation,
+          currentUserId
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('✅ Convite enviado com sucesso:', data);
+        return { success: true, inviteId: data.inviteId };
+      } else {
+        const errorData = await response.json();
+        console.error('❌ Erro ao enviar convite:', errorData);
+        throw new Error(errorData.error || 'Erro ao enviar convite');
+      }
+    } catch (error) {
+      console.error('❌ Erro na função inviteToMultiplayer:', error);
+      throw error;
+    }
   };
 
   // Funções de referência (placeholder)

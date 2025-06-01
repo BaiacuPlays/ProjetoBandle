@@ -4,6 +4,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useFriends } from '../contexts/FriendsContext';
 import { useModalScrollLock } from '../hooks/useModalScrollLock';
+import { getAchievement } from '../data/achievements';
 import styles from '../styles/PublicProfileModal.module.css';
 
 const PublicProfileModal = ({ isOpen, onClose, userId, username }) => {
@@ -118,9 +119,13 @@ const PublicProfileModal = ({ isOpen, onClose, userId, username }) => {
                 <div className={styles.avatarSection}>
                   <div className={styles.avatar}>
                     {/* Renderizar avatar de forma segura */}
-                    {profile.avatar && typeof profile.avatar === 'string' && profile.avatar.length < 10 ?
-                      profile.avatar : '👤'
-                    }
+                    {profile.avatar && typeof profile.avatar === 'string' ? (
+                      profile.avatar.startsWith('http') || profile.avatar.startsWith('data:') ? (
+                        <img src={profile.avatar} alt="Avatar" className={styles.avatarImage} />
+                      ) : (
+                        profile.avatar
+                      )
+                    ) : '👤'}
                   </div>
                   <div className={styles.onlineStatus}>
                     <span className={`${styles.statusDot} ${profile.isOnline ? styles.online : styles.offline}`}></span>
@@ -208,12 +213,15 @@ const PublicProfileModal = ({ isOpen, onClose, userId, username }) => {
                 <div className={styles.achievementsSection}>
                   <h4>🏆 Conquistas ({Object.keys(profile.achievements).length})</h4>
                   <div className={styles.achievementsList}>
-                    {Object.entries(profile.achievements).slice(0, 6).map(([key, achievement]) => (
-                      <div key={key} className={styles.achievementItem}>
-                        <span className={styles.achievementIcon}>🏆</span>
-                        <span className={styles.achievementName}>{key}</span>
-                      </div>
-                    ))}
+                    {Object.entries(profile.achievements).slice(0, 6).map(([key, achievement]) => {
+                      const achievementData = getAchievement(key);
+                      return (
+                        <div key={key} className={styles.achievementItem} title={`${achievementData?.title || key} - Desbloqueado em ${new Date(achievement.unlockedAt).toLocaleDateString('pt-BR')}`}>
+                          <span className={styles.achievementIcon}>{achievementData?.icon || '🏆'}</span>
+                          <span className={styles.achievementName}>{achievementData?.title || key}</span>
+                        </div>
+                      );
+                    })}
                     {Object.keys(profile.achievements).length > 6 && (
                       <div className={styles.moreAchievements}>
                         +{Object.keys(profile.achievements).length - 6} mais
@@ -229,7 +237,7 @@ const PublicProfileModal = ({ isOpen, onClose, userId, username }) => {
                   <h4>🎖️ Badges ({Object.keys(profile.badges).length})</h4>
                   <div className={styles.badgesList}>
                     {Object.entries(profile.badges).slice(0, 8).map(([key, badge]) => (
-                      <div key={key} className={styles.badgeItem}>
+                      <div key={key} className={styles.badgeItem} title={`Desbloqueado em ${new Date(badge.unlockedAt).toLocaleDateString('pt-BR')}`}>
                         🎖️
                       </div>
                     ))}

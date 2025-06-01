@@ -1,5 +1,6 @@
 // Contexto de autenticação
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { AuthCookies } from '../utils/cookies';
 
 const AuthContext = createContext();
 
@@ -26,10 +27,11 @@ export const AuthProvider = ({ children }) => {
   // Função para verificar sessão existente
   const checkSession = async () => {
     try {
-      const sessionToken = localStorage.getItem('ludomusic_session_token');
+      // Tentar obter token dos cookies primeiro, depois localStorage
+      const sessionToken = AuthCookies.getSessionToken();
 
       if (!sessionToken) {
-        console.log('🔍 Nenhum token de sessão encontrado');
+        console.log('🔍 Nenhum token de sessão encontrado nos cookies ou localStorage');
         setIsLoading(false);
         return;
       }
@@ -49,11 +51,11 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(true);
         console.log('✅ Sessão válida encontrada:', data.user.displayName);
 
-        // Atualizar localStorage com dados mais recentes se necessário
+        // Atualizar cookies e localStorage com dados mais recentes se necessário
         const currentUserData = JSON.stringify(data.user);
-        const savedUserData = localStorage.getItem('ludomusic_user_data');
-        if (savedUserData !== currentUserData) {
-          localStorage.setItem('ludomusic_user_data', currentUserData);
+        const savedUserData = AuthCookies.getUserData();
+        if (!savedUserData || JSON.stringify(savedUserData) !== currentUserData) {
+          AuthCookies.saveAuth(sessionToken, data.user, AuthCookies.shouldRemember());
         }
       } else {
         // Sessão inválida, mas não remover token imediatamente
@@ -67,61 +69,37 @@ export const AuthProvider = ({ children }) => {
              errorData.error === 'Sessão expirada' ||
              errorData.error === 'Token de sessão não fornecido')) {
 
-          // Tentar múltiplas verificações antes de remover definitivamente
-          console.log('🔄 Tentando verificações adicionais antes de remover sessão...');
+          console.log('⚠️ Sessão possivelmente inválida, mas mantendo dados locais como fallback');
 
-          let sessionValid = false;
-          const maxRetries = 3;
-
-          for (let attempt = 1; attempt <= maxRetries; attempt++) {
-            try {
-              // Aguardar um pouco entre tentativas
-              if (attempt > 1) {
-                await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
-              }
-
-              console.log(`🔄 Tentativa ${attempt}/${maxRetries}...`);
-
-              const retryResponse = await fetch(`/api/auth?sessionToken=${sessionToken}`, {
-                method: 'GET',
-                headers: {
-                  'Cache-Control': 'no-cache',
-                  'Pragma': 'no-cache'
-                }
-              });
-
-              if (retryResponse.ok) {
-                const retryData = await retryResponse.json();
-                setUser(retryData.user);
-                setIsAuthenticated(true);
-                console.log(`✅ Sessão válida na tentativa ${attempt}:`, retryData.user.displayName);
-                sessionValid = true;
-                break;
-              }
-            } catch (retryError) {
-              console.log(`❌ Tentativa ${attempt} falhou:`, retryError.message);
-            }
-          }
-
-          // Só remover se todas as tentativas falharam
-          if (!sessionValid) {
-            localStorage.removeItem('ludomusic_session_token');
-            localStorage.removeItem('ludomusic_user_data');
-            console.log('❌ Sessão realmente inválida após múltiplas tentativas, removendo token');
-          }
-        } else {
-          // Para outros erros (500, timeout, etc.), usar dados do localStorage como fallback
-          const savedUserData = localStorage.getItem('ludomusic_user_data');
+          // Em vez de remover imediatamente, usar dados dos cookies/localStorage como fallback
+          const savedUserData = AuthCookies.getUserData();
           if (savedUserData) {
             try {
-              const userData = JSON.parse(savedUserData);
-              setUser(userData);
+              setUser(savedUserData);
+              setIsAuthenticated(true);
+              console.log('📱 Usando dados salvos localmente (sessão pode estar temporariamente inválida)');
+            } catch (e) {
+              console.error('Erro ao usar dados salvos:', e);
+              // Só remover se os dados estão corrompidos
+              AuthCookies.clearAuth();
+            }
+          } else {
+            // Só remover token se não há dados salvos
+            AuthCookies.clearAuth();
+            console.log('❌ Nenhum dado salvo encontrado, removendo tokens');
+          }
+        } else {
+          // Para outros erros (500, timeout, etc.), usar dados dos cookies/localStorage como fallback
+          const savedUserData = AuthCookies.getUserData();
+          if (savedUserData) {
+            try {
+              setUser(savedUserData);
               setIsAuthenticated(true);
               console.log('📱 Usando dados salvos localmente como fallback (erro temporário de rede)');
             } catch (e) {
-              console.error('Erro ao parsear dados salvos:', e);
+              console.error('Erro ao usar dados salvos:', e);
               // Só remover se os dados estão corrompidos
-              localStorage.removeItem('ludomusic_user_data');
+              AuthCookies.clearAuth();
             }
           }
         }
@@ -129,17 +107,16 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error('Erro ao verificar sessão (rede):', error);
 
-      // Em caso de erro de rede, tentar carregar dados do localStorage
-      const savedUserData = localStorage.getItem('ludomusic_user_data');
+      // Em caso de erro de rede, tentar carregar dados dos cookies/localStorage
+      const savedUserData = AuthCookies.getUserData();
       if (savedUserData) {
         try {
-          const userData = JSON.parse(savedUserData);
-          setUser(userData);
+          setUser(savedUserData);
           setIsAuthenticated(true);
           console.log('📱 Usando dados salvos localmente (erro de rede)');
         } catch (e) {
-          console.error('Erro ao parsear dados salvos:', e);
-          localStorage.removeItem('ludomusic_user_data');
+          console.error('Erro ao usar dados salvos:', e);
+          AuthCookies.clearAuth();
         }
       }
     } finally {
@@ -167,9 +144,8 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
 
       if (response.ok) {
-        // Salvar token de sessão e dados do usuário
-        localStorage.setItem('ludomusic_session_token', data.sessionToken);
-        localStorage.setItem('ludomusic_user_data', JSON.stringify(data.user));
+        // Salvar token de sessão e dados do usuário nos cookies e localStorage
+        AuthCookies.saveAuth(data.sessionToken, data.user, true); // Sempre lembrar no registro
         setUser(data.user);
         setIsAuthenticated(true);
         console.log('✅ Usuário registrado:', data.user.displayName);
@@ -185,7 +161,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Função para fazer login
-  const login = async (username, password) => {
+  const login = async (username, password, rememberMe = true) => {
     try {
       const response = await fetch('/api/auth', {
         method: 'POST',
@@ -202,9 +178,8 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
 
       if (response.ok) {
-        // Salvar token de sessão e dados do usuário
-        localStorage.setItem('ludomusic_session_token', data.sessionToken);
-        localStorage.setItem('ludomusic_user_data', JSON.stringify(data.user));
+        // Salvar token de sessão e dados do usuário nos cookies e localStorage
+        AuthCookies.saveAuth(data.sessionToken, data.user, rememberMe);
         setUser(data.user);
         setIsAuthenticated(true);
         console.log('✅ Login realizado:', data.user.displayName);
@@ -222,8 +197,8 @@ export const AuthProvider = ({ children }) => {
   // Função para fazer logout
   const logout = async () => {
     try {
-      const sessionToken = localStorage.getItem('ludomusic_session_token');
-      
+      const sessionToken = AuthCookies.getSessionToken();
+
       if (sessionToken) {
         await fetch('/api/auth', {
           method: 'POST',
@@ -237,9 +212,8 @@ export const AuthProvider = ({ children }) => {
         });
       }
 
-      // Limpar dados locais
-      localStorage.removeItem('ludomusic_session_token');
-      localStorage.removeItem('ludomusic_user_data');
+      // Limpar dados dos cookies e localStorage
+      AuthCookies.clearAuth();
       setUser(null);
       setIsAuthenticated(false);
       console.log('✅ Logout realizado');
@@ -248,8 +222,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error('❌ Erro no logout:', error);
       // Mesmo com erro, limpar dados locais
-      localStorage.removeItem('ludomusic_session_token');
-      localStorage.removeItem('ludomusic_user_data');
+      AuthCookies.clearAuth();
       setUser(null);
       setIsAuthenticated(false);
       return { success: false, error: 'Erro de conexão' };
@@ -261,6 +234,17 @@ export const AuthProvider = ({ children }) => {
     if (isAuthenticated && user) {
       return `auth_${user.username}`;
     }
+
+    // Fallback: tentar obter dos cookies/localStorage
+    try {
+      const savedUserData = AuthCookies.getUserData();
+      if (savedUserData) {
+        return `auth_${savedUserData.username}`;
+      }
+    } catch (error) {
+      console.error('Erro ao obter ID do usuário dos dados salvos:', error);
+    }
+
     return null;
   };
 
@@ -269,6 +253,17 @@ export const AuthProvider = ({ children }) => {
     if (isAuthenticated && user) {
       return user;
     }
+
+    // Fallback: tentar obter dos cookies/localStorage
+    try {
+      const savedUserData = AuthCookies.getUserData();
+      if (savedUserData) {
+        return savedUserData;
+      }
+    } catch (error) {
+      console.error('Erro ao obter dados do usuário dos dados salvos:', error);
+    }
+
     return null;
   };
 

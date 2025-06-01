@@ -135,9 +135,24 @@ const FriendsManager = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleInviteToGame = (friendId, friendName) => {
-    setSelectedFriend({ id: friendId, name: friendName });
-    setShowInviteModal(true);
+  const handleInviteToGame = async (friendId, friendName) => {
+    try {
+      console.log(`🎮 Iniciando convite para ${friendName} (${friendId})`);
+
+      // Criar código de sala temporário
+      const roomCode = 'ROOM' + Math.random().toString(36).substr(2, 6).toUpperCase();
+      const hostName = profile?.displayName || profile?.username || 'Jogador';
+
+      // Usar a função do contexto de amigos
+      const result = await inviteToMultiplayer(friendId, friendName, roomCode, hostName);
+
+      if (result.success) {
+        alert(`✅ Convite enviado para ${friendName}!\nCódigo da sala: ${roomCode}`);
+      }
+    } catch (error) {
+      console.error('Erro ao enviar convite:', error);
+      alert(`❌ Erro ao enviar convite para ${friendName}: ${error.message}`);
+    }
   };
 
   const handleViewProfile = (friend) => {

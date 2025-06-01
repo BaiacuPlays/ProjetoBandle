@@ -115,7 +115,28 @@ export default async function handler(req, res) {
       username: sanitizeString(userData.username),
       displayName: sanitizeString(userData.displayName || userData.username),
       createdAt: userData.createdAt,
-      lastLoginAt: userData.lastLoginAt
+      lastLoginAt: userData.lastLoginAt,
+
+      // Valores padrão
+      avatar: '👤',
+      level: 1,
+      xp: 0,
+      title: null,
+      bio: null,
+
+      // Estatísticas padrão
+      stats: {
+        totalGames: 0,
+        totalWins: 0,
+        totalScore: 0,
+        averageScore: 0,
+        bestStreak: 0,
+        perfectGames: 0
+      },
+
+      // Conquistas e badges vazios por padrão
+      achievements: {},
+      badges: {}
     };
 
     // Função para sanitizar strings corrompidas
@@ -141,6 +162,30 @@ export default async function handler(req, res) {
       }
 
       return str;
+    }
+
+    // Função para sanitizar avatares
+    function sanitizeAvatar(avatar) {
+      if (!avatar || typeof avatar !== 'string') return '👤';
+
+      // Se é um emoji válido (1-4 caracteres)
+      if (avatar.length <= 4 && /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/u.test(avatar)) {
+        return avatar;
+      }
+
+      // Se é uma URL válida
+      if (avatar.startsWith('http://') || avatar.startsWith('https://') || avatar.startsWith('/')) {
+        return avatar;
+      }
+
+      // Se é uma imagem base64 válida (mas não muito longa)
+      if (avatar.startsWith('data:image/') && avatar.length < 500000) { // Máximo 500KB
+        return avatar;
+      }
+
+      // Se chegou aqui, é suspeito - usar padrão
+      console.warn('Avatar suspeito detectado:', avatar.substring(0, 50) + '...');
+      return '👤';
     }
 
     // Se tem perfil, adicionar dados públicos do perfil

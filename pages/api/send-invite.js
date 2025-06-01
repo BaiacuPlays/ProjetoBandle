@@ -15,13 +15,21 @@ export default async function handler(req, res) {
   try {
     const { invitation, currentUserId } = req.body;
 
+    console.log('📤 Recebendo convite:', { invitation, currentUserId });
+
     if (!invitation || !currentUserId) {
       return res.status(400).json({ error: 'Dados obrigatórios não fornecidos' });
     }
 
     // Validar dados do convite
     if (!invitation.toUserId || !invitation.roomCode || !invitation.hostName) {
+      console.log('❌ Dados do convite incompletos:', invitation);
       return res.status(400).json({ error: 'Dados do convite incompletos' });
+    }
+
+    // Verificar se o usuário não está tentando convidar a si mesmo
+    if (invitation.toUserId === currentUserId) {
+      return res.status(400).json({ error: 'Você não pode convidar a si mesmo' });
     }
 
     // Chave para armazenar convites do usuário destinatário
@@ -105,9 +113,12 @@ export default async function handler(req, res) {
         }
       }
 
+      console.log('✅ Convite enviado com sucesso para:', invitation.toUserId);
+
       return res.status(200).json({
         success: true,
-        message: 'Convite enviado com sucesso'
+        message: 'Convite enviado com sucesso',
+        inviteId: invitation.id
       });
 
     } catch (error) {

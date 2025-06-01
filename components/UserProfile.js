@@ -314,18 +314,21 @@ const UserProfile = ({ isOpen, onClose }) => {
     return new Date(dateString).toLocaleDateString('pt-BR');
   };
 
-  const getXPForNextLevel = (currentLevel) => {
-    return Math.pow(currentLevel, 2) * 100;
-  };
+  // Usar as funções do contexto para consistência
+  const { getXPForLevel, getXPForNextLevel } = useUserProfile();
 
   const getCurrentLevelXP = (currentLevel) => {
-    return Math.pow(currentLevel - 1, 2) * 100;
+    return getXPForLevel ? getXPForLevel(currentLevel) : Math.pow(currentLevel - 1, 2) * 100;
+  };
+
+  const getNextLevelXP = (currentLevel) => {
+    return getXPForNextLevel ? getXPForNextLevel(currentLevel) : Math.pow(currentLevel, 2) * 100;
   };
 
   const getLevelProgress = () => {
     if (!profile) return 0;
     const currentLevelXP = getCurrentLevelXP(profile.level);
-    const nextLevelXP = getXPForNextLevel(profile.level);
+    const nextLevelXP = getNextLevelXP(profile.level);
     const progressXP = profile.xp - currentLevelXP;
     const neededXP = nextLevelXP - currentLevelXP;
     // Prevent division by zero if neededXP is 0 (e.g., at max level or initial state)
@@ -415,7 +418,7 @@ const UserProfile = ({ isOpen, onClose }) => {
               <div className={styles.xpSection}>
                 <div className={styles.xpInfo}>
                   <span>XP: {profile.xp}</span>
-                  <span>Próximo nível: {Math.max(0, getXPForNextLevel(profile.level) - profile.xp)} XP</span> {/* Ensure XP doesn't go negative */}
+                  <span>Próximo nível: {Math.max(0, getNextLevelXP(profile.level) - profile.xp)} XP</span> {/* Ensure XP doesn't go negative */}
                 </div>
                 <div className={styles.xpBar}>
                   <div

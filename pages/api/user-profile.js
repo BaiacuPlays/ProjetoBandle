@@ -84,17 +84,28 @@ export default async function handler(req, res) {
       // Buscar dados básicos do usuário (username, displayName)
       let userData = null;
       const userKey = `user:${userProfile.username || username}`;
-      
-      if (isDevelopment && !hasKVConfig) {
-        userData = localUsers.get(userKey);
-      } else {
-        userData = await kv.get(userKey);
+
+      try {
+        if (isDevelopment && !hasKVConfig) {
+          userData = localUsers.get(userKey);
+        } else {
+          userData = await kv.get(userKey);
+        }
+      } catch (error) {
+        console.warn('Erro ao buscar dados do usuário:', error);
       }
 
       // Verificar se o usuário solicitante está autenticado
       const authResult = await verifyAuthentication(req);
       const isOwnProfile = authResult.authenticated && authResult.userId === targetUserId;
       const isAuthenticated = authResult.authenticated;
+
+      console.log('🔍 Dados encontrados:', {
+        userProfile: !!userProfile,
+        userData: !!userData,
+        isAuthenticated,
+        isOwnProfile
+      });
 
       // Preparar dados do perfil para retorno
       const publicProfile = {
@@ -113,15 +124,12 @@ export default async function handler(req, res) {
         
         // Estatísticas públicas
         statistics: {
-          totalGames: userProfile.totalGames || 0,
-          gamesWon: userProfile.gamesWon || 0,
-          winRate: userProfile.totalGames > 0 ? Math.round((userProfile.gamesWon / userProfile.totalGames) * 100) : 0,
-          currentStreak: userProfile.currentStreak || 0,
-          bestStreak: userProfile.bestStreak || 0,
-          level: userProfile.level || 1,
-          xp: userProfile.xp || 0,
-          averageGuesses: userProfile.averageGuesses || 0,
-          perfectGames: userProfile.perfectGames || 0
+          totalGames: userProfile.stats?.totalGames || 0,
+          gamesWon: userProfile.stats?.wins || 0,
+          winRate: userProfile.stats?.winRate || 0,
+          currentStreak: userProfile.stats?.currentStreak || 0,
+          bestStreak: userProfile.stats?.bestStreak || 0,
+          perfectGames: userProfile.stats?.perfectGames || 0
         },
 
         // Conquistas públicas (apenas desbloqueadas)
