@@ -204,38 +204,72 @@ export default async function handler(req, res) {
 
     } else if (method === 'DELETE') {
       // Deletar conta do usuário
+      const authResult = await authenticateRequest(req);
+      if (!authResult.success) {
+        return res.status(401).json({ error: authResult.error });
+      }
+
       const { userId } = req.body;
 
       if (!userId) {
         return res.status(400).json({ error: 'ID do usuário é obrigatório' });
       }
 
+      // Verificar se o userId corresponde ao usuário autenticado
+      const expectedUserId = `auth_${authResult.username}`;
+      if (userId !== expectedUserId) {
+        console.warn('⚠️ Tentativa de deletar conta de outro usuário:', { userId, expectedUserId });
+        return res.status(403).json({ error: 'Não autorizado a deletar esta conta' });
+      }
+
       const profileKey = `profile:${userId}`;
+      const userKey = `user:${authResult.username}`;
 
       if (isDevelopment && !hasKVConfig) {
         // Usar armazenamento local em desenvolvimento
-        const existed = localProfiles.has(profileKey);
+        const { localProfiles, localUsers, localSessions } = require('./auth');
+
+        // Deletar perfil
         localProfiles.delete(profileKey);
-        
-        if (!existed) {
-          return res.status(404).json({ error: 'Perfil não encontrado' });
+
+        // Deletar usuário
+        localUsers.delete(userKey);
+
+        // Deletar todas as sessões do usuário
+        for (const [sessionKey, sessionData] of localSessions.entries()) {
+          if (sessionData.username === authResult.username) {
+            localSessions.delete(sessionKey);
+          }
         }
       } else {
         // Usar Vercel KV em produção
         try {
-          const existed = await kv.get(profileKey);
-          if (!existed) {
-            return res.status(404).json({ error: 'Perfil não encontrado' });
-          }
-          
+          // Deletar perfil
           await kv.del(profileKey);
+
+          // Deletar usuário
+          await kv.del(userKey);
+
+          // Deletar sessão atual
+          if (authResult.sessionToken) {
+            await kv.del(`session:${authResult.sessionToken}`);
+          }
+
+          // Buscar e deletar outras sessões do usuário
+          const sessionKeys = await kv.keys('session:*');
+          for (const sessionKey of sessionKeys) {
+            const sessionData = await kv.get(sessionKey);
+            if (sessionData && sessionData.username === authResult.username) {
+              await kv.del(sessionKey);
+            }
+          }
         } catch (error) {
-          console.error('Erro ao deletar perfil do KV:', error);
-          return res.status(500).json({ error: 'Erro ao deletar perfil' });
+          console.error('Erro ao deletar conta do KV:', error);
+          return res.status(500).json({ error: 'Erro ao deletar conta' });
         }
       }
 
-      console.log(`🗑️ Perfil ${userId} deletado com sucesso`);
+      console.log(`🗑️ Conta ${authResult.username} (${userId}) deletada completamente`);
 
       return res.status(200).json({
         success: true,

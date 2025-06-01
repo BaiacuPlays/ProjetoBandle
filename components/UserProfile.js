@@ -30,7 +30,7 @@ const UserProfile = ({ isOpen, onClose }) => {
   const [showAvatarSelector, setShowAvatarSelector] = useState(false);
 
   // Hook de autenticação
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
 
   // Hook do perfil com verificação de segurança
   // Destructure directly to avoid unnecessary intermediate variables and potential null issues
@@ -265,15 +265,20 @@ const UserProfile = ({ isOpen, onClose }) => {
   };
 
   const handleDeleteAccount = async () => {
-    if (deleteAccount) {
+    if (deleteAccount && logout) {
       const success = await deleteAccount();
       setShowConfirmDelete(false);
 
       if (success) {
+        // Fazer logout para limpar todos os estados de autenticação
+        await logout();
+
         alert('Conta deletada com sucesso! Você será redirecionado para a página inicial.');
-        // Fechar modal e redirecionar
+
+        // Fechar modal
         onClose();
-        // Recarregar a página para limpar todos os estados
+
+        // Recarregar a página para garantir que todos os estados sejam limpos
         window.location.reload();
       } else {
         alert('Erro ao deletar conta. Tente novamente.');

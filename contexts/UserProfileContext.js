@@ -967,22 +967,29 @@ export const UserProfileProvider = ({ children }) => {
     if (!userId || !profile) return false;
 
     try {
+      // Obter token de sessão para autenticação
+      const sessionToken = localStorage.getItem('ludomusic_session_token');
+
       // Deletar do servidor
       const response = await fetch('/api/profile', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${sessionToken}`
         },
         body: JSON.stringify({ userId })
       });
 
       if (!response.ok) {
-        throw new Error(`Erro HTTP: ${response.status}`);
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Erro HTTP: ${response.status}`);
       }
 
-      // Deletar dados locais
+      // Limpar TODOS os dados locais relacionados ao usuário
       localStorage.removeItem(`ludomusic_profile_${userId}`);
       localStorage.removeItem('ludomusic_user_id');
+      localStorage.removeItem('ludomusic_session_token');
+      localStorage.removeItem('ludomusic_user_data');
 
       // Limpar estado
       setProfile(null);
