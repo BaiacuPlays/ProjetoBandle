@@ -63,13 +63,30 @@ class Logger {
   error(...args) {
     // Errors sempre são mostrados, mas com limite
     if (this.logCount < this.maxLogsPerMinute * 2) {
-      console.error(...args);
+      // Usar console original se disponível para evitar recursão
+      if (typeof window !== 'undefined' && window.originalConsole) {
+        window.originalConsole.error(...args);
+      } else {
+        // Fallback para console padrão apenas se não estivermos em produção
+        if (!this.isProduction && !this.isVercel) {
+          console.error(...args);
+        }
+      }
+      this.logCount++;
     }
   }
   
   // Log crítico - SEMPRE habilitado
   critical(...args) {
-    console.error('🚨 CRÍTICO:', ...args);
+    // Usar console original se disponível para evitar recursão
+    if (typeof window !== 'undefined' && window.originalConsole) {
+      window.originalConsole.error('🚨 CRÍTICO:', ...args);
+    } else {
+      // Fallback seguro
+      if (!this.isProduction && !this.isVercel) {
+        console.error('🚨 CRÍTICO:', ...args);
+      }
+    }
   }
   
   // Debug - APENAS em desenvolvimento
@@ -109,38 +126,49 @@ if (logger.isProduction || logger.isVercel) {
     warn: console.warn,
     error: console.error
   };
-  
+
+  // Salvar globalmente para acesso em outros métodos
+  if (typeof window !== 'undefined') {
+    window.originalConsole = originalConsole;
+  }
+
   // Substituir métodos
   console.log = (...args) => {
     // Silencioso em produção
   };
-  
+
   console.warn = (...args) => {
     // Silencioso em produção
   };
-  
-  // Manter errors mas com limite
+
+  // Manter errors mas com limite - USAR CONSOLE ORIGINAL para evitar recursão
   console.error = (...args) => {
-    logger.error(...args);
+    // Errors sempre são mostrados, mas com limite
+    if (logger.logCount < logger.maxLogsPerMinute * 2) {
+      originalConsole.error(...args);
+      logger.logCount++;
+    }
   };
-  
+
   // Adicionar método para restaurar (se necessário para debug)
-  window.restoreConsole = () => {
-    console.log = originalConsole.log;
-    console.warn = originalConsole.warn;
-    console.error = originalConsole.error;
-    logger.log('✅ Console restaurado para debug');
-  };
-  
-  // Adicionar método para verificar status
-  window.loggerStatus = () => {
-    originalConsole.log('📊 Logger Status:', {
-      isProduction: logger.isProduction,
-      isVercel: logger.isVercel,
-      enableLogs: logger.enableLogs,
-      logCount: logger.logCount
-    });
-  };
+  if (typeof window !== 'undefined') {
+    window.restoreConsole = () => {
+      console.log = originalConsole.log;
+      console.warn = originalConsole.warn;
+      console.error = originalConsole.error;
+      originalConsole.log('✅ Console restaurado para debug');
+    };
+
+    // Adicionar método para verificar status
+    window.loggerStatus = () => {
+      originalConsole.log('📊 Logger Status:', {
+        isProduction: logger.isProduction,
+        isVercel: logger.isVercel,
+        enableLogs: logger.enableLogs,
+        logCount: logger.logCount
+      });
+    };
+  }
 }
 
 export default logger;
