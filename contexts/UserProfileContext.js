@@ -977,12 +977,58 @@ export const UserProfileProvider = ({ children }) => {
   };
 
   // Função para resetar perfil (para testes ou reset completo)
-  const resetProfile = () => {
-    if (!userId) return;
+  const resetProfile = async () => {
+    if (!userId || !profile) return false;
 
-    localStorage.removeItem(`ludomusic_profile_${userId}`);
-    setProfile(null);
-    loadProfile();
+    try {
+      // Obter token de sessão para autenticação
+      const sessionToken = localStorage.getItem('ludomusic_session_token');
+
+      console.log('🔄 [FRONTEND] Iniciando reset de perfil...');
+      console.log('🔄 [FRONTEND] UserId:', userId);
+      console.log('🔄 [FRONTEND] SessionToken:', sessionToken ? 'Presente' : 'Ausente');
+
+      if (!sessionToken) {
+        console.error('❌ [FRONTEND] Token de sessão não encontrado');
+        return false;
+      }
+
+      // Resetar no servidor
+      const response = await fetch('/api/profile/reset', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${sessionToken}`
+        },
+        body: JSON.stringify({ userId })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('❌ Erro ao resetar perfil no servidor:', errorData);
+        return false;
+      }
+
+      const data = await response.json();
+      console.log('✅ Perfil resetado no servidor:', data);
+
+      // Limpar dados locais
+      console.log('🧹 Limpando dados locais...');
+      localStorage.removeItem(`ludomusic_profile_${userId}`);
+      localStorage.removeItem(`ludomusic_profile_backup_${userId}`);
+
+      // Atualizar estado com o novo perfil
+      setProfile(data.profile);
+
+      // Salvar novo perfil no localStorage
+      localStorage.setItem(`ludomusic_profile_${userId}`, JSON.stringify(data.profile));
+
+      console.log('✅ Reset de perfil concluído com sucesso');
+      return true;
+    } catch (error) {
+      console.error('❌ Erro ao resetar perfil:', error);
+      return false;
+    }
   };
 
   // Função para deletar conta permanentemente

@@ -1,11 +1,4 @@
-// Importação condicional do KV
-let kv = null;
-try {
-  const kvModule = await import('@vercel/kv');
-  kv = kvModule.kv;
-} catch (error) {
-  console.log('⚠️ [ADMIN] Vercel KV não disponível (ambiente local)');
-}
+import { kv } from '@vercel/kv';
 
 export default async function handler(req, res) {
   // Verificar se é uma requisição GET

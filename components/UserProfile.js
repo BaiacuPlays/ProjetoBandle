@@ -256,11 +256,16 @@ const UserProfile = ({ isOpen, onClose }) => {
     event.target.value = '';
   };
 
-  const handleResetProfile = () => {
+  const handleResetProfile = async () => {
     if (resetProfile) {
-      resetProfile();
+      const success = await resetProfile();
       setShowConfirmReset(false);
-      alert('Perfil resetado com sucesso!');
+
+      if (success) {
+        alert('Perfil resetado com sucesso!');
+      } else {
+        alert('Erro ao resetar perfil. Tente novamente.');
+      }
     }
   };
 
