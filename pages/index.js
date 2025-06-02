@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Head from 'next/head';
 import { songs } from '../data/songs';
 import styles from '../styles/Home.module.css';
@@ -20,12 +20,11 @@ import BrowserCompatibilityWarning from '../components/BrowserCompatibilityWarni
 import { useLanguage } from '../contexts/LanguageContext';
 import { useUserProfile } from '../contexts/UserProfileContext';
 import { fetchTimezone } from '../config/api';
-import { audioCache } from '../utils/audioCache';
 import { browserCompatibility } from '../utils/browserCompatibility';
 import { useServiceWorker } from '../hooks/useServiceWorker';
-import { usePerformanceOptimization } from '../hooks/usePerformanceOptimization';
-// import { useUltraAdvancedOptimizations, useOptimizationsStatus } from '../hooks/useUltraAdvancedOptimizations';
-// import { useUniversalCompatibility, useDeviceInfo, useResponsive, useBrowserCapabilities } from '../hooks/useUniversalCompatibility';
+import logger from '../utils/logger'; // Sistema de logging otimizado
+import performanceOptimizer, { optimizedDebounce, optimizedThrottle } from '../utils/performanceOptimizer';
+// Hooks removidos para melhor performance
 import {
   MemoizedPlayButton,
   MemoizedVolumeControl,
@@ -56,19 +55,19 @@ export default function Home() {
     console.warn('UserProfile context not available:', error);
   }
 
-  // Hooks de performance
-  const { debounce, throttle } = usePerformanceOptimization();
+  // Hooks
   const { isRegistered: swRegistered } = useServiceWorker();
 
-  // Hooks ultra-avançados (carregamento dinâmico) - temporariamente desabilitados
-  // const ultraOptimizations = useUltraAdvancedOptimizations();
-  // const optimizationsStatus = useOptimizationsStatus();
+  // Funções de performance ULTRA-OTIMIZADAS
+  const debounce = useCallback((func, delay) => {
+    return optimizedDebounce(func, delay);
+  }, []);
 
-  // Hooks de compatibilidade universal (carregamento dinâmico)
-  // const compatibility = useUniversalCompatibility();
-  // const deviceInfo = useDeviceInfo();
-  // const responsive = useResponsive();
-  // const browserCapabilities = useBrowserCapabilities();
+  const throttle = useCallback((func, delay) => {
+    return optimizedThrottle(func, delay);
+  }, []);
+
+  // Hooks removidos para melhor performance
   const [currentSong, setCurrentSong] = useState(null);
   const [guess, setGuess] = useState('');
   const [message, setMessage] = useState('');
@@ -586,17 +585,17 @@ export default function Home() {
     loadMusicOfTheDay();
   }, []); // Remover dependência do isClient
 
-  // Atualizar timer a cada segundo
+  // Timer OTIMIZADO - atualizar a cada 10 segundos para reduzir overhead
   useEffect(() => {
     if (timer === null) return;
     const interval = setInterval(() => {
       setTimer(prev => {
-        if (prev > 1000) return prev - 1000;
+        if (prev > 10000) return prev - 10000; // Reduzir 10 segundos por vez
         // Quando zerar, recarrega a música do dia
         window.location.reload();
         return 0;
       });
-    }, 1000);
+    }, 10000); // 10 segundos em vez de 1 segundo - 90% menos overhead
     return () => clearInterval(interval);
   }, [timer]);
 

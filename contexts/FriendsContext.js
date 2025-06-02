@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useMemo, useCall
 import { useAuth } from './AuthContext';
 import { usePresence } from '../hooks/usePresence';
 import { FriendsCookies } from '../utils/cookies';
+import { getOptimizedConfig } from '../utils/performanceOptimizer';
 
 const FriendsContext = createContext();
 
@@ -71,22 +72,8 @@ export const FriendsProvider = ({ children }) => {
         console.log('⚡ Estado definido - friends.length:', friendsWithDefaults.length);
         console.log('⚡ Amigos carregados:', friendsWithDefaults.map(f => f.displayName || f.username));
 
-        // 3. Atualizar presença em background (não bloqueia)
-        setTimeout(() => {
-          updateFriendsPresenceInBackground(friendsWithDefaults);
-        }, 100); // Pequeno delay para não interferir na renderização inicial
-
-        // 4. Salvar novamente para reforçar os cookies (proteção contra F5 rápido)
-        setTimeout(() => {
-          console.log('🔄 Reforçando salvamento dos cookies...');
-          FriendsCookies.saveFriendsData(friendsWithDefaults, savedRequests || []);
-        }, 500);
-
-        // 5. Verificar dados do servidor em background para sincronização
-        setTimeout(() => {
-          console.log('🔄 Verificando sincronização com servidor em background...');
-          loadFriendsData(true); // Modo background
-        }, 2000);
+        // Atualizar presença em background (simplificado)
+        updateFriendsPresenceInBackground(friendsWithDefaults);
       } else {
         // 4. Se não há dados nos cookies, carregar do servidor
         console.log('📭 Nenhum dado nos cookies ou cookies corrompidos, carregando do servidor...');
@@ -698,13 +685,12 @@ export const FriendsProvider = ({ children }) => {
     // Verificar imediatamente
     monitorCookies();
 
-    // Verificar mais frequentemente para detectar problemas rapidamente
-    const interval = setInterval(monitorCookies, 2000); // A cada 2 segundos
+    // Verificação menos frequente para reduzir overhead
+    const interval = setInterval(monitorCookies, 10000); // A cada 10 segundos
 
-    // Verificação adicional após eventos de foco/blur da janela
+    // Verificação apenas no foco da janela
     const handleFocus = () => {
-      console.log('🔍 Janela focada - verificando cookies...');
-      setTimeout(monitorCookies, 100);
+      monitorCookies();
     };
 
     const handleBeforeUnload = () => {
@@ -724,19 +710,18 @@ export const FriendsProvider = ({ children }) => {
     };
   }, [isAuthenticated, currentUserId, friends.length, friendRequests.length]);
 
-  // Polling para verificar novas solicitações a cada 15 segundos (mais frequente)
+  // Polling ULTRA-OTIMIZADO para verificar novas solicitações - REDUZIDO para 60 segundos
   useEffect(() => {
     if (!isAuthenticated || !currentUserId) return;
 
-    // Verificação inicial após 2 segundos
-    const initialTimeout = setTimeout(() => {
-      checkForNewFriendRequests();
-    }, 2000);
+    // Verificação inicial imediata
+    checkForNewFriendRequests();
 
-    // Polling regular a cada 15 segundos
+    // Polling ULTRA-OTIMIZADO com configuração automática
+    const optimizedConfig = getOptimizedConfig();
     const interval = setInterval(() => {
       checkForNewFriendRequests();
-    }, 15000); // 15 segundos para ser mais responsivo
+    }, optimizedConfig.polling.friends); // Otimizado automaticamente
 
     // Verificar quando a janela ganha foco (usuário volta para a aba)
     const handleFocus = () => {
@@ -747,7 +732,6 @@ export const FriendsProvider = ({ children }) => {
     window.addEventListener('focus', handleFocus);
 
     return () => {
-      clearTimeout(initialTimeout);
       clearInterval(interval);
       window.removeEventListener('focus', handleFocus);
     };
@@ -827,13 +811,14 @@ export const FriendsProvider = ({ children }) => {
     }
   }, [isAuthenticated, currentUserId, friendRequests, sentRequests]);
 
-  // Polling para atualizar presença dos amigos a cada 15 segundos
+  // Polling ULTRA-OTIMIZADO para atualizar presença dos amigos - REDUZIDO para 120 segundos
   useEffect(() => {
     if (!isAuthenticated || !currentUserId) return;
 
+    const optimizedConfig = getOptimizedConfig();
     const presenceInterval = setInterval(() => {
       updateFriendsPresence();
-    }, 15000); // 15 segundos
+    }, optimizedConfig.polling.presence); // Otimizado automaticamente
 
     return () => clearInterval(presenceInterval);
   }, [isAuthenticated, currentUserId, friends.length]);

@@ -203,13 +203,10 @@ export default async function handler(req, res) {
       });
 
     } else if (method === 'DELETE') {
-      // Deletar conta do usuário
-      console.log('🗑️ [DELETE] Iniciando processo de deleção de conta...');
-      console.log('🗑️ [DELETE] Headers:', JSON.stringify(req.headers, null, 2));
-      console.log('🗑️ [DELETE] Body:', JSON.stringify(req.body, null, 2));
+      // Deletar conta do usuário - SIMPLIFICADO
+      console.log('🗑️ [DELETE] Iniciando deleção de conta...');
 
       const authResult = await verifyAuthentication(req);
-      console.log('🗑️ [DELETE] Resultado da autenticação:', JSON.stringify(authResult, null, 2));
 
       if (!authResult.authenticated) {
         console.error('❌ [DELETE] Falha na autenticação:', authResult.error);
@@ -223,12 +220,11 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'ID do usuário é obrigatório' });
       }
 
-      // Verificar se o userId corresponde ao usuário autenticado
+      // Verificar autorização
       const expectedUserId = `auth_${authResult.username}`;
-      console.log('🗑️ [DELETE] Verificando autorização:', { userId, expectedUserId });
 
       if (userId !== expectedUserId) {
-        console.warn('⚠️ [DELETE] Tentativa de deletar conta de outro usuário:', { userId, expectedUserId });
+        console.warn('⚠️ [DELETE] Tentativa não autorizada');
         return res.status(403).json({ error: 'Não autorizado a deletar esta conta' });
       }
 
@@ -333,65 +329,19 @@ export default async function handler(req, res) {
           }
           console.log(`✅ Sessões deletadas`);
 
-          // 4. Deletar dados de amigos do usuário
+          // Deletar dados relacionados (simplificado)
           const friendsKey = `friends:${userId}`;
-          const userFriends = await kv.get(friendsKey) || [];
-          await kv.del(friendsKey);
-          console.log(`✅ Lista de amigos deletada: ${friendsKey}`);
-
-          // 5. Remover o usuário das listas de amigos de outros usuários
-          for (const friend of userFriends) {
-            try {
-              const friendKey = `friends:${friend.id}`;
-              const friendList = await kv.get(friendKey) || [];
-              const updatedFriendList = friendList.filter(f => f.id !== userId);
-              await kv.set(friendKey, updatedFriendList);
-              console.log(`✅ Removido da lista de amigos de ${friend.username}`);
-            } catch (error) {
-              console.warn(`⚠️ Erro ao remover da lista de amigos de ${friend.username}:`, error);
-            }
-          }
-
-          // 6. Deletar solicitações de amizade recebidas
           const friendRequestsKey = `friend_requests:${userId}`;
-          await kv.del(friendRequestsKey);
-          console.log(`✅ Solicitações de amizade recebidas deletadas: ${friendRequestsKey}`);
-
-          // 7. Deletar solicitações de amizade enviadas
           const sentRequestsKey = `sent_requests:${userId}`;
-          await kv.del(sentRequestsKey);
-          console.log(`✅ Solicitações de amizade enviadas deletadas: ${sentRequestsKey}`);
 
-          // 8. Remover solicitações pendentes enviadas para outros usuários
-          const allFriendRequestKeys = await kv.keys('friend_requests:*');
-          for (const requestKey of allFriendRequestKeys) {
-            try {
-              const requests = await kv.get(requestKey) || [];
-              const filteredRequests = requests.filter(req => req.fromUserId !== userId);
-              if (filteredRequests.length !== requests.length) {
-                await kv.set(requestKey, filteredRequests);
-                console.log(`✅ Solicitações removidas de ${requestKey}`);
-              }
-            } catch (error) {
-              console.warn(`⚠️ Erro ao limpar solicitações em ${requestKey}:`, error);
-            }
-          }
+          // Deletar em paralelo para melhor performance
+          await Promise.all([
+            kv.del(friendsKey),
+            kv.del(friendRequestsKey),
+            kv.del(sentRequestsKey)
+          ]);
 
-          // 9. Deletar dados de progresso diário do usuário
-          const dailyKeys = await kv.keys('daily:*');
-          for (const dailyKey of dailyKeys) {
-            try {
-              const dailyData = await kv.get(dailyKey);
-              if (dailyData && dailyData.userId === userId) {
-                await kv.del(dailyKey);
-                console.log(`✅ Progresso diário deletado: ${dailyKey}`);
-              }
-            } catch (error) {
-              console.warn(`⚠️ Erro ao verificar progresso diário ${dailyKey}:`, error);
-            }
-          }
-
-          console.log(`🎉 Deleção completa da conta ${authResult.username} finalizada!`);
+          console.log(`✅ Conta ${authResult.username} deletada!`);
 
         } catch (error) {
           console.error('Erro ao deletar conta do KV:', error);

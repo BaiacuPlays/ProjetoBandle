@@ -45,34 +45,16 @@ export class PolyfillManager {
     }
   }
 
-  // Polyfills condicionais
+  // Polyfills essenciais apenas
   loadConditionalPolyfills() {
-    // Web Audio API polyfill
-    if (!window.AudioContext && !window.webkitAudioContext) {
-      this.loadWebAudioPolyfill();
-    }
+    // Apenas polyfills críticos para funcionalidade básica
 
-    // Intersection Observer polyfill
-    if (!('IntersectionObserver' in window)) {
-      this.loadIntersectionObserverPolyfill();
-    }
-
-    // ResizeObserver polyfill
-    if (!('ResizeObserver' in window)) {
-      this.loadResizeObserverPolyfill();
-    }
-
-    // Clipboard API polyfill
-    if (!navigator.clipboard) {
-      this.loadClipboardPolyfill();
-    }
-
-    // CustomEvent polyfill
+    // CustomEvent polyfill (essencial)
     if (typeof CustomEvent !== 'function') {
       this.loadCustomEventPolyfill();
     }
 
-    // requestAnimationFrame polyfill
+    // requestAnimationFrame polyfill (essencial)
     if (!window.requestAnimationFrame) {
       this.loadRequestAnimationFramePolyfill();
     }

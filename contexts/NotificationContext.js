@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
+import { getOptimizedConfig } from '../utils/performanceOptimizer';
 
 const NotificationContext = createContext();
 
@@ -126,14 +127,15 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
-  // Polling para verificar novos convites a cada 3 segundos
+  // Polling OTIMIZADO para verificar novos convites - REDUZIDO para 30 segundos
   useEffect(() => {
     if (!currentUserId || !isAuthenticated) return;
 
     // Verificação inicial
     loadServerInvites();
 
-    const interval = setInterval(loadServerInvites, 3000); // 3 segundos para convites mais responsivos
+    const optimizedConfig = getOptimizedConfig();
+    const interval = setInterval(loadServerInvites, optimizedConfig.polling.notifications); // Otimizado automaticamente
     return () => clearInterval(interval);
   }, [currentUserId, isAuthenticated]);
 
@@ -156,9 +158,15 @@ export const NotificationProvider = ({ children }) => {
       const saved = localStorage.getItem(`ludomusic_notifications_${currentUserId}`);
       if (saved) {
         const parsed = JSON.parse(saved);
-        // Filtrar notificações antigas (mais de 24 horas)
+        // Filtrar notificações antigas (mais de 24 horas) E salvar a lista filtrada
         const recent = parsed.filter(n => Date.now() - n.timestamp < 24 * 60 * 60 * 1000);
         setNotifications(recent);
+
+        // IMPORTANTE: Salvar a lista filtrada para remover notificações expiradas
+        if (recent.length !== parsed.length) {
+          console.log(`🧹 Removendo ${parsed.length - recent.length} notificações expiradas`);
+          saveNotifications(recent);
+        }
       }
     } catch (error) {
       console.error('Erro ao carregar notificações:', error);
@@ -171,9 +179,15 @@ export const NotificationProvider = ({ children }) => {
       const saved = localStorage.getItem(`ludomusic_invitations_${currentUserId}`);
       if (saved) {
         const parsed = JSON.parse(saved);
-        // Filtrar convites expirados (mais de 1 hora)
+        // Filtrar convites expirados (mais de 1 hora) E salvar a lista filtrada
         const active = parsed.filter(i => Date.now() - i.timestamp < 60 * 60 * 1000);
         setInvitations(active);
+
+        // IMPORTANTE: Salvar a lista filtrada para remover convites expirados
+        if (active.length !== parsed.length) {
+          console.log(`🧹 Removendo ${parsed.length - active.length} convites expirados`);
+          saveInvitations(active);
+        }
       }
     } catch (error) {
       console.error('Erro ao carregar convites:', error);

@@ -5,187 +5,71 @@ class BrowserCompatibility {
     this.audioConfig = this._initializeAudioConfig();
   }
 
-  // Inicializar configuração de áudio
+  // Configuração simplificada de áudio
   _initializeAudioConfig() {
-    const config = {
+    // Configuração única e simples para todos os navegadores
+    return {
       preload: 'metadata',
-      crossOrigin: 'anonymous',
-      useWebWorker: true,
-      maxRetries: 3,
-      timeout: 5000,
-      playTimeout: 3000,
-      loadDelay: 100,
-      useCache: true,
-      forceReload: false
+      crossOrigin: null, // Removido para evitar problemas de CORS
+      timeout: 3000, // Timeout reduzido
+      playTimeout: 2000, // Timeout de play reduzido
+      loadDelay: 50, // Delay mínimo
+      maxRetries: 1 // Apenas 1 retry
     };
-
-    switch (this.browserInfo.name) {
-      case 'safari':
-        return {
-          ...config,
-          preload: 'none', // Safari tem problemas com preload
-          crossOrigin: null, // Não usar crossOrigin no Safari
-          useWebWorker: false,
-          timeout: 8000,
-          playTimeout: 5000,
-          loadDelay: 300,
-          forceReload: true
-        };
-
-      case 'edge':
-        return {
-          ...config,
-          useWebWorker: false,
-          timeout: 7000,
-          playTimeout: 4000,
-          loadDelay: 200,
-          maxRetries: 2
-        };
-
-      case 'opera':
-        return {
-          ...config,
-          useWebWorker: false,
-          timeout: this.browserInfo.variant === 'gx' ? 7000 : 6000, // Opera GX pode precisar de mais tempo
-          playTimeout: this.browserInfo.variant === 'gx' ? 5000 : 4000,
-          loadDelay: this.browserInfo.variant === 'gx' ? 300 : 200,
-          maxRetries: 2
-        };
-
-      case 'firefox':
-        return {
-          ...config,
-          crossOrigin: null, // Firefox às vezes tem problemas com CORS
-          useWebWorker: false,
-          loadDelay: 150
-        };
-
-      case 'chrome':
-      default:
-        return config; // Chrome usa configuração padrão
-    }
   }
 
-  // Detectar navegador e versão
+  // Detecção simplificada de navegador
   detectBrowser() {
     if (typeof window === 'undefined') {
       return { name: 'unknown', version: 0, isProblematic: false };
     }
-    
+
     const userAgent = window.navigator.userAgent;
-    let browser = { name: 'unknown', version: 0, isProblematic: false };
 
+    // Simplificado: apenas detectar se é Chrome/Firefox (estáveis) ou outros (problemáticos)
     if (userAgent.includes('Chrome') && !userAgent.includes('Edg')) {
-      browser.name = 'chrome';
-      const match = userAgent.match(/Chrome\/(\d+)/);
-      browser.version = match ? parseInt(match[1]) : 0;
-      browser.isProblematic = false; // Chrome é o mais estável
+      return { name: 'chrome', version: 0, isProblematic: false };
     } else if (userAgent.includes('Firefox')) {
-      browser.name = 'firefox';
-      const match = userAgent.match(/Firefox\/(\d+)/);
-      browser.version = match ? parseInt(match[1]) : 0;
-      browser.isProblematic = false; // Firefox funciona bem
-    } else if (userAgent.includes('Safari') && !userAgent.includes('Chrome')) {
-      browser.name = 'safari';
-      const match = userAgent.match(/Version\/(\d+)/);
-      browser.version = match ? parseInt(match[1]) : 0;
-      browser.isProblematic = true; // Safari tem problemas com áudio
-    } else if (userAgent.includes('Edg')) {
-      browser.name = 'edge';
-      const match = userAgent.match(/Edg\/(\d+)/);
-      browser.version = match ? parseInt(match[1]) : 0;
-      browser.isProblematic = true; // Edge pode ter problemas
-    } else if (userAgent.includes('Opera') || userAgent.includes('OPR')) {
-      browser.name = 'opera';
-      // Detectar Opera GX especificamente
-      if (userAgent.includes('GX')) {
-        browser.variant = 'gx';
-      }
-      const match = userAgent.match(/(Opera|OPR)\/(\d+)/);
-      browser.version = match ? parseInt(match[2]) : 0;
-      browser.isProblematic = true; // Opera/Opera GX podem ter problemas
+      return { name: 'firefox', version: 0, isProblematic: false };
+    } else {
+      // Todos os outros navegadores são considerados problemáticos
+      return { name: 'other', version: 0, isProblematic: true };
     }
-
-    // Detectar versões antigas problemáticas
-    if (browser.name === 'chrome' && browser.version < 80) {
-      browser.isProblematic = true;
-    }
-    if (browser.name === 'firefox' && browser.version < 75) {
-      browser.isProblematic = true;
-    }
-
-    return browser;
   }
 
 
 
-  // Configurar elemento de áudio com configurações específicas do navegador
+  // Configuração simplificada do elemento de áudio
   configureAudioElement(audio) {
-    const config = this.audioConfig;
-
-    if (config.preload) {
-      audio.preload = config.preload;
-    }
-
-    if (config.crossOrigin) {
-      audio.crossOrigin = config.crossOrigin;
-    } else {
-      audio.removeAttribute('crossorigin');
-    }
-
-    // Configurações específicas para navegadores problemáticos
-    if (this.browserInfo.isProblematic) {
-      // Desabilitar algumas otimizações para melhor compatibilidade
-      audio.muted = false; // Garantir que não está mudo
-      
-      // Para Safari, configurações especiais
-      if (this.browserInfo.name === 'safari') {
-        audio.playsInline = true;
-        audio.controls = false;
-      }
-    }
-
+    // Configuração mínima e universal
+    audio.preload = 'metadata';
+    audio.removeAttribute('crossorigin'); // Remove CORS para evitar problemas
+    audio.muted = false;
+    audio.playsInline = true; // Para mobile
     return audio;
   }
 
-  // Método para reproduzir áudio com fallbacks específicos do navegador
+  // Método simplificado para reproduzir áudio
   async playAudio(audio) {
-    const config = this.audioConfig;
-
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
         reject(new Error('Timeout ao reproduzir áudio'));
-      }, config.playTimeout);
+      }, 2000); // Timeout fixo de 2 segundos
 
       const cleanup = () => {
         clearTimeout(timeout);
       };
 
-      // Para navegadores problemáticos, usar abordagem mais conservadora
-      if (this.browserInfo.isProblematic) {
-        // Verificar se o áudio está pronto
-        if (audio.readyState < 2) { // HAVE_CURRENT_DATA
-          audio.addEventListener('canplay', () => {
-            this.attemptPlay(audio, cleanup, resolve, reject);
-          }, { once: true });
-          return;
-        }
-      }
-
+      // Tentar reproduzir diretamente
       this.attemptPlay(audio, cleanup, resolve, reject);
     });
   }
 
-  // Tentar reproduzir com tratamento de erros específico
+  // Tentativa simplificada de reprodução
   async attemptPlay(audio, cleanup, resolve, reject) {
     try {
-      // Para Safari, aguardar um pouco antes de tentar reproduzir
-      if (this.browserInfo.name === 'safari') {
-        await new Promise(resolve => setTimeout(resolve, 100));
-      }
-
       const playPromise = audio.play();
-      
+
       if (playPromise !== undefined) {
         playPromise
           .then(() => {
@@ -197,7 +81,7 @@ class BrowserCompatibility {
             this.handlePlayError(error, reject);
           });
       } else {
-        // Navegadores muito antigos que não retornam Promise
+        // Navegadores antigos
         cleanup();
         resolve();
       }
@@ -207,7 +91,7 @@ class BrowserCompatibility {
     }
   }
 
-  // Tratar erros específicos de reprodução
+  // Tratamento simplificado de erros
   handlePlayError(error, reject) {
     let userMessage = 'Erro ao reproduzir áudio';
 
@@ -216,15 +100,13 @@ class BrowserCompatibility {
         userMessage = 'Clique em qualquer lugar para permitir reprodução de áudio';
         break;
       case 'NotSupportedError':
-        userMessage = 'Formato de áudio não suportado neste navegador';
+        userMessage = 'Formato de áudio não suportado';
         break;
       case 'AbortError':
         userMessage = 'Reprodução cancelada';
         break;
       default:
-        if (this.browserInfo.isProblematic) {
-          userMessage = `Problema de compatibilidade com ${this.browserInfo.name}. Tente atualizar o navegador.`;
-        }
+        userMessage = 'Erro ao reproduzir áudio. Tente novamente.';
     }
 
     reject(new Error(userMessage));
@@ -245,36 +127,14 @@ class BrowserCompatibility {
     return this.audioConfig;
   }
 
-  // Método para resetar áudio com configurações específicas do navegador
+  // Reset simplificado de áudio
   resetAudio(audio) {
     try {
       audio.pause();
-      
-      if (this.browserInfo.name === 'safari') {
-        // Safari precisa de um reset mais agressivo
-        audio.currentTime = 0;
-        audio.removeAttribute('src');
-        audio.load();
-      } else {
-        // Outros navegadores
-        audio.currentTime = 0;
-      }
+      audio.currentTime = 0;
     } catch (error) {
       console.warn('Erro ao resetar áudio:', error);
     }
-  }
-
-  // Verificar se o navegador suporta recursos específicos
-  checkFeatureSupport() {
-    const support = {
-      webAudio: !!(window.AudioContext || window.webkitAudioContext),
-      mediaSource: !!window.MediaSource,
-      webWorkers: !!window.Worker,
-      fetch: !!window.fetch,
-      promises: typeof Promise !== 'undefined'
-    };
-
-    return support;
   }
 }
 

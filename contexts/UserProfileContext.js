@@ -954,6 +954,10 @@ export const UserProfileProvider = ({ children }) => {
         throw new Error('Perfil corrompido - dados críticos ausentes');
       }
 
+      // GARANTIR que XP e level estão sincronizados
+      updatedProfile.stats.xp = updatedProfile.xp;
+      updatedProfile.stats.level = updatedProfile.level;
+
       // SEMPRE salvar localmente primeiro (crítico para não perder dados)
       setProfile(updatedProfile);
       localStorage.setItem(`ludomusic_profile_${userId}`, JSON.stringify(updatedProfile));
@@ -1012,10 +1016,42 @@ export const UserProfileProvider = ({ children }) => {
       const data = await response.json();
       console.log('✅ Perfil resetado no servidor:', data);
 
-      // Limpar dados locais
-      console.log('🧹 Limpando dados locais...');
+      // Limpar TODOS os dados locais relacionados ao usuário
+      console.log('🧹 Limpando dados locais COMPLETAMENTE...');
+
+      // Dados do perfil
       localStorage.removeItem(`ludomusic_profile_${userId}`);
       localStorage.removeItem(`ludomusic_profile_backup_${userId}`);
+
+      // Dados de jogo
+      const keysToRemove = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && (
+          key.includes(`ludomusic_game_state_day_`) ||
+          key.includes(`ludomusic_infinite_stats`) ||
+          key.includes(`ludomusic_notifications_${userId}`) ||
+          key.includes(`ludomusic_invitations_${userId}`) ||
+          key.includes(`ludomusic_friends_${userId}`) ||
+          key.includes(`ludomusic_friend_requests_${userId}`)
+        )) {
+          keysToRemove.push(key);
+        }
+      }
+
+      // Remover todas as chaves encontradas
+      keysToRemove.forEach(key => {
+        localStorage.removeItem(key);
+        console.log(`🗑️ Removido: ${key}`);
+      });
+
+      // Limpar dados de tutorial para que apareça novamente
+      localStorage.removeItem('ludomusic_tutorial_seen');
+
+      // Limpar cookies de amigos
+      import('../utils/cookies').then(({ FriendsCookies }) => {
+        FriendsCookies.clearFriendsData();
+      });
 
       // Atualizar estado com o novo perfil
       setProfile(data.profile);
@@ -1067,7 +1103,7 @@ export const UserProfileProvider = ({ children }) => {
       }
 
       // Limpar TODOS os dados locais relacionados ao usuário
-      console.log('🧹 Limpando dados locais...');
+      console.log('🧹 Limpando dados locais COMPLETAMENTE...');
 
       // Dados do perfil
       localStorage.removeItem(`ludomusic_profile_${userId}`);
@@ -1082,6 +1118,27 @@ export const UserProfileProvider = ({ children }) => {
       localStorage.removeItem(`ludomusic_friends_${userId}`);
       localStorage.removeItem(`ludomusic_friend_requests_${userId}`);
       localStorage.removeItem(`ludomusic_sent_requests_${userId}`);
+
+      // Limpar TODOS os dados relacionados ao jogo
+      const keysToRemove = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('ludomusic_')) {
+          keysToRemove.push(key);
+        }
+      }
+
+      // Remover todas as chaves do ludomusic
+      keysToRemove.forEach(key => {
+        localStorage.removeItem(key);
+        console.log(`🗑️ Removido: ${key}`);
+      });
+
+      // Limpar cookies de autenticação e amigos
+      import('../utils/cookies').then(({ AuthCookies, FriendsCookies }) => {
+        AuthCookies.clearAuth();
+        FriendsCookies.clearFriendsData();
+      });
 
       // Dados de jogo
       localStorage.removeItem(`ludomusic_daily_progress_${userId}`);
@@ -1282,7 +1339,13 @@ export const UserProfileProvider = ({ children }) => {
 
     updatedProfile = checkAndUpdateBadges(updatedProfile);
 
+    // GARANTIR sincronização de XP e level em stats
+    updatedProfile.stats.xp = updatedProfile.xp;
+    updatedProfile.stats.level = updatedProfile.level;
+
     setProfile(updatedProfile);
+
+    // Salvar localmente também
     localStorage.setItem(`ludomusic_profile_${userId}`, JSON.stringify(updatedProfile));
 
     // Salvar no servidor

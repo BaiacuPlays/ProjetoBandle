@@ -80,7 +80,7 @@ export const usePresence = () => {
   const startHeartbeat = () => {
     if (heartbeatIntervalRef.current) return;
 
-    heartbeatIntervalRef.current = setInterval(sendHeartbeat, 60000); // 60 segundos
+    heartbeatIntervalRef.current = setInterval(sendHeartbeat, 120000); // 120 segundos - OTIMIZADO
   };
 
   // Parar heartbeat
