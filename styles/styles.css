@@ -17,12 +17,7 @@ body {
   flex-direction: column;
 }
 
-/* Aplicar transform apenas quando não há modais abertos */
-body:not(.modal-open) {
-  transform: scale(var(--interface-scale));
-  transform-origin: top left;
-  transition: transform 0.3s ease;
-}
+/* Transform removido - estava causando problemas de posicionamento em modais */
 
 /* BLOQUEIO DE SCROLL PARA MODAIS - VERSÃO ULTRA ESPECÍFICA */
 html.modal-open,

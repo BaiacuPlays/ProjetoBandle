@@ -39,23 +39,23 @@ export default async function handler(req, res) {
 
     if (isDevelopment && !hasKVConfig) {
       // Verificar no storage local
-      const { localUsers, localProfiles, localSessions } = require('../auth');
-      
+      const { localUsers, localSessions } = require('../../../utils/storage');
+
       results.checks.user = localUsers.has(userKey);
-      results.checks.profile = localProfiles.has(profileKey);
+      results.checks.profile = false; // Não implementado no local storage
       results.checks.sessions = [];
-      
+
       // Verificar sessões
       for (const [sessionKey, sessionData] of localSessions.entries()) {
         if (sessionData.username === username) {
           results.checks.sessions.push(sessionKey);
         }
       }
-      
+
       results.checks.friends = false; // Não implementado no local storage
       results.checks.friendRequests = false;
       results.checks.sentRequests = false;
-      
+
     } else {
       // Verificar no Vercel KV
       results.checks.user = await kv.exists(userKey);
@@ -63,54 +63,54 @@ export default async function handler(req, res) {
       results.checks.friends = await kv.exists(friendsKey);
       results.checks.friendRequests = await kv.exists(friendRequestsKey);
       results.checks.sentRequests = await kv.exists(sentRequestsKey);
-      
+
       // Verificar sessões
       const sessionKeys = await kv.keys('session:*');
       results.checks.sessions = [];
-      
+
       for (const sessionKey of sessionKeys) {
         const sessionData = await kv.get(sessionKey);
         if (sessionData && sessionData.username === username) {
           results.checks.sessions.push(sessionKey);
         }
       }
-      
+
       // Verificar dados diários
       const dailyKeys = await kv.keys('daily:*');
       results.checks.dailyData = [];
-      
+
       for (const dailyKey of dailyKeys) {
         const dailyData = await kv.get(dailyKey);
         if (dailyData && dailyData.userId === userId) {
           results.checks.dailyData.push(dailyKey);
         }
       }
-      
+
       // Verificar se aparece em listas de amigos de outros usuários
       const allFriendsKeys = await kv.keys('friends:*');
       results.checks.appearsInOtherFriendsLists = [];
-      
+
       for (const friendsListKey of allFriendsKeys) {
         if (friendsListKey === friendsKey) continue; // Pular própria lista
-        
+
         const friendsList = await kv.get(friendsListKey) || [];
         const appearsInList = friendsList.some(friend => friend.id === userId);
-        
+
         if (appearsInList) {
           results.checks.appearsInOtherFriendsLists.push(friendsListKey);
         }
       }
-      
+
       // Verificar solicitações pendentes em outras listas
       const allRequestKeys = await kv.keys('friend_requests:*');
       results.checks.appearsInOtherRequests = [];
-      
+
       for (const requestKey of allRequestKeys) {
         if (requestKey === friendRequestsKey) continue; // Pular própria lista
-        
+
         const requests = await kv.get(requestKey) || [];
         const appearsInRequests = requests.some(req => req.fromUserId === userId);
-        
+
         if (appearsInRequests) {
           results.checks.appearsInOtherRequests.push(requestKey);
         }
@@ -118,8 +118,8 @@ export default async function handler(req, res) {
     }
 
     // Determinar se a conta existe
-    const accountExists = results.checks.user || 
-                         results.checks.profile || 
+    const accountExists = results.checks.user ||
+                         results.checks.profile ||
                          results.checks.sessions.length > 0 ||
                          results.checks.friends ||
                          results.checks.friendRequests ||
@@ -129,8 +129,8 @@ export default async function handler(req, res) {
                          (results.checks.appearsInOtherRequests && results.checks.appearsInOtherRequests.length > 0);
 
     results.accountExists = accountExists;
-    results.summary = accountExists ? 
-      '❌ Conta ainda existe (não foi completamente deletada)' : 
+    results.summary = accountExists ?
+      '❌ Conta ainda existe (não foi completamente deletada)' :
       '✅ Conta foi completamente deletada';
 
     console.log(`🔍 Resultado da verificação:`, results);

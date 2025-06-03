@@ -19,6 +19,7 @@ import BrowserCompatibilityWarning from '../components/BrowserCompatibilityWarni
 
 import { useLanguage } from '../contexts/LanguageContext';
 import { useUserProfile } from '../contexts/UserProfileContext';
+import { useAuth } from '../contexts/AuthContext';
 import { fetchTimezone } from '../config/api';
 import { browserCompatibility } from '../utils/browserCompatibility';
 import { useServiceWorker } from '../hooks/useServiceWorker';
@@ -43,6 +44,7 @@ const MAX_ATTEMPTS = 6;
 
 export default function Home() {
   const { t, isClient } = useLanguage();
+  const { isAuthenticated } = useAuth();
 
   // Hook do perfil com verificação de segurança
   let updateGameStats = () => {};
@@ -500,6 +502,107 @@ export default function Home() {
     return () => window.removeEventListener('openDonationModal', handleOpenDonationModal);
   }, []);
 
+  // 🔒 Verificar jogo diário quando usuário faz login (baseado no estado de autenticação)
+  useEffect(() => {
+    const checkDailyGameAfterLogin = async () => {
+      if (!isAuthenticated || isInfiniteMode) {
+        return; // Só verificar se estiver autenticado e no modo diário (não infinito)
+      }
+
+      console.log('🔐 Usuário autenticado - verificando status do jogo diário...');
+
+      try {
+        const sessionToken = localStorage.getItem('ludomusic_session_token');
+        if (!sessionToken) {
+          console.log('🔓 Token não encontrado');
+          return;
+        }
+
+        const now = new Date();
+        const dateStr = now.toISOString().split('T')[0]; // YYYY-MM-DD
+
+        const response = await fetch('/api/validate-daily-game', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${sessionToken}`
+          },
+          body: JSON.stringify({
+            date: dateStr,
+            gameStats: {
+              won: false,
+              attempts: 0,
+              mode: 'daily',
+              song: { title: 'check_only', game: 'check_only', id: 'check_only' },
+              playTime: 0
+            }
+          })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          if (errorData.error === 'Jogo diário já completado hoje') {
+            console.log('🚫 Usuário já jogou hoje - carregando estado final');
+
+            // Calcular dia do ano para buscar estado salvo
+            const start = new Date(now.getFullYear(), 0, 0);
+            const diff = now - start + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
+            const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+            // Carregar estado salvo do localStorage
+            try {
+              const savedState = localStorage.getItem(`ludomusic_game_state_day_${dayOfYear}`);
+              if (savedState) {
+                const parsedState = JSON.parse(savedState);
+                if (parsedState.day === dayOfYear && parsedState.gameOver) {
+                  console.log('📋 Estado final encontrado:', parsedState);
+
+                  // Restaurar estado final
+                  setAttempts(parsedState.attempts || 6);
+                  setHistory(parsedState.history || []);
+                  setMessage(parsedState.message || 'Você já jogou hoje!');
+                  setGameOver(true);
+                  setShowHint(true); // Mostrar resposta
+                  setActiveHint(0);
+                  setCurrentClipDuration(15); // Permitir ouvir música completa
+                  setGameResult(parsedState.gameResult || { won: false, attempts: parsedState.attempts || 6 });
+
+                  // Mostrar estatísticas automaticamente
+                  setTimeout(() => {
+                    setShowStatistics(true);
+                  }, 1000);
+                }
+              } else {
+                // Se não há estado salvo, mostrar mensagem genérica
+                console.log('⚠️ Usuário já jogou mas não há estado salvo');
+                setGameOver(true);
+                setMessage('Você já jogou hoje! Volte amanhã para uma nova música.');
+                setShowHint(true);
+                setActiveHint(0);
+                setCurrentClipDuration(15);
+              }
+            } catch (error) {
+              console.error('❌ Erro ao carregar estado final:', error);
+              // Fallback: mostrar que já jogou
+              setGameOver(true);
+              setMessage('Você já jogou hoje! Volte amanhã para uma nova música.');
+              setShowHint(true);
+            }
+          }
+        } else {
+          console.log('✅ Usuário pode jogar hoje');
+        }
+      } catch (error) {
+        console.error('❌ Erro ao verificar status do jogo diário:', error);
+      }
+    };
+
+    // Aguardar um pouco para garantir que o componente foi montado
+    const timeoutId = setTimeout(checkDailyGameAfterLogin, 1000);
+
+    return () => clearTimeout(timeoutId);
+  }, [isAuthenticated, isInfiniteMode]); // Executar quando autenticação ou modo de jogo mudar
+
   // Controle de anúncios intersticiais
   useEffect(() => {
     // Mostrar anúncio intersticial a cada 5 jogos
@@ -557,6 +660,53 @@ export default function Home() {
       localStorage.setItem(savedDayKey, dayOfYear.toString());
       setCurrentDay(dayOfYear);
 
+      // 🔒 VERIFICAÇÃO DE JOGO DIÁRIO - Verificar se usuário já jogou hoje
+      const checkDailyGameStatus = async () => {
+        try {
+          const sessionToken = localStorage.getItem('ludomusic_session_token');
+          if (!sessionToken) {
+            console.log('🔓 Usuário não logado - permitindo jogo diário');
+            return false; // Não logado, pode jogar
+          }
+
+          const dateStr = now.toISOString().split('T')[0]; // YYYY-MM-DD
+
+          const response = await fetch('/api/validate-daily-game', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${sessionToken}`
+            },
+            body: JSON.stringify({
+              date: dateStr,
+              gameStats: {
+                won: false,
+                attempts: 0,
+                mode: 'daily',
+                song: { title: 'check_only', game: 'check_only', id: 'check_only' },
+                playTime: 0
+              }
+            })
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            if (errorData.error === 'Jogo diário já completado hoje') {
+              console.log('🚫 Usuário já jogou hoje - carregando estado final');
+              return true; // Já jogou
+            }
+          }
+
+          console.log('✅ Usuário pode jogar hoje');
+          return false; // Pode jogar
+        } catch (error) {
+          console.error('❌ Erro ao verificar status do jogo diário:', error);
+          return false; // Em caso de erro, permitir jogar
+        }
+      };
+
+      const hasPlayedToday = await checkDailyGameStatus();
+
       // --- OVERRIDE ESPECIAL PARA 28/05/2025 ---
       // Se a data for 28/05/2025, força a música 'Crowdfunding Single'
       let song;
@@ -576,6 +726,44 @@ export default function Home() {
       const songWithEncodedUrl = { ...song, audioUrl: song.audioUrl };
 
       setCurrentSong(songWithEncodedUrl);
+
+      // 🔒 Se usuário já jogou hoje, carregar estado final do jogo
+      if (hasPlayedToday) {
+        console.log('🎯 Carregando estado final do jogo diário...');
+
+        // Carregar estado salvo do localStorage
+        try {
+          const savedState = localStorage.getItem(`ludomusic_game_state_day_${dayOfYear}`);
+          if (savedState) {
+            const parsedState = JSON.parse(savedState);
+            if (parsedState.day === dayOfYear && parsedState.gameOver) {
+              console.log('📋 Estado final encontrado:', parsedState);
+
+              // Restaurar estado final
+              setAttempts(parsedState.attempts || 6);
+              setHistory(parsedState.history || []);
+              setMessage(parsedState.message || 'Você já jogou hoje!');
+              setGameOver(true);
+              setShowHint(true); // Mostrar resposta
+              setActiveHint(0);
+              setCurrentClipDuration(15); // Permitir ouvir música completa
+              setGameResult(parsedState.gameResult || { won: false, attempts: parsedState.attempts || 6 });
+
+              // Mostrar estatísticas automaticamente
+              setTimeout(() => {
+                setShowStatistics(true);
+              }, 1000);
+            }
+          }
+        } catch (error) {
+          console.error('❌ Erro ao carregar estado final:', error);
+          // Fallback: mostrar que já jogou
+          setGameOver(true);
+          setMessage('Você já jogou hoje! Volte amanhã para uma nova música.');
+          setShowHint(true);
+        }
+      }
+
       // Calcular tempo até a próxima meia-noite
       const nextMidnight = new Date(now);
       nextMidnight.setHours(24, 0, 0, 0);
@@ -1538,6 +1726,7 @@ export default function Home() {
         'ludomusic_infinite_stats',
         'ludomusic_daily_history', // Histórico de músicas para controle de repetições
         'ludomusic_tutorial_seen', // Tutorial visto pelo usuário
+        'ludomusic_profile_tutorial_seen', // Tutorial do perfil visto
         'ludomusic_current_day' // Dia atual salvo
       ];
 

@@ -604,21 +604,77 @@ export const FriendsProvider = ({ children }) => {
     }
   };
 
-  // Funções de referência (placeholder)
-  const referFriend = () => {
+  // Funções de referência
+  const referFriend = async (email) => {
     if (!isAuthenticated) {
       throw new Error('Você precisa estar logado para referenciar amigos');
+    }
+
+    if (!email || !email.includes('@')) {
+      throw new Error('Email inválido');
+    }
+
+    try {
+      const sessionToken = localStorage.getItem('ludomusic_session_token');
+      const response = await fetch('/api/referral', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${sessionToken}`
+        },
+        body: JSON.stringify({
+          action: 'send_invite',
+          email: email.trim().toLowerCase()
+        })
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Erro ao enviar convite');
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Erro ao enviar convite por email:', error);
+      throw error;
     }
   };
 
   const getReferralLink = () => {
-    if (!isAuthenticated) {
-      throw new Error('Você precisa estar logado para obter link de referência');
+    if (!isAuthenticated || !currentUserId) {
+      return `${window.location.origin}?ref=DEMO123`;
     }
+
+    // Gerar código de referência baseado no ID do usuário
+    const referralCode = currentUserId.replace('auth_', '').slice(-8).toUpperCase();
+    return `${window.location.origin}?ref=${referralCode}`;
   };
 
-  const processReferral = () => {
-    return false;
+  const processReferral = async (referralCode) => {
+    if (!referralCode || !isAuthenticated) {
+      return false;
+    }
+
+    try {
+      const sessionToken = localStorage.getItem('ludomusic_session_token');
+      const response = await fetch('/api/referral', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${sessionToken}`
+        },
+        body: JSON.stringify({
+          action: 'process_referral',
+          referralCode: referralCode.toUpperCase()
+        })
+      });
+
+      const data = await response.json();
+      return response.ok ? data : false;
+    } catch (error) {
+      console.error('Erro ao processar referral:', error);
+      return false;
+    }
   };
 
 

@@ -127,15 +127,19 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
-  // Polling OTIMIZADO para verificar novos convites - REDUZIDO para 30 segundos
+  // Polling OTIMIZADO para verificar novos convites e notificações - REDUZIDO para 30 segundos
   useEffect(() => {
     if (!currentUserId || !isAuthenticated) return;
 
     // Verificação inicial
     loadServerInvites();
+    loadServerNotifications();
 
     const optimizedConfig = getOptimizedConfig();
-    const interval = setInterval(loadServerInvites, optimizedConfig.polling.notifications); // Otimizado automaticamente
+    const interval = setInterval(() => {
+      loadServerInvites();
+      loadServerNotifications();
+    }, optimizedConfig.polling.notifications); // Otimizado automaticamente
     return () => clearInterval(interval);
   }, [currentUserId, isAuthenticated]);
 
@@ -144,13 +148,72 @@ export const NotificationProvider = ({ children }) => {
     if (!currentUserId || !isAuthenticated) return;
 
     const handleFocus = () => {
-      console.log('🔍 Página ganhou foco, verificando novos convites...');
+      console.log('🔍 Página ganhou foco, verificando novos convites e notificações...');
       loadServerInvites();
+      loadServerNotifications();
     };
 
     window.addEventListener('focus', handleFocus);
     return () => window.removeEventListener('focus', handleFocus);
   }, [currentUserId, isAuthenticated]);
+
+  // Carregar notificações do servidor
+  const loadServerNotifications = async () => {
+    if (!currentUserId || !isAuthenticated) return;
+
+    try {
+      const sessionToken = localStorage.getItem('ludomusic_session_token');
+      if (!sessionToken) return;
+
+      const response = await fetch('/api/notifications', {
+        headers: {
+          'Authorization': `Bearer ${sessionToken}`,
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
+        }
+      });
+
+      if (response.ok) {
+        const serverNotifications = await response.json();
+
+        // Converter notificações do servidor para o formato local
+        const formattedNotifications = serverNotifications.map(notif => ({
+          id: notif.id,
+          type: notif.type,
+          title: getNotificationTitle(notif.type, notif.message),
+          message: notif.message,
+          timestamp: new Date(notif.createdAt).getTime(),
+          read: notif.read,
+          data: notif.data || {}
+        }));
+
+        // Mesclar com notificações locais (manter notificações que não vieram do servidor)
+        const localNotifications = notifications.filter(n => !n.id.startsWith('notif_server_'));
+        const mergedNotifications = [...formattedNotifications, ...localNotifications]
+          .sort((a, b) => b.timestamp - a.timestamp)
+          .slice(0, 50); // Máximo 50 notificações
+
+        setNotifications(mergedNotifications);
+        saveNotifications(mergedNotifications);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar notificações do servidor:', error);
+    }
+  };
+
+  // Função auxiliar para gerar títulos de notificação
+  const getNotificationTitle = (type, message) => {
+    switch (type) {
+      case 'friend_request':
+        return 'Novo Pedido de Amizade!';
+      case 'friend_accepted':
+        return 'Pedido Aceito!';
+      case 'multiplayer_invite':
+        return 'Convite para Multiplayer!';
+      default:
+        return 'Nova Notificação';
+    }
+  };
 
   // Carregar notificações salvas
   const loadNotifications = () => {

@@ -49,47 +49,48 @@ const UserProfile = ({ isOpen, onClose }) => {
     userId // Adicionar userId do contexto
   } = useUserProfile() || {}; // Add || {} to safely destructure if context is null/undefined
 
-  // Inicializar formulário de edição e verificar tutorial
+  // Verificar se deve mostrar tutorial quando modal abre (independente de autenticação)
+  useEffect(() => {
+    if (isOpen && !showTutorial) {
+      // Verificar se já viu o tutorial do perfil
+      const hasSeenTutorial = localStorage.getItem('ludomusic_profile_tutorial_seen') === 'true';
+
+      if (!hasSeenTutorial) {
+        console.log('📚 Mostrando tutorial do perfil pela primeira vez');
+        setShowTutorial(true);
+      }
+    }
+  }, [isOpen, showTutorial]);
+
+  // Inicializar formulário de edição quando há perfil
   useEffect(() => {
     if (profile && userId) {
       setEditForm({
         displayName: profile.displayName || '',
         bio: profile.bio || ''
       });
-
-      // Verificar se deve mostrar o tutorial
-      // Verificar tanto no perfil quanto no localStorage
-      const hasSeenInProfile = profile.preferences?.hasSeenProfileTutorial;
-      const hasSeenInStorage = localStorage.getItem(`ludomusic_tutorial_seen_${userId}`) === 'true';
-
-      // Mostrar tutorial apenas se:
-      // 1. Modal está aberto
-      // 2. Usuário está autenticado
-      // 3. Não viu o tutorial (nem no perfil nem no localStorage)
-      // 4. Tutorial não está sendo mostrado atualmente
-      if (isOpen && isAuthenticated && !hasSeenInProfile && !hasSeenInStorage && !showTutorial) {
-        console.log('📚 Mostrando tutorial do perfil pela primeira vez');
-        setShowTutorial(true);
-      }
     }
-  }, [profile, isOpen, isAuthenticated, userId, showTutorial]); // Depend on all relevant variables
+  }, [profile, userId]);
 
   // Definir função handleCloseTutorial antes de usar
   const handleCloseTutorial = async () => {
     setShowTutorial(false);
 
-    // Marcar tutorial como visto
+    // Marcar tutorial como visto no localStorage
+    localStorage.setItem('ludomusic_profile_tutorial_seen', 'true');
+    console.log('✅ Tutorial do perfil marcado como visto');
+
+    // Se há perfil e função disponível, marcar também no perfil
     if (markTutorialAsSeen) {
       try {
         await markTutorialAsSeen();
-        console.log('✅ Tutorial do perfil marcado como visto');
+        console.log('✅ Tutorial do perfil marcado como visto no servidor');
       } catch (error) {
-        console.error('❌ Erro ao marcar tutorial como visto:', error);
+        console.error('❌ Erro ao marcar tutorial como visto no servidor:', error);
       }
     }
 
-    // Se usuário não está autenticado após o tutorial, fechar o modal
-    // O componente irá automaticamente mostrar o login na próxima renderização
+    // Após fechar o tutorial, o componente irá automaticamente mostrar o login
   };
 
   // If the modal is not open, don't render anything

@@ -1,5 +1,7 @@
 // API para validar se usuário já jogou o jogo diário hoje
 import { kv } from '@vercel/kv';
+import fs from 'fs';
+import path from 'path';
 
 // Fallback para desenvolvimento local
 const localDailyGames = new Map();
@@ -7,6 +9,48 @@ const localDailyGames = new Map();
 // Verificar se estamos em ambiente de desenvolvimento
 const isDevelopment = process.env.NODE_ENV === 'development';
 const hasKVConfig = process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN;
+
+// Arquivo para persistir dados em desenvolvimento local
+const LOCAL_DATA_FILE = path.join(process.cwd(), 'temp', 'daily-games.json');
+
+// Função para carregar dados locais do arquivo
+const loadLocalData = () => {
+  if (!isDevelopment || hasKVConfig) return;
+
+  try {
+    // Criar diretório temp se não existir
+    const tempDir = path.dirname(LOCAL_DATA_FILE);
+    if (!fs.existsSync(tempDir)) {
+      fs.mkdirSync(tempDir, { recursive: true });
+    }
+
+    if (fs.existsSync(LOCAL_DATA_FILE)) {
+      const data = JSON.parse(fs.readFileSync(LOCAL_DATA_FILE, 'utf8'));
+      Object.entries(data).forEach(([key, value]) => {
+        localDailyGames.set(key, value);
+      });
+      console.log('📁 Dados locais de jogos diários carregados:', localDailyGames.size, 'registros');
+    }
+  } catch (error) {
+    console.warn('⚠️ Erro ao carregar dados locais:', error);
+  }
+};
+
+// Função para salvar dados locais no arquivo
+const saveLocalData = () => {
+  if (!isDevelopment || hasKVConfig) return;
+
+  try {
+    const data = Object.fromEntries(localDailyGames);
+    fs.writeFileSync(LOCAL_DATA_FILE, JSON.stringify(data, null, 2));
+    console.log('💾 Dados locais de jogos diários salvos:', localDailyGames.size, 'registros');
+  } catch (error) {
+    console.warn('⚠️ Erro ao salvar dados locais:', error);
+  }
+};
+
+// Carregar dados na inicialização
+loadLocalData();
 
 // Função para verificar autenticação
 const verifyAuthentication = async (req) => {
@@ -67,34 +111,66 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Data e estatísticas do jogo são obrigatórias' });
     }
 
-    // Chave para armazenar jogos diários do usuário
-    const dailyGameKey = `daily_game:${userId}:${date}`;
+    // Verificar se é apenas uma verificação (não salvar)
+    const isCheckOnly = gameStats.song?.title === 'check_only';
 
-    // Verificar se usuário já jogou hoje
+    // 🔒 VERIFICAÇÃO DUPLA DE SEGURANÇA PARA JOGO DIÁRIO
+    // Chave principal por userId (auth_username)
+    const dailyGameKey = `daily_game:${userId}:${date}`;
+    // Chave secundária por username (backup de segurança)
+    const dailyGameByUsernameKey = `daily_game_by_user:${authResult.username}:${date}`;
+
+    // Verificar se usuário já jogou hoje (verificação principal)
     let existingGame = null;
-    
+
     if (isDevelopment && !hasKVConfig) {
       existingGame = localDailyGames.get(dailyGameKey);
     } else {
       existingGame = await kv.get(dailyGameKey);
     }
 
-    if (existingGame) {
-      console.log(`🚫 Usuário ${userId} já jogou em ${date}:`, existingGame);
-      return res.status(400).json({ 
+    // 🔒 VERIFICAÇÃO ADICIONAL POR USERNAME (camada extra de segurança)
+    let existingGameByUsername = null;
+
+    if (isDevelopment && !hasKVConfig) {
+      existingGameByUsername = localDailyGames.get(dailyGameByUsernameKey);
+    } else {
+      existingGameByUsername = await kv.get(dailyGameByUsernameKey);
+    }
+
+    // Se qualquer uma das verificações encontrar um jogo existente, bloquear
+    const gameAlreadyPlayed = existingGame || existingGameByUsername;
+
+    if (gameAlreadyPlayed) {
+      console.log(`🚫 SEGURANÇA: Usuário ${authResult.username} (${userId}) já jogou em ${date}:`, gameAlreadyPlayed);
+      console.log(`🔍 Verificação por userId: ${existingGame ? 'ENCONTRADO' : 'NÃO ENCONTRADO'}`);
+      console.log(`🔍 Verificação por username: ${existingGameByUsername ? 'ENCONTRADO' : 'NÃO ENCONTRADO'}`);
+
+      return res.status(400).json({
         error: 'Jogo diário já completado hoje',
         existingGame: {
-          date: existingGame.date,
-          won: existingGame.won,
-          attempts: existingGame.attempts,
-          completedAt: existingGame.completedAt
+          date: gameAlreadyPlayed.date,
+          won: gameAlreadyPlayed.won,
+          attempts: gameAlreadyPlayed.attempts,
+          completedAt: gameAlreadyPlayed.completedAt
         }
+      });
+    }
+
+    // Se é apenas verificação e não há jogo existente, retornar sucesso
+    if (isCheckOnly) {
+      console.log(`✅ Usuário ${userId} pode jogar em ${date}`);
+      return res.status(200).json({
+        success: true,
+        message: 'Usuário pode jogar hoje',
+        canPlay: true
       });
     }
 
     // Registrar o jogo atual
     const gameRecord = {
       userId: userId,
+      username: authResult.username, // 🔒 Adicionar username para auditoria
       date: date,
       won: gameStats.won,
       attempts: gameStats.attempts,
@@ -109,17 +185,25 @@ export default async function handler(req, res) {
       timestamp: Date.now()
     };
 
-    // Salvar no armazenamento
+    // 🔒 SALVAR EM AMBAS AS CHAVES PARA MÁXIMA SEGURANÇA
     if (isDevelopment && !hasKVConfig) {
+      // Salvar por userId (chave principal)
       localDailyGames.set(dailyGameKey, gameRecord);
+      // Salvar por username (chave de segurança)
+      localDailyGames.set(dailyGameByUsernameKey, gameRecord);
+      saveLocalData(); // Persistir no arquivo
     } else {
+      // Salvar por userId (chave principal)
       await kv.set(dailyGameKey, gameRecord, { ex: 86400 * 7 }); // Expira em 7 dias
+      // Salvar por username (chave de segurança)
+      await kv.set(dailyGameByUsernameKey, gameRecord, { ex: 86400 * 7 }); // Expira em 7 dias
     }
 
-    console.log(`✅ Jogo diário registrado para ${userId} em ${date}:`, {
+    console.log(`✅ Jogo diário registrado com SEGURANÇA DUPLA para ${authResult.username} (${userId}) em ${date}:`, {
       won: gameRecord.won,
       attempts: gameRecord.attempts,
-      song: gameRecord.song?.title
+      song: gameRecord.song?.title,
+      savedKeys: [dailyGameKey, dailyGameByUsernameKey]
     });
 
     return res.status(200).json({

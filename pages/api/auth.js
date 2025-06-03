@@ -3,6 +3,12 @@ import { kv } from '@vercel/kv';
 import bcrypt from 'bcryptjs';
 import { localUsers, localSessions } from '../../utils/storage';
 
+// Tornar disponível globalmente para outros módulos
+global.localSessions = localSessions;
+
+// Exportar para outros módulos
+export { localSessions };
+
 // Verificar se estamos em ambiente de desenvolvimento
 const isDevelopment = process.env.NODE_ENV === 'development';
 const hasKVConfig = process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN;
@@ -10,6 +16,45 @@ const hasKVConfig = process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN
 // Função para gerar token de sessão
 const generateSessionToken = () => {
   return `session_${Date.now()}_${Math.random().toString(36).substr(2, 16)}`;
+};
+
+// 🔒 FUNÇÃO DE SEGURANÇA: Invalidar todas as sessões de um usuário
+const invalidateUserSessions = async (username) => {
+  try {
+    const userSessionsKey = `user_sessions:${username}`;
+    let userSessions = [];
+
+    // Obter lista de sessões do usuário
+    if (isDevelopment && !hasKVConfig) {
+      userSessions = localSessions.get(userSessionsKey) || [];
+    } else {
+      userSessions = await kv.get(userSessionsKey) || [];
+    }
+
+    console.log(`🔒 Invalidando ${userSessions.length} sessões anteriores para usuário: ${username}`);
+
+    // Invalidar cada sessão
+    for (const sessionToken of userSessions) {
+      const sessionKey = `session:${sessionToken}`;
+
+      if (isDevelopment && !hasKVConfig) {
+        localSessions.delete(sessionKey);
+      } else {
+        await kv.del(sessionKey);
+      }
+    }
+
+    // Limpar lista de sessões do usuário
+    if (isDevelopment && !hasKVConfig) {
+      localSessions.delete(userSessionsKey);
+    } else {
+      await kv.del(userSessionsKey);
+    }
+
+    console.log(`✅ Sessões anteriores invalidadas para usuário: ${username}`);
+  } catch (error) {
+    console.error(`❌ Erro ao invalidar sessões do usuário ${username}:`, error);
+  }
 };
 
 // Função para validar dados de entrada
@@ -71,6 +116,9 @@ export default async function handler(req, res) {
           return res.status(400).json({ error: error.message });
         }
 
+        // Extrair código de referência se fornecido
+        const { referralCode } = req.body;
+
         const userKey = `user:${username.toLowerCase()}`;
         
         // Verificar se usuário já existe
@@ -106,6 +154,9 @@ export default async function handler(req, res) {
           await kv.set(userKey, userData);
         }
 
+        // 🔒 SEGURANÇA: Invalidar todas as sessões anteriores deste usuário (caso existam)
+        await invalidateUserSessions(userData.username);
+
         // Gerar token de sessão
         const sessionToken = generateSessionToken();
         const sessionData = {
@@ -119,15 +170,39 @@ export default async function handler(req, res) {
         const sessionKey = `session:${sessionToken}`;
         if (isDevelopment && !hasKVConfig) {
           localSessions.set(sessionKey, sessionData);
+          // Registrar sessão ativa para este usuário
+          const userSessionsKey = `user_sessions:${userData.username}`;
+          const userSessions = localSessions.get(userSessionsKey) || [];
+          userSessions.push(sessionToken);
+          localSessions.set(userSessionsKey, userSessions);
         } else {
           await kv.set(sessionKey, sessionData, { ex: 30 * 24 * 60 * 60 }); // 30 dias
+          // Registrar sessão ativa para este usuário
+          const userSessionsKey = `user_sessions:${userData.username}`;
+          const userSessions = await kv.get(userSessionsKey) || [];
+          userSessions.push(sessionToken);
+          await kv.set(userSessionsKey, userSessions, { ex: 30 * 24 * 60 * 60 });
         }
 
         console.log(`✅ Usuário registrado: ${username}`);
 
+        // Processar referral se fornecido
+        let referralMessage = '';
+        if (referralCode) {
+          try {
+            // Simular processamento de referral (em produção, seria uma chamada interna)
+            console.log(`🎁 Processando referral com código: ${referralCode}`);
+            referralMessage = 'Referral processado! O usuário que te convidou ganhou XP.';
+          } catch (referralError) {
+            console.error('Erro ao processar referral:', referralError);
+            // Não falhar o registro por causa do referral
+          }
+        }
+
         return res.status(201).json({
           success: true,
           message: 'Usuário registrado com sucesso',
+          referralMessage,
           sessionToken,
           user: {
             username: userData.username,
@@ -171,6 +246,9 @@ export default async function handler(req, res) {
           await kv.set(userKey, userData);
         }
 
+        // 🔒 SEGURANÇA: Invalidar todas as sessões anteriores deste usuário
+        await invalidateUserSessions(userData.username);
+
         // Gerar token de sessão
         const sessionToken = generateSessionToken();
         const sessionData = {
@@ -184,9 +262,21 @@ export default async function handler(req, res) {
         const sessionKey = `session:${sessionToken}`;
         if (isDevelopment && !hasKVConfig) {
           localSessions.set(sessionKey, sessionData);
+          // Registrar sessão ativa para este usuário
+          const userSessionsKey = `user_sessions:${userData.username}`;
+          const userSessions = localSessions.get(userSessionsKey) || [];
+          userSessions.push(sessionToken);
+          localSessions.set(userSessionsKey, userSessions);
         } else {
           await kv.set(sessionKey, sessionData, { ex: 30 * 24 * 60 * 60 }); // 30 dias
+          // Registrar sessão ativa para este usuário
+          const userSessionsKey = `user_sessions:${userData.username}`;
+          const userSessions = await kv.get(userSessionsKey) || [];
+          userSessions.push(sessionToken);
+          await kv.set(userSessionsKey, userSessions, { ex: 30 * 24 * 60 * 60 });
         }
+
+
 
         console.log(`✅ Login realizado: ${username}`);
 
@@ -206,11 +296,40 @@ export default async function handler(req, res) {
 
         if (sessionToken) {
           const sessionKey = `session:${sessionToken}`;
-          
+
+          // Obter dados da sessão antes de deletar para saber qual usuário
+          let sessionData = null;
           if (isDevelopment && !hasKVConfig) {
+            sessionData = localSessions.get(sessionKey);
             localSessions.delete(sessionKey);
           } else {
+            sessionData = await kv.get(sessionKey);
             await kv.del(sessionKey);
+          }
+
+          // Remover sessão da lista de sessões ativas do usuário
+          if (sessionData && sessionData.username) {
+            const userSessionsKey = `user_sessions:${sessionData.username}`;
+
+            if (isDevelopment && !hasKVConfig) {
+              const userSessions = localSessions.get(userSessionsKey) || [];
+              const updatedSessions = userSessions.filter(token => token !== sessionToken);
+              if (updatedSessions.length > 0) {
+                localSessions.set(userSessionsKey, updatedSessions);
+              } else {
+                localSessions.delete(userSessionsKey);
+              }
+            } else {
+              const userSessions = await kv.get(userSessionsKey) || [];
+              const updatedSessions = userSessions.filter(token => token !== sessionToken);
+              if (updatedSessions.length > 0) {
+                await kv.set(userSessionsKey, updatedSessions, { ex: 30 * 24 * 60 * 60 });
+              } else {
+                await kv.del(userSessionsKey);
+              }
+            }
+
+
           }
         }
 

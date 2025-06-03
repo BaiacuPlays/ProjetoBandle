@@ -667,34 +667,65 @@ export const UserProfileProvider = ({ children }) => {
 
   // Verificar e desbloquear conquistas
   const checkAchievements = (updatedProfile) => {
+    console.log('🏆 Verificando conquistas...', {
+      totalGames: updatedProfile.stats.totalGames,
+      wins: updatedProfile.stats.wins,
+      currentAchievements: updatedProfile.achievements.length,
+      showPopups: updatedProfile.preferences?.showAchievementPopups,
+      achievementsArray: updatedProfile.achievements
+    });
+
     const newAchievements = [];
+
+    // Verificar se achievements está importado corretamente
+    if (!achievements || Object.keys(achievements).length === 0) {
+      console.error('❌ Achievements não carregados corretamente!');
+      return updatedProfile;
+    }
+
+    console.log('📋 Total de conquistas disponíveis:', Object.keys(achievements).length);
 
     Object.values(achievements).forEach(achievement => {
       if (!updatedProfile.achievements.includes(achievement.id)) {
         const progress = calculateAchievementProgress(achievement.id, updatedProfile.stats, updatedProfile);
 
+        console.log(`🔍 Conquista ${achievement.id}: ${progress}% (${achievement.title})`);
+
         if (progress >= 100) {
+          console.log(`✅ CONQUISTA DESBLOQUEADA: ${achievement.title} (+${achievement.xpReward} XP)`);
           newAchievements.push(achievement.id);
           updatedProfile.xp += achievement.xpReward;
         }
+      } else {
+        console.log(`⏭️ Conquista ${achievement.id} já desbloqueada`);
       }
     });
 
     if (newAchievements.length > 0) {
+      console.log(`🎉 ${newAchievements.length} nova(s) conquista(s) desbloqueada(s):`, newAchievements);
       updatedProfile.achievements = [...updatedProfile.achievements, ...newAchievements];
 
       // Mostrar notificação de conquista (se habilitado) com delay para evitar IDs duplicados
-      if (updatedProfile.preferences.showAchievementPopups) {
+      // Verificar se as notificações estão habilitadas (padrão: true se não definido)
+      const showPopups = updatedProfile.preferences?.showAchievementPopups !== false;
+
+      if (showPopups) {
+        console.log('📢 Mostrando notificações de conquistas...');
         newAchievements.forEach((achievementId, index) => {
           const achievement = achievements[achievementId];
           if (achievement) {
             // Adicionar delay progressivo para evitar IDs duplicados
             setTimeout(() => {
+              console.log(`🏆 Exibindo notificação para: ${achievement.title}`);
               showAchievementNotification(achievement);
             }, index * 100); // 100ms de delay entre cada notificação
           }
         });
+      } else {
+        console.log('🔇 Notificações de conquistas desabilitadas nas preferências');
       }
+    } else {
+      console.log('📝 Nenhuma conquista nova desbloqueada');
     }
 
     return updatedProfile;
@@ -723,13 +754,31 @@ export const UserProfileProvider = ({ children }) => {
 
   // Mostrar notificação de conquista
   const showAchievementNotification = (achievement) => {
+    console.log('🔔 Tentando mostrar notificação para:', achievement.title);
+
     // Verificar se a função global existe
     if (typeof window !== 'undefined' && window.showAchievementToast) {
       try {
+        console.log('✅ Função showAchievementToast encontrada, chamando...');
         window.showAchievementToast(achievement);
+        console.log('✅ Notificação enviada com sucesso');
       } catch (error) {
         console.error('❌ Erro ao mostrar notificação:', error);
       }
+    } else {
+      console.error('❌ Função showAchievementToast não encontrada no window');
+      console.log('🔍 Window object:', typeof window);
+      console.log('🔍 showAchievementToast:', typeof window?.showAchievementToast);
+
+      // Tentar novamente após um pequeno delay
+      setTimeout(() => {
+        if (typeof window !== 'undefined' && window.showAchievementToast) {
+          console.log('🔄 Tentativa de retry bem-sucedida');
+          window.showAchievementToast(achievement);
+        } else {
+          console.error('❌ Retry falhou - função ainda não disponível');
+        }
+      }, 100);
     }
   };
 
@@ -768,13 +817,24 @@ export const UserProfileProvider = ({ children }) => {
 
         if (!validationResponse.ok) {
           const errorData = await validationResponse.json();
+          console.log('❌ Erro na validação do jogo diário:', errorData);
 
           if (errorData.error === 'Jogo diário já completado hoje') {
+            console.log('🚫 Jogo diário já foi completado hoje - bloqueando atualização');
             return null;
           }
+
+          // Se houve outro erro, também bloquear para segurança
+          console.log('🚫 Erro na validação - bloqueando por segurança');
+          return null;
+        } else {
+          console.log('✅ Validação do jogo diário passou - permitindo atualização');
         }
       } catch (error) {
-        // Em caso de erro de rede, continuar silenciosamente
+        console.error('❌ Erro de rede na validação do jogo diário:', error);
+        // Em caso de erro de rede, bloquear por segurança
+        console.log('🚫 Erro de rede - bloqueando por segurança');
+        return null;
       }
     }
 

@@ -127,6 +127,10 @@ export const AuthProvider = ({ children }) => {
   // Função para registrar usuário
   const register = async (username, password, email = null, anonymousUserId = null) => {
     try {
+      // Capturar código de referência da URL se existir
+      const urlParams = new URLSearchParams(window.location.search);
+      const referralCode = urlParams.get('ref');
+
       const response = await fetch('/api/auth', {
         method: 'POST',
         headers: {
@@ -137,7 +141,8 @@ export const AuthProvider = ({ children }) => {
           username,
           password,
           email,
-          anonymousUserId
+          anonymousUserId,
+          referralCode
         })
       });
 
@@ -154,6 +159,13 @@ export const AuthProvider = ({ children }) => {
         window.dispatchEvent(new CustomEvent('userLoggedIn', {
           detail: { user: data.user }
         }));
+
+        // Mostrar mensagem de referral se houver
+        if (data.referralMessage) {
+          setTimeout(() => {
+            alert(`🎉 ${data.referralMessage}`);
+          }, 1000);
+        }
 
         return { success: true, user: data.user };
       } else {
@@ -191,6 +203,7 @@ export const AuthProvider = ({ children }) => {
         console.log('✅ Login realizado:', data.user.displayName);
 
         // Disparar evento customizado para notificar outros componentes sobre o login
+        console.log('🔔 Disparando evento userLoggedIn para:', data.user.displayName);
         window.dispatchEvent(new CustomEvent('userLoggedIn', {
           detail: { user: data.user }
         }));

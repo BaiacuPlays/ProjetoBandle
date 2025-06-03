@@ -3,7 +3,7 @@ import { kv } from '@vercel/kv';
 
 // Verificar se estamos em ambiente de desenvolvimento
 const isDevelopment = process.env.NODE_ENV === 'development';
-const hasKVConfig = process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN;
+const hasKVConfig = !!(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
 
 // Storage local para desenvolvimento
 const localFriends = new Map();
@@ -89,6 +89,8 @@ export default async function handler(req, res) {
             friendProfile = await kv.get(profileKey);
           }
 
+          // Sistema de presença removido - todos os amigos aparecem sem status online/offline
+
           // Combinar dados básicos com dados do perfil
           const enrichedFriend = {
             ...friend,
@@ -96,8 +98,8 @@ export default async function handler(req, res) {
             bio: friendProfile?.bio || friend.bio || '',
             level: friendProfile?.level || friend.level || 1,
             xp: friendProfile?.xp || 0,
-            lastActiveAt: friendProfile?.lastLogin || friend.lastActiveAt,
-            status: friend.status || 'offline' // Será atualizado pelo sistema de presença
+            lastActiveAt: friendProfile?.lastLogin || friend.lastActiveAt
+            // Status online/offline removido
           };
 
           enrichedFriends.push(enrichedFriend);
@@ -113,10 +115,7 @@ export default async function handler(req, res) {
         }
       }
 
-      return res.status(200).json({
-        success: true,
-        friends: enrichedFriends
-      });
+      return res.status(200).json(enrichedFriends);
 
     } else if (method === 'DELETE') {
       // Remover amigo

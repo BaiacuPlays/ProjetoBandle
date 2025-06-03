@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useUserProfile } from '../contexts/UserProfileContext';
 import { FaShare, FaBug, FaHeart, FaCopy, FaYoutube, FaTwitter, FaFacebook, FaCheck } from 'react-icons/fa';
-import ErrorReportModal from './ErrorReportModal';
+
 import styles from '../styles/ActionButtons.module.css';
 
 const ActionButtons = ({ gameResult, currentSong, isInfiniteMode = false, infiniteStats = null }) => {
   const { t, isClient } = useLanguage();
   const { updateSocialStats } = useUserProfile();
   const [showShareMenu, setShowShareMenu] = useState(false);
-  const [showErrorReport, setShowErrorReport] = useState(false);
+
   const [copied, setCopied] = useState(false);
 
   // Gerar texto para compartilhamento (sem nome do jogo)
@@ -112,7 +112,18 @@ const ActionButtons = ({ gameResult, currentSong, isInfiniteMode = false, infini
   };
 
   const handleErrorReportClick = () => {
-    setShowErrorReport(true);
+    // Abrir email para reportar erro
+    const subject = encodeURIComponent('Relatório de Erro - LudoMusic');
+    const body = encodeURIComponent(
+      `Olá! Encontrei um erro no LudoMusic.\n\n` +
+      `Descrição do erro: [Descreva o problema aqui]\n\n` +
+      `Música atual: ${currentSong?.name || 'N/A'}\n` +
+      `Jogo: ${currentSong?.game || 'N/A'}\n` +
+      `URL: ${window.location.href}\n` +
+      `Navegador: ${navigator.userAgent}\n` +
+      `Data: ${new Date().toLocaleString('pt-BR')}`
+    );
+    window.open(`mailto:andreibonatto8@gmail.com?subject=${subject}&body=${body}`, '_blank');
   };
 
   const handleSupportClick = () => {
@@ -269,13 +280,7 @@ const ActionButtons = ({ gameResult, currentSong, isInfiniteMode = false, infini
         </button>
       </div>
 
-      {/* Modal de Relatório de Erro */}
-      <ErrorReportModal
-        isOpen={showErrorReport}
-        onClose={() => setShowErrorReport(false)}
-        currentSong={currentSong}
-        gameResult={gameResult}
-      />
+
     </div>
   );
 };

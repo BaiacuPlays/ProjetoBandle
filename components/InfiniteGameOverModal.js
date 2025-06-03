@@ -1,5 +1,6 @@
 // Modal para fim de jogo do modo infinito
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useModalScrollLock } from '../hooks/useModalScrollLock';
 import styles from '../styles/InfiniteGameOverModal.module.css';
@@ -17,7 +18,8 @@ const InfiniteGameOverModal = ({
 
   if (!isOpen) return null;
 
-  return (
+  // Renderizar o modal usando portal diretamente no body
+  return createPortal(
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         {/* Header */}
@@ -25,7 +27,7 @@ const InfiniteGameOverModal = ({
           <h2 className={styles.title}>
             {t('infinite_game_over') || 'Fim da Sequência!'}
           </h2>
-          <button 
+          <button
             className={styles.closeButton}
             onClick={onClose}
             type="button"
@@ -51,7 +53,7 @@ const InfiniteGameOverModal = ({
                 {infiniteStreak === 1 ? 'Música' : 'Músicas'}
               </div>
             </div>
-            
+
             <div className={styles.statItem}>
               <div className={styles.statValue}>{infiniteBestRecord}</div>
               <div className={styles.statLabel}>Melhor Sequência</div>
@@ -60,7 +62,7 @@ const InfiniteGameOverModal = ({
 
           {/* Mensagem */}
           <div className={styles.message}>
-            {t('streak_of')?.replace('{count}', infiniteStreak) || 
+            {t('streak_of')?.replace('{count}', infiniteStreak) ||
              `Você conseguiu uma sequência de ${infiniteStreak} ${infiniteStreak === 1 ? 'música' : 'músicas'}!`}
           </div>
 
@@ -73,7 +75,7 @@ const InfiniteGameOverModal = ({
             >
               🎮 {t('play_again_infinite') || 'Jogar Novamente'}
             </button>
-            
+
             <button
               className={styles.closeModalButton}
               onClick={onClose}
@@ -84,7 +86,8 @@ const InfiniteGameOverModal = ({
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

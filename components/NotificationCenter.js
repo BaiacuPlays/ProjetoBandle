@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNotifications } from '../contexts/NotificationContext';
+import { useFriends } from '../contexts/FriendsContext';
 import { FaBell, FaTimes, FaCheck, FaGamepad, FaUsers, FaTrophy, FaInfo } from 'react-icons/fa';
 import styles from '../styles/NotificationCenter.module.css';
 
@@ -15,6 +16,8 @@ const NotificationCenter = () => {
     getUnreadCount,
     getPendingInvites
   } = useNotifications();
+
+  const { acceptFriendRequest, rejectFriendRequest } = useFriends();
 
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('notifications');
@@ -66,6 +69,24 @@ const NotificationCenter = () => {
     // Ações específicas por tipo de notificação
     if (notification.type === 'multiplayer_invite' && notification.data?.roomCode) {
       acceptMultiplayerInvite(notification.data.inviteId, notification.data.roomCode);
+    }
+  };
+
+  const handleAcceptFriendRequest = async (notification) => {
+    try {
+      await acceptFriendRequest(notification.data.requestId);
+      removeNotification(notification.id);
+    } catch (error) {
+      console.error('Erro ao aceitar pedido de amizade:', error);
+    }
+  };
+
+  const handleRejectFriendRequest = async (notification) => {
+    try {
+      await rejectFriendRequest(notification.data.requestId);
+      removeNotification(notification.id);
+    } catch (error) {
+      console.error('Erro ao rejeitar pedido de amizade:', error);
     }
   };
 
@@ -125,8 +146,7 @@ const NotificationCenter = () => {
                   notifications.map(notification => (
                     <div
                       key={notification.id}
-                      className={`${styles.notificationItem} ${!notification.read ? styles.unread : ''}`}
-                      onClick={() => handleNotificationClick(notification)}
+                      className={`${styles.notificationItem} ${!notification.read ? styles.unread : ''} ${notification.type === 'friend_request' ? styles.friendRequest : ''}`}
                     >
                       <div className={styles.notificationIcon}>
                         {getNotificationIcon(notification.type)}
@@ -141,16 +161,44 @@ const NotificationCenter = () => {
                         <div className={styles.notificationTime}>
                           {formatTime(notification.timestamp)}
                         </div>
+
+                        {/* Ações para pedidos de amizade */}
+                        {notification.type === 'friend_request' && notification.data?.requestId && (
+                          <div className={styles.friendRequestActions}>
+                            <button
+                              className={styles.acceptButton}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleAcceptFriendRequest(notification);
+                              }}
+                            >
+                              <FaCheck /> Aceitar
+                            </button>
+                            <button
+                              className={styles.declineButton}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleRejectFriendRequest(notification);
+                              }}
+                            >
+                              <FaTimes /> Recusar
+                            </button>
+                          </div>
+                        )}
                       </div>
-                      <button
-                        className={styles.removeButton}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          removeNotification(notification.id);
-                        }}
-                      >
-                        <FaTimes />
-                      </button>
+
+                      {/* Botão de remover apenas para notificações que não são pedidos de amizade */}
+                      {notification.type !== 'friend_request' && (
+                        <button
+                          className={styles.removeButton}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            removeNotification(notification.id);
+                          }}
+                        >
+                          <FaTimes />
+                        </button>
+                      )}
                     </div>
                   ))
                 )}

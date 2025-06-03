@@ -33,6 +33,15 @@ railway-backend/
 railway.json
 Dockerfile
 
+# Scripts desnecessários para produção
+scripts/
+*.js.map
+
+# Arquivos de teste
+test/
+tests/
+__tests__/
+
 # Outros
 .git/
 .gitignore

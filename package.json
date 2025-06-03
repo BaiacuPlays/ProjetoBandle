@@ -11,9 +11,13 @@
     "build:hostinger": "npm run export && node scripts/build-for-hostinger.js",
     "prepare:deploy": "npm run build:hostinger",
     "generate:sitemap": "node scripts/generate-sitemap.js",
-    "seo:optimize": "npm run generate:sitemap"
+    "seo:optimize": "npm run generate:sitemap",
+    "upload:r2": "node scripts/upload-to-r2.js",
+    "update:urls": "node scripts/update-audio-urls.js",
+    "migrate:r2": "npm run upload:r2 && npm run update:urls"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.821.0",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
     "@fortawesome/free-regular-svg-icons": "^6.7.2",
@@ -24,6 +28,8 @@
     "@vercel/speed-insights": "^1.2.0",
     "bcryptjs": "^3.0.2",
     "crypto": "^1.0.1",
+    "dotenv": "^16.5.0",
+    "formidable": "^3.5.4",
     "next": "^14.1.0",
     "node-fetch": "^3.3.2",
     "react": "^18.2.0",

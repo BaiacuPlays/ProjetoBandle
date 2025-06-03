@@ -7,9 +7,16 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Verificação básica de admin (você pode melhorar isso)
-    const adminKey = req.headers['x-admin-key'];
-    if (adminKey !== 'ludomusic_admin_2024') {
+    // Verificar autenticação de admin
+    const authHeader = req.headers.authorization;
+    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Não autorizado' });
+    }
+
+    const password = authHeader.substring(7);
+    if (password !== ADMIN_PASSWORD) {
       return res.status(401).json({ error: 'Não autorizado' });
     }
 

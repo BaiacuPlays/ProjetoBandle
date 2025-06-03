@@ -46,51 +46,82 @@ const verifyAuthentication = async (req) => {
   }
 };
 
-// Função para validar dados do perfil
-const validateProfile = (profileData) => {
-  console.log('🔍 Validando perfil:', JSON.stringify(profileData, null, 2));
+// Função para calcular XP baseado no desempenho
+const calculateXP = (gameStats) => {
+  if (!gameStats.won) return 0;
 
-  if (!profileData || typeof profileData !== 'object') {
-    console.error('❌ Dados de perfil inválidos:', typeof profileData);
-    throw new Error('Dados de perfil inválidos');
+  let xp = 50; // XP base por vitória
+
+  // Bônus por performance
+  if (gameStats.attempts === 1) {
+    xp += 50; // Perfeito
+  } else if (gameStats.attempts <= 2) {
+    xp += 30; // Muito bom
+  } else if (gameStats.attempts <= 3) {
+    xp += 20; // Bom
+  } else if (gameStats.attempts <= 4) {
+    xp += 10; // Regular
   }
 
-  if (!profileData.id || typeof profileData.id !== 'string') {
-    console.error('❌ ID do usuário inválido:', profileData.id);
-    throw new Error('ID do usuário é obrigatório');
-  }
-
-  // Validação mais flexível para stats
-  if (!profileData.stats || typeof profileData.stats !== 'object') {
-    console.warn('⚠️ Estatísticas ausentes, criando estrutura padrão');
-    profileData.stats = {
-      totalGames: 0,
-      wins: 0,
-      losses: 0,
-      winRate: 0,
-      currentStreak: 0,
-      bestStreak: 0,
-      totalPlayTime: 0,
-      perfectGames: 0,
-      averageAttempts: 0,
-      fastestWin: null,
-      modeStats: {
-        daily: { games: 0, wins: 0, bestStreak: 0, averageAttempts: 0, perfectGames: 0 },
-        infinite: { games: 0, wins: 0, bestStreak: 0, totalSongsCompleted: 0, longestSession: 0 },
-        multiplayer: { games: 0, wins: 0, roomsCreated: 0, totalPoints: 0, bestRoundScore: 0 }
-      }
-    };
-  }
-
-  console.log('✅ Perfil validado com sucesso');
-  return true;
+  return xp;
 };
 
-// Função para sanitizar dados do perfil (remover dados sensíveis se houver)
-const sanitizeProfile = (profileData) => {
-  // Por enquanto, retorna todos os dados
-  // No futuro, pode remover campos sensíveis se necessário
-  return profileData;
+// Função para calcular nível baseado no XP
+const calculateLevel = (xp) => {
+  return Math.floor(Math.sqrt(xp / 100)) + 1;
+};
+
+// Função para verificar conquistas
+const checkAchievements = (profile, gameStats) => {
+  const newAchievements = [];
+  const stats = profile.stats;
+
+  // Conquistas básicas
+  if (stats.totalGames === 1 && !profile.achievements.includes('first_game')) {
+    newAchievements.push('first_game');
+  }
+
+  if (stats.wins === 1 && !profile.achievements.includes('first_win')) {
+    newAchievements.push('first_win');
+  }
+
+  // Conquistas de volume
+  if (stats.totalGames >= 10 && !profile.achievements.includes('veteran')) {
+    newAchievements.push('veteran');
+  }
+
+  if (stats.totalGames >= 50 && !profile.achievements.includes('experienced')) {
+    newAchievements.push('experienced');
+  }
+
+  if (stats.totalGames >= 100 && !profile.achievements.includes('master')) {
+    newAchievements.push('master');
+  }
+
+  // Conquistas de streak
+  if (stats.bestStreak >= 5 && !profile.achievements.includes('streak_5')) {
+    newAchievements.push('streak_5');
+  }
+
+  if (stats.bestStreak >= 10 && !profile.achievements.includes('streak_10')) {
+    newAchievements.push('streak_10');
+  }
+
+  // Conquistas de performance
+  if (gameStats.won && gameStats.attempts === 1 && !profile.achievements.includes('perfect_first')) {
+    newAchievements.push('perfect_first');
+  }
+
+  // Conquistas de nível
+  if (profile.level >= 5 && !profile.achievements.includes('level_5')) {
+    newAchievements.push('level_5');
+  }
+
+  if (profile.level >= 10 && !profile.achievements.includes('level_10')) {
+    newAchievements.push('level_10');
+  }
+
+  return newAchievements;
 };
 
 export default async function handler(req, res) {
@@ -98,13 +129,14 @@ export default async function handler(req, res) {
 
   try {
     if (method === 'GET') {
-      // Buscar perfil do usuário
-      const { userId } = req.query;
-
-      if (!userId) {
-        return res.status(400).json({ error: 'ID do usuário é obrigatório' });
+      // Buscar perfil do usuário autenticado
+      const authResult = await verifyAuthentication(req);
+      if (!authResult.authenticated) {
+        console.warn('⚠️ Tentativa de carregar perfil sem autenticação:', authResult.error);
+        return res.status(401).json({ error: authResult.error });
       }
 
+      const userId = `auth_${authResult.username}`;
       const profileKey = `profile:${userId}`;
       let profile = null;
 
@@ -122,13 +154,50 @@ export default async function handler(req, res) {
       }
 
       if (!profile) {
-        return res.status(404).json({ error: 'Perfil não encontrado' });
+        // Criar perfil padrão se não existir
+        profile = {
+          id: userId,
+          username: authResult.username,
+          level: 1,
+          xp: 0,
+          achievements: [],
+          stats: {
+            totalGames: 0,
+            wins: 0,
+            losses: 0,
+            winRate: 0,
+            currentStreak: 0,
+            bestStreak: 0,
+            totalPlayTime: 0,
+            perfectGames: 0,
+            averageAttempts: 0,
+            fastestWin: null,
+            modeStats: {
+              daily: { games: 0, wins: 0, bestStreak: 0, averageAttempts: 0, perfectGames: 0 },
+              infinite: { games: 0, wins: 0, bestStreak: 0, totalSongsCompleted: 0, longestSession: 0 },
+              multiplayer: { games: 0, wins: 0, roomsCreated: 0, totalPoints: 0, bestRoundScore: 0 }
+            }
+          },
+          createdAt: new Date().toISOString(),
+          lastSyncedAt: new Date().toISOString(),
+          version: '1.0'
+        };
+
+        // Salvar o perfil padrão
+        if (isDevelopment && !hasKVConfig) {
+          localProfiles.set(profileKey, profile);
+        } else {
+          try {
+            await kv.set(profileKey, profile);
+          } catch (error) {
+            console.error('Erro ao criar perfil padrão no KV:', error);
+          }
+        }
+
+        console.log(`✅ Perfil padrão criado para ${authResult.username}`);
       }
 
-      return res.status(200).json({
-        success: true,
-        profile: sanitizeProfile(profile)
-      });
+      return res.status(200).json(profile);
 
     } else if (method === 'POST') {
       // 🔒 VERIFICAR AUTENTICAÇÃO ANTES DE SALVAR PERFIL
@@ -138,223 +207,148 @@ export default async function handler(req, res) {
         return res.status(401).json({ error: authResult.error });
       }
 
-      // Criar ou atualizar perfil
-      console.log('📝 Recebendo dados para salvar perfil:', req.body);
+      const { action } = req.body;
 
-      const { userId, profileData } = req.body;
-
-      // Verificar se o userId corresponde ao usuário autenticado
-      const expectedUserId = `auth_${authResult.username}`;
-      if (userId !== expectedUserId) {
-        console.warn('⚠️ Tentativa de salvar perfil de outro usuário:', { userId, expectedUserId });
-        return res.status(403).json({ error: 'Não autorizado a modificar este perfil' });
-      }
-
-      if (!userId) {
-        console.error('❌ ID do usuário não fornecido');
-        return res.status(400).json({ error: 'ID do usuário é obrigatório' });
-      }
-
-      if (!profileData) {
-        console.error('❌ Dados do perfil não fornecidos');
-        return res.status(400).json({ error: 'Dados do perfil são obrigatórios' });
-      }
-
-      // Validar dados do perfil
-      try {
-        validateProfile(profileData);
-      } catch (error) {
-        console.error('❌ Erro na validação:', error.message);
-        return res.status(400).json({
-          error: error.message,
-          receivedData: isDevelopment ? profileData : undefined
-        });
-      }
-
-      // Adicionar timestamp de atualização
-      const updatedProfile = {
-        ...profileData,
-        id: userId, // Garantir que o ID está correto
-        lastSyncedAt: new Date().toISOString(),
-        version: profileData.version || '1.0'
-      };
-
-      const profileKey = `profile:${userId}`;
-
-      if (isDevelopment && !hasKVConfig) {
-        // Usar armazenamento local em desenvolvimento
-        localProfiles.set(profileKey, updatedProfile);
-      } else {
-        // Usar Vercel KV em produção
+      // Verificar se é uma ação específica (como updateGameStats)
+      if (action === 'updateGameStats') {
+        // Implementar updateGameStats inline
         try {
-          await kv.set(profileKey, updatedProfile);
-        } catch (error) {
-          console.error('Erro ao salvar perfil no KV:', error);
-          return res.status(500).json({ error: 'Erro ao salvar perfil' });
-        }
-      }
+          const { gameStats } = req.body;
+          const userId = `auth_${authResult.username}`;
+          const profileKey = `profile:${userId}`;
 
-      console.log(`✅ Perfil ${userId} salvo com sucesso`);
-
-      return res.status(200).json({
-        success: true,
-        message: 'Perfil salvo com sucesso',
-        profile: sanitizeProfile(updatedProfile)
-      });
-
-    } else if (method === 'DELETE') {
-      // Deletar conta do usuário - SIMPLIFICADO
-      console.log('🗑️ [DELETE] Iniciando deleção de conta...');
-
-      const authResult = await verifyAuthentication(req);
-
-      if (!authResult.authenticated) {
-        console.error('❌ [DELETE] Falha na autenticação:', authResult.error);
-        return res.status(401).json({ error: authResult.error });
-      }
-
-      const { userId } = req.body;
-
-      if (!userId) {
-        console.error('❌ [DELETE] ID do usuário não fornecido');
-        return res.status(400).json({ error: 'ID do usuário é obrigatório' });
-      }
-
-      // Verificar autorização
-      const expectedUserId = `auth_${authResult.username}`;
-
-      if (userId !== expectedUserId) {
-        console.warn('⚠️ [DELETE] Tentativa não autorizada');
-        return res.status(403).json({ error: 'Não autorizado a deletar esta conta' });
-      }
-
-      const profileKey = `profile:${userId}`;
-      const userKey = `user:${authResult.username}`;
-
-      if (isDevelopment && !hasKVConfig) {
-        // Usar armazenamento local em desenvolvimento
-        const { localProfiles, localUsers, localSessions } = require('./auth');
-        // Importar storage local para amigos
-        const localFriends = new Map();
-        const localFriendRequests = new Map();
-
-        console.log(`🗑️ Iniciando deleção completa da conta ${authResult.username} (desenvolvimento)...`);
-
-        // 1. Deletar perfil
-        localProfiles.delete(profileKey);
-        console.log(`✅ Perfil deletado: ${profileKey}`);
-
-        // 2. Deletar usuário
-        localUsers.delete(userKey);
-        console.log(`✅ Usuário deletado: ${userKey}`);
-
-        // 3. Deletar todas as sessões do usuário
-        for (const [sessionKey, sessionData] of localSessions.entries()) {
-          if (sessionData.username === authResult.username) {
-            localSessions.delete(sessionKey);
+          // Carregar perfil atual
+          let profile = null;
+          if (isDevelopment && !hasKVConfig) {
+            profile = localProfiles.get(profileKey);
+          } else {
+            profile = await kv.get(profileKey);
           }
-        }
-        console.log(`✅ Sessões deletadas`);
 
-        // 4. Deletar dados de amigos do usuário
-        const friendsKey = `friends:${userId}`;
-        const userFriends = localFriends.get(friendsKey) || [];
-        localFriends.delete(friendsKey);
-        console.log(`✅ Lista de amigos deletada: ${friendsKey}`);
-
-        // 5. Remover o usuário das listas de amigos de outros usuários
-        for (const friend of userFriends) {
-          try {
-            const friendKey = `friends:${friend.id}`;
-            const friendList = localFriends.get(friendKey) || [];
-            const updatedFriendList = friendList.filter(f => f.id !== userId);
-            localFriends.set(friendKey, updatedFriendList);
-            console.log(`✅ Removido da lista de amigos de ${friend.username}`);
-          } catch (error) {
-            console.warn(`⚠️ Erro ao remover da lista de amigos de ${friend.username}:`, error);
+          if (!profile) {
+            return res.status(404).json({ error: 'Perfil não encontrado' });
           }
-        }
 
-        // 6. Deletar solicitações de amizade recebidas
-        const friendRequestsKey = `friend_requests:${userId}`;
-        localFriendRequests.delete(friendRequestsKey);
-        console.log(`✅ Solicitações de amizade recebidas deletadas: ${friendRequestsKey}`);
+          // Calcular XP ganho
+          const xpGained = calculateXP(gameStats);
+          const oldLevel = profile.level || 1;
+          const newXP = (profile.xp || 0) + xpGained;
+          const newLevel = calculateLevel(newXP);
 
-        // 7. Deletar solicitações de amizade enviadas
-        const sentRequestsKey = `sent_requests:${userId}`;
-        localFriendRequests.delete(sentRequestsKey);
-        console.log(`✅ Solicitações de amizade enviadas deletadas: ${sentRequestsKey}`);
+          // Atualizar estatísticas
+          const stats = profile.stats || {};
+          stats.totalGames = (stats.totalGames || 0) + 1;
 
-        // 8. Remover solicitações pendentes enviadas para outros usuários
-        for (const [requestKey, requests] of localFriendRequests.entries()) {
-          if (requestKey.startsWith('friend_requests:')) {
-            const filteredRequests = requests.filter(req => req.fromUserId !== userId);
-            if (filteredRequests.length !== requests.length) {
-              localFriendRequests.set(requestKey, filteredRequests);
-              console.log(`✅ Solicitações removidas de ${requestKey}`);
+          if (gameStats.won) {
+            stats.wins = (stats.wins || 0) + 1;
+            stats.currentStreak = (stats.currentStreak || 0) + 1;
+            stats.bestStreak = Math.max(stats.bestStreak || 0, stats.currentStreak);
+
+            if (gameStats.attempts === 1) {
+              stats.perfectGames = (stats.perfectGames || 0) + 1;
             }
-          }
-        }
-
-        console.log(`🎉 Deleção completa da conta ${authResult.username} finalizada (desenvolvimento)!`);
-      } else {
-        // Usar Vercel KV em produção
-        try {
-          console.log(`🗑️ Iniciando deleção completa da conta ${authResult.username}...`);
-
-          // 1. Deletar perfil
-          await kv.del(profileKey);
-          console.log(`✅ Perfil deletado: ${profileKey}`);
-
-          // 2. Deletar usuário
-          await kv.del(userKey);
-          console.log(`✅ Usuário deletado: ${userKey}`);
-
-          // 3. Deletar todas as sessões do usuário
-          // Buscar token da requisição para deletar sessão atual
-          const currentSessionToken = req.headers.authorization?.replace('Bearer ', '') ||
-                                     req.headers['x-session-token'] ||
-                                     req.query.sessionToken;
-
-          if (currentSessionToken) {
-            await kv.del(`session:${currentSessionToken}`);
+          } else {
+            stats.losses = (stats.losses || 0) + 1;
+            stats.currentStreak = 0;
           }
 
-          const sessionKeys = await kv.keys('session:*');
-          for (const sessionKey of sessionKeys) {
-            const sessionData = await kv.get(sessionKey);
-            if (sessionData && sessionData.username === authResult.username) {
-              await kv.del(sessionKey);
-            }
+          stats.winRate = stats.totalGames > 0 ? (stats.wins / stats.totalGames) * 100 : 0;
+          stats.totalPlayTime = (stats.totalPlayTime || 0) + (gameStats.playTime || 0);
+
+          // Atualizar perfil
+          profile.xp = newXP;
+          profile.level = newLevel;
+          profile.stats = stats;
+          profile.lastSyncedAt = new Date().toISOString();
+
+          // Verificar conquistas
+          const newAchievements = checkAchievements(profile, gameStats);
+          if (newAchievements.length > 0) {
+            profile.achievements = [...(profile.achievements || []), ...newAchievements];
+            
+            // XP bônus por conquistas
+            const achievementXP = newAchievements.length * 50;
+            profile.xp += achievementXP;
+            profile.level = calculateLevel(profile.xp);
           }
-          console.log(`✅ Sessões deletadas`);
 
-          // Deletar dados relacionados (simplificado)
-          const friendsKey = `friends:${userId}`;
-          const friendRequestsKey = `friend_requests:${userId}`;
-          const sentRequestsKey = `sent_requests:${userId}`;
+          // Salvar perfil atualizado
+          if (isDevelopment && !hasKVConfig) {
+            localProfiles.set(profileKey, profile);
+          } else {
+            await kv.set(profileKey, profile);
+          }
 
-          // Deletar em paralelo para melhor performance
-          await Promise.all([
-            kv.del(friendsKey),
-            kv.del(friendRequestsKey),
-            kv.del(sentRequestsKey)
-          ]);
+          const levelUp = newLevel > oldLevel;
 
-          console.log(`✅ Conta ${authResult.username} deletada!`);
+          return res.status(200).json({
+            success: true,
+            xpGained: xpGained + (newAchievements.length * 50),
+            newLevel: profile.level,
+            levelUp,
+            newAchievements,
+            profile: profile
+          });
 
         } catch (error) {
-          console.error('Erro ao deletar conta do KV:', error);
-          return res.status(500).json({ error: 'Erro ao deletar conta' });
+          console.error('Erro ao atualizar estatísticas:', error);
+          return res.status(500).json({ error: 'Erro interno do servidor' });
+        }
+      } else if (action === 'resetProfile') {
+        // Implementar resetProfile inline
+        try {
+          const userId = `auth_${authResult.username}`;
+          const profileKey = `profile:${userId}`;
+
+          // Criar perfil limpo
+          const cleanProfile = {
+            id: userId,
+            username: authResult.username,
+            level: 1,
+            xp: 0,
+            achievements: [],
+            stats: {
+              totalGames: 0,
+              wins: 0,
+              losses: 0,
+              winRate: 0,
+              currentStreak: 0,
+              bestStreak: 0,
+              totalPlayTime: 0,
+              perfectGames: 0,
+              averageAttempts: 0,
+              fastestWin: null,
+              modeStats: {
+                daily: { games: 0, wins: 0, bestStreak: 0, averageAttempts: 0, perfectGames: 0 },
+                infinite: { games: 0, wins: 0, bestStreak: 0, totalSongsCompleted: 0, longestSession: 0 },
+                multiplayer: { games: 0, wins: 0, roomsCreated: 0, totalPoints: 0, bestRoundScore: 0 }
+              }
+            },
+            createdAt: new Date().toISOString(),
+            lastSyncedAt: new Date().toISOString(),
+            version: '1.0'
+          };
+
+          // Salvar perfil resetado
+          if (isDevelopment && !hasKVConfig) {
+            localProfiles.set(profileKey, cleanProfile);
+          } else {
+            await kv.set(profileKey, cleanProfile);
+          }
+
+          return res.status(200).json({
+            success: true,
+            message: 'Perfil resetado com sucesso',
+            profile: cleanProfile
+          });
+
+        } catch (error) {
+          console.error('Erro ao resetar perfil:', error);
+          return res.status(500).json({ error: 'Erro interno do servidor' });
         }
       }
 
-      console.log(`🎉 [DELETE] Conta ${authResult.username} (${userId}) deletada completamente`);
-
-      return res.status(200).json({
-        success: true,
-        message: 'Conta deletada com sucesso'
-      });
+      return res.status(400).json({ error: 'Ação não reconhecida' });
 
     } else {
       return res.status(405).json({ error: 'Método não permitido' });

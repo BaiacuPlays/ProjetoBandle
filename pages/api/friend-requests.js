@@ -2,6 +2,7 @@
 import { kv } from '@vercel/kv';
 import { localUsers, localProfiles } from '../../utils/storage';
 import { verifyAuthentication, sanitizeInput } from '../../utils/auth';
+import { createNotification } from './notifications';
 
 // Verificar se estamos em ambiente de desenvolvimento
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -45,10 +46,7 @@ export default async function handler(req, res) {
           new Date(request.timestamp).getTime() > sevenDaysAgo
         );
 
-        return res.status(200).json({
-          success: true,
-          requests: validSentRequests
-        });
+        return res.status(200).json(validSentRequests);
       } else {
         // Buscar solicitações recebidas (comportamento padrão)
         const requestsKey = `friend_requests:${currentUserId}`;
@@ -69,26 +67,37 @@ export default async function handler(req, res) {
           new Date(request.timestamp).getTime() > sevenDaysAgo
         );
 
-        return res.status(200).json({
-          success: true,
-          requests: validRequests
-        });
+        return res.status(200).json(validRequests);
       }
 
     } else if (method === 'POST') {
       // Enviar solicitação de amizade
-      const { toUserId, toUser } = req.body;
+      const { toUserId, toUser, targetUsername } = req.body;
 
-      if (!toUserId || !toUser) {
+      // Aceitar tanto o formato antigo quanto o novo
+      let finalToUserId = toUserId;
+      let finalToUser = toUser;
+
+      if (targetUsername && !toUserId) {
+        // Formato novo do teste - converter targetUsername para o formato esperado
+        finalToUserId = `auth_${targetUsername}`;
+        finalToUser = {
+          username: targetUsername,
+          displayName: targetUsername,
+          avatar: '👤'
+        };
+      }
+
+      if (!finalToUserId || !finalToUser) {
         return res.status(400).json({ error: 'Dados da solicitação incompletos' });
       }
 
       // Validar e sanitizar dados de entrada
-      const sanitizedToUserId = sanitizeInput(toUserId, 100);
+      const sanitizedToUserId = sanitizeInput(finalToUserId, 100);
       const sanitizedToUser = {
-        username: sanitizeInput(toUser.username, 50),
-        displayName: sanitizeInput(toUser.displayName, 100),
-        avatar: sanitizeInput(toUser.avatar, 10)
+        username: sanitizeInput(finalToUser.username, 50),
+        displayName: sanitizeInput(finalToUser.displayName, 100),
+        avatar: sanitizeInput(finalToUser.avatar, 10)
       };
 
       // Verificar se não está tentando adicionar a si mesmo
@@ -166,7 +175,27 @@ export default async function handler(req, res) {
         await kv.set(fromSentKey, sentRequests);
       }
 
-      console.log(`✅ Solicitação de amizade enviada: ${currentUserId} → ${toUserId}`);
+      // Criar notificação para o destinatário
+      try {
+        await createNotification(
+          sanitizedToUserId,
+          'friend_request',
+          `${request.fromUser.displayName} enviou um pedido de amizade`,
+          {
+            requestId: request.id,
+            fromUserId: currentUserId,
+            fromUsername: request.fromUser.username,
+            fromDisplayName: request.fromUser.displayName,
+            fromAvatar: request.fromUser.avatar
+          }
+        );
+        console.log(`🔔 Notificação de pedido de amizade criada para ${sanitizedToUserId}`);
+      } catch (notifError) {
+        console.error('Erro ao criar notificação:', notifError);
+        // Não falhar a operação principal por causa da notificação
+      }
+
+      console.log(`✅ Solicitação de amizade enviada: ${currentUserId} → ${sanitizedToUserId}`);
 
       return res.status(200).json({
         success: true,
@@ -214,15 +243,19 @@ export default async function handler(req, res) {
           friends1 = await kv.get(friendsKey1) || [];
         }
 
-        friends1.push({
-          id: request.fromUserId,
-          username: request.fromUser.username,
-          displayName: request.fromUser.displayName,
-          avatar: request.fromUser.avatar,
-          bio: request.fromUser.bio || '',
-          addedAt: new Date().toISOString(),
-          status: 'offline'
-        });
+        // Verificar se já não são amigos
+        const alreadyFriends1 = friends1.some(friend => friend.id === request.fromUserId);
+        if (!alreadyFriends1) {
+          friends1.push({
+            id: request.fromUserId,
+            username: request.fromUser.username,
+            displayName: request.fromUser.displayName,
+            avatar: request.fromUser.avatar,
+            bio: request.fromUser.bio || '',
+            addedAt: new Date().toISOString(),
+            status: 'offline'
+          });
+        }
 
         // Amigos do remetente
         let friends2 = [];
@@ -232,15 +265,19 @@ export default async function handler(req, res) {
           friends2 = await kv.get(friendsKey2) || [];
         }
 
-        friends2.push({
-          id: currentUserId,
-          username: authResult.username,
-          displayName: request.toUser.displayName,
-          avatar: request.toUser.avatar,
-          bio: request.toUser.bio || '',
-          addedAt: new Date().toISOString(),
-          status: 'offline'
-        });
+        // Verificar se já não são amigos
+        const alreadyFriends2 = friends2.some(friend => friend.id === currentUserId);
+        if (!alreadyFriends2) {
+          friends2.push({
+            id: currentUserId,
+            username: authResult.username,
+            displayName: request.toUser.displayName,
+            avatar: request.toUser.avatar,
+            bio: request.toUser.bio || '',
+            addedAt: new Date().toISOString(),
+            status: 'offline'
+          });
+        }
 
         // Salvar listas de amigos
         if (isDevelopment && !hasKVConfig) {
@@ -271,6 +308,8 @@ export default async function handler(req, res) {
         }
 
         console.log(`✅ Solicitação removida da lista de enviadas do usuário ${request.fromUserId}`);
+
+        // Não criar notificação de aceite - o aceite já remove a notificação original
 
       } else if (action === 'reject') {
         // Marcar como rejeitada
