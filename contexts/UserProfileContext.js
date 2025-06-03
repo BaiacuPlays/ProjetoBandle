@@ -95,7 +95,7 @@ export const UserProfileProvider = ({ children }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-Session-Token': sessionToken || '',
+          'Authorization': `Bearer ${sessionToken || ''}`,
         },
         body: JSON.stringify({
           userId: cleanProfileData.id,
@@ -122,16 +122,27 @@ export const UserProfileProvider = ({ children }) => {
   const loadProfileFromServer = async (userId) => {
     // Não tentar carregar se userId for null/undefined
     if (!userId || userId === 'null' || userId === 'undefined') {
-
       return null;
     }
 
     try {
+      // Obter token de sessão para autenticação
+      const sessionToken = localStorage.getItem('ludomusic_session_token');
 
-      const response = await fetch(`/api/profile?userId=${userId}`);
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+
+      // Adicionar token se disponível
+      if (sessionToken) {
+        headers['Authorization'] = `Bearer ${sessionToken}`;
+      }
+
+      const response = await fetch(`/api/profile?userId=${userId}`, {
+        headers
+      });
 
       if (response.status === 404) {
-
         return null; // Perfil não existe no servidor
       }
 
@@ -140,7 +151,7 @@ export const UserProfileProvider = ({ children }) => {
       }
 
       const result = await response.json();
-      return result.profile;
+      return result;
     } catch (error) {
       console.error('❌ Erro ao carregar perfil do servidor:', error);
       return null; // Retornar null em vez de throw para não quebrar o fluxo
