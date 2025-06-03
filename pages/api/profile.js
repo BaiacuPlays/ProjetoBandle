@@ -164,7 +164,32 @@ export default async function handler(req, res) {
         return res.status(401).json({ error: authResult.error });
       }
 
-      const { action } = req.body;
+      const { action, profile: profileData } = req.body;
+
+      // Se não há action, assumir que é para salvar perfil diretamente
+      if (!action && profileData) {
+        try {
+          const userId = authResult.userId;
+          const profileKey = `profile:${userId}`;
+
+          // Salvar perfil atualizado
+          if (isDevelopment && !hasKVConfig) {
+            localProfiles.set(profileKey, profileData);
+          } else {
+            await kv.set(profileKey, profileData);
+          }
+
+          return res.status(200).json({
+            success: true,
+            message: 'Perfil salvo com sucesso',
+            profile: profileData
+          });
+
+        } catch (error) {
+          console.error('Erro ao salvar perfil:', error);
+          return res.status(500).json({ error: 'Erro interno do servidor' });
+        }
+      }
 
       // Verificar se é uma ação específica (como updateGameStats)
       if (action === 'updateGameStats') {

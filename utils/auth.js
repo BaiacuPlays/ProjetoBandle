@@ -21,7 +21,7 @@ export const verifyAuthentication = async (req) => {
   try {
     if (isDevelopment && !hasKVConfig) {
       // Buscar no storage local
-      const { localSessions } = require('./storage');
+      const { localSessions } = require('../pages/api/auth');
       sessionData = localSessions.get(sessionKey);
     } else {
       sessionData = await kv.get(sessionKey);
