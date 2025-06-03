@@ -7,10 +7,6 @@ import { isDevelopment, hasKVConfig, kvGet, kvSet } from '../../utils/kv-config'
 // Fallback para desenvolvimento local
 const localDailyGames = new Map();
 
-// Verificar se estamos em ambiente de desenvolvimento
-const isDevelopment = process.env.NODE_ENV === 'development';
-const hasKVConfig = process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN;
-
 // Arquivo para persistir dados em desenvolvimento local
 const LOCAL_DATA_FILE = path.join(process.cwd(), 'temp', 'daily-games.json');
 
