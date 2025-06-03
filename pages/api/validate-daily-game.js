@@ -102,22 +102,10 @@ export default async function handler(req, res) {
     const dailyGameByUsernameKey = `daily_game_by_user:${authResult.username}:${date}`;
 
     // Verificar se usuário já jogou hoje (verificação principal)
-    let existingGame = null;
-
-    if (isDevelopment && !hasKVConfig) {
-      existingGame = localDailyGames.get(dailyGameKey);
-    } else {
-      existingGame = await kv.get(dailyGameKey);
-    }
+    const existingGame = await kvGet(dailyGameKey, localDailyGames);
 
     // 🔒 VERIFICAÇÃO ADICIONAL POR USERNAME (camada extra de segurança)
-    let existingGameByUsername = null;
-
-    if (isDevelopment && !hasKVConfig) {
-      existingGameByUsername = localDailyGames.get(dailyGameByUsernameKey);
-    } else {
-      existingGameByUsername = await kv.get(dailyGameByUsernameKey);
-    }
+    const existingGameByUsername = await kvGet(dailyGameByUsernameKey, localDailyGames);
 
     // Se qualquer uma das verificações encontrar um jogo existente, bloquear
     const gameAlreadyPlayed = existingGame || existingGameByUsername;
@@ -167,17 +155,13 @@ export default async function handler(req, res) {
     };
 
     // 🔒 SALVAR EM AMBAS AS CHAVES PARA MÁXIMA SEGURANÇA
+    // Salvar por userId (chave principal)
+    await kvSet(dailyGameKey, gameRecord, { ex: 86400 * 7 }, localDailyGames);
+    // Salvar por username (chave de segurança)
+    await kvSet(dailyGameByUsernameKey, gameRecord, { ex: 86400 * 7 }, localDailyGames);
+
     if (isDevelopment && !hasKVConfig) {
-      // Salvar por userId (chave principal)
-      localDailyGames.set(dailyGameKey, gameRecord);
-      // Salvar por username (chave de segurança)
-      localDailyGames.set(dailyGameByUsernameKey, gameRecord);
-      saveLocalData(); // Persistir no arquivo
-    } else {
-      // Salvar por userId (chave principal)
-      await kv.set(dailyGameKey, gameRecord, { ex: 86400 * 7 }); // Expira em 7 dias
-      // Salvar por username (chave de segurança)
-      await kv.set(dailyGameByUsernameKey, gameRecord, { ex: 86400 * 7 }); // Expira em 7 dias
+      saveLocalData(); // Persistir no arquivo apenas em desenvolvimento
     }
 
     console.log(`✅ Jogo diário registrado com SEGURANÇA DUPLA para ${authResult.username} (${userId}) em ${date}:`, {
