@@ -1,50 +1,11 @@
 // API para resetar perfil do usuário
 import { kv } from '@vercel/kv';
-import { localProfiles, localSessions } from '../../../utils/storage';
+import { localProfiles } from '../../../utils/storage';
+import { verifyAuthentication } from '../../../utils/auth';
 
 // Verificar se estamos em ambiente de desenvolvimento
 const isDevelopment = process.env.NODE_ENV === 'development';
 const hasKVConfig = process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN;
-
-// 🔒 Função para verificar se o usuário está autenticado
-const verifyAuthentication = async (req) => {
-  const sessionToken = req.headers.authorization?.replace('Bearer ', '') ||
-                      req.headers['x-session-token'] ||
-                      req.query.sessionToken;
-
-  if (!sessionToken) {
-    return { authenticated: false, error: 'Token de sessão não fornecido' };
-  }
-
-  const sessionKey = `session:${sessionToken}`;
-  let sessionData = null;
-
-  try {
-    if (isDevelopment && !hasKVConfig) {
-      sessionData = localSessions.get(sessionKey);
-    } else {
-      sessionData = await kv.get(sessionKey);
-    }
-
-    if (!sessionData) {
-      return { authenticated: false, error: 'Sessão inválida ou expirada' };
-    }
-
-    // Verificar se sessão expirou
-    if (new Date() > new Date(sessionData.expiresAt)) {
-      return { authenticated: false, error: 'Sessão expirada' };
-    }
-
-    return {
-      authenticated: true,
-      userId: sessionData.userId,
-      username: sessionData.username
-    };
-  } catch (error) {
-    console.error('Erro ao verificar autenticação:', error);
-    return { authenticated: false, error: 'Erro interno de autenticação' };
-  }
-};
 
 // Função para criar perfil padrão
 const createDefaultProfile = (userId, username, displayName) => {

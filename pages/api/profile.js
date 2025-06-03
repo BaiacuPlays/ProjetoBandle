@@ -1,50 +1,7 @@
 // API para gerenciar perfis de usuário no servidor
 import { kv } from '@vercel/kv';
-import { localProfiles, localSessions } from '../../utils/storage';
-
-// Verificar se estamos em ambiente de desenvolvimento
-const isDevelopment = process.env.NODE_ENV === 'development';
-const hasKVConfig = process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN;
-
-// 🔒 Função para verificar se o usuário está autenticado
-const verifyAuthentication = async (req) => {
-  const sessionToken = req.headers.authorization?.replace('Bearer ', '') ||
-                      req.headers['x-session-token'] ||
-                      req.query.sessionToken;
-
-  if (!sessionToken) {
-    return { authenticated: false, error: 'Token de sessão não fornecido' };
-  }
-
-  const sessionKey = `session:${sessionToken}`;
-  let sessionData = null;
-
-  try {
-    if (isDevelopment && !hasKVConfig) {
-      sessionData = localSessions.get(sessionKey);
-    } else {
-      sessionData = await kv.get(sessionKey);
-    }
-
-    if (!sessionData) {
-      return { authenticated: false, error: 'Sessão inválida ou expirada' };
-    }
-
-    // Verificar se sessão expirou
-    if (new Date() > new Date(sessionData.expiresAt)) {
-      return { authenticated: false, error: 'Sessão expirada' };
-    }
-
-    return {
-      authenticated: true,
-      userId: sessionData.userId,
-      username: sessionData.username
-    };
-  } catch (error) {
-    console.error('Erro ao verificar autenticação:', error);
-    return { authenticated: false, error: 'Erro interno de autenticação' };
-  }
-};
+import { localProfiles } from '../../utils/storage';
+import { verifyAuthentication } from '../../utils/auth';
 
 // Função para calcular XP baseado no desempenho
 const calculateXP = (gameStats) => {
@@ -136,7 +93,7 @@ export default async function handler(req, res) {
         return res.status(401).json({ error: authResult.error });
       }
 
-      const userId = `auth_${authResult.username}`;
+      const userId = authResult.userId;
       const profileKey = `profile:${userId}`;
       let profile = null;
 
@@ -214,7 +171,7 @@ export default async function handler(req, res) {
         // Implementar updateGameStats inline
         try {
           const { gameStats } = req.body;
-          const userId = `auth_${authResult.username}`;
+          const userId = authResult.userId;
           const profileKey = `profile:${userId}`;
 
           // Carregar perfil atual
@@ -297,7 +254,7 @@ export default async function handler(req, res) {
       } else if (action === 'resetProfile') {
         // Implementar resetProfile inline
         try {
-          const userId = `auth_${authResult.username}`;
+          const userId = authResult.userId;
           const profileKey = `profile:${userId}`;
 
           // Criar perfil limpo
