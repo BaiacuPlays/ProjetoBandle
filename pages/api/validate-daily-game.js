@@ -2,6 +2,7 @@
 import { kv } from '@vercel/kv';
 import fs from 'fs';
 import path from 'path';
+import { verifyAuthentication } from '../../utils/auth';
 
 // Fallback para desenvolvimento local
 const localDailyGames = new Map();
@@ -52,45 +53,7 @@ const saveLocalData = () => {
 // Carregar dados na inicialização
 loadLocalData();
 
-// Função para verificar autenticação
-const verifyAuthentication = async (req) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return { authenticated: false, error: 'Token de autorização não fornecido' };
-  }
 
-  const sessionToken = authHeader.substring(7);
-  const sessionKey = `session:${sessionToken}`;
-  let sessionData;
-
-  try {
-    if (isDevelopment && !hasKVConfig) {
-      // Buscar no storage local
-      const { localSessions } = require('./auth');
-      sessionData = localSessions.get(sessionKey);
-    } else {
-      sessionData = await kv.get(sessionKey);
-    }
-
-    if (!sessionData) {
-      return { authenticated: false, error: 'Sessão inválida ou expirada' };
-    }
-
-    // Verificar se sessão expirou
-    if (new Date() > new Date(sessionData.expiresAt)) {
-      return { authenticated: false, error: 'Sessão expirada' };
-    }
-
-    return {
-      authenticated: true,
-      userId: `auth_${sessionData.username}`,
-      username: sessionData.username
-    };
-  } catch (error) {
-    console.error('Erro ao verificar autenticação:', error);
-    return { authenticated: false, error: 'Erro interno de autenticação' };
-  }
-};
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {

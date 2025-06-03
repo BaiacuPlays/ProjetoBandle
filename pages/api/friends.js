@@ -1,5 +1,6 @@
 // API para gerenciar lista de amigos
 import { kv } from '@vercel/kv';
+import { verifyAuthentication } from '../../utils/auth';
 
 // Verificar se estamos em ambiente de desenvolvimento
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -7,48 +8,6 @@ const hasKVConfig = !!(process.env.KV_REST_API_URL && process.env.KV_REST_API_TO
 
 // Storage local para desenvolvimento
 const localFriends = new Map();
-
-// Função para verificar autenticação
-const verifyAuthentication = async (req) => {
-  const sessionToken = req.headers.authorization?.replace('Bearer ', '') ||
-                      req.headers['x-session-token'] ||
-                      req.query.sessionToken;
-
-  if (!sessionToken) {
-    return { authenticated: false, error: 'Token de sessão não fornecido' };
-  }
-
-  const sessionKey = `session:${sessionToken}`;
-  let sessionData = null;
-
-  try {
-    if (isDevelopment && !hasKVConfig) {
-      // Buscar no storage local
-      const { localSessions } = require('./auth');
-      sessionData = localSessions.get(sessionKey);
-    } else {
-      sessionData = await kv.get(sessionKey);
-    }
-
-    if (!sessionData) {
-      return { authenticated: false, error: 'Sessão inválida ou expirada' };
-    }
-
-    // Verificar se sessão expirou
-    if (new Date() > new Date(sessionData.expiresAt)) {
-      return { authenticated: false, error: 'Sessão expirada' };
-    }
-
-    return {
-      authenticated: true,
-      userId: `auth_${sessionData.username}`,
-      username: sessionData.username
-    };
-  } catch (error) {
-    console.error('Erro ao verificar autenticação:', error);
-    return { authenticated: false, error: 'Erro interno de autenticação' };
-  }
-};
 
 export default async function handler(req, res) {
   const { method } = req;
