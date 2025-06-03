@@ -1,7 +1,7 @@
 // API para gerenciar perfis de usuário no servidor
-import { kv } from '@vercel/kv';
 import { localProfiles } from '../../utils/storage';
 import { verifyAuthentication } from '../../utils/auth';
+import { isDevelopment, hasKVConfig, kvGet, kvSet } from '../../utils/kv-config';
 
 // Função para calcular XP baseado no desempenho
 const calculateXP = (gameStats) => {
@@ -97,18 +97,8 @@ export default async function handler(req, res) {
       const profileKey = `profile:${userId}`;
       let profile = null;
 
-      if (isDevelopment && !hasKVConfig) {
-        // Usar armazenamento local em desenvolvimento
-        profile = localProfiles.get(profileKey);
-      } else {
-        // Usar Vercel KV em produção
-        try {
-          profile = await kv.get(profileKey);
-        } catch (error) {
-          console.error('Erro ao acessar KV:', error);
-          return res.status(500).json({ error: 'Erro interno do servidor' });
-        }
-      }
+      // Usar função centralizada do KV
+      profile = await kvGet(profileKey, localProfiles);
 
       if (!profile) {
         // Criar perfil padrão se não existir

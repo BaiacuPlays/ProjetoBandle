@@ -1,9 +1,5 @@
 // Utilitário centralizado para verificação de autenticação
-import { kv } from '@vercel/kv';
-
-// Verificar se estamos em ambiente de desenvolvimento
-const isDevelopment = process.env.NODE_ENV === 'development';
-const hasKVConfig = process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN;
+import { isDevelopment, hasKVConfig, kvGet } from './kv-config';
 
 // Função centralizada para verificar autenticação
 export const verifyAuthentication = async (req) => {
@@ -22,9 +18,9 @@ export const verifyAuthentication = async (req) => {
     if (isDevelopment && !hasKVConfig) {
       // Buscar no storage local
       const { localSessions } = require('../pages/api/auth');
-      sessionData = localSessions.get(sessionKey);
+      sessionData = await kvGet(sessionKey, localSessions);
     } else {
-      sessionData = await kv.get(sessionKey);
+      sessionData = await kvGet(sessionKey);
     }
 
     if (!sessionData) {

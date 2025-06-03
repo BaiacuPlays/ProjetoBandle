@@ -1,8 +1,8 @@
 // API para validar se usuário já jogou o jogo diário hoje
-import { kv } from '@vercel/kv';
 import fs from 'fs';
 import path from 'path';
 import { verifyAuthentication } from '../../utils/auth';
+import { isDevelopment, hasKVConfig, kvGet, kvSet } from '../../utils/kv-config';
 
 // Fallback para desenvolvimento local
 const localDailyGames = new Map();
@@ -56,7 +56,7 @@ loadLocalData();
 
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
+  if (req.method !== 'POST' && req.method !== 'GET') {
     return res.status(405).json({ error: 'Método não permitido' });
   }
 
@@ -67,11 +67,29 @@ export default async function handler(req, res) {
       return res.status(401).json({ error: authResult.error });
     }
 
-    const { date, gameStats } = req.body;
+    // Suporte para GET e POST
+    const { date, gameStats } = req.method === 'GET' ? req.query : req.body;
     const userId = authResult.userId;
 
-    if (!date || !gameStats) {
-      return res.status(400).json({ error: 'Data e estatísticas do jogo são obrigatórias' });
+    if (!date) {
+      return res.status(400).json({ error: 'Data é obrigatória' });
+    }
+
+    // Para GET, apenas verificar se pode jogar
+    if (req.method === 'GET') {
+      const dailyGameKey = `daily_game:${userId}:${date}`;
+      const existingGame = await kvGet(dailyGameKey, localDailyGames);
+
+      return res.status(200).json({
+        success: true,
+        canPlay: !existingGame,
+        existingGame: existingGame || null
+      });
+    }
+
+    // Para POST, validar gameStats
+    if (!gameStats) {
+      return res.status(400).json({ error: 'Estatísticas do jogo são obrigatórias' });
     }
 
     // Verificar se é apenas uma verificação (não salvar)
