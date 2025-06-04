@@ -45,7 +45,6 @@ export const CookieManager = {
     }
 
     document.cookie = cookieString;
-    console.log(`🍪 Cookie definido: ${name}`);
   },
 
   // Obter um cookie
@@ -53,9 +52,6 @@ export const CookieManager = {
     if (typeof window === 'undefined') {
       return null; // SSR safety
     }
-
-    console.log('🔍 DEBUG CookieManager - Buscando cookie:', name);
-    console.log('🔍 DEBUG CookieManager - Todos os cookies:', document.cookie);
 
     const nameEQ = encodeURIComponent(name) + '=';
     const cookies = document.cookie.split(';');
@@ -65,11 +61,9 @@ export const CookieManager = {
       if (c.indexOf(nameEQ) === 0) {
         const value = c.substring(nameEQ.length);
         const result = decodeURIComponent(value);
-        console.log('🔍 DEBUG CookieManager - Cookie encontrado:', result);
         return result;
       }
     }
-    console.log('🔍 DEBUG CookieManager - Cookie não encontrado');
     return null;
   },
 
@@ -79,7 +73,6 @@ export const CookieManager = {
 
     const finalOptions = { ...options, maxAge: -1, expires: new Date(0) };
     this.set(name, '', finalOptions);
-    console.log(`🗑️ Cookie removido: ${name}`);
   },
 
   // Verificar se um cookie existe
@@ -130,8 +123,6 @@ export const AuthCookies = {
     // Também salvar no localStorage como backup
     localStorage.setItem('ludomusic_session_token', sessionToken);
     localStorage.setItem('ludomusic_user_data', JSON.stringify(userData));
-    
-    console.log('🔐 Dados de autenticação salvos nos cookies e localStorage');
   },
 
   // Obter token de sessão
@@ -158,7 +149,6 @@ export const AuthCookies = {
       
       return null;
     } catch (error) {
-      console.error('Erro ao parsear dados do usuário:', error);
       return null;
     }
   },
@@ -179,8 +169,6 @@ export const AuthCookies = {
     // Remover localStorage
     localStorage.removeItem('ludomusic_session_token');
     localStorage.removeItem('ludomusic_user_data');
-    
-    console.log('🧹 Dados de autenticação limpos dos cookies e localStorage');
   },
 
   // Verificar se há dados de autenticação salvos
@@ -204,10 +192,6 @@ export const FriendsCookies = {
         secure: false, // Permitir HTTP para desenvolvimento local
         sameSite: 'lax' // Mais permissivo para evitar problemas de CORS
       };
-
-      console.log('💾 DEBUG - Salvando amigos nos cookies:', friends?.length || 0, 'amigos');
-      console.log('💾 DEBUG - Salvando solicitações nos cookies:', friendRequests?.length || 0, 'solicitações');
-      console.log('💾 DEBUG - Lista de amigos:', friends?.map(f => f.displayName || f.username) || []);
 
       // Salvar lista de amigos com múltiplas tentativas
       const friendsData = JSON.stringify(friends);
@@ -236,23 +220,18 @@ export const FriendsCookies = {
           const savedRequests = CookieManager.get(this.FRIEND_REQUESTS);
 
           if (savedFriends && savedRequests) {
-            console.log(`✅ DEBUG - Salvamento bem-sucedido na tentativa ${attempt}`);
             break;
           } else {
-            console.log(`⚠️ DEBUG - Tentativa ${attempt} falhou, tentando novamente...`);
             if (attempt === 3) {
               throw new Error('Falha em todas as tentativas de salvamento');
             }
           }
         } catch (attemptError) {
-          console.error(`❌ Erro na tentativa ${attempt}:`, attemptError);
           if (attempt === 3) {
             throw attemptError;
           }
         }
       }
-
-      console.log('👥 Dados dos amigos salvos nos cookies:', friends.length, 'amigos,', friendRequests.length, 'solicitações');
 
       // Sempre salvar no localStorage como backup adicional
       localStorage.setItem(this.FRIENDS_DATA, friendsData);
@@ -260,15 +239,13 @@ export const FriendsCookies = {
       localStorage.setItem('ludomusic_friends_timestamp', Date.now().toString());
 
     } catch (error) {
-      console.error('❌ Erro ao salvar dados dos amigos nos cookies:', error);
       // Fallback para localStorage
       try {
         localStorage.setItem(this.FRIENDS_DATA, JSON.stringify(friends));
         localStorage.setItem(this.FRIEND_REQUESTS, JSON.stringify(friendRequests));
         localStorage.setItem('ludomusic_friends_timestamp', Date.now().toString());
-        console.log('💾 Fallback: dados salvos no localStorage');
       } catch (localError) {
-        console.error('❌ Erro também no localStorage:', localError);
+        // Silent error handling
       }
     }
   },
@@ -276,47 +253,32 @@ export const FriendsCookies = {
   // Obter lista de amigos
   getFriendsData() {
     try {
-      console.log('🔍 DEBUG - Buscando cookie:', this.FRIENDS_DATA);
-      console.log('🔍 DEBUG - Todos os cookies:', CookieManager.getAll());
-
       // Tentar obter do cookie principal
       let friendsData = CookieManager.get(this.FRIENDS_DATA);
-      console.log('🔍 DEBUG - Cookie principal encontrado:', friendsData ? 'SIM' : 'NÃO');
 
       // Se não encontrou, tentar backup 1
       if (!friendsData) {
-        console.log('🔍 DEBUG - Tentando backup 1 do cookie...');
         friendsData = CookieManager.get(this.FRIENDS_DATA + '_backup');
-        console.log('🔍 DEBUG - Cookie backup 1 encontrado:', friendsData ? 'SIM' : 'NÃO');
       }
 
       // Se não encontrou, tentar backup 2
       if (!friendsData) {
-        console.log('🔍 DEBUG - Tentando backup 2 do cookie...');
         friendsData = CookieManager.get(this.FRIENDS_DATA + '_backup2');
-        console.log('🔍 DEBUG - Cookie backup 2 encontrado:', friendsData ? 'SIM' : 'NÃO');
       }
 
       // Se ainda não encontrou, tentar localStorage
       if (!friendsData) {
-        console.log('🔍 DEBUG - Tentando localStorage...');
         friendsData = localStorage.getItem(this.FRIENDS_DATA);
-        console.log('🔍 DEBUG - localStorage encontrado:', friendsData ? 'SIM' : 'NÃO');
       }
 
-      console.log('🔍 DEBUG - Conteúdo final:', friendsData ? 'DADOS ENCONTRADOS' : 'NENHUM DADO');
       const parsed = friendsData ? JSON.parse(friendsData) : [];
-      console.log('🔍 DEBUG - Dados parseados:', parsed?.length || 0, 'amigos encontrados');
-      console.log('🔍 DEBUG - Lista de amigos:', parsed?.map(f => f.displayName || f.username) || []);
       return parsed;
     } catch (error) {
-      console.error('❌ Erro ao parsear dados dos amigos:', error);
       // Tentar localStorage como último recurso
       try {
         const localData = localStorage.getItem(this.FRIENDS_DATA);
         return localData ? JSON.parse(localData) : [];
       } catch (localError) {
-        console.error('❌ Erro também no localStorage:', localError);
         return [];
       }
     }
@@ -325,45 +287,32 @@ export const FriendsCookies = {
   // Obter solicitações de amizade
   getFriendRequests() {
     try {
-      console.log('🔍 DEBUG - Buscando cookie:', this.FRIEND_REQUESTS);
-
       // Tentar obter do cookie principal
       let requestsData = CookieManager.get(this.FRIEND_REQUESTS);
-      console.log('🔍 DEBUG - Cookie principal encontrado:', requestsData ? 'SIM' : 'NÃO');
 
       // Se não encontrou, tentar backup 1
       if (!requestsData) {
-        console.log('🔍 DEBUG - Tentando backup 1 do cookie...');
         requestsData = CookieManager.get(this.FRIEND_REQUESTS + '_backup');
-        console.log('🔍 DEBUG - Cookie backup 1 encontrado:', requestsData ? 'SIM' : 'NÃO');
       }
 
       // Se não encontrou, tentar backup 2
       if (!requestsData) {
-        console.log('🔍 DEBUG - Tentando backup 2 do cookie...');
         requestsData = CookieManager.get(this.FRIEND_REQUESTS + '_backup2');
-        console.log('🔍 DEBUG - Cookie backup 2 encontrado:', requestsData ? 'SIM' : 'NÃO');
       }
 
       // Se ainda não encontrou, tentar localStorage
       if (!requestsData) {
-        console.log('🔍 DEBUG - Tentando localStorage...');
         requestsData = localStorage.getItem(this.FRIEND_REQUESTS);
-        console.log('🔍 DEBUG - localStorage encontrado:', requestsData ? 'SIM' : 'NÃO');
       }
 
-      console.log('🔍 DEBUG - Conteúdo final:', requestsData);
       const parsed = requestsData ? JSON.parse(requestsData) : [];
-      console.log('🔍 DEBUG - Dados parseados:', parsed);
       return parsed;
     } catch (error) {
-      console.error('❌ Erro ao parsear solicitações de amizade:', error);
       // Tentar localStorage como último recurso
       try {
         const localData = localStorage.getItem(this.FRIEND_REQUESTS);
         return localData ? JSON.parse(localData) : [];
       } catch (localError) {
-        console.error('❌ Erro também no localStorage:', localError);
         return [];
       }
     }
@@ -386,8 +335,6 @@ export const FriendsCookies = {
     localStorage.removeItem(this.FRIENDS_DATA);
     localStorage.removeItem(this.FRIEND_REQUESTS);
     localStorage.removeItem('ludomusic_friends_timestamp');
-
-    console.log('🧹 Dados dos amigos limpos dos cookies e localStorage');
   },
 
   // Verificar integridade dos dados
@@ -416,10 +363,8 @@ export const FriendsCookies = {
         )
       };
 
-      console.log('🔍 Relatório de integridade dos dados dos amigos:', report);
       return report;
     } catch (error) {
-      console.error('❌ Erro ao verificar integridade:', error);
       return null;
     }
   },

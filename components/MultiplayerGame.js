@@ -8,6 +8,11 @@ import gameStyles from '../styles/Home.module.css';
 import { FaPlay, FaPause, FaVolumeUp, FaFastForward } from 'react-icons/fa';
 import { browserCompatibility } from '../utils/browserCompatibility';
 import BrowserCompatibilityWarning from './BrowserCompatibilityWarning';
+// Imports temporariamente desabilitados para SSR
+// import { audioCache } from '../utils/audioCache';
+// import { useAudioPreloader } from '../hooks/useAudioPreloader';
+// import { useAudioProxy } from '../utils/audioProxy';
+import { useSimpleAudioProxy } from '../utils/simpleAudioProxy';
 
 const MultiplayerGame = ({ onBackToLobby }) => {
 
@@ -22,6 +27,41 @@ const MultiplayerGame = ({ onBackToLobby }) => {
 
   // Detecção de navegador para compatibilidade
   const [browserInfo, setBrowserInfo] = useState(null);
+
+  // Hook para proxy de áudio (resolve problemas de CORS) - TESTE SIMPLIFICADO
+  const { songs: processedSongs, isReady } = useSimpleAudioProxy(songs);
+
+  // Usar músicas processadas (com proxy se necessário)
+  const songsToUse = processedSongs || songs;
+
+  // Estados para sistema de cache de áudio
+  const [audioCache, setAudioCache] = useState(null);
+  const [isInCache, setIsInCache] = useState(() => () => false);
+  const [playInstant, setPlayInstant] = useState(() => () => Promise.resolve(null));
+
+  // Carregar sistema de cache apenas no cliente
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      import('../utils/audioCache').then(({ audioCache: cache }) => {
+        setAudioCache(cache);
+        setIsInCache(() => (song) => {
+          if (!song?.audioUrl) return false;
+          return cache.has(song.audioUrl);
+        });
+        setPlayInstant(() => async (song) => {
+          if (!song?.audioUrl) return null;
+          try {
+            return await cache.playInstant(song.audioUrl);
+          } catch (error) {
+            console.warn('Erro na reprodução instantânea:', error);
+            return null;
+          }
+        });
+      }).catch(error => {
+        console.warn('Erro ao carregar sistema de cache:', error);
+      });
+    }
+  }, []);
 
   useEffect(() => {
     const detectBrowser = () => {
@@ -108,6 +148,14 @@ const MultiplayerGame = ({ onBackToLobby }) => {
     }
   }
 
+  // Processar URL através do proxy para resolver CORS
+  if (songToPlay?.audioUrl) {
+    songToPlay = {
+      ...songToPlay,
+      audioUrl: processedSongs.find(s => s.id === songToPlay.id)?.audioUrl || songToPlay.audioUrl
+    };
+  }
+
 
 
   // Função para gerar tempo determinístico
@@ -149,24 +197,18 @@ const MultiplayerGame = ({ onBackToLobby }) => {
       const handleLoadedMetadata = () => {
         if (!audio || audio !== audioRef.current) return; // Verificação de segurança
 
-        console.log('📊 [MULTIPLAYER] Metadata carregada', {
-          duration: audio.duration,
-          readyState: audio.readyState,
-          url: songToUse.audioUrl
-        });
+
 
         const duration = audio.duration || 0;
 
         // Verificar se a duração é válida
         if (!duration || isNaN(duration) || duration < 10) {
-          console.error('❌ [MULTIPLAYER] Arquivo de áudio inválido:', songToUse.audioUrl);
           setAudioLoadError(true);
 
           return;
         }
 
         // Áudio carregado com sucesso
-        console.log('✅ [MULTIPLAYER] Áudio carregado com sucesso');
         setAudioLoadError(false);
         setAudioLoadRetries(0);
         setConnectionError(false);
@@ -184,15 +226,11 @@ const MultiplayerGame = ({ onBackToLobby }) => {
       const handleError = (e) => {
         if (!audio || audio !== audioRef.current) return; // Verificação de segurança
 
-        console.error('❌ [MULTIPLAYER] Erro ao carregar áudio:', e);
         setAudioLoadError(true);
-
-
 
         // Tentar recarregar automaticamente até 3 vezes com debounce
         if (audioLoadRetries < 3) {
           const retryDelay = Math.min(2000 * (audioLoadRetries + 1), 8000); // Max 8s
-          console.log(`🔄 [MULTIPLAYER] Tentativa ${audioLoadRetries + 1}/3 em ${retryDelay}ms`);
           setTimeout(() => {
             if (audio === audioRef.current) { // Verificar se ainda é o mesmo elemento
               setAudioLoadRetries(prev => prev + 1);
@@ -200,7 +238,6 @@ const MultiplayerGame = ({ onBackToLobby }) => {
             }
           }, retryDelay);
         } else {
-          console.error('❌ [MULTIPLAYER] Máximo de tentativas excedido');
           setConnectionError(true);
         }
       };
@@ -283,7 +320,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
 
         setAudioProgress(currentTime);
       } catch (error) {
-        console.error('Erro no updateProgress multiplayer:', error);
+        // Silent error handling
       }
     };
 
@@ -331,7 +368,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
           audio.currentTime = startTime;
         }
       } catch (error) {
-        console.error('Erro ao resetar áudio na mudança de rodada:', error);
+        // Silent error handling
       }
     }
 
@@ -367,16 +404,16 @@ const MultiplayerGame = ({ onBackToLobby }) => {
         setIsPlaying(false);
         setAudioProgress(0);
 
-        // Debounce para evitar múltiplos loads - aumentado para melhor performance
+        // Debounce reduzido para melhor responsividade
         const loadTimeout = setTimeout(() => {
           if (audio === audioRef.current && songToPlay?.audioUrl) {
             audio.load();
           }
-        }, 300);
+        }, 100); // Reduzido de 300 para 100ms
 
         return () => clearTimeout(loadTimeout);
       } catch (error) {
-        console.error('Erro ao configurar áudio com nova URL:', error);
+        // Silent error handling
       }
     }
   }, [songToPlay?.audioUrl]);
@@ -389,8 +426,6 @@ const MultiplayerGame = ({ onBackToLobby }) => {
   // Detectar fim do jogo e distribuir XP (APENAS UMA VEZ)
   useEffect(() => {
     if (gameFinished && gameState && updateSocialStats && !xpDistributed) {
-      console.log('🎮 [MULTIPLAYER] Jogo finalizado, distribuindo XP...');
-
       // Marcar como distribuído IMEDIATAMENTE para evitar execuções múltiplas
       setXpDistributed(true);
 
@@ -407,13 +442,6 @@ const MultiplayerGame = ({ onBackToLobby }) => {
       updateSocialStats('multiplayer_game', {
         won: isWinner,
         totalRounds: gameState.totalRounds || 10
-      });
-
-      console.log('🎮 [MULTIPLAYER] XP distribuído:', {
-        player: nickname,
-        isWinner,
-        totalRounds: gameState.totalRounds,
-        finalScore: gameState.scores?.[nickname] || 0
       });
     }
   }, [gameFinished, gameState, updateSocialStats, xpDistributed, nickname]);
@@ -651,10 +679,8 @@ const MultiplayerGame = ({ onBackToLobby }) => {
               } else if (error.name === 'NotSupportedError') {
                 actions.setError('Formato de áudio não suportado neste navegador');
               } else if (error.name === 'AbortError') {
-                // Ignorar AbortError mas logar outros erros
-                console.error('Erro ao reproduzir áudio no multiplayer:', error);
+                // Ignorar AbortError
               } else {
-                console.error('Erro desconhecido ao reproduzir áudio:', error);
                 actions.setError('Erro ao reproduzir áudio. Tente novamente.');
               }
             });
@@ -667,7 +693,6 @@ const MultiplayerGame = ({ onBackToLobby }) => {
         }
       }
     } catch (error) {
-      console.error('Erro na função handlePlayPause:', error);
       actions.setError('Erro ao controlar reprodução de áudio');
       setTimeout(() => actions.setError(''), 3000);
     }
@@ -860,29 +885,41 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                       onClick={async (e) => {
                         if (!songToPlay || isPlayButtonDisabled) return;
 
-                        console.log('🎵 [MULTIPLAYER] Botão play clicado', {
-                          songUrl: songToPlay?.audioUrl,
-                          duration: audioRef.current?.duration,
-                          readyState: audioRef.current?.readyState,
-                          startTime
-                        });
+                        // Tentar reprodução instantânea do cache primeiro
+                        if (isInCache(songToPlay) && !isPlaying) {
+                          try {
+                            const cachedAudio = await playInstant(songToPlay);
 
-                        // Verificar se o áudio está carregado
+                            if (cachedAudio) {
+                              // Configurar tempo de início se necessário
+                              if (startTime !== null && startTime !== undefined) {
+                                cachedAudio.currentTime = startTime;
+                              }
+
+                              // Atualizar referência do áudio
+                              audioRef.current = cachedAudio;
+                              setIsPlaying(true);
+                              return;
+                            }
+                          } catch (error) {
+                            console.warn('Falha na reprodução instantânea, usando método tradicional:', error);
+                          }
+                        }
+
+                        // Fallback para método tradicional
                         if (!audioRef.current || !audioRef.current.duration) {
-                          console.log('⚠️ [MULTIPLAYER] Áudio não carregado ainda');
                           actions.setError('Áudio ainda carregando, aguarde...');
                           setTimeout(() => actions.setError(''), 2000);
                           return;
                         }
 
                         if (startTime === null || startTime === undefined) {
-                          console.log('⚠️ [MULTIPLAYER] StartTime inválido');
                           return;
                         }
 
-                        // Desabilitar botão temporariamente
+                        // Desabilitar botão temporariamente (tempo reduzido)
                         setIsPlayButtonDisabled(true);
-                        setTimeout(() => setIsPlayButtonDisabled(false), 500);
+                        setTimeout(() => setIsPlayButtonDisabled(false), 200); // Reduzido de 500 para 200ms
 
                         try {
                           const currentTime = audioRef.current.currentTime - startTime;
@@ -891,7 +928,6 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                           if (isPlaying) {
                             // Pausar
                             audioRef.current.pause();
-                            console.log('⏸️ [MULTIPLAYER] Áudio pausado');
                           } else {
                             // Reproduzir
                             if (currentTime >= 15 || (!iAmWinner && myAttempts < 6 && currentTime >= maxDuration) || currentTime < 0) {
@@ -900,13 +936,15 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                             }
 
                             if (audioRef.current.paused) {
-                              console.log('▶️ [MULTIPLAYER] Iniciando reprodução...');
-                              await browserCompatibility.playAudio(audioRef.current);
-                              console.log('✅ [MULTIPLAYER] Reprodução iniciada');
+                              // Usar método instantâneo se áudio está pronto
+                              if (audioRef.current.readyState >= 2) {
+                                await browserCompatibility.playAudioInstant(audioRef.current);
+                              } else {
+                                await browserCompatibility.playAudio(audioRef.current);
+                              }
                             }
                           }
                         } catch (error) {
-                          console.error('❌ [MULTIPLAYER] Erro ao reproduzir áudio:', error);
                           if (error.name !== 'AbortError') {
                             actions.setError(error.message || 'Erro ao reproduzir o áudio. Tentando novamente...');
                             setTimeout(() => actions.setError(''), 3000);
@@ -961,6 +999,17 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                         audioRef.current = el;
                         // Configurar elemento com compatibilidade específica do navegador
                         browserCompatibility.configureAudioElement(el);
+                        // Configuração otimizada para reprodução instantânea
+                        el.preload = 'auto'; // Carrega tudo para reprodução instantânea
+                        // Não definir crossOrigin para URLs do proxy (evita problemas de CORS)
+                        if (!songToPlay?.audioUrl?.includes('/api/audio-proxy')) {
+                          el.crossOrigin = 'anonymous';
+                        }
+
+                        // Adicionar ao cache quando carregado
+                        if (audioCache && songToPlay?.audioUrl && !audioCache.has(songToPlay.audioUrl)) {
+                          audioCache.set(songToPlay.audioUrl, el);
+                        }
                       }
                     }}
                     src={songToPlay?.audioUrl}
@@ -968,9 +1017,6 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                     onError={(e) => {
                       // Tratamento de erro mais robusto
                       const errorCode = e.target.error?.code;
-                      const errorMessage = e.target.error?.message;
-
-                      console.error('Erro de áudio no multiplayer:', { errorCode, errorMessage, url: songToPlay?.audioUrl });
 
                       if (errorCode === 4) {
                         actions.setError('Formato de áudio não suportado');
@@ -988,30 +1034,26 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                       setAudioLoadError(true);
                     }}
                     onCanPlay={() => {
-                      console.log('✅ [MULTIPLAYER] Áudio pronto para tocar');
                       // Áudio pronto para tocar
                       setAudioLoadError(false);
                       setConnectionError(false);
                       setAudioLoadRetries(0);
                     }}
                     onLoadStart={() => {
-                      console.log('🔄 [MULTIPLAYER] Começou a carregar áudio');
                       // Começou a carregar
                       setAudioLoadError(false);
                     }}
                     onWaiting={() => {
                       // Aguardando dados
-                      console.log('⏳ [MULTIPLAYER] Áudio aguardando dados...');
                     }}
                     onStalled={() => {
                       // Carregamento travou
-                      console.warn('⚠️ [MULTIPLAYER] Carregamento de áudio travou');
                     }}
                     onSuspend={() => {
-                      console.log('⏸️ [MULTIPLAYER] Download suspenso');
+                      // Download suspenso
                     }}
                     onAbort={() => {
-                      console.log('🛑 [MULTIPLAYER] Carregamento abortado');
+                      // Carregamento abortado
                     }}
                   />
                 </div>
@@ -1040,7 +1082,6 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                   {connectionError && (
                     <button
                       onClick={() => {
-                        console.log('🔧 [MULTIPLAYER] Botão tentar novamente clicado');
                         setAudioLoadError(false);
                         setAudioLoadRetries(0);
                         setConnectionError(false);
@@ -1135,7 +1176,6 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                       }}
                       onClick={() => {
                         if (idx <= myAttempts) {
-                          console.log(`🔍 [MULTIPLAYER] Navegando para dica da tentativa ${idx + 1}`);
                           setActiveHint(idx);
                         }
                       }}

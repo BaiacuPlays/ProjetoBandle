@@ -111,7 +111,6 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
         setError(result.error || 'Erro desconhecido');
       }
     } catch (error) {
-      console.error('Erro no formulário:', error);
       setError('Erro de conexão. Tente novamente.');
     } finally {
       setIsLoading(false);

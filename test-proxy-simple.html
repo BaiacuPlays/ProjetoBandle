@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Proxy de Áudio - LudoMusic</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .test-section {
+            background: #2a2a2a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+        }
+        .error {
+            border-left-color: #f44336;
+        }
+        .warning {
+            border-left-color: #ff9800;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+        .log {
+            background: #000;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        audio {
+            width: 100%;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎵 Teste de Proxy de Áudio - LudoMusic</h1>
+    
+    <div class="test-section">
+        <h2>🔍 Teste 1: Verificar API do Proxy</h2>
+        <button onclick="testProxyAPI()">Testar API</button>
+        <div id="api-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>🎵 Teste 2: Reprodução de Áudio via Proxy</h2>
+        <button onclick="testAudioPlayback()">Testar Reprodução</button>
+        <div id="audio-container"></div>
+        <div id="audio-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>📊 Teste 3: Comparar Direto vs Proxy</h2>
+        <button onclick="compareDirectVsProxy()">Comparar</button>
+        <div id="compare-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>📝 Logs</h2>
+        <button onclick="clearLogs()">Limpar Logs</button>
+        <div id="logs" class="log"></div>
+    </div>
+
+    <script>
+        const testUrl = 'https://pub-4d254faec6ec408ab584ea82049c2f79.r2.dev/a-short-hike/01.%20Beach%20Buds%20%28Short%20Hike%29.mp3';
+        const proxyUrl = `/api/audio-proxy?url=${encodeURIComponent(testUrl)}`;
+
+        function log(message) {
+            const logs = document.getElementById('logs');
+            const timestamp = new Date().toLocaleTimeString();
+            logs.textContent += `[${timestamp}] ${message}\n`;
+            logs.scrollTop = logs.scrollHeight;
+            console.log(message);
+        }
+
+        async function testProxyAPI() {
+            const resultDiv = document.getElementById('api-result');
+            resultDiv.innerHTML = '<p>🔄 Testando API...</p>';
+            
+            try {
+                log('🔍 Testando API do proxy...');
+                
+                const response = await fetch(proxyUrl, { method: 'HEAD' });
+                
+                log(`📊 Status: ${response.status}`);
+                log(`📊 Headers CORS: ${response.headers.get('access-control-allow-origin') || 'Não encontrado'}`);
+                log(`📊 Content-Type: ${response.headers.get('content-type') || 'Não encontrado'}`);
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = '<p style="color: #4CAF50;">✅ API funcionando!</p>';
+                    log('✅ API do proxy funcionando corretamente');
+                } else {
+                    resultDiv.innerHTML = `<p style="color: #f44336;">❌ Erro: ${response.status}</p>`;
+                    log(`❌ Erro na API: ${response.status}`);
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color: #f44336;">❌ Erro: ${error.message}</p>`;
+                log(`❌ Erro ao testar API: ${error.message}`);
+            }
+        }
+
+        async function testAudioPlayback() {
+            const containerDiv = document.getElementById('audio-container');
+            const resultDiv = document.getElementById('audio-result');
+            
+            resultDiv.innerHTML = '<p>🔄 Criando player de áudio...</p>';
+            
+            try {
+                log('🎵 Testando reprodução de áudio via proxy...');
+                
+                // Criar elemento de áudio
+                const audio = document.createElement('audio');
+                audio.controls = true;
+                audio.preload = 'metadata';
+                audio.src = proxyUrl;
+                
+                // Event listeners
+                audio.addEventListener('loadstart', () => {
+                    log('📡 Iniciando carregamento...');
+                });
+                
+                audio.addEventListener('loadedmetadata', () => {
+                    log('✅ Metadados carregados');
+                    log(`⏱️ Duração: ${audio.duration.toFixed(2)}s`);
+                });
+                
+                audio.addEventListener('canplay', () => {
+                    log('✅ Áudio pronto para reprodução');
+                    resultDiv.innerHTML = '<p style="color: #4CAF50;">✅ Áudio carregado com sucesso!</p>';
+                });
+                
+                audio.addEventListener('error', (e) => {
+                    log(`❌ Erro no áudio: ${e.target.error?.message || 'Erro desconhecido'}`);
+                    resultDiv.innerHTML = '<p style="color: #f44336;">❌ Erro ao carregar áudio</p>';
+                });
+                
+                // Adicionar ao container
+                containerDiv.innerHTML = '';
+                containerDiv.appendChild(audio);
+                
+                log('🎵 Player criado, aguardando carregamento...');
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color: #f44336;">❌ Erro: ${error.message}</p>`;
+                log(`❌ Erro ao criar player: ${error.message}`);
+            }
+        }
+
+        async function compareDirectVsProxy() {
+            const resultDiv = document.getElementById('compare-result');
+            resultDiv.innerHTML = '<p>🔄 Comparando acesso direto vs proxy...</p>';
+            
+            try {
+                log('🔍 Comparando acesso direto vs proxy...');
+                
+                // Teste direto
+                let directResult = '❌ Falhou';
+                try {
+                    const directResponse = await fetch(testUrl, { 
+                        method: 'HEAD',
+                        mode: 'cors'
+                    });
+                    if (directResponse.ok) {
+                        directResult = '✅ Funcionou';
+                        log('✅ Acesso direto funcionou');
+                    } else {
+                        log(`❌ Acesso direto falhou: ${directResponse.status}`);
+                    }
+                } catch (error) {
+                    log(`❌ Acesso direto falhou: ${error.message}`);
+                }
+                
+                // Teste proxy
+                let proxyResult = '❌ Falhou';
+                try {
+                    const proxyResponse = await fetch(proxyUrl, { method: 'HEAD' });
+                    if (proxyResponse.ok) {
+                        proxyResult = '✅ Funcionou';
+                        log('✅ Proxy funcionou');
+                    } else {
+                        log(`❌ Proxy falhou: ${proxyResponse.status}`);
+                    }
+                } catch (error) {
+                    log(`❌ Proxy falhou: ${error.message}`);
+                }
+                
+                resultDiv.innerHTML = `
+                    <p><strong>Acesso Direto:</strong> ${directResult}</p>
+                    <p><strong>Via Proxy:</strong> ${proxyResult}</p>
+                `;
+                
+                if (directResult.includes('✅')) {
+                    log('🎉 CORS funcionando diretamente!');
+                } else if (proxyResult.includes('✅')) {
+                    log('🔄 CORS resolvido via proxy!');
+                } else {
+                    log('⚠️ Ambos falharam - verificar conectividade');
+                }
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color: #f44336;">❌ Erro: ${error.message}</p>`;
+                log(`❌ Erro na comparação: ${error.message}`);
+            }
+        }
+
+        function clearLogs() {
+            document.getElementById('logs').textContent = '';
+        }
+
+        // Log inicial
+        log('🎵 Teste de Proxy de Áudio iniciado');
+        log(`📍 URL de teste: ${testUrl}`);
+        log(`🔄 URL do proxy: ${proxyUrl}`);
+    </script>
+</body>
+</html>

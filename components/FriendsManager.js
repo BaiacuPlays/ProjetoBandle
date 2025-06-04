@@ -28,15 +28,7 @@ const FriendsManager = ({ isOpen, onClose, onViewProfile }) => {
     inviteToMultiplayer
   } = useFriends();
 
-  // Debug: Log quando o estado dos amigos muda
-  React.useEffect(() => {
-    console.log('🔍 FriendsManager - Estado dos amigos atualizado:', {
-      friendsLength: friends.length,
-      friends: friends,
-      isLoading: isLoading,
-      currentUserId: currentUserId
-    });
-  }, [friends, isLoading, currentUserId]);
+
 
   const { sendMultiplayerInvite } = useNotifications();
   const { profile } = useUserProfile();
@@ -145,8 +137,6 @@ const FriendsManager = ({ isOpen, onClose, onViewProfile }) => {
 
   const handleInviteToGame = async (friendId, friendName) => {
     try {
-      console.log(`🎮 Iniciando convite para ${friendName} (${friendId})`);
-
       // Criar código de sala temporário
       const roomCode = 'ROOM' + Math.random().toString(36).substr(2, 6).toUpperCase();
       const hostName = profile?.displayName || profile?.username || 'Jogador';
@@ -158,7 +148,6 @@ const FriendsManager = ({ isOpen, onClose, onViewProfile }) => {
         alert(`✅ Convite enviado para ${friendName}!\nCódigo da sala: ${roomCode}`);
       }
     } catch (error) {
-      console.error('Erro ao enviar convite:', error);
       alert(`❌ Erro ao enviar convite para ${friendName}: ${error.message}`);
     }
   };
@@ -241,7 +230,6 @@ const FriendsManager = ({ isOpen, onClose, onViewProfile }) => {
                       <UserAvatar
                         avatar={friend.avatar}
                         size="medium"
-                        className={friend.status === 'online' ? styles.online : styles.offline}
                       />
                       <div className={styles.friendDetails}>
                         <span className={styles.friendName}>{friend.displayName}</span>

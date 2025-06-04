@@ -403,8 +403,6 @@ export default async function handler(req, res) {
         await kv.set(toRequestsKey, toRequests);
       }
 
-      console.log(`✅ Solicitação cancelada: ${requestId}`);
-
       return res.status(200).json({
         success: true,
         message: 'Solicitação cancelada com sucesso'
@@ -415,7 +413,6 @@ export default async function handler(req, res) {
     }
 
   } catch (error) {
-    console.error('Erro na API de solicitações de amizade:', error);
     return res.status(500).json({
       error: 'Erro interno do servidor',
       details: isDevelopment ? error.message : undefined

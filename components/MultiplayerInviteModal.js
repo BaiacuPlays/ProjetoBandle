@@ -60,7 +60,7 @@ const MultiplayerInviteModal = ({ isOpen, onClose, roomCode, onCreateRoom }) => 
           sendMultiplayerInvite(friendId, friend.displayName, code, hostName);
           sentTo.push(friend.displayName);
         } catch (error) {
-          console.error('Erro ao enviar convite:', error);
+          // Silent error handling
         }
       }
     });

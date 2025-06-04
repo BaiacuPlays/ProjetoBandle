@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { achievements, calculateAchievementProgress } from '../data/achievements';
 import { getUnlockedBadges, getAvailableTitles } from '../data/badges';
 import { useAuth } from './AuthContext';
@@ -8,7 +8,6 @@ const UserProfileContext = createContext();
 export const useUserProfile = () => {
   const context = useContext(UserProfileContext);
   if (!context) {
-    console.warn('useUserProfile usado fora do UserProfileProvider');
     return {
       profile: null,
       isLoading: false,
@@ -54,6 +53,17 @@ export const UserProfileProvider = ({ children }) => {
   // Salvar perfil no servidor
   const saveProfileToServer = async (profileData) => {
     try {
+      // Verificar se está autenticado antes de tentar salvar
+      if (!isAuthenticated) {
+        return null;
+      }
+
+      // Verificar se tem token de sessão
+      const sessionToken = localStorage.getItem('ludomusic_session_token');
+      if (!sessionToken) {
+        return null;
+      }
+
       // Limpar e preparar dados para envio
       const cleanProfileData = {
         ...profileData,
@@ -87,9 +97,7 @@ export const UserProfileProvider = ({ children }) => {
 
 
 
-      // Obter token de sessão para autenticação
-      const sessionToken = typeof window !== 'undefined' ?
-        localStorage.getItem('ludomusic_session_token') : null;
+      // Usar o token já obtido anteriormente
 
       const response = await fetch('/api/profile', {
         method: 'POST',
@@ -98,14 +106,12 @@ export const UserProfileProvider = ({ children }) => {
           'Authorization': `Bearer ${sessionToken || ''}`,
         },
         body: JSON.stringify({
-          userId: cleanProfileData.id,
-          profileData: cleanProfileData
+          profile: cleanProfileData
         })
       });
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        console.error('❌ Erro HTTP do servidor:', response.status, errorData);
         throw new Error(`Erro HTTP: ${response.status} - ${errorData.error || 'Erro desconhecido'}`);
       }
 
@@ -113,7 +119,6 @@ export const UserProfileProvider = ({ children }) => {
 
       return result;
     } catch (error) {
-      console.error('❌ Erro ao salvar perfil no servidor:', error);
       throw error;
     }
   };
@@ -125,20 +130,26 @@ export const UserProfileProvider = ({ children }) => {
       return null;
     }
 
+    // Verificar se está autenticado antes de tentar carregar
+    if (!isAuthenticated) {
+      return null;
+    }
+
     try {
       // Obter token de sessão para autenticação
-      const sessionToken = localStorage.getItem('ludomusic_session_token');
+      const loadToken = localStorage.getItem('ludomusic_session_token');
 
-      const headers = {
-        'Content-Type': 'application/json'
-      };
-
-      // Adicionar token se disponível
-      if (sessionToken) {
-        headers['Authorization'] = `Bearer ${sessionToken}`;
+      if (!loadToken) {
+        return null;
       }
 
-      const response = await fetch(`/api/profile?userId=${userId}`, {
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${loadToken}`
+      };
+
+      // A API /api/profile obtém o userId automaticamente do token de autenticação
+      const response = await fetch(`/api/profile`, {
         headers
       });
 
@@ -153,7 +164,6 @@ export const UserProfileProvider = ({ children }) => {
       const result = await response.json();
       return result;
     } catch (error) {
-      console.error('❌ Erro ao carregar perfil do servidor:', error);
       return null; // Retornar null em vez de throw para não quebrar o fluxo
     }
   };
@@ -205,10 +215,7 @@ export const UserProfileProvider = ({ children }) => {
         setProfile(updatedProfile);
         localStorage.setItem(`ludomusic_profile_${userId}`, JSON.stringify(updatedProfile));
 
-        // Salvar no servidor
-        saveProfileToServer(updatedProfile).catch(error => {
-          console.warn('Erro ao sincronizar perfil:', error);
-        });
+        // Salvamento automático no servidor removido para evitar erros 401
       }
     }
   }, [isAuthenticated, profile, userId]);
@@ -238,22 +245,18 @@ export const UserProfileProvider = ({ children }) => {
 
             // Validar integridade do perfil
             if (!localProfile.stats || !localProfile.achievements || localProfile.achievements === undefined) {
-              console.warn('⚠️ Perfil local corrompido (dados ausentes), tentando backup...');
               throw new Error('Perfil corrompido - dados críticos ausentes');
             }
           } catch (error) {
-            console.error('❌ Erro ao parsear perfil do localStorage:', error);
 
             // Tentar carregar do backup
             const backupProfile = localStorage.getItem(`ludomusic_profile_backup_${userIdToUse}`);
             if (backupProfile) {
               try {
                 localProfile = JSON.parse(backupProfile);
-                console.log('🔄 Perfil recuperado do backup:', localProfile);
                 // Restaurar perfil principal
                 localStorage.setItem(`ludomusic_profile_${userIdToUse}`, backupProfile);
               } catch (backupError) {
-                console.error('❌ Backup também corrompido:', backupError);
                 // Remover dados corrompidos
                 localStorage.removeItem(`ludomusic_profile_${userIdToUse}`);
                 localStorage.removeItem(`ludomusic_profile_backup_${userIdToUse}`);
@@ -269,11 +272,9 @@ export const UserProfileProvider = ({ children }) => {
           if (backupProfile) {
             try {
               localProfile = JSON.parse(backupProfile);
-              console.log('🔄 Perfil carregado do backup (sem principal):', localProfile);
               // Restaurar perfil principal
               localStorage.setItem(`ludomusic_profile_${userIdToUse}`, backupProfile);
             } catch (error) {
-              console.error('❌ Erro ao carregar backup:', error);
               localStorage.removeItem(`ludomusic_profile_backup_${userIdToUse}`);
             }
           }
@@ -319,7 +320,6 @@ export const UserProfileProvider = ({ children }) => {
           const localTime = new Date(updatedProfile.lastUpdated || 0).getTime();
 
           if (serverTime > localTime) {
-            console.log('🔄 Servidor tem dados mais recentes, mesclando...');
             // Mesclar dados importantes do servidor, mas manter progresso local
             const mergedProfile = {
               ...updatedProfile, // Base local
@@ -338,13 +338,8 @@ export const UserProfileProvider = ({ children }) => {
           }
         }
 
-        // Tentar sincronizar com servidor em background
-        try {
-          await saveProfileToServer(updatedProfile);
-          console.log('🔄 Perfil sincronizado com servidor');
-        } catch (error) {
-          console.warn('⚠️ Não foi possível sincronizar com servidor:', error);
-        }
+        // Sincronização com servidor removida para evitar erros 401
+        // A sincronização será feita apenas quando necessário
       } else if (serverProfile) {
         // Só usar servidor se não tiver dados locais
         const authenticatedUser = getAuthenticatedUser();
@@ -362,10 +357,8 @@ export const UserProfileProvider = ({ children }) => {
           };
         }
 
-        console.log('🌐 Definindo perfil do servidor:', updatedProfile);
         setProfile(updatedProfile);
         localStorage.setItem(`ludomusic_profile_${userIdToUse}`, JSON.stringify(updatedProfile));
-        console.log('📥 Perfil carregado do servidor (sem dados locais)');
       } else {
         // Criar novo perfil
         const authenticatedUser = getAuthenticatedUser();
@@ -443,20 +436,13 @@ export const UserProfileProvider = ({ children }) => {
           }
         };
 
-        console.log('🆕 Definindo novo perfil:', newProfile);
         setProfile(newProfile);
         localStorage.setItem(`ludomusic_profile_${userIdToUse}`, JSON.stringify(newProfile));
 
-        // Salvar novo perfil no servidor
-        try {
-          await saveProfileToServer(newProfile);
-        } catch (error) {
-          // Silenciar erro de salvamento no servidor
-        }
+        // Salvamento no servidor removido para evitar erros 401
+        // O perfil será salvo quando o usuário fizer login
       }
     } catch (error) {
-      console.error('❌ ERRO CRÍTICO ao carregar perfil:', error);
-
       // Em caso de erro crítico, tentar criar um perfil básico
       try {
         const authenticatedUser = getAuthenticatedUser();
@@ -513,11 +499,9 @@ export const UserProfileProvider = ({ children }) => {
           }
         };
 
-        console.log('🚨 Criando perfil de emergência devido ao erro:', emergencyProfile);
         setProfile(emergencyProfile);
         localStorage.setItem(`ludomusic_profile_${userIdToUse}`, JSON.stringify(emergencyProfile));
       } catch (emergencyError) {
-        console.error('❌ Falha ao criar perfil de emergência:', emergencyError);
         // Se nem o perfil de emergência funcionar, deixar profile como null
         // O componente UserProfile vai mostrar a mensagem de erro
       }
@@ -527,10 +511,7 @@ export const UserProfileProvider = ({ children }) => {
     }
   };
 
-  // Função pública para carregar perfil (usa userId do estado)
-  const loadProfile = () => {
-    return loadProfileInternal(userId);
-  };
+
 
   // Função para garantir estrutura válida do perfil
   const ensureProfileStructure = (profileData) => {
@@ -615,25 +596,19 @@ export const UserProfileProvider = ({ children }) => {
   const updateProfile = async (updates) => {
     // 🔒 VERIFICAÇÃO DE SEGURANÇA: Apenas usuários autenticados podem atualizar perfil
     if (!isAuthenticated) {
-      console.warn('⚠️ Tentativa de atualizar perfil sem autenticação bloqueada');
       return null;
     }
 
     if (!profile || !userId) {
-      console.warn('⚠️ Perfil ou userId não disponível');
       return null;
     }
 
     try {
-
-
       const updatedProfile = ensureProfileStructure({
         ...profile,
         ...updates,
         lastUpdated: new Date().toISOString()
       });
-
-
 
       setProfile(updatedProfile);
 
@@ -652,7 +627,6 @@ export const UserProfileProvider = ({ children }) => {
 
       return updatedProfile;
     } catch (error) {
-      console.error('❌ Erro ao atualizar perfil:', error);
       throw error; // Re-throw para que o erro seja tratado pelo chamador
     }
   };
@@ -678,37 +652,22 @@ export const UserProfileProvider = ({ children }) => {
 
   // Verificar e desbloquear conquistas
   const checkAchievements = (updatedProfile) => {
-    console.log('🏆 Verificando conquistas...', {
-      totalGames: updatedProfile.stats.totalGames,
-      wins: updatedProfile.stats.wins,
-      currentAchievements: updatedProfile.achievements.length,
-      showPopups: updatedProfile.preferences?.showAchievementPopups,
-      achievementsArray: updatedProfile.achievements
-    });
 
     const newAchievements = [];
 
     // Verificar se achievements está importado corretamente
     if (!achievements || Object.keys(achievements).length === 0) {
-      console.error('❌ Achievements não carregados corretamente!');
       return updatedProfile;
     }
-
-    console.log('📋 Total de conquistas disponíveis:', Object.keys(achievements).length);
 
     Object.values(achievements).forEach(achievement => {
       if (!updatedProfile.achievements.includes(achievement.id)) {
         const progress = calculateAchievementProgress(achievement.id, updatedProfile.stats, updatedProfile);
 
-        console.log(`🔍 Conquista ${achievement.id}: ${progress}% (${achievement.title})`);
-
         if (progress >= 100) {
-          console.log(`✅ CONQUISTA DESBLOQUEADA: ${achievement.title} (+${achievement.xpReward} XP)`);
           newAchievements.push(achievement.id);
           updatedProfile.xp += achievement.xpReward;
         }
-      } else {
-        console.log(`⏭️ Conquista ${achievement.id} já desbloqueada`);
       }
     });
 
@@ -809,7 +768,7 @@ export const UserProfileProvider = ({ children }) => {
     // 🔒 VALIDAÇÃO CRÍTICA: Para modo diário, verificar no servidor se já jogou hoje
     if (gameStats.mode === 'daily') {
       try {
-        const sessionToken = localStorage.getItem('ludomusic_session_token');
+        const dailyToken = localStorage.getItem('ludomusic_session_token');
         const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
 
 
@@ -818,7 +777,7 @@ export const UserProfileProvider = ({ children }) => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${sessionToken}`
+            'Authorization': `Bearer ${dailyToken}`
           },
           body: JSON.stringify({
             date: today,
@@ -858,7 +817,13 @@ export const UserProfileProvider = ({ children }) => {
         playTime = 0,
         streak = 0,
         songsCompleted = 0,
-        points = 0
+        points = 0,
+        // 🔧 NOVOS PARÂMETROS para conquistas especiais
+        isComeback = false,
+        consecutiveLosses = 0,
+        dailyGameCompleted = false,
+        gameDate = null,
+        sessionDuration = null
       } = gameStats;
 
       let updatedProfile = { ...profile };
@@ -869,6 +834,11 @@ export const UserProfileProvider = ({ children }) => {
       // Atualizar estatísticas gerais
       updatedProfile.stats.totalGames += 1;
       updatedProfile.stats.totalPlayTime += playTime;
+
+      // 🔧 ATUALIZAR DADOS DE SESSÃO LONGA para conquista "Maratonista"
+      if (sessionDuration && sessionDuration > (updatedProfile.stats.longestSession || 0)) {
+        updatedProfile.stats.longestSession = sessionDuration;
+      }
 
       if (won) {
         updatedProfile.stats.wins += 1;
@@ -970,7 +940,7 @@ export const UserProfileProvider = ({ children }) => {
 
       // Adicionar ao histórico
       const gameRecord = {
-        id: `game_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        id: `game_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
         date: new Date().toISOString(),
         mode,
         won,
@@ -981,16 +951,19 @@ export const UserProfileProvider = ({ children }) => {
           game: song.game,
           artist: song.artist || song.composer
         } : null,
-        xpGained: won ? (50 + (attempts === 1 ? 50 : 0)) : 10
+        xpGained: won ? (50 + (attempts === 1 ? 50 : 0)) : 10,
+        // 🔧 NOVOS CAMPOS para conquistas especiais
+        isComeback: isComeback || false,
+        consecutiveLosses: consecutiveLosses || 0,
+        dailyGameCompleted: dailyGameCompleted || false,
+        gameDate: gameDate || null,
+        sessionDuration: sessionDuration || null
       };
 
       updatedProfile.gameHistory = [gameRecord, ...updatedProfile.gameHistory].slice(0, 100); // Manter apenas os últimos 100 jogos
 
       // Atualizar nível
-      const oldLevel = updatedProfile.level;
       const newLevel = calculateLevel(updatedProfile.xp);
-      const xpForCurrentLevel = getXPForLevel(oldLevel);
-      const xpForNextLevel = getXPForNextLevel(oldLevel);
 
       if (newLevel > updatedProfile.level) {
         updatedProfile.level = newLevel;
@@ -1057,25 +1030,25 @@ export const UserProfileProvider = ({ children }) => {
 
     try {
       // Obter token de sessão para autenticação
-      const sessionToken = localStorage.getItem('ludomusic_session_token');
+      const resetToken = localStorage.getItem('ludomusic_session_token');
 
       console.log('🔄 [FRONTEND] Iniciando reset de perfil...');
       console.log('🔄 [FRONTEND] UserId:', userId);
-      console.log('🔄 [FRONTEND] SessionToken:', sessionToken ? 'Presente' : 'Ausente');
+      console.log('🔄 [FRONTEND] SessionToken:', resetToken ? 'Presente' : 'Ausente');
 
-      if (!sessionToken) {
+      if (!resetToken) {
         console.error('❌ [FRONTEND] Token de sessão não encontrado');
         return false;
       }
 
-      // Resetar no servidor
+      // Resetar no servidor - A API obtém o userId automaticamente do token
       const response = await fetch('/api/profile/reset', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${sessionToken}`
+          'Authorization': `Bearer ${resetToken}`
         },
-        body: JSON.stringify({ userId })
+        body: JSON.stringify({})
       });
 
       if (!response.ok) {
@@ -1144,25 +1117,24 @@ export const UserProfileProvider = ({ children }) => {
 
     try {
       // Obter token de sessão para autenticação
-      const sessionToken = localStorage.getItem('ludomusic_session_token');
+      const deleteToken = localStorage.getItem('ludomusic_session_token');
 
       console.log('🗑️ [FRONTEND] Iniciando deleção de conta...');
       console.log('🗑️ [FRONTEND] UserId:', userId);
-      console.log('🗑️ [FRONTEND] SessionToken:', sessionToken ? 'Presente' : 'Ausente');
+      console.log('🗑️ [FRONTEND] SessionToken:', deleteToken ? 'Presente' : 'Ausente');
 
-      if (!sessionToken) {
+      if (!deleteToken) {
         console.error('❌ [FRONTEND] Token de sessão não encontrado');
         return false;
       }
 
-      // Deletar do servidor
-      const response = await fetch('/api/profile', {
+      // Deletar do servidor - A API obtém o userId automaticamente do token
+      const response = await fetch('/api/delete-account', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${sessionToken}`
-        },
-        body: JSON.stringify({ userId })
+          'Authorization': `Bearer ${deleteToken}`
+        }
       });
 
       console.log('🗑️ [FRONTEND] Response status:', response.status);
@@ -1203,6 +1175,20 @@ export const UserProfileProvider = ({ children }) => {
       keysToRemove.forEach(key => {
         localStorage.removeItem(key);
         console.log(`🗑️ Removido: ${key}`);
+      });
+
+      // Limpar sessionStorage também
+      const sessionKeysToRemove = [];
+      for (let i = 0; i < sessionStorage.length; i++) {
+        const key = sessionStorage.key(i);
+        if (key && key.startsWith('ludomusic_')) {
+          sessionKeysToRemove.push(key);
+        }
+      }
+
+      sessionKeysToRemove.forEach(key => {
+        sessionStorage.removeItem(key);
+        console.log(`🗑️ SessionStorage removido: ${key}`);
       });
 
       // Limpar cookies de autenticação e amigos

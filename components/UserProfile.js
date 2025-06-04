@@ -9,6 +9,7 @@ import ProfileTutorial from './ProfileTutorial';
 import AvatarSelector from './AvatarSelector';
 import UserAvatar from './UserAvatar';
 import LoginModal from './LoginModal';
+import ActivateBenefitsModal from './ActivateBenefitsModal';
 import { useAuth } from '../contexts/AuthContext';
 import styles from '../styles/UserProfile.module.css';
 
@@ -28,6 +29,7 @@ const UserProfile = ({ isOpen, onClose }) => {
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
   const [showAvatarSelector, setShowAvatarSelector] = useState(false);
+  const [showActivateModal, setShowActivateModal] = useState(false);
 
   // Hook de autenticação
   const { isAuthenticated, logout } = useAuth();
@@ -46,7 +48,9 @@ const UserProfile = ({ isOpen, onClose }) => {
     markTutorialAsSeen,
     setCurrentTitle,
     updateAvatar,
-    userId // Adicionar userId do contexto
+    userId, // Adicionar userId do contexto
+    getXPForLevel,
+    getXPForNextLevel
   } = useUserProfile() || {}; // Add || {} to safely destructure if context is null/undefined
 
   // Verificar se deve mostrar tutorial quando modal abre (independente de autenticação)
@@ -56,7 +60,6 @@ const UserProfile = ({ isOpen, onClose }) => {
       const hasSeenTutorial = localStorage.getItem('ludomusic_profile_tutorial_seen') === 'true';
 
       if (!hasSeenTutorial) {
-        console.log('📚 Mostrando tutorial do perfil pela primeira vez');
         setShowTutorial(true);
       }
     }
@@ -78,15 +81,13 @@ const UserProfile = ({ isOpen, onClose }) => {
 
     // Marcar tutorial como visto no localStorage
     localStorage.setItem('ludomusic_profile_tutorial_seen', 'true');
-    console.log('✅ Tutorial do perfil marcado como visto');
 
     // Se há perfil e função disponível, marcar também no perfil
     if (markTutorialAsSeen) {
       try {
         await markTutorialAsSeen();
-        console.log('✅ Tutorial do perfil marcado como visto no servidor');
       } catch (error) {
-        console.error('❌ Erro ao marcar tutorial como visto no servidor:', error);
+        // Silent error handling
       }
     }
 
@@ -112,7 +113,6 @@ const UserProfile = ({ isOpen, onClose }) => {
         isOpen={true}
         onClose={onClose}
         onSuccess={(user) => {
-          console.log('✅ Login realizado com sucesso:', user.displayName);
           // O perfil será automaticamente recarregado pelo contexto
         }}
       />
@@ -140,14 +140,7 @@ const UserProfile = ({ isOpen, onClose }) => {
     );
   }
 
-  // Debug: verificar estado do perfil
-  console.log('🔍 UserProfile - Estado atual:', {
-    isAuthenticated,
-    isLoading,
-    profile: !!profile,
-    userId,
-    profileData: profile ? 'existe' : 'null'
-  });
+
 
   // If there's no profile after loading (e.g., error in context), show an error message
   if (!profile) {
@@ -319,9 +312,6 @@ const UserProfile = ({ isOpen, onClose }) => {
     if (!dateString) return 'N/A';
     return new Date(dateString).toLocaleDateString('pt-BR');
   };
-
-  // Usar as funções do contexto para consistência
-  const { getXPForLevel, getXPForNextLevel } = useUserProfile();
 
   const getCurrentLevelXP = (currentLevel) => {
     return getXPForLevel ? getXPForLevel(currentLevel) : Math.pow(currentLevel - 1, 2) * 100;
@@ -828,6 +818,42 @@ const UserProfile = ({ isOpen, onClose }) => {
                       </div>
                     </div>
 
+                    {/* Benefícios de Doação */}
+                    <div className={styles.settingsSection}>
+                      <h5>🎁 Benefícios de Doação</h5>
+
+                      <div className={styles.benefitsSection}>
+                        <p>Ative códigos de benefícios recebidos por email após fazer doações:</p>
+
+                        <button
+                          className={styles.activateBenefitsButton}
+                          onClick={() => setShowActivateModal(true)}
+                        >
+                          🎁 Ativar Código de Benefícios
+                        </button>
+
+                        {profile?.donationBenefits && (
+                          <div className={styles.currentBenefits}>
+                            <h6>Benefícios Ativos:</h6>
+                            <div className={styles.benefitsList}>
+                              {profile.donationBenefits.badges?.length > 0 && (
+                                <span className={styles.benefit}>🏆 {profile.donationBenefits.badges.length} Badge(s)</span>
+                              )}
+                              {profile.donationBenefits.features?.includes('adFree') && (
+                                <span className={styles.benefit}>🚫 Sem Anúncios</span>
+                              )}
+                              {profile.donationBenefits.extraLives > 0 && (
+                                <span className={styles.benefit}>❤️ {profile.donationBenefits.extraLives} Vidas Extras</span>
+                              )}
+                              {profile.donationBenefits.activeXpBonus && (
+                                <span className={styles.benefit}>⚡ Bônus XP Ativo</span>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
                     {/* Zona de Perigo */}
                     <div className={styles.settingsSection}>
                       <h5 className={styles.dangerZone}>Zona de Perigo</h5>
@@ -903,6 +929,14 @@ const UserProfile = ({ isOpen, onClose }) => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Modal de ativação de benefícios */}
+      {showActivateModal && (
+        <ActivateBenefitsModal
+          isOpen={showActivateModal}
+          onClose={() => setShowActivateModal(false)}
+        />
       )}
     </>
   );

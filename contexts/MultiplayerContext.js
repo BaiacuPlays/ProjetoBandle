@@ -116,7 +116,6 @@ export function MultiplayerProvider({ children }) {
         consecutiveErrors++;
         // Ignorar erros de rede temporários e AbortError
         if (err.name !== 'AbortError' && consecutiveErrors >= maxErrors && isActive && !state.loading) {
-          console.error('🚨 Erro persistente no polling:', err);
           dispatch({ type: ACTIONS.SET_ERROR, payload: 'Problemas de conexão' });
         }
       }

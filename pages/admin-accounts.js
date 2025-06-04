@@ -44,7 +44,64 @@ export default function AdminAccounts() {
         setError('Senha de admin incorreta');
       }
     } catch (err) {
-      setError('Erro ao autenticar');
+      setError('Erro ao autenticar - servidor pode estar offline');
+    }
+  };
+
+  // Modo emergência para entrar sem servidor
+  const emergencyLogin = () => {
+    if (adminPassword === 'admin123') {
+      setIsAuthenticated(true);
+      setError('');
+      // Carregar dados demo
+      setAccounts([
+        {
+          username: 'demouser',
+          displayName: 'Usuário Demo',
+          email: 'demo@example.com',
+          createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+          lastLoginAt: new Date().toISOString()
+        },
+        {
+          username: 'testuser',
+          displayName: 'Usuário Teste',
+          email: 'test@example.com',
+          createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+          lastLoginAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
+        }
+      ]);
+      setProfiles([
+        {
+          username: 'demouser',
+          level: 5,
+          xp: 2500,
+          stats: { totalGames: 25, wins: 18 }
+        },
+        {
+          username: 'testuser',
+          level: 3,
+          xp: 900,
+          stats: { totalGames: 12, wins: 8 }
+        }
+      ]);
+      calculateStats([
+        {
+          username: 'demouser',
+          createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+          lastLoginAt: new Date().toISOString()
+        },
+        {
+          username: 'testuser',
+          createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+          lastLoginAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
+        }
+      ], [
+        { username: 'demouser', xp: 2500 },
+        { username: 'testuser', xp: 900 }
+      ]);
+      setLoading(false);
+    } else {
+      setError('Senha incorreta');
     }
   };
 
@@ -191,7 +248,7 @@ export default function AdminAccounts() {
             <div className={styles.authForm}>
               <input
                 type="password"
-                placeholder="Senha de administrador"
+                placeholder="Senha de administrador (admin123)"
                 value={adminPassword}
                 onChange={(e) => setAdminPassword(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && authenticateAdmin()}
@@ -201,6 +258,20 @@ export default function AdminAccounts() {
                 Entrar
               </button>
               {error && <div className={styles.authError}>{error}</div>}
+
+              {/* Botão de emergência */}
+              <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                <button
+                  onClick={emergencyLogin}
+                  className={styles.authButton}
+                  style={{ background: '#dc2626', marginTop: '10px' }}
+                >
+                  🚨 Modo Emergência (Offline)
+                </button>
+                <p style={{ fontSize: '12px', color: '#666', marginTop: '10px' }}>
+                  Use apenas se o servidor não estiver respondendo
+                </p>
+              </div>
             </div>
           </div>
         </div>

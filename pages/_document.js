@@ -1,4 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
+import Script from 'next/script';
 
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
@@ -78,11 +79,22 @@ class MyDocument extends Document {
           <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
           {/* Polyfills para compatibilidade com navegadores antigos */}
-          <script src="https://cdn.jsdelivr.net/npm/core-js-bundle@3.32.0/minified.js"></script>
+
+
+        </Head>
+        <body>
+          <Main />
+          <NextScript />
+
+          {/* Polyfills para compatibilidade com navegadores antigos */}
+          <Script
+            src="https://cdn.jsdelivr.net/npm/core-js-bundle@3.32.0/minified.js"
+            strategy="beforeInteractive"
+          />
 
           {/* Script para carregar o idioma do localStorage antes de renderizar a página */}
-          <script dangerouslySetInnerHTML={{
-            __html: `
+          <Script id="language-loader" strategy="beforeInteractive">
+            {`
               try {
                 // Verificar primeiro o localStorage
                 const savedSettings = localStorage.getItem('ludomusic_settings');
@@ -149,12 +161,8 @@ class MyDocument extends Document {
               } catch (e) {
                 // Silenciar erro
               }
-            `
-          }} />
-        </Head>
-        <body>
-          <Main />
-          <NextScript />
+            `}
+          </Script>
         </body>
       </Html>
     );

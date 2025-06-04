@@ -81,10 +81,13 @@
 
 /* Posicionamentos específicos */
 .headerAd {
-  margin: 0 0 1rem 0;
+  margin: 1rem auto;
   max-width: 728px;
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;
+  display: block;
+  clear: both;
+  position: relative;
+  z-index: 1;
 }
 
 .sidebarAd {
@@ -184,7 +187,12 @@
 
 /* Responsividade */
 @media (max-width: 768px) {
-  .headerAd,
+  .headerAd {
+    max-width: 100%;
+    margin: 0.5rem auto;
+    padding: 0 0.5rem;
+  }
+
   .betweenGamesAd,
   .footerAd {
     max-width: 100%;
@@ -199,6 +207,11 @@
   .interstitialContent {
     margin: 1rem;
     padding: 1.5rem;
+  }
+
+  .headerAd {
+    margin: 0.25rem auto;
+    padding: 0 0.25rem;
   }
 
   .interstitialHeader h3 {

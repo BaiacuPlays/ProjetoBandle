@@ -1,7 +1,7 @@
 // API para gerenciar perfis de usuário no servidor
 import { localProfiles } from '../../utils/storage';
 import { verifyAuthentication } from '../../utils/auth';
-import { isDevelopment, hasKVConfig, kvGet, kvSet } from '../../utils/kv-config';
+import { isDevelopment, hasKVConfig, kvGet, kvSet, kv } from '../../utils/kv-config';
 
 // Função para calcular XP baseado no desempenho
 const calculateXP = (gameStats) => {
@@ -321,6 +321,39 @@ export default async function handler(req, res) {
       }
 
       return res.status(400).json({ error: 'Ação não reconhecida' });
+
+    } else if (method === 'DELETE') {
+      // 🔒 VERIFICAR AUTENTICAÇÃO ANTES DE DELETAR PERFIL
+      const authResult = await verifyAuthentication(req);
+      if (!authResult.authenticated) {
+        console.warn('⚠️ Tentativa de deletar perfil sem autenticação:', authResult.error);
+        return res.status(401).json({ error: authResult.error });
+      }
+
+      try {
+        const userId = authResult.userId;
+        const profileKey = `profile:${userId}`;
+
+        console.log(`🗑️ [DELETE] Iniciando deleção de perfil para ${authResult.username} (${userId})`);
+
+        // Deletar perfil
+        if (isDevelopment && !hasKVConfig) {
+          localProfiles.delete(profileKey);
+        } else {
+          await kv.del(profileKey);
+        }
+
+        console.log(`✅ [DELETE] Perfil ${authResult.username} deletado com sucesso`);
+
+        return res.status(200).json({
+          success: true,
+          message: 'Perfil deletado com sucesso'
+        });
+
+      } catch (error) {
+        console.error('❌ Erro ao deletar perfil:', error);
+        return res.status(500).json({ error: 'Erro interno do servidor' });
+      }
 
     } else {
       return res.status(405).json({ error: 'Método não permitido' });

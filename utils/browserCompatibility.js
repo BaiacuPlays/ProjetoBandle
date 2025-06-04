@@ -49,12 +49,13 @@ class BrowserCompatibility {
     return audio;
   }
 
-  // Método simplificado para reproduzir áudio
+  // Método ultra-otimizado para reproduzir áudio
   async playAudio(audio) {
     return new Promise((resolve, reject) => {
+      // Timeout reduzido para 500ms para reprodução mais rápida
       const timeout = setTimeout(() => {
         reject(new Error('Timeout ao reproduzir áudio'));
-      }, 2000); // Timeout fixo de 2 segundos
+      }, 500);
 
       const cleanup = () => {
         clearTimeout(timeout);
@@ -63,6 +64,25 @@ class BrowserCompatibility {
       // Tentar reproduzir diretamente
       this.attemptPlay(audio, cleanup, resolve, reject);
     });
+  }
+
+  // Método para reprodução instantânea (sem timeout)
+  async playAudioInstant(audio) {
+    try {
+      // Se o áudio está pronto, reproduzir imediatamente
+      if (audio.readyState >= 2) {
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          return await playPromise;
+        }
+        return Promise.resolve();
+      }
+
+      // Se não está pronto, usar método normal com timeout reduzido
+      return this.playAudio(audio);
+    } catch (error) {
+      this.handlePlayError(error, (err) => { throw err; });
+    }
   }
 
   // Tentativa simplificada de reprodução
@@ -133,7 +153,7 @@ class BrowserCompatibility {
       audio.pause();
       audio.currentTime = 0;
     } catch (error) {
-      console.warn('Erro ao resetar áudio:', error);
+      // Silent error handling
     }
   }
 }

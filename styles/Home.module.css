@@ -111,17 +111,58 @@
   }
 }
 
-/* Orientação landscape em mobile */
+/* Orientação landscape em mobile - MELHORADA */
 @media (max-height: 500px) and (orientation: landscape) {
   .container {
     min-height: 100vh;
-    padding: 0.5rem;
+    padding: 0.25rem;
     justify-content: flex-start;
+    overflow-y: auto; /* Permitir scroll se necessário */
   }
 
   .gameAreaModern {
-    margin: 1rem auto 0 auto;
-    padding: 1rem;
+    margin: 0.5rem auto;
+    padding: 0.75rem;
+    max-width: 100%;
+  }
+
+  /* Compactar header em landscape */
+  .titleBarContainer {
+    padding: 0.25rem;
+    min-height: 60px; /* Reduzir altura mínima */
+  }
+
+  .titleBarContainer img {
+    height: 40px; /* Logo menor */
+    max-width: 100px;
+  }
+
+  /* Compactar controles de áudio */
+  .audioModernBox {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Compactar botões de tentativa */
+  .attemptsRow {
+    margin: 0.75rem 0;
+  }
+
+  .attemptButton {
+    min-width: 1.8rem;
+    min-height: 1.8rem;
+    padding: 0.3rem 0.7rem;
+    font-size: 1rem;
+  }
+
+  /* Compactar formulário */
+  .guessFormModern {
+    margin-top: 0.75rem;
+  }
+
+  /* Sugestões em landscape */
+  .suggestionsListModern {
+    max-height: 150px; /* Altura reduzida para landscape */
   }
 }
 
@@ -381,21 +422,127 @@
   color: #ccc;
 }
 
+/* ✨ LOADING STATES MELHORADOS */
 .loading {
   font-size: 1.5rem;
   color: #1DB954;
-  animation: pulse 1.5s infinite;
+  animation: loadingPulse 1.5s infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
-@keyframes pulse {
+.loading::before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  border: 2px solid #1DB954;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: loadingSpin 1s linear infinite;
+}
+
+/* Spinner para botões */
+.buttonLoading {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.buttonLoading::before {
+  content: '';
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: loadingSpin 1s linear infinite;
+}
+
+/* Loading para áudio */
+.audioLoading {
+  background: rgba(29, 185, 84, 0.1);
+  border: 2px dashed #1DB954;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  color: #1DB954;
+  font-size: 1.1rem;
+  animation: loadingPulse 2s infinite;
+}
+
+.audioLoading::before {
+  content: '🎵';
+  display: block;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  animation: loadingBounce 1.5s infinite;
+}
+
+@keyframes loadingPulse {
   0% {
     opacity: 0.6;
+    transform: scale(1);
   }
   50% {
     opacity: 1;
+    transform: scale(1.02);
   }
   100% {
     opacity: 0.6;
+    transform: scale(1);
+  }
+}
+
+@keyframes loadingSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes loadingBounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Loading skeleton para sugestões */
+.suggestionsSkeleton {
+  background: #23272f;
+  border: 1px solid #333;
+  border-radius: 0.5rem;
+  padding: 0;
+  margin-top: 2.6rem;
+  width: 100%;
+  max-height: 200px;
+  overflow: hidden;
+}
+
+.skeletonItem {
+  padding: 0.75rem 1rem;
+  background: linear-gradient(90deg, #333 25%, #444 50%, #333 75%);
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.5s infinite;
+  height: 20px;
+  margin-bottom: 1px;
+}
+
+@keyframes skeletonShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
   }
 }
 
@@ -446,6 +593,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 1rem;
+  background: transparent;
+  position: relative;
+  z-index: 2;
+  min-height: 120px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
@@ -806,6 +958,28 @@
   .audioControlsModern {
     flex-direction: column;
     gap: 0.7rem;
+  }
+
+  /* 📱 MELHORAR SUGESTÕES EM MOBILE */
+  .suggestionsListModern {
+    position: fixed; /* Mudar para fixed para evitar cortes */
+    left: 1rem;
+    right: 1rem;
+    width: auto; /* Auto width para se ajustar às margens */
+    max-height: 250px; /* Aumentar altura máxima */
+    margin-top: 0.5rem; /* Reduzir margem superior */
+    z-index: 1000; /* Aumentar z-index */
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5); /* Sombra mais forte */
+  }
+
+  .suggestionItemModern {
+    padding: 1rem; /* Aumentar padding para touch */
+    font-size: 1rem; /* Tamanho de fonte adequado para mobile */
+    border-bottom: 1px solid #333; /* Separador visual */
+  }
+
+  .suggestionItemModern:last-child {
+    border-bottom: none;
   }
 }
 
@@ -1331,15 +1505,41 @@
 
 /* 📱 RESPONSIVIDADE PARA TELAS MUITO PEQUENAS */
 @media (max-width: 360px) {
+  .titleBarContainer {
+    padding: 0.25rem;
+  }
+
+  .titleBarContainer .menuButton {
+    left: 0.25rem;
+    top: 0.25rem;
+  }
+
+  .titleBarContainer .headerButtons {
+    right: 0.25rem;
+    top: 0.25rem;
+    gap: 0.2rem;
+  }
+
   .titleBarContainer img {
     height: 50px;
     width: auto;
     max-width: 120px;
+    margin: 0.25rem 0;
   }
 
   .menuButton, .helpButton {
     padding: 0.25rem;
     font-size: 0.9rem;
+  }
+
+  .headerButtons {
+    gap: 0.2rem !important;
+  }
+
+  .topBar {
+    padding: 0.25rem 0.15rem 0.15rem 0.15rem;
+    min-height: 80px;
+    gap: 0.3rem;
   }
 
   .attemptButton {
@@ -1400,6 +1600,8 @@
   position: relative;
   width: 100%;
   padding: 0 1rem;
+  min-height: 80px;
+  z-index: 5;
 }
 
 .titleBarContainer .menuButton {
@@ -1421,30 +1623,51 @@
 /* 📱 RESPONSIVIDADE DO HEADER */
 @media (max-width: 768px) {
   .titleBarContainer {
-    padding: 0 0.5rem;
+    padding: 0.5rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    min-height: 120px;
   }
 
   .titleBarContainer .menuButton {
+    position: absolute;
     left: 0.5rem;
+    top: 0.5rem;
+    order: 1;
+    z-index: 10;
   }
 
   .titleBarContainer .headerButtons {
+    position: absolute;
     right: 0.5rem;
+    top: 0.5rem;
+    order: 3;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    z-index: 10;
   }
 
   .titleBarContainer img {
-    height: 70px;
+    height: 60px;
     width: auto;
-    max-width: 180px;
+    max-width: 160px;
+    order: 2;
+    margin: 0.5rem 0;
   }
 
   .menuButton, .helpButton {
     padding: 0.4rem;
-    font-size: 1.1rem;
+    font-size: 1rem;
+    min-width: 40px;
+    min-height: 40px;
   }
 
   .topBar {
-    padding: 0.8rem 0.3rem 0.3rem 0.3rem;
+    padding: 0.5rem 0.3rem 0.3rem 0.3rem;
+    min-height: 140px;
+    gap: 0.8rem;
   }
 
   .songInfoBar {
@@ -1463,15 +1686,56 @@
 }
 
 @media (max-width: 480px) {
+  .titleBarContainer {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    min-height: 100px;
+  }
+
+  .titleBarContainer .menuButton {
+    position: absolute;
+    left: 0.3rem;
+    top: 0.3rem;
+    order: 1;
+    z-index: 10;
+  }
+
+  .titleBarContainer .headerButtons {
+    position: absolute;
+    right: 0.3rem;
+    top: 0.3rem;
+    order: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    z-index: 10;
+  }
+
   .titleBarContainer img {
-    height: 60px;
+    height: 50px;
     width: auto;
-    max-width: 150px;
+    max-width: 140px;
+    order: 2;
+    margin: 0.3rem 0;
   }
 
   .menuButton, .helpButton {
     padding: 0.3rem;
-    font-size: 1rem;
+    font-size: 0.9rem;
+    min-width: 36px;
+    min-height: 36px;
+  }
+
+  .headerButtons {
+    gap: 0.2rem !important;
+  }
+
+  .topBar {
+    padding: 0.3rem 0.2rem 0.2rem 0.2rem;
+    min-height: 120px;
+    gap: 0.5rem;
   }
 
   .songInfoBar {
@@ -1494,6 +1758,8 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+  flex-wrap: wrap;
+  z-index: 10;
 }
 
 .menuButton, .helpButton {
@@ -1887,11 +2153,18 @@
 @media (max-width: 768px) {
   .modeSelector {
     margin: 0.5rem 0;
+    gap: 0.3rem;
+    padding: 0.3rem;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .modeButton {
     padding: 0.6rem 1rem;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
+    flex: 1;
+    min-width: 110px;
+    max-width: 180px;
   }
 
   .infiniteStats {
@@ -1928,6 +2201,35 @@
   .nextSongButton {
     padding: 0.8rem 1.5rem;
     font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .modeSelector {
+    margin: 0.3rem 0;
+    gap: 0.3rem;
+    padding: 0.2rem;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .modeButton {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.75rem;
+    text-align: center;
+    width: 100%;
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 360px) {
+  .modeSelector {
+    margin: 0.2rem 0;
+  }
+
+  .modeButton {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.7rem;
   }
 }
 

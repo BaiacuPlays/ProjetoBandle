@@ -146,6 +146,48 @@ export const badges = {
     requirement: { type: 'special', value: 'early_adopter' },
     rarity: 'legendary'
   },
+
+  // Badges de doação
+  supporter_temp: {
+    id: 'supporter_temp',
+    title: 'Apoiador',
+    description: 'Apoiou o LudoMusic com uma doação',
+    icon: '💝',
+    color: '#ff6b6b',
+    requirement: { type: 'donation', value: 5 },
+    rarity: 'special',
+    temporary: true
+  },
+  supporter_permanent: {
+    id: 'supporter_permanent',
+    title: 'Apoiador',
+    description: 'Apoiador permanente do LudoMusic',
+    icon: '💝',
+    color: '#ff6b6b',
+    requirement: { type: 'donation', value: 15 },
+    rarity: 'special',
+    permanent: true
+  },
+  premium_supporter: {
+    id: 'premium_supporter',
+    title: 'Apoiador Premium',
+    description: 'Apoiador premium do LudoMusic',
+    icon: '⭐',
+    color: '#ffd700',
+    requirement: { type: 'donation', value: 30 },
+    rarity: 'epic',
+    permanent: true
+  },
+  vip_supporter: {
+    id: 'vip_supporter',
+    title: 'VIP',
+    description: 'Apoiador VIP do LudoMusic',
+    icon: '👑',
+    color: '#9333ea',
+    requirement: { type: 'donation', value: 50 },
+    rarity: 'legendary',
+    permanent: true
+  },
   beta_tester: {
     id: 'beta_tester',
     title: 'Testador Beta',
@@ -220,6 +262,23 @@ export const titles = {
     id: 'early_adopter',
     title: 'Pioneiro',
     badgeRequired: 'early_adopter'
+  },
+
+  // Títulos de doação
+  supporter: {
+    id: 'supporter',
+    title: 'Apoiador',
+    badgeRequired: 'supporter_permanent'
+  },
+  premium_supporter: {
+    id: 'premium_supporter',
+    title: 'Apoiador Premium',
+    badgeRequired: 'premium_supporter'
+  },
+  vip_supporter: {
+    id: 'vip_supporter',
+    title: 'VIP',
+    badgeRequired: 'vip_supporter'
   }
 };
 

@@ -1,4 +1,4 @@
-/* Botão de doação */
+/* Botão de doação base */
 .donateButton {
   background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
   color: white;
@@ -19,6 +19,88 @@
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
   background: linear-gradient(45deg, #ff5252, #ff7979);
+}
+
+/* Botão para desktop - visível apenas em telas grandes */
+.desktopOnly {
+  display: inline-flex;
+}
+
+/* Botão flutuante para mobile - oculto por padrão */
+.floatingButton {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  z-index: 100;
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+  animation: pulse 2s infinite;
+}
+
+.floatingButton:hover {
+  transform: scale(1.1);
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+  }
+  50% {
+    box-shadow: 0 6px 25px rgba(255, 107, 107, 0.6);
+  }
+  100% {
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+  }
+}
+
+/* Botão compacto para header */
+.compactButton {
+  background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3);
+  flex-shrink: 0; /* Evita que o botão encolha */
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.compactButton:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+  background: linear-gradient(45deg, #ff5252, #ff7979);
+}
+
+/* Responsividade para botão compacto */
+@media (max-width: 768px) {
+  .compactButton {
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .compactButton {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
 }
 
 /* Modal */
@@ -192,6 +274,46 @@
   transform: translateY(-1px);
 }
 
+/* Seletor de método de pagamento */
+.paymentMethodSelector {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.paymentMethodSelector p {
+  color: #ccc;
+  margin: 0 0 1rem 0;
+  font-weight: bold;
+}
+
+.methodButtons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.methodButton {
+  background: #2a2a2a;
+  border: 2px solid #333;
+  border-radius: 10px;
+  padding: 0.75rem 1.5rem;
+  color: #ccc;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+.methodButton:hover {
+  border-color: #ff6b6b;
+  color: #fff;
+}
+
+.methodButton.active {
+  background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+  border-color: #ff6b6b;
+  color: white;
+}
+
 /* Métodos de pagamento */
 .paymentMethods {
   text-align: center;
@@ -232,6 +354,15 @@
 
 /* Responsividade */
 @media (max-width: 768px) {
+  /* Em mobile, ocultar botão compacto e mostrar flutuante */
+  .compactButton {
+    display: none;
+  }
+
+  .floatingButton {
+    display: flex !important; /* Override do style inline */
+  }
+
   .modal {
     margin: 1rem;
     max-height: 95vh;
@@ -279,12 +410,20 @@
     flex-direction: column;
     gap: 0.5rem;
   }
+
+  .methodButtons {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 }
 
 @media (max-width: 480px) {
-  .donateButton {
-    padding: 0.6rem 1.2rem;
-    font-size: 0.8rem;
+  .floatingButton {
+    bottom: 15px;
+    right: 15px;
+    width: 55px;
+    height: 55px;
+    font-size: 1.3rem;
   }
 
   .modalHeader {
@@ -305,5 +444,270 @@
 
   .optionAmount {
     font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .floatingButton {
+    bottom: 10px;
+    right: 10px;
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+}
+
+/* Modal PIX */
+.pixModal {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border-radius: 20px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  border: 2px solid #00d4aa;
+}
+
+.pixContent {
+  padding: 2rem;
+}
+
+.pixAmount {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: linear-gradient(45deg, #00d4aa, #00b894);
+  border-radius: 15px;
+}
+
+.pixAmount h3 {
+  color: white;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.pixInstructions {
+  color: #fff;
+}
+
+.pixInstructions p {
+  margin: 1rem 0;
+  font-size: 1.1rem;
+}
+
+.pixKeyContainer {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+  align-items: center;
+}
+
+.pixKeyInput {
+  flex: 1;
+  background: #1a1a1a;
+  border: 2px solid #333;
+  border-radius: 10px;
+  padding: 0.75rem;
+  color: #fff;
+  font-size: 1rem;
+  font-family: monospace;
+}
+
+.pixKeyInput:focus {
+  outline: none;
+  border-color: #00d4aa;
+}
+
+.copyButton {
+  background: linear-gradient(45deg, #00d4aa, #00b894);
+  color: white;
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.copyButton:hover {
+  background: linear-gradient(45deg, #00b894, #00a085);
+  transform: translateY(-1px);
+}
+
+.pixAlternative {
+  margin: 2rem 0;
+  padding: 1rem;
+  background: #2a2a2a;
+  border-radius: 10px;
+  border-left: 4px solid #ffd700;
+}
+
+.pixSteps {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: #2a2a2a;
+  border-radius: 10px;
+}
+
+.pixSteps h4 {
+  color: #fff;
+  margin: 0 0 1rem 0;
+  font-size: 1.2rem;
+}
+
+.pixSteps ol {
+  color: #ccc;
+  padding-left: 1.5rem;
+}
+
+.pixSteps li {
+  margin: 0.5rem 0;
+  line-height: 1.5;
+}
+
+.pixNote {
+  text-align: center;
+  margin-top: 2rem;
+  padding: 1rem;
+  background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+  border-radius: 10px;
+}
+
+.pixNote p {
+  color: white;
+  margin: 0 0 1rem 0;
+  font-weight: bold;
+}
+
+/* Aviso de login para benefícios */
+.loginWarning {
+  background: linear-gradient(45deg, #dc2626, #ef4444);
+  color: white;
+  padding: 1.5rem;
+  border-radius: 15px;
+  margin: 1.5rem 0;
+  text-align: center;
+  border: 2px solid #dc2626;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+.loginWarning h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.loginWarning p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+/* Seção de ativação de código */
+.activateSection {
+  background: #2a2a2a;
+  padding: 1.5rem;
+  border-radius: 15px;
+  margin: 1.5rem 0;
+  text-align: center;
+  border: 2px solid #3b82f6;
+}
+
+.activateSection h3 {
+  color: #fff;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.activateSection p {
+  color: #ccc;
+  margin: 0 0 1rem 0;
+  font-size: 0.9rem;
+}
+
+.activateCodeButton {
+  background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+  color: white;
+  border: none;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 300px;
+}
+
+.activateCodeButton:hover {
+  background: linear-gradient(45deg, #1d4ed8, #1e40af);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+}
+
+.confirmButton {
+  background: linear-gradient(45deg, #10b981, #059669);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.confirmButton:hover {
+  background: linear-gradient(45deg, #059669, #047857);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+}
+
+/* Responsividade para modal PIX */
+@media (max-width: 768px) {
+  .pixModal {
+    margin: 1rem;
+    max-width: calc(100% - 2rem);
+  }
+
+  .pixContent {
+    padding: 1.5rem;
+  }
+
+  .pixKeyContainer {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .pixKeyInput {
+    width: 100%;
+  }
+
+  .copyButton {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .pixContent {
+    padding: 1rem;
+  }
+
+  .pixAmount h3 {
+    font-size: 1.3rem;
+  }
+
+  .pixSteps {
+    padding: 1rem;
   }
 }

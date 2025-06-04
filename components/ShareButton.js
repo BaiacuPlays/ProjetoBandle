@@ -62,7 +62,7 @@ const ShareButton = ({ gameResult, currentSong, isInfiniteMode = false, infinite
       try {
         updateSocialStats('share_game');
       } catch (error) {
-        console.warn('Erro ao atualizar estatísticas sociais:', error);
+        // Silent error handling
       }
     }
 

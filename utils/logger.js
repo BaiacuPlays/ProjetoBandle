@@ -3,15 +3,19 @@
 
 class Logger {
   constructor() {
-    // Detectar se está em produção
-    this.isProduction = process.env.NODE_ENV === 'production' || 
-                       typeof window !== 'undefined' && window.location.hostname !== 'localhost';
-    
-    // Detectar se está no Vercel
-    this.isVercel = typeof window !== 'undefined' && 
-                    (window.location.hostname.includes('vercel.app') || 
-                     window.location.hostname === 'ludomusic.xyz');
-    
+    // Detectar se está em produção (mais rigoroso)
+    this.isProduction = process.env.NODE_ENV === 'production' ||
+                       typeof window !== 'undefined' &&
+                       (window.location.hostname !== 'localhost' &&
+                        window.location.hostname !== '127.0.0.1' &&
+                        !window.location.hostname.includes('localhost'));
+
+    // Detectar se está no Vercel ou domínio de produção
+    this.isVercel = typeof window !== 'undefined' &&
+                    (window.location.hostname.includes('vercel.app') ||
+                     window.location.hostname === 'ludomusic.xyz' ||
+                     window.location.hostname.includes('ludomusic'));
+
     // Em produção, desabilitar TODOS os logs exceto errors críticos
     this.enableLogs = !this.isProduction && !this.isVercel;
     
@@ -118,13 +122,16 @@ class Logger {
 // Instância global
 const logger = new Logger();
 
-// Substituir console global em produção
+// Substituir console global em produção (MAIS RIGOROSO)
 if (logger.isProduction || logger.isVercel) {
   // Salvar referências originais
   const originalConsole = {
     log: console.log,
     warn: console.warn,
-    error: console.error
+    error: console.error,
+    info: console.info,
+    debug: console.debug,
+    trace: console.trace
   };
 
   // Salvar globalmente para acesso em outros métodos
@@ -132,20 +139,31 @@ if (logger.isProduction || logger.isVercel) {
     window.originalConsole = originalConsole;
   }
 
-  // Substituir métodos
-  console.log = (...args) => {
-    // Silencioso em produção
-  };
+  // Função vazia para substituir todos os logs
+  const silentFunction = () => {};
 
-  console.warn = (...args) => {
-    // Silencioso em produção
-  };
+  // Substituir TODOS os métodos de console
+  console.log = silentFunction;
+  console.warn = silentFunction;
+  console.info = silentFunction;
+  console.debug = silentFunction;
+  console.trace = silentFunction;
 
-  // Manter errors mas com limite - USAR CONSOLE ORIGINAL para evitar recursão
+  // Manter apenas errors críticos com filtro rigoroso
   console.error = (...args) => {
-    // Errors sempre são mostrados, mas com limite
-    if (logger.logCount < logger.maxLogsPerMinute * 2) {
-      originalConsole.error(...args);
+    // Filtrar apenas erros realmente críticos
+    const errorMessage = args.join(' ').toLowerCase();
+    const isCriticalError = [
+      'uncaught',
+      'unhandled',
+      'fatal',
+      'critical',
+      'security'
+    ].some(keyword => errorMessage.includes(keyword));
+
+    // Mostrar apenas erros críticos e com limite
+    if (isCriticalError && logger.logCount < 3) {
+      originalConsole.error('🚨 ERRO CRÍTICO:', ...args);
       logger.logCount++;
     }
   };

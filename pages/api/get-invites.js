@@ -25,25 +25,17 @@ export default async function handler(req, res) {
     try {
       let invites = [];
 
-      console.log(`🔍 Buscando convites para usuário: ${userId}`);
-      console.log(`🔧 Ambiente: ${isDevelopment ? 'desenvolvimento' : 'produção'}, KV configurado: ${hasKVConfig}`);
-
       if (isDevelopment && !hasKVConfig) {
         // Desenvolvimento local - usar Map
         invites = localInvites.get(inviteKey) || [];
-        console.log(`📊 Convites encontrados no Map local: ${invites.length}`);
       } else {
         // Produção - usar Vercel KV
         try {
           invites = await kv.get(inviteKey) || [];
-          console.log(`📊 Convites encontrados no KV: ${invites.length}`);
         } catch (kvError) {
-          console.error('❌ Erro ao acessar Vercel KV:', kvError);
           invites = [];
         }
       }
-
-      console.log(`📋 Todos os convites encontrados:`, invites);
 
       // Filtrar apenas convites pendentes e não expirados (últimas 24 horas)
       const now = Date.now();
@@ -53,12 +45,8 @@ export default async function handler(req, res) {
         const isPending = invite.status === 'pending';
         const isNotExpired = invite.timestamp > oneDayAgo;
 
-        console.log(`📝 Convite ${invite.id}: status=${invite.status}, pending=${isPending}, expired=${!isNotExpired}`);
-
         return isPending && isNotExpired;
       });
-
-      console.log(`📥 Convites válidos para ${userId}: ${validInvites.length} de ${invites.length} total`);
 
       return res.status(200).json({
         success: true,
@@ -66,7 +54,6 @@ export default async function handler(req, res) {
       });
 
     } catch (error) {
-      console.error('❌ Erro ao buscar convites:', error);
       return res.status(500).json({
         error: 'Erro ao buscar convites',
         details: isDevelopment ? error.message : undefined
@@ -74,7 +61,6 @@ export default async function handler(req, res) {
     }
 
   } catch (error) {
-    console.error('Erro na API de busca de convites:', error);
     return res.status(500).json({
       error: 'Erro interno do servidor',
       details: isDevelopment ? error.message : undefined

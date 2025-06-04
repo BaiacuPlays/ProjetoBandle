@@ -63,7 +63,6 @@ export default async function handler(req, res) {
 
           enrichedFriends.push(enrichedFriend);
         } catch (error) {
-          console.warn(`Erro ao buscar perfil do amigo ${friend.id}:`, error);
           // Usar dados básicos se não conseguir buscar o perfil
           enrichedFriends.push({
             ...friend,
@@ -117,8 +116,6 @@ export default async function handler(req, res) {
         await kv.set(friendsKey2, friends2);
       }
 
-      console.log(`✅ Amizade removida: ${currentUserId} ↔ ${friendId}`);
-
       return res.status(200).json({
         success: true,
         message: 'Amigo removido com sucesso'
@@ -129,7 +126,6 @@ export default async function handler(req, res) {
     }
 
   } catch (error) {
-    console.error('Erro na API de amigos:', error);
     return res.status(500).json({
       error: 'Erro interno do servidor',
       details: isDevelopment ? error.message : undefined

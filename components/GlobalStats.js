@@ -32,7 +32,6 @@ const GlobalStats = ({ showInDailyMode = true }) => {
         }
         setLoading(false);
       } catch (error) {
-        console.error('Erro ao buscar estatísticas globais:', error);
         // Fallback para dados iniciais
         setStats({
           totalGames: 0,

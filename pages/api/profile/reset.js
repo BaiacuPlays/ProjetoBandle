@@ -78,21 +78,9 @@ export default async function handler(req, res) {
       return res.status(401).json({ error: authResult.error });
     }
 
-    const { userId } = req.body;
-
-    if (!userId) {
-      console.error('❌ [RESET] ID do usuário não fornecido');
-      return res.status(400).json({ error: 'ID do usuário é obrigatório' });
-    }
-
-    // Verificar se o userId corresponde ao usuário autenticado
-    const expectedUserId = `auth_${authResult.username}`;
-    console.log('🔄 [RESET] Verificando autorização:', { userId, expectedUserId });
-
-    if (userId !== expectedUserId) {
-      console.warn('⚠️ [RESET] Tentativa de resetar perfil de outro usuário:', { userId, expectedUserId });
-      return res.status(403).json({ error: 'Não autorizado a resetar este perfil' });
-    }
+    // Obter userId do token de autenticação (mais seguro)
+    const userId = authResult.userId;
+    console.log('🔄 [RESET] UserId obtido do token:', userId);
 
     const profileKey = `profile:${userId}`;
 

@@ -257,21 +257,8 @@ export default async function handler(req, res) {
       }
     }
 
-    // Verificar status online
-    const presenceKey = `presence:${targetUserId}`;
-    let isOnline = false;
-
-    if (isDevelopment && !hasKVConfig) {
-      const { localPresence } = require('./presence');
-      const presenceData = localPresence.get(presenceKey);
-      isOnline = presenceData && (Date.now() - presenceData.heartbeat) < 120000;
-    } else {
-      const presenceData = await kv.get(presenceKey);
-      isOnline = !!presenceData;
-    }
-
-    publicProfile.isOnline = isOnline;
-    publicProfile.lastSeen = isOnline ? 'Agora' : (userData.lastLoginAt ? new Date(userData.lastLoginAt).toLocaleDateString('pt-BR') : 'Nunca');
+    // Sistema de presença removido - não mostrar status online/offline
+    publicProfile.lastSeen = userData.lastLoginAt ? new Date(userData.lastLoginAt).toLocaleDateString('pt-BR') : 'Nunca';
 
 
 

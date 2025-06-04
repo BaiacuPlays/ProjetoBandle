@@ -64,7 +64,7 @@ const ActionButtons = ({ gameResult, currentSong, isInfiniteMode = false, infini
       try {
         updateSocialStats('share_game');
       } catch (error) {
-        console.warn('Erro ao atualizar estatísticas sociais:', error);
+        // Silent error handling
       }
     }
 
@@ -117,7 +117,7 @@ const ActionButtons = ({ gameResult, currentSong, isInfiniteMode = false, infini
     const body = encodeURIComponent(
       `Olá! Encontrei um erro no LudoMusic.\n\n` +
       `Descrição do erro: [Descreva o problema aqui]\n\n` +
-      `Música atual: ${currentSong?.name || 'N/A'}\n` +
+      `Música atual: ${currentSong?.title || 'N/A'}\n` +
       `Jogo: ${currentSong?.game || 'N/A'}\n` +
       `URL: ${window.location.href}\n` +
       `Navegador: ${navigator.userAgent}\n` +
@@ -127,8 +127,13 @@ const ActionButtons = ({ gameResult, currentSong, isInfiniteMode = false, infini
   };
 
   const handleSupportClick = () => {
-    // Abrir link para apoiar o projeto (pode ser Patreon, Ko-fi, etc.)
-    window.open('https://ludomusic.xyz/apoiar', '_blank');
+    // Abrir modal de doação em vez de link quebrado
+    if (typeof window !== 'undefined' && window.openDonationModal) {
+      window.openDonationModal();
+    } else {
+      // Fallback para email
+      window.open('mailto:andreibonatto8@gmail.com?subject=Apoio%20ao%20LudoMusic', '_blank');
+    }
   };
 
   const handleCopyLinkClick = () => {

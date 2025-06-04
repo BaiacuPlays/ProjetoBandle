@@ -116,7 +116,7 @@ export const achievements = {
   speed_demon: {
     id: 'speed_demon',
     title: 'Demônio da Velocidade',
-    description: 'Acerte uma música em menos de 5 segundos',
+    description: 'Acerte uma música em menos de 5 segundos (tempo real)',
     icon: '💨',
     rarity: 'epic',
     xpReward: 500
@@ -262,7 +262,7 @@ export const achievements = {
   lightning_fast: {
     id: 'lightning_fast',
     title: 'Raio Veloz',
-    description: 'Acerte uma música em menos de 3 segundos',
+    description: 'Acerte uma música em menos de 3 segundos (tempo real)',
     icon: '⚡',
     rarity: 'epic',
     xpReward: 750
@@ -336,6 +336,14 @@ export const achievements = {
     icon: '👑',
     rarity: 'epic',
     xpReward: 400
+  },
+  daily_dedication: {
+    id: 'daily_dedication',
+    title: 'Dedicação Diária',
+    description: 'Jogue por 7 dias consecutivos',
+    icon: '📅',
+    rarity: 'rare',
+    xpReward: 400
   }
 };
 
@@ -401,8 +409,18 @@ export const calculateAchievementProgress = (achievementId, userStats, profile =
     case 'ten_hours_played':
       return Math.min(100, (userStats.totalPlayTime / 36000) * 100);
     case 'marathon_player':
-      // Esta precisa ser verificada durante a sessão
-      return 0; // Implementar lógica de sessão
+      // Verificar se há dados de sessão longa (5 horas)
+      if (userStats.longestSession && userStats.longestSession >= 18000) { // 5 horas em segundos
+        return 100;
+      }
+      // Verificar se há registro de sessão maratona no histórico
+      if (profile?.gameHistory) {
+        const marathonSession = profile.gameHistory.find(game =>
+          game.mode === 'marathon_session' && game.playTime >= 18000
+        );
+        return marathonSession ? 100 : 0;
+      }
+      return 0;
 
     // Conquistas especiais
     case 'speed_demon':
@@ -473,8 +491,28 @@ export const calculateAchievementProgress = (achievementId, userStats, profile =
     case 'unstoppable':
       return Math.min(100, (userStats.bestStreak / 50) * 100);
     case 'comeback_king':
-      // Esta precisa ser verificada durante o jogo
-      return 0; // Implementar lógica de comeback
+      // Verificar se há registro de comeback no histórico
+      if (profile?.gameHistory) {
+        const comebackGame = profile.gameHistory.find(game =>
+          game.won && game.isComeback && game.consecutiveLosses >= 5
+        );
+        return comebackGame ? 100 : 0;
+      }
+      return 0;
+    case 'daily_dedication':
+      // Verificar dias consecutivos no localStorage
+      try {
+        if (typeof window !== 'undefined') {
+          const consecutiveDaysData = localStorage.getItem('ludomusic_consecutive_days');
+          if (consecutiveDaysData) {
+            const data = JSON.parse(consecutiveDaysData);
+            return data.consecutiveDays >= 7 ? 100 : Math.min(100, (data.consecutiveDays / 7) * 100);
+          }
+        }
+      } catch (error) {
+        // Silent error handling
+      }
+      return 0;
 
     default:
       return 0;

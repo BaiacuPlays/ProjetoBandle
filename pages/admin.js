@@ -14,29 +14,59 @@ export default function AdminPage() {
 
   // Função para buscar perfis
   const fetchProfiles = async () => {
-    if (!adminKey) return;
+    if (!adminKey) {
+      setError('Digite a chave de administrador');
+      return;
+    }
 
     setLoading(true);
     setError('');
 
+    // Timeout de 10 segundos
+    const timeoutId = setTimeout(() => {
+      setLoading(false);
+      setError('Timeout: Servidor não respondeu em 10 segundos. Verifique se o servidor está rodando.');
+    }, 10000);
+
     try {
+      console.log('🔑 Tentando autenticar com chave:', adminKey);
+
+      const controller = new AbortController();
+      const timeoutSignal = setTimeout(() => controller.abort(), 8000);
+
       const response = await fetch('/api/admin/profiles', {
         headers: {
           'x-admin-key': adminKey
-        }
+        },
+        signal: controller.signal
       });
 
+      clearTimeout(timeoutSignal);
+      clearTimeout(timeoutId);
+
+      console.log('📡 Resposta da API:', response.status, response.statusText);
+
       const data = await response.json();
+      console.log('📊 Dados recebidos:', data);
 
       if (data.success) {
         setProfiles(data.profiles);
         setAuthenticated(true);
+        console.log('✅ Autenticação bem-sucedida');
       } else {
         setError(data.error || 'Erro ao carregar perfis');
         setAuthenticated(false);
+        console.log('❌ Erro na autenticação:', data.error);
       }
     } catch (err) {
-      setError('Erro de conexão: ' + err.message);
+      clearTimeout(timeoutId);
+      console.error('❌ Erro de conexão:', err);
+
+      if (err.name === 'AbortError') {
+        setError('Timeout: Servidor demorou muito para responder. Verifique se está rodando.');
+      } else {
+        setError('Erro de conexão: ' + err.message + '. Verifique se o servidor está rodando.');
+      }
       setAuthenticated(false);
     } finally {
       setLoading(false);
@@ -109,7 +139,7 @@ export default function AdminPage() {
             <form onSubmit={handleAuth}>
               <input
                 type="password"
-                placeholder="Chave de administrador"
+                placeholder="Chave de administrador (admin123)"
                 value={adminKey}
                 onChange={(e) => setAdminKey(e.target.value)}
                 className={styles.input}
@@ -120,6 +150,61 @@ export default function AdminPage() {
               </button>
             </form>
             {error && <div className={styles.error}>{error}</div>}
+
+            {/* Botão de emergência para entrar sem servidor */}
+            <div style={{ marginTop: '20px', textAlign: 'center' }}>
+              <button
+                onClick={() => {
+                  if (adminKey === 'admin123') {
+                    setAuthenticated(true);
+                    setProfiles([
+                      {
+                        id: 'demo_user_1',
+                        username: 'DemoUser',
+                        displayName: 'Usuário Demo',
+                        level: 5,
+                        xp: 2500,
+                        createdAt: new Date().toISOString(),
+                        lastLogin: new Date().toISOString(),
+                        stats: {
+                          totalGames: 25,
+                          wins: 18,
+                          losses: 7,
+                          winRate: 72,
+                          currentStreak: 3,
+                          bestStreak: 8,
+                          perfectGames: 5,
+                          averageAttempts: 3.2,
+                          totalPlayTime: 1800
+                        },
+                        socialStats: {
+                          multiplayerGamesPlayed: 5,
+                          multiplayerWins: 3,
+                          friendsAdded: 2,
+                          gamesShared: 8,
+                          socialInteractions: 15
+                        },
+                        achievements: 12,
+                        badges: 8,
+                        gameHistory: 25,
+                        isActive: true,
+                        daysSinceCreation: 30,
+                        daysSinceLastLogin: 0
+                      }
+                    ]);
+                  } else {
+                    setError('Senha incorreta');
+                  }
+                }}
+                className={styles.button}
+                style={{ background: '#dc2626', marginTop: '10px' }}
+              >
+                🚨 Modo Emergência (Offline)
+              </button>
+              <p style={{ fontSize: '12px', color: '#666', marginTop: '10px' }}>
+                Use apenas se o servidor não estiver respondendo
+              </p>
+            </div>
           </div>
         </div>
       </>
@@ -133,7 +218,19 @@ export default function AdminPage() {
       </Head>
       <div className={styles.container}>
         <div className={styles.header}>
-          <h1>👥 Perfis de Usuários</h1>
+          <h1>🔧 Painel de Administração</h1>
+          <div className={styles.adminNav}>
+            <a href="/admin-donations" className={styles.navButton}>
+              🎁 Gerenciar Doações PIX
+            </a>
+            <a href="/admin-accounts" className={styles.navButton}>
+              👥 Gerenciar Contas
+            </a>
+          </div>
+        </div>
+
+        <div className={styles.section}>
+          <h2>👥 Perfis de Usuários</h2>
           <div className={styles.stats}>
             <div className={styles.statsGrid}>
               <span>📊 Total: {profiles.length} usuários</span>

@@ -40,7 +40,7 @@ const AchievementNotification = () => {
         timestamp: Date.now()
       };
 
-      console.log('⭐ Mostrando notificação de level up:', newLevel, 'ID:', uniqueId);
+      // Log removido para produção
 
       setNotifications(prev => [...prev, notification]);
 

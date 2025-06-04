@@ -6,14 +6,21 @@ import { UserProfileProvider } from '../contexts/UserProfileContext';
 import { FriendsProvider } from '../contexts/FriendsContext';
 import { AuthProvider } from '../contexts/AuthContext';
 import { NotificationProvider } from '../contexts/NotificationContext';
+import ToastNotification from '../components/ToastNotification';
 
 import { useEffect } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import errorHandler from '../utils/errorHandler';
+import performanceOptimizer from '../utils/performanceOptimizer';
 
 export default function MyApp({ Component, pageProps }) {
   // Carregar configurações do localStorage ao iniciar a aplicação
   useEffect(() => {
+    // Inicializar error handler e performance optimizer
+    errorHandler;
+    performanceOptimizer;
+
     try {
       const savedSettings = localStorage.getItem('ludomusic_settings');
       if (savedSettings) {
@@ -30,7 +37,10 @@ export default function MyApp({ Component, pageProps }) {
         }
       }
     } catch (error) {
-      // Silenciar erro
+      // Usar error handler em vez de silenciar
+      if (typeof window !== 'undefined' && window.showToast) {
+        window.showToast('Erro ao carregar configurações', 'warning');
+      }
     }
   }, []);
 
@@ -41,6 +51,7 @@ export default function MyApp({ Component, pageProps }) {
           <FriendsProvider>
             <NotificationProvider>
               <Component {...pageProps} />
+              <ToastNotification />
               <Analytics />
               <SpeedInsights />
             </NotificationProvider>

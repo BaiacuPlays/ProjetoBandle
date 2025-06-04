@@ -22,7 +22,6 @@ export const NotificationProvider = ({ children }) => {
 
   useEffect(() => {
     if (currentUserId && isAuthenticated) {
-      console.log('🔐 NotificationContext: Usuário autenticado detectado:', currentUserId);
       loadNotifications();
       loadInvitations();
       loadServerInvites(); // Carregar convites do servidor
@@ -32,15 +31,10 @@ export const NotificationProvider = ({ children }) => {
   // Carregar convites do servidor
   const loadServerInvites = async () => {
     if (!currentUserId || !isAuthenticated) {
-      console.log('❌ Não é possível carregar convites: usuário não autenticado ou currentUserId não definido');
-      console.log('❌ currentUserId:', currentUserId);
-      console.log('❌ isAuthenticated:', isAuthenticated);
       return;
     }
 
     try {
-      console.log(`🔍 Verificando convites para usuário: ${currentUserId}`);
-
       const response = await fetch(`/api/get-invites?userId=${currentUserId}`, {
         headers: {
           'Cache-Control': 'no-cache',
@@ -49,51 +43,36 @@ export const NotificationProvider = ({ children }) => {
       });
 
       if (!response.ok) {
-        console.error('❌ Erro ao buscar convites:', response.status);
-        const errorData = await response.json().catch(() => ({}));
-        console.error('❌ Detalhes do erro:', errorData);
         return;
       }
 
       const result = await response.json();
-      console.log(`📥 Resposta da API de convites:`, result);
 
       if (result.success) {
         const serverInvites = result.invites || [];
-        console.log(`📊 Total de convites no servidor: ${serverInvites.length}`);
 
         // IMPORTANTE: Filtrar apenas convites onde o usuário atual é o DESTINATÁRIO
         const receivedInvites = serverInvites.filter(invite => {
           const isRecipient = invite.toUserId === currentUserId;
           const isNotSender = invite.fromUserId !== currentUserId;
 
-          console.log(`📋 Convite ${invite.id}: toUserId=${invite.toUserId}, fromUserId=${invite.fromUserId}, currentUserId=${currentUserId}`);
-          console.log(`📋 É destinatário: ${isRecipient}, Não é remetente: ${isNotSender}`);
-
           return isRecipient && isNotSender;
         });
-
-        console.log(`📊 Convites válidos RECEBIDOS: ${receivedInvites.length} de ${serverInvites.length} total`);
 
         if (receivedInvites.length > 0) {
           // Mesclar convites do servidor com os locais
           const localInviteIds = invitations.map(inv => inv.id);
-          console.log(`📊 Convites locais existentes: ${localInviteIds.length}`);
 
           // Adicionar apenas convites novos
           const newInvites = receivedInvites.filter(inv => !localInviteIds.includes(inv.id));
 
           if (newInvites.length > 0) {
-            console.log(`📨 ${newInvites.length} novos convites RECEBIDOS encontrados:`, newInvites);
-
             const updatedInvitations = [...invitations, ...newInvites];
             setInvitations(updatedInvitations);
             saveInvitations(updatedInvitations);
 
             // Adicionar notificações para os novos convites
             newInvites.forEach(invite => {
-              console.log(`🔔 Criando notificação para convite RECEBIDO de ${invite.hostName}`);
-
               addNotification({
                 type: 'multiplayer_invite',
                 title: 'Novo Convite para Multiplayer!',
@@ -113,17 +92,11 @@ export const NotificationProvider = ({ children }) => {
                 });
               }
             });
-          } else {
-            console.log('📥 Nenhum convite novo encontrado');
           }
-        } else {
-          console.log('📥 Nenhum convite RECEBIDO no servidor');
         }
-      } else {
-        console.error('❌ API retornou erro:', result.error);
       }
     } catch (error) {
-      console.error('❌ Erro de rede ao carregar convites do servidor:', error);
+      // Silent error handling
     }
   };
 
@@ -148,7 +121,6 @@ export const NotificationProvider = ({ children }) => {
     if (!currentUserId || !isAuthenticated) return;
 
     const handleFocus = () => {
-      console.log('🔍 Página ganhou foco, verificando novos convites e notificações...');
       loadServerInvites();
       loadServerNotifications();
     };
@@ -197,7 +169,7 @@ export const NotificationProvider = ({ children }) => {
         saveNotifications(mergedNotifications);
       }
     } catch (error) {
-      console.error('Erro ao carregar notificações do servidor:', error);
+      // Silent error handling
     }
   };
 
@@ -227,12 +199,11 @@ export const NotificationProvider = ({ children }) => {
 
         // IMPORTANTE: Salvar a lista filtrada para remover notificações expiradas
         if (recent.length !== parsed.length) {
-          console.log(`🧹 Removendo ${parsed.length - recent.length} notificações expiradas`);
           saveNotifications(recent);
         }
       }
     } catch (error) {
-      console.error('Erro ao carregar notificações:', error);
+      // Silent error handling
     }
   };
 
@@ -248,12 +219,11 @@ export const NotificationProvider = ({ children }) => {
 
         // IMPORTANTE: Salvar a lista filtrada para remover convites expirados
         if (active.length !== parsed.length) {
-          console.log(`🧹 Removendo ${parsed.length - active.length} convites expirados`);
           saveInvitations(active);
         }
       }
     } catch (error) {
-      console.error('Erro ao carregar convites:', error);
+      // Silent error handling
     }
   };
 
@@ -262,7 +232,7 @@ export const NotificationProvider = ({ children }) => {
     try {
       localStorage.setItem(`ludomusic_notifications_${currentUserId}`, JSON.stringify(newNotifications));
     } catch (error) {
-      console.error('Erro ao salvar notificações:', error);
+      // Silent error handling
     }
   };
 
@@ -271,7 +241,7 @@ export const NotificationProvider = ({ children }) => {
     try {
       localStorage.setItem(`ludomusic_invitations_${currentUserId}`, JSON.stringify(newInvitations));
     } catch (error) {
-      console.error('Erro ao salvar convites:', error);
+      // Silent error handling
     }
   };
 
@@ -337,8 +307,6 @@ export const NotificationProvider = ({ children }) => {
       status: 'pending' // 'pending', 'accepted', 'declined', 'expired'
     };
 
-    console.log('📤 Enviando convite:', invitation);
-
     try {
       // Enviar convite via API com retry
       let response;
@@ -367,7 +335,6 @@ export const NotificationProvider = ({ children }) => {
           } else if (response.status >= 500 && attempts < maxAttempts - 1) {
             // Erro do servidor, tentar novamente
             attempts++;
-            console.log(`⚠️ Tentativa ${attempts} falhou, tentando novamente...`);
             await new Promise(resolve => setTimeout(resolve, 1000 * attempts)); // Delay progressivo
             continue;
           } else {
@@ -377,7 +344,6 @@ export const NotificationProvider = ({ children }) => {
         } catch (fetchError) {
           attempts++;
           if (attempts < maxAttempts) {
-            console.log(`⚠️ Erro de rede na tentativa ${attempts}, tentando novamente...`);
             await new Promise(resolve => setTimeout(resolve, 1000 * attempts));
             continue;
           } else {
@@ -392,8 +358,6 @@ export const NotificationProvider = ({ children }) => {
         // NÃO adicionar à nossa lista de convites - apenas convites RECEBIDOS devem aparecer aqui
         // O convite foi enviado com sucesso, mas não deve aparecer nas nossas notificações
 
-        console.log('✅ Convite enviado com sucesso para:', friendName);
-
         // Notificar sucesso
         addNotification({
           type: 'success',
@@ -406,7 +370,6 @@ export const NotificationProvider = ({ children }) => {
         throw new Error(result.error || 'Erro ao enviar convite');
       }
     } catch (error) {
-      console.error('❌ Erro ao enviar convite:', error);
       addNotification({
         type: 'error',
         title: 'Erro ao Enviar Convite',

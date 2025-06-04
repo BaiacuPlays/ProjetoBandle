@@ -128,6 +128,47 @@ export default async function handler(req, res) {
 
         console.log(`✅ Sala criada: ${roomId} por ${currentUsername}`);
 
+        // 🏠 RASTREAR SALAS CRIADAS para conquista "Criador de Salas"
+        try {
+          // Atualizar estatísticas de salas criadas no perfil do usuário
+          const profileKey = `profile:${currentUserId}`;
+          let userProfile = null;
+
+          if (isDevelopment && !hasKVConfig) {
+            userProfile = localProfiles.get(profileKey);
+          } else {
+            userProfile = await kv.get(profileKey);
+          }
+
+          if (userProfile) {
+            // Incrementar contador de salas criadas
+            if (!userProfile.stats.modeStats.multiplayer) {
+              userProfile.stats.modeStats.multiplayer = {
+                games: 0,
+                wins: 0,
+                roomsCreated: 0,
+                totalPoints: 0,
+                bestRoundScore: 0
+              };
+            }
+
+            userProfile.stats.modeStats.multiplayer.roomsCreated += 1;
+            userProfile.lastUpdated = new Date().toISOString();
+
+            // Salvar perfil atualizado
+            if (isDevelopment && !hasKVConfig) {
+              localProfiles.set(profileKey, userProfile);
+            } else {
+              await kv.set(profileKey, userProfile);
+            }
+
+            console.log(`📊 Salas criadas por ${currentUsername}: ${userProfile.stats.modeStats.multiplayer.roomsCreated}`);
+          }
+        } catch (error) {
+          console.warn('Erro ao atualizar estatísticas de salas criadas:', error);
+          // Não falhar a criação da sala por causa disso
+        }
+
         return res.status(200).json({
           success: true,
           roomId: roomId,

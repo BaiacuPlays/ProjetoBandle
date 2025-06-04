@@ -24,7 +24,6 @@ const AdBanner = ({
         // Track ad impression
         trackAdImpression(placement, slot);
       } catch (error) {
-        console.error('Erro ao carregar anúncio:', error);
         setAdError(true);
       }
     }
@@ -51,7 +50,7 @@ const AdBanner = ({
         timestamp: new Date().toISOString()
       })
     }).catch(error => {
-      console.error('Erro ao registrar impressão:', error);
+      // Silent error handling
     });
   };
 

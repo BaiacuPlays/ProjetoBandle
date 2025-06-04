@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuth } from './AuthContext';
-import { usePresence } from '../hooks/usePresence';
 import { FriendsCookies } from '../utils/cookies';
 import { getOptimizedConfig } from '../utils/performanceOptimizer';
 
@@ -16,7 +15,6 @@ export const useFriends = () => {
 
 export const FriendsProvider = ({ children }) => {
   const { isAuthenticated, user } = useAuth();
-  const { getFriendsPresence } = usePresence();
 
   const [friends, setFriends] = useState([]);
   const [friendRequests, setFriendRequests] = useState([]);
@@ -31,26 +29,12 @@ export const FriendsProvider = ({ children }) => {
   // SISTEMA OTIMIZADO: Carregar dados instantaneamente quando usuário está autenticado
   useEffect(() => {
     if (isAuthenticated && currentUserId) {
-      console.log('🔐 Usuário autenticado detectado:', currentUserId);
-      console.log('🍪 DEBUG - Verificando cookies para usuário:', currentUserId);
-
       // 1. Carregar dados dos cookies SINCRONAMENTE (sem await/delay)
       const savedFriends = FriendsCookies.getFriendsData();
       const savedRequests = FriendsCookies.getFriendRequests();
 
-      console.log('🍪 DEBUG - Amigos dos cookies:', savedFriends?.length || 0, 'encontrados');
-      console.log('🍪 DEBUG - Solicitações dos cookies:', savedRequests?.length || 0, 'encontradas');
-
       // Verificar integridade dos dados
       const integrity = FriendsCookies.checkDataIntegrity();
-      console.log('🔍 DEBUG - Integridade dos cookies:', integrity);
-
-      // Log detalhado dos dados encontrados
-      if (savedFriends && savedFriends.length > 0) {
-        console.log('👥 DEBUG - Lista de amigos encontrada:', savedFriends.map(f => f.displayName || f.username));
-      } else {
-        console.log('👥 DEBUG - Nenhum amigo encontrado nos cookies');
-      }
 
 
 
@@ -61,22 +45,17 @@ export const FriendsProvider = ({ children }) => {
           ...friend,
           avatar: friend.avatar || '👤',
           level: friend.level || 1,
-          displayName: friend.displayName || friend.username || 'Jogador',
-          status: friend.status || 'offline'
+          displayName: friend.displayName || friend.username || 'Jogador'
+          // status removido - sistema de presença desabilitado
         }));
 
         // Definir estado SINCRONAMENTE
         setFriends(friendsWithDefaults);
         setFriendRequests(savedRequests || []);
-        console.log('⚡ Dados dos amigos carregados INSTANTANEAMENTE dos cookies');
-        console.log('⚡ Estado definido - friends.length:', friendsWithDefaults.length);
-        console.log('⚡ Amigos carregados:', friendsWithDefaults.map(f => f.displayName || f.username));
 
-        // Atualizar presença em background (simplificado)
-        updateFriendsPresenceInBackground(friendsWithDefaults);
+        // Sistema de presença removido - dados carregados instantaneamente
       } else {
         // 4. Se não há dados nos cookies, carregar do servidor
-        console.log('📭 Nenhum dado nos cookies ou cookies corrompidos, carregando do servidor...');
         loadFriendsData(false); // Modo foreground
       }
     } else {
@@ -87,48 +66,22 @@ export const FriendsProvider = ({ children }) => {
     }
   }, [isAuthenticated, currentUserId]);
 
-  // Função para atualizar presença em background (sem bloquear exibição)
-  const updateFriendsPresenceInBackground = async (currentFriendsList) => {
-    if (!isAuthenticated || currentFriendsList.length === 0) return;
-
-    try {
-      console.log('🔄 Atualizando presença em background...');
-      const friendIds = currentFriendsList.map(friend => friend.id);
-      const presenceStatus = await getFriendsPresence(friendIds);
-
-      // Atualizar apenas o status, mantendo todos os outros dados
-      setFriends(prevFriends =>
-        prevFriends.map(friend => ({
-          ...friend,
-          status: presenceStatus[friend.id] || friend.status || 'offline'
-        }))
-      );
-
-      console.log('✅ Status de presença atualizado em background');
-    } catch (error) {
-      console.warn('⚠️ Erro ao buscar presença em background (não afeta exibição):', error);
-      // Não fazer nada - manter dados existentes
-    }
-  };
+  // Sistema de presença removido - função removida
 
   // Carregar dados dos amigos do servidor
   const loadFriendsData = async (backgroundMode = false) => {
     if (!currentUserId || !isAuthenticated) {
-      console.log('❌ Não é possível carregar dados: usuário não autenticado ou ID não definido');
       return;
     }
 
     // Verificar se já está carregando para evitar múltiplas chamadas simultâneas
     if (isLoading && !backgroundMode) {
-      console.log('⏳ Carregamento já em andamento, ignorando...');
       return;
     }
 
     if (!backgroundMode) {
       setIsLoading(true);
     }
-
-    console.log(`🔄 Carregando dados dos amigos do servidor (modo: ${backgroundMode ? 'background' : 'foreground'})...`);
 
     try {
       const sessionToken = localStorage.getItem('ludomusic_session_token');
@@ -153,41 +106,20 @@ export const FriendsProvider = ({ children }) => {
         // Salvar no localStorage como backup
         localStorage.setItem(`ludomusic_friends_${currentUserId}`, JSON.stringify(friendsList));
 
-        // Buscar status de presença dos amigos
+        // Sistema de presença removido - usar dados básicos
         if (friendsList.length > 0) {
-          try {
-            const friendIds = friendsList.map(friend => friend.id);
-            const presenceStatus = await getFriendsPresence(friendIds);
+          const friendsWithDefaults = friendsList.map(friend => ({
+            ...friend,
+            avatar: friend.avatar || '👤',
+            level: friend.level || 1,
+            displayName: friend.displayName || friend.username || 'Jogador'
+            // status removido - sistema de presença desabilitado
+          }));
 
-            // Atualizar status dos amigos
-            const friendsWithStatus = friendsList.map(friend => ({
-              ...friend,
-              // Garantir que avatar e level estão presentes
-              avatar: friend.avatar || '👤',
-              level: friend.level || 1,
-              displayName: friend.displayName || friend.username || 'Jogador',
-              status: presenceStatus[friend.id] || 'offline'
-            }));
+          setFriends(friendsWithDefaults);
 
-            setFriends(friendsWithStatus);
-
-            // Salvar nos cookies após carregar com sucesso
-            FriendsCookies.saveFriendsData(friendsWithStatus, friendRequests);
-          } catch (presenceError) {
-            console.warn('Erro ao buscar presença dos amigos:', presenceError);
-            // Usar dados básicos sem status de presença
-            const friendsWithDefaults = friendsList.map(friend => ({
-              ...friend,
-              avatar: friend.avatar || '👤',
-              level: friend.level || 1,
-              displayName: friend.displayName || friend.username || 'Jogador',
-              status: 'offline'
-            }));
-            setFriends(friendsWithDefaults);
-
-            // Salvar nos cookies mesmo sem status de presença
-            FriendsCookies.saveFriendsData(friendsWithDefaults, friendRequests);
-          }
+          // Salvar nos cookies após carregar com sucesso
+          FriendsCookies.saveFriendsData(friendsWithDefaults, friendRequests);
         } else {
           setFriends(friendsList);
           // Salvar nos cookies
@@ -232,7 +164,6 @@ export const FriendsProvider = ({ children }) => {
         localStorage.setItem(`ludomusic_sent_requests_${currentUserId}`, JSON.stringify(sentRequestsList));
       }
     } catch (error) {
-      console.error('❌ Erro ao carregar dados dos amigos:', error);
       // Fallback para localStorage em caso de erro
       try {
         const savedFriends = localStorage.getItem(`ludomusic_friends_${currentUserId}`);
@@ -252,34 +183,16 @@ export const FriendsProvider = ({ children }) => {
           setSentRequests(sentRequestsList);
         }
       } catch (localError) {
-        console.error('❌ Erro ao carregar dados locais:', localError);
+        // Silent error handling
       }
     } finally {
       if (!backgroundMode) {
         setIsLoading(false);
       }
-      console.log(`✅ Carregamento concluído (modo: ${backgroundMode ? 'background' : 'foreground'})`);
     }
   };
 
-  // Atualizar apenas status de presença dos amigos
-  const updateFriendsPresence = async () => {
-    if (!currentUserId || !isAuthenticated || friends.length === 0) return;
-
-    try {
-      const friendIds = friends.map(friend => friend.id);
-      const presenceStatus = await getFriendsPresence(friendIds);
-
-      setFriends(prevFriends =>
-        prevFriends.map(friend => ({
-          ...friend,
-          status: presenceStatus[friend.id] || 'offline'
-        }))
-      );
-    } catch (error) {
-      console.error('Erro ao atualizar presença dos amigos:', error);
-    }
-  };
+  // Sistema de presença removido - função removida
 
   // Salvar dados dos amigos nos cookies
   const saveFriendsData = () => {
@@ -294,7 +207,7 @@ export const FriendsProvider = ({ children }) => {
       localStorage.setItem(`ludomusic_friend_requests_${currentUserId}`, JSON.stringify(friendRequests));
       localStorage.setItem(`ludomusic_sent_requests_${currentUserId}`, JSON.stringify(sentRequests));
     } catch (error) {
-      console.error('Erro ao salvar dados dos amigos:', error);
+      // Silent error handling
     }
   };
 
@@ -314,7 +227,6 @@ export const FriendsProvider = ({ children }) => {
       const data = await response.json();
       return data.user || null;
     } catch (error) {
-      console.error('Erro ao buscar usuário:', error);
       throw error;
     }
   };
@@ -366,7 +278,6 @@ export const FriendsProvider = ({ children }) => {
       setSentRequests(prev => [...prev, request]);
       return request;
     } catch (error) {
-      console.error('Erro ao enviar solicitação:', error);
       throw error;
     }
   };
@@ -403,7 +314,6 @@ export const FriendsProvider = ({ children }) => {
       // Verificar se há mudanças nas solicitações enviadas também
       await checkForNewFriendRequests();
     } catch (error) {
-      console.error('Erro ao aceitar solicitação:', error);
       throw error;
     }
   };
@@ -442,7 +352,6 @@ export const FriendsProvider = ({ children }) => {
         return updatedRequests;
       });
     } catch (error) {
-      console.error('Erro ao rejeitar solicitação:', error);
       throw error;
     }
   };
@@ -480,7 +389,6 @@ export const FriendsProvider = ({ children }) => {
         return updatedFriends;
       });
     } catch (error) {
-      console.error('Erro ao remover amigo:', error);
       throw error;
     }
   };
@@ -516,7 +424,6 @@ export const FriendsProvider = ({ children }) => {
       localStorage.setItem(`ludomusic_sent_requests_${currentUserId}`, JSON.stringify(updatedSentRequests));
 
     } catch (error) {
-      console.error('Erro ao cancelar solicitação:', error);
       throw error;
     }
   };
@@ -599,7 +506,6 @@ export const FriendsProvider = ({ children }) => {
         throw new Error(errorData.error || 'Erro ao enviar convite');
       }
     } catch (error) {
-      console.error('❌ Erro na função inviteToMultiplayer:', error);
       throw error;
     }
   };
@@ -635,7 +541,6 @@ export const FriendsProvider = ({ children }) => {
 
       return data;
     } catch (error) {
-      console.error('Erro ao enviar convite por email:', error);
       throw error;
     }
   };
@@ -672,7 +577,6 @@ export const FriendsProvider = ({ children }) => {
       const data = await response.json();
       return response.ok ? data : false;
     } catch (error) {
-      console.error('Erro ao processar referral:', error);
       return false;
     }
   };
@@ -706,17 +610,13 @@ export const FriendsProvider = ({ children }) => {
       const integrity = FriendsCookies.checkDataIntegrity();
 
       if (integrity) {
-        console.log('🔍 Monitoramento de cookies:', integrity);
-
         // Se temos amigos no estado mas não nos cookies, recriar cookies
         if (friends.length > 0 && !integrity.cookiesWorking && !integrity.backupWorking) {
-          console.log('⚠️ DETECTADO: Amigos no estado mas cookies perdidos! Recriando...');
           FriendsCookies.saveFriendsData(friends, friendRequests);
         }
 
         // Se não temos amigos no estado mas temos nos cookies, recarregar
         if (friends.length === 0 && integrity.anySourceWorking) {
-          console.log('⚠️ DETECTADO: Cookies existem mas estado vazio! Recarregando...');
           const savedFriends = FriendsCookies.getFriendsData();
           const savedRequests = FriendsCookies.getFriendRequests();
 
@@ -725,8 +625,8 @@ export const FriendsProvider = ({ children }) => {
               ...friend,
               avatar: friend.avatar || '👤',
               level: friend.level || 1,
-              displayName: friend.displayName || friend.username || 'Jogador',
-              status: friend.status || 'offline'
+              displayName: friend.displayName || friend.username || 'Jogador'
+              // status removido - sistema de presença desabilitado
             }));
             setFriends(friendsWithDefaults);
             setFriendRequests(savedRequests);
@@ -781,7 +681,6 @@ export const FriendsProvider = ({ children }) => {
 
     // Verificar quando a janela ganha foco (usuário volta para a aba)
     const handleFocus = () => {
-      console.log('🔍 Janela ganhou foco - verificando solicitações...');
       checkForNewFriendRequests();
     };
 
@@ -818,12 +717,7 @@ export const FriendsProvider = ({ children }) => {
         const actualNewRequests = newRequests.filter(req => !currentRequestIds.includes(req.id));
 
         if (actualNewRequests.length > 0) {
-          console.log(`🔔 ${actualNewRequests.length} nova(s) solicitação(ões) de amizade encontrada(s)`);
-
-          // Log para cada nova solicitação
-          actualNewRequests.forEach(request => {
-            console.log('Nova solicitação de amizade recebida:', request.fromUser?.displayName || request.fromUser?.username);
-          });
+          // Process new requests silently
         }
 
         // Atualizar estado sempre (para remover solicitações processadas)
@@ -852,7 +746,7 @@ export const FriendsProvider = ({ children }) => {
         );
 
         if (removedSentRequests.length > 0) {
-          console.log(`✅ ${removedSentRequests.length} solicitação(ões) enviada(s) foi(ram) processada(s)`);
+          // Process removed requests silently
         }
 
         // Atualizar estado das solicitações enviadas
@@ -863,21 +757,11 @@ export const FriendsProvider = ({ children }) => {
       }
 
     } catch (error) {
-      console.error('Erro ao verificar novas solicitações:', error);
+      // Silent error handling
     }
   }, [isAuthenticated, currentUserId, friendRequests, sentRequests]);
 
-  // Polling ULTRA-OTIMIZADO para atualizar presença dos amigos - REDUZIDO para 120 segundos
-  useEffect(() => {
-    if (!isAuthenticated || !currentUserId) return;
-
-    const optimizedConfig = getOptimizedConfig();
-    const presenceInterval = setInterval(() => {
-      updateFriendsPresence();
-    }, optimizedConfig.polling.presence); // Otimizado automaticamente
-
-    return () => clearInterval(presenceInterval);
-  }, [isAuthenticated, currentUserId, friends.length]);
+  // Sistema de presença removido - polling removido
 
   // Polling duplicado removido - já está sendo feito no useEffect anterior
 
@@ -899,7 +783,6 @@ export const FriendsProvider = ({ children }) => {
     getOnlineFriends,
     inviteToMultiplayer,
     loadFriendsData,
-    updateFriendsPresence,
     referFriend,
     getReferralLink,
     processReferral

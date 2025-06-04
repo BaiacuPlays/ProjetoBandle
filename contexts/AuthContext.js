@@ -31,12 +31,9 @@ export const AuthProvider = ({ children }) => {
       const sessionToken = AuthCookies.getSessionToken();
 
       if (!sessionToken) {
-        console.log('🔍 Nenhum token de sessão encontrado nos cookies ou localStorage');
         setIsLoading(false);
         return;
       }
-
-      console.log('🔍 Verificando sessão existente...');
       const response = await fetch(`/api/auth?sessionToken=${sessionToken}`, {
         method: 'GET',
         headers: {
@@ -49,7 +46,6 @@ export const AuthProvider = ({ children }) => {
         const data = await response.json();
         setUser(data.user);
         setIsAuthenticated(true);
-        console.log('✅ Sessão válida encontrada:', data.user.displayName);
 
         // Atualizar cookies e localStorage com dados mais recentes se necessário
         const currentUserData = JSON.stringify(data.user);
@@ -61,7 +57,6 @@ export const AuthProvider = ({ children }) => {
         // Sessão inválida, mas não remover token imediatamente
         // Pode ser um erro temporário de rede
         const errorData = await response.json().catch(() => ({}));
-        console.log('❌ Erro na verificação de sessão:', response.status, errorData.error);
 
         // Só remover token em casos específicos de sessão realmente inválida
         if (response.status === 401 &&
@@ -69,24 +64,19 @@ export const AuthProvider = ({ children }) => {
              errorData.error === 'Sessão expirada' ||
              errorData.error === 'Token de sessão não fornecido')) {
 
-          console.log('⚠️ Sessão possivelmente inválida, mas mantendo dados locais como fallback');
-
           // Em vez de remover imediatamente, usar dados dos cookies/localStorage como fallback
           const savedUserData = AuthCookies.getUserData();
           if (savedUserData) {
             try {
               setUser(savedUserData);
               setIsAuthenticated(true);
-              console.log('📱 Usando dados salvos localmente (sessão pode estar temporariamente inválida)');
             } catch (e) {
-              console.error('Erro ao usar dados salvos:', e);
               // Só remover se os dados estão corrompidos
               AuthCookies.clearAuth();
             }
           } else {
             // Só remover token se não há dados salvos
             AuthCookies.clearAuth();
-            console.log('❌ Nenhum dado salvo encontrado, removendo tokens');
           }
         } else {
           // Para outros erros (500, timeout, etc.), usar dados dos cookies/localStorage como fallback
@@ -95,9 +85,7 @@ export const AuthProvider = ({ children }) => {
             try {
               setUser(savedUserData);
               setIsAuthenticated(true);
-              console.log('📱 Usando dados salvos localmente como fallback (erro temporário de rede)');
             } catch (e) {
-              console.error('Erro ao usar dados salvos:', e);
               // Só remover se os dados estão corrompidos
               AuthCookies.clearAuth();
             }
@@ -105,17 +93,13 @@ export const AuthProvider = ({ children }) => {
         }
       }
     } catch (error) {
-      console.error('Erro ao verificar sessão (rede):', error);
-
       // Em caso de erro de rede, tentar carregar dados dos cookies/localStorage
       const savedUserData = AuthCookies.getUserData();
       if (savedUserData) {
         try {
           setUser(savedUserData);
           setIsAuthenticated(true);
-          console.log('📱 Usando dados salvos localmente (erro de rede)');
         } catch (e) {
-          console.error('Erro ao usar dados salvos:', e);
           AuthCookies.clearAuth();
         }
       }
@@ -153,7 +137,6 @@ export const AuthProvider = ({ children }) => {
         AuthCookies.saveAuth(data.sessionToken, data.user, true); // Sempre lembrar no registro
         setUser(data.user);
         setIsAuthenticated(true);
-        console.log('✅ Usuário registrado:', data.user.displayName);
 
         // Disparar evento customizado para notificar outros componentes sobre o registro
         window.dispatchEvent(new CustomEvent('userLoggedIn', {
@@ -169,11 +152,9 @@ export const AuthProvider = ({ children }) => {
 
         return { success: true, user: data.user };
       } else {
-        console.error('❌ Erro no registro:', data.error);
         return { success: false, error: data.error };
       }
     } catch (error) {
-      console.error('❌ Erro na requisição de registro:', error);
       return { success: false, error: 'Erro de conexão' };
     }
   };
@@ -200,21 +181,17 @@ export const AuthProvider = ({ children }) => {
         AuthCookies.saveAuth(data.sessionToken, data.user, rememberMe);
         setUser(data.user);
         setIsAuthenticated(true);
-        console.log('✅ Login realizado:', data.user.displayName);
 
         // Disparar evento customizado para notificar outros componentes sobre o login
-        console.log('🔔 Disparando evento userLoggedIn para:', data.user.displayName);
         window.dispatchEvent(new CustomEvent('userLoggedIn', {
           detail: { user: data.user }
         }));
 
         return { success: true, user: data.user };
       } else {
-        console.error('❌ Erro no login:', data.error);
         return { success: false, error: data.error };
       }
     } catch (error) {
-      console.error('❌ Erro na requisição de login:', error);
       return { success: false, error: 'Erro de conexão' };
     }
   };
@@ -242,11 +219,9 @@ export const AuthProvider = ({ children }) => {
       FriendsCookies.clearFriendsData(); // Limpar dados dos amigos também
       setUser(null);
       setIsAuthenticated(false);
-      console.log('✅ Logout realizado - dados de autenticação e amigos limpos');
 
       return { success: true };
     } catch (error) {
-      console.error('❌ Erro no logout:', error);
       // Mesmo com erro, limpar dados locais
       AuthCookies.clearAuth();
       FriendsCookies.clearFriendsData(); // Limpar dados dos amigos também
@@ -269,7 +244,7 @@ export const AuthProvider = ({ children }) => {
         return `auth_${savedUserData.username}`;
       }
     } catch (error) {
-      console.error('Erro ao obter ID do usuário dos dados salvos:', error);
+      // Silent error handling
     }
 
     return null;
@@ -288,7 +263,7 @@ export const AuthProvider = ({ children }) => {
         return savedUserData;
       }
     } catch (error) {
-      console.error('Erro ao obter dados do usuário dos dados salvos:', error);
+      // Silent error handling
     }
 
     return null;

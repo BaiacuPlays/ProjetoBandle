@@ -38,28 +38,67 @@ class PerformanceOptimizer {
         info: console.info,
         debug: console.debug
       };
-      
+
       // Substituir por funções vazias
       console.log = () => {};
       console.warn = () => {};
       console.info = () => {};
       console.debug = () => {};
-      
+
       // Manter apenas errors críticos mas limitados
       let errorCount = 0;
-      const maxErrors = 10;
-      
+      const maxErrors = 5; // Reduzido para 5
+
       console.error = (...args) => {
         if (errorCount < maxErrors) {
-          window._originalConsole.error(...args);
-          errorCount++;
+          // Filtrar erros conhecidos e não críticos (LISTA EXPANDIDA)
+          const errorMessage = args.join(' ').toLowerCase();
+          const isKnownError = [
+            'network error',
+            'fetch failed',
+            'audio',
+            'cors',
+            'loading',
+            'conquista',
+            'achievement',
+            'estatística',
+            'timer',
+            'sessão',
+            'derrotas',
+            'dias consecutivos',
+            'maratonista',
+            'comeback',
+            'salas criadas',
+            'multiplayer',
+            'perfil',
+            'profile',
+            'stats',
+            'game',
+            'música',
+            'song'
+          ].some(keyword => errorMessage.includes(keyword));
+
+          // Filtrar apenas erros REALMENTE críticos
+          const isCriticalError = [
+            'uncaught',
+            'unhandled',
+            'fatal',
+            'security',
+            'critical'
+          ].some(keyword => errorMessage.includes(keyword));
+
+          // Mostrar apenas se for crítico E não for conhecido
+          if (isCriticalError && !isKnownError) {
+            window._originalConsole.error('🚨 ERRO CRÍTICO:', ...args);
+            errorCount++;
+          }
         }
       };
-      
+
       // Função para restaurar console em caso de debug necessário
       window.restoreConsole = () => {
         Object.assign(console, window._originalConsole);
-        console.log('🔧 Console restaurado para debug');
+        window._originalConsole.log('🔧 Console restaurado para debug');
       };
     }
   }

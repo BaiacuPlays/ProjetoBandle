@@ -74,7 +74,6 @@ const ForgotPasswordModal = ({ isOpen, onClose, onBack }) => {
         setError(data.error || 'Erro ao solicitar reset de senha');
       }
     } catch (error) {
-      console.error('Erro ao solicitar reset:', error);
       setError('Erro de conexão. Tente novamente.');
     } finally {
       setIsLoading(false);
