@@ -35,8 +35,13 @@ export const NotificationProvider = ({ children }) => {
     }
 
     try {
+      // Obter token de múltiplas fontes
+      const sessionToken = localStorage.getItem('ludomusic_session_token') ||
+                           (typeof window !== 'undefined' && window.AuthCookies?.getSessionToken?.());
+
       const response = await fetch(`/api/get-invites?userId=${currentUserId}`, {
         headers: {
+          'Authorization': sessionToken ? `Bearer ${sessionToken}` : undefined,
           'Cache-Control': 'no-cache',
           'Pragma': 'no-cache'
         }
@@ -134,7 +139,9 @@ export const NotificationProvider = ({ children }) => {
     if (!currentUserId || !isAuthenticated) return;
 
     try {
-      const sessionToken = localStorage.getItem('ludomusic_session_token');
+      // Obter token de múltiplas fontes
+      const sessionToken = localStorage.getItem('ludomusic_session_token') ||
+                           (typeof window !== 'undefined' && window.AuthCookies?.getSessionToken?.());
       if (!sessionToken) return;
 
       const response = await fetch('/api/notifications', {
@@ -293,6 +300,15 @@ export const NotificationProvider = ({ children }) => {
     saveNotifications(updated);
   };
 
+  // 🔄 SINCRONIZAÇÃO: Remover notificação por requestId (para sincronizar com aba de amigos)
+  const removeNotificationByRequestId = (requestId) => {
+    const updated = notifications.filter(n =>
+      !(n.type === 'friend_request' && n.data?.requestId === requestId)
+    );
+    setNotifications(updated);
+    saveNotifications(updated);
+  };
+
   // Enviar convite para multiplayer
   const sendMultiplayerInvite = async (friendId, friendName, roomCode, hostName) => {
     const invitation = {
@@ -429,6 +445,7 @@ export const NotificationProvider = ({ children }) => {
     markAsRead,
     markAllAsRead,
     removeNotification,
+    removeNotificationByRequestId,
     sendMultiplayerInvite,
     acceptMultiplayerInvite,
     declineMultiplayerInvite,
@@ -437,6 +454,18 @@ export const NotificationProvider = ({ children }) => {
     getPendingInvites,
     currentUserId
   };
+
+  // 🔄 SINCRONIZAÇÃO: Expor contexto globalmente para sincronização entre contextos
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.NotificationContext = value;
+    }
+    return () => {
+      if (typeof window !== 'undefined') {
+        delete window.NotificationContext;
+      }
+    };
+  }, [value]);
 
   return (
     <NotificationContext.Provider value={value}>

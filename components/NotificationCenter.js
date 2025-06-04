@@ -76,8 +76,13 @@ const NotificationCenter = () => {
     try {
       await acceptFriendRequest(notification.data.requestId);
       removeNotification(notification.id);
+
+      // 🔄 SINCRONIZAÇÃO: A função acceptFriendRequest já cuida da sincronização
+      // com a aba de amigos através do recarregamento de dados
     } catch (error) {
       console.error('Erro ao aceitar pedido de amizade:', error);
+      // Mostrar erro para o usuário
+      alert('Erro ao aceitar pedido de amizade: ' + error.message);
     }
   };
 
@@ -85,8 +90,13 @@ const NotificationCenter = () => {
     try {
       await rejectFriendRequest(notification.data.requestId);
       removeNotification(notification.id);
+
+      // 🔄 SINCRONIZAÇÃO: A função rejectFriendRequest já cuida da sincronização
+      // com a aba de amigos através da atualização da lista local
     } catch (error) {
       console.error('Erro ao rejeitar pedido de amizade:', error);
+      // Mostrar erro para o usuário
+      alert('Erro ao rejeitar pedido de amizade: ' + error.message);
     }
   };
 

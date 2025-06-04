@@ -295,7 +295,13 @@ export const FriendsProvider = ({ children }) => {
     }
 
     try {
-      const sessionToken = localStorage.getItem('ludomusic_session_token');
+      // Obter token de múltiplas fontes
+      const sessionToken = localStorage.getItem('ludomusic_session_token') ||
+                           AuthCookies.getSessionToken();
+
+      if (!sessionToken) {
+        throw new Error('Token de sessão não encontrado. Faça login novamente.');
+      }
 
       const response = await fetch('/api/friend-requests', {
         method: 'PUT',
@@ -319,7 +325,16 @@ export const FriendsProvider = ({ children }) => {
 
       // Verificar se há mudanças nas solicitações enviadas também
       await checkForNewFriendRequests();
+
+      // 🔄 SINCRONIZAÇÃO: Remover notificação correspondente se existir
+      if (typeof window !== 'undefined' && window.NotificationContext) {
+        const { removeNotificationByRequestId } = window.NotificationContext;
+        if (removeNotificationByRequestId) {
+          removeNotificationByRequestId(requestId);
+        }
+      }
     } catch (error) {
+      console.error('Erro ao aceitar solicitação:', error);
       throw error;
     }
   };
@@ -331,7 +346,13 @@ export const FriendsProvider = ({ children }) => {
     }
 
     try {
-      const sessionToken = localStorage.getItem('ludomusic_session_token');
+      // Obter token de múltiplas fontes
+      const sessionToken = localStorage.getItem('ludomusic_session_token') ||
+                           AuthCookies.getSessionToken();
+
+      if (!sessionToken) {
+        throw new Error('Token de sessão não encontrado. Faça login novamente.');
+      }
 
       const response = await fetch('/api/friend-requests', {
         method: 'PUT',
@@ -357,7 +378,16 @@ export const FriendsProvider = ({ children }) => {
         FriendsCookies.saveFriendsData(friends, updatedRequests);
         return updatedRequests;
       });
+
+      // 🔄 SINCRONIZAÇÃO: Remover notificação correspondente se existir
+      if (typeof window !== 'undefined' && window.NotificationContext) {
+        const { removeNotificationByRequestId } = window.NotificationContext;
+        if (removeNotificationByRequestId) {
+          removeNotificationByRequestId(requestId);
+        }
+      }
     } catch (error) {
+      console.error('Erro ao rejeitar solicitação:', error);
       throw error;
     }
   };
