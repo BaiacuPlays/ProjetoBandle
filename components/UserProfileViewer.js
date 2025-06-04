@@ -2,14 +2,14 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { useFriends } from '../contexts/FriendsContext';
+import { useSimpleFriends } from '../contexts/SimpleFriendsContext';
 import styles from '../styles/UserProfileViewer.module.css';
 import { getBadge } from '../data/badges';
 import { getAchievement } from '../data/achievements';
 
 const UserProfileViewer = ({ isOpen, userId, username, onClose }) => {
   const { isAuthenticated } = useAuth();
-  const { sendFriendRequest, friends } = useFriends();
+  const { sendFriendRequest, friends } = useSimpleFriends();
   
   const [profile, setProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);

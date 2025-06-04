@@ -3,8 +3,9 @@ import '../styles/settings.css';
 import '../styles/global-scrollbar.css';
 import { LanguageProvider } from '../contexts/LanguageContext';
 import { UserProfileProvider } from '../contexts/UserProfileContext';
-import { FriendsProvider } from '../contexts/FriendsContext';
 import { AuthProvider } from '../contexts/AuthContext';
+import { SimpleFriendsProvider } from '../contexts/SimpleFriendsContext';
+import { FriendsProvider } from '../contexts/FriendsContext';
 import { NotificationProvider } from '../contexts/NotificationContext';
 import ToastNotification from '../components/ToastNotification';
 
@@ -13,6 +14,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import errorHandler from '../utils/errorHandler';
 import performanceOptimizer from '../utils/performanceOptimizer';
+import Script from 'next/script';
 
 export default function MyApp({ Component, pageProps }) {
   // Carregar configurações do localStorage ao iniciar a aplicação
@@ -48,14 +50,16 @@ export default function MyApp({ Component, pageProps }) {
     <LanguageProvider>
       <AuthProvider>
         <UserProfileProvider>
-          <FriendsProvider>
-            <NotificationProvider>
-              <Component {...pageProps} />
-              <ToastNotification />
-              <Analytics />
-              <SpeedInsights />
-            </NotificationProvider>
-          </FriendsProvider>
+          <NotificationProvider>
+            <FriendsProvider>
+              <SimpleFriendsProvider>
+                <Component {...pageProps} />
+                <ToastNotification />
+                <Analytics />
+                <SpeedInsights />
+              </SimpleFriendsProvider>
+            </FriendsProvider>
+          </NotificationProvider>
         </UserProfileProvider>
       </AuthProvider>
     </LanguageProvider>

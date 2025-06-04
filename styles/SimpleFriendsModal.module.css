@@ -1,0 +1,804 @@
+/* Estilos para o modal simples de amigos - Tema LudoMusic */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+}
+
+.modal {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  animation: slideIn 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 30px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, rgba(29, 185, 84, 0.1), rgba(30, 215, 96, 0.05));
+}
+
+.header h2 {
+  margin: 0;
+  background: linear-gradient(135deg, #1DB954, #1ed760);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-shadow: 0 0 20px rgba(29, 185, 84, 0.3);
+}
+
+.closeButton {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 8px 12px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.closeButton:hover {
+  background: linear-gradient(135deg, rgba(244, 67, 54, 0.8), rgba(229, 57, 53, 0.8));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+}
+
+.tabs {
+  display: flex;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tab {
+  flex: 1;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 18px 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  position: relative;
+  overflow: hidden;
+}
+
+.tab::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(29, 185, 84, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.tab:hover::before {
+  left: 100%;
+}
+
+.tab:hover {
+  background: linear-gradient(135deg, rgba(29, 185, 84, 0.1), rgba(30, 215, 96, 0.05));
+  color: #1DB954;
+}
+
+.tab.active {
+  background: linear-gradient(135deg, rgba(29, 185, 84, 0.2), rgba(30, 215, 96, 0.1));
+  color: #1DB954;
+  border-bottom: 3px solid #1DB954;
+  box-shadow: 0 0 20px rgba(29, 185, 84, 0.3);
+}
+
+.content {
+  padding: 25px 30px;
+  flex: 1;
+  overflow-y: auto;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  min-height: 0;
+}
+
+.content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #1DB954, #1ed760);
+  border-radius: 4px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #1ed760, #4ecdc4);
+}
+
+.loading {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 50px;
+  font-size: 1.1rem;
+}
+
+.emptyState {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 50px 30px;
+}
+
+.emptyIcon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  opacity: 0.7;
+  filter: drop-shadow(0 0 10px rgba(29, 185, 84, 0.3));
+}
+
+.emptyState p {
+  margin: 8px 0;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* Lista de amigos */
+.friendsList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.friendItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  position: relative;
+  overflow: hidden;
+}
+
+.friendItem::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(29, 185, 84, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.friendItem:hover::before {
+  left: 100%;
+}
+
+.friendItem:hover {
+  transform: translateY(-2px);
+  border-color: rgba(29, 185, 84, 0.3);
+  box-shadow: 0 8px 25px rgba(29, 185, 84, 0.2);
+}
+
+.friendInfo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.avatar {
+  font-size: 1.8rem;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1DB954, #1ed760);
+  border-radius: 50%;
+  box-shadow: 0 4px 15px rgba(29, 185, 84, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.friendDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.name {
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.username {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.removeButton {
+  background: linear-gradient(135deg, rgba(244, 67, 54, 0.8), rgba(229, 57, 53, 0.8));
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.removeButton:hover {
+  background: linear-gradient(135deg, rgba(244, 67, 54, 1), rgba(229, 57, 53, 1));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(244, 67, 54, 0.4);
+}
+
+/* Lista de solicitações */
+.requestsList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.requestItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  position: relative;
+  overflow: hidden;
+}
+
+.requestItem::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(29, 185, 84, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.requestItem:hover::before {
+  left: 100%;
+}
+
+.requestItem:hover {
+  transform: translateY(-2px);
+  border-color: rgba(29, 185, 84, 0.3);
+  box-shadow: 0 8px 25px rgba(29, 185, 84, 0.2);
+}
+
+.requestInfo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.requestDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.requestActions {
+  display: flex;
+  gap: 12px;
+}
+
+.acceptButton {
+  background: linear-gradient(135deg, #1DB954, #1ed760);
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 15px rgba(29, 185, 84, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.acceptButton:hover {
+  background: linear-gradient(135deg, #1ed760, #4ecdc4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(29, 185, 84, 0.4);
+}
+
+.rejectButton {
+  background: linear-gradient(135deg, rgba(244, 67, 54, 0.8), rgba(229, 57, 53, 0.8));
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.rejectButton:hover {
+  background: linear-gradient(135deg, rgba(244, 67, 54, 1), rgba(229, 57, 53, 1));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(244, 67, 54, 0.4);
+}
+
+/* Seção de adicionar amigos */
+.addFriend {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.searchSection h3 {
+  color: #fff;
+  margin: 0 0 20px 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #1DB954, #1ed760);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 20px rgba(29, 185, 84, 0.3);
+}
+
+.searchBox {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.searchBox input {
+  flex: 1;
+  padding: 15px 20px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.searchBox input:focus {
+  outline: none;
+  border-color: rgba(29, 185, 84, 0.5);
+  box-shadow: 0 0 20px rgba(29, 185, 84, 0.2);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+}
+
+.searchBox input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.searchButton {
+  background: linear-gradient(135deg, #1DB954, #1ed760);
+  border: none;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 4px 15px rgba(29, 185, 84, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.searchButton:hover {
+  background: linear-gradient(135deg, #1ed760, #4ecdc4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(29, 185, 84, 0.4);
+}
+
+.searchButton:disabled {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  opacity: 0.5;
+}
+
+.error {
+  color: #ff6b6b;
+  font-size: 1rem;
+  margin-top: 10px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, rgba(244, 67, 54, 0.1), rgba(229, 57, 53, 0.05));
+  border-radius: 12px;
+  border: 1px solid rgba(244, 67, 54, 0.3);
+  backdrop-filter: blur(5px);
+}
+
+.searchResult {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 20px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  position: relative;
+  overflow: hidden;
+}
+
+.searchResult::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(29, 185, 84, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.searchResult:hover::before {
+  left: 100%;
+}
+
+.searchResult:hover {
+  transform: translateY(-2px);
+  border-color: rgba(29, 185, 84, 0.3);
+  box-shadow: 0 8px 25px rgba(29, 185, 84, 0.2);
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.userDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.addButton {
+  background: linear-gradient(135deg, #1DB954, #1ed760);
+  border: none;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(29, 185, 84, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.addButton:hover {
+  background: linear-gradient(135deg, #1ed760, #4ecdc4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(29, 185, 84, 0.4);
+}
+
+/* Seção de solicitações enviadas */
+.sentSection h3 {
+  color: #fff;
+  margin: 0 0 20px 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #1DB954, #1ed760);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 20px rgba(29, 185, 84, 0.3);
+}
+
+.sentList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sentItem {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 18px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.sentItem:hover {
+  transform: translateY(-1px);
+  border-color: rgba(29, 185, 84, 0.2);
+  box-shadow: 0 4px 15px rgba(29, 185, 84, 0.1);
+}
+
+.sentDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.status {
+  color: #ffc107;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 4px 8px;
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 193, 7, 0.05));
+  border-radius: 8px;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  backdrop-filter: blur(5px);
+  display: inline-block;
+  width: fit-content;
+}
+
+/* Seção de convites por link */
+.inviteSection {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.inviteInfo {
+  text-align: center;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(29, 185, 84, 0.1), rgba(30, 215, 96, 0.05));
+  border-radius: 16px;
+  border: 1px solid rgba(29, 185, 84, 0.3);
+  backdrop-filter: blur(5px);
+}
+
+.inviteInfo h3 {
+  color: #1DB954;
+  margin: 0 0 15px 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-shadow: 0 0 20px rgba(29, 185, 84, 0.3);
+}
+
+.inviteInfo p {
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.inviteInfo strong {
+  color: #1DB954;
+  font-weight: 700;
+}
+
+.inviteActions {
+  display: flex;
+  justify-content: center;
+}
+
+.openReferralButton {
+  background: linear-gradient(135deg, #1DB954, #1ed760);
+  border: none;
+  color: white;
+  padding: 18px 30px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  font-size: 1.1rem;
+  box-shadow: 0 8px 25px rgba(29, 185, 84, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.openReferralButton:hover {
+  background: linear-gradient(135deg, #1ed760, #4ecdc4);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(29, 185, 84, 0.4);
+}
+
+.quickShare {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+}
+
+.quickShare h4 {
+  color: #fff;
+  margin: 0 0 15px 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.linkPreview {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.linkInput {
+  flex: 1;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 0.9rem;
+  font-family: 'Courier New', monospace;
+}
+
+.linkInput:focus {
+  outline: none;
+  border-color: rgba(29, 185, 84, 0.5);
+  box-shadow: 0 0 15px rgba(29, 185, 84, 0.2);
+}
+
+.copyLinkButton {
+  background: linear-gradient(135deg, rgba(29, 185, 84, 0.8), rgba(30, 215, 96, 0.8));
+  border: none;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 15px rgba(29, 185, 84, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  white-space: nowrap;
+}
+
+.copyLinkButton:hover {
+  background: linear-gradient(135deg, #1DB954, #1ed760);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(29, 185, 84, 0.4);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .overlay {
+    padding: 15px;
+  }
+
+  .modal {
+    max-height: 95vh;
+    border-radius: 16px;
+    margin: auto;
+  }
+
+  .header {
+    padding: 20px 25px;
+  }
+
+  .header h2 {
+    font-size: 1.5rem;
+  }
+
+  .tab {
+    font-size: 0.9rem;
+    padding: 15px 10px;
+  }
+
+  .content {
+    padding: 20px 25px;
+  }
+
+  .searchBox {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .searchButton {
+    align-self: stretch;
+    padding: 15px;
+  }
+
+  .friendItem,
+  .requestItem,
+  .searchResult {
+    padding: 15px;
+  }
+
+  .avatar {
+    width: 45px;
+    height: 45px;
+    font-size: 1.6rem;
+  }
+
+  .name {
+    font-size: 1rem;
+  }
+
+  .username {
+    font-size: 0.85rem;
+  }
+
+  .requestActions {
+    gap: 8px;
+  }
+
+  .acceptButton,
+  .rejectButton,
+  .removeButton,
+  .addButton {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+
+  .linkPreview {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .copyLinkButton {
+    align-self: stretch;
+    padding: 12px;
+  }
+
+  .openReferralButton {
+    padding: 15px 25px;
+    font-size: 1rem;
+  }
+}

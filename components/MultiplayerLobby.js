@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useMultiplayerContext } from '../contexts/MultiplayerContext';
 import { useFriends } from '../contexts/FriendsContext';
-import { FaUserPlus, FaUsers } from 'react-icons/fa';
+import { FaUserPlus, FaUsers, FaQuestionCircle, FaCog } from 'react-icons/fa';
 import MultiplayerInviteModal from './MultiplayerInviteModal';
+import MultiplayerModal from './MultiplayerModal';
 import styles from '../styles/Multiplayer.module.css';
 
 const MultiplayerLobby = ({ onGameStart }) => {
@@ -24,6 +25,7 @@ const MultiplayerLobby = ({ onGameStart }) => {
   });
   const [mode, setMode] = useState('menu'); // 'menu', 'create', 'join', 'waiting'
   const [showInviteModal, setShowInviteModal] = useState(false);
+  const [showMultiplayerModal, setShowMultiplayerModal] = useState(false);
   const [selectedRounds, setSelectedRounds] = useState(10); // Número de rodadas selecionado
 
   // Detectar quando o jogo foi iniciado (backup do polling)
@@ -108,9 +110,27 @@ const MultiplayerLobby = ({ onGameStart }) => {
       <div className={styles.container}>
         <div className={styles.content}>
           <div className={styles.lobbyContainer}>
-            <h1 className={styles.title}>
-              {isClient ? t('multiplayer') : 'Multiplayer'}
-            </h1>
+            <div className={styles.titleContainer}>
+              <h1 className={styles.title}>
+                {isClient ? t('multiplayer') : 'Multiplayer'}
+              </h1>
+              <div className={styles.headerButtons}>
+                <button
+                  className={styles.helpButton}
+                  onClick={() => setShowMultiplayerModal(true)}
+                  title="Como jogar e configurações"
+                >
+                  <FaQuestionCircle />
+                </button>
+                <button
+                  className={styles.helpButton}
+                  onClick={() => setShowMultiplayerModal(true)}
+                  title="Configurações"
+                >
+                  <FaCog />
+                </button>
+              </div>
+            </div>
 
             <div className={styles.buttonGroup}>
               <button
@@ -472,6 +492,12 @@ const MultiplayerLobby = ({ onGameStart }) => {
           isOpen={showInviteModal}
           onClose={() => setShowInviteModal(false)}
           roomCode={roomCode}
+        />
+
+        {/* Modal completo do multiplayer */}
+        <MultiplayerModal
+          isOpen={showMultiplayerModal}
+          onClose={() => setShowMultiplayerModal(false)}
         />
       </div>
     );

@@ -65,8 +65,8 @@
   position: absolute;
   top: 1.5rem;
   right: 1.5rem;
-  background: none;
-  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: #fff;
   font-size: 1.5rem;
   cursor: pointer;
@@ -76,7 +76,9 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  z-index: 10;
 }
 
 .closeButton:hover {
@@ -93,6 +95,7 @@
 .menuSectionHeader {
   display: flex;
   align-items: center;
+  justify-content: center;
   width: 100%;
   padding: 1rem;
   background-color: #181c22;
@@ -100,10 +103,11 @@
   color: #1DB954;
   font-size: 1rem;
   font-weight: 600;
-  text-align: left;
+  text-align: center;
   cursor: pointer;
   transition: background-color 0.2s, color 0.2s;
   border-radius: 0.7rem;
+  position: relative;
 }
 
 .menuSectionHeader:hover {
@@ -112,12 +116,14 @@
 }
 
 .menuIcon {
-  margin-right: 0.75rem;
+  position: absolute;
+  left: 1rem;
   width: 1.2rem;
 }
 
 .expandIcon {
-  margin-left: auto;
+  position: absolute;
+  right: 1rem;
   font-size: 0.8rem;
   color: #1DB954;
 }
@@ -367,6 +373,14 @@ input:checked + .slider:before {
     font-size: 0.95rem;
   }
 
+  .menuIcon {
+    left: 0.75rem;
+  }
+
+  .expandIcon {
+    right: 0.75rem;
+  }
+
   .menuSectionContent {
     padding: 0.75rem;
     font-size: 0.85rem;
@@ -385,6 +399,14 @@ input:checked + .slider:before {
   .menuSectionHeader {
     padding: 0.7rem;
     font-size: 0.9rem;
+  }
+
+  .menuIcon {
+    left: 0.7rem;
+  }
+
+  .expandIcon {
+    right: 0.7rem;
   }
 
   .menuSectionContent {

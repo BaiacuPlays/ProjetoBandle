@@ -233,17 +233,24 @@ export const FriendsProvider = ({ children }) => {
 
   // Enviar solicitação de amizade
   const sendFriendRequest = async (user) => {
+    console.log('🔍 [DEBUG] Enviando solicitação de amizade para:', user);
+    console.log('🔍 [DEBUG] isAuthenticated:', isAuthenticated);
+    console.log('🔍 [DEBUG] currentUserId:', currentUserId);
+
     if (!isAuthenticated || !currentUserId) {
+      console.log('❌ [DEBUG] Usuário não autenticado');
       throw new Error('Você precisa estar logado para enviar solicitações de amizade');
     }
 
     // Verificar se já é amigo
     if (friends.some(friend => friend.id === user.id)) {
+      console.log('❌ [DEBUG] Usuário já é amigo');
       throw new Error('Este usuário já é seu amigo');
     }
 
     // Verificar se já enviou solicitação
     if (sentRequests.some(request => request.toUserId === user.id)) {
+      console.log('❌ [DEBUG] Solicitação já enviada');
       throw new Error('Você já enviou uma solicitação para este usuário');
     }
 
@@ -252,9 +259,14 @@ export const FriendsProvider = ({ children }) => {
       const sessionToken = localStorage.getItem('ludomusic_session_token') ||
                            AuthCookies.getSessionToken();
 
+      console.log('🔍 [DEBUG] Token encontrado:', sessionToken ? 'SIM' : 'NÃO');
+
       if (!sessionToken) {
+        console.log('❌ [DEBUG] Token não encontrado');
         throw new Error('Token de sessão não encontrado. Faça login novamente.');
       }
+
+      console.log('🔍 [DEBUG] Enviando requisição para API...');
 
       const response = await fetch('/api/friend-requests', {
         method: 'POST',
@@ -272,8 +284,11 @@ export const FriendsProvider = ({ children }) => {
         })
       });
 
+      console.log('🔍 [DEBUG] Resposta da API:', response.status, response.statusText);
+
       if (!response.ok) {
         const errorData = await response.json();
+        console.log('❌ [DEBUG] Erro da API:', errorData);
         throw new Error(errorData.error || 'Erro ao enviar solicitação');
       }
 
@@ -290,7 +305,10 @@ export const FriendsProvider = ({ children }) => {
 
   // Aceitar solicitação de amizade
   const acceptFriendRequest = async (requestId) => {
+    console.log('🔍 [DEBUG] Aceitando solicitação:', requestId);
+
     if (!isAuthenticated) {
+      console.log('❌ [DEBUG] Usuário não autenticado');
       throw new Error('Você precisa estar logado para aceitar solicitações de amizade');
     }
 
@@ -299,7 +317,10 @@ export const FriendsProvider = ({ children }) => {
       const sessionToken = localStorage.getItem('ludomusic_session_token') ||
                            AuthCookies.getSessionToken();
 
+      console.log('🔍 [DEBUG] Token encontrado:', sessionToken ? 'SIM' : 'NÃO');
+
       if (!sessionToken) {
+        console.log('❌ [DEBUG] Token não encontrado');
         throw new Error('Token de sessão não encontrado. Faça login novamente.');
       }
 
@@ -823,6 +844,18 @@ export const FriendsProvider = ({ children }) => {
     getReferralLink,
     processReferral
   };
+
+  // 🔄 SINCRONIZAÇÃO: Expor contexto globalmente para testes e sincronização
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.FriendsContext = value;
+    }
+    return () => {
+      if (typeof window !== 'undefined') {
+        delete window.FriendsContext;
+      }
+    };
+  }, [value]);
 
   return (
     <FriendsContext.Provider value={value}>

@@ -14,15 +14,25 @@ const localFriendRequests = new Map();
 export default async function handler(req, res) {
   const { method } = req;
 
+  console.log('🔍 [DEBUG API] Método:', method);
+  console.log('🔍 [DEBUG API] Headers:', {
+    authorization: req.headers.authorization ? 'PRESENTE' : 'AUSENTE',
+    'content-type': req.headers['content-type']
+  });
+
   try {
     // Verificar autenticação
     const authResult = await verifyAuthentication(req);
 
+    console.log('🔍 [DEBUG API] Auth result:', authResult);
+
     if (!authResult.authenticated) {
+      console.log('❌ [DEBUG API] Falha na autenticação:', authResult.error);
       return res.status(401).json({ error: authResult.error });
     }
 
     const currentUserId = authResult.userId;
+    console.log('✅ [DEBUG API] Usuário autenticado:', currentUserId);
 
     if (method === 'GET') {
       const { type } = req.query; // 'received' ou 'sent'

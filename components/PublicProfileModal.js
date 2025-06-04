@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
-import { useFriends } from '../contexts/FriendsContext';
+import { useSimpleFriends } from '../contexts/SimpleFriendsContext';
 import { useModalScrollLock } from '../hooks/useModalScrollLock';
 import { getAchievement } from '../data/achievements';
 import { getBadge } from '../data/badges';
@@ -13,7 +13,7 @@ const PublicProfileModal = ({ isOpen, onClose, userId, username, friendData }) =
   useModalScrollLock(isOpen);
   const { t } = useLanguage();
   const { isAuthenticated } = useAuth();
-  const { sendFriendRequest, friends } = useFriends();
+  const { sendFriendRequest, friends } = useSimpleFriends();
   
   const [profile, setProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useFriends } from '../contexts/FriendsContext';
-import { useNotifications } from '../contexts/NotificationContext';
+import { useSimpleFriends } from '../contexts/SimpleFriendsContext';
+// import { useNotifications } from '../contexts/NotificationContext';
 import { useUserProfile } from '../contexts/UserProfileContext';
 import { useModalScrollLock } from '../hooks/useModalScrollLock';
 import { FaTimes, FaUsers, FaGamepad, FaPaperPlane, FaCheck } from 'react-icons/fa';
@@ -10,8 +10,8 @@ import styles from '../styles/MultiplayerInviteModal.module.css';
 const MultiplayerInviteModal = ({ isOpen, onClose, roomCode, onCreateRoom }) => {
   // Bloquear/desbloquear scroll da página
   useModalScrollLock(isOpen);
-  const { friends, getOnlineFriends } = useFriends();
-  const { sendMultiplayerInvite } = useNotifications();
+  const { friends } = useSimpleFriends();
+  // const { sendMultiplayerInvite } = useNotifications();
   const { profile } = useUserProfile();
   
   const [selectedFriends, setSelectedFriends] = useState([]);
@@ -20,7 +20,7 @@ const MultiplayerInviteModal = ({ isOpen, onClose, roomCode, onCreateRoom }) => 
 
   if (!isOpen) return null;
 
-  const onlineFriends = getOnlineFriends();
+  const onlineFriends = friends; // Todos os amigos (sistema de presença removido)
   const hostName = profile?.displayName || 'Jogador';
 
   const toggleFriendSelection = (friendId) => {
@@ -57,7 +57,8 @@ const MultiplayerInviteModal = ({ isOpen, onClose, roomCode, onCreateRoom }) => 
       const friend = friends.find(f => f.id === friendId);
       if (friend) {
         try {
-          sendMultiplayerInvite(friendId, friend.displayName, code, hostName);
+          // Sistema de notificações será reimplementado
+          // sendMultiplayerInvite(friendId, friend.displayName, code, hostName);
           sentTo.push(friend.displayName);
         } catch (error) {
           // Silent error handling

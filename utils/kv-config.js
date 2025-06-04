@@ -32,12 +32,9 @@ export const kvGet = async (key, fallbackStorage = null) => {
   try {
     return await kv.get(key);
   } catch (error) {
-    console.error(`❌ Erro ao buscar chave ${key} no KV:`, error);
-    // Em produção, não usar fallback - queremos detectar problemas
-    if (isDevelopment) {
-      return fallbackStorage ? fallbackStorage.get(key) : null;
-    }
-    throw error;
+    console.warn(`⚠️ Erro ao buscar chave ${key} no KV (usando fallback):`, error.message);
+    // Sempre usar fallback em caso de erro para evitar quebrar a aplicação
+    return fallbackStorage ? fallbackStorage.get(key) : null;
   }
 };
 
@@ -53,13 +50,13 @@ export const kvSet = async (key, value, options = {}, fallbackStorage = null) =>
     await kv.set(key, value, options);
     return true;
   } catch (error) {
-    console.error(`❌ Erro ao salvar chave ${key} no KV:`, error);
-    // Em produção, não usar fallback - queremos detectar problemas
-    if (isDevelopment && fallbackStorage) {
+    console.warn(`⚠️ Erro ao salvar chave ${key} no KV (usando fallback):`, error.message);
+    // Sempre usar fallback em caso de erro para evitar quebrar a aplicação
+    if (fallbackStorage) {
       fallbackStorage.set(key, value);
       return true;
     }
-    throw error;
+    return false;
   }
 };
 

@@ -10,7 +10,7 @@ import GameMenu from '../components/GameMenu';
 import Statistics from '../components/Statistics';
 import Tutorial from '../components/Tutorial';
 import UserProfile from '../components/UserProfile';
-import FriendsManager from '../components/FriendsManager';
+import SimpleFriendsModal from '../components/SimpleFriendsModal';
 import UserProfileViewer from '../components/UserProfileViewer';
 import NotificationCenter from '../components/NotificationCenter';
 import GlobalStats from '../components/GlobalStats';
@@ -2370,9 +2370,9 @@ export default function Home() {
         <meta name="description" content="Teste seus conhecimentos musicais dos videogames! Ouça trechos de músicas de jogos famosos e adivinhe o nome. Jogue sozinho ou com amigos no modo multiplayer. Mais de 1000 músicas de games clássicos e modernos." />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href="https://ludomusic.xyz" />
-
-
       </Head>
+
+
       <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <div className={styles.darkBg} style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div className={styles.topBar}>
@@ -2487,16 +2487,28 @@ export default function Home() {
                 <p>Aviso: Após dar play na musica, ela pode demorar um pouco para carregar, é normal</p>
                 <div className={styles.legendBox}>
                   <div className={styles.legendItem}>
-                    <span className={styles.legendCorrect}>✅ Verde</span> = Acertou a música
+                    <span className={styles.legendCorrect} style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                      <span>✅</span>
+                      <span>Verde</span>
+                    </span> = Acertou a música
                   </div>
                   <div className={styles.legendItem}>
-                    <span style={{ color: '#ffd700' }}>🎮 Amarelo</span> = Franquia certa e jogo certo, mas música errada
+                    <span style={{ color: '#ffd700', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                      <span>🎮</span>
+                      <span>Amarelo</span>
+                    </span> = Franquia certa e jogo certo, mas música errada
                   </div>
                   <div className={styles.legendItem}>
-                    <span style={{ color: '#ff9800' }}>🔶 Laranja</span> = Franquia certa, mas jogo errado
+                    <span style={{ color: '#ff9800', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                      <span>🔶</span>
+                      <span>Laranja</span>
+                    </span> = Franquia certa, mas jogo errado
                   </div>
                   <div className={styles.legendItem}>
-                    <span className={styles.legendIncorrect}>❌ Vermelho</span> = Completamente errado
+                    <span className={styles.legendIncorrect} style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                      <span>❌</span>
+                      <span>Vermelho</span>
+                    </span> = Completamente errado
                   </div>
                 </div>
                 <p className={styles.goodLuck}>Boa Sorte!</p>
@@ -2950,14 +2962,10 @@ export default function Home() {
           onClose={() => setShowProfile(false)}
         />
 
-        {/* Gerenciador de amigos */}
-        <FriendsManager
+        {/* Novo sistema de amigos */}
+        <SimpleFriendsModal
           isOpen={showFriends}
           onClose={() => setShowFriends(false)}
-          onViewProfile={(userId) => {
-            setSelectedUserId(userId);
-            setShowUserProfileViewer(true);
-          }}
         />
 
         {/* Visualizador de perfil de usuário */}

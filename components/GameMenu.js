@@ -281,8 +281,28 @@ const GameMenu = ({ isOpen, onClose }) => {
           )}
         </div>
 
-
-
+        {/* Relatório de Bug */}
+        <div className={styles.menuSection}>
+          <button
+            className={styles.menuSectionHeader}
+            onClick={() => {
+              // Abrir email para reportar erro
+              const subject = encodeURIComponent('Relatório de Erro - LudoMusic');
+              const body = encodeURIComponent(
+                `Olá! Encontrei um erro no LudoMusic.\n\n` +
+                `Descrição do erro: [Descreva o problema aqui]\n\n` +
+                `URL: ${window.location.href}\n` +
+                `Navegador: ${navigator.userAgent}\n` +
+                `Data: ${new Date().toLocaleString('pt-BR')}`
+              );
+              window.open(`mailto:andreibonatto8@gmail.com?subject=${subject}&body=${body}`, '_blank');
+            }}
+            style={{ justifyContent: 'center' }}
+          >
+            <FontAwesomeIcon icon={faBug} className={styles.menuIcon} />
+            <span>{isClient ? t('report_error') : 'Reportar Erro'}</span>
+          </button>
+        </div>
 
       </div>
     </div>

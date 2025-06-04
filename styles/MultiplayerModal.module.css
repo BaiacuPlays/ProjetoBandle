@@ -1,0 +1,362 @@
+/* Estilos para o modal completo do multiplayer */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+}
+
+.modal {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  animation: slideIn 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 30px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, rgba(78, 205, 196, 0.1), rgba(78, 205, 196, 0.05));
+}
+
+.header h2 {
+  margin: 0;
+  background: linear-gradient(135deg, #4ecdc4, #44a08d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-shadow: 0 0 20px rgba(78, 205, 196, 0.3);
+}
+
+.closeButton {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 8px 12px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.closeButton:hover {
+  background: linear-gradient(135deg, rgba(244, 67, 54, 0.8), rgba(229, 57, 53, 0.8));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+}
+
+.tabs {
+  display: flex;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tab {
+  flex: 1;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 18px 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  position: relative;
+  overflow: hidden;
+}
+
+.tab::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(78, 205, 196, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.tab:hover::before {
+  left: 100%;
+}
+
+.tab:hover {
+  background: linear-gradient(135deg, rgba(78, 205, 196, 0.1), rgba(78, 205, 196, 0.05));
+  color: #4ecdc4;
+}
+
+.tab.active {
+  background: linear-gradient(135deg, rgba(78, 205, 196, 0.2), rgba(78, 205, 196, 0.1));
+  color: #4ecdc4;
+  border-bottom: 3px solid #4ecdc4;
+  box-shadow: 0 0 20px rgba(78, 205, 196, 0.3);
+}
+
+.content {
+  padding: 25px 30px;
+  flex: 1;
+  overflow-y: auto;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  min-height: 0;
+}
+
+.content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #4ecdc4, #44a08d);
+  border-radius: 4px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #44a08d, #4ecdc4);
+}
+
+/* Como jogar */
+.howToPlay h3 {
+  color: #4ecdc4;
+  margin: 0 0 25px 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-align: center;
+  text-shadow: 0 0 20px rgba(78, 205, 196, 0.3);
+}
+
+.section {
+  margin-bottom: 25px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+}
+
+.section h4 {
+  color: #4ecdc4;
+  margin: 0 0 15px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.section ul {
+  margin: 0;
+  padding-left: 20px;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.6;
+}
+
+.section li {
+  margin-bottom: 8px;
+}
+
+.section strong {
+  color: #4ecdc4;
+  font-weight: 600;
+}
+
+/* Configurações */
+.settings h3 {
+  color: #4ecdc4;
+  margin: 0 0 25px 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-align: center;
+  text-shadow: 0 0 20px rgba(78, 205, 196, 0.3);
+}
+
+.settingGroup {
+  margin-bottom: 25px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+}
+
+.settingGroup h4 {
+  color: #4ecdc4;
+  margin: 0 0 15px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.settingItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.settingItem:last-child {
+  border-bottom: none;
+}
+
+.settingItem span:first-child {
+  font-weight: 500;
+}
+
+.settingItem span:last-child {
+  color: #4ecdc4;
+  font-weight: 600;
+}
+
+/* Notificações */
+.notifications h3 {
+  color: #4ecdc4;
+  margin: 0 0 15px 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-align: center;
+  text-shadow: 0 0 20px rgba(78, 205, 196, 0.3);
+}
+
+.notifications p {
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 20px;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.notificationCenter {
+  margin: 20px 0;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+}
+
+.notificationInfo {
+  margin-top: 20px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+}
+
+.notificationInfo h4 {
+  color: #4ecdc4;
+  margin: 0 0 15px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.notificationInfo ul {
+  margin: 0;
+  padding-left: 20px;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.6;
+}
+
+.notificationInfo li {
+  margin-bottom: 8px;
+}
+
+.notificationInfo strong {
+  color: #4ecdc4;
+  font-weight: 600;
+}
+
+/* Dicas */
+.tip {
+  margin-top: 20px;
+  padding: 15px 20px;
+  background: linear-gradient(135deg, rgba(78, 205, 196, 0.1), rgba(78, 205, 196, 0.05));
+  border-radius: 12px;
+  border: 1px solid rgba(78, 205, 196, 0.3);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  backdrop-filter: blur(5px);
+}
+
+.tip strong {
+  color: #4ecdc4;
+  font-weight: 600;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .overlay {
+    padding: 15px;
+  }
+
+  .modal {
+    max-height: 95vh;
+    border-radius: 16px;
+  }
+
+  .header {
+    padding: 20px 25px;
+  }
+
+  .header h2 {
+    font-size: 1.5rem;
+  }
+
+  .tab {
+    font-size: 0.9rem;
+    padding: 15px 10px;
+  }
+
+  .content {
+    padding: 20px 25px;
+  }
+
+  .section,
+  .settingGroup,
+  .notificationInfo {
+    padding: 15px;
+  }
+
+  .settingItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+}
