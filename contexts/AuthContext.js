@@ -1,6 +1,7 @@
 // Contexto de autenticação
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { AuthCookies, FriendsCookies } from '../utils/cookies';
+import authDiagnostic, { logAuth } from '../utils/authDiagnostic';
 
 const AuthContext = createContext();
 
@@ -27,13 +28,19 @@ export const AuthProvider = ({ children }) => {
   // Função para verificar sessão existente
   const checkSession = async () => {
     try {
+      logAuth('info', 'Verificando sessão existente');
+
       // Tentar obter token dos cookies primeiro, depois localStorage
       const sessionToken = AuthCookies.getSessionToken();
 
       if (!sessionToken) {
+        logAuth('warning', 'Nenhum token de sessão encontrado');
         setIsLoading(false);
         return;
       }
+
+      logAuth('info', `Token encontrado (${sessionToken.length} chars)`);
+      authDiagnostic.syncStorage(); // Sincronizar storage
       const response = await fetch(`/api/auth?sessionToken=${sessionToken}`, {
         method: 'GET',
         headers: {
@@ -54,41 +61,38 @@ export const AuthProvider = ({ children }) => {
           AuthCookies.saveAuth(sessionToken, data.user, AuthCookies.shouldRemember());
         }
       } else {
-        // Sessão inválida, mas não remover token imediatamente
-        // Pode ser um erro temporário de rede
+        // Sessão inválida - tratar baseado no tipo de erro
         const errorData = await response.json().catch(() => ({}));
 
-        // Só remover token em casos específicos de sessão realmente inválida
-        if (response.status === 401 &&
-            (errorData.error === 'Sessão inválida ou expirada' ||
-             errorData.error === 'Sessão expirada' ||
-             errorData.error === 'Token de sessão não fornecido')) {
-
-          // Em vez de remover imediatamente, usar dados dos cookies/localStorage como fallback
-          const savedUserData = AuthCookies.getUserData();
-          if (savedUserData) {
-            try {
+        if (response.status === 401) {
+          // Verificar se é erro de token expirado vs inválido
+          if (errorData.error === 'Sessão expirada') {
+            // Token expirado - tentar renovar se possível
+            const savedUserData = AuthCookies.getUserData();
+            if (savedUserData) {
+              // Manter dados do usuário mas marcar como não autenticado
               setUser(savedUserData);
-              setIsAuthenticated(true);
-            } catch (e) {
-              // Só remover se os dados estão corrompidos
+              setIsAuthenticated(false);
+              console.log('🔄 Sessão expirada - necessário relogin');
+            } else {
               AuthCookies.clearAuth();
+              setUser(null);
+              setIsAuthenticated(false);
             }
           } else {
-            // Só remover token se não há dados salvos
+            // Token inválido ou outros erros 401 - limpar tudo
             AuthCookies.clearAuth();
+            setUser(null);
+            setIsAuthenticated(false);
+            console.log('❌ Sessão inválida - dados limpos');
           }
         } else {
-          // Para outros erros (500, timeout, etc.), usar dados dos cookies/localStorage como fallback
+          // Erro de rede ou servidor - manter dados locais
           const savedUserData = AuthCookies.getUserData();
           if (savedUserData) {
-            try {
-              setUser(savedUserData);
-              setIsAuthenticated(true);
-            } catch (e) {
-              // Só remover se os dados estão corrompidos
-              AuthCookies.clearAuth();
-            }
+            setUser(savedUserData);
+            setIsAuthenticated(true);
+            console.log('🔄 Erro de rede - usando dados locais');
           }
         }
       }
@@ -269,9 +273,55 @@ export const AuthProvider = ({ children }) => {
     return null;
   };
 
+  // Função para renovar token automaticamente
+  const renewToken = async () => {
+    try {
+      const sessionToken = AuthCookies.getSessionToken();
+      const userData = AuthCookies.getUserData();
+
+      if (!sessionToken || !userData) {
+        return { success: false, error: 'Dados de sessão não encontrados' };
+      }
+
+      const response = await fetch('/api/auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'renew',
+          sessionToken,
+          username: userData.username
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Atualizar token e dados
+        AuthCookies.saveAuth(data.sessionToken, data.user, AuthCookies.shouldRemember());
+        setUser(data.user);
+        setIsAuthenticated(true);
+        console.log('✅ Token renovado com sucesso');
+        return { success: true, user: data.user };
+      } else {
+        console.log('❌ Falha ao renovar token:', data.error);
+        return { success: false, error: data.error };
+      }
+    } catch (error) {
+      console.log('❌ Erro ao renovar token:', error);
+      return { success: false, error: 'Erro de conexão' };
+    }
+  };
+
   // Função para verificar se usuário está logado
   const requireAuth = () => {
     return isAuthenticated && user;
+  };
+
+  // Função para executar diagnóstico de autenticação
+  const runAuthDiagnostic = async () => {
+    return await authDiagnostic.runFullDiagnostic();
   };
 
   const value = {
@@ -282,9 +332,11 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     checkSession,
+    renewToken,
     getAuthenticatedUserId,
     getAuthenticatedUser,
-    requireAuth
+    requireAuth,
+    runAuthDiagnostic
   };
 
   return (

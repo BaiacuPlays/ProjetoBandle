@@ -170,14 +170,24 @@ const GameMenu = ({ isOpen, onClose }) => {
     applySettings(settings);
   }, [settings]);
 
-
-
+  // Fechar modal com ESC
+  useEffect(() => {
+    const handleEsc = (event) => {
+      if (event.keyCode === 27) {
+        onClose();
+      }
+    };
+    document.addEventListener('keydown', handleEsc);
+    return () => {
+      document.removeEventListener('keydown', handleEsc);
+    };
+  }, [onClose]);
 
   if (!isOpen) return null;
 
   return (
-    <div className={styles.menuOverlay}>
-      <div className={styles.menuContainer}>
+    <div className={styles.menuOverlay} onClick={onClose}>
+      <div className={styles.menuContainer} onClick={(e) => e.stopPropagation()}>
         <button className={styles.closeButton} onClick={onClose}>×</button>
 
         {/* Multiplayer */}
@@ -286,16 +296,22 @@ const GameMenu = ({ isOpen, onClose }) => {
           <button
             className={styles.menuSectionHeader}
             onClick={() => {
-              // Abrir email para reportar erro
-              const subject = encodeURIComponent('Relatório de Erro - LudoMusic');
-              const body = encodeURIComponent(
-                `Olá! Encontrei um erro no LudoMusic.\n\n` +
-                `Descrição do erro: [Descreva o problema aqui]\n\n` +
-                `URL: ${window.location.href}\n` +
-                `Navegador: ${navigator.userAgent}\n` +
-                `Data: ${new Date().toLocaleString('pt-BR')}`
-              );
-              window.open(`mailto:andreibonatto8@gmail.com?subject=${subject}&body=${body}`, '_blank');
+              // Abrir modal de bug report se disponível
+              if (typeof window !== 'undefined' && window.openBugReport) {
+                window.openBugReport();
+                onClose(); // Fechar menu
+              } else {
+                // Fallback para email
+                const subject = encodeURIComponent('Relatório de Erro - LudoMusic');
+                const body = encodeURIComponent(
+                  `Olá! Encontrei um erro no LudoMusic.\n\n` +
+                  `Descrição do erro: [Descreva o problema aqui]\n\n` +
+                  `URL: ${window.location.href}\n` +
+                  `Navegador: ${navigator.userAgent}\n` +
+                  `Data: ${new Date().toLocaleString('pt-BR')}`
+                );
+                window.open(`mailto:andreibonatto8@gmail.com?subject=${subject}&body=${body}`, '_blank');
+              }
             }}
             style={{ justifyContent: 'center' }}
           >

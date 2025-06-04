@@ -81,6 +81,23 @@ export const CompactDonationButton = () => {
     };
   }, []);
 
+  // Fechar modal com ESC
+  useEffect(() => {
+    const handleEsc = (event) => {
+      if (event.keyCode === 27) {
+        if (showPixDetails) {
+          closePixDetails();
+        } else if (showModal) {
+          setShowModal(false);
+        }
+      }
+    };
+    document.addEventListener('keydown', handleEsc);
+    return () => {
+      document.removeEventListener('keydown', handleEsc);
+    };
+  }, [showModal, showPixDetails]);
+
 
 
   // Usar função do donationUtils.js
@@ -397,6 +414,23 @@ const DonationButton = () => {
       window.removeEventListener('openDonationModal', handleOpenDonationModal);
     };
   }, []);
+
+  // Fechar modal com ESC
+  useEffect(() => {
+    const handleEsc = (event) => {
+      if (event.keyCode === 27) {
+        if (showPixDetails) {
+          closePixDetails();
+        } else if (showModal) {
+          setShowModal(false);
+        }
+      }
+    };
+    document.addEventListener('keydown', handleEsc);
+    return () => {
+      document.removeEventListener('keydown', handleEsc);
+    };
+  }, [showModal, showPixDetails]);
 
 
 

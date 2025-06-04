@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../styles/ActivateBenefitsModal.module.css';
 import DonationBenefitsModal from './DonationBenefitsModal';
 
@@ -9,6 +9,19 @@ const ActivateBenefitsModal = ({ isOpen, onClose }) => {
   const [showBenefitsModal, setShowBenefitsModal] = useState(false);
   const [activatedBenefits, setActivatedBenefits] = useState([]);
   const [activatedAmount, setActivatedAmount] = useState(0);
+
+  // Fechar modal com ESC
+  useEffect(() => {
+    const handleEsc = (event) => {
+      if (event.keyCode === 27) {
+        onClose();
+      }
+    };
+    document.addEventListener('keydown', handleEsc);
+    return () => {
+      document.removeEventListener('keydown', handleEsc);
+    };
+  }, [onClose]);
 
   if (!isOpen) return null;
 

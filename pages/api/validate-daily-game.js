@@ -60,6 +60,7 @@ export default async function handler(req, res) {
     // Verificar autenticação
     const authResult = await verifyAuthentication(req);
     if (!authResult.authenticated) {
+      console.log('❌ Falha na autenticação:', authResult.error);
       return res.status(401).json({ error: authResult.error });
     }
 
@@ -67,8 +68,24 @@ export default async function handler(req, res) {
     const { date, gameStats } = req.method === 'GET' ? req.query : req.body;
     const userId = authResult.userId;
 
+    console.log('🔍 Validação de jogo diário:', {
+      method: req.method,
+      userId,
+      username: authResult.username,
+      date,
+      hasGameStats: !!gameStats
+    });
+
     if (!date) {
+      console.log('❌ Data não fornecida');
       return res.status(400).json({ error: 'Data é obrigatória' });
+    }
+
+    // Validar formato da data
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!dateRegex.test(date)) {
+      console.log('❌ Formato de data inválido:', date);
+      return res.status(400).json({ error: 'Formato de data inválido. Use YYYY-MM-DD' });
     }
 
     // Para GET, apenas verificar se pode jogar
@@ -85,11 +102,14 @@ export default async function handler(req, res) {
 
     // Para POST, validar gameStats
     if (!gameStats) {
+      console.log('❌ Estatísticas do jogo não fornecidas');
       return res.status(400).json({ error: 'Estatísticas do jogo são obrigatórias' });
     }
 
     // Verificar se é apenas uma verificação (não salvar)
     const isCheckOnly = gameStats.song?.title === 'check_only';
+
+    console.log('🎮 Tipo de operação:', isCheckOnly ? 'Verificação' : 'Registro de jogo');
 
     // 🔒 VERIFICAÇÃO DUPLA DE SEGURANÇA PARA JOGO DIÁRIO
     // Chave principal por userId (auth_username)
@@ -179,7 +199,20 @@ export default async function handler(req, res) {
     });
 
   } catch (error) {
-    console.error('Erro na validação do jogo diário:', error);
-    return res.status(500).json({ error: 'Erro interno do servidor' });
+    console.error('❌ Erro na validação do jogo diário:', {
+      error: error.message,
+      stack: error.stack,
+      method: req.method,
+      body: req.body,
+      query: req.query,
+      headers: {
+        authorization: req.headers.authorization ? 'Bearer [REDACTED]' : 'None',
+        'content-type': req.headers['content-type']
+      }
+    });
+    return res.status(500).json({
+      error: 'Erro interno do servidor',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 }

@@ -2149,6 +2149,37 @@
   box-shadow: 0 2px 10px rgba(29, 185, 84, 0.3);
 }
 
+/* Botão Jogar Novamente no modo infinito */
+.playAgainButton {
+  background: linear-gradient(135deg, #1DB954, #1ed760);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 0.8rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 15px rgba(29, 185, 84, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.playAgainButton:hover {
+  background: linear-gradient(135deg, #1ed760, #1DB954);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(29, 185, 84, 0.4);
+}
+
+.playAgainButton:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(29, 185, 84, 0.3);
+}
+
 /* Responsividade para modo infinito */
 @media (max-width: 768px) {
   .modeSelector {
@@ -2198,7 +2229,8 @@
     margin: 1rem 0;
   }
 
-  .nextSongButton {
+  .nextSongButton,
+  .playAgainButton {
     padding: 0.8rem 1.5rem;
     font-size: 1rem;
   }

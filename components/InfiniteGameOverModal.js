@@ -1,20 +1,33 @@
 // Modal para fim de jogo do modo infinito
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useModalScrollLock } from '../hooks/useModalScrollLock';
 import styles from '../styles/InfiniteGameOverModal.module.css';
 
-const InfiniteGameOverModal = ({ 
-  isOpen, 
-  onClose, 
-  onPlayAgain, 
-  infiniteStreak, 
-  infiniteBestRecord, 
-  isNewRecord 
+const InfiniteGameOverModal = ({
+  isOpen,
+  onClose,
+  onPlayAgain,
+  infiniteStreak,
+  infiniteBestRecord,
+  isNewRecord
 }) => {
   useModalScrollLock(isOpen);
   const { t } = useLanguage();
+
+  // Fechar modal com ESC
+  useEffect(() => {
+    const handleEsc = (event) => {
+      if (event.keyCode === 27) {
+        onClose();
+      }
+    };
+    document.addEventListener('keydown', handleEsc);
+    return () => {
+      document.removeEventListener('keydown', handleEsc);
+    };
+  }, [onClose]);
 
   if (!isOpen) return null;
 

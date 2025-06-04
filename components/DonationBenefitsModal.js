@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from '../styles/DonationBenefitsModal.module.css';
 
 const DonationBenefitsModal = ({ isOpen, onClose, amount, benefits }) => {
+  // Fechar modal com ESC
+  useEffect(() => {
+    const handleEsc = (event) => {
+      if (event.keyCode === 27) {
+        onClose();
+      }
+    };
+    document.addEventListener('keydown', handleEsc);
+    return () => {
+      document.removeEventListener('keydown', handleEsc);
+    };
+  }, [onClose]);
+
   if (!isOpen) return null;
 
   const formatBenefits = (benefits) => {

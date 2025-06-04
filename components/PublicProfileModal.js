@@ -14,10 +14,23 @@ const PublicProfileModal = ({ isOpen, onClose, userId, username, friendData }) =
   const { t } = useLanguage();
   const { isAuthenticated } = useAuth();
   const { sendFriendRequest, friends } = useSimpleFriends();
-  
+
   const [profile, setProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  // Fechar modal com ESC
+  useEffect(() => {
+    const handleEsc = (event) => {
+      if (event.keyCode === 27) {
+        onClose();
+      }
+    };
+    document.addEventListener('keydown', handleEsc);
+    return () => {
+      document.removeEventListener('keydown', handleEsc);
+    };
+  }, [onClose]);
 
   // Carregar perfil quando modal abrir
   useEffect(() => {

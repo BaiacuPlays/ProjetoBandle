@@ -149,6 +149,11 @@
   cursor: pointer;
   transition: all 0.3s;
   box-shadow: 0 4px 15px rgba(29, 185, 84, 0.3);
+  display: block !important;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 .playAgainButton:hover {

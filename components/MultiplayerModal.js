@@ -1,5 +1,5 @@
 // Modal completo para multiplayer com abas
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaTimes, FaGamepad, FaCog, FaBell, FaQuestionCircle } from 'react-icons/fa';
 import { useLanguage } from '../contexts/LanguageContext';
 import NotificationCenter from './NotificationCenter';
@@ -9,11 +9,24 @@ const MultiplayerModal = ({ isOpen, onClose }) => {
   const { t, isClient } = useLanguage();
   const [activeTab, setActiveTab] = useState('howToPlay');
 
+  // Fechar modal com ESC
+  useEffect(() => {
+    const handleEsc = (event) => {
+      if (event.keyCode === 27) {
+        onClose();
+      }
+    };
+    document.addEventListener('keydown', handleEsc);
+    return () => {
+      document.removeEventListener('keydown', handleEsc);
+    };
+  }, [onClose]);
+
   if (!isOpen) return null;
 
   return (
-    <div className={styles.overlay}>
-      <div className={styles.modal}>
+    <div className={styles.overlay} onClick={onClose}>
+      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <div className={styles.header}>
           <h2>🎮 Multiplayer</h2>
           <button className={styles.closeButton} onClick={onClose}>

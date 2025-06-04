@@ -338,6 +338,83 @@ export default async function handler(req, res) {
           message: 'Logout realizado com sucesso'
         });
 
+      } else if (action === 'renew') {
+        // Renovar token de sessão
+        const { sessionToken, username } = req.body;
+
+        if (!sessionToken || !username) {
+          return res.status(400).json({ error: 'Token de sessão e username são obrigatórios' });
+        }
+
+        // Verificar se a sessão atual existe e é válida
+        const sessionKey = `session:${sessionToken}`;
+        let sessionData = null;
+
+        if (isDevelopment && !hasKVConfig) {
+          sessionData = localSessions.get(sessionKey);
+        } else {
+          sessionData = await kv.get(sessionKey);
+        }
+
+        if (!sessionData || sessionData.username !== username) {
+          return res.status(401).json({ error: 'Sessão inválida para renovação' });
+        }
+
+        // Buscar dados atualizados do usuário
+        const userKey = `user:${username}`;
+        let userData = null;
+
+        if (isDevelopment && !hasKVConfig) {
+          userData = localUsers.get(userKey);
+        } else {
+          userData = await kv.get(userKey);
+        }
+
+        if (!userData) {
+          return res.status(404).json({ error: 'Usuário não encontrado' });
+        }
+
+        // Gerar novo token de sessão
+        const newSessionToken = generateSessionToken();
+        const newSessionData = {
+          username: userData.username,
+          displayName: userData.displayName,
+          createdAt: new Date().toISOString(),
+          expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // 30 dias
+        };
+
+        // Salvar nova sessão
+        const newSessionKey = `session:${newSessionToken}`;
+        if (isDevelopment && !hasKVConfig) {
+          localSessions.set(newSessionKey, newSessionData);
+          // Remover sessão antiga
+          localSessions.delete(sessionKey);
+        } else {
+          await kv.set(newSessionKey, newSessionData);
+          // Remover sessão antiga
+          await kv.del(sessionKey);
+        }
+
+        // Atualizar último login
+        userData.lastLoginAt = new Date().toISOString();
+        if (isDevelopment && !hasKVConfig) {
+          localUsers.set(userKey, userData);
+        } else {
+          await kv.set(userKey, userData);
+        }
+
+        return res.status(200).json({
+          success: true,
+          sessionToken: newSessionToken,
+          user: {
+            username: userData.username,
+            displayName: userData.displayName,
+            email: userData.email,
+            createdAt: userData.createdAt,
+            lastLoginAt: userData.lastLoginAt
+          }
+        });
+
       } else {
         return res.status(400).json({ error: 'Ação inválida' });
       }

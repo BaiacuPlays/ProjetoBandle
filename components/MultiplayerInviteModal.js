@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSimpleFriends } from '../contexts/SimpleFriendsContext';
 // import { useNotifications } from '../contexts/NotificationContext';
 import { useUserProfile } from '../contexts/UserProfileContext';
@@ -17,6 +17,19 @@ const MultiplayerInviteModal = ({ isOpen, onClose, roomCode, onCreateRoom }) => 
   const [selectedFriends, setSelectedFriends] = useState([]);
   const [isCreatingRoom, setIsCreatingRoom] = useState(false);
   const [invitesSent, setInvitesSent] = useState([]);
+
+  // Fechar modal com ESC
+  useEffect(() => {
+    const handleEsc = (event) => {
+      if (event.keyCode === 27) {
+        onClose();
+      }
+    };
+    document.addEventListener('keydown', handleEsc);
+    return () => {
+      document.removeEventListener('keydown', handleEsc);
+    };
+  }, [onClose]);
 
   if (!isOpen) return null;
 
@@ -86,8 +99,8 @@ const MultiplayerInviteModal = ({ isOpen, onClose, roomCode, onCreateRoom }) => 
   };
 
   return (
-    <div className={styles.overlay}>
-      <div className={styles.modal}>
+    <div className={styles.overlay} onClick={onClose}>
+      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <div className={styles.header}>
           <h2>
             <FaGamepad /> Convidar Amigos

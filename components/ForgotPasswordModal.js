@@ -1,5 +1,5 @@
 // Modal para solicitar reset de senha
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import styles from '../styles/ForgotPasswordModal.module.css';
 import { FaEnvelope, FaUser, FaTimes, FaArrowLeft } from 'react-icons/fa';
@@ -13,6 +13,19 @@ const ForgotPasswordModal = ({ isOpen, onClose, onBack }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+
+  // Fechar modal com ESC
+  useEffect(() => {
+    const handleEsc = (event) => {
+      if (event.keyCode === 27) {
+        handleClose();
+      }
+    };
+    document.addEventListener('keydown', handleEsc);
+    return () => {
+      document.removeEventListener('keydown', handleEsc);
+    };
+  }, []);
 
   // Não renderizar se não estiver aberto
   if (!isOpen) return null;
@@ -97,8 +110,8 @@ const ForgotPasswordModal = ({ isOpen, onClose, onBack }) => {
   };
 
   return (
-    <div className={styles.overlay}>
-      <div className={styles.modal}>
+    <div className={styles.overlay} onClick={handleClose}>
+      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         {/* Header */}
         <div className={styles.header}>
           <div className={styles.headerLeft}>

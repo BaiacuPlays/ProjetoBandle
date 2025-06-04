@@ -112,18 +112,23 @@ const ActionButtons = ({ gameResult, currentSong, isInfiniteMode = false, infini
   };
 
   const handleErrorReportClick = () => {
-    // Abrir email para reportar erro
-    const subject = encodeURIComponent('Relatório de Erro - LudoMusic');
-    const body = encodeURIComponent(
-      `Olá! Encontrei um erro no LudoMusic.\n\n` +
-      `Descrição do erro: [Descreva o problema aqui]\n\n` +
-      `Música atual: ${currentSong?.title || 'N/A'}\n` +
-      `Jogo: ${currentSong?.game || 'N/A'}\n` +
-      `URL: ${window.location.href}\n` +
-      `Navegador: ${navigator.userAgent}\n` +
-      `Data: ${new Date().toLocaleString('pt-BR')}`
-    );
-    window.open(`mailto:andreibonatto8@gmail.com?subject=${subject}&body=${body}`, '_blank');
+    // Abrir modal de bug report se disponível
+    if (typeof window !== 'undefined' && window.openBugReport) {
+      window.openBugReport();
+    } else {
+      // Fallback para email
+      const subject = encodeURIComponent('Relatório de Erro - LudoMusic');
+      const body = encodeURIComponent(
+        `Olá! Encontrei um erro no LudoMusic.\n\n` +
+        `Descrição do erro: [Descreva o problema aqui]\n\n` +
+        `Música atual: ${currentSong?.title || 'N/A'}\n` +
+        `Jogo: ${currentSong?.game || 'N/A'}\n` +
+        `URL: ${window.location.href}\n` +
+        `Navegador: ${navigator.userAgent}\n` +
+        `Data: ${new Date().toLocaleString('pt-BR')}`
+      );
+      window.open(`mailto:andreibonatto8@gmail.com?subject=${subject}&body=${body}`, '_blank');
+    }
   };
 
   const handleSupportClick = () => {

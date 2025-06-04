@@ -15,8 +15,9 @@ import UserProfileViewer from '../components/UserProfileViewer';
 import NotificationCenter from '../components/NotificationCenter';
 import GlobalStats from '../components/GlobalStats';
 import AchievementNotification from '../components/AchievementNotification';
-import InfiniteGameOverModal from '../components/InfiniteGameOverModal';
+
 import BrowserCompatibilityWarning from '../components/BrowserCompatibilityWarning';
+import BugReportModal from '../components/BugReportModal';
 
 import { useLanguage } from '../contexts/LanguageContext';
 import { useUserProfile } from '../contexts/UserProfileContext';
@@ -151,6 +152,7 @@ export default function Home() {
   const [showStatistics, setShowStatistics] = useState(false);
   const [gameResult, setGameResult] = useState(null);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [showBugReport, setShowBugReport] = useState(false);
   const [isPlayLoading, setIsPlayLoading] = useState(false);
   const [pendingPlay, setPendingPlay] = useState(false);
   const [isSkipLoading, setIsSkipLoading] = useState(false);
@@ -168,8 +170,6 @@ export default function Home() {
   const [infiniteUsedSongs, setInfiniteUsedSongs] = useState([]);
   const [infiniteGameOver, setInfiniteGameOver] = useState(false);
   const [showNextSongButton, setShowNextSongButton] = useState(false);
-  const [isNewRecord, setIsNewRecord] = useState(false);
-  const [finalStreak, setFinalStreak] = useState(0);
 
   // Estados do perfil
   const [showProfile, setShowProfile] = useState(false);
@@ -410,28 +410,25 @@ export default function Home() {
     setInfiniteGameOver(true);
     setGameOver(true);
 
-    // Salva o streak final antes de resetar
-    setFinalStreak(infiniteStreak);
-
     // Salva o recorde final
     let finalBestRecord = infiniteBestRecord;
-    const isNewRecord = infiniteStreak > infiniteBestRecord;
-    if (isNewRecord) {
+    if (infiniteStreak > infiniteBestRecord) {
       finalBestRecord = infiniteStreak;
       setInfiniteBestRecord(finalBestRecord);
     }
-
-    // Salva se é novo recorde para o modal
-    setIsNewRecord(isNewRecord);
 
     // Reseta a sequência atual mas mantém as músicas usadas
     setInfiniteStreak(0); // Atualiza o estado local também
     saveInfiniteStats(0, finalBestRecord, infiniteUsedSongs);
 
-    // Não mostra estatísticas automaticamente, deixa o modal decidir
+    // Mostra estatísticas diretamente
+    setTimeout(() => {
+      setShowStatistics(true);
+    }, 500);
   };
 
   const resetInfiniteMode = () => {
+    setInfiniteGameOver(false); // Fechar o modal primeiro
     setInfiniteStreak(0);
     setInfiniteUsedSongs([]);
     saveInfiniteStats(0, infiniteBestRecord, []);
@@ -573,6 +570,62 @@ export default function Home() {
     return () => window.removeEventListener('openDonationModal', handleOpenDonationModal);
   }, []);
 
+  // Listener para abrir modal de bug report
+  useEffect(() => {
+    const handleOpenBugReport = () => {
+      setShowBugReport(true);
+    };
+
+    window.addEventListener('openBugReport', handleOpenBugReport);
+    window.openBugReport = handleOpenBugReport; // Função global
+    return () => {
+      window.removeEventListener('openBugReport', handleOpenBugReport);
+      delete window.openBugReport;
+    };
+  }, []);
+
+  // Função auxiliar para fazer chamadas autenticadas com retry
+  const makeAuthenticatedRequest = async (url, options = {}) => {
+    let sessionToken = localStorage.getItem('ludomusic_session_token');
+    if (!sessionToken) {
+      throw new Error('Token de sessão não encontrado');
+    }
+
+    const requestOptions = {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${sessionToken}`,
+        ...options.headers
+      }
+    };
+
+    let response = await fetch(url, requestOptions);
+
+    // Se recebeu 401, tentar renovar token uma vez
+    if (response.status === 401) {
+      console.log('🔄 Token expirado, tentando renovar...');
+      try {
+        const { renewToken } = useAuth();
+        const renewResult = await renewToken();
+
+        if (renewResult?.success) {
+          console.log('✅ Token renovado com sucesso');
+          // Atualizar token e tentar novamente
+          sessionToken = localStorage.getItem('ludomusic_session_token');
+          requestOptions.headers['Authorization'] = `Bearer ${sessionToken}`;
+          response = await fetch(url, requestOptions);
+        } else {
+          console.log('❌ Falha na renovação do token');
+        }
+      } catch (renewError) {
+        console.log('❌ Erro ao renovar token:', renewError);
+      }
+    }
+
+    return response;
+  };
+
   // 🔒 Verificar jogo diário quando usuário faz login (baseado no estado de autenticação)
   useEffect(() => {
     const checkDailyGameAfterLogin = async () => {
@@ -597,12 +650,10 @@ export default function Home() {
         // 🔒 SEGURANÇA CRÍTICA: Verificar se há dados de jogo anônimo no localStorage
         const anonymousGameState = localStorage.getItem(`ludomusic_game_state_day_${dayOfYear}`);
 
-        const response = await fetch('/api/validate-daily-game', {
+        console.log('🔍 Verificando jogo diário após login:', { dateStr, sessionToken: sessionToken ? 'presente' : 'ausente' });
+
+        const response = await makeAuthenticatedRequest('/api/validate-daily-game', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${sessionToken}`
-          },
           body: JSON.stringify({
             date: dateStr,
             gameStats: {
@@ -615,8 +666,12 @@ export default function Home() {
           })
         });
 
+        console.log('📡 Resposta da API:', { status: response.status, ok: response.ok });
+
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}));
+          console.log('❌ Erro na verificação do jogo diário:', { status: response.status, error: errorData });
+
           if (errorData.error === 'Jogo diário já completado hoje') {
             // Usuário já jogou hoje no servidor - carregar estado salvo
             try {
@@ -754,12 +809,10 @@ export default function Home() {
 
           const dateStr = now.toISOString().split('T')[0]; // YYYY-MM-DD
 
-          const response = await fetch('/api/validate-daily-game', {
+          console.log('🔍 Verificando status do jogo diário:', { dateStr, sessionToken: sessionToken ? 'presente' : 'ausente' });
+
+          const response = await makeAuthenticatedRequest('/api/validate-daily-game', {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${sessionToken}`
-            },
             body: JSON.stringify({
               date: dateStr,
               gameStats: {
@@ -772,11 +825,17 @@ export default function Home() {
             })
           });
 
+          console.log('📡 Resposta da verificação:', { status: response.status, ok: response.ok });
+
           if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
+            console.log('❌ Erro na verificação do status:', { status: response.status, error: errorData });
+
             if (errorData.error === 'Jogo diário já completado hoje') {
               return true; // Já jogou
             }
+            // Para outros erros (incluindo 401), permitir jogar
+            return false;
           }
 
           return false; // Pode jogar
@@ -945,7 +1004,14 @@ export default function Home() {
 
     // Limpa o estado de erro quando o áudio carrega com sucesso
     setAudioError(false);
-    if (message === 'Erro ao carregar o áudio. Verifique se o arquivo existe.') {
+
+    // Limpar qualquer mensagem de erro de áudio
+    if (message && (
+      message.includes('Erro ao carregar o áudio') ||
+      message.includes('Erro ao reproduzir o áudio') ||
+      message.includes('Formato de áudio não suportado') ||
+      message.includes('Erro de rede')
+    )) {
       setMessage('');
     }
     // Se o usuário clicou play enquanto carregava, já inicia a reprodução
@@ -1032,9 +1098,22 @@ export default function Home() {
       }
     };
 
-    const handleAudioError = () => {
-      setAudioError(true);
-      setMessage('Erro ao carregar o áudio. Tentando novamente...');
+    const handleAudioError = (e) => {
+      // Só mostrar erro se for um erro real de carregamento
+      const errorCode = e?.target?.error?.code;
+      if (errorCode === 4) {
+        setAudioError(true);
+        setMessage('Formato de áudio não suportado.');
+      } else if (errorCode === 2) {
+        setAudioError(true);
+        setMessage('Erro de rede ao carregar áudio.');
+      } else if (errorCode === 3) {
+        setAudioError(true);
+        setMessage('Áudio corrompido ou incompleto.');
+      } else {
+        // Para outros erros, apenas log sem mostrar mensagem
+        console.warn('Erro de áudio (silenciado):', e?.target?.error);
+      }
     };
 
     audio.addEventListener('timeupdate', updateProgress);
@@ -2012,8 +2091,14 @@ export default function Home() {
     if (currentSong?.audioUrl) {
       // Reseta o estado de erro quando uma nova música é carregada
       setAudioError(false);
-      if (message === 'Erro ao carregar o áudio. Tentando novamente...' ||
-          message === 'Erro ao carregar o áudio. Verifique se o arquivo existe.') {
+
+      // Limpar mensagens de erro de áudio específicas
+      if (message && (
+        message.includes('Erro ao carregar o áudio') ||
+        message.includes('Erro ao reproduzir o áudio') ||
+        message.includes('Formato de áudio não suportado') ||
+        message.includes('Erro de rede')
+      )) {
         setMessage('');
       }
 
@@ -2566,124 +2651,82 @@ export default function Home() {
                       return;
                     }
 
-                    // Tentar reprodução instantânea do cache primeiro
-                    if (isInCache(currentSong) && !isPlaying) {
-                      try {
-                        setIsPlayLoading(true);
-                        const cachedAudio = await playInstant(currentSong);
-
-                        if (cachedAudio) {
-                          // Configurar tempo de início se necessário
-                          if (startTime !== null && startTime !== undefined) {
-                            cachedAudio.currentTime = startTime;
-                          }
-
-                          // Atualizar referência do áudio
-                          audioRef.current = cachedAudio;
-                          setIsPlaying(true);
-                          setIsPlayLoading(false);
-                          setAudioError(false);
-                          return;
-                        }
-                      } catch (error) {
-                        console.warn('Falha na reprodução instantânea, usando método tradicional:', error);
-                      }
-                    }
-
-                    // Fallback para método tradicional
                     if (!audioRef.current) {
-                      setIsPlayLoading(false);
                       return;
                     }
 
-                    // Desabilitar botão temporariamente
+                    // Desabilitar botão temporariamente para evitar cliques duplos
                     setIsPlayButtonDisabled(true);
                     setIsPlayLoading(true);
 
-                    // Timeout de segurança reduzido para melhor responsividade
+                    // Timeout de segurança
                     const safetyTimeout = setTimeout(() => {
                       setIsPlayLoading(false);
                       setIsPlayButtonDisabled(false);
-                      setPendingPlay(false);
-                    }, 2000); // Reduzido de 5000 para 2000ms
+                    }, 3000);
 
-                    setAudioLoadTimeout(safetyTimeout);
-
-                    // Reabilitar botão após delay reduzido
-                    setTimeout(() => setIsPlayButtonDisabled(false), 200); // Reduzido de 400 para 200ms
-
-                    // Se áudio não carregou ainda, aguardar carregamento
-                    if (!audioDuration && currentSong?.audioUrl) {
-                      setPendingPlay(true);
-                      try {
+                    try {
+                      // Se áudio não carregou ainda, aguardar carregamento
+                      if (!audioDuration && currentSong?.audioUrl) {
+                        setPendingPlay(true);
                         audioRef.current.load();
-                      } catch (error) {
-                        clearTimeout(safetyTimeout);
-                        setIsPlayLoading(false);
-                        setPendingPlay(false);
+                        return;
                       }
-                      return;
-                    }
 
-                    // Limpar timeout se chegou até aqui
-                    clearTimeout(safetyTimeout);
-                    setAudioLoadTimeout(null);
+                      if (startTime === null || startTime === undefined) {
+                        return;
+                      }
 
-                    if (startTime === null || startTime === undefined) {
-                      setIsPlayLoading(false);
-                      return;
-                    }
+                      const currentTime = audioRef.current.currentTime - startTime;
+                      const maxAllowed = (gameOver && !isInfiniteMode) || (gameOver && isInfiniteMode && infiniteGameOver) ? MAX_PLAY_TIME : (maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1]);
 
-                    const currentTime = audioRef.current.currentTime - startTime;
-                    const maxAllowed = (gameOver && !isInfiniteMode) || (gameOver && isInfiniteMode && infiniteGameOver) ? MAX_PLAY_TIME : (maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1]);
-
-                    if (isPlaying) {
-                      // Pausar
-                      try {
+                      if (isPlaying) {
+                        // Pausar
                         audioRef.current.pause();
-                      } catch (error) {
-                        // Silent error handling
-                      }
-                      setIsPlayLoading(false);
-                    } else {
-                      // Reproduzir
-                      if (currentTime >= maxAllowed || currentTime < 0 || audioRef.current.currentTime < startTime) {
-                        audioRef.current.currentTime = startTime;
-                        setAudioProgress(0);
-                      }
+                      } else {
+                        // Reproduzir
+                        if (currentTime >= maxAllowed || currentTime < 0 || audioRef.current.currentTime < startTime) {
+                          audioRef.current.currentTime = startTime;
+                          setAudioProgress(0);
+                        }
 
-                      try {
                         if (audioRef.current.paused) {
-                          // Usar método instantâneo se áudio está pronto
-                          if (audioRef.current.readyState >= 2) {
-                            await browserCompatibility.playAudioInstant(audioRef.current);
-                          } else {
-                            // Usar sistema de compatibilidade normal
-                            await browserCompatibility.playAudio(audioRef.current);
-                          }
+                          await browserCompatibility.playAudio(audioRef.current);
                         }
-                        setIsPlayLoading(false);
-                        setPlayPromiseRef(null);
-                      } catch (error) {
-                        setIsPlayLoading(false);
-                        setPlayPromiseRef(null);
+                      }
 
-                        if (error.name === 'AbortError') {
-                          return;
-                        }
+                      clearTimeout(safetyTimeout);
+                      setIsPlayLoading(false);
+                      setIsPlayButtonDisabled(false);
 
-                        // Usar mensagem de erro específica do sistema de compatibilidade
-                        if (error.message.includes('Clique em qualquer lugar')) {
-                          setMessage(error.message);
-                        } else if (error.message.includes('não suportado')) {
-                          setAudioError(true);
-                          setMessage(error.message);
-                        } else {
-                          setMessage(error.message || 'Erro ao reproduzir o áudio. Tentando novamente...');
-                        }
+                    } catch (error) {
+                      clearTimeout(safetyTimeout);
+                      setIsPlayLoading(false);
+                      setIsPlayButtonDisabled(false);
+
+                      // Ignorar erros de abort (usuário cancelou)
+                      if (error.name === 'AbortError') {
+                        return;
+                      }
+
+                      // Ignorar erros de interação (usuário precisa interagir primeiro)
+                      if (error.name === 'NotAllowedError') {
+                        setMessage('Clique em qualquer lugar da página para habilitar o áudio.');
+                        return;
+                      }
+
+                      // Só mostrar erro se for um erro real de reprodução
+                      if (error.message && error.message.includes('não suportado')) {
+                        setAudioError(true);
+                        setMessage('Formato de áudio não suportado.');
+                      } else if (error.message && error.message.includes('network')) {
+                        setMessage('Erro de rede. Verifique sua conexão.');
+                      } else {
+                        // Log do erro para debug, mas não mostrar mensagem genérica
+                        console.warn('Erro de reprodução (silenciado):', error);
                       }
                     }
-                  }, 100, 'play_button')}
+                  }, 150, 'play_button')}
                 />
                 <MemoizedVolumeControl
                   volume={volume}
@@ -2707,9 +2750,31 @@ export default function Home() {
                     src: e.target.src
                   });
 
-                  // Resetar estados de loading em caso de erro
+                  // Resetar todos os estados de loading
                   setIsPlayLoading(false);
                   setPendingPlay(false);
+                  setIsPlayButtonDisabled(false);
+                  setAudioError(true);
+
+                  // Limpar timeout se existir
+                  if (audioLoadTimeout) {
+                    clearTimeout(audioLoadTimeout);
+                    setAudioLoadTimeout(null);
+                  }
+
+                  // Mensagem de erro baseada no código
+                  const errorCode = e.target.error?.code;
+                  if (errorCode === 4) {
+                    setMessage('Formato de áudio não suportado.');
+                  } else if (errorCode === 2) {
+                    setMessage('Erro de rede ao carregar áudio.');
+                  } else {
+                    setMessage('Erro ao carregar o áudio.');
+                  }
+                }}
+                onCanPlay={() => {
+                  setAudioError(false);
+                  setIsPlayLoading(false);
                   setIsPlayButtonDisabled(false);
 
                   // Limpar timeout se existir
@@ -2718,42 +2783,29 @@ export default function Home() {
                     setAudioLoadTimeout(null);
                   }
 
-                  setAudioError(true);
-                  setMessage('Erro ao carregar o áudio. Tentando novamente...');
-
-                  // Tentar recarregar o áudio após um delay maior, mas apenas uma vez
-                  setTimeout(() => {
-                    if (audioRef.current && currentSong?.audioUrl && !audioError) {
-                      audioRef.current.load();
-                    }
-                  }, 3000);
-                }}
-                onCanPlay={() => {
-                  setAudioError(false);
-
-                  // Limpar timeout se existir
-                  if (audioLoadTimeout) {
-                    clearTimeout(audioLoadTimeout);
-                    setAudioLoadTimeout(null);
-                  }
-
-                  if (message === 'Erro ao carregar o áudio. Tentando novamente...' || message === 'Erro ao carregar o áudio. Verifique se o arquivo existe.') {
+                  // Limpar mensagens de erro de áudio e reprodução
+                  if (message && (
+                    message.includes('Erro ao carregar o áudio') ||
+                    message.includes('Erro ao reproduzir o áudio') ||
+                    message.includes('Formato de áudio não suportado') ||
+                    message.includes('Erro de rede') ||
+                    message.includes('Clique em qualquer lugar')
+                  )) {
                     setMessage('');
                   }
 
                   // Se havia um play pendente, executar agora
                   if (pendingPlay) {
                     setPendingPlay(false);
-                    setIsPlayLoading(false);
                     setTimeout(async () => {
                       if (audioRef.current && audioRef.current.paused) {
                         try {
                           await browserCompatibility.playAudio(audioRef.current);
                         } catch (error) {
-                          setIsPlayLoading(false);
+                          console.warn('Erro no play pendente:', error);
                         }
                       }
-                    }, browserCompatibility.getAudioConfig().loadDelay || 100);
+                    }, 100);
                   }
                 }}
                 onLoadStart={() => {
@@ -2911,6 +2963,18 @@ export default function Home() {
             </div>
           )}
 
+          {/* Botão Jogar Novamente quando modo infinito termina */}
+          {isInfiniteMode && infiniteGameOver && !showNextSongButton && (
+            <div className={styles.nextSongContainer}>
+              <button
+                className={styles.playAgainButton}
+                onClick={resetInfiniteMode}
+              >
+                🎮 {isClient ? t('play_again_infinite') : 'Jogar Novamente'}
+              </button>
+            </div>
+          )}
+
           {!isInfiniteMode && (
             <div className={styles.timerBox}>
               Novo jogo em: <span className={styles.timer}>{formatTimer(timer)}</span>
@@ -2998,18 +3062,13 @@ export default function Home() {
         {/* Aviso de compatibilidade do navegador */}
         <BrowserCompatibilityWarning />
 
-        {/* Modal de fim de jogo infinito */}
-        <InfiniteGameOverModal
-          isOpen={isInfiniteMode && infiniteGameOver}
-          onClose={() => {
-            setInfiniteGameOver(false);
-            setShowStatistics(true);
-          }}
-          onPlayAgain={resetInfiniteMode}
-          infiniteStreak={finalStreak}
-          infiniteBestRecord={infiniteBestRecord}
-          isNewRecord={isNewRecord}
+        {/* Modal de relatório de bug */}
+        <BugReportModal
+          isOpen={showBugReport}
+          onClose={() => setShowBugReport(false)}
+          currentSong={currentSong}
         />
+
       </div>
 
       {/* Google AdSense */}

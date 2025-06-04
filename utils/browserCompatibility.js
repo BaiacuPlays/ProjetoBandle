@@ -52,10 +52,15 @@ class BrowserCompatibility {
   // Método ultra-otimizado para reproduzir áudio
   async playAudio(audio) {
     return new Promise((resolve, reject) => {
-      // Timeout reduzido para 500ms para reprodução mais rápida
+      // Timeout aumentado para 2s para evitar falsos erros
       const timeout = setTimeout(() => {
-        reject(new Error('Timeout ao reproduzir áudio'));
-      }, 500);
+        // Só rejeitar se o áudio realmente não conseguiu reproduzir
+        if (audio.paused && audio.readyState < 2) {
+          reject(new Error('Timeout ao reproduzir áudio'));
+        } else {
+          resolve(); // Se está tocando ou carregado, considerar sucesso
+        }
+      }, 2000);
 
       const cleanup = () => {
         clearTimeout(timeout);
@@ -113,7 +118,7 @@ class BrowserCompatibility {
 
   // Tratamento simplificado de erros
   handlePlayError(error, reject) {
-    let userMessage = 'Erro ao reproduzir áudio';
+    let userMessage = '';
 
     switch (error.name) {
       case 'NotAllowedError':
@@ -123,13 +128,18 @@ class BrowserCompatibility {
         userMessage = 'Formato de áudio não suportado';
         break;
       case 'AbortError':
-        userMessage = 'Reprodução cancelada';
-        break;
+        // Não mostrar erro para abort (usuário cancelou)
+        return;
       default:
-        userMessage = 'Erro ao reproduzir áudio. Tente novamente.';
+        // Para outros erros, apenas log sem mostrar mensagem
+        console.warn('Erro de reprodução (silenciado):', error);
+        return;
     }
 
-    reject(new Error(userMessage));
+    // Só rejeitar se houver uma mensagem específica para o usuário
+    if (userMessage) {
+      reject(new Error(userMessage));
+    }
   }
 
   // Verificar se o navegador precisa de tratamento especial

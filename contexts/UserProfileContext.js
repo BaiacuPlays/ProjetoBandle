@@ -30,7 +30,7 @@ export const useUserProfile = () => {
 };
 
 export const UserProfileProvider = ({ children }) => {
-  const { isAuthenticated, getAuthenticatedUserId, getAuthenticatedUser, isLoading: authLoading } = useAuth();
+  const { isAuthenticated, getAuthenticatedUserId, getAuthenticatedUser, isLoading: authLoading, renewToken } = useAuth();
   const [profile, setProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isClient, setIsClient] = useState(false);
@@ -110,15 +110,49 @@ export const UserProfileProvider = ({ children }) => {
         })
       });
 
+      if (response.status === 401) {
+        // Token expirado - tentar renovar
+        console.log('🔄 Token expirado, tentando renovar...');
+        const renewResult = await renewToken();
+
+        if (renewResult.success) {
+          // Tentar novamente com novo token
+          const newSessionToken = localStorage.getItem('ludomusic_session_token');
+          const retryResponse = await fetch('/api/profile', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${newSessionToken}`,
+            },
+            body: JSON.stringify({
+              profile: cleanProfileData
+            })
+          });
+
+          if (retryResponse.ok) {
+            console.log('✅ Perfil salvo após renovação de token');
+            return await retryResponse.json();
+          } else {
+            const errorData = await retryResponse.json().catch(() => ({}));
+            throw new Error(`Erro após renovação: ${retryResponse.status} - ${errorData.error || 'Erro desconhecido'}`);
+          }
+        } else {
+          // Se renovação falhou, silenciar erro
+          console.log('❌ Falha ao renovar token - perfil não sincronizado');
+          throw new Error('Token expirado e renovação falhou');
+        }
+      }
+
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(`Erro HTTP: ${response.status} - ${errorData.error || 'Erro desconhecido'}`);
       }
 
       const result = await response.json();
-
       return result;
     } catch (error) {
+      // Log do erro mas não quebrar o fluxo
+      console.log('⚠️ Erro ao salvar perfil no servidor:', error.message);
       throw error;
     }
   };
