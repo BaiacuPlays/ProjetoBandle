@@ -1,5 +1,10 @@
 // Utilitário centralizado para verificação de autenticação
-import { isDevelopment, hasKVConfig, kvGet } from './kv-config';
+import { kv } from '@vercel/kv';
+import { localSessions } from './storage';
+
+// Verificar se estamos em ambiente de desenvolvimento
+const isDevelopment = process.env.NODE_ENV === 'development';
+const hasKVConfig = process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN;
 
 // Função centralizada para verificar autenticação
 export const verifyAuthentication = async (req) => {
@@ -17,10 +22,9 @@ export const verifyAuthentication = async (req) => {
   try {
     if (isDevelopment && !hasKVConfig) {
       // Buscar no storage local
-      const { localSessions } = require('../utils/storage');
-      sessionData = await kvGet(sessionKey, localSessions);
+      sessionData = localSessions.get(sessionKey);
     } else {
-      sessionData = await kvGet(sessionKey);
+      sessionData = await kv.get(sessionKey);
     }
 
     if (!sessionData) {
@@ -28,7 +32,10 @@ export const verifyAuthentication = async (req) => {
     }
 
     // Verificar se sessão expirou
-    if (new Date() > new Date(sessionData.expiresAt)) {
+    const now = new Date();
+    const expiresAt = new Date(sessionData.expiresAt);
+
+    if (now > expiresAt) {
       return { authenticated: false, error: 'Sessão expirada' };
     }
 

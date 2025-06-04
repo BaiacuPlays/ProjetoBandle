@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuth } from './AuthContext';
-import { FriendsCookies } from '../utils/cookies';
+import { FriendsCookies, AuthCookies } from '../utils/cookies';
 import { getOptimizedConfig } from '../utils/performanceOptimizer';
 
 const FriendsContext = createContext();
@@ -248,7 +248,13 @@ export const FriendsProvider = ({ children }) => {
     }
 
     try {
-      const sessionToken = localStorage.getItem('ludomusic_session_token');
+      // Obter token de múltiplas fontes
+      const sessionToken = localStorage.getItem('ludomusic_session_token') ||
+                           AuthCookies.getSessionToken();
+
+      if (!sessionToken) {
+        throw new Error('Token de sessão não encontrado. Faça login novamente.');
+      }
 
       const response = await fetch('/api/friend-requests', {
         method: 'POST',
