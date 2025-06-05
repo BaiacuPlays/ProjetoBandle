@@ -674,10 +674,8 @@ export default function Home() {
                   setCurrentClipDuration(15); // Permitir ouvir música completa
                   setGameResult(parsedState.gameResult || { won: false, attempts: parsedState.attempts || 6 });
 
-                  // Mostrar estatísticas automaticamente
-                  setTimeout(() => {
-                    setShowStatistics(true);
-                  }, 1000);
+                  // Não mostrar estatísticas automaticamente ao carregar estado salvo
+                  // O modal só deve aparecer após completar um jogo, não ao entrar no site
                 }
               } else {
                 // Se não há estado salvo, mostrar mensagem genérica
@@ -853,10 +851,8 @@ export default function Home() {
               setCurrentClipDuration(15); // Permitir ouvir música completa
               setGameResult(parsedState.gameResult || { won: false, attempts: parsedState.attempts || 6 });
 
-              // Mostrar estatísticas automaticamente
-              setTimeout(() => {
-                setShowStatistics(true);
-              }, 1000);
+              // Não mostrar estatísticas automaticamente ao carregar estado salvo
+              // O modal só deve aparecer após completar um jogo, não ao entrar no site
             }
           } else {
             // Se não há estado salvo mas já jogou, bloquear mesmo assim
@@ -2262,10 +2258,8 @@ export default function Home() {
                 const won = parsedState.history && parsedState.history.some(h => h.correct);
                 setGameResult({ won, attempts: parsedState.attempts || 0 });
 
-                // 🔧 FIX: Mostrar modal de estatísticas quando carregar estado salvo
-                setTimeout(() => {
-                  setShowStatistics(true);
-                }, 1000);
+                // Não mostrar estatísticas automaticamente ao carregar estado salvo
+                // O modal só deve aparecer após completar um jogo, não ao entrar no site
               }
 
               return true; // Estado carregado com sucesso
@@ -2298,10 +2292,8 @@ export default function Home() {
           const savedMessage = localStorage.getItem('ludomusic_gameover_message');
           if (savedMessage) setMessage(savedMessage);
 
-          // 🔧 FIX: Mostrar modal de estatísticas para sistema antigo também
-          setTimeout(() => {
-            setShowStatistics(true);
-          }, 1000);
+          // Não mostrar estatísticas automaticamente para sistema antigo
+          // O modal só deve aparecer após completar um jogo, não ao entrar no site
         }
       }
 
