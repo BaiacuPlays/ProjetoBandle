@@ -57,7 +57,24 @@ export function checkKVConfiguration() {
  */
 export async function createSafeKVInstance() {
   try {
-    // Primeiro verificar se as variáveis estão definidas
+    // Em produção, sempre tentar usar KV
+    if (process.env.NODE_ENV === 'production') {
+      const { kv } = await import('@vercel/kv');
+
+      // Testar conexão básica
+      const testKey = `test:${Date.now()}`;
+      await kv.set(testKey, { test: true }, { ex: 10 });
+      await kv.del(testKey);
+
+      console.log('✅ KV funcionando em produção');
+      return {
+        instance: kv,
+        isWorking: true,
+        error: null
+      };
+    }
+
+    // Em desenvolvimento, verificar se as variáveis estão definidas
     const configCheck = checkKVConfiguration();
     if (!configCheck.isValid) {
       console.warn('⚠️ Variáveis KV não configuradas, usando fallback');
@@ -70,9 +87,9 @@ export async function createSafeKVInstance() {
 
     const { kv } = await import('@vercel/kv');
 
-    // Testar conexão básica apenas se as variáveis estão OK
+    // Testar conexão básica
     const testKey = `test:${Date.now()}`;
-    await kv.set(testKey, { test: true }, { ex: 10 }); // Expira em 10 segundos
+    await kv.set(testKey, { test: true }, { ex: 10 });
     await kv.del(testKey);
 
     return {
@@ -119,16 +136,18 @@ export class SafeKV {
 
     if (this.isWorking && this.kvInstance) {
       try {
-        return await this.kvInstance.get(key);
+        const result = await this.kvInstance.get(key);
+        console.log(`🔍 SafeKV GET ${key}:`, result ? 'ENCONTRADO' : 'NÃO ENCONTRADO');
+        return result;
       } catch (error) {
-        if (this.isDevelopment) {
-          console.warn(`⚠️ Erro ao buscar ${key} no KV, usando fallback:`, error.message);
-        }
+        console.warn(`⚠️ Erro ao buscar ${key} no KV, usando fallback:`, error.message);
       }
     }
 
     // Fallback para armazenamento em memória
-    return this.fallbackStorage.get(key) || null;
+    const fallbackResult = this.fallbackStorage.get(key) || null;
+    console.log(`🔄 SafeKV GET ${key} (fallback):`, fallbackResult ? 'ENCONTRADO' : 'NÃO ENCONTRADO');
+    return fallbackResult;
   }
 
   async set(key, value, options = {}) {
@@ -137,18 +156,18 @@ export class SafeKV {
     if (this.isWorking && this.kvInstance) {
       try {
         await this.kvInstance.set(key, value, options);
+        console.log(`💾 SafeKV SET ${key}: SALVO NO KV`);
         // Também salvar no fallback para consistência
         this.fallbackStorage.set(key, value);
         return true;
       } catch (error) {
-        if (this.isDevelopment) {
-          console.warn(`⚠️ Erro ao salvar ${key} no KV, usando fallback:`, error.message);
-        }
+        console.warn(`⚠️ Erro ao salvar ${key} no KV, usando fallback:`, error.message);
       }
     }
 
     // Fallback para armazenamento em memória
     this.fallbackStorage.set(key, value);
+    console.log(`🔄 SafeKV SET ${key}: SALVO NO FALLBACK`);
     return true;
   }
 
