@@ -2136,6 +2136,7 @@ export default function Home() {
           showHint: gameState.showHint,
           activeHint: gameState.activeHint,
           currentClipDuration: gameState.currentClipDuration,
+          gameResult: gameState.gameResult, // Salvar gameResult também
           timestamp: Date.now()
         };
 
@@ -2260,6 +2261,11 @@ export default function Home() {
               if (parsedState.gameOver) {
                 const won = parsedState.history && parsedState.history.some(h => h.correct);
                 setGameResult({ won, attempts: parsedState.attempts || 0 });
+
+                // 🔧 FIX: Mostrar modal de estatísticas quando carregar estado salvo
+                setTimeout(() => {
+                  setShowStatistics(true);
+                }, 1000);
               }
 
               return true; // Estado carregado com sucesso
@@ -2281,9 +2287,21 @@ export default function Home() {
         if (savedDay && Number(savedDay) === currentDay) {
           setGameOver(true);
           const savedHistory = localStorage.getItem('ludomusic_gameover_history');
-          if (savedHistory) setHistory(JSON.parse(savedHistory));
+          if (savedHistory) {
+            const history = JSON.parse(savedHistory);
+            setHistory(history);
+
+            // Definir gameResult baseado no histórico
+            const won = history && history.some(h => h.correct);
+            setGameResult({ won, attempts: history.length || 6 });
+          }
           const savedMessage = localStorage.getItem('ludomusic_gameover_message');
           if (savedMessage) setMessage(savedMessage);
+
+          // 🔧 FIX: Mostrar modal de estatísticas para sistema antigo também
+          setTimeout(() => {
+            setShowStatistics(true);
+          }, 1000);
         }
       }
 
