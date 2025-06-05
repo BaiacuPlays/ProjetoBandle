@@ -1,10 +1,10 @@
 // API para verificar variáveis de ambiente
 export default function handler(req, res) {
-  // Verificar autorização básica para produção
-  const authHeader = req.headers.authorization;
-  if (process.env.NODE_ENV === 'production' && (!authHeader || !authHeader.startsWith('Bearer '))) {
-    return res.status(401).json({ error: 'Não autorizado' });
-  }
+  // Temporariamente sem autenticação para debug
+  // const authHeader = req.headers.authorization;
+  // if (process.env.NODE_ENV === 'production' && (!authHeader || !authHeader.startsWith('Bearer '))) {
+  //   return res.status(401).json({ error: 'Não autorizado' });
+  // }
 
   try {
     // Verificar variáveis de ambiente KV

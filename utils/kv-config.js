@@ -10,6 +10,16 @@ export const hasKVConfig = !!(
   process.env.KV_REST_API_TOKEN
 );
 
+// Log de debug para produção
+if (!isDevelopment) {
+  console.log('🔍 KV Config Check:', {
+    KV_REST_API_URL: process.env.KV_REST_API_URL ? 'DEFINIDA' : 'NÃO DEFINIDA',
+    KV_URL: process.env.KV_URL ? 'DEFINIDA' : 'NÃO DEFINIDA',
+    KV_REST_API_TOKEN: process.env.KV_REST_API_TOKEN ? 'DEFINIDA' : 'NÃO DEFINIDA',
+    hasKVConfig
+  });
+}
+
 // Em produção, sempre usar KV (já sabemos que funciona)
 const shouldUseKV = !isDevelopment || hasKVConfig;
 
