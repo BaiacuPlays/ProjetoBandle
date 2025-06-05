@@ -57,20 +57,31 @@ export function checkKVConfiguration() {
  */
 export async function createSafeKVInstance() {
   try {
+    // Primeiro verificar se as variáveis estão definidas
+    const configCheck = checkKVConfiguration();
+    if (!configCheck.isValid) {
+      console.warn('⚠️ Variáveis KV não configuradas, usando fallback');
+      return {
+        instance: null,
+        isWorking: false,
+        error: 'Variáveis KV não configuradas'
+      };
+    }
+
     const { kv } = await import('@vercel/kv');
-    
-    // Testar conexão básica
+
+    // Testar conexão básica apenas se as variáveis estão OK
     const testKey = `test:${Date.now()}`;
     await kv.set(testKey, { test: true }, { ex: 10 }); // Expira em 10 segundos
     await kv.del(testKey);
-    
+
     return {
       instance: kv,
       isWorking: true,
       error: null
     };
   } catch (error) {
-    console.error('❌ Erro ao criar instância KV:', error);
+    console.warn('⚠️ KV não disponível, usando fallback:', error.message);
     return {
       instance: null,
       isWorking: false,
@@ -98,7 +109,7 @@ export class SafeKV {
     this.isWorking = kvResult.isWorking;
     this.isInitialized = true;
 
-    if (!this.isWorking) {
+    if (!this.isWorking && this.isDevelopment) {
       console.warn('⚠️ KV não está funcionando, usando fallback em memória');
     }
   }
@@ -110,7 +121,9 @@ export class SafeKV {
       try {
         return await this.kvInstance.get(key);
       } catch (error) {
-        console.warn(`⚠️ Erro ao buscar ${key} no KV, usando fallback:`, error.message);
+        if (this.isDevelopment) {
+          console.warn(`⚠️ Erro ao buscar ${key} no KV, usando fallback:`, error.message);
+        }
       }
     }
 
@@ -128,7 +141,9 @@ export class SafeKV {
         this.fallbackStorage.set(key, value);
         return true;
       } catch (error) {
-        console.warn(`⚠️ Erro ao salvar ${key} no KV, usando fallback:`, error.message);
+        if (this.isDevelopment) {
+          console.warn(`⚠️ Erro ao salvar ${key} no KV, usando fallback:`, error.message);
+        }
       }
     }
 
@@ -146,13 +161,37 @@ export class SafeKV {
         this.fallbackStorage.delete(key);
         return true;
       } catch (error) {
-        console.warn(`⚠️ Erro ao deletar ${key} no KV, usando fallback:`, error.message);
+        if (this.isDevelopment) {
+          console.warn(`⚠️ Erro ao deletar ${key} no KV, usando fallback:`, error.message);
+        }
       }
     }
 
     // Fallback para armazenamento em memória
     this.fallbackStorage.delete(key);
     return true;
+  }
+
+  async keys(pattern) {
+    await this.initialize();
+
+    if (this.isWorking && this.kvInstance) {
+      try {
+        return await this.kvInstance.keys(pattern);
+      } catch (error) {
+        if (this.isDevelopment) {
+          console.warn(`⚠️ Erro ao buscar chaves ${pattern} no KV, usando fallback:`, error.message);
+        }
+      }
+    }
+
+    // Fallback para armazenamento em memória
+    const keys = Array.from(this.fallbackStorage.keys());
+    if (pattern === '*') return keys;
+
+    // Simular pattern matching básico
+    const regex = new RegExp(pattern.replace('*', '.*'));
+    return keys.filter(key => regex.test(key));
   }
 
   getStatus() {
