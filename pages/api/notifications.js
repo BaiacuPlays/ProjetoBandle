@@ -1,11 +1,7 @@
 // API para gerenciar notificações
-import { safeKV } from '../../utils/kv-fix';
 import { localUsers, localProfiles } from '../../utils/storage';
 import { verifyAuthentication, sanitizeInput } from '../../utils/auth';
-
-// Verificar se estamos em ambiente de desenvolvimento
-const isDevelopment = process.env.NODE_ENV === 'development';
-const hasKVConfig = (process.env.KV_REST_API_URL || process.env.KV_URL) && process.env.KV_REST_API_TOKEN;
+import { isDevelopment, hasKVConfig, kvGet, kvSet } from '../../utils/kv-config';
 
 // Storage local para desenvolvimento
 const localNotifications = new Map();
@@ -25,11 +21,7 @@ export async function createNotification(userId, type, message, data = {}) {
   let notifications = [];
 
   try {
-    if (isDevelopment && !hasKVConfig) {
-      notifications = localNotifications.get(notificationsKey) || [];
-    } else {
-      notifications = await kv.get(notificationsKey) || [];
-    }
+    notifications = await kvGet(notificationsKey, localNotifications) || [];
 
     notifications.push(notification);
 
@@ -38,11 +30,7 @@ export async function createNotification(userId, type, message, data = {}) {
       notifications = notifications.slice(-100);
     }
 
-    if (isDevelopment && !hasKVConfig) {
-      localNotifications.set(notificationsKey, notifications);
-    } else {
-      await kv.set(notificationsKey, notifications);
-    }
+    await kvSet(notificationsKey, notifications, {}, localNotifications);
 
     console.log(`🔔 Notificação criada para ${userId}: ${type} - ${message}`);
     return notification;
@@ -69,11 +57,7 @@ export default async function handler(req, res) {
       const notificationsKey = `notifications:${currentUserId}`;
       let notifications = [];
 
-      if (isDevelopment && !hasKVConfig) {
-        notifications = localNotifications.get(notificationsKey) || [];
-      } else {
-        notifications = await kv.get(notificationsKey) || [];
-      }
+      notifications = await kvGet(notificationsKey, localNotifications) || [];
 
       // Filtrar notificações não expiradas (últimos 30 dias)
       const now = Date.now();
@@ -108,11 +92,7 @@ export default async function handler(req, res) {
       const notificationsKey = `notifications:${currentUserId}`;
       let notifications = [];
 
-      if (isDevelopment && !hasKVConfig) {
-        notifications = localNotifications.get(notificationsKey) || [];
-      } else {
-        notifications = await kv.get(notificationsKey) || [];
-      }
+      notifications = await kvGet(notificationsKey, localNotifications) || [];
 
       notifications.push(notification);
 
@@ -121,11 +101,7 @@ export default async function handler(req, res) {
         notifications = notifications.slice(-100);
       }
 
-      if (isDevelopment && !hasKVConfig) {
-        localNotifications.set(notificationsKey, notifications);
-      } else {
-        await kv.set(notificationsKey, notifications);
-      }
+      await kvSet(notificationsKey, notifications, {}, localNotifications);
 
       console.log(`✅ Notificação criada para ${currentUserId}: ${type}`);
 
@@ -142,11 +118,7 @@ export default async function handler(req, res) {
       const notificationsKey = `notifications:${currentUserId}`;
       let notifications = [];
 
-      if (isDevelopment && !hasKVConfig) {
-        notifications = localNotifications.get(notificationsKey) || [];
-      } else {
-        notifications = await kv.get(notificationsKey) || [];
-      }
+      notifications = await kvGet(notificationsKey, localNotifications) || [];
 
       if (action === 'markAllAsRead') {
         // Marcar todas como lidas
@@ -163,11 +135,7 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Ação inválida' });
       }
 
-      if (isDevelopment && !hasKVConfig) {
-        localNotifications.set(notificationsKey, notifications);
-      } else {
-        await kv.set(notificationsKey, notifications);
-      }
+      await kvSet(notificationsKey, notifications, {}, localNotifications);
 
       console.log(`✅ Notificações marcadas como lidas para ${currentUserId}`);
 
@@ -183,11 +151,7 @@ export default async function handler(req, res) {
       const notificationsKey = `notifications:${currentUserId}`;
       let notifications = [];
 
-      if (isDevelopment && !hasKVConfig) {
-        notifications = localNotifications.get(notificationsKey) || [];
-      } else {
-        notifications = await kv.get(notificationsKey) || [];
-      }
+      notifications = await kvGet(notificationsKey, localNotifications) || [];
 
       if (notificationId) {
         // Deletar notificação específica
@@ -197,11 +161,7 @@ export default async function handler(req, res) {
         notifications = [];
       }
 
-      if (isDevelopment && !hasKVConfig) {
-        localNotifications.set(notificationsKey, notifications);
-      } else {
-        await kv.set(notificationsKey, notifications);
-      }
+      await kvSet(notificationsKey, notifications, {}, localNotifications);
 
       console.log(`✅ Notificações limpas para ${currentUserId}`);
 

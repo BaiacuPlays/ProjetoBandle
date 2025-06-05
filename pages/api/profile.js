@@ -1,5 +1,5 @@
 // API para gerenciar perfis de usuário no servidor
-import { localProfiles } from '../../utils/storage';
+import { localProfiles, localUsers } from '../../utils/storage';
 import { verifyAuthentication } from '../../utils/auth';
 import { isDevelopment, hasKVConfig, kvGet, kvSet, kvDel } from '../../utils/kv-config';
 
@@ -178,7 +178,7 @@ export default async function handler(req, res) {
           const profileKey = `profile:${userId}`;
 
           // Carregar perfil atual
-          let profile = await safeKV.get(profileKey);
+          let profile = await kvGet(profileKey, localProfiles);
 
           if (!profile) {
             return res.status(404).json({ error: 'Perfil não encontrado' });
@@ -228,7 +228,7 @@ export default async function handler(req, res) {
           }
 
           // Salvar perfil atualizado
-          await safeKV.set(profileKey, profile);
+          await kvSet(profileKey, profile, {}, localProfiles);
 
           const levelUp = newLevel > oldLevel;
 
@@ -281,7 +281,7 @@ export default async function handler(req, res) {
           };
 
           // Salvar perfil resetado
-          await safeKV.set(profileKey, cleanProfile);
+          await kvSet(profileKey, cleanProfile, {}, localProfiles);
 
           return res.status(200).json({
             success: true,
@@ -312,7 +312,7 @@ export default async function handler(req, res) {
         console.log(`🗑️ [DELETE] Iniciando deleção de perfil para ${authResult.username} (${userId})`);
 
         // Deletar perfil
-        await safeKV.del(profileKey);
+        await kvDel(profileKey, {}, localProfiles);
 
         console.log(`✅ [DELETE] Perfil ${authResult.username} deletado com sucesso`);
 

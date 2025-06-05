@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teste de Perfil</title>
+</head>
+<body>
+    <h1>Teste de Perfil</h1>
+    <button onclick="testProfile()">Testar Perfil</button>
+    <button onclick="updateProfile()">Atualizar Perfil</button>
+    <div id="result"></div>
+
+    <script>
+        async function testProfile() {
+            try {
+                const response = await fetch('/api/profile', {
+                    headers: {
+                        'Authorization': 'Bearer presente'
+                    }
+                });
+                
+                const data = await response.json();
+                document.getElementById('result').innerHTML = `
+                    <h3>GET Profile:</h3>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                document.getElementById('result').innerHTML = `
+                    <h3>Erro:</h3>
+                    <pre>${error.message}</pre>
+                `;
+            }
+        }
+
+        async function updateProfile() {
+            try {
+                const response = await fetch('/api/profile', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer presente',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        displayName: 'Teste ' + Date.now(),
+                        bio: 'Bio de teste'
+                    })
+                });
+                
+                const data = await response.json();
+                document.getElementById('result').innerHTML = `
+                    <h3>POST Profile:</h3>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                document.getElementById('result').innerHTML = `
+                    <h3>Erro:</h3>
+                    <pre>${error.message}</pre>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

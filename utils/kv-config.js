@@ -71,7 +71,7 @@ export const kvSet = async (key, value, options = {}, fallbackStorage = null) =>
   }
 };
 
-export const kvDel = async (key, fallbackStorage = null) => {
+export const kvDel = async (key, options = {}, fallbackStorage = null) => {
   if (!shouldUseKV) {
     if (fallbackStorage) {
       fallbackStorage.delete(key);
@@ -83,13 +83,13 @@ export const kvDel = async (key, fallbackStorage = null) => {
     await kv.del(key);
     return true;
   } catch (error) {
-    console.error(`❌ Erro ao deletar chave ${key} no KV:`, error);
-    // Em produção, não usar fallback - queremos detectar problemas
-    if (isDevelopment && fallbackStorage) {
+    console.warn(`⚠️ Erro ao deletar chave ${key} no KV (usando fallback):`, error.message);
+    // Sempre usar fallback em caso de erro para evitar quebrar a aplicação
+    if (fallbackStorage) {
       fallbackStorage.delete(key);
       return true;
     }
-    throw error;
+    return false;
   }
 };
 
