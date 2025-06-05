@@ -203,6 +203,41 @@ class AuthDiagnostic {
     }
   }
 
+  // Detectar problemas comuns
+  detectCommonIssues() {
+    const issues = [];
+    const authState = this.checkAuthState();
+
+    // Verificar inconsistências entre cookies e localStorage
+    if (authState.cookies.hasToken !== authState.localStorage.hasToken) {
+      issues.push({
+        type: 'inconsistency',
+        message: 'Inconsistência entre cookies e localStorage',
+        severity: 'medium'
+      });
+    }
+
+    // Verificar se há dados corrompidos
+    if (authState.cookies.hasToken && !authState.cookies.hasUserData) {
+      issues.push({
+        type: 'corruption',
+        message: 'Token presente mas dados do usuário ausentes',
+        severity: 'high'
+      });
+    }
+
+    // Verificar se localStorage está disponível
+    if (typeof localStorage === 'undefined') {
+      issues.push({
+        type: 'storage',
+        message: 'localStorage não disponível',
+        severity: 'low'
+      });
+    }
+
+    return issues;
+  }
+
   // Diagnóstico completo
   async runFullDiagnostic() {
     this.log('info', 'Iniciando diagnóstico completo');
@@ -210,6 +245,7 @@ class AuthDiagnostic {
     const results = {
       authState: this.checkAuthState(),
       tokenValidity: await this.checkTokenValidity(),
+      commonIssues: this.detectCommonIssues(),
       timestamp: new Date().toISOString()
     };
 
@@ -219,8 +255,44 @@ class AuthDiagnostic {
       results.tokenRenewal = await this.attemptTokenRenewal();
     }
 
+    // Auto-corrigir problemas detectados
+    if (results.commonIssues.length > 0) {
+      this.log('warning', `${results.commonIssues.length} problemas detectados`, results.commonIssues);
+      results.autoFix = this.autoFixIssues(results.commonIssues);
+    }
+
     this.log('info', 'Diagnóstico completo finalizado', results);
     return results;
+  }
+
+  // Auto-correção de problemas
+  autoFixIssues(issues) {
+    const fixes = [];
+
+    for (const issue of issues) {
+      switch (issue.type) {
+        case 'inconsistency':
+          if (this.syncStorage()) {
+            fixes.push({ issue: issue.type, status: 'fixed' });
+          } else {
+            fixes.push({ issue: issue.type, status: 'failed' });
+          }
+          break;
+
+        case 'corruption':
+          if (this.clearCorruptedData()) {
+            fixes.push({ issue: issue.type, status: 'cleared' });
+          } else {
+            fixes.push({ issue: issue.type, status: 'failed' });
+          }
+          break;
+
+        default:
+          fixes.push({ issue: issue.type, status: 'no_action' });
+      }
+    }
+
+    return fixes;
   }
 
   // Obter logs recentes

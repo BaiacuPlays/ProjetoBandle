@@ -11,6 +11,7 @@ const NotificationCenter = () => {
     markAsRead,
     markAllAsRead,
     removeNotification,
+    clearReadNotifications,
     acceptMultiplayerInvite,
     declineMultiplayerInvite,
     getUnreadCount,
@@ -119,14 +120,25 @@ const NotificationCenter = () => {
         <div className={styles.dropdown}>
           <div className={styles.header}>
             <h3>Notificações</h3>
-            {(notifications.length > 0 || invitations.length > 0) && (
-              <button
-                className={styles.markAllRead}
-                onClick={markAllAsRead}
-              >
-                Marcar todas como lidas
-              </button>
-            )}
+            <div className={styles.headerActions}>
+              {(notifications.length > 0 || invitations.length > 0) && (
+                <button
+                  className={styles.markAllRead}
+                  onClick={markAllAsRead}
+                >
+                  Marcar todas como lidas
+                </button>
+              )}
+              {notifications.filter(n => n.read).length > 0 && (
+                <button
+                  className={styles.clearRead}
+                  onClick={clearReadNotifications}
+                  title="Limpar notificações lidas"
+                >
+                  🗑️ Limpar lidas
+                </button>
+              )}
+            </div>
           </div>
 
           <div className={styles.tabs}>

@@ -84,7 +84,19 @@ export const FriendsProvider = ({ children }) => {
     }
 
     try {
-      const sessionToken = localStorage.getItem('ludomusic_session_token');
+      // Obter token de múltiplas fontes com fallbacks
+      let sessionToken = localStorage.getItem('ludomusic_session_token') ||
+                         AuthCookies.getSessionToken();
+
+      // Se não encontrou o token, tentar buscar dos cookies diretamente
+      if (!sessionToken) {
+        const cookieValue = document.cookie
+          .split('; ')
+          .find(row => row.startsWith('ludomusic_session_token='));
+        if (cookieValue) {
+          sessionToken = cookieValue.split('=')[1];
+        }
+      }
 
       if (!sessionToken) {
         setIsLoading(false);
@@ -255,14 +267,24 @@ export const FriendsProvider = ({ children }) => {
     }
 
     try {
-      // Obter token de múltiplas fontes
-      const sessionToken = localStorage.getItem('ludomusic_session_token') ||
-                           AuthCookies.getSessionToken();
+      // Obter token de múltiplas fontes com fallbacks
+      let sessionToken = localStorage.getItem('ludomusic_session_token') ||
+                         AuthCookies.getSessionToken();
+
+      // Se não encontrou o token, tentar buscar dos cookies diretamente
+      if (!sessionToken) {
+        const cookieValue = document.cookie
+          .split('; ')
+          .find(row => row.startsWith('ludomusic_session_token='));
+        if (cookieValue) {
+          sessionToken = cookieValue.split('=')[1];
+        }
+      }
 
       console.log('🔍 [DEBUG] Token encontrado:', sessionToken ? 'SIM' : 'NÃO');
 
       if (!sessionToken) {
-        console.log('❌ [DEBUG] Token não encontrado');
+        console.log('❌ [DEBUG] Token não encontrado em nenhuma fonte');
         throw new Error('Token de sessão não encontrado. Faça login novamente.');
       }
 
@@ -313,14 +335,24 @@ export const FriendsProvider = ({ children }) => {
     }
 
     try {
-      // Obter token de múltiplas fontes
-      const sessionToken = localStorage.getItem('ludomusic_session_token') ||
-                           AuthCookies.getSessionToken();
+      // Obter token de múltiplas fontes com fallbacks
+      let sessionToken = localStorage.getItem('ludomusic_session_token') ||
+                         AuthCookies.getSessionToken();
+
+      // Se não encontrou o token, tentar buscar dos cookies diretamente
+      if (!sessionToken) {
+        const cookieValue = document.cookie
+          .split('; ')
+          .find(row => row.startsWith('ludomusic_session_token='));
+        if (cookieValue) {
+          sessionToken = cookieValue.split('=')[1];
+        }
+      }
 
       console.log('🔍 [DEBUG] Token encontrado:', sessionToken ? 'SIM' : 'NÃO');
 
       if (!sessionToken) {
-        console.log('❌ [DEBUG] Token não encontrado');
+        console.log('❌ [DEBUG] Token não encontrado em nenhuma fonte');
         throw new Error('Token de sessão não encontrado. Faça login novamente.');
       }
 
@@ -367,9 +399,19 @@ export const FriendsProvider = ({ children }) => {
     }
 
     try {
-      // Obter token de múltiplas fontes
-      const sessionToken = localStorage.getItem('ludomusic_session_token') ||
-                           AuthCookies.getSessionToken();
+      // Obter token de múltiplas fontes com fallbacks
+      let sessionToken = localStorage.getItem('ludomusic_session_token') ||
+                         AuthCookies.getSessionToken();
+
+      // Se não encontrou o token, tentar buscar dos cookies diretamente
+      if (!sessionToken) {
+        const cookieValue = document.cookie
+          .split('; ')
+          .find(row => row.startsWith('ludomusic_session_token='));
+        if (cookieValue) {
+          sessionToken = cookieValue.split('=')[1];
+        }
+      }
 
       if (!sessionToken) {
         throw new Error('Token de sessão não encontrado. Faça login novamente.');

@@ -1,9 +1,3 @@
-import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope } from '@fortawesome/free-regular-svg-icons'; // Ícone de e-mail
-import { faInstagram, faTwitter, faFacebook, faYoutube } from '@fortawesome/free-brands-svg-icons'; // Ícones de marcas
-import { faShoppingBasket } from '@fortawesome/free-solid-svg-icons'; // Ícone de cesta de compras
-import { faCube } from '@fortawesome/free-solid-svg-icons'; // Escolhi faCube como um placeholder para o ícone abstrato/logo
 import { useLanguage } from '../contexts/LanguageContext';
 
 const Footer = () => {
@@ -16,7 +10,6 @@ const Footer = () => {
         <p>{isClient ? t('footer_background') : 'Background feito por'} <a href='https://x.com/Azzy_JP'>@Azzy_JP</a></p>
         <p>{isClient ? t('footer_logo') : 'Logo feita por'} <a href='https://x.com/IvanBaroni_'>@IvanBaroni_</a></p>
         <p>{isClient ? t('footer_inspired') : 'Inspirado por'} <a href='https://gamedle.wtf' target='_blank' rel='noopener noreferrer'>Gamedle</a></p>
-        <p>{isClient ? t('footer_disclaimer') : 'Este site utiliza trechos de áudio com fins de entretenimento. Todos os direitos sobre as músicas pertencem aos seus respectivos detentores.'}</p>
         <p>
           {language === 'pt-BR' && (
             <>

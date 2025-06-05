@@ -50,7 +50,7 @@ export default function AdminAccounts() {
 
   // Modo emergência para entrar sem servidor
   const emergencyLogin = () => {
-    if (adminPassword === 'admin123') {
+    if (adminPassword === 'ludomusic_admin_2024_secure' || adminPassword === 'admin123') {
       setIsAuthenticated(true);
       setError('');
       // Carregar dados demo
@@ -248,10 +248,10 @@ export default function AdminAccounts() {
             <div className={styles.authForm}>
               <input
                 type="password"
-                placeholder="Senha de administrador (admin123)"
+                placeholder="Senha de administrador (ludomusic_admin_2024_secure)"
                 value={adminPassword}
                 onChange={(e) => setAdminPassword(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && authenticateAdmin()}
+                onKeyDown={(e) => e.key === 'Enter' && authenticateAdmin()}
                 className={styles.passwordInput}
               />
               <button onClick={authenticateAdmin} className={styles.authButton}>

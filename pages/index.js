@@ -3,7 +3,7 @@ import Head from 'next/head';
 import Script from 'next/script';
 import { songs } from '../data/songs';
 import styles from '../styles/Home.module.css';
-import { FaFastForward, FaQuestionCircle, FaBars, FaUser, FaUsers } from 'react-icons/fa';
+import { FaFastForward, FaQuestionCircle, FaBars, FaUser, FaUsers, FaTrophy } from 'react-icons/fa';
 
 import Footer from '../components/Footer';
 import GameMenu from '../components/GameMenu';
@@ -12,6 +12,7 @@ import Tutorial from '../components/Tutorial';
 import UserProfile from '../components/UserProfile';
 import SimpleFriendsModal from '../components/SimpleFriendsModal';
 import UserProfileViewer from '../components/UserProfileViewer';
+import PlayersRanking from '../components/PlayersRanking';
 import NotificationCenter from '../components/NotificationCenter';
 import GlobalStats from '../components/GlobalStats';
 import AchievementNotification from '../components/AchievementNotification';
@@ -76,8 +77,6 @@ export default function Home() {
 
   // Estados para sistema de cache de áudio
   const [audioCache, setAudioCache] = useState(null);
-  const [isInCache, setIsInCache] = useState(() => () => false);
-  const [playInstant, setPlayInstant] = useState(() => () => Promise.resolve(null));
 
   // Carregar sistema de cache apenas no cliente
   useEffect(() => {
@@ -176,6 +175,7 @@ export default function Home() {
   const [showFriends, setShowFriends] = useState(false);
   const [showUserProfileViewer, setShowUserProfileViewer] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const [showPlayersRanking, setShowPlayersRanking] = useState(false);
 
 
 
@@ -2475,6 +2475,13 @@ export default function Home() {
               <NotificationCenter />
               <button
                 className={styles.helpButton}
+                onClick={() => setShowPlayersRanking(true)}
+                aria-label="Ranking"
+              >
+                <FaTrophy size={24} />
+              </button>
+              <button
+                className={styles.helpButton}
                 onClick={() => setShowProfile(true)}
                 aria-label="Perfil"
               >
@@ -3030,6 +3037,11 @@ export default function Home() {
         <SimpleFriendsModal
           isOpen={showFriends}
           onClose={() => setShowFriends(false)}
+          onViewProfile={(userId) => {
+            setSelectedUserId(userId);
+            setShowUserProfileViewer(true);
+            setShowFriends(false);
+          }}
         />
 
         {/* Visualizador de perfil de usuário */}
@@ -3040,6 +3052,17 @@ export default function Home() {
             setSelectedUserId(null);
           }}
           userId={selectedUserId}
+        />
+
+        {/* Ranking de jogadores */}
+        <PlayersRanking
+          isOpen={showPlayersRanking}
+          onClose={() => setShowPlayersRanking(false)}
+          onViewProfile={(userId) => {
+            setSelectedUserId(userId);
+            setShowUserProfileViewer(true);
+            setShowPlayersRanking(false);
+          }}
         />
 
         {/* Componentes de monetização */}

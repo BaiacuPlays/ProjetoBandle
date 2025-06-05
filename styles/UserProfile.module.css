@@ -53,6 +53,7 @@
   padding: 1.5rem 1.5rem 1rem 1.5rem;
   border-bottom: 1px solid rgba(29, 185, 84, 0.2);
   flex-shrink: 0;
+  position: relative; /* Adicionar position relative para o botão absoluto */
 }
 
 .profileHeader h2 {
@@ -63,6 +64,12 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  margin-right: 60px; /* Espaço fixo para o botão X */
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .profileHeader h2::before {
@@ -89,11 +96,12 @@
   border-radius: 50%;
   transition: all 0.3s ease;
   backdrop-filter: blur(5px);
-  z-index: 1000;
+  z-index: 10000; /* Z-index muito alto para garantir que fique no topo */
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   line-height: 1;
   padding: 0;
   text-align: center;
+  flex-shrink: 0; /* Evita que o botão seja comprimido */
 }
 
 .closeButton:hover {
@@ -713,6 +721,19 @@
     max-height: 95vh;
   }
 
+  .closeButton {
+    top: 1.2rem;
+    right: 1.2rem;
+    width: 2.2rem;
+    height: 2.2rem;
+    font-size: 1.3rem;
+  }
+
+  .profileHeader h2 {
+    font-size: 1.3rem;
+    margin-right: 55px; /* Ajuste para tablets */
+  }
+
   .profileContent {
     padding: 20px;
   }
@@ -849,6 +870,32 @@
 .statItem span:last-child {
   color: white;
   font-weight: 600;
+}
+
+/* Seção de Gerenciamento de Conta */
+.accountActions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.logoutButton {
+  background: #f59e0b;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.logoutButton:hover {
+  background: #d97706;
+  transform: translateY(-2px);
 }
 
 .dangerZone {
@@ -1357,6 +1404,19 @@
     max-height: calc(100vh - 40px);
     margin: 20px auto 20px auto;
     border-radius: 10px;
+  }
+
+  .closeButton {
+    top: 1rem;
+    right: 1rem;
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.2rem;
+  }
+
+  .profileHeader h2 {
+    font-size: 1.1rem;
+    margin-right: 50px; /* Menos espaço em telas pequenas */
   }
 
   .profileContent {

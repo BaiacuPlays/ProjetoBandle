@@ -97,6 +97,12 @@
   font-weight: 600;
 }
 
+.headerActions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
 .markAllRead {
   background: none;
   border: none;
@@ -108,6 +114,22 @@
 
 .markAllRead:hover {
   color: #1db954;
+}
+
+.clearRead {
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.clearRead:hover {
+  color: #ef4444;
 }
 
 /* Abas */
@@ -439,7 +461,15 @@
     font-size: 1rem;
   }
 
+  .headerActions {
+    gap: 8px;
+  }
+
   .markAllRead {
+    font-size: 0.7rem;
+  }
+
+  .clearRead {
     font-size: 0.7rem;
   }
 

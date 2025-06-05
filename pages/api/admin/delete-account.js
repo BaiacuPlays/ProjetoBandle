@@ -1,4 +1,5 @@
 import { kv } from '@vercel/kv';
+import { localUsers, localProfiles, localSessions } from '../../../utils/storage';
 
 // Configuração para desenvolvimento local
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -38,24 +39,96 @@ export default async function handler(req, res) {
     let errors = [];
     let cleanupActions = [];
 
+    console.log(`🔍 Ambiente: ${isDevelopment ? 'desenvolvimento' : 'produção'}`);
+    console.log(`🔍 KV Config: ${hasKVConfig ? 'disponível' : 'não disponível'}`);
+    console.log(`🔍 Usando: ${(isDevelopment && !hasKVConfig) ? 'armazenamento local' : 'Vercel KV'}`);
+
     if (isDevelopment && !hasKVConfig) {
-      // Em desenvolvimento local sem KV, simular remoção
+      // Em desenvolvimento local sem KV, remover dos Maps locais
+      const authUsername = `auth_${username}`;
+      let deletedKeys = [];
+      let cleanupActions = [];
+
+      console.log(`🗑️ Removendo conta local: ${username}`);
+
+      // Chaves para remover do armazenamento local
+      const keysToDelete = [
+        `user:${authUsername}`,
+        `profile:${authUsername}`,
+        `sessions:${authUsername}`
+      ];
+
+      // Deletar do armazenamento local
+      for (const key of keysToDelete) {
+        if (localUsers.has(key)) {
+          localUsers.delete(key);
+          deletedKeys.push(key);
+          console.log(`✅ Chave local deletada: ${key}`);
+        }
+        if (localProfiles.has(key)) {
+          localProfiles.delete(key);
+          deletedKeys.push(key);
+          console.log(`✅ Perfil local deletado: ${key}`);
+        }
+        if (localSessions.has(key)) {
+          localSessions.delete(key);
+          deletedKeys.push(key);
+          console.log(`✅ Sessão local deletada: ${key}`);
+        }
+      }
+
+      // Buscar por username também (caso a chave seja diferente)
+      for (const [key, userData] of localUsers.entries()) {
+        if (userData && userData.username === username) {
+          localUsers.delete(key);
+          deletedKeys.push(key);
+          console.log(`✅ Usuário local deletado por username: ${key}`);
+        }
+      }
+
+      for (const [key, profileData] of localProfiles.entries()) {
+        if (profileData && (profileData.username === username || key.includes(username))) {
+          localProfiles.delete(key);
+          deletedKeys.push(key);
+          console.log(`✅ Perfil local deletado por username: ${key}`);
+        }
+      }
+
+      cleanupActions.push(`Removido do armazenamento local em desenvolvimento`);
+
+      console.log(`✅ Conta local ${username} removida completamente`);
+      console.log(`📊 Chaves deletadas: ${deletedKeys.length}`);
+
       return res.status(200).json({
         success: true,
-        message: `Conta '${username}' removida (simulado em desenvolvimento)`,
-        deletedKeys: [`user:auth_${username}`, `profile:auth_${username}`],
-        cleanupActions: ['Simulação de limpeza em desenvolvimento'],
+        message: `Conta '${username}' removida do armazenamento local`,
+        deletedKeys,
+        cleanupActions,
+        totalDeleted: deletedKeys.length,
         errors: []
       });
     }
 
     // Em produção com KV, remover dados reais
     const authUsername = `auth_${username}`;
-    
-    console.log(`🗑️ Iniciando remoção da conta: ${username}`);
 
-    // Chaves relacionadas ao usuário
+    console.log(`🗑️ Iniciando remoção da conta: ${username}`);
+    console.log(`🔍 Procurando chaves para: ${username} e ${authUsername}`);
+
+    // Chaves relacionadas ao usuário (testando ambos os formatos)
     const keysToDelete = [
+      // Formato atual (sem auth_)
+      `user:${username}`,
+      `profile:${username}`,
+      `friends:${username}`,
+      `friend_requests:${username}`,
+      `sent_requests:${username}`,
+      `notifications:${username}`,
+      `invites:${username}`,
+      `sent_invites:${username}`,
+      `sessions:${username}`,
+      `referrals:${username}`,
+      // Formato antigo (com auth_)
       `user:${authUsername}`,
       `profile:${authUsername}`,
       `friends:${authUsername}`,
@@ -68,13 +141,33 @@ export default async function handler(req, res) {
       `referrals:${authUsername}`
     ];
 
-    // Deletar chaves principais
+    // Verificar quais chaves existem antes de deletar
+    console.log(`🔍 Verificando existência das chaves...`);
+    const existingKeys = [];
+
     for (const key of keysToDelete) {
+      try {
+        const exists = await kv.get(key);
+        if (exists !== null) {
+          existingKeys.push(key);
+          console.log(`✅ Encontrado: ${key}`);
+        } else {
+          console.log(`⚠️ Não encontrado: ${key}`);
+        }
+      } catch (error) {
+        console.error(`❌ Erro ao verificar ${key}:`, error);
+      }
+    }
+
+    console.log(`📊 Total de chaves encontradas: ${existingKeys.length}`);
+
+    // Deletar apenas as chaves que existem
+    for (const key of existingKeys) {
       try {
         const deleted = await kv.del(key);
         if (deleted > 0) {
           deletedKeys.push(key);
-          console.log(`✅ Chave deletada: ${key}`);
+          console.log(`🗑️ Deletado: ${key}`);
         }
       } catch (error) {
         console.error(`❌ Erro ao deletar ${key}:`, error);

@@ -19,6 +19,8 @@ const generateSessionToken = () => {
 };
 
 // 🔒 FUNÇÃO DE SEGURANÇA: Invalidar todas as sessões de um usuário
+// NOTA: Esta função está desabilitada para permitir múltiplas sessões simultâneas
+// Isso permite que o usuário faça login em múltiplos dispositivos sem perder progresso
 const invalidateUserSessions = async (username) => {
   try {
     const userSessionsKey = `user_sessions:${username}`;
@@ -31,18 +33,17 @@ const invalidateUserSessions = async (username) => {
       userSessions = await kv.get(userSessionsKey) || [];
     }
 
-    console.log(`🔒 Invalidando ${userSessions.length} sessões anteriores para usuário: ${username}`);
+    console.log(`🔒 [DESABILITADO] Invalidação de ${userSessions.length} sessões para usuário: ${username}`);
 
-    // Invalidar cada sessão
-    for (const sessionToken of userSessions) {
-      const sessionKey = `session:${sessionToken}`;
-
-      if (isDevelopment && !hasKVConfig) {
-        localSessions.delete(sessionKey);
-      } else {
-        await kv.del(sessionKey);
-      }
-    }
+    // COMENTADO: Invalidar cada sessão
+    // for (const sessionToken of userSessions) {
+    //   const sessionKey = `session:${sessionToken}`;
+    //   if (isDevelopment && !hasKVConfig) {
+    //     localSessions.delete(sessionKey);
+    //   } else {
+    //     await kv.del(sessionKey);
+    //   }
+    // }
 
     // Limpar lista de sessões do usuário
     if (isDevelopment && !hasKVConfig) {
@@ -154,8 +155,9 @@ export default async function handler(req, res) {
           await kv.set(userKey, userData);
         }
 
-        // 🔒 SEGURANÇA: Invalidar todas as sessões anteriores deste usuário (caso existam)
-        await invalidateUserSessions(userData.username);
+        // 🔒 SEGURANÇA: Permitir múltiplas sessões simultâneas
+        // Comentado para permitir login em múltiplos dispositivos
+        // await invalidateUserSessions(userData.username);
 
         // Gerar token de sessão
         const sessionToken = generateSessionToken();
@@ -246,8 +248,9 @@ export default async function handler(req, res) {
           await kv.set(userKey, userData);
         }
 
-        // 🔒 SEGURANÇA: Invalidar todas as sessões anteriores deste usuário
-        await invalidateUserSessions(userData.username);
+        // 🔒 SEGURANÇA: Permitir múltiplas sessões simultâneas
+        // Comentado para permitir login em múltiplos dispositivos
+        // await invalidateUserSessions(userData.username);
 
         // Gerar token de sessão
         const sessionToken = generateSessionToken();

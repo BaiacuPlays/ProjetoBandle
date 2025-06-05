@@ -1,12 +1,9 @@
 // Modal completo para multiplayer com abas
-import React, { useState, useEffect } from 'react';
-import { FaTimes, FaGamepad, FaCog, FaBell, FaQuestionCircle } from 'react-icons/fa';
-import { useLanguage } from '../contexts/LanguageContext';
-import NotificationCenter from './NotificationCenter';
+import { useState, useEffect } from 'react';
+import { FaTimes, FaCog, FaQuestionCircle } from 'react-icons/fa';
 import styles from '../styles/MultiplayerModal.module.css';
 
 const MultiplayerModal = ({ isOpen, onClose }) => {
-  const { t, isClient } = useLanguage();
   const [activeTab, setActiveTab] = useState('howToPlay');
 
   // Fechar modal com ESC
@@ -46,12 +43,6 @@ const MultiplayerModal = ({ isOpen, onClose }) => {
             onClick={() => setActiveTab('settings')}
           >
             <FaCog /> Configurações
-          </button>
-          <button
-            className={`${styles.tab} ${activeTab === 'notifications' ? styles.active : ''}`}
-            onClick={() => setActiveTab('notifications')}
-          >
-            <FaBell /> Notificações
           </button>
         </div>
 
@@ -125,7 +116,7 @@ const MultiplayerModal = ({ isOpen, onClose }) => {
                 </div>
                 <div className={styles.settingItem}>
                   <span>Máximo de Jogadores:</span>
-                  <span>4 jogadores por sala</span>
+                  <span>Ilimitado</span>
                 </div>
                 <div className={styles.settingItem}>
                   <span>Tempo por Rodada:</span>
@@ -159,31 +150,6 @@ const MultiplayerModal = ({ isOpen, onClose }) => {
 
               <div className={styles.tip}>
                 💡 <strong>Dica:</strong> Use o sistema de amigos para convidar pessoas facilmente para suas salas!
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'notifications' && (
-            <div className={styles.notifications}>
-              <h3>🔔 Central de Notificações</h3>
-              <p>Gerencie seus convites e notificações do multiplayer:</p>
-              
-              <div className={styles.notificationCenter}>
-                <NotificationCenter />
-              </div>
-              
-              <div className={styles.notificationInfo}>
-                <h4>📱 Tipos de Notificação:</h4>
-                <ul>
-                  <li><strong>Convites para Sala:</strong> Quando amigos te convidam</li>
-                  <li><strong>Solicitações de Amizade:</strong> Novos pedidos de amizade</li>
-                  <li><strong>Jogo Iniciado:</strong> Quando uma partida começa</li>
-                  <li><strong>Conquistas:</strong> Novos badges e níveis</li>
-                </ul>
-              </div>
-
-              <div className={styles.tip}>
-                🔔 <strong>Permissões:</strong> Ative as notificações do navegador para não perder convites!
               </div>
             </div>
           )}

@@ -2,11 +2,12 @@
 import React, { useState } from 'react';
 import { useSimpleFriends } from '../contexts/SimpleFriendsContext';
 import { useFriends } from '../contexts/FriendsContext';
-import { FaTimes, FaUsers, FaUserPlus, FaSearch, FaCheck, FaTimes as FaReject, FaTrash, FaShare } from 'react-icons/fa';
+import { FaTimes, FaUsers, FaUserPlus, FaSearch, FaCheck, FaTimes as FaReject, FaTrash, FaShare, FaEye } from 'react-icons/fa';
 import ReferralSystem from './ReferralSystem';
+import UserAvatar from './UserAvatar';
 import styles from '../styles/SimpleFriendsModal.module.css';
 
-const SimpleFriendsModal = ({ isOpen, onClose }) => {
+const SimpleFriendsModal = ({ isOpen, onClose, onViewProfile }) => {
   const {
     friends,
     requests,
@@ -96,6 +97,13 @@ const SimpleFriendsModal = ({ isOpen, onClose }) => {
     }
   };
 
+  // Visualizar perfil do amigo
+  const handleViewProfile = (friend) => {
+    if (onViewProfile) {
+      onViewProfile(friend.id, friend.username);
+    }
+  };
+
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
@@ -150,21 +158,31 @@ const SimpleFriendsModal = ({ isOpen, onClose }) => {
                 friends.map(friend => (
                   <div key={friend.id} className={styles.friendItem}>
                     <div className={styles.friendInfo}>
-                      <span className={styles.avatar}>
-                        {friend.avatar && friend.avatar.startsWith('data:image') ? '👤' : (friend.avatar || '👤')}
-                      </span>
+                      <UserAvatar
+                        avatar={friend.avatar}
+                        size="medium"
+                      />
                       <div className={styles.friendDetails}>
                         <span className={styles.name}>{friend.displayName}</span>
                         <span className={styles.username}>@{friend.username}</span>
                       </div>
                     </div>
-                    <button
-                      className={styles.removeButton}
-                      onClick={() => handleRemoveFriend(friend.id, friend.displayName)}
-                      title="Remover amigo"
-                    >
-                      <FaTrash />
-                    </button>
+                    <div className={styles.friendActions}>
+                      <button
+                        className={styles.viewProfileButton}
+                        onClick={() => handleViewProfile(friend)}
+                        title="Ver perfil"
+                      >
+                        <FaEye />
+                      </button>
+                      <button
+                        className={styles.removeButton}
+                        onClick={() => handleRemoveFriend(friend.id, friend.displayName)}
+                        title="Remover amigo"
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
                   </div>
                 ))
               )}
@@ -182,9 +200,10 @@ const SimpleFriendsModal = ({ isOpen, onClose }) => {
                 requests.map(request => (
                   <div key={request.id} className={styles.requestItem}>
                     <div className={styles.requestInfo}>
-                      <span className={styles.avatar}>
-                        {request.fromUser.avatar && request.fromUser.avatar.startsWith('data:image') ? '👤' : (request.fromUser.avatar || '👤')}
-                      </span>
+                      <UserAvatar
+                        avatar={request.fromUser.avatar}
+                        size="medium"
+                      />
                       <div className={styles.requestDetails}>
                         <span className={styles.name}>{request.fromUser.displayName}</span>
                         <span className={styles.username}>@{request.fromUser.username}</span>
@@ -240,7 +259,10 @@ const SimpleFriendsModal = ({ isOpen, onClose }) => {
                 {searchResult && (
                   <div className={styles.searchResult}>
                     <div className={styles.userInfo}>
-                      <span className={styles.avatar}>{searchResult.avatar}</span>
+                      <UserAvatar
+                        avatar={searchResult.avatar}
+                        size="medium"
+                      />
                       <div className={styles.userDetails}>
                         <span className={styles.name}>{searchResult.displayName}</span>
                         <span className={styles.username}>@{searchResult.username}</span>
@@ -262,7 +284,10 @@ const SimpleFriendsModal = ({ isOpen, onClose }) => {
                   <div className={styles.sentList}>
                     {sentRequests.map(request => (
                       <div key={request.id} className={styles.sentItem}>
-                        <span className={styles.avatar}>{request.toUser.avatar}</span>
+                        <UserAvatar
+                          avatar={request.toUser.avatar}
+                          size="medium"
+                        />
                         <div className={styles.sentDetails}>
                           <span className={styles.name}>{request.toUser.displayName}</span>
                           <span className={styles.status}>Pendente</span>

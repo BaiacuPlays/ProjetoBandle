@@ -207,6 +207,24 @@ export const UserProfileProvider = ({ children }) => {
     setIsClient(true);
   }, []);
 
+  // Sincronização automática quando a aba ganha foco (usuário volta de outro dispositivo)
+  useEffect(() => {
+    if (!isAuthenticated || !userId) return;
+
+    const handleFocus = async () => {
+      console.log('🔄 Aba ganhou foco - verificando sincronização');
+      try {
+        // Recarregar perfil para sincronizar com possíveis mudanças de outros dispositivos
+        await loadProfile(userId);
+      } catch (error) {
+        console.warn('Erro na sincronização automática:', error);
+      }
+    };
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
+  }, [isAuthenticated, userId]);
+
   // Aguardar autenticação e então carregar perfil
   useEffect(() => {
     if (!authLoading && isClient) {
@@ -354,21 +372,41 @@ export const UserProfileProvider = ({ children }) => {
           const localTime = new Date(updatedProfile.lastUpdated || 0).getTime();
 
           if (serverTime > localTime) {
-            // Mesclar dados importantes do servidor, mas manter progresso local
+            // Merge inteligente: combinar o melhor dos dois mundos
             const mergedProfile = {
               ...updatedProfile, // Base local
-              // Manter apenas dados não críticos do servidor
+              // Manter dados não críticos do servidor
               preferences: serverProfile.preferences || updatedProfile.preferences,
-              // Manter estatísticas locais (mais importantes)
-              stats: updatedProfile.stats,
-              achievements: updatedProfile.achievements,
-              xp: updatedProfile.xp,
-              level: updatedProfile.level,
+              // Para estatísticas: usar os valores MAIORES (progresso nunca regride)
+              stats: {
+                ...updatedProfile.stats,
+                totalGames: Math.max(updatedProfile.stats.totalGames || 0, serverProfile.stats?.totalGames || 0),
+                wins: Math.max(updatedProfile.stats.wins || 0, serverProfile.stats?.wins || 0),
+                bestStreak: Math.max(updatedProfile.stats.bestStreak || 0, serverProfile.stats?.bestStreak || 0),
+                xp: Math.max(updatedProfile.stats.xp || 0, serverProfile.stats?.xp || 0),
+                level: Math.max(updatedProfile.stats.level || 1, serverProfile.stats?.level || 1)
+              },
+              // Para conquistas: unir ambas as listas (sem duplicatas)
+              achievements: [...new Set([
+                ...(updatedProfile.achievements || []),
+                ...(serverProfile.achievements || [])
+              ])],
+              // Para XP e level: usar o maior valor
+              xp: Math.max(updatedProfile.xp || 0, serverProfile.xp || 0),
+              level: Math.max(updatedProfile.level || 1, serverProfile.level || 1),
               lastUpdated: new Date().toISOString()
             };
 
             setProfile(mergedProfile);
             localStorage.setItem(`ludomusic_profile_${userIdToUse}`, JSON.stringify(mergedProfile));
+
+            // Sincronizar dados mesclados de volta para o servidor
+            try {
+              await saveProfileToServer(mergedProfile);
+              console.log('🔄 Dados mesclados sincronizados com servidor');
+            } catch (error) {
+              console.warn('Erro ao sincronizar dados mesclados:', error);
+            }
           }
         }
 

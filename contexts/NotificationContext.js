@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
+import { AuthCookies } from '../utils/cookies';
 import { getOptimizedConfig } from '../utils/performanceOptimizer';
 
 const NotificationContext = createContext();
@@ -291,6 +292,11 @@ export const NotificationProvider = ({ children }) => {
     const updated = notifications.map(n => ({ ...n, read: true }));
     setNotifications(updated);
     saveNotifications(updated);
+
+    // Também limpar notificações lidas após um pequeno delay para melhor UX
+    setTimeout(() => {
+      clearReadNotifications();
+    }, 1000);
   };
 
   // Remover notificação
@@ -298,6 +304,39 @@ export const NotificationProvider = ({ children }) => {
     const updated = notifications.filter(n => n.id !== notificationId);
     setNotifications(updated);
     saveNotifications(updated);
+
+    // Também remover do servidor se o usuário estiver autenticado
+    if (currentUserId && currentUserId.startsWith('auth_')) {
+      removeNotificationFromServer(notificationId);
+    }
+  };
+
+  // Limpar notificações lidas
+  const clearReadNotifications = () => {
+    const updated = notifications.filter(n => !n.read);
+    setNotifications(updated);
+    saveNotifications(updated);
+  };
+
+  // Remover notificação do servidor
+  const removeNotificationFromServer = async (notificationId) => {
+    try {
+      const sessionToken = localStorage.getItem('ludomusic_session_token') ||
+                           AuthCookies.getSessionToken();
+
+      if (!sessionToken) return;
+
+      await fetch('/api/notifications', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${sessionToken}`
+        },
+        body: JSON.stringify({ notificationId })
+      });
+    } catch (error) {
+      console.error('Erro ao remover notificação do servidor:', error);
+    }
   };
 
   // 🔄 SINCRONIZAÇÃO: Remover notificação por requestId (para sincronizar com aba de amigos)
@@ -446,6 +485,7 @@ export const NotificationProvider = ({ children }) => {
     markAllAsRead,
     removeNotification,
     removeNotificationByRequestId,
+    clearReadNotifications,
     sendMultiplayerInvite,
     acceptMultiplayerInvite,
     declineMultiplayerInvite,

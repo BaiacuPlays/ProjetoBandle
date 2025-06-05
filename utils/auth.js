@@ -36,6 +36,16 @@ export const verifyAuthentication = async (req) => {
     const expiresAt = new Date(sessionData.expiresAt);
 
     if (now > expiresAt) {
+      // Limpar sessão expirada automaticamente
+      try {
+        if (isDevelopment && !hasKVConfig) {
+          localSessions.delete(sessionKey);
+        } else {
+          await kv.del(sessionKey);
+        }
+      } catch (cleanupError) {
+        console.warn('Erro ao limpar sessão expirada:', cleanupError);
+      }
       return { authenticated: false, error: 'Sessão expirada' };
     }
 

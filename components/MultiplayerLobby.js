@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useMultiplayerContext } from '../contexts/MultiplayerContext';
 import { useFriends } from '../contexts/FriendsContext';
-import { FaUserPlus, FaUsers, FaQuestionCircle, FaCog } from 'react-icons/fa';
+import { FaUserPlus, FaQuestionCircle } from 'react-icons/fa';
 import MultiplayerInviteModal from './MultiplayerInviteModal';
 import MultiplayerModal from './MultiplayerModal';
 import styles from '../styles/Multiplayer.module.css';
@@ -121,13 +121,7 @@ const MultiplayerLobby = ({ onGameStart }) => {
                   title="Como jogar e configurações"
                 >
                   <FaQuestionCircle />
-                </button>
-                <button
-                  className={styles.helpButton}
-                  onClick={() => setShowMultiplayerModal(true)}
-                  title="Configurações"
-                >
-                  <FaCog />
+                  <span style={{ marginLeft: '8px', fontSize: '14px' }}>Ajuda</span>
                 </button>
               </div>
             </div>
@@ -171,6 +165,12 @@ const MultiplayerLobby = ({ onGameStart }) => {
             )}
           </div>
         </div>
+
+        {/* Modal sempre disponível */}
+        <MultiplayerModal
+          isOpen={showMultiplayerModal}
+          onClose={() => setShowMultiplayerModal(false)}
+        />
       </div>
     );
   }
@@ -232,6 +232,12 @@ const MultiplayerLobby = ({ onGameStart }) => {
             )}
           </div>
         </div>
+
+        {/* Modal sempre disponível */}
+        <MultiplayerModal
+          isOpen={showMultiplayerModal}
+          onClose={() => setShowMultiplayerModal(false)}
+        />
       </div>
     );
   }
@@ -310,6 +316,12 @@ const MultiplayerLobby = ({ onGameStart }) => {
             )}
           </div>
         </div>
+
+        {/* Modal sempre disponível */}
+        <MultiplayerModal
+          isOpen={showMultiplayerModal}
+          onClose={() => setShowMultiplayerModal(false)}
+        />
       </div>
     );
   }
@@ -504,7 +516,7 @@ const MultiplayerLobby = ({ onGameStart }) => {
   }
 
   // Loading
-  return (
+  const loadingContent = (
     <div className={styles.container}>
       <div className={styles.content}>
         <div className={styles.loading}>
@@ -512,8 +524,16 @@ const MultiplayerLobby = ({ onGameStart }) => {
           {isClient ? t('loading') : 'Carregando...'}
         </div>
       </div>
+
+      {/* Modal sempre disponível */}
+      <MultiplayerModal
+        isOpen={showMultiplayerModal}
+        onClose={() => setShowMultiplayerModal(false)}
+      />
     </div>
   );
+
+  return loadingContent;
 };
 
 export default MultiplayerLobby;

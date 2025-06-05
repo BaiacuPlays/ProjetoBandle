@@ -228,19 +228,6 @@
   gap: 15px;
 }
 
-.avatar {
-  font-size: 1.8rem;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #1DB954, #1ed760);
-  border-radius: 50%;
-  box-shadow: 0 4px 15px rgba(29, 185, 84, 0.3);
-  border: 2px solid rgba(255, 255, 255, 0.1);
-}
-
 .friendDetails {
   display: flex;
   flex-direction: column;
@@ -258,6 +245,33 @@
   color: rgba(255, 255, 255, 0.6);
   font-size: 0.9rem;
   font-weight: 400;
+}
+
+/* Ações dos amigos */
+.friendActions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.viewProfileButton {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.8), rgba(67, 160, 71, 0.8));
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.viewProfileButton:hover {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 1), rgba(67, 160, 71, 1));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
 }
 
 .removeButton {
@@ -782,6 +796,7 @@
   .acceptButton,
   .rejectButton,
   .removeButton,
+  .viewProfileButton,
   .addButton {
     padding: 8px 12px;
     font-size: 0.85rem;

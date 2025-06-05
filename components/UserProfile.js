@@ -4,7 +4,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useModalScrollLock } from '../hooks/useModalScrollLock';
 import { achievements, rarityColors, getAchievement, getNearAchievements } from '../data/achievements'; // Removed getAchievementStats as it wasn't used
 import { badges, titles, getBadge, getTitle, getAvailableTitles } from '../data/badges';
-import { FaTimes, FaEdit, FaTrophy, FaGamepad, FaClock, FaFire, FaStar, FaChartLine, FaCog, FaDownload, FaUpload, FaTrash, FaMedal } from 'react-icons/fa';
+import { FaTimes, FaEdit, FaTrophy, FaGamepad, FaClock, FaFire, FaStar, FaChartLine, FaCog, FaDownload, FaUpload, FaTrash, FaMedal, FaSignOutAlt } from 'react-icons/fa';
 import ProfileTutorial from './ProfileTutorial';
 import AvatarSelector from './AvatarSelector';
 import UserAvatar from './UserAvatar';
@@ -851,6 +851,29 @@ const UserProfile = ({ isOpen, onClose }) => {
                             </div>
                           </div>
                         )}
+                      </div>
+                    </div>
+
+                    {/* Gerenciamento de Conta */}
+                    <div className={styles.settingsSection}>
+                      <h5>Gerenciamento de Conta</h5>
+
+                      <div className={styles.accountActions}>
+                        <button
+                          className={styles.logoutButton}
+                          onClick={async () => {
+                            if (confirm('Tem certeza que deseja sair da sua conta?')) {
+                              try {
+                                await logout();
+                                onClose(); // Fechar modal após logout
+                              } catch (error) {
+                                alert('Erro ao fazer logout. Tente novamente.');
+                              }
+                            }
+                          }}
+                        >
+                          <FaSignOutAlt /> Sair da Conta
+                        </button>
                       </div>
                     </div>
 

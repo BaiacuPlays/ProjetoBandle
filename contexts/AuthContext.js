@@ -25,6 +25,34 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  // Verificação periódica de saúde da autenticação (a cada 5 minutos)
+  useEffect(() => {
+    if (!isAuthenticated || typeof window === 'undefined') return;
+
+    const healthCheck = setInterval(async () => {
+      try {
+        const diagnostic = await authDiagnostic.runFullDiagnostic();
+
+        // Se detectou problemas críticos, tentar corrigir
+        if (diagnostic.commonIssues.some(issue => issue.severity === 'high')) {
+          logAuth('warning', 'Problemas críticos detectados na autenticação');
+
+          // Se token inválido, tentar renovar
+          if (!diagnostic.tokenValidity.valid) {
+            const renewResult = await renewToken();
+            if (!renewResult.success) {
+              logAuth('error', 'Falha na renovação automática do token');
+            }
+          }
+        }
+      } catch (error) {
+        logAuth('error', 'Erro na verificação de saúde da autenticação', error.message);
+      }
+    }, 5 * 60 * 1000); // 5 minutos
+
+    return () => clearInterval(healthCheck);
+  }, [isAuthenticated]);
+
   // Função para verificar sessão existente
   const checkSession = async () => {
     try {
