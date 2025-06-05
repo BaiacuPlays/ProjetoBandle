@@ -12,16 +12,12 @@ import ToastNotification from '../components/ToastNotification';
 import { useEffect } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import errorHandler from '../utils/errorHandler';
-import performanceOptimizer from '../utils/performanceOptimizer';
-import Script from 'next/script';
 
 export default function MyApp({ Component, pageProps }) {
   // Carregar configurações do localStorage ao iniciar a aplicação
   useEffect(() => {
-    // Inicializar error handler e performance optimizer
-    errorHandler;
-    performanceOptimizer;
+    // Sistema de error handling simplificado
+    console.log('App inicializado');
 
     try {
       const savedSettings = localStorage.getItem('ludomusic_settings');

@@ -46,10 +46,16 @@ class SimpleAudioProxy {
   // Teste simples de conectividade
   async testConnection() {
     try {
+      // Timeout manual para compatibilidade
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
+
       const response = await fetch('/api/audio-proxy?test=true', {
         method: 'HEAD',
-        signal: AbortSignal.timeout(5000)
+        signal: controller.signal
       });
+
+      clearTimeout(timeoutId);
       return response.ok;
     } catch (error) {
       return false;
