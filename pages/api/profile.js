@@ -2,6 +2,7 @@
 import { localProfiles } from '../../utils/storage';
 import { verifyAuthentication } from '../../utils/auth';
 import { safeKV } from '../../utils/kv-fix';
+import { isDevelopment, hasKVConfig } from '../../utils/kv-config';
 
 // Função para calcular XP baseado no desempenho
 const calculateXP = (gameStats) => {
@@ -97,8 +98,8 @@ export default async function handler(req, res) {
       const profileKey = `profile:${userId}`;
       let profile = null;
 
-      // Usar função centralizada do KV
-      profile = await kvGet(profileKey, localProfiles);
+      // Usar SafeKV
+      profile = await safeKV.get(profileKey);
 
       if (!profile) {
         // Criar perfil padrão se não existir
@@ -131,15 +132,7 @@ export default async function handler(req, res) {
         };
 
         // Salvar o perfil padrão
-        if (isDevelopment && !hasKVConfig) {
-          localProfiles.set(profileKey, profile);
-        } else {
-          try {
-            await kv.set(profileKey, profile);
-          } catch (error) {
-            console.error('Erro ao criar perfil padrão no KV:', error);
-          }
-        }
+        await safeKV.set(profileKey, profile);
 
         console.log(`✅ Perfil padrão criado para ${authResult.username}`);
       }
@@ -163,11 +156,7 @@ export default async function handler(req, res) {
           const profileKey = `profile:${userId}`;
 
           // Salvar perfil atualizado
-          if (isDevelopment && !hasKVConfig) {
-            localProfiles.set(profileKey, profileData);
-          } else {
-            await kv.set(profileKey, profileData);
-          }
+          await safeKV.set(profileKey, profileData);
 
           return res.status(200).json({
             success: true,
@@ -190,12 +179,7 @@ export default async function handler(req, res) {
           const profileKey = `profile:${userId}`;
 
           // Carregar perfil atual
-          let profile = null;
-          if (isDevelopment && !hasKVConfig) {
-            profile = localProfiles.get(profileKey);
-          } else {
-            profile = await kv.get(profileKey);
-          }
+          let profile = await safeKV.get(profileKey);
 
           if (!profile) {
             return res.status(404).json({ error: 'Perfil não encontrado' });
@@ -245,11 +229,7 @@ export default async function handler(req, res) {
           }
 
           // Salvar perfil atualizado
-          if (isDevelopment && !hasKVConfig) {
-            localProfiles.set(profileKey, profile);
-          } else {
-            await kv.set(profileKey, profile);
-          }
+          await safeKV.set(profileKey, profile);
 
           const levelUp = newLevel > oldLevel;
 
@@ -302,11 +282,7 @@ export default async function handler(req, res) {
           };
 
           // Salvar perfil resetado
-          if (isDevelopment && !hasKVConfig) {
-            localProfiles.set(profileKey, cleanProfile);
-          } else {
-            await kv.set(profileKey, cleanProfile);
-          }
+          await safeKV.set(profileKey, cleanProfile);
 
           return res.status(200).json({
             success: true,
@@ -337,11 +313,7 @@ export default async function handler(req, res) {
         console.log(`🗑️ [DELETE] Iniciando deleção de perfil para ${authResult.username} (${userId})`);
 
         // Deletar perfil
-        if (isDevelopment && !hasKVConfig) {
-          localProfiles.delete(profileKey);
-        } else {
-          await kv.del(profileKey);
-        }
+        await safeKV.del(profileKey);
 
         console.log(`✅ [DELETE] Perfil ${authResult.username} deletado com sucesso`);
 
