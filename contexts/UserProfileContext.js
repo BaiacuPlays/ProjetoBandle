@@ -248,24 +248,23 @@ export const UserProfileProvider = ({ children }) => {
     if (isAuthenticated && profile && userId) {
       const authenticatedUser = getAuthenticatedUser();
 
-
-
       if (authenticatedUser && (
         profile.username !== authenticatedUser.username ||
         profile.displayName !== authenticatedUser.displayName
       )) {
-
-
         const updatedProfile = {
           ...profile,
           username: authenticatedUser.username,
-          displayName: authenticatedUser.displayName
+          displayName: authenticatedUser.displayName,
+          lastUpdated: new Date().toISOString()
         };
 
         setProfile(updatedProfile);
-        localStorage.setItem(`ludomusic_profile_${userId}`, JSON.stringify(updatedProfile));
 
-        // Salvamento automático no servidor removido para evitar erros 401
+        // Salvar na Vercel KV
+        saveProfileToServer(updatedProfile).catch(error => {
+          console.warn('Erro ao sincronizar dados de login:', error);
+        });
       }
     }
   }, [isAuthenticated, profile, userId]);
@@ -286,138 +285,22 @@ export const UserProfileProvider = ({ children }) => {
     try {
       setIsLoading(true);
 
-      // 1. SEMPRE tentar carregar do localStorage primeiro (mais rápido e confiável)
-      let localProfile = null;
-      if (typeof window !== 'undefined' && userIdToUse) {
-        const savedProfile = localStorage.getItem(`ludomusic_profile_${userIdToUse}`);
-        if (savedProfile) {
-          try {
-            localProfile = JSON.parse(savedProfile);
-            console.log('✅ [PROFILE] Perfil local carregado:', localProfile.username);
-
-            // Validar integridade do perfil
-            if (!localProfile.stats || !localProfile.achievements || localProfile.achievements === undefined) {
-              throw new Error('Perfil corrompido - dados críticos ausentes');
-            }
-          } catch (error) {
-
-            // Tentar carregar do backup
-            const backupProfile = localStorage.getItem(`ludomusic_profile_backup_${userIdToUse}`);
-            if (backupProfile) {
-              try {
-                localProfile = JSON.parse(backupProfile);
-                // Restaurar perfil principal
-                localStorage.setItem(`ludomusic_profile_${userIdToUse}`, backupProfile);
-              } catch (backupError) {
-                // Remover dados corrompidos
-                localStorage.removeItem(`ludomusic_profile_${userIdToUse}`);
-                localStorage.removeItem(`ludomusic_profile_backup_${userIdToUse}`);
-              }
-            } else {
-              // Remover dados corrompidos
-              localStorage.removeItem(`ludomusic_profile_${userIdToUse}`);
-            }
-          }
-        } else {
-          // Se não tem perfil principal, tentar backup
-          const backupProfile = localStorage.getItem(`ludomusic_profile_backup_${userIdToUse}`);
-          if (backupProfile) {
-            try {
-              localProfile = JSON.parse(backupProfile);
-              // Restaurar perfil principal
-              localStorage.setItem(`ludomusic_profile_${userIdToUse}`, backupProfile);
-            } catch (error) {
-              localStorage.removeItem(`ludomusic_profile_backup_${userIdToUse}`);
-            }
-          }
-        }
-      }
-
-      // 2. Tentar carregar do servidor em paralelo (para sincronização)
+      // SISTEMA SIMPLIFICADO: SEMPRE carregar da Vercel KV
       let serverProfile = null;
       try {
         serverProfile = await loadProfileFromServer(userIdToUse);
+        console.log('🔍 [DEBUG] Perfil carregado da Vercel KV:', !!serverProfile, serverProfile?.username);
       } catch (error) {
-        // Silenciar erro de carregamento do servidor
+        console.log('❌ [DEBUG] Erro ao carregar da Vercel KV:', error);
       }
 
-      // 3. Decidir qual perfil usar - PRIORIZAR LOCALSTORAGE
-      if (localProfile) {
-        // USAR PERFIL LOCAL COMO PRINCIPAL (mais confiável)
-        const authenticatedUser = getAuthenticatedUser();
-        let updatedProfile = localProfile;
-
-        // Se usuário está autenticado e o perfil não tem os dados corretos, atualizar
-        if (authenticatedUser && (
-          localProfile.username !== authenticatedUser.username ||
-          localProfile.displayName !== authenticatedUser.displayName
-        )) {
-          updatedProfile = {
-            ...localProfile,
-            username: authenticatedUser.username,
-            displayName: authenticatedUser.displayName,
-            lastUpdated: new Date().toISOString()
-          };
-
-          // Salvar perfil atualizado localmente
-          localStorage.setItem(`ludomusic_profile_${userIdToUse}`, JSON.stringify(updatedProfile));
-        }
-
-        setProfile(updatedProfile);
-        console.log('✅ [PROFILE] Perfil definido no estado:', updatedProfile.username);
-
-        // Sincronizar com servidor em background (sem bloquear)
-        if (serverProfile) {
-          // Se servidor tem dados mais recentes, mesclar
-          const serverTime = new Date(serverProfile.lastUpdated || 0).getTime();
-          const localTime = new Date(updatedProfile.lastUpdated || 0).getTime();
-
-          if (serverTime > localTime) {
-            // Merge inteligente: combinar o melhor dos dois mundos
-            const mergedProfile = {
-              ...updatedProfile, // Base local
-              // Manter dados não críticos do servidor
-              preferences: serverProfile.preferences || updatedProfile.preferences,
-              // Para estatísticas: usar os valores MAIORES (progresso nunca regride)
-              stats: {
-                ...updatedProfile.stats,
-                totalGames: Math.max(updatedProfile.stats.totalGames || 0, serverProfile.stats?.totalGames || 0),
-                wins: Math.max(updatedProfile.stats.wins || 0, serverProfile.stats?.wins || 0),
-                bestStreak: Math.max(updatedProfile.stats.bestStreak || 0, serverProfile.stats?.bestStreak || 0),
-                xp: Math.max(updatedProfile.stats.xp || 0, serverProfile.stats?.xp || 0),
-                level: Math.max(updatedProfile.stats.level || 1, serverProfile.stats?.level || 1)
-              },
-              // Para conquistas: unir ambas as listas (sem duplicatas)
-              achievements: [...new Set([
-                ...(updatedProfile.achievements || []),
-                ...(serverProfile.achievements || [])
-              ])],
-              // Para XP e level: usar o maior valor
-              xp: Math.max(updatedProfile.xp || 0, serverProfile.xp || 0),
-              level: Math.max(updatedProfile.level || 1, serverProfile.level || 1),
-              lastUpdated: new Date().toISOString()
-            };
-
-            setProfile(mergedProfile);
-            localStorage.setItem(`ludomusic_profile_${userIdToUse}`, JSON.stringify(mergedProfile));
-
-            // Sincronizar dados mesclados de volta para o servidor
-            try {
-              await saveProfileToServer(mergedProfile);
-              console.log('🔄 Dados mesclados sincronizados com servidor');
-            } catch (error) {
-              console.warn('Erro ao sincronizar dados mesclados:', error);
-            }
-          }
-        }
-
-        // Sincronização com servidor removida para evitar erros 401
-        // A sincronização será feita apenas quando necessário
-      } else if (serverProfile) {
-        // Só usar servidor se não tiver dados locais
+      if (serverProfile) {
+        // USAR PERFIL DA VERCEL KV
+        console.log('✅ [PROFILE] Usando perfil da Vercel KV:', serverProfile.username);
         const authenticatedUser = getAuthenticatedUser();
         let updatedProfile = serverProfile;
 
+        // Atualizar dados de autenticação se necessário
         if (authenticatedUser && (
           serverProfile.username !== authenticatedUser.username ||
           serverProfile.displayName !== authenticatedUser.displayName
@@ -428,15 +311,22 @@ export const UserProfileProvider = ({ children }) => {
             displayName: authenticatedUser.displayName,
             lastUpdated: new Date().toISOString()
           };
+
+          // Salvar de volta na Vercel KV
+          try {
+            await saveProfileToServer(updatedProfile);
+            console.log('🔄 Dados de autenticação atualizados na Vercel KV');
+          } catch (error) {
+            console.warn('Erro ao atualizar dados de autenticação:', error);
+          }
         }
 
         setProfile(updatedProfile);
-        localStorage.setItem(`ludomusic_profile_${userIdToUse}`, JSON.stringify(updatedProfile));
+        console.log('✅ [PROFILE] Perfil definido no estado:', updatedProfile.username);
       } else {
-        // Criar novo perfil
+        // CRIAR NOVO PERFIL E SALVAR NA VERCEL KV
+        console.log('🆕 [PROFILE] Criando novo perfil para:', userIdToUse);
         const authenticatedUser = getAuthenticatedUser();
-
-
 
         const newProfile = {
           id: userIdToUse,
@@ -448,87 +338,7 @@ export const UserProfileProvider = ({ children }) => {
           xp: 0,
           createdAt: new Date().toISOString(),
           lastLogin: new Date().toISOString(),
-          stats: {
-            totalGames: 0,
-            wins: 0,
-            losses: 0,
-            winRate: 0,
-            currentStreak: 0,
-            bestStreak: 0,
-            totalPlayTime: 0,
-            perfectGames: 0, // Jogos acertados na primeira tentativa
-            averageAttempts: 0,
-            fastestWin: null, // Tempo da vitória mais rápida
-            modeStats: {
-              daily: {
-                games: 0,
-                wins: 0,
-                bestStreak: 0,
-                averageAttempts: 0,
-                perfectGames: 0
-              },
-              infinite: {
-                games: 0,
-                wins: 0,
-                bestStreak: 0,
-                totalSongsCompleted: 0,
-                longestSession: 0
-              },
-              multiplayer: {
-                games: 0,
-                wins: 0,
-                roomsCreated: 0,
-                totalPoints: 0,
-                bestRoundScore: 0
-              }
-            }
-          },
-          achievements: [],
-          gameHistory: [],
-          franchiseStats: {}, // Estatísticas por franquia
-          preferences: {
-            theme: 'dark',
-            language: 'pt',
-            notifications: true,
-            showAchievementPopups: true,
-            hasSeenProfileTutorial: false
-          },
-          badges: [], // Badges especiais conquistados
-          titles: [], // Títulos desbloqueados
-          currentTitle: null, // Título atualmente exibido
-          socialStats: {
-            gamesShared: 0,
-            friendsReferred: 0,
-            friendsAdded: 0,
-            multiplayerGamesPlayed: 0,
-            multiplayerWins: 0,
-            invitesSent: 0,
-            invitesAccepted: 0,
-            socialInteractions: 0,
-            helpfulActions: 0
-          }
-        };
-
-        setProfile(newProfile);
-        localStorage.setItem(`ludomusic_profile_${userIdToUse}`, JSON.stringify(newProfile));
-
-        // Salvamento no servidor removido para evitar erros 401
-        // O perfil será salvo quando o usuário fizer login
-      }
-    } catch (error) {
-      // Em caso de erro crítico, tentar criar um perfil básico
-      try {
-        const authenticatedUser = getAuthenticatedUser();
-        const emergencyProfile = {
-          id: userIdToUse,
-          username: authenticatedUser?.username || `Jogador_${userIdToUse?.slice(-6) || '000000'}`,
-          displayName: authenticatedUser?.displayName || '',
-          bio: '',
-          avatar: '/default-avatar.svg',
-          level: 1,
-          xp: 0,
-          createdAt: new Date().toISOString(),
-          lastLogin: new Date().toISOString(),
+          lastUpdated: new Date().toISOString(),
           stats: {
             totalGames: 0,
             wins: 0,
@@ -572,15 +382,22 @@ export const UserProfileProvider = ({ children }) => {
           }
         };
 
-        setProfile(emergencyProfile);
-        localStorage.setItem(`ludomusic_profile_${userIdToUse}`, JSON.stringify(emergencyProfile));
-      } catch (emergencyError) {
-        // Se nem o perfil de emergência funcionar, deixar profile como null
-        // O componente UserProfile vai mostrar a mensagem de erro
+        setProfile(newProfile);
+
+        // SALVAR NOVO PERFIL NA VERCEL KV
+        try {
+          await saveProfileToServer(newProfile);
+          console.log('✅ [PROFILE] Novo perfil salvo na Vercel KV:', newProfile.username);
+        } catch (error) {
+          console.warn('❌ Erro ao salvar novo perfil na Vercel KV:', error);
+        }
       }
+    } catch (error) {
+      console.error('❌ [PROFILE] Erro crítico ao carregar perfil:', error);
+      // Em caso de erro, deixar profile como null
+      // O componente UserProfile vai mostrar a mensagem de erro
     } finally {
       setIsLoading(false);
-
     }
   };
 
@@ -669,10 +486,12 @@ export const UserProfileProvider = ({ children }) => {
   const updateProfile = async (updates) => {
     // 🔒 VERIFICAÇÃO DE SEGURANÇA: Apenas usuários autenticados podem atualizar perfil
     if (!isAuthenticated) {
+      console.warn('⚠️ Tentativa de atualizar perfil sem autenticação');
       return null;
     }
 
     if (!profile || !userId) {
+      console.warn('⚠️ Perfil ou userId não disponível para atualização');
       return null;
     }
 
@@ -683,24 +502,22 @@ export const UserProfileProvider = ({ children }) => {
         lastUpdated: new Date().toISOString()
       });
 
+      // Atualizar estado local
       setProfile(updatedProfile);
 
-      // SEMPRE salvar no localStorage primeiro (mais confiável)
-      localStorage.setItem(`ludomusic_profile_${userId}`, JSON.stringify(updatedProfile));
-
-      // Criar backup adicional
-      localStorage.setItem(`ludomusic_profile_backup_${userId}`, JSON.stringify(updatedProfile));
-
-      // Salvar no servidor em background (não bloquear)
+      // SALVAR DIRETAMENTE NA VERCEL KV
       try {
         await saveProfileToServer(updatedProfile);
+        console.log('✅ [PROFILE] Perfil atualizado na Vercel KV');
       } catch (error) {
-        // Silenciar erro de sincronização
+        console.error('❌ Erro ao salvar perfil na Vercel KV:', error);
+        throw error; // Re-throw para que o erro seja tratado pelo chamador
       }
 
       return updatedProfile;
     } catch (error) {
-      throw error; // Re-throw para que o erro seja tratado pelo chamador
+      console.error('❌ Erro ao atualizar perfil:', error);
+      throw error;
     }
   };
 
