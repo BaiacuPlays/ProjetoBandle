@@ -1,53 +1,9 @@
 // API para validar se usuário já jogou o jogo diário hoje
-import fs from 'fs';
-import path from 'path';
 import { verifyAuthentication } from '../../utils/auth';
 import { isDevelopment, hasKVConfig, kvGet, kvSet } from '../../utils/kv-config';
 
-// Fallback para desenvolvimento local
+// Fallback para desenvolvimento local (apenas em memória)
 const localDailyGames = new Map();
-
-// Arquivo para persistir dados em desenvolvimento local
-const LOCAL_DATA_FILE = path.join(process.cwd(), 'temp', 'daily-games.json');
-
-// Função para carregar dados locais do arquivo
-const loadLocalData = () => {
-  if (!isDevelopment || hasKVConfig) return;
-
-  try {
-    // Criar diretório temp se não existir
-    const tempDir = path.dirname(LOCAL_DATA_FILE);
-    if (!fs.existsSync(tempDir)) {
-      fs.mkdirSync(tempDir, { recursive: true });
-    }
-
-    if (fs.existsSync(LOCAL_DATA_FILE)) {
-      const data = JSON.parse(fs.readFileSync(LOCAL_DATA_FILE, 'utf8'));
-      Object.entries(data).forEach(([key, value]) => {
-        localDailyGames.set(key, value);
-      });
-      console.log('📁 Dados locais de jogos diários carregados:', localDailyGames.size, 'registros');
-    }
-  } catch (error) {
-    console.warn('⚠️ Erro ao carregar dados locais:', error);
-  }
-};
-
-// Função para salvar dados locais no arquivo
-const saveLocalData = () => {
-  if (!isDevelopment || hasKVConfig) return;
-
-  try {
-    const data = Object.fromEntries(localDailyGames);
-    fs.writeFileSync(LOCAL_DATA_FILE, JSON.stringify(data, null, 2));
-    console.log('💾 Dados locais de jogos diários salvos:', localDailyGames.size, 'registros');
-  } catch (error) {
-    console.warn('⚠️ Erro ao salvar dados locais:', error);
-  }
-};
-
-// Carregar dados na inicialização
-loadLocalData();
 
 
 
@@ -176,9 +132,7 @@ export default async function handler(req, res) {
     // Salvar por username (chave de segurança)
     await kvSet(dailyGameByUsernameKey, gameRecord, { ex: 86400 * 7 }, localDailyGames);
 
-    if (isDevelopment && !hasKVConfig) {
-      saveLocalData(); // Persistir no arquivo apenas em desenvolvimento
-    }
+    // Dados salvos apenas em memória em desenvolvimento
 
     console.log(`✅ Jogo diário registrado com SEGURANÇA DUPLA para ${authResult.username} (${userId}) em ${date}:`, {
       won: gameRecord.won,
