@@ -10,7 +10,7 @@ const localResetTokens = new Map();
 
 // Verificar se estamos em ambiente de desenvolvimento
 const isDevelopment = process.env.NODE_ENV === 'development';
-const hasKVConfig = process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN;
+const hasKVConfig = (process.env.KV_REST_API_URL || process.env.KV_URL) && process.env.KV_REST_API_TOKEN;
 
 // Inicializar Resend (apenas se a chave estiver configurada)
 let resend = null;

@@ -6,7 +6,7 @@ const localLobbies = new Map();
 
 // Verificar se estamos em ambiente de desenvolvimento
 const isDevelopment = process.env.NODE_ENV === 'development';
-const hasKVConfig = process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN;
+const hasKVConfig = (process.env.KV_REST_API_URL || process.env.KV_URL) && process.env.KV_REST_API_TOKEN;
 
 // Funções auxiliares para gerenciar dados com fallback
 async function getLobby(roomCode) {

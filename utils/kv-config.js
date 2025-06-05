@@ -17,6 +17,7 @@ const shouldUseKV = !isDevelopment || hasKVConfig;
 if (!isDevelopment && !hasKVConfig) {
   console.warn('⚠️ KV Config não encontrada - usando fallback:', {
     hasKVConfig,
+    KV_URL: process.env.KV_URL ? 'DEFINIDA' : 'NÃO DEFINIDA',
     KV_REST_API_URL: process.env.KV_REST_API_URL ? 'DEFINIDA' : 'NÃO DEFINIDA',
     KV_REST_API_TOKEN: process.env.KV_REST_API_TOKEN ? 'DEFINIDA' : 'NÃO DEFINIDA',
     NODE_ENV: process.env.NODE_ENV
