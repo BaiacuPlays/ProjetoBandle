@@ -7,7 +7,6 @@ const UserProfileContext = createContext();
 
 export const useUserProfile = () => {
   const context = useContext(UserProfileContext);
-  console.log('🔍 [HOOK] useUserProfile chamado, context:', !!context);
   if (!context) {
     console.log('❌ [HOOK] Contexto não encontrado! Retornando objeto vazio');
     return {
@@ -28,7 +27,6 @@ export const useUserProfile = () => {
       updateAvatar: () => {}
     };
   }
-  console.log('✅ [HOOK] Contexto encontrado, profile:', !!context.profile, 'isLoading:', context.isLoading);
   return context;
 };
 
@@ -233,20 +231,17 @@ export const UserProfileProvider = ({ children }) => {
     if (!authLoading && isClient) {
       const id = getUserId();
 
-      // Só atualizar userId se mudou
-      if (id !== userId) {
+      // Só carregar se o userId mudou ou se não temos perfil ainda
+      if (id && id !== 'null' && id !== 'undefined' && id !== userId) {
+        console.log('🔄 [PROFILE] UserID mudou de', userId, 'para', id);
         setUserId(id);
-      }
-
-      // SEMPRE carregar perfil se tiver um ID válido (mesmo se já tiver perfil)
-      if (id && id !== 'null' && id !== 'undefined') {
         // Chamar loadProfile diretamente aqui para evitar dependências circulares
         loadProfileInternal(id);
       } else if (!id || id === 'null' || id === 'undefined') {
         setIsLoading(false);
       }
     }
-  }, [authLoading, isAuthenticated, isClient, userId]); // Removido 'profile' da dependência
+  }, [authLoading, isAuthenticated, isClient]); // REMOVIDO userId da dependência para evitar loop
 
   // Atualizar perfil quando usuário faz login
   useEffect(() => {
