@@ -1,5 +1,5 @@
 // Sistema de Proxy de Áudio Simplificado
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 class SimpleAudioProxy {
   constructor() {

@@ -21,7 +21,8 @@ class PerformanceOptimizer {
   
   init() {
     if (this.isProduction) {
-      this.disableConsoleInProduction();
+      // Temporariamente desabilitado para debug
+      // this.disableConsoleInProduction();
       this.optimizeGlobalPerformance();
       this.setupMemoryCleanup();
     }
