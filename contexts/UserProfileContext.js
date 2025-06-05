@@ -197,8 +197,10 @@ export const UserProfileProvider = ({ children }) => {
       }
 
       const result = await response.json();
+      console.log('🔍 [API] Resposta da API /profile:', result);
       return result;
     } catch (error) {
+      console.error('❌ [API] Erro ao carregar perfil da API:', error);
       return null; // Retornar null em vez de throw para não quebrar o fluxo
     }
   };

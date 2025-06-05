@@ -742,7 +742,7 @@ export async function saveStatistics(userId, gameResult, hintsUsed) {
 
   try {
     // Atualizar estatísticas do usuário
-    const userStats = await safeKV.get(statsKey) || {
+    const userStats = await kv.get(statsKey) || {
       wins: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 },
       losses: 0
     };
@@ -753,10 +753,10 @@ export async function saveStatistics(userId, gameResult, hintsUsed) {
       userStats.losses += 1;
     }
 
-    await safeKV.set(statsKey, userStats);
+    await kv.set(statsKey, userStats);
 
     // Atualizar estatísticas globais
-    const globalStats = await safeKV.get(globalStatsKey) || {
+    const globalStats = await kv.get(globalStatsKey) || {
       totalGames: 0,
       wins: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 },
       losses: 0
@@ -770,7 +770,7 @@ export async function saveStatistics(userId, gameResult, hintsUsed) {
       globalStats.losses += 1;
     }
 
-    await safeKV.set(globalStatsKey, globalStats);
+    await kv.set(globalStatsKey, globalStats);
   } catch (error) {
     console.error('Erro ao salvar estatísticas:', error);
   }
@@ -790,7 +790,7 @@ export async function getGlobalStatistics() {
 
   const globalStatsKey = 'stats:global';
   try {
-    const stats = await safeKV.get(globalStatsKey) || {
+    const stats = await kv.get(globalStatsKey) || {
       totalGames: 0,
       wins: 0,
       losses: 0,
