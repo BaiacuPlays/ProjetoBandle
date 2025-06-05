@@ -1,7 +1,7 @@
 // API para gerenciar perfis de usuário no servidor
 import { localProfiles } from '../../utils/storage';
 import { verifyAuthentication } from '../../utils/auth';
-import { isDevelopment, hasKVConfig, kvGet, kvSet, kv } from '../../utils/kv-config';
+import { safeKV } from '../../utils/kv-fix';
 
 // Função para calcular XP baseado no desempenho
 const calculateXP = (gameStats) => {

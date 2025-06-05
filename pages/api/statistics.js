@@ -1,12 +1,11 @@
 // API para estatísticas do modo diário (por userid)
-import { kv } from '@vercel/kv';
+import { safeKV } from '../../utils/kv-fix';
 
 // Fallback para desenvolvimento local - armazenamento em memória
 const localStats = new Map();
 
 // Verificar se estamos em ambiente de desenvolvimento
 const isDevelopment = process.env.NODE_ENV === 'development';
-const hasKVConfig = (process.env.KV_REST_API_URL || process.env.KV_URL) && process.env.KV_REST_API_TOKEN;
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -27,26 +26,14 @@ export default async function handler(req, res) {
   };
 
   if (method === 'GET') {
-    // Buscar estatísticas do usuário
-    let stats;
-
-    if (isDevelopment && !hasKVConfig) {
-      // Usar armazenamento local em desenvolvimento
-      stats = localStats.get(statsKey);
-    } else {
-      // Usar Vercel KV em produção
-      try {
-        stats = await kv.get(statsKey);
-      } catch (error) {
-        // Silenciar erro se for problema de configuração KV
-        if (!error.message.includes('Missing required environment variable')) {
-          console.error('Erro ao acessar KV:', error);
-        }
-        stats = null;
-      }
+    // Buscar estatísticas do usuário usando SafeKV
+    try {
+      const stats = await safeKV.get(statsKey);
+      return res.status(200).json(stats || defaultStats);
+    } catch (error) {
+      console.error('Erro ao buscar estatísticas:', error);
+      return res.status(200).json(defaultStats);
     }
-
-    return res.status(200).json(stats || defaultStats);
   }
 
   if (method === 'POST') {
@@ -56,27 +43,13 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Dados inválidos' });
     }
 
-    let stats;
+    try {
+      // Buscar estatísticas atuais usando SafeKV
+      let stats = await safeKV.get(statsKey);
 
-    if (isDevelopment && !hasKVConfig) {
-      // Usar armazenamento local em desenvolvimento
-      stats = localStats.get(statsKey) || { ...defaultStats };
-    } else {
-      // Usar Vercel KV em produção
-      try {
-        stats = await kv.get(statsKey);
-      } catch (error) {
-        // Silenciar erro se for problema de configuração KV
-        if (!error.message.includes('Missing required environment variable')) {
-          console.error('Erro ao acessar KV:', error);
-        }
-        stats = null;
+      if (!stats) {
+        stats = { ...defaultStats };
       }
-    }
-
-    if (!stats) {
-      stats = { ...defaultStats };
-    }
 
     stats.totalGames++;
     if (won) {
@@ -95,27 +68,18 @@ export default async function handler(req, res) {
       stats.averageAttempts = Math.round((totalAttempts / stats.wins) * 10) / 10;
     }
 
-    // Salvar estatísticas
-    if (isDevelopment && !hasKVConfig) {
-      // Usar armazenamento local em desenvolvimento
-      localStats.set(statsKey, stats);
-    } else {
-      // Usar Vercel KV em produção
-      try {
-        await kv.set(statsKey, stats);
-      } catch (error) {
-        // Silenciar erro se for problema de configuração KV
-        if (!error.message.includes('Missing required environment variable')) {
-          console.error('Erro ao salvar no KV:', error);
-        }
-        // Continuar mesmo com erro para não quebrar a aplicação
-      }
+      // Salvar estatísticas usando SafeKV
+      await safeKV.set(statsKey, stats);
+
+      // Atualizar estatísticas globais
+      await updateGlobalStats(won, attempts);
+
+      return res.status(200).json(stats);
+
+    } catch (error) {
+      console.error('Erro ao processar estatísticas:', error);
+      return res.status(500).json({ error: 'Erro interno do servidor' });
     }
-
-    // Atualizar estatísticas globais
-    await updateGlobalStats(won, attempts);
-
-    return res.status(200).json(stats);
   }
 
   return res.status(405).json({ error: 'Método não suportado' });
@@ -136,31 +100,16 @@ async function updateGlobalStats(won, attempts) {
     const currentDay = getCurrentDay();
     const dailyStatsKey = `stats:daily:${currentDay}`;
 
-    // Buscar estatísticas diárias atuais
-    let dailyStats;
-    if (isDevelopment && !hasKVConfig) {
-      // Usar armazenamento local em desenvolvimento
-      dailyStats = localStats.get(dailyStatsKey) || {
-        totalGames: 0,
-        totalWins: 0,
-        totalLosses: 0,
-        attemptDistribution: [0, 0, 0, 0, 0, 0], // tentativas 1-6
-        totalAttempts: 0,
-        averageAttempts: 0,
-        date: currentDay
-      };
-    } else {
-      // Usar Vercel KV em produção
-      dailyStats = await kv.get(dailyStatsKey) || {
-        totalGames: 0,
-        totalWins: 0,
-        totalLosses: 0,
-        attemptDistribution: [0, 0, 0, 0, 0, 0], // tentativas 1-6
-        totalAttempts: 0,
-        averageAttempts: 0,
-        date: currentDay
-      };
-    }
+    // Buscar estatísticas diárias atuais usando SafeKV
+    let dailyStats = await safeKV.get(dailyStatsKey) || {
+      totalGames: 0,
+      totalWins: 0,
+      totalLosses: 0,
+      attemptDistribution: [0, 0, 0, 0, 0, 0], // tentativas 1-6
+      totalAttempts: 0,
+      averageAttempts: 0,
+      date: currentDay
+    };
 
     // Incrementar total de jogos
     dailyStats.totalGames += 1;
@@ -183,16 +132,8 @@ async function updateGlobalStats(won, attempts) {
       ? Math.round((dailyStats.totalAttempts / dailyStats.totalGames) * 10) / 10
       : 0;
 
-    // Salvar estatísticas diárias atualizadas
-    if (isDevelopment && !hasKVConfig) {
-      localStats.set(dailyStatsKey, dailyStats);
-    } else {
-      try {
-        await kv.set(dailyStatsKey, dailyStats);
-      } catch (error) {
-        console.error('Erro ao salvar estatísticas diárias no KV:', error);
-      }
-    }
+    // Salvar estatísticas diárias atualizadas usando SafeKV
+    await safeKV.set(dailyStatsKey, dailyStats);
 
     console.log('Estatísticas diárias atualizadas:', {
       date: currentDay,
