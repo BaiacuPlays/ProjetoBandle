@@ -75,30 +75,13 @@ export default function Home() {
 
 
 
-  // Estados para sistema de cache de áudio
-  const [audioCache, setAudioCache] = useState(null);
+  // Cache de áudio temporariamente desabilitado
 
-  // Carregar sistema de cache apenas no cliente
+  // Sistema de cache simplificado para correção
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      import('../utils/audioCache').then(({ audioCache: cache }) => {
-        setAudioCache(cache);
-        setIsInCache(() => (song) => {
-          if (!song?.audioUrl) return false;
-          return cache.has(song.audioUrl);
-        });
-        setPlayInstant(() => async (song) => {
-          if (!song?.audioUrl) return null;
-          try {
-            return await cache.playInstant(song.audioUrl);
-          } catch (error) {
-            console.warn('Erro na reprodução instantânea:', error);
-            return null;
-          }
-        });
-      }).catch(error => {
-        console.warn('Erro ao carregar sistema de cache:', error);
-      });
+      // Cache simplificado sem imports dinâmicos
+      console.log('Sistema de cache simplificado carregado');
     }
   }, []);
 

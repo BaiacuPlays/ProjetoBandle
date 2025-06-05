@@ -86,11 +86,7 @@ class MyDocument extends Document {
           <Main />
           <NextScript />
 
-          {/* Polyfills para compatibilidade com navegadores antigos */}
-          <Script
-            src="https://cdn.jsdelivr.net/npm/core-js-bundle@3.32.0/minified.js"
-            strategy="beforeInteractive"
-          />
+          {/* Polyfills removidos temporariamente para correção */}
 
           {/* Script para carregar o idioma do localStorage antes de renderizar a página */}
           <Script id="language-loader" strategy="beforeInteractive">

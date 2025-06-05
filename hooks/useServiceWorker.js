@@ -7,11 +7,9 @@ export const useServiceWorker = () => {
   const [updateAvailable, setUpdateAvailable] = useState(false);
 
   useEffect(() => {
-    // Verificar se Service Worker é suportado
-    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-      setIsSupported(true);
-      registerServiceWorker();
-    }
+    // Service Worker DESABILITADO temporariamente para correção de bugs
+    console.log('Service Worker desabilitado para correção');
+    setIsSupported(false);
   }, []);
 
   const registerServiceWorker = async () => {
