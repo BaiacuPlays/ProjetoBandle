@@ -1406,7 +1406,7 @@
   },
   {
     "id": 117,
-    "title": "Title Screen",
+    "title": "Donkey Kong Country Title Screen",
     "artist": "David Wise",
     "composer": "David Wise",
     "game": "Donkey Kong Country",
@@ -3449,10 +3449,10 @@
   },
   {
     "id": 289,
-    "title": "Title Screen",
+    "title": "New Super Mario Bros Title Screen",
     "artist": "Asuka Ohta",
     "composer": "Asuka Ohta",
-    "game": "New Super Mario Bros.",
+    "game": "New Super Mario Bros",
     "context": "Audio - New Super Mario Bros.",
     "audioUrl": "https://pub-4d254faec6ec408ab584ea82049c2f79.r2.dev/mario/new-super-mario-bros-ds/01 Title Screen.mp3",
     "year": 2006,
@@ -3509,7 +3509,7 @@
   },
   {
     "id": 294,
-    "title": "Title Screen",
+    "title": "New Super Mario Bros. Wii Title Screen",
     "artist": "Ryo Nagamatsu",
     "composer": "Ryo Nagamatsu",
     "game": "New Super Mario Bros. Wii",
@@ -3797,7 +3797,7 @@
   },
   {
     "id": 318,
-    "title": "Title Screen",
+    "title": "Mega Man X Title Screen",
     "artist": "Setsuo Yamamoto",
     "composer": "Setsuo Yamamoto",
     "game": "Mega Man X",
@@ -5153,7 +5153,7 @@
   },
   {
     "id": 448,
-    "title": "Title Screen",
+    "title": "Sea of Stars Title Screen",
     "artist": "Yasunori Mitsuda",
     "composer": "Yasunori Mitsuda",
     "game": "Sea of Stars",
@@ -7182,7 +7182,7 @@
   },
   {
     "id": 634,
-    "title": "Shop Channel",
+    "title": "Wii Shop Channel",
     "artist": "Kazumi Totaka",
     "composer": "Kazumi Totaka",
     "game": "Wii System Music",
@@ -7194,10 +7194,10 @@
   },
   {
     "id": 635,
-    "title": "Title",
+    "title": "Wii Sports Title",
     "artist": "Kazumi Totaka",
     "composer": "Kazumi Totaka",
-    "game": "Wii System Music",
+    "game": "Wii Sports Music",
     "context": "Audio - Wii System Music",
     "audioUrl": "https://pub-4d254faec6ec408ab584ea82049c2f79.r2.dev/wii/08. Title (Wii Sports).mp3",
     "year": 2006,

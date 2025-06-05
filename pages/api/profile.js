@@ -23,9 +23,9 @@ const calculateXP = (gameStats) => {
   return xp;
 };
 
-// Função para calcular nível baseado no XP
+// Função para calcular nível baseado no XP - SISTEMA REBALANCEADO
 const calculateLevel = (xp) => {
-  return Math.floor(Math.sqrt(xp / 100)) + 1;
+  return Math.floor(Math.sqrt(xp / 300)) + 1;
 };
 
 // Função para verificar conquistas

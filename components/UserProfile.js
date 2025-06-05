@@ -325,9 +325,9 @@ const UserProfile = ({ isOpen, onClose }) => {
     if (!profile) return 0;
 
     const xp = profile.xp || 0;
-    const calculatedLevel = Math.floor(xp / 1000) + 1;
-    const currentLevelXP = (calculatedLevel - 1) * 1000;
-    const nextLevelXP = calculatedLevel * 1000;
+    const calculatedLevel = Math.floor(Math.sqrt(xp / 300)) + 1;
+    const currentLevelXP = Math.pow(calculatedLevel - 1, 2) * 300;
+    const nextLevelXP = Math.pow(calculatedLevel, 2) * 300;
     const progress = ((xp - currentLevelXP) / (nextLevelXP - currentLevelXP)) * 100;
 
     return Math.max(0, Math.min(100, progress));
@@ -362,7 +362,7 @@ const UserProfile = ({ isOpen, onClose }) => {
                     onClick={() => setShowAvatarSelector(true)}
                   />
                   <div className={styles.levelBadge}>
-                    Nível {Math.floor((profile.xp || 0) / 1000) + 1}
+                    Nível {Math.floor(Math.sqrt((profile.xp || 0) / 300)) + 1}
                   </div>
                 </div>
 
@@ -416,7 +416,7 @@ const UserProfile = ({ isOpen, onClose }) => {
               <div className={styles.xpSection}>
                 <div className={styles.xpInfo}>
                   <span>XP: {profile.xp}</span>
-                  <span>Próximo nível: {Math.max(0, (Math.floor((profile.xp || 0) / 1000) + 1) * 1000 - profile.xp)} XP</span>
+                  <span>Próximo nível: {Math.max(0, Math.pow(Math.floor(Math.sqrt((profile.xp || 0) / 300)) + 1, 2) * 300 - profile.xp)} XP</span>
                 </div>
                 <div className={styles.xpBar}>
                   <div

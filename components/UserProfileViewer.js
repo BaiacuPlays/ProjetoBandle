@@ -176,16 +176,14 @@ const UserProfileViewer = ({ isOpen, userId, username, onClose }) => {
 
     const xp = profile.xp || profile.stats?.xp || 0;
 
-    // Calcular o nível correto baseado no XP
-    const calculatedLevel = Math.floor(xp / 1000) + 1;
+    // Calcular o nível correto baseado no XP - SISTEMA REBALANCEADO
+    const calculatedLevel = Math.floor(Math.sqrt(xp / 300)) + 1;
     const level = calculatedLevel;
 
-    const currentLevelXP = (level - 1) * 1000;
-    const nextLevelXP = level * 1000;
+    const currentLevelXP = Math.pow(level - 1, 2) * 300;
+    const nextLevelXP = Math.pow(level, 2) * 300;
     const progress = ((xp - currentLevelXP) / (nextLevelXP - currentLevelXP)) * 100;
     const finalProgress = Math.max(0, Math.min(100, progress));
-
-
 
     return finalProgress;
   };

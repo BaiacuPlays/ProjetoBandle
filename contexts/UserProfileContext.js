@@ -703,23 +703,23 @@ export const UserProfileProvider = ({ children }) => {
     }
   };
 
-  // Calcular nível baseado no XP
-  // Fórmula: Level = floor(sqrt(XP / 100)) + 1
-  // XP necessário para level N = (N-1)² * 100
+  // Calcular nível baseado no XP - SISTEMA REBALANCEADO
+  // Fórmula: Level = floor(sqrt(XP / 300)) + 1
+  // XP necessário para level N = (N-1)² * 300
   const calculateLevel = (xp) => {
     if (xp < 0) return 1;
-    return Math.floor(Math.sqrt(xp / 100)) + 1;
+    return Math.floor(Math.sqrt(xp / 300)) + 1;
   };
 
   // Calcular XP necessário para um nível específico
   const getXPForLevel = (level) => {
     if (level <= 1) return 0;
-    return Math.pow(level - 1, 2) * 100;
+    return Math.pow(level - 1, 2) * 300;
   };
 
   // Calcular XP necessário para o próximo nível
   const getXPForNextLevel = (currentLevel) => {
-    return Math.pow(currentLevel, 2) * 100;
+    return Math.pow(currentLevel, 2) * 300;
   };
 
   // Verificar e desbloquear conquistas

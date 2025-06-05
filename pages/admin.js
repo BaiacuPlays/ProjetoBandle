@@ -121,10 +121,10 @@ export default function AdminPage() {
     });
   };
 
-  // Função para calcular nível baseado no XP
+  // Função para calcular nível baseado no XP - SISTEMA REBALANCEADO
   const calculateLevel = (xp) => {
     if (xp < 0) return 1;
-    return Math.floor(Math.sqrt(xp / 100)) + 1;
+    return Math.floor(Math.sqrt(xp / 300)) + 1;
   };
 
   if (!authenticated) {
