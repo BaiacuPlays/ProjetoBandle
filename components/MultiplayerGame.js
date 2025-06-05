@@ -858,6 +858,12 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                       onClick={async (e) => {
                         if (!songToPlay || isPlayButtonDisabled) return;
 
+                        // Feedback visual instantâneo
+                        e.target.style.transform = 'scale(0.95)';
+                        setTimeout(() => {
+                          if (e.target) e.target.style.transform = 'scale(1)';
+                        }, 150);
+
                         // Tentar reprodução instantânea do cache primeiro
                         if (isInCache(songToPlay) && !isPlaying) {
                           try {

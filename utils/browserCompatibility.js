@@ -11,9 +11,9 @@ class BrowserCompatibility {
     return {
       preload: 'metadata',
       crossOrigin: null, // Removido para evitar problemas de CORS
-      timeout: 3000, // Timeout reduzido
-      playTimeout: 2000, // Timeout de play reduzido
-      loadDelay: 50, // Delay mínimo
+      timeout: 1500, // Timeout reduzido para melhor UX
+      playTimeout: 500, // Timeout de play muito reduzido
+      loadDelay: 25, // Delay mínimo reduzido
       maxRetries: 1 // Apenas 1 retry
     };
   }
@@ -52,7 +52,7 @@ class BrowserCompatibility {
   // Método ultra-otimizado para reproduzir áudio
   async playAudio(audio) {
     return new Promise((resolve, reject) => {
-      // Timeout aumentado para 2s para evitar falsos erros
+      // Timeout reduzido para melhor UX
       const timeout = setTimeout(() => {
         // Só rejeitar se o áudio realmente não conseguiu reproduzir
         if (audio.paused && audio.readyState < 2) {
@@ -60,7 +60,7 @@ class BrowserCompatibility {
         } else {
           resolve(); // Se está tocando ou carregado, considerar sucesso
         }
-      }, 2000);
+      }, this.audioConfig.playTimeout); // Usar configuração dinâmica
 
       const cleanup = () => {
         clearTimeout(timeout);

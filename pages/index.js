@@ -2619,7 +2619,7 @@ export default function Home() {
                   disabled={audioError || (!audioDuration && !currentSong?.audioUrl) || isPlayButtonDisabled || isPlayLoading}
                   className={styles.audioPlayBtnCustom}
                   onClick={debounce(async () => {
-                    if (!currentSong?.audioUrl || isPlayButtonDisabled || audioError || isPlayLoading) {
+                    if (!currentSong?.audioUrl || isPlayButtonDisabled || audioError) {
                       return;
                     }
 
@@ -2627,15 +2627,14 @@ export default function Home() {
                       return;
                     }
 
-                    // Desabilitar botão temporariamente para evitar cliques duplos
-                    setIsPlayButtonDisabled(true);
+                    // Definir loading imediatamente para feedback visual
                     setIsPlayLoading(true);
 
-                    // Timeout de segurança
+                    // Timeout de segurança reduzido para melhor UX
                     const safetyTimeout = setTimeout(() => {
                       setIsPlayLoading(false);
                       setIsPlayButtonDisabled(false);
-                    }, 3000);
+                    }, 1000); // Reduzido de 3000 para 1000ms
 
                     try {
                       // Se áudio não carregou ainda, aguardar carregamento
@@ -2653,8 +2652,12 @@ export default function Home() {
                       const maxAllowed = (gameOver && !isInfiniteMode) || (gameOver && isInfiniteMode && infiniteGameOver) ? MAX_PLAY_TIME : (maxClipDurations[attempts] || maxClipDurations[maxClipDurations.length - 1]);
 
                       if (isPlaying) {
-                        // Pausar
+                        // Pausar - ação instantânea
                         audioRef.current.pause();
+                        setIsPlaying(false);
+                        setIsPlayLoading(false);
+                        clearTimeout(safetyTimeout);
+                        return;
                       } else {
                         // Reproduzir
                         if (currentTime >= maxAllowed || currentTime < 0 || audioRef.current.currentTime < startTime) {
@@ -2663,7 +2666,12 @@ export default function Home() {
                         }
 
                         if (audioRef.current.paused) {
-                          await browserCompatibility.playAudio(audioRef.current);
+                          // Tentar reprodução instantânea se áudio está pronto
+                          if (audioRef.current.readyState >= 2) {
+                            await browserCompatibility.playAudioInstant(audioRef.current);
+                          } else {
+                            await browserCompatibility.playAudio(audioRef.current);
+                          }
                         }
                       }
 
@@ -2698,7 +2706,7 @@ export default function Home() {
                         console.warn('Erro de reprodução (silenciado):', error);
                       }
                     }
-                  }, 150, 'play_button')}
+                  }, 50, 'play_button')} // Reduzido de 150 para 50ms
                 />
                 <MemoizedVolumeControl
                   volume={volume}

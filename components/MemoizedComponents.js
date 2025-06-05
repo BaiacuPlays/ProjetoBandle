@@ -1,28 +1,31 @@
-import React, { memo, useMemo } from 'react';
-import { FaPlay, FaPause, FaVolumeUp, FaFastForward } from 'react-icons/fa';
+import React, { memo } from 'react';
+import { FaVolumeUp, FaFastForward } from 'react-icons/fa';
+import OptimizedPlayButton from './OptimizedPlayButton';
 
-// Componente de botão de play memoizado
-export const MemoizedPlayButton = memo(({ 
-  isPlaying, 
-  onClick, 
-  disabled, 
+// Componente de botão de play memoizado e ultra-otimizado
+export const MemoizedPlayButton = memo(({
+  isPlaying,
+  onClick,
+  disabled,
   isLoading,
-  className 
+  className,
+  size = 20,
+  ...props
 }) => {
-  const icon = useMemo(() => {
-    if (isLoading) return '⏳';
-    return isPlaying ? <FaPause /> : <FaPlay />;
-  }, [isPlaying, isLoading]);
-
   return (
-    <button
-      className={className}
-      onClick={onClick}
+    <OptimizedPlayButton
+      isPlaying={isPlaying}
+      isLoading={isLoading}
       disabled={disabled}
-      type="button"
-    >
-      {icon}
-    </button>
+      onClick={onClick}
+      className={className}
+      size={size}
+      instantFeedback={true}
+      scaleOnClick={true}
+      showSpinner={true}
+      debounceMs={50}
+      {...props}
+    />
   );
 });
 
