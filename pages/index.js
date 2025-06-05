@@ -67,6 +67,8 @@ export default function Home() {
   useEffect(() => {
     if (!songs || songs.length === 0) {
       console.error('❌ Erro: Lista de músicas não carregada');
+    } else {
+      console.log('✅ Músicas carregadas:', songs.length);
     }
   }, []);
 
@@ -782,47 +784,20 @@ export default function Home() {
       localStorage.setItem(savedDayKey, dayOfYear.toString());
       setCurrentDay(dayOfYear);
 
-      // 🔒 VERIFICAÇÃO DE JOGO DIÁRIO - Verificar se usuário já jogou hoje
+      // 🔒 VERIFICAÇÃO DE JOGO DIÁRIO - Simplificada para evitar travamento
       const checkDailyGameStatus = async () => {
         try {
-          const sessionToken = localStorage.getItem('ludomusic_session_token');
-          if (!sessionToken) {
-            return false; // Não logado, pode jogar
-          }
+          // Verificação simplificada apenas no localStorage
+          const savedState = localStorage.getItem(`ludomusic_game_state_day_${dayOfYear}`);
 
-          const dateStr = now.toISOString().split('T')[0]; // YYYY-MM-DD
-
-          console.log('🔍 Verificando status do jogo diário:', { dateStr, sessionToken: sessionToken ? 'presente' : 'ausente' });
-
-          const response = await makeAuthenticatedRequest('/api/validate-daily-game', {
-            method: 'POST',
-            body: JSON.stringify({
-              date: dateStr,
-              gameStats: {
-                won: false,
-                attempts: 0,
-                mode: 'daily',
-                song: { title: 'check_only', game: 'check_only', id: 'check_only' },
-                playTime: 0
-              }
-            })
-          });
-
-          console.log('📡 Resposta da verificação:', { status: response.status, ok: response.ok });
-
-          if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            console.log('❌ Erro na verificação do status:', { status: response.status, error: errorData });
-
-            if (errorData.error === 'Jogo diário já completado hoje') {
-              return true; // Já jogou
-            }
-            // Para outros erros (incluindo 401), permitir jogar
-            return false;
+          if (savedState) {
+            const parsedState = JSON.parse(savedState);
+            return parsedState.day === dayOfYear && parsedState.gameOver;
           }
 
           return false; // Pode jogar
         } catch (error) {
+          console.log('Erro na verificação do status:', error);
           return false; // Em caso de erro, permitir jogar
         }
       };
