@@ -13,9 +13,9 @@ export const hasKVConfig = !!(
 // Em produção, sempre usar KV (já sabemos que funciona)
 const shouldUseKV = !isDevelopment || hasKVConfig;
 
-// Log de debug para verificar configuração
-if (!isDevelopment) {
-  console.log('🔧 KV Config Status:', {
+// Log de debug para verificar configuração (apenas se houver problema)
+if (!isDevelopment && !hasKVConfig) {
+  console.warn('⚠️ KV Config não encontrada - usando fallback:', {
     hasKVConfig,
     KV_REST_API_URL: process.env.KV_REST_API_URL ? 'DEFINIDA' : 'NÃO DEFINIDA',
     KV_REST_API_TOKEN: process.env.KV_REST_API_TOKEN ? 'DEFINIDA' : 'NÃO DEFINIDA',

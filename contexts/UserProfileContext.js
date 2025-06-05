@@ -215,7 +215,7 @@ export const UserProfileProvider = ({ children }) => {
       console.log('🔄 Aba ganhou foco - verificando sincronização');
       try {
         // Recarregar perfil para sincronizar com possíveis mudanças de outros dispositivos
-        await loadProfile(userId);
+        await loadProfileInternal(userId);
       } catch (error) {
         console.warn('Erro na sincronização automática:', error);
       }
@@ -1443,7 +1443,6 @@ export const UserProfileProvider = ({ children }) => {
       updatedProfile.xp += xpGained;
 
       // Verificar level up
-      const oldLevel = updatedProfile.level;
       const newLevel = calculateLevel(updatedProfile.xp);
 
       if (newLevel > updatedProfile.level) {

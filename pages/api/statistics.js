@@ -38,7 +38,10 @@ export default async function handler(req, res) {
       try {
         stats = await kv.get(statsKey);
       } catch (error) {
-        console.error('Erro ao acessar KV:', error);
+        // Silenciar erro se for problema de configuração KV
+        if (!error.message.includes('Missing required environment variable')) {
+          console.error('Erro ao acessar KV:', error);
+        }
         stats = null;
       }
     }
@@ -63,7 +66,10 @@ export default async function handler(req, res) {
       try {
         stats = await kv.get(statsKey);
       } catch (error) {
-        console.error('Erro ao acessar KV:', error);
+        // Silenciar erro se for problema de configuração KV
+        if (!error.message.includes('Missing required environment variable')) {
+          console.error('Erro ao acessar KV:', error);
+        }
         stats = null;
       }
     }
@@ -98,7 +104,10 @@ export default async function handler(req, res) {
       try {
         await kv.set(statsKey, stats);
       } catch (error) {
-        console.error('Erro ao salvar no KV:', error);
+        // Silenciar erro se for problema de configuração KV
+        if (!error.message.includes('Missing required environment variable')) {
+          console.error('Erro ao salvar no KV:', error);
+        }
         // Continuar mesmo com erro para não quebrar a aplicação
       }
     }

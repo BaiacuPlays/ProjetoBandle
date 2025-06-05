@@ -67,7 +67,10 @@ export default async function handler(req, res) {
           };
         }
       } catch (error) {
-        console.error('Erro ao acessar KV para estatísticas globais:', error);
+        // Silenciar erro se for problema de configuração KV
+        if (!error.message.includes('Missing required environment variable')) {
+          console.error('Erro ao acessar KV para estatísticas globais:', error);
+        }
         // Fallback para dados iniciais
         stats = {
           totalGames: 0,
