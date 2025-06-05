@@ -7,7 +7,9 @@ const UserProfileContext = createContext();
 
 export const useUserProfile = () => {
   const context = useContext(UserProfileContext);
+  console.log('🔍 [HOOK] useUserProfile chamado, context:', !!context);
   if (!context) {
+    console.log('❌ [HOOK] Contexto não encontrado! Retornando objeto vazio');
     return {
       profile: null,
       isLoading: false,
@@ -26,6 +28,7 @@ export const useUserProfile = () => {
       updateAvatar: () => {}
     };
   }
+  console.log('✅ [HOOK] Contexto encontrado, profile:', !!context.profile, 'isLoading:', context.isLoading);
   return context;
 };
 

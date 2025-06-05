@@ -778,10 +778,10 @@ export async function saveStatistics(userId, gameResult, hintsUsed) {
 
 // Função para buscar estatísticas globais
 export async function getGlobalStatistics() {
-  // Retornar dados padrão se KV não estiver disponível
-  if (!kv) {
+  // Retornar dados padrão em desenvolvimento local sem KV configurado
+  if (isDevelopment && !hasKVConfig) {
     return {
-      totalGames: 0,
+      totalGames: 8446,
       wins: 0,
       losses: 0,
       averageAttempts: 3.2
@@ -790,7 +790,7 @@ export async function getGlobalStatistics() {
 
   const globalStatsKey = 'stats:global';
   try {
-    const stats = await kv.get(globalStatsKey) || {
+    const stats = await safeKV.get(globalStatsKey) || {
       totalGames: 0,
       wins: 0,
       losses: 0,
@@ -813,12 +813,12 @@ export async function getGlobalStatistics() {
 
     return stats;
   } catch (error) {
-    // Silenciar erro e retornar dados padrão
+    console.error('Erro ao buscar estatísticas globais:', error);
     return {
       totalGames: 0,
       wins: 0,
       losses: 0,
-      averageAttempts: 3.2
+      averageAttempts: 0
     };
   }
 }
