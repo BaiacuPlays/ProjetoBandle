@@ -1,5 +1,5 @@
 // API para reset de senha via email
-import { kv } from '@vercel/kv';
+import { safeKV } from '../../utils/kv-fix';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import { Resend } from 'resend';

@@ -1,5 +1,5 @@
 // API para gerenciar notificações
-import { kv } from '@vercel/kv';
+import { safeKV } from '../../utils/kv-fix';
 import { localUsers, localProfiles } from '../../utils/storage';
 import { verifyAuthentication, sanitizeInput } from '../../utils/auth';
 

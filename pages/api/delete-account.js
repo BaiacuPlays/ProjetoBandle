@@ -1,7 +1,8 @@
 // API para usuário deletar sua própria conta
 import { verifyAuthentication } from '../../utils/auth';
 import { localUsers, localProfiles, localSessions } from '../../utils/storage';
-import { isDevelopment, hasKVConfig, kvGet, kvSet, kvDel, kv } from '../../utils/kv-config';
+import { isDevelopment, hasKVConfig, kvGet, kvSet, kvDel } from '../../utils/kv-config';
+import { safeKV } from '../../utils/kv-fix';
 
 // Função para invalidar todas as sessões de um usuário (copiada de auth.js)
 const invalidateUserSessions = async (username) => {
@@ -13,7 +14,7 @@ const invalidateUserSessions = async (username) => {
     if (isDevelopment && !hasKVConfig) {
       userSessions = localSessions.get(userSessionsKey) || [];
     } else {
-      userSessions = await kv.get(userSessionsKey) || [];
+      userSessions = await safeKV.get(userSessionsKey) || [];
     }
 
     console.log(`🔒 [DELETE] Invalidando ${userSessions.length} sessões para usuário: ${username}`);
@@ -25,7 +26,7 @@ const invalidateUserSessions = async (username) => {
       if (isDevelopment && !hasKVConfig) {
         localSessions.delete(sessionKey);
       } else {
-        await kv.del(sessionKey);
+        await safeKV.del(sessionKey);
       }
     }
 
@@ -33,7 +34,7 @@ const invalidateUserSessions = async (username) => {
     if (isDevelopment && !hasKVConfig) {
       localSessions.delete(userSessionsKey);
     } else {
-      await kv.del(userSessionsKey);
+      await safeKV.del(userSessionsKey);
     }
 
     console.log(`✅ [DELETE] Sessões invalidadas para usuário: ${username}`);
@@ -131,10 +132,10 @@ export default async function handler(req, res) {
       for (const key of keysToDelete) {
         try {
           // Verificar se a chave existe antes de deletar
-          const exists = await kv.get(key);
+          const exists = await safeKV.get(key);
           console.log(`🔍 [PROD] Verificando chave ${key}: ${exists ? 'EXISTE' : 'NÃO EXISTE'}`);
 
-          const deleted = await kv.del(key);
+          const deleted = await safeKV.del(key);
           if (deleted > 0) {
             deletedKeys.push(key);
             console.log(`✅ [PROD] Chave deletada: ${key}`);
@@ -149,12 +150,12 @@ export default async function handler(req, res) {
 
       // Buscar e remover dados diários (daily_*)
       try {
-        const dailyKeys = await kv.keys(`daily_*`);
+        const dailyKeys = await safeKV.keys(`daily_*`);
         for (const dailyKey of dailyKeys) {
           try {
-            const dailyData = await kv.get(dailyKey);
+            const dailyData = await safeKV.get(dailyKey);
             if (dailyData && dailyData.username === username) {
-              await kv.del(dailyKey);
+              await safeKV.del(dailyKey);
               deletedKeys.push(dailyKey);
               console.log(`✅ [PROD] Dados diários deletados: ${dailyKey}`);
             }
@@ -170,20 +171,20 @@ export default async function handler(req, res) {
 
       // Limpar referências em listas de amigos de outros usuários
       try {
-        const allFriendKeys = await kv.keys('friends:*');
+        const allFriendKeys = await safeKV.keys('friends:*');
         let friendsCleanedCount = 0;
-        
+
         for (const friendKey of allFriendKeys) {
           try {
-            const friendsList = await kv.get(friendKey);
+            const friendsList = await safeKV.get(friendKey);
             if (friendsList && Array.isArray(friendsList)) {
               const originalLength = friendsList.length;
-              const filteredList = friendsList.filter(friend => 
+              const filteredList = friendsList.filter(friend =>
                 friend.username !== username && friend.userId !== userId
               );
-              
+
               if (filteredList.length !== originalLength) {
-                await kv.set(friendKey, filteredList);
+                await safeKV.set(friendKey, filteredList);
                 friendsCleanedCount++;
                 console.log(`✅ [PROD] Referências removidas de ${friendKey}`);
               }
@@ -204,24 +205,24 @@ export default async function handler(req, res) {
 
       // Limpar solicitações de amizade pendentes
       try {
-        const allRequestKeys = await kv.keys('friend_requests:*');
-        const allSentRequestKeys = await kv.keys('sent_requests:*');
+        const allRequestKeys = await safeKV.keys('friend_requests:*');
+        const allSentRequestKeys = await safeKV.keys('sent_requests:*');
         let requestsCleanedCount = 0;
-        
+
         for (const requestKey of [...allRequestKeys, ...allSentRequestKeys]) {
           try {
-            const requests = await kv.get(requestKey);
+            const requests = await safeKV.get(requestKey);
             if (requests && Array.isArray(requests)) {
               const originalLength = requests.length;
-              const filteredRequests = requests.filter(req => 
-                req.fromUserId !== userId && 
+              const filteredRequests = requests.filter(req =>
+                req.fromUserId !== userId &&
                 req.toUserId !== userId &&
                 req.fromUsername !== username &&
                 req.toUsername !== username
               );
-              
+
               if (filteredRequests.length !== originalLength) {
-                await kv.set(requestKey, filteredRequests);
+                await safeKV.set(requestKey, filteredRequests);
                 requestsCleanedCount++;
                 console.log(`✅ [PROD] Solicitações removidas de ${requestKey}`);
               }
@@ -242,22 +243,22 @@ export default async function handler(req, res) {
 
       // Limpar notificações que mencionam este usuário
       try {
-        const allNotificationKeys = await kv.keys('notifications:*');
+        const allNotificationKeys = await safeKV.keys('notifications:*');
         let notificationsCleanedCount = 0;
-        
+
         for (const notifKey of allNotificationKeys) {
           try {
-            const notifications = await kv.get(notifKey);
+            const notifications = await safeKV.get(notifKey);
             if (notifications && Array.isArray(notifications)) {
               const originalLength = notifications.length;
-              const filteredNotifications = notifications.filter(notif => 
-                !notif.message?.includes(username) && 
+              const filteredNotifications = notifications.filter(notif =>
+                !notif.message?.includes(username) &&
                 notif.fromUserId !== userId &&
                 notif.fromUsername !== username
               );
-              
+
               if (filteredNotifications.length !== originalLength) {
-                await kv.set(notifKey, filteredNotifications);
+                await safeKV.set(notifKey, filteredNotifications);
                 notificationsCleanedCount++;
                 console.log(`✅ [PROD] Notificações limpas de ${notifKey}`);
               }

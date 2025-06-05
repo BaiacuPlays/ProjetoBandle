@@ -1,5 +1,5 @@
 import songs from '../../data/music.json';
-import { kv } from '@vercel/kv';
+import { safeKV } from '../../utils/kv-fix';
 
 // Fallback para desenvolvimento local - armazenamento em memória
 const localLobbies = new Map();
@@ -17,7 +17,7 @@ async function getLobby(roomCode) {
   }
 
   try {
-    return await kv.get(key);
+    return await safeKV.get(key);
   } catch (error) {
     console.error('Erro ao acessar KV:', error);
     return null;
@@ -33,7 +33,7 @@ async function setLobby(roomCode, data) {
   }
 
   try {
-    await kv.set(key, data);
+    await safeKV.set(key, data);
   } catch (error) {
     console.error('Erro ao salvar no KV:', error);
   }
@@ -48,7 +48,7 @@ async function deleteLobby(roomCode) {
   }
 
   try {
-    await kv.del(key);
+    await safeKV.del(key);
   } catch (error) {
     console.error('Erro ao deletar do KV:', error);
   }

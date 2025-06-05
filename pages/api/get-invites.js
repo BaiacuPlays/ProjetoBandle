@@ -1,4 +1,4 @@
-import { kv } from '@vercel/kv';
+import { safeKV } from '../../utils/kv-fix';
 
 // Fallback para desenvolvimento local
 const localInvites = new Map();
@@ -31,7 +31,7 @@ export default async function handler(req, res) {
       } else {
         // Produção - usar Vercel KV
         try {
-          invites = await kv.get(inviteKey) || [];
+          invites = await safeKV.get(inviteKey) || [];
         } catch (kvError) {
           invites = [];
         }

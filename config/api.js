@@ -1,4 +1,5 @@
-import { kv } from '@vercel/kv';
+// Importar KV de forma segura
+import { safeKV } from '../utils/kv-fix';
 
 // Verificar se estamos em ambiente de desenvolvimento
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -733,7 +734,7 @@ export async function saveStatistics(userId, gameResult, hintsUsed) {
 
   try {
     // Atualizar estatísticas do usuário
-    const userStats = await kv.get(statsKey) || {
+    const userStats = await safeKV.get(statsKey) || {
       wins: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 },
       losses: 0
     };
@@ -744,10 +745,10 @@ export async function saveStatistics(userId, gameResult, hintsUsed) {
       userStats.losses += 1;
     }
 
-    await kv.set(statsKey, userStats);
+    await safeKV.set(statsKey, userStats);
 
     // Atualizar estatísticas globais
-    const globalStats = await kv.get(globalStatsKey) || {
+    const globalStats = await safeKV.get(globalStatsKey) || {
       totalGames: 0,
       wins: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 },
       losses: 0
@@ -761,7 +762,7 @@ export async function saveStatistics(userId, gameResult, hintsUsed) {
       globalStats.losses += 1;
     }
 
-    await kv.set(globalStatsKey, globalStats);
+    await safeKV.set(globalStatsKey, globalStats);
   } catch (error) {
     console.error('Erro ao salvar estatísticas:', error);
   }
@@ -781,7 +782,7 @@ export async function getGlobalStatistics() {
 
   const globalStatsKey = 'stats:global';
   try {
-    const stats = await kv.get(globalStatsKey) || {
+    const stats = await safeKV.get(globalStatsKey) || {
       totalGames: 0,
       wins: 0,
       losses: 0,

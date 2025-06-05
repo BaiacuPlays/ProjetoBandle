@@ -1,5 +1,5 @@
 // API unificada para sistema de amigos - SIMPLES E CONFIÁVEL
-import { kv } from '@vercel/kv';
+import { safeKV } from '../../utils/kv-fix';
 import { verifyAuthentication } from '../../utils/auth';
 
 // Configuração de ambiente
@@ -24,7 +24,7 @@ const getData = async (key) => {
   if (isDevelopment && !hasKVConfig) {
     return localStorage.friends.get(key) || localStorage.requests.get(key) || localStorage.users.get(key);
   }
-  return await kv.get(key);
+  return await safeKV.get(key);
 };
 
 // Função para salvar dados no KV ou storage local
@@ -38,7 +38,7 @@ const setData = async (key, value) => {
       localStorage.users.set(key, value);
     }
   } else {
-    await kv.set(key, value);
+    await safeKV.set(key, value);
   }
 };
 

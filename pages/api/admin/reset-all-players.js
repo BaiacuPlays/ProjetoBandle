@@ -1,5 +1,5 @@
 // API para resetar todos os jogadores - APENAS PARA DESENVOLVIMENTO
-import { kv } from '@vercel/kv';
+import { safeKV } from '../../../utils/kv-fix';
 
 export default async function handler(req, res) {
   // Verificar se é método POST
@@ -34,12 +34,12 @@ async function deleteAllAccounts(res) {
   console.log('🗑️ Iniciando DELEÇÃO COMPLETA de todas as contas...');
 
   // Buscar todos os tipos de dados
-  const users = await kv.keys('user:*');
-  const profiles = await kv.keys('profile:*');
-  const sessions = await kv.keys('session:*');
-  const dailyKeys = await kv.keys('daily:*');
-  const roomKeys = await kv.keys('room:*');
-  const friendKeys = await kv.keys('friends:*');
+  const users = await safeKV.keys('user:*');
+  const profiles = await safeKV.keys('profile:*');
+  const sessions = await safeKV.keys('session:*');
+  const dailyKeys = await safeKV.keys('daily:*');
+  const roomKeys = await safeKV.keys('room:*');
+  const friendKeys = await safeKV.keys('friends:*');
 
   console.log(`📋 Encontrados para deletar:`);
   console.log(`   - ${users.length} usuários`);

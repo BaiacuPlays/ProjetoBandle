@@ -1,5 +1,5 @@
 // API para gerenciar doações e benefícios
-import { kv } from '@vercel/kv';
+import { safeKV } from '../../utils/kv-fix';
 import { verifyAuthentication } from '../../utils/auth';
 import { isDevelopment, hasKVConfig } from '../../utils/kv-config';
 import { Resend } from 'resend';
@@ -110,7 +110,7 @@ export default async function handler(req, res) {
           const { localUsers } = require('../../utils/storage');
           userData = localUsers.get(userKey);
         } else {
-          userData = await kv.get(userKey);
+          userData = await safeKV.get(userKey);
         }
 
         if (userData && userData.email) {
@@ -166,7 +166,7 @@ export default async function handler(req, res) {
       if (isDevelopment && !hasKVConfig) {
         localDonations.set(donationKey, donation);
       } else {
-        await kv.set(donationKey, donation);
+        await safeKV.set(donationKey, donation);
       }
 
       // Salvar código de ativação
@@ -185,7 +185,7 @@ export default async function handler(req, res) {
       if (isDevelopment && !hasKVConfig) {
         localDonations.set(codeKey, codeData);
       } else {
-        await kv.set(codeKey, codeData);
+        await safeKV.set(codeKey, codeData);
       }
 
       // Enviar email com código de ativação
@@ -232,7 +232,7 @@ export default async function handler(req, res) {
       if (isDevelopment && !hasKVConfig) {
         donationHistory = localDonations.get(historyKey) || [];
       } else {
-        donationHistory = await kv.get(historyKey) || [];
+        donationHistory = await safeKV.get(historyKey) || [];
       }
 
       return res.status(200).json({
@@ -304,7 +304,7 @@ async function applyBenefitsToProfile(userId, benefits) {
       console.log(`🎁 [SIMULADO] Aplicando benefícios para ${userId}:`, benefits);
       return true;
     } else {
-      profile = await kv.get(profileKey);
+      profile = await safeKV.get(profileKey);
     }
 
     if (!profile) {
@@ -385,7 +385,7 @@ async function applyBenefitsToProfile(userId, benefits) {
     profile.supporterSince = profile.supporterSince || new Date().toISOString();
 
     // Salvar perfil atualizado
-    await kv.set(profileKey, profile);
+    await safeKV.set(profileKey, profile);
 
     console.log(`✅ Benefícios aplicados para ${userId}`);
     return true;
@@ -405,7 +405,7 @@ async function addToUserDonationHistory(userId, donation) {
     if (isDevelopment && !hasKVConfig) {
       history = localDonations.get(historyKey) || [];
     } else {
-      history = await kv.get(historyKey) || [];
+      history = await safeKV.get(historyKey) || [];
     }
 
     // Adicionar nova doação ao início do array
@@ -426,7 +426,7 @@ async function addToUserDonationHistory(userId, donation) {
     if (isDevelopment && !hasKVConfig) {
       localDonations.set(historyKey, history);
     } else {
-      await kv.set(historyKey, history);
+      await safeKV.set(historyKey, history);
     }
 
     return true;

@@ -1,5 +1,5 @@
 // API para estatísticas globais simplificadas
-import { kv } from '@vercel/kv';
+import { safeKV } from '../../utils/kv-fix';
 
 // Fallback para desenvolvimento local - armazenamento em memória
 const localStats = new Map();
@@ -52,7 +52,7 @@ export default async function handler(req, res) {
       // Buscar dados reais do Vercel KV para o dia atual
       try {
         const dailyStatsKey = `stats:daily:${currentDay}`;
-        const rawStats = await kv.get(dailyStatsKey);
+        const rawStats = await safeKV.get(dailyStatsKey);
 
         if (rawStats && rawStats.totalGames >= 0) {
           stats = {
