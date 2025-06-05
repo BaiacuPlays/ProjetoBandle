@@ -1,8 +1,7 @@
 // API para gerenciar perfis de usuário no servidor
 import { localProfiles } from '../../utils/storage';
 import { verifyAuthentication } from '../../utils/auth';
-import { safeKV } from '../../utils/kv-fix';
-import { isDevelopment, hasKVConfig } from '../../utils/kv-config';
+import { isDevelopment, hasKVConfig, kvGet, kvSet, kvDel } from '../../utils/kv-config';
 
 // Função para calcular XP baseado no desempenho
 const calculateXP = (gameStats) => {
@@ -98,8 +97,8 @@ export default async function handler(req, res) {
       const profileKey = `profile:${userId}`;
       let profile = null;
 
-      // Usar SafeKV
-      profile = await safeKV.get(profileKey);
+      // Usar função centralizada do KV
+      profile = await kvGet(profileKey, localProfiles);
 
       if (!profile) {
         // Criar perfil padrão se não existir
@@ -132,7 +131,7 @@ export default async function handler(req, res) {
         };
 
         // Salvar o perfil padrão
-        await safeKV.set(profileKey, profile);
+        await kvSet(profileKey, profile, {}, localProfiles);
 
         console.log(`✅ Perfil padrão criado para ${authResult.username}`);
       }
@@ -156,7 +155,7 @@ export default async function handler(req, res) {
           const profileKey = `profile:${userId}`;
 
           // Salvar perfil atualizado
-          await safeKV.set(profileKey, profileData);
+          await kvSet(profileKey, profileData, {}, localProfiles);
 
           return res.status(200).json({
             success: true,
