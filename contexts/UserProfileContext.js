@@ -235,15 +235,15 @@ export const UserProfileProvider = ({ children }) => {
         setUserId(id);
       }
 
-      // Só carregar perfil se tiver um ID válido e ainda não tiver perfil
-      if (id && id !== 'null' && id !== 'undefined' && !profile) {
+      // SEMPRE carregar perfil se tiver um ID válido (mesmo se já tiver perfil)
+      if (id && id !== 'null' && id !== 'undefined') {
         // Chamar loadProfile diretamente aqui para evitar dependências circulares
         loadProfileInternal(id);
       } else if (!id || id === 'null' || id === 'undefined') {
         setIsLoading(false);
       }
     }
-  }, [authLoading, isAuthenticated, isClient, userId, profile]);
+  }, [authLoading, isAuthenticated, isClient, userId]); // Removido 'profile' da dependência
 
   // Atualizar perfil quando usuário faz login
   useEffect(() => {
@@ -278,10 +278,12 @@ export const UserProfileProvider = ({ children }) => {
 
     // Não carregar se userId não estiver pronto
     if (!userIdToUse || userIdToUse === 'null' || userIdToUse === 'undefined') {
-
+      console.log('❌ [PROFILE] UserID inválido:', userIdToUse);
       setIsLoading(false);
       return;
     }
+
+    console.log('🔄 [PROFILE] Carregando perfil para userId:', userIdToUse);
 
     try {
       setIsLoading(true);
@@ -293,7 +295,7 @@ export const UserProfileProvider = ({ children }) => {
         if (savedProfile) {
           try {
             localProfile = JSON.parse(savedProfile);
-
+            console.log('✅ [PROFILE] Perfil local carregado:', localProfile.username);
 
             // Validar integridade do perfil
             if (!localProfile.stats || !localProfile.achievements || localProfile.achievements === undefined) {
