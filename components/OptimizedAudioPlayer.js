@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
-import { audioCache } from '../utils/audioCache';
+// audioCache temporariamente desabilitado
+const audioCache = { get: () => null, set: () => {}, has: () => false };
 
 const OptimizedAudioPlayer = ({
   src,

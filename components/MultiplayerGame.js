@@ -34,34 +34,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
   // Usar músicas processadas (com proxy se necessário)
   const songsToUse = processedSongs || songs;
 
-  // Estados para sistema de cache de áudio
-  const [audioCache, setAudioCache] = useState(null);
-  const [isInCache, setIsInCache] = useState(() => () => false);
-  const [playInstant, setPlayInstant] = useState(() => () => Promise.resolve(null));
-
-  // Carregar sistema de cache apenas no cliente
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      import('../utils/audioCache').then(({ audioCache: cache }) => {
-        setAudioCache(cache);
-        setIsInCache(() => (song) => {
-          if (!song?.audioUrl) return false;
-          return cache.has(song.audioUrl);
-        });
-        setPlayInstant(() => async (song) => {
-          if (!song?.audioUrl) return null;
-          try {
-            return await cache.playInstant(song.audioUrl);
-          } catch (error) {
-            console.warn('Erro na reprodução instantânea:', error);
-            return null;
-          }
-        });
-      }).catch(error => {
-        console.warn('Erro ao carregar sistema de cache:', error);
-      });
-    }
-  }, []);
+  // Cache de áudio temporariamente desabilitado para correção
 
   useEffect(() => {
     const detectBrowser = () => {
@@ -1006,10 +979,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                           el.crossOrigin = 'anonymous';
                         }
 
-                        // Adicionar ao cache quando carregado
-                        if (audioCache && songToPlay?.audioUrl && !audioCache.has(songToPlay.audioUrl)) {
-                          audioCache.set(songToPlay.audioUrl, el);
-                        }
+                        // Cache temporariamente desabilitado
                       }
                     }}
                     src={songToPlay?.audioUrl}

@@ -2062,12 +2062,9 @@ export default function Home() {
       // Configurar elemento com compatibilidade específica do navegador
       browserCompatibility.configureAudioElement(audio);
 
-      // Adicionar ao cache quando carregado
-      if (audioCache && currentSong?.audioUrl && !audioCache.has(currentSong.audioUrl)) {
-        audioCache.set(currentSong.audioUrl, audio);
-      }
+      // Cache temporariamente desabilitado
     }
-  }, [currentSong?.audioUrl, audioCache]);
+  }, [currentSong?.audioUrl]);
 
   // useEffect para limpar erros de áudio (movido para depois dos estados)
   useEffect(() => {
