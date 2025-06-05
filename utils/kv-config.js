@@ -4,9 +4,9 @@ import { kv } from '@vercel/kv';
 // Verificar se estamos em ambiente de desenvolvimento
 export const isDevelopment = process.env.NODE_ENV === 'development';
 
-// Verificar se as variáveis KV estão configuradas
+// Verificar se as variáveis KV estão configuradas (aceitar KV_URL ou KV_REST_API_URL)
 export const hasKVConfig = !!(
-  process.env.KV_REST_API_URL &&
+  (process.env.KV_REST_API_URL || process.env.KV_URL) &&
   process.env.KV_REST_API_TOKEN
 );
 
