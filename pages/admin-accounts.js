@@ -214,10 +214,7 @@ export default function AdminAccounts() {
       }
     });
 
-  const formatDate = (dateString) => {
-    if (!dateString) return 'Nunca';
-    return new Date(dateString).toLocaleString('pt-BR');
-  };
+
 
   const formatTimeAgo = (dateString) => {
     if (!dateString) return 'Nunca';
@@ -479,7 +476,7 @@ export default function AdminAccounts() {
             <p>Mostrando {filteredAccounts.length} de {accounts.length} contas</p>
           </div>
 
-          {filteredAccounts.map((account, index) => {
+          {filteredAccounts.map((account) => {
             const profile = getAccountProfile(account.username);
             const isActive = account.lastLoginAt &&
               new Date(account.lastLoginAt) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
