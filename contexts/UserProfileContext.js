@@ -366,6 +366,7 @@ export const UserProfileProvider = ({ children }) => {
         }
 
         setProfile(updatedProfile);
+        console.log('✅ [PROFILE] Perfil definido no estado:', updatedProfile.username);
 
         // Sincronizar com servidor em background (sem bloquear)
         if (serverProfile) {

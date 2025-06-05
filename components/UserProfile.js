@@ -67,13 +67,15 @@ const UserProfile = ({ isOpen, onClose }) => {
 
   // Inicializar formulário de edição quando há perfil
   useEffect(() => {
+    console.log('🔍 [USERPROFILE] Estado atual:', { profile: !!profile, userId, isLoading, isAuthenticated });
     if (profile && userId) {
+      console.log('✅ [USERPROFILE] Perfil recebido:', profile.username);
       setEditForm({
         displayName: profile.displayName || '',
         bio: profile.bio || ''
       });
     }
-  }, [profile, userId]);
+  }, [profile, userId, isLoading, isAuthenticated]);
 
   // Definir função handleCloseTutorial antes de usar
   const handleCloseTutorial = async () => {
