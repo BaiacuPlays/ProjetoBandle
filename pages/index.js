@@ -2988,10 +2988,12 @@ export default function Home() {
         />
 
         {/* Perfil do usuário */}
-        <UserProfile
-          isOpen={showProfile}
-          onClose={() => setShowProfile(false)}
-        />
+        {showProfile && (
+          <UserProfile
+            isOpen={showProfile}
+            onClose={() => setShowProfile(false)}
+          />
+        )}
 
         {/* Novo sistema de amigos */}
         <SimpleFriendsModal
@@ -3060,7 +3062,7 @@ export default function Home() {
         strategy="beforeInteractive"
         id="adblock-detector"
       />
-      
+
       {/* Google AdSense - carregado condicionalmente */}
       <Script
         id="adsense-script"

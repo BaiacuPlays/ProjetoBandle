@@ -8,14 +8,18 @@ const hasKVConfig = (process.env.KV_REST_API_URL || process.env.KV_URL) && proce
 
 // Função centralizada para verificar autenticação
 export const verifyAuthentication = async (req) => {
-  const sessionToken = req.headers.authorization?.replace('Bearer ', '') ||
-                      req.headers['x-session-token'] ||
-                      req.query.sessionToken;
+  const authHeader = req.headers.authorization;
+  const sessionToken = authHeader?.startsWith('Bearer ') 
+    ? authHeader.substring(7) 
+    : req.headers['x-session-token'] || req.query.sessionToken;
 
   if (!sessionToken) {
+    console.warn('⚠️ Tentativa de acesso sem token');
     return { authenticated: false, error: 'Token de sessão não fornecido' };
   }
 
+  // Log para debug
+  console.log('🔒 Verificando token:', sessionToken.substring(0, 10) + '...');
   const sessionKey = `session:${sessionToken}`;
   let sessionData = null;
 
@@ -28,6 +32,7 @@ export const verifyAuthentication = async (req) => {
     }
 
     if (!sessionData) {
+      console.warn('⚠️ Sessão não encontrada:', sessionKey);
       return { authenticated: false, error: 'Sessão inválida ou expirada' };
     }
 

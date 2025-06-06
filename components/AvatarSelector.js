@@ -1,71 +1,71 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useModalScrollLockAlways } from '../hooks/useModalScrollLock';
-import { FaTimes, FaUpload, FaUser, FaSpinner } from 'react-icons/fa';
-import { processAvatar } from '../utils/imageProcessor';
+import { FaTimes, FaUpload, FaUser, FaTrash } from 'react-icons/fa';
+import { PREDEFINED_AVATARS } from '../utils/avatarUtils';
+import { useAvatar } from '../hooks/useAvatar';
+import SimpleUserAvatar from './SimpleUserAvatar';
 import styles from '../styles/AvatarSelector.module.css';
 
 const AvatarSelector = ({ currentAvatar, onAvatarChange, onClose }) => {
   const [selectedAvatar, setSelectedAvatar] = useState(currentAvatar);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [uploadError, setUploadError] = useState('');
+
+  // Usar o hook de avatar para processamento
+  const {
+    isProcessing,
+    error,
+    processImageFile,
+    clearError
+  } = useAvatar(currentAvatar, onAvatarChange);
 
   // Bloquear/desbloquear scroll da página
   useModalScrollLockAlways();
 
-  // Avatares predefinidos
-  const predefinedAvatars = [
-    '🎮', '🎵', '🎯', '🎪', '🎨', '🎭', '🎸', '🎹',
-    '🎺', '🎻', '🥁', '🎤', '🎧', '🎬', '🎲', '🎳',
-    '🚀', '⭐', '🌟', '💫', '🔥', '⚡', '💎', '👑',
-    '🦄', '🐉', '🦋', '🌈', '🎊', '🎉', '💝', '🏆',
-    '🥇', '🥈', '🥉', '🏅', '🎖️', '🏵️', '🌺', '🌸',
-    '🌼', '🌻', '🌷', '🌹', '🍀', '🌿', '🌱', '🌳'
-  ];
+  // Limpar erro quando o modal abre
+  useEffect(() => {
+    clearError();
+  }, [clearError]);
 
   const handleAvatarSelect = (avatar) => {
     setSelectedAvatar(avatar);
+    clearError();
   };
 
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
-    if (file) {
-      try {
-        setIsProcessing(true);
-        setUploadError('');
-        
-        // Usar o utilitário de processamento de imagens
-        const processedImage = await processAvatar(file, {
-          maxWidth: 200,
-          maxHeight: 200,
-          format: 'image/jpeg',
-          quality: 0.85
-        });
-        
-        setSelectedAvatar(processedImage);
-        setIsProcessing(false);
-      } catch (error) {
-        console.error('Erro ao processar imagem:', error);
-        setUploadError(error.message || 'Erro ao processar a imagem. Tente outra imagem.');
-        setIsProcessing(false);
-      }
+    if (!file) return;
+
+    console.log('📁 [AvatarSelector] Arquivo selecionado:', file.name, file.size, file.type);
+
+    try {
+      console.log('🔄 [AvatarSelector] Iniciando processamento...');
+      const processedImage = await processImageFile(file);
+      console.log('✅ [AvatarSelector] Imagem processada:', processedImage ? processedImage.length : 'null', 'caracteres');
+      setSelectedAvatar(processedImage);
+      console.log('✅ [AvatarSelector] Avatar selecionado definido');
+    } catch (error) {
+      console.error('❌ [AvatarSelector] Erro no processamento:', error);
+      // Erro será exibido pelo hook useAvatar
     }
+
     // Limpar o input
     event.target.value = '';
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (isProcessing) return;
-    
-    // Salvar diretamente sem processamento adicional
-    // O processamento já foi feito durante o upload
-    console.log('Salvando avatar selecionado:', selectedAvatar ? 'Avatar presente' : 'Nenhum avatar');
-    
-    // Garantir que o avatar não seja undefined
-    const avatarToSave = selectedAvatar || currentAvatar || null;
-    
-    // Chamar callback com o avatar selecionado
-    onAvatarChange(avatarToSave);
-    onClose();
+
+    console.log('💾 [AvatarSelector] Salvando avatar:', selectedAvatar ? 'Avatar presente' : 'Removendo avatar');
+
+    try {
+      if (onAvatarChange) {
+        await onAvatarChange(selectedAvatar);
+        console.log('✅ [AvatarSelector] Avatar salvo com sucesso');
+      }
+      onClose();
+    } catch (error) {
+      console.error('❌ [AvatarSelector] Erro ao salvar:', error);
+      // Erro será tratado pelo componente pai
+    }
   };
 
   const isCustomImage = selectedAvatar && selectedAvatar.startsWith('data:');
@@ -81,27 +81,27 @@ const AvatarSelector = ({ currentAvatar, onAvatarChange, onClose }) => {
         </div>
 
         <div className={styles.content}>
-          {/* Avatar atual */}
+          {/* Preview do avatar */}
           <div className={styles.currentSection}>
-            <h4>Avatar Atual</h4>
+            <h4>Preview</h4>
             <div className={styles.currentAvatar}>
-              {selectedAvatar ? (
-                isCustomImage ? (
-                  <img src={selectedAvatar} alt="Avatar" className={styles.avatarImage} />
-                ) : (
-                  <span className={styles.avatarEmoji}>{selectedAvatar}</span>
-                )
-              ) : (
-                <FaUser className={styles.defaultIcon} />
-              )}
+              <SimpleUserAvatar
+                avatar={selectedAvatar || currentAvatar}
+                size="xlarge"
+              />
             </div>
+            {selectedAvatar && selectedAvatar !== currentAvatar && (
+              <p className={styles.previewText}>
+                Avatar selecionado
+              </p>
+            )}
           </div>
 
           {/* Upload personalizado */}
           <div className={styles.uploadSection}>
             <h4>Upload Personalizado</h4>
             <label className={`${styles.uploadButton} ${isProcessing ? styles.disabled : ''}`}>
-              {isProcessing ? <FaSpinner className={styles.spinner} /> : <FaUpload />}
+              <FaUpload />
               {isProcessing ? 'Processando...' : 'Enviar Imagem'}
               <input
                 type="file"
@@ -111,11 +111,11 @@ const AvatarSelector = ({ currentAvatar, onAvatarChange, onClose }) => {
                 disabled={isProcessing}
               />
             </label>
-            {uploadError ? (
-              <p className={styles.errorMessage}>{uploadError}</p>
+            {error ? (
+              <p className={styles.errorMessage}>{error}</p>
             ) : (
               <p className={styles.uploadInfo}>
-                Máximo 5MB • JPG, PNG, GIF
+                Máximo 5MB • JPG, PNG, GIF, WebP
               </p>
             )}
           </div>
@@ -124,7 +124,7 @@ const AvatarSelector = ({ currentAvatar, onAvatarChange, onClose }) => {
           <div className={styles.predefinedSection}>
             <h4>Avatares Predefinidos</h4>
             <div className={styles.avatarGrid}>
-              {predefinedAvatars.map((avatar, index) => (
+              {PREDEFINED_AVATARS.map((avatar, index) => (
                 <button
                   key={index}
                   className={`${styles.avatarOption} ${selectedAvatar === avatar ? styles.selected : ''}`}

@@ -4,7 +4,7 @@ import { useSimpleFriends } from '../contexts/SimpleFriendsContext';
 import { useUserProfile } from '../contexts/UserProfileContext';
 import { useModalScrollLock } from '../hooks/useModalScrollLock';
 import { FaTimes, FaUsers, FaGamepad, FaPaperPlane, FaCheck } from 'react-icons/fa';
-import UserAvatar from './UserAvatar';
+import SimpleUserAvatar from './SimpleUserAvatar';
 import styles from '../styles/MultiplayerInviteModal.module.css';
 
 const MultiplayerInviteModal = ({ isOpen, onClose, roomCode, onCreateRoom }) => {
@@ -13,7 +13,7 @@ const MultiplayerInviteModal = ({ isOpen, onClose, roomCode, onCreateRoom }) => 
   const { friends } = useSimpleFriends();
   // const { sendMultiplayerInvite } = useNotifications();
   const { profile } = useUserProfile();
-  
+
   const [selectedFriends, setSelectedFriends] = useState([]);
   const [isCreatingRoom, setIsCreatingRoom] = useState(false);
   const [invitesSent, setInvitesSent] = useState([]);
@@ -37,8 +37,8 @@ const MultiplayerInviteModal = ({ isOpen, onClose, roomCode, onCreateRoom }) => 
   const hostName = profile?.displayName || 'Jogador';
 
   const toggleFriendSelection = (friendId) => {
-    setSelectedFriends(prev => 
-      prev.includes(friendId) 
+    setSelectedFriends(prev =>
+      prev.includes(friendId)
         ? prev.filter(id => id !== friendId)
         : [...prev, friendId]
     );
@@ -65,7 +65,7 @@ const MultiplayerInviteModal = ({ isOpen, onClose, roomCode, onCreateRoom }) => 
 
   const sendInvites = (code) => {
     const sentTo = [];
-    
+
     selectedFriends.forEach(friendId => {
       const friend = friends.find(f => f.id === friendId);
       if (friend) {
@@ -80,7 +80,7 @@ const MultiplayerInviteModal = ({ isOpen, onClose, roomCode, onCreateRoom }) => 
     });
 
     setInvitesSent(sentTo);
-    
+
     if (sentTo.length > 0) {
       setTimeout(() => {
         onClose();
@@ -169,7 +169,7 @@ const MultiplayerInviteModal = ({ isOpen, onClose, roomCode, onCreateRoom }) => 
                         onClick={() => toggleFriendSelection(friend.id)}
                       >
                         <div className={styles.friendInfo}>
-                          <UserAvatar
+                          <SimpleUserAvatar
                             avatar={friend.avatar}
                             size="medium"
                             className={styles.online}

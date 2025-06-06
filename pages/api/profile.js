@@ -85,13 +85,15 @@ export default async function handler(req, res) {
   const { method } = req;
 
   try {
+    // Verificar autenticação para todos os métodos
+    const authResult = await verifyAuthentication(req);
+    if (!authResult.authenticated) {
+      console.warn('⚠️ Tentativa de acessar perfil sem autenticação:', authResult.error);
+      return res.status(401).json({ error: authResult.error });
+    }
+
     if (method === 'GET') {
       // Buscar perfil do usuário autenticado
-      const authResult = await verifyAuthentication(req);
-      if (!authResult.authenticated) {
-        console.warn('⚠️ Tentativa de carregar perfil sem autenticação:', authResult.error);
-        return res.status(401).json({ error: authResult.error });
-      }
 
       const userId = authResult.userId;
       const profileKey = `profile:${userId}`;
@@ -220,7 +222,7 @@ export default async function handler(req, res) {
           const newAchievements = checkAchievements(profile, gameStats);
           if (newAchievements.length > 0) {
             profile.achievements = [...(profile.achievements || []), ...newAchievements];
-            
+
             // XP bônus por conquistas
             const achievementXP = newAchievements.length * 50;
             profile.xp += achievementXP;
@@ -326,6 +328,51 @@ export default async function handler(req, res) {
         return res.status(500).json({ error: 'Erro interno do servidor' });
       }
 
+    } else if (method === 'PUT' || method === 'POST') {
+      const authResult = await verifyAuthentication(req);
+      if (!authResult.authenticated) {
+        return res.status(401).json({ error: 'Não autorizado' });
+      }
+
+      const userId = authResult.userId;
+      const profileKey = `profile:${userId}`;
+      const updates = req.body;
+
+      // Validar dados do avatar se estiver presente
+      if (updates.avatar !== undefined) {
+        if (updates.avatar === null) {
+          // Permitir remover avatar
+        } else {
+          // Importar utilitário de validação
+          const { validateAvatar } = require('../../utils/avatarUtils');
+
+          const validation = validateAvatar(updates.avatar);
+          if (!validation.isValid) {
+            return res.status(400).json({ error: validation.error });
+          }
+        }
+      }
+
+      // Buscar perfil existente
+      let currentProfile = await kvGet(profileKey, localProfiles);
+      if (!currentProfile) {
+        return res.status(404).json({ error: 'Perfil não encontrado' });
+      }
+
+      // Atualizar perfil com novos dados
+      const updatedProfile = {
+        ...currentProfile,
+        ...updates,
+        lastUpdated: new Date().toISOString()
+      };
+
+      // Salvar no KV
+      await kvSet(profileKey, updatedProfile, localProfiles);
+
+      return res.status(200).json({
+        profile: updatedProfile,
+        message: 'Perfil atualizado com sucesso'
+      });
     } else {
       return res.status(405).json({ error: 'Método não permitido' });
     }

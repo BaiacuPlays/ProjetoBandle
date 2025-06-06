@@ -4,7 +4,7 @@ import { useNotifications } from '../contexts/NotificationContext';
 import { useUserProfile } from '../contexts/UserProfileContext';
 import { useModalScrollLock } from '../hooks/useModalScrollLock';
 import { FaTimes, FaUserPlus, FaSearch, FaUsers, FaUserFriends, FaPaperPlane, FaCheck, FaTimes as FaReject, FaTrash, FaGamepad, FaShare, FaEye } from 'react-icons/fa';
-import UserAvatar from './UserAvatar';
+import SimpleUserAvatar from './SimpleUserAvatar';
 import MultiplayerInviteModal from './MultiplayerInviteModal';
 
 import ReferralSystem from './ReferralSystem';
@@ -227,7 +227,7 @@ const FriendsManager = ({ isOpen, onClose, onViewProfile }) => {
                 friends.map(friend => (
                   <div key={friend.id} className={styles.friendItem}>
                     <div className={styles.friendInfo}>
-                      <UserAvatar
+                      <SimpleUserAvatar
                         avatar={friend.avatar}
                         size="medium"
                       />
@@ -276,7 +276,7 @@ const FriendsManager = ({ isOpen, onClose, onViewProfile }) => {
                   friendRequests.map(request => (
                     <div key={request.id} className={styles.requestItem}>
                       <div className={styles.requestInfo}>
-                        <UserAvatar
+                        <SimpleUserAvatar
                           avatar={request.fromUser?.avatar}
                           size="medium"
                         />
@@ -315,7 +315,7 @@ const FriendsManager = ({ isOpen, onClose, onViewProfile }) => {
                   sentRequests.map(request => (
                     <div key={request.id} className={styles.requestItem}>
                       <div className={styles.requestInfo}>
-                        <UserAvatar
+                        <SimpleUserAvatar
                           avatar={request.toUser?.avatar}
                           size="medium"
                         />
@@ -348,7 +348,7 @@ const FriendsManager = ({ isOpen, onClose, onViewProfile }) => {
               <div className={styles.searchSection}>
                 <h4>Buscar Amigos</h4>
                 <p>Digite o código de amigo ou nome de usuário:</p>
-                
+
                 <div className={styles.searchBox}>
                   <input
                     type="text"
@@ -374,7 +374,7 @@ const FriendsManager = ({ isOpen, onClose, onViewProfile }) => {
                 {searchResult && (
                   <div className={styles.searchResult}>
                     <div className={styles.userFound}>
-                      <UserAvatar
+                      <SimpleUserAvatar
                         avatar={searchResult.avatar}
                         size="large"
                       />

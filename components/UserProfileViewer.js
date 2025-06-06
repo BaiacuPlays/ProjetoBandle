@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useSimpleFriends } from '../contexts/SimpleFriendsContext';
+import SimpleUserAvatar from './SimpleUserAvatar';
 import styles from '../styles/UserProfileViewer.module.css';
 import { getBadge } from '../data/badges';
 import { getAchievement } from '../data/achievements';
@@ -10,7 +11,7 @@ import { getAchievement } from '../data/achievements';
 const UserProfileViewer = ({ isOpen, userId, username, onClose }) => {
   const { isAuthenticated } = useAuth();
   const { sendFriendRequest, friends } = useSimpleFriends();
-  
+
   const [profile, setProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -106,7 +107,7 @@ const UserProfileViewer = ({ isOpen, userId, username, onClose }) => {
 
       // Recarregar perfil para atualizar status de relacionamento
       await loadUserProfile();
-      
+
       alert('Solicitação de amizade enviada!');
     } catch (error) {
       alert(error.message || 'Erro ao enviar solicitação');
@@ -153,7 +154,7 @@ const UserProfileViewer = ({ isOpen, userId, username, onClose }) => {
     }
 
     return (
-      <button 
+      <button
         className={styles.addFriendButton}
         onClick={handleAddFriend}
         disabled={actionLoading}
@@ -275,17 +276,10 @@ const UserProfileViewer = ({ isOpen, userId, username, onClose }) => {
           {/* Informações básicas */}
           <div className={styles.basicInfo}>
             <div className={styles.avatar}>
-              {profile.avatar && typeof profile.avatar === 'string' ? (
-                profile.avatar.startsWith('http') || profile.avatar.startsWith('/') || profile.avatar.startsWith('data:') ? (
-                  <img
-                    src={profile.avatar}
-                    alt="Avatar"
-                    className={styles.avatarImage}
-                  />
-                ) : (
-                  profile.avatar
-                )
-              ) : '👤'}
+              <SimpleUserAvatar
+                avatar={profile.avatar}
+                size="xlarge"
+              />
             </div>
             <div className={styles.userInfo}>
               <h3 className={styles.displayName}>{profile.displayName}</h3>

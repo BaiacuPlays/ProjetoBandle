@@ -1,0 +1,32 @@
+.editableContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.editableAvatar {
+  cursor: default;
+}
+
+.editIcon {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #1DB954;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 12px;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.editIcon:hover {
+  background-color: #1ed760;
+  transform: scale(1.1);
+}

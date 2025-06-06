@@ -2,12 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { FaTimes, FaSearch, FaTrophy, FaGamepad, FaFire, FaMedal, FaUser, FaCrown, FaStar } from 'react-icons/fa';
 import { useModalScrollLock } from '../hooks/useModalScrollLock';
-import UserAvatar from './UserAvatar';
+import SimpleUserAvatar from './SimpleUserAvatar';
 import styles from '../styles/PlayersRanking.module.css';
 
 const PlayersRanking = ({ isOpen, onClose, onViewProfile }) => {
   useModalScrollLock(isOpen);
-  
+
   const [players, setPlayers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -41,7 +41,7 @@ const PlayersRanking = ({ isOpen, onClose, onViewProfile }) => {
       });
 
       const response = await fetch(`/api/players-ranking?${params.toString()}`);
-      
+
       if (response.ok) {
         const data = await response.json();
         setPlayers(data.players || []);
@@ -193,7 +193,7 @@ const PlayersRanking = ({ isOpen, onClose, onViewProfile }) => {
 
                   {/* Avatar e Info */}
                   <div className={styles.playerInfo}>
-                    <UserAvatar
+                    <SimpleUserAvatar
                       avatar={player.avatar}
                       size="medium"
                     />
@@ -211,7 +211,7 @@ const PlayersRanking = ({ isOpen, onClose, onViewProfile }) => {
 
                   {/* Nível */}
                   <div className={styles.levelContainer}>
-                    <div 
+                    <div
                       className={styles.levelBadge}
                       style={{ backgroundColor: getLevelColor(player.level) }}
                     >

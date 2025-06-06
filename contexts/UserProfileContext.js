@@ -212,13 +212,13 @@ export const UserProfileProvider = ({ children }) => {
   // Verificar se está no cliente e carregar perfil do localStorage
   useEffect(() => {
     setIsClient(true);
-    
+
     // Verificar se já temos um userId no localStorage
     const storedUserId = localStorage.getItem('ludomusic_user_id');
     if (storedUserId && isAuthenticated) {
       // Carregar perfil do localStorage usando o sistema de persistência
       const localProfile = loadProfileFromLocalStorage(storedUserId);
-      
+
       if (localProfile) {
         // Verificar integridade do perfil
         if (!verifyProfileIntegrity(localProfile)) {
@@ -238,7 +238,7 @@ export const UserProfileProvider = ({ children }) => {
         }
       }
     }
-    
+
     // Configurar verificação periódica de integridade
     const intervalId = setInterval(() => {
       if (profile && userId) {
@@ -254,7 +254,7 @@ export const UserProfileProvider = ({ children }) => {
         }
       }
     }, 30000); // 30 segundos
-    
+
     return () => clearInterval(intervalId);
   }, [isAuthenticated, profile, userId]);
 
@@ -275,14 +275,14 @@ export const UserProfileProvider = ({ children }) => {
     window.addEventListener('focus', handleFocus);
     return () => window.removeEventListener('focus', handleFocus);
   }, [isAuthenticated, userId]);
-  
+
   // Configurar sincronização automática entre localStorage e sessionStorage
   useEffect(() => {
     if (!userId) return;
-    
+
     // Iniciar sincronização automática
     const cleanup = initProfileSync(userId);
-    
+
     // Limpar ao desmontar
     return cleanup;
   }, [userId]);
@@ -296,11 +296,11 @@ export const UserProfileProvider = ({ children }) => {
       if (id && id !== 'null' && id !== 'undefined' && id !== userId) {
         console.log('🔄 [PROFILE] UserID mudou de', userId, 'para', id);
         setUserId(id);
-        
+
         // Primeiro tentar carregar do localStorage para exibição imediata
         const localProfileKey = `ludomusic_profile_${id}`;
         const localProfileStr = localStorage.getItem(localProfileKey);
-        
+
         if (localProfileStr) {
           try {
             const localProfile = JSON.parse(localProfileStr);
@@ -310,7 +310,7 @@ export const UserProfileProvider = ({ children }) => {
             console.error('❌ [PROFILE] Erro ao carregar perfil do localStorage:', error);
           }
         }
-        
+
         // Chamar loadProfile para sincronizar com o servidor
         loadProfileInternal(id);
       } else if (!id || id === 'null' || id === 'undefined') {
@@ -344,15 +344,15 @@ export const UserProfileProvider = ({ children }) => {
       }
     }
   }, [isAuthenticated, profile, userId]);
-  
+
   // Sincronização automática quando a página é carregada ou atualizada
   useEffect(() => {
     if (isAuthenticated && userId) {
       console.log('🔄 Página carregada/atualizada - sincronizando perfil');
-      
+
       // Primeiro tentar carregar do localStorage usando o sistema de persistência
       const localProfile = loadProfileFromLocalStorage(userId);
-      
+
       if (localProfile) {
         // Verificar integridade do perfil
         if (!verifyProfileIntegrity(localProfile)) {
@@ -371,7 +371,7 @@ export const UserProfileProvider = ({ children }) => {
           setIsLoading(false);
         }
       }
-      
+
       // Depois sincronizar com o servidor
       loadProfileInternal(userId);
     }
@@ -395,16 +395,16 @@ export const UserProfileProvider = ({ children }) => {
 
       // Carregar perfil do localStorage usando o sistema de persistência com recuperação de backup
       let localProfile = loadProfileFromLocalStorage(userIdToUse);
-      
+
       if (localProfile) {
         console.log('📋 [PROFILE] Perfil encontrado no localStorage:', localProfile.username);
-        
+
         // Verificar integridade do perfil
         if (!verifyProfileIntegrity(localProfile)) {
           console.log('🔧 [PROFILE] Perfil corrompido, tentando reparar...');
           localProfile = repairProfile(localProfile, userIdToUse);
         }
-        
+
         // Aplicar perfil local imediatamente para garantir que temos dados na UI
         if (!profile) {
           setProfile(localProfile);
@@ -422,7 +422,7 @@ export const UserProfileProvider = ({ children }) => {
 
       // Decidir qual perfil usar (servidor ou local)
       let finalProfile = null;
-      
+
       if (serverProfile) {
         // USAR PERFIL DA VERCEL KV
         console.log('✅ [PROFILE] Usando perfil da Vercel KV:', serverProfile.username);
@@ -449,14 +449,14 @@ export const UserProfileProvider = ({ children }) => {
             console.warn('Erro ao atualizar dados de autenticação:', error);
           }
         }
-        
+
         // Salvar no localStorage usando o sistema de persistência com múltiplos backups
         saveProfileToLocalStorage(userIdToUse, finalProfile);
       } else if (localProfile) {
         // Se não conseguiu carregar do servidor mas tem perfil local, usar o local
         console.log('📋 [PROFILE] Usando perfil do localStorage:', localProfile.username);
         finalProfile = localProfile;
-        
+
         // Tentar salvar no servidor para sincronizar
         try {
           await saveProfileToServer(localProfile);
@@ -474,7 +474,7 @@ export const UserProfileProvider = ({ children }) => {
           username: authenticatedUser?.username || `Jogador_${userIdToUse?.slice(-6) || '000000'}`,
           displayName: authenticatedUser?.displayName || '',
           bio: '',
-          avatar: '/default-avatar.svg',
+          avatar: null,
           level: 1,
           xp: 0,
           createdAt: new Date().toISOString(),
@@ -538,7 +538,7 @@ export const UserProfileProvider = ({ children }) => {
       // Atualizar o estado com o perfil final
       setProfile(finalProfile);
       console.log('✅ [PROFILE] Perfil final definido no estado:', finalProfile.username);
-      
+
     } catch (error) {
       console.error('❌ [PROFILE] Erro crítico ao carregar perfil:', error);
       // Em caso de erro, tentar usar o perfil do localStorage como fallback usando o sistema de persistência
@@ -577,7 +577,7 @@ export const UserProfileProvider = ({ children }) => {
       username: profileData.username || `Jogador_${(profileData.id || userId)?.slice(-6) || '000000'}`,
       displayName: profileData.displayName || '',
       bio: profileData.bio || '',
-      avatar: profileData.avatar || '/default-avatar.svg',
+      avatar: profileData.avatar || null,
       level: profileData.level || 1,
       xp: profileData.xp || 0,
       createdAt: profileData.createdAt || new Date().toISOString(),
@@ -821,11 +821,11 @@ export const UserProfileProvider = ({ children }) => {
       console.warn('⚠️ UserId não disponível');
       return null;
     }
-    
+
     // Se não temos perfil, tentar carregar do localStorage usando o sistema de persistência
     if (!profile) {
       const localProfile = loadProfileFromLocalStorage(userId);
-      
+
       if (localProfile) {
         // Verificar integridade do perfil
         if (!verifyProfileIntegrity(localProfile)) {
@@ -1089,7 +1089,7 @@ export const UserProfileProvider = ({ children }) => {
 
       // SEMPRE salvar localmente primeiro (crítico para não perder dados)
       setProfile(updatedProfile);
-      
+
       // Usar o sistema de persistência com múltiplos backups
       saveProfileToLocalStorage(userId, updatedProfile);
 
@@ -1559,37 +1559,66 @@ export const UserProfileProvider = ({ children }) => {
 
   // Função para atualizar avatar
   const updateAvatar = async (avatarData) => {
-    if (!profile || !userId) return;
-
     try {
-      console.log('Atualizando avatar no contexto:', avatarData ? 'Avatar presente' : 'Nenhum avatar');
-      
+      // Validar avatar antes de salvar (se não for null)
+      if (avatarData !== null && avatarData !== undefined) {
+        if (typeof avatarData === 'string') {
+          // Verificar tamanho se for imagem base64
+          if (avatarData.startsWith('data:image/')) {
+            const base64Size = Math.ceil((avatarData.length * 3) / 4);
+            if (base64Size > 500000) { // 500KB
+              throw new Error('Avatar muito grande (máximo 500KB)');
+            }
+          }
+          // Para emojis e outros tipos, ser mais permissivo
+          // Apenas verificar se não é excessivamente longo
+          else if (avatarData.length > 50) { // Aumentado significativamente
+            throw new Error('Avatar muito longo');
+          }
+        } else {
+          throw new Error('Avatar deve ser uma string ou null');
+        }
+      }
+
       // Criar cópia do perfil com o novo avatar
       const updatedProfile = {
         ...profile,
-        avatar: avatarData
+        avatar: avatarData,
+        lastUpdated: new Date().toISOString()
       };
 
       // Atualizar estado local imediatamente
+      console.log('🔄 [UserProfileContext] Atualizando estado local com avatar:', avatarData ? 'Avatar presente' : 'Removendo avatar');
       setProfile(updatedProfile);
-      
-      // Salvar diretamente no localStorage para garantir persistência imediata
-      localStorage.setItem(`ludomusic_profile_${userId}`, JSON.stringify(updatedProfile));
-      
-      // Backup adicional
-      localStorage.setItem(`ludomusic_profile_backup_${userId}`, JSON.stringify(updatedProfile));
+      console.log('✅ [UserProfileContext] Estado local atualizado:', updatedProfile.avatar ? 'Avatar definido' : 'Avatar removido');
 
-      // Salvar no servidor em segundo plano
-      saveProfileToServer(updatedProfile)
-        .then(() => console.log('🖼️ Avatar atualizado no servidor'))
-        .catch(err => console.warn('Não foi possível atualizar avatar no servidor:', err));
+      // Salvar no servidor usando a função existente
+      try {
+        console.log('💾 [UserProfileContext] Salvando no servidor...');
+        await saveProfileToServer(updatedProfile);
+        console.log('✅ [UserProfileContext] Salvo no servidor com sucesso');
+      } catch (serverError) {
+        console.error('❌ [UserProfileContext] Erro no servidor:', serverError);
+        // Em caso de erro no servidor, reverter o estado local
+        setProfile(profile);
+        throw new Error('Erro ao salvar no servidor: ' + serverError.message);
+      }
+
+      // Salvar no localStorage como backup
+      if (userId) {
+        try {
+          localStorage.setItem(`ludomusic_profile_${userId}`, JSON.stringify(updatedProfile));
+          localStorage.setItem(`ludomusic_profile_backup_${userId}`, JSON.stringify(updatedProfile));
+          console.log('✅ Avatar salvo no localStorage');
+        } catch (localError) {
+          console.warn('⚠️ Erro ao salvar avatar no localStorage:', localError.message);
+        }
+      }
 
       return updatedProfile;
     } catch (error) {
       console.error('❌ Erro ao atualizar avatar:', error);
-      // Não propagar o erro para evitar que a UI seja afetada
-      // Em vez disso, retornar o perfil sem alterações
-      return profile;
+      throw error;
     }
   };
 

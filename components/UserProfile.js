@@ -7,8 +7,7 @@ import { badges, titles, getBadge, getTitle, getAvailableTitles } from '../data/
 import { FaTimes, FaEdit, FaTrophy, FaGamepad, FaClock, FaFire, FaStar, FaChartLine, FaCog, FaDownload, FaUpload, FaTrash, FaMedal, FaSignOutAlt } from 'react-icons/fa';
 import ProfileTutorial from './ProfileTutorial';
 import AvatarSelector from './AvatarSelector';
-import UserAvatar from './UserAvatar';
-import DirectAvatarUpload from './DirectAvatarUpload';
+import EditableAvatar from './EditableAvatar';
 import LoginModal from './LoginModal';
 import ActivateBenefitsModal from './ActivateBenefitsModal';
 import { useAuth } from '../contexts/AuthContext';
@@ -101,6 +100,8 @@ const UserProfile = ({ isOpen, onClose }) => {
   if (!isOpen) {
     return null;
   }
+
+
 
   // Se deve mostrar tutorial, mostrar primeiro (independente de autenticação)
   if (showTutorial) {
@@ -297,17 +298,12 @@ const UserProfile = ({ isOpen, onClose }) => {
   const handleAvatarChange = async (avatarData) => {
     if (updateAvatar) {
       try {
-        console.log('Salvando avatar...', avatarData ? avatarData.substring(0, 50) + '...' : 'null');
-        // Salvar localmente primeiro para garantir que não desapareça
-        if (profile && avatarData) {
-          const tempProfile = {...profile, avatar: avatarData};
-          localStorage.setItem(`ludomusic_profile_${profile.id}`, JSON.stringify(tempProfile));
-        }
-        // Atualizar no contexto
-        await updateAvatar(avatarData);
+        console.log('🔄 [UserProfile] Iniciando atualização de avatar:', avatarData ? 'Avatar presente' : 'Removendo avatar');
+        const result = await updateAvatar(avatarData);
+        console.log('✅ [UserProfile] Avatar atualizado com sucesso:', result);
         setShowAvatarSelector(false);
       } catch (error) {
-        console.error('Erro ao atualizar avatar:', error);
+        console.error('❌ [UserProfile] Erro ao atualizar avatar:', error);
         alert('Não foi possível atualizar o avatar. Tente novamente.');
       }
     }
@@ -355,7 +351,7 @@ const UserProfile = ({ isOpen, onClose }) => {
   return (
     <>
       {/* Renderizar o modal de perfil */}
-      {(
+      {isOpen && (
         <div className={styles.modalOverlay}>
           <div className={styles.profileModal}>
             <div className={styles.profileHeader}>
@@ -369,18 +365,11 @@ const UserProfile = ({ isOpen, onClose }) => {
               {/* Informações básicas */}
               <div className={styles.profileBasicInfo}>
                 <div className={styles.avatarSection}>
-                  <div style={{ position: 'relative', display: 'inline-block', width: '100px', height: '100px' }}>
-                    <UserAvatar
-                      avatar={profile.avatar}
-                      size="xlarge"
-                      editable={true}
-                      showEditIcon={false}
-                      onClick={() => setShowAvatarSelector(true)}
-                    />
-                    <div style={{ position: 'absolute', bottom: '0', right: '0', zIndex: 10 }}>
-                      <DirectAvatarUpload />
-                    </div>
-                  </div>
+                  <EditableAvatar
+                    avatar={profile.avatar}
+                    size="xlarge"
+                    onEdit={() => setShowAvatarSelector(true)}
+                  />
                   <div className={styles.levelBadge}>
                     Nível {Math.floor(Math.sqrt((profile.xp || 0) / 300)) + 1}
                   </div>

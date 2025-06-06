@@ -4,7 +4,7 @@ import { useSimpleFriends } from '../contexts/SimpleFriendsContext';
 import { useFriends } from '../contexts/FriendsContext';
 import { FaTimes, FaUsers, FaUserPlus, FaSearch, FaCheck, FaTimes as FaReject, FaTrash, FaShare, FaEye } from 'react-icons/fa';
 import ReferralSystem from './ReferralSystem';
-import UserAvatar from './UserAvatar';
+import SimpleUserAvatar from './SimpleUserAvatar';
 import styles from '../styles/SimpleFriendsModal.module.css';
 
 const SimpleFriendsModal = ({ isOpen, onClose, onViewProfile }) => {
@@ -158,7 +158,7 @@ const SimpleFriendsModal = ({ isOpen, onClose, onViewProfile }) => {
                 friends.map(friend => (
                   <div key={friend.id} className={styles.friendItem}>
                     <div className={styles.friendInfo}>
-                      <UserAvatar
+                      <SimpleUserAvatar
                         avatar={friend.avatar}
                         size="medium"
                       />
@@ -200,7 +200,7 @@ const SimpleFriendsModal = ({ isOpen, onClose, onViewProfile }) => {
                 requests.map(request => (
                   <div key={request.id} className={styles.requestItem}>
                     <div className={styles.requestInfo}>
-                      <UserAvatar
+                      <SimpleUserAvatar
                         avatar={request.fromUser.avatar}
                         size="medium"
                       />
@@ -251,7 +251,7 @@ const SimpleFriendsModal = ({ isOpen, onClose, onViewProfile }) => {
                     {searchLoading ? '...' : <FaSearch />}
                   </button>
                 </div>
-                
+
                 {searchError && (
                   <div className={styles.error}>{searchError}</div>
                 )}
@@ -259,7 +259,7 @@ const SimpleFriendsModal = ({ isOpen, onClose, onViewProfile }) => {
                 {searchResult && (
                   <div className={styles.searchResult}>
                     <div className={styles.userInfo}>
-                      <UserAvatar
+                      <SimpleUserAvatar
                         avatar={searchResult.avatar}
                         size="medium"
                       />
@@ -284,7 +284,7 @@ const SimpleFriendsModal = ({ isOpen, onClose, onViewProfile }) => {
                   <div className={styles.sentList}>
                     {sentRequests.map(request => (
                       <div key={request.id} className={styles.sentItem}>
-                        <UserAvatar
+                        <SimpleUserAvatar
                           avatar={request.toUser.avatar}
                           size="medium"
                         />
