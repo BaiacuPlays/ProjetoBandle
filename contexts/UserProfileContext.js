@@ -39,17 +39,52 @@ export const UserProfileProvider = ({ children }) => {
   const [isClient, setIsClient] = useState(false);
   const [userId, setUserId] = useState(null);
 
-  // Gerar ou recuperar ID do usuário - APENAS PARA USUÁRIOS AUTENTICADOS
+  // SISTEMA ULTRA-ROBUSTO: GARANTIR que usuários logados SEMPRE tenham dados
   const getUserId = () => {
     if (typeof window === 'undefined') return null;
 
-    // APENAS usuários autenticados podem ter perfis
+    // PRIORIDADE 1: Usuário autenticado
     if (isAuthenticated) {
       const authId = getAuthenticatedUserId();
-      if (authId) return authId;
+      if (authId) {
+        console.log('✅ [USER-ID] ID obtido via autenticação:', authId);
+        return authId;
+      }
     }
 
-    // NÃO permitir perfis para usuários não autenticados
+    // PRIORIDADE 2: Fallback para dados salvos (caso autenticação falhe temporariamente)
+    try {
+      const savedUserId = localStorage.getItem('ludomusic_user_id');
+      const sessionToken = localStorage.getItem('ludomusic_session_token');
+
+      if (savedUserId && sessionToken) {
+        console.log('🔄 [USER-ID] ID obtido via fallback localStorage:', savedUserId);
+        return savedUserId;
+      }
+    } catch (error) {
+      console.warn('⚠️ [USER-ID] Erro ao acessar localStorage:', error);
+    }
+
+    // PRIORIDADE 3: Tentar obter dos cookies
+    try {
+      const userData = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('ludomusic_user_data='));
+
+      if (userData) {
+        const userDataValue = decodeURIComponent(userData.split('=')[1]);
+        const parsedData = JSON.parse(userDataValue);
+        if (parsedData.username) {
+          const cookieUserId = `auth_${parsedData.username}`;
+          console.log('🍪 [USER-ID] ID obtido via cookies:', cookieUserId);
+          return cookieUserId;
+        }
+      }
+    } catch (error) {
+      console.warn('⚠️ [USER-ID] Erro ao acessar cookies:', error);
+    }
+
+    console.log('❌ [USER-ID] Nenhum ID encontrado');
     return null;
   };
 
@@ -209,13 +244,471 @@ export const UserProfileProvider = ({ children }) => {
     }
   };
 
-  // Verificar se está no cliente e carregar perfil do localStorage
+  // Função para verificação periódica de integridade
+  const performPeriodicIntegrityCheck = async () => {
+    if (!profile || !userId) return;
+
+    try {
+      console.log('🔍 [INTEGRITY] Iniciando verificação periódica de integridade');
+
+      // Verificar integridade do perfil
+      if (!verifyProfileIntegrity(profile)) {
+        console.warn('⚠️ [INTEGRITY] Perfil corrompido detectado durante verificação periódica');
+        const repairedProfile = repairProfile(profile, userId);
+        if (repairedProfile) {
+          console.log('🔧 [INTEGRITY] Perfil reparado automaticamente');
+          setProfile(repairedProfile);
+          saveProfileToLocalStorage(userId, repairedProfile);
+
+          // Tentar sincronizar com o servidor
+          try {
+            await saveProfileToServerWithRetry(repairedProfile, userId);
+            console.log('✅ [INTEGRITY] Perfil reparado sincronizado com servidor');
+          } catch (error) {
+            console.warn('⚠️ [INTEGRITY] Erro ao sincronizar perfil reparado:', error);
+          }
+        }
+      }
+
+      // Verificar integridade das estatísticas
+      const statsCheck = verifyStatsIntegrity(profile.stats);
+      if (!statsCheck.isValid) {
+        console.warn('⚠️ [INTEGRITY] Estatísticas corrompidas detectadas:', statsCheck.issues);
+        const repairedStats = repairStats(profile.stats, statsCheck.issues);
+        const updatedProfile = { ...profile, stats: repairedStats };
+
+        setProfile(updatedProfile);
+        saveProfileToLocalStorage(userId, updatedProfile);
+
+        try {
+          await saveProfileToServerWithRetry(updatedProfile, userId);
+          console.log('✅ [INTEGRITY] Estatísticas reparadas sincronizadas com servidor');
+        } catch (error) {
+          console.warn('⚠️ [INTEGRITY] Erro ao sincronizar estatísticas reparadas:', error);
+        }
+      }
+
+      // Limpar backups antigos
+      cleanupOldBackups(userId);
+
+      console.log('✅ [INTEGRITY] Verificação de integridade concluída');
+    } catch (error) {
+      console.error('❌ [INTEGRITY] Erro durante verificação de integridade:', error);
+    }
+  };
+
+  // SISTEMA DE GARANTIA ABSOLUTA: Usuários logados SEMPRE têm dados - VERSÃO INFALÍVEL
+  const ensureUserDataExists = async (userIdToEnsure) => {
+    if (!userIdToEnsure) return null;
+
+    console.log('🛡️ [GUARANTEE] ⚠️ GARANTINDO DADOS OBRIGATÓRIOS para usuário logado:', userIdToEnsure);
+    console.log('🛡️ [GUARANTEE] ⚠️ USUÁRIO LOGADO DEVE TER DADOS - NUNCA PODE FALHAR!');
+
+    const authenticatedUser = getAuthenticatedUser();
+    let profile = null;
+
+    // ETAPA 1: Verificar localStorage COM REPARO AUTOMÁTICO
+    try {
+      profile = loadProfileFromLocalStorage(userIdToEnsure);
+      if (profile) {
+        console.log('📋 [GUARANTEE] ✅ Dados encontrados no localStorage');
+
+        // SEMPRE atualizar dados de autenticação para usuários logados
+        if (authenticatedUser && isAuthenticated) {
+          profile.username = authenticatedUser.username;
+          profile.displayName = authenticatedUser.displayName || profile.displayName;
+          profile.lastLogin = new Date().toISOString();
+          profile.lastUpdated = new Date().toISOString();
+
+          // Verificar e reparar integridade
+          if (!verifyProfileIntegrity(profile)) {
+            console.log('🔧 [GUARANTEE] Reparando dados corrompidos do localStorage');
+            profile = repairProfile(profile, userIdToEnsure);
+          }
+
+          // Salvar dados atualizados
+          saveProfileToLocalStorage(userIdToEnsure, profile);
+          console.log('✅ [GUARANTEE] Dados do localStorage atualizados e validados');
+        }
+
+        return profile;
+      }
+    } catch (error) {
+      console.warn('⚠️ [GUARANTEE] Erro no localStorage (continuando):', error);
+    }
+
+    // ETAPA 2: Verificar TODOS os backups disponíveis
+    try {
+      console.log('💾 [GUARANTEE] Procurando backups...');
+      const backupKeys = [];
+
+      // Procurar backups normais
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && (
+          key.startsWith(`ludomusic_profile_backup_${userIdToEnsure}_`) ||
+          key.startsWith(`ludomusic_profile_snapshot_${userIdToEnsure}`) ||
+          key.startsWith(`ludomusic_emergency_profile_${userIdToEnsure}`)
+        )) {
+          backupKeys.push(key);
+        }
+      }
+
+      if (backupKeys.length > 0) {
+        console.log(`💾 [GUARANTEE] Encontrados ${backupKeys.length} backups`);
+
+        // Tentar cada backup até encontrar um válido
+        for (const backupKey of backupKeys) {
+          try {
+            const backupData = localStorage.getItem(backupKey);
+            if (backupData) {
+              profile = JSON.parse(backupData);
+
+              // Verificar se o backup é válido
+              if (profile && profile.id === userIdToEnsure) {
+                console.log('🔄 [GUARANTEE] ✅ Backup válido encontrado:', backupKey);
+
+                // Atualizar dados de autenticação
+                if (authenticatedUser && isAuthenticated) {
+                  profile.username = authenticatedUser.username;
+                  profile.displayName = authenticatedUser.displayName || profile.displayName;
+                  profile.lastLogin = new Date().toISOString();
+                  profile.lastUpdated = new Date().toISOString();
+                }
+
+                // Reparar se necessário
+                if (!verifyProfileIntegrity(profile)) {
+                  profile = repairProfile(profile, userIdToEnsure);
+                }
+
+                // Salvar como perfil principal
+                saveProfileToLocalStorage(userIdToEnsure, profile);
+                console.log('✅ [GUARANTEE] Backup restaurado e salvo como perfil principal');
+                return profile;
+              }
+            }
+          } catch (error) {
+            console.warn(`⚠️ [GUARANTEE] Backup ${backupKey} corrompido:`, error);
+          }
+        }
+      }
+    } catch (error) {
+      console.warn('⚠️ [GUARANTEE] Erro ao verificar backups (continuando):', error);
+    }
+
+    // ETAPA 3: Tentar carregar do servidor COM MÚLTIPLAS TENTATIVAS
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        console.log(`🌐 [GUARANTEE] Tentativa ${attempt}/3 de carregar do servidor`);
+        profile = await loadProfileFromServer(userIdToEnsure);
+        if (profile) {
+          console.log('✅ [GUARANTEE] Dados carregados do servidor');
+
+          // Atualizar dados de autenticação
+          if (authenticatedUser && isAuthenticated) {
+            profile.username = authenticatedUser.username;
+            profile.displayName = authenticatedUser.displayName || profile.displayName;
+            profile.lastLogin = new Date().toISOString();
+            profile.lastUpdated = new Date().toISOString();
+          }
+
+          // Salvar localmente
+          saveProfileToLocalStorage(userIdToEnsure, profile);
+          console.log('✅ [GUARANTEE] Dados do servidor salvos localmente');
+          return profile;
+        }
+      } catch (error) {
+        console.warn(`⚠️ [GUARANTEE] Tentativa ${attempt}/3 falhou:`, error);
+        if (attempt < 3) {
+          // Aguardar antes da próxima tentativa
+          await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+        }
+      }
+    }
+
+    // ETAPA 3.5: USAR API DE EMERGÊNCIA COMO ÚLTIMO RECURSO DO SERVIDOR
+    try {
+      console.log('🆘 [GUARANTEE] Tentando API de emergência...');
+      const emergencyResponse = await fetch('/api/emergency-profile', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('ludomusic_session_token')}`
+        }
+      });
+
+      if (emergencyResponse.ok) {
+        const emergencyData = await emergencyResponse.json();
+        if (emergencyData.success && emergencyData.profile) {
+          console.log('✅ [GUARANTEE] Dados obtidos da API de emergência');
+          profile = emergencyData.profile;
+
+          // Atualizar dados de autenticação
+          if (authenticatedUser && isAuthenticated) {
+            profile.username = authenticatedUser.username;
+            profile.displayName = authenticatedUser.displayName || profile.displayName;
+            profile.lastLogin = new Date().toISOString();
+            profile.lastUpdated = new Date().toISOString();
+          }
+
+          // Salvar localmente
+          saveProfileToLocalStorage(userIdToEnsure, profile);
+          console.log('✅ [GUARANTEE] Dados da API de emergência salvos localmente');
+          return profile;
+        }
+      }
+    } catch (error) {
+      console.warn('⚠️ [GUARANTEE] API de emergência falhou:', error);
+    }
+
+    // ETAPA 4: CRIAR PERFIL DE EMERGÊNCIA - NUNCA PODE FALHAR!
+    console.log('🆘 [GUARANTEE] ⚠️ CRIANDO PERFIL DE EMERGÊNCIA - USUÁRIO LOGADO DEVE TER DADOS!');
+    console.log('🆘 [GUARANTEE] ⚠️ ESTA É A ÚLTIMA LINHA DE DEFESA - NÃO PODE FALHAR!');
+
+
+    // Criar perfil de emergência com dados mínimos mas funcionais
+    const emergencyProfile = {
+      id: userIdToEnsure,
+      username: authenticatedUser?.username || `Jogador_${userIdToEnsure.slice(-6)}`,
+      displayName: authenticatedUser?.displayName || '',
+      bio: '',
+      avatar: null,
+      level: 1,
+      xp: 0,
+      createdAt: new Date().toISOString(),
+      lastLogin: new Date().toISOString(),
+      lastUpdated: new Date().toISOString(),
+      stats: {
+        totalGames: 0,
+        wins: 0,
+        losses: 0,
+        winRate: 0,
+        currentStreak: 0,
+        bestStreak: 0,
+        totalPlayTime: 0,
+        perfectGames: 0,
+        averageAttempts: 0,
+        fastestWin: null,
+        longestSession: 0,
+        xp: 0,
+        level: 1,
+        modeStats: {
+          daily: { games: 0, wins: 0, bestStreak: 0, averageAttempts: 0, perfectGames: 0 },
+          infinite: { games: 0, wins: 0, bestStreak: 0, totalSongsCompleted: 0, longestSession: 0 },
+          multiplayer: { games: 0, wins: 0, roomsCreated: 0, totalPoints: 0, bestRoundScore: 0 }
+        }
+      },
+      achievements: [],
+      gameHistory: [],
+      franchiseStats: {},
+      preferences: {
+        theme: 'dark',
+        language: 'pt',
+        notifications: true,
+        showAchievementPopups: true,
+        hasSeenProfileTutorial: false
+      },
+      badges: [],
+      titles: [],
+      currentTitle: null,
+      socialStats: {
+        gamesShared: 0,
+        friendsReferred: 0,
+        friendsAdded: 0,
+        multiplayerGamesPlayed: 0,
+        multiplayerWins: 0,
+        invitesSent: 0,
+        invitesAccepted: 0,
+        socialInteractions: 0,
+        helpfulActions: 0
+      },
+      // Marcar como perfil de emergência para debugging
+      _isEmergencyProfile: true,
+      _emergencyCreatedAt: new Date().toISOString(),
+      _emergencyReason: 'Usuário logado sem dados - perfil criado automaticamente'
+    };
+
+    // SALVAR EM MÚLTIPLOS LOCAIS PARA MÁXIMA SEGURANÇA
+    try {
+      // 1. Salvar no localStorage principal
+      saveProfileToLocalStorage(userIdToEnsure, emergencyProfile);
+      console.log('💾 [GUARANTEE] ✅ Perfil de emergência salvo no localStorage principal');
+
+      // 2. Salvar backup de emergência
+      localStorage.setItem(`ludomusic_emergency_profile_${userIdToEnsure}`, JSON.stringify(emergencyProfile));
+      console.log('💾 [GUARANTEE] ✅ Backup de emergência criado');
+
+      // 3. Salvar no sessionStorage como backup adicional
+      sessionStorage.setItem(`ludomusic_session_profile_${userIdToEnsure}`, JSON.stringify(emergencyProfile));
+      console.log('💾 [GUARANTEE] ✅ Backup de sessão criado');
+
+      // 4. Tentar salvar no servidor (não crítico, mas importante)
+      saveProfileToServer(emergencyProfile).then(() => {
+        console.log('🌐 [GUARANTEE] ✅ Perfil de emergência sincronizado com servidor');
+      }).catch(error => {
+        console.warn('⚠️ [GUARANTEE] Erro ao salvar no servidor (não crítico):', error);
+      });
+
+      console.log('🎉 [GUARANTEE] ✅ PERFIL DE EMERGÊNCIA CRIADO COM SUCESSO!');
+      console.log('🎉 [GUARANTEE] ✅ USUÁRIO LOGADO TEM DADOS GARANTIDOS!');
+
+    } catch (error) {
+      console.error('❌ [GUARANTEE] ERRO CRÍTICO ao salvar perfil de emergência:', error);
+      console.error('❌ [GUARANTEE] MAS RETORNANDO PERFIL MESMO ASSIM - USUÁRIO DEVE TER DADOS!');
+    }
+
+    // SEMPRE retornar o perfil, mesmo se houve erro ao salvar
+    return emergencyProfile;
+  };
+
+  // Função auxiliar para criar perfil de emergência
+  const createEmergencyProfile = (userId, authenticatedUser) => {
+    return {
+      id: userId,
+      username: authenticatedUser?.username || `Jogador_${userId.slice(-6)}`,
+      displayName: authenticatedUser?.displayName || '',
+      bio: '',
+      avatar: null,
+      level: 1,
+      xp: 0,
+      createdAt: new Date().toISOString(),
+      lastLogin: new Date().toISOString(),
+      lastUpdated: new Date().toISOString(),
+      stats: {
+        totalGames: 0,
+        wins: 0,
+        losses: 0,
+        winRate: 0,
+        currentStreak: 0,
+        bestStreak: 0,
+        totalPlayTime: 0,
+        perfectGames: 0,
+        averageAttempts: 0,
+        fastestWin: null,
+        longestSession: 0,
+        xp: 0,
+        level: 1,
+        modeStats: {
+          daily: { games: 0, wins: 0, bestStreak: 0, averageAttempts: 0, perfectGames: 0 },
+          infinite: { games: 0, wins: 0, bestStreak: 0, totalSongsCompleted: 0, longestSession: 0 },
+          multiplayer: { games: 0, wins: 0, roomsCreated: 0, totalPoints: 0, bestRoundScore: 0 }
+        }
+      },
+      achievements: [],
+      gameHistory: [],
+      franchiseStats: {},
+      preferences: {
+        theme: 'dark',
+        language: 'pt',
+        notifications: true,
+        showAchievementPopups: true,
+        hasSeenProfileTutorial: false
+      },
+      badges: [],
+      titles: [],
+      currentTitle: null,
+      socialStats: {
+        gamesShared: 0,
+        friendsReferred: 0,
+        friendsAdded: 0,
+        multiplayerGamesPlayed: 0,
+        multiplayerWins: 0,
+        invitesSent: 0,
+        invitesAccepted: 0,
+        socialInteractions: 0,
+        helpfulActions: 0
+      },
+      _isEmergencyProfile: true,
+      _emergencyCreatedAt: new Date().toISOString()
+    };
+  };
+
+  // SISTEMA DE MONITORAMENTO CRÍTICO: Usuários logados SEMPRE devem ter dados
   useEffect(() => {
     setIsClient(true);
 
-    // Verificar se já temos um userId no localStorage
+    // VERIFICAÇÃO CRÍTICA: Se usuário está autenticado, DEVE ter dados
+    if (isAuthenticated) {
+      const userIdToLoad = getUserId();
+      if (userIdToLoad) {
+        console.log('🛡️ [CRITICAL] USUÁRIO LOGADO DETECTADO - GARANTINDO DADOS:', userIdToLoad);
+        console.log('🛡️ [CRITICAL] ESTA É UMA OPERAÇÃO OBRIGATÓRIA - NÃO PODE FALHAR!');
+
+        // Usar sistema de garantia INFALÍVEL
+        ensureUserDataExists(userIdToLoad).then(guaranteedProfile => {
+          if (guaranteedProfile) {
+            setProfile(guaranteedProfile);
+            setUserId(userIdToLoad);
+            setIsLoading(false);
+            console.log('✅ [CRITICAL] ✅ DADOS GARANTIDOS CARREGADOS:', guaranteedProfile.username);
+            console.log('✅ [CRITICAL] ✅ USUÁRIO LOGADO TEM DADOS - MISSÃO CUMPRIDA!');
+          } else {
+            // ISSO NUNCA DEVERIA ACONTECER - SISTEMA DE EMERGÊNCIA
+            console.error('❌ [CRITICAL] ERRO IMPOSSÍVEL - SISTEMA DE GARANTIA RETORNOU NULL!');
+            console.error('❌ [CRITICAL] ATIVANDO SISTEMA DE EMERGÊNCIA FINAL!');
+
+            const emergencyProfile = createEmergencyProfile(userIdToLoad, getAuthenticatedUser());
+            setProfile(emergencyProfile);
+            setUserId(userIdToLoad);
+            setIsLoading(false);
+
+            console.log('🆘 [CRITICAL] SISTEMA DE EMERGÊNCIA ATIVADO - USUÁRIO TEM DADOS!');
+          }
+        }).catch(error => {
+          console.error('❌ [CRITICAL] ERRO CRÍTICO NO SISTEMA DE GARANTIA:', error);
+          console.error('❌ [CRITICAL] ATIVANDO PROTOCOLO DE EMERGÊNCIA FINAL!');
+
+          // PROTOCOLO DE EMERGÊNCIA FINAL - NUNCA PODE FALHAR
+          try {
+            const emergencyProfile = createEmergencyProfile(userIdToLoad, getAuthenticatedUser());
+            setProfile(emergencyProfile);
+            setUserId(userIdToLoad);
+            setIsLoading(false);
+
+            // Salvar em todos os locais possíveis
+            localStorage.setItem(`ludomusic_profile_${userIdToLoad}`, JSON.stringify(emergencyProfile));
+            localStorage.setItem(`ludomusic_emergency_profile_${userIdToLoad}`, JSON.stringify(emergencyProfile));
+            sessionStorage.setItem(`ludomusic_session_profile_${userIdToLoad}`, JSON.stringify(emergencyProfile));
+
+            console.log('🆘 [CRITICAL] ✅ PROTOCOLO DE EMERGÊNCIA EXECUTADO - USUÁRIO TEM DADOS!');
+          } catch (finalError) {
+            console.error('❌ [CRITICAL] ERRO NO PROTOCOLO DE EMERGÊNCIA:', finalError);
+            console.error('❌ [CRITICAL] CRIANDO PERFIL MÍNIMO ABSOLUTO!');
+
+            // PERFIL MÍNIMO ABSOLUTO - ÚLTIMA LINHA DE DEFESA
+            const minimalProfile = {
+              id: userIdToLoad,
+              username: getAuthenticatedUser()?.username || 'Usuário',
+              displayName: getAuthenticatedUser()?.displayName || '',
+              level: 1,
+              xp: 0,
+              stats: {
+                totalGames: 0,
+                wins: 0,
+                losses: 0,
+                winRate: 0,
+                currentStreak: 0,
+                bestStreak: 0,
+                modeStats: {}
+              },
+              achievements: [],
+              gameHistory: [],
+              _isMinimalProfile: true,
+              _createdAt: new Date().toISOString()
+            };
+
+            setProfile(minimalProfile);
+            setUserId(userIdToLoad);
+            setIsLoading(false);
+
+            console.log('🆘 [CRITICAL] ✅ PERFIL MÍNIMO CRIADO - USUÁRIO TEM DADOS BÁSICOS!');
+          }
+        });
+      }
+    }
+
+    // Verificar se já temos um userId no localStorage (fallback)
     const storedUserId = localStorage.getItem('ludomusic_user_id');
-    if (storedUserId && isAuthenticated) {
+    if (storedUserId && isAuthenticated && !userId) {
       // Carregar perfil do localStorage usando o sistema de persistência
       const localProfile = loadProfileFromLocalStorage(storedUserId);
 
@@ -568,7 +1061,99 @@ export const UserProfileProvider = ({ children }) => {
     }
   };
 
+  // MONITORAMENTO CRÍTICO: Verificar se usuário logado tem dados
+  useEffect(() => {
+    if (!isAuthenticated) return;
 
+    const criticalMonitoring = setInterval(() => {
+      const currentUserId = getUserId();
+
+      // VERIFICAÇÃO CRÍTICA: Usuário logado DEVE ter dados
+      if (currentUserId && !profile) {
+        console.log('🚨 [CRITICAL] Usuário logado sem dados detectado! Corrigindo...');
+
+        // Forçar carregamento de dados
+        ensureUserDataExists(currentUserId).then(guaranteedProfile => {
+          if (guaranteedProfile) {
+            setProfile(guaranteedProfile);
+            setUserId(currentUserId);
+            console.log('✅ [CRITICAL] Dados restaurados para usuário logado');
+          }
+        }).catch(error => {
+          console.error('❌ [CRITICAL] Falha crítica ao restaurar dados:', error);
+        });
+      }
+
+      // Verificar se userId mudou (troca de usuário)
+      if (currentUserId && currentUserId !== userId) {
+        console.log('🔄 [CRITICAL] Mudança de usuário detectada:', userId, '->', currentUserId);
+        setUserId(currentUserId);
+
+        // Carregar dados do novo usuário
+        ensureUserDataExists(currentUserId).then(guaranteedProfile => {
+          if (guaranteedProfile) {
+            setProfile(guaranteedProfile);
+            console.log('✅ [CRITICAL] Dados carregados para novo usuário');
+          }
+        });
+      }
+    }, 10000); // Verificar a cada 10 segundos
+
+    return () => clearInterval(criticalMonitoring);
+  }, [isAuthenticated, profile, userId]);
+
+  // SISTEMA DE MONITORAMENTO CRÍTICO: Verificar se usuário logado tem dados
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    // Verificação crítica a cada 10 segundos
+    const criticalMonitoring = setInterval(() => {
+      const currentUserId = getUserId();
+
+      if (currentUserId && isAuthenticated) {
+        // VERIFICAÇÃO CRÍTICA: Usuário logado SEM dados
+        if (!profile || !userId || userId !== currentUserId) {
+          console.error('🚨 [CRITICAL] USUÁRIO LOGADO SEM DADOS DETECTADO!');
+          console.error('🚨 [CRITICAL] isAuthenticated:', isAuthenticated);
+          console.error('🚨 [CRITICAL] currentUserId:', currentUserId);
+          console.error('🚨 [CRITICAL] profile:', !!profile);
+          console.error('🚨 [CRITICAL] userId:', userId);
+          console.error('🚨 [CRITICAL] ATIVANDO CORREÇÃO AUTOMÁTICA!');
+
+          // Forçar carregamento de dados
+          ensureUserDataExists(currentUserId).then(guaranteedProfile => {
+            if (guaranteedProfile) {
+              setProfile(guaranteedProfile);
+              setUserId(currentUserId);
+              console.log('✅ [CRITICAL] DADOS RESTAURADOS AUTOMATICAMENTE!');
+            }
+          }).catch(error => {
+            console.error('❌ [CRITICAL] Erro na correção automática:', error);
+          });
+        }
+      }
+    }, 10000); // 10 segundos
+
+    // Verificação de integridade a cada 5 minutos
+    const integrityInterval = setInterval(() => {
+      if (profile && userId) {
+        performPeriodicIntegrityCheck();
+      }
+    }, 5 * 60 * 1000); // 5 minutos
+
+    // Executar uma verificação inicial após 30 segundos
+    const initialCheck = setTimeout(() => {
+      if (profile && userId) {
+        performPeriodicIntegrityCheck();
+      }
+    }, 30000);
+
+    return () => {
+      clearInterval(criticalMonitoring);
+      clearInterval(integrityInterval);
+      clearTimeout(initialCheck);
+    };
+  }, [isAuthenticated, profile, userId]);
 
   // Função para garantir estrutura válida do perfil
   const ensureProfileStructure = (profileData) => {
@@ -1077,15 +1662,45 @@ export const UserProfileProvider = ({ children }) => {
       // Verificar e atualizar badges
       updatedProfile = checkAndUpdateBadges(updatedProfile);
 
+      // CRIAR BACKUP ANTES DE SALVAR
+      const backupProfile = JSON.parse(JSON.stringify(profile));
+      const backupKey = `ludomusic_profile_backup_${userId}_${Date.now()}`;
+      try {
+        localStorage.setItem(backupKey, JSON.stringify(backupProfile));
+        console.log('💾 [BACKUP] Backup criado:', backupKey);
+      } catch (error) {
+        console.warn('⚠️ [BACKUP] Erro ao criar backup:', error);
+      }
+
       // Validar perfil antes de salvar
       if (!updatedProfile.stats || !updatedProfile.achievements) {
         console.error('❌ Perfil corrompido detectado! Não salvando.');
         throw new Error('Perfil corrompido - dados críticos ausentes');
       }
 
+      // VERIFICAR INTEGRIDADE DAS ESTATÍSTICAS
+      const statsIntegrityCheck = verifyStatsIntegrity(updatedProfile.stats);
+      if (!statsIntegrityCheck.isValid) {
+        console.warn('⚠️ [STATS] Problemas de integridade detectados:', statsIntegrityCheck.issues);
+        updatedProfile.stats = repairStats(updatedProfile.stats, statsIntegrityCheck.issues);
+        console.log('🔧 [STATS] Estatísticas reparadas automaticamente');
+      }
+
       // GARANTIR que XP e level estão sincronizados
       updatedProfile.stats.xp = updatedProfile.xp;
       updatedProfile.stats.level = updatedProfile.level;
+
+      // Log detalhado das estatísticas atualizadas
+      console.log('📊 [STATS] Estatísticas finais:', {
+        totalGames: updatedProfile.stats.totalGames,
+        wins: updatedProfile.stats.wins,
+        losses: updatedProfile.stats.losses,
+        winRate: updatedProfile.stats.winRate,
+        currentStreak: updatedProfile.stats.currentStreak,
+        bestStreak: updatedProfile.stats.bestStreak,
+        xp: updatedProfile.xp,
+        level: updatedProfile.level
+      });
 
       // SEMPRE salvar localmente primeiro (crítico para não perder dados)
       setProfile(updatedProfile);
@@ -1093,18 +1708,225 @@ export const UserProfileProvider = ({ children }) => {
       // Usar o sistema de persistência com múltiplos backups
       saveProfileToLocalStorage(userId, updatedProfile);
 
-
-
-      // Salvar no servidor em background (não bloquear)
+      // Salvar no servidor com retry logic para garantir sincronização
       try {
-        await saveProfileToServer(updatedProfile);
+        await saveProfileToServerWithRetry(updatedProfile, userId);
+        console.log('✅ [SYNC] Sincronização com servidor bem-sucedida');
       } catch (error) {
-        // Silenciar erro de sincronização
+        console.warn('⚠️ [SYNC] Erro na sincronização com servidor, dados salvos localmente:', error);
+        // Tentar novamente em 5 segundos
+        setTimeout(async () => {
+          try {
+            await saveProfileToServerWithRetry(updatedProfile, userId);
+            console.log('✅ [SYNC] Retry de sincronização bem-sucedido');
+          } catch (retryError) {
+            console.warn('⚠️ [SYNC] Retry de sincronização falhou:', retryError);
+          }
+        }, 5000);
       }
 
       return updatedProfile;
     } catch (error) {
-      console.error('Erro ao atualizar estatísticas:', error);
+      console.error('❌ [STATS] Erro crítico ao atualizar estatísticas:', error);
+
+      // Em caso de erro crítico, tentar restaurar do backup mais recente
+      try {
+        const backupProfile = await restoreFromBackup(userId);
+        if (backupProfile) {
+          console.log('🔄 [RECOVERY] Perfil restaurado do backup');
+          setProfile(backupProfile);
+          return backupProfile;
+        }
+      } catch (backupError) {
+        console.error('❌ [RECOVERY] Erro ao restaurar do backup:', backupError);
+      }
+
+      // Se tudo falhar, retornar o perfil original
+      return profile;
+    }
+  };
+
+  // Função para verificar integridade das estatísticas
+  const verifyStatsIntegrity = (stats) => {
+    const issues = [];
+
+    // Verificar se campos obrigatórios existem
+    const requiredFields = ['totalGames', 'wins', 'losses', 'winRate', 'currentStreak', 'bestStreak'];
+    requiredFields.forEach(field => {
+      if (typeof stats[field] !== 'number') {
+        issues.push(`Campo ${field} ausente ou inválido`);
+      }
+    });
+
+    // Verificar consistência matemática
+    if (stats.totalGames !== (stats.wins + stats.losses)) {
+      issues.push('Total de jogos não confere com wins + losses');
+    }
+
+    if (stats.totalGames > 0) {
+      const calculatedWinRate = (stats.wins / stats.totalGames) * 100;
+      if (Math.abs(stats.winRate - calculatedWinRate) > 0.1) {
+        issues.push('Taxa de vitória inconsistente');
+      }
+    }
+
+    if (stats.currentStreak > stats.bestStreak) {
+      issues.push('Sequência atual maior que a melhor sequência');
+    }
+
+    // Verificar valores negativos
+    requiredFields.forEach(field => {
+      if (stats[field] < 0) {
+        issues.push(`Campo ${field} com valor negativo`);
+      }
+    });
+
+    return {
+      isValid: issues.length === 0,
+      issues
+    };
+  };
+
+  // Função para reparar estatísticas corrompidas
+  const repairStats = (stats, issues) => {
+    const repairedStats = { ...stats };
+
+    // Garantir que todos os campos obrigatórios existem
+    const defaults = {
+      totalGames: 0,
+      wins: 0,
+      losses: 0,
+      winRate: 0,
+      currentStreak: 0,
+      bestStreak: 0,
+      perfectGames: 0,
+      averageAttempts: 0,
+      totalPlayTime: 0,
+      fastestWin: null,
+      longestSession: 0,
+      modeStats: {},
+      xp: 0,
+      level: 1
+    };
+
+    Object.keys(defaults).forEach(key => {
+      if (typeof repairedStats[key] !== 'number' && key !== 'fastestWin' && key !== 'modeStats') {
+        repairedStats[key] = defaults[key];
+      }
+    });
+
+    // Corrigir inconsistências matemáticas
+    if (repairedStats.totalGames !== (repairedStats.wins + repairedStats.losses)) {
+      repairedStats.totalGames = repairedStats.wins + repairedStats.losses;
+    }
+
+    // Recalcular taxa de vitória
+    if (repairedStats.totalGames > 0) {
+      repairedStats.winRate = (repairedStats.wins / repairedStats.totalGames) * 100;
+    } else {
+      repairedStats.winRate = 0;
+    }
+
+    // Corrigir sequências
+    if (repairedStats.currentStreak > repairedStats.bestStreak) {
+      repairedStats.bestStreak = repairedStats.currentStreak;
+    }
+
+    // Garantir valores não negativos
+    Object.keys(repairedStats).forEach(key => {
+      if (typeof repairedStats[key] === 'number' && repairedStats[key] < 0) {
+        repairedStats[key] = 0;
+      }
+    });
+
+    // Garantir que modeStats existe
+    if (!repairedStats.modeStats || typeof repairedStats.modeStats !== 'object') {
+      repairedStats.modeStats = {};
+    }
+
+    return repairedStats;
+  };
+
+  // Função para restaurar perfil do backup mais recente
+  const restoreFromBackup = async (userIdToRestore) => {
+    try {
+      // Procurar por backups no localStorage
+      const backupKeys = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith(`ludomusic_profile_backup_${userIdToRestore}_`)) {
+          backupKeys.push(key);
+        }
+      }
+
+      if (backupKeys.length === 0) {
+        console.log('📋 [RECOVERY] Nenhum backup encontrado');
+        return null;
+      }
+
+      // Ordenar por timestamp (mais recente primeiro)
+      backupKeys.sort((a, b) => {
+        const timestampA = parseInt(a.split('_').pop());
+        const timestampB = parseInt(b.split('_').pop());
+        return timestampB - timestampA;
+      });
+
+      // Tentar restaurar do backup mais recente
+      for (const backupKey of backupKeys) {
+        try {
+          const backupData = localStorage.getItem(backupKey);
+          if (backupData) {
+            const backupProfile = JSON.parse(backupData);
+
+            // Verificar integridade do backup
+            if (verifyProfileIntegrity(backupProfile)) {
+              console.log('✅ [RECOVERY] Backup válido encontrado:', backupKey);
+              return backupProfile;
+            } else {
+              console.warn('⚠️ [RECOVERY] Backup corrompido:', backupKey);
+            }
+          }
+        } catch (error) {
+          console.warn('⚠️ [RECOVERY] Erro ao processar backup:', backupKey, error);
+        }
+      }
+
+      console.log('❌ [RECOVERY] Nenhum backup válido encontrado');
+      return null;
+    } catch (error) {
+      console.error('❌ [RECOVERY] Erro ao restaurar do backup:', error);
+      return null;
+    }
+  };
+
+  // Função para limpar backups antigos (manter apenas os 5 mais recentes)
+  const cleanupOldBackups = (userIdToClean) => {
+    try {
+      const backupKeys = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith(`ludomusic_profile_backup_${userIdToClean}_`)) {
+          backupKeys.push(key);
+        }
+      }
+
+      if (backupKeys.length > 5) {
+        // Ordenar por timestamp (mais antigo primeiro)
+        backupKeys.sort((a, b) => {
+          const timestampA = parseInt(a.split('_').pop());
+          const timestampB = parseInt(b.split('_').pop());
+          return timestampA - timestampB;
+        });
+
+        // Remover os backups mais antigos
+        const toRemove = backupKeys.slice(0, backupKeys.length - 5);
+        toRemove.forEach(key => {
+          localStorage.removeItem(key);
+          console.log('🗑️ [CLEANUP] Backup antigo removido:', key);
+        });
+      }
+    } catch (error) {
+      console.warn('⚠️ [CLEANUP] Erro ao limpar backups antigos:', error);
     }
   };
 

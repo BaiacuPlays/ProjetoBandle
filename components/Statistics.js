@@ -55,11 +55,80 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
       const res = await fetch(`/api/statistics?userid=${userid}`);
       if (res.ok) {
         const data = await res.json();
-        setStats(data);
+
+        // Verificar integridade dos dados recebidos
+        const integrityCheck = verifyStatsIntegrity(data);
+        if (!integrityCheck.isValid) {
+          console.warn('⚠️ [STATS] Estatísticas com problemas de integridade:', integrityCheck.issues);
+
+          // Tentar reparar automaticamente
+          const repairedStats = repairStatsData(data);
+          setStats(repairedStats);
+
+          // Log do reparo
+          console.log('🔧 [STATS] Estatísticas reparadas automaticamente');
+        } else {
+          setStats(data);
+        }
       }
     } catch (error) {
-      // erro ao buscar estatísticas
+      console.error('❌ [STATS] Erro ao buscar estatísticas:', error);
     }
+  };
+
+  // Função para verificar integridade das estatísticas
+  const verifyStatsIntegrity = (statsData) => {
+    const issues = [];
+
+    // Verificar campos obrigatórios
+    const requiredFields = ['totalGames', 'wins', 'losses', 'winPercentage', 'averageAttempts'];
+    requiredFields.forEach(field => {
+      if (typeof statsData[field] !== 'number') {
+        issues.push(`Campo ${field} ausente ou inválido`);
+      }
+    });
+
+    // Verificar consistência matemática
+    if (statsData.totalGames !== (statsData.wins + statsData.losses)) {
+      issues.push('Total de jogos não confere com wins + losses');
+    }
+
+    // Verificar valores negativos
+    if (statsData.totalGames < 0 || statsData.wins < 0 || statsData.losses < 0) {
+      issues.push('Valores negativos detectados');
+    }
+
+    return {
+      isValid: issues.length === 0,
+      issues
+    };
+  };
+
+  // Função para reparar dados de estatísticas
+  const repairStatsData = (statsData) => {
+    const repaired = { ...statsData };
+
+    // Garantir valores padrão
+    repaired.totalGames = Math.max(0, repaired.totalGames || 0);
+    repaired.wins = Math.max(0, repaired.wins || 0);
+    repaired.losses = Math.max(0, repaired.losses || 0);
+    repaired.winPercentage = repaired.winPercentage || 0;
+    repaired.averageAttempts = repaired.averageAttempts || 0;
+    repaired.attemptDistribution = repaired.attemptDistribution || [0, 0, 0, 0, 0, 0];
+
+    // Corrigir total de jogos
+    if (repaired.totalGames !== (repaired.wins + repaired.losses)) {
+      repaired.totalGames = repaired.wins + repaired.losses;
+    }
+
+    // Recalcular percentual de vitória
+    if (repaired.totalGames > 0) {
+      repaired.winPercentage = Math.round((repaired.wins / repaired.totalGames) * 100);
+    } else {
+      repaired.winPercentage = 0;
+    }
+
+    return repaired;
   };
 
   // Salvar resultado do jogo atual no backend (modo diário)
