@@ -6,7 +6,7 @@ const SimpleUserAvatar = ({ avatar, size = 'medium', onClick, className = '' }) 
   const [imageError, setImageError] = useState(false);
 
   // Log temporário para debug
-  console.log('🔍 [SimpleUserAvatar] Recebido:', { avatar, type: typeof avatar, length: avatar?.length });
+  // console.log('🔍 [SimpleUserAvatar] Recebido:', { avatar, type: typeof avatar, length: avatar?.length });
 
   // Tamanhos disponíveis
   const sizes = {

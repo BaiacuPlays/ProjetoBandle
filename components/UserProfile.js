@@ -6,8 +6,7 @@ import { achievements, rarityColors, getAchievement, getNearAchievements } from 
 import { badges, titles, getBadge, getTitle, getAvailableTitles } from '../data/badges';
 import { FaTimes, FaEdit, FaTrophy, FaGamepad, FaClock, FaFire, FaStar, FaChartLine, FaCog, FaDownload, FaUpload, FaTrash, FaMedal, FaSignOutAlt } from 'react-icons/fa';
 import ProfileTutorial from './ProfileTutorial';
-import AvatarSelector from './AvatarSelector';
-import EditableAvatar from './EditableAvatar';
+import SimplePhotoUpload from './SimplePhotoUpload';
 import LoginModal from './LoginModal';
 import ActivateBenefitsModal from './ActivateBenefitsModal';
 import { useAuth } from '../contexts/AuthContext';
@@ -28,7 +27,6 @@ const UserProfile = ({ isOpen, onClose }) => {
   const [showConfirmReset, setShowConfirmReset] = useState(false);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
-  const [showAvatarSelector, setShowAvatarSelector] = useState(false);
   const [showActivateModal, setShowActivateModal] = useState(false);
 
   // Hook de autenticação
@@ -295,16 +293,12 @@ const UserProfile = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleAvatarChange = async (avatarData) => {
+  const handlePhotoChange = async (photoData) => {
     if (updateAvatar) {
       try {
-        console.log('🔄 [UserProfile] Iniciando atualização de avatar:', avatarData ? 'Avatar presente' : 'Removendo avatar');
-        const result = await updateAvatar(avatarData);
-        console.log('✅ [UserProfile] Avatar atualizado com sucesso:', result);
-        setShowAvatarSelector(false);
+        await updateAvatar(photoData);
       } catch (error) {
-        console.error('❌ [UserProfile] Erro ao atualizar avatar:', error);
-        alert('Não foi possível atualizar o avatar. Tente novamente.');
+        alert('Não foi possível atualizar a foto. Tente novamente.');
       }
     }
   };
@@ -365,10 +359,10 @@ const UserProfile = ({ isOpen, onClose }) => {
               {/* Informações básicas */}
               <div className={styles.profileBasicInfo}>
                 <div className={styles.avatarSection}>
-                  <EditableAvatar
-                    avatar={profile.avatar}
+                  <SimplePhotoUpload
+                    currentPhoto={profile.avatar}
+                    onPhotoChange={handlePhotoChange}
                     size="xlarge"
-                    onEdit={() => setShowAvatarSelector(true)}
                   />
                   <div className={styles.levelBadge}>
                     Nível {Math.floor(Math.sqrt((profile.xp || 0) / 300)) + 1}
@@ -950,14 +944,7 @@ const UserProfile = ({ isOpen, onClose }) => {
                 )}
               </div>
 
-              {/* Seletor de avatar */}
-              {showAvatarSelector && (
-                <AvatarSelector
-                  currentAvatar={profile?.avatar}
-                  onAvatarChange={handleAvatarChange}
-                  onClose={() => setShowAvatarSelector(false)}
-                />
-              )}
+
             </div>
           </div>
         </div>
