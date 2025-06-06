@@ -864,26 +864,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                           if (e.target) e.target.style.transform = 'scale(1)';
                         }, 150);
 
-                        // Tentar reprodução instantânea do cache primeiro
-                        if (isInCache(songToPlay) && !isPlaying) {
-                          try {
-                            const cachedAudio = await playInstant(songToPlay);
-
-                            if (cachedAudio) {
-                              // Configurar tempo de início se necessário
-                              if (startTime !== null && startTime !== undefined) {
-                                cachedAudio.currentTime = startTime;
-                              }
-
-                              // Atualizar referência do áudio
-                              audioRef.current = cachedAudio;
-                              setIsPlaying(true);
-                              return;
-                            }
-                          } catch (error) {
-                            console.warn('Falha na reprodução instantânea, usando método tradicional:', error);
-                          }
-                        }
+                        // Cache temporariamente desabilitado - usar método tradicional diretamente
 
                         // Fallback para método tradicional
                         if (!audioRef.current || !audioRef.current.duration) {
