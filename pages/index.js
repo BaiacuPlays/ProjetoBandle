@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Head from 'next/head';
 import Script from 'next/script';
+import AdSuppressor from '../components/AdSuppressor';
 import { songs } from '../data/songs';
 import styles from '../styles/Home.module.css';
 import { FaFastForward, FaQuestionCircle, FaBars, FaUser, FaUsers, FaTrophy } from 'react-icons/fa';
@@ -2408,8 +2409,9 @@ export default function Home() {
       </Head>
 
 
+      <AdSuppressor />
       <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-        <div className={styles.darkBg} style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div className={styles.darkBg} style={{ flex: 1, display: 'flex', flexDirection: 'column' }} data-bis_skin_checked="1">
         <div className={styles.topBar}>
           <div className={styles.titleBarContainer}>
             <button
@@ -3052,11 +3054,40 @@ export default function Home() {
 
       </div>
 
-      {/* Google AdSense */}
+      {/* Detector de bloqueador de anúncios */}
       <Script
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1007836460713451"
-        strategy="afterInteractive"
-        crossOrigin="anonymous"
+        src="/ads.js"
+        strategy="beforeInteractive"
+        id="adblock-detector"
+      />
+      
+      {/* Google AdSense - carregado condicionalmente */}
+      <Script
+        id="adsense-script"
+        strategy="lazyOnload"
+        dangerouslySetInnerHTML={{
+          __html: `
+            try {
+              if (window.canRunAds === true) {
+                // AdBlock não detectado, carregar AdSense
+                (function() {
+                  const script = document.createElement('script');
+                  script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1007836460713451';
+                  script.async = true;
+                  script.crossOrigin = 'anonymous';
+                  script.onerror = function() {
+                    console.log('📢 AdSense bloqueado pelo navegador - isso é normal com bloqueadores de anúncios');
+                  };
+                  document.head.appendChild(script);
+                })();
+              } else {
+                console.log('📢 Bloqueador de anúncios detectado');
+              }
+            } catch (e) {
+              // Silenciar erros
+            }
+          `
+        }}
       />
 
       {/* Google Analytics */}

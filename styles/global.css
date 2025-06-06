@@ -1,0 +1,11 @@
+/* Arquivo global.css para suprimir erros de hidratação */
+
+/* Suprimir atributos bis_skin_checked adicionados por extensões de navegador */
+[bis_skin_checked] {
+  /* Não adicionar estilos, apenas garantir que o atributo seja reconhecido pelo React */
+}
+
+/* Suprimir outros atributos que possam causar erros de hidratação */
+[data-bis_skin_checked] {
+  /* Não adicionar estilos, apenas garantir que o atributo seja reconhecido pelo React */
+}

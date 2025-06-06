@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { useModalScrollLockAlways } from '../hooks/useModalScrollLock';
-import { FaTimes, FaUpload, FaUser } from 'react-icons/fa';
+import { FaTimes, FaUpload, FaUser, FaSpinner } from 'react-icons/fa';
+import { processAvatar } from '../utils/imageProcessor';
 import styles from '../styles/AvatarSelector.module.css';
 
 const AvatarSelector = ({ currentAvatar, onAvatarChange, onClose }) => {
   const [selectedAvatar, setSelectedAvatar] = useState(currentAvatar);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [uploadError, setUploadError] = useState('');
 
   // Bloquear/desbloquear scroll da página
   useModalScrollLockAlways();
@@ -23,33 +26,45 @@ const AvatarSelector = ({ currentAvatar, onAvatarChange, onClose }) => {
     setSelectedAvatar(avatar);
   };
 
-  const handleFileUpload = (event) => {
+  const handleFileUpload = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      // Verificar se é uma imagem
-      if (!file.type.startsWith('image/')) {
-        alert('Por favor, selecione apenas arquivos de imagem.');
-        return;
+      try {
+        setIsProcessing(true);
+        setUploadError('');
+        
+        // Usar o utilitário de processamento de imagens
+        const processedImage = await processAvatar(file, {
+          maxWidth: 200,
+          maxHeight: 200,
+          format: 'image/jpeg',
+          quality: 0.85
+        });
+        
+        setSelectedAvatar(processedImage);
+        setIsProcessing(false);
+      } catch (error) {
+        console.error('Erro ao processar imagem:', error);
+        setUploadError(error.message || 'Erro ao processar a imagem. Tente outra imagem.');
+        setIsProcessing(false);
       }
-
-      // Verificar tamanho (máximo 2MB)
-      if (file.size > 2 * 1024 * 1024) {
-        alert('A imagem deve ter no máximo 2MB.');
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setSelectedAvatar(e.target.result);
-      };
-      reader.readAsDataURL(file);
     }
     // Limpar o input
     event.target.value = '';
   };
 
   const handleSave = () => {
-    onAvatarChange(selectedAvatar);
+    if (isProcessing) return;
+    
+    // Salvar diretamente sem processamento adicional
+    // O processamento já foi feito durante o upload
+    console.log('Salvando avatar selecionado:', selectedAvatar ? 'Avatar presente' : 'Nenhum avatar');
+    
+    // Garantir que o avatar não seja undefined
+    const avatarToSave = selectedAvatar || currentAvatar || null;
+    
+    // Chamar callback com o avatar selecionado
+    onAvatarChange(avatarToSave);
     onClose();
   };
 
@@ -85,19 +100,24 @@ const AvatarSelector = ({ currentAvatar, onAvatarChange, onClose }) => {
           {/* Upload personalizado */}
           <div className={styles.uploadSection}>
             <h4>Upload Personalizado</h4>
-            <label className={styles.uploadButton}>
-              <FaUpload />
-              Enviar Imagem
+            <label className={`${styles.uploadButton} ${isProcessing ? styles.disabled : ''}`}>
+              {isProcessing ? <FaSpinner className={styles.spinner} /> : <FaUpload />}
+              {isProcessing ? 'Processando...' : 'Enviar Imagem'}
               <input
                 type="file"
                 accept="image/*"
                 onChange={handleFileUpload}
                 style={{ display: 'none' }}
+                disabled={isProcessing}
               />
             </label>
-            <p className={styles.uploadInfo}>
-              Máximo 2MB • JPG, PNG, GIF
-            </p>
+            {uploadError ? (
+              <p className={styles.errorMessage}>{uploadError}</p>
+            ) : (
+              <p className={styles.uploadInfo}>
+                Máximo 5MB • JPG, PNG, GIF
+              </p>
+            )}
           </div>
 
           {/* Avatares predefinidos */}

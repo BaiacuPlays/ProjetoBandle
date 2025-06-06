@@ -8,6 +8,7 @@ import { FaTimes, FaEdit, FaTrophy, FaGamepad, FaClock, FaFire, FaStar, FaChartL
 import ProfileTutorial from './ProfileTutorial';
 import AvatarSelector from './AvatarSelector';
 import UserAvatar from './UserAvatar';
+import DirectAvatarUpload from './DirectAvatarUpload';
 import LoginModal from './LoginModal';
 import ActivateBenefitsModal from './ActivateBenefitsModal';
 import { useAuth } from '../contexts/AuthContext';
@@ -293,10 +294,22 @@ const UserProfile = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleAvatarChange = (avatarData) => {
+  const handleAvatarChange = async (avatarData) => {
     if (updateAvatar) {
-      updateAvatar(avatarData);
-      setShowAvatarSelector(false);
+      try {
+        console.log('Salvando avatar...', avatarData ? avatarData.substring(0, 50) + '...' : 'null');
+        // Salvar localmente primeiro para garantir que não desapareça
+        if (profile && avatarData) {
+          const tempProfile = {...profile, avatar: avatarData};
+          localStorage.setItem(`ludomusic_profile_${profile.id}`, JSON.stringify(tempProfile));
+        }
+        // Atualizar no contexto
+        await updateAvatar(avatarData);
+        setShowAvatarSelector(false);
+      } catch (error) {
+        console.error('Erro ao atualizar avatar:', error);
+        alert('Não foi possível atualizar o avatar. Tente novamente.');
+      }
     }
   };
 
@@ -356,13 +369,18 @@ const UserProfile = ({ isOpen, onClose }) => {
               {/* Informações básicas */}
               <div className={styles.profileBasicInfo}>
                 <div className={styles.avatarSection}>
-                  <UserAvatar
-                    avatar={profile.avatar}
-                    size="xlarge"
-                    editable={true}
-                    showEditIcon={true}
-                    onClick={() => setShowAvatarSelector(true)}
-                  />
+                  <div style={{ position: 'relative', display: 'inline-block', width: '100px', height: '100px' }}>
+                    <UserAvatar
+                      avatar={profile.avatar}
+                      size="xlarge"
+                      editable={true}
+                      showEditIcon={false}
+                      onClick={() => setShowAvatarSelector(true)}
+                    />
+                    <div style={{ position: 'absolute', bottom: '0', right: '0', zIndex: 10 }}>
+                      <DirectAvatarUpload />
+                    </div>
+                  </div>
                   <div className={styles.levelBadge}>
                     Nível {Math.floor(Math.sqrt((profile.xp || 0) / 300)) + 1}
                   </div>

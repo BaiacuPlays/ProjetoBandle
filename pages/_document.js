@@ -80,10 +80,33 @@ class MyDocument extends Document {
 
           {/* Polyfills para compatibilidade com navegadores antigos */}
 
-
+          {/* Script para suprimir erros de hidratação */}
+          <script dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                if (typeof window !== 'undefined') {
+                  // Adicionar estilo para suprimir erros de hidratação
+                  const style = document.createElement('style');
+                  style.textContent = '[bis_skin_checked] { } [data-bis_skin_checked] { }';
+                  document.head.appendChild(style);
+                  
+                  // Suprimir erros de console relacionados a hidratação
+                  const originalError = console.error;
+                  console.error = function(msg) {
+                    if (msg && typeof msg === 'string' && 
+                        (msg.includes('Warning: Extra attributes from the server') || 
+                         msg.includes('bis_skin_checked'))) {
+                      return;
+                    }
+                    originalError.apply(console, arguments);
+                  };
+                }
+              })();
+            `
+          }} />
         </Head>
         <body>
-          <Main />
+          <Main data-bis_skin_checked="1" />
           <NextScript />
 
           {/* Polyfills removidos temporariamente para correção */}

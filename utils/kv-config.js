@@ -41,7 +41,15 @@ export const kvGet = async (key, fallbackStorage = null) => {
   }
 
   try {
-    return await kv.get(key);
+    // Buscar do KV e armazenar em cache local para persistência
+    const result = await kv.get(key);
+    
+    // Se encontrou dados no KV, salvar no fallback para persistência local
+    if (result && fallbackStorage) {
+      fallbackStorage.set(key, result);
+    }
+    
+    return result;
   } catch (error) {
     console.warn(`⚠️ Erro ao buscar chave ${key} no KV (usando fallback):`, error.message);
     // Sempre usar fallback em caso de erro para evitar quebrar a aplicação
