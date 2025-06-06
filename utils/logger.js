@@ -18,26 +18,26 @@ class Logger {
 
     // Em produção, desabilitar TODOS os logs exceto errors críticos
     this.enableLogs = !this.isProduction && !this.isVercel;
-    
+
     // Contador de logs para detectar spam
     this.logCount = 0;
     this.maxLogsPerMinute = 50;
     this.logResetInterval = null;
-    
+
     this.initLogCounter();
   }
-  
+
   initLogCounter() {
     // Reset contador a cada minuto
     this.logResetInterval = setInterval(() => {
       this.logCount = 0;
     }, 60000);
   }
-  
+
   // Verificar se deve logar (anti-spam)
   shouldLog() {
     if (!this.enableLogs) return false;
-    
+
     this.logCount++;
     if (this.logCount > this.maxLogsPerMinute) {
       if (this.logCount === this.maxLogsPerMinute + 1) {
@@ -45,24 +45,24 @@ class Logger {
       }
       return false;
     }
-    
+
     return true;
   }
-  
+
   // Log normal - DESABILITADO em produção
   log(...args) {
     if (this.shouldLog()) {
       console.log(...args);
     }
   }
-  
+
   // Warning - DESABILITADO em produção
   warn(...args) {
     if (this.shouldLog()) {
       console.warn(...args);
     }
   }
-  
+
   // Error - SEMPRE habilitado mas limitado
   error(...args) {
     // Errors sempre são mostrados, mas com limite
@@ -79,7 +79,7 @@ class Logger {
       this.logCount++;
     }
   }
-  
+
   // Log crítico - SEMPRE habilitado
   critical(...args) {
     // Usar console original se disponível para evitar recursão
@@ -92,14 +92,14 @@ class Logger {
       }
     }
   }
-  
+
   // Debug - APENAS em desenvolvimento
   debug(...args) {
     if (!this.isProduction && !this.isVercel) {
       console.log('🐛 DEBUG:', ...args);
     }
   }
-  
+
   // Performance log - APENAS em desenvolvimento
   perf(label, fn) {
     if (!this.isProduction && !this.isVercel) {
@@ -110,7 +110,7 @@ class Logger {
     }
     return fn();
   }
-  
+
   // Cleanup
   destroy() {
     if (this.logResetInterval) {
@@ -142,31 +142,23 @@ if (logger.isProduction || logger.isVercel) {
   // Função vazia para substituir todos os logs
   const silentFunction = () => {};
 
-  // Substituir TODOS os métodos de console
+  // Substituir TODOS os métodos de console COMPLETAMENTE
   console.log = silentFunction;
   console.warn = silentFunction;
   console.info = silentFunction;
   console.debug = silentFunction;
   console.trace = silentFunction;
+  console.time = silentFunction;
+  console.timeEnd = silentFunction;
+  console.group = silentFunction;
+  console.groupEnd = silentFunction;
+  console.table = silentFunction;
+  console.count = silentFunction;
+  console.countReset = silentFunction;
+  console.clear = silentFunction;
 
-  // Manter apenas errors críticos com filtro rigoroso
-  console.error = (...args) => {
-    // Filtrar apenas erros realmente críticos
-    const errorMessage = args.join(' ').toLowerCase();
-    const isCriticalError = [
-      'uncaught',
-      'unhandled',
-      'fatal',
-      'critical',
-      'security'
-    ].some(keyword => errorMessage.includes(keyword));
-
-    // Mostrar apenas erros críticos e com limite
-    if (isCriticalError && logger.logCount < 3) {
-      originalConsole.error('🚨 ERRO CRÍTICO:', ...args);
-      logger.logCount++;
-    }
-  };
+  // DESABILITAR COMPLETAMENTE console.error também para evitar travamento
+  console.error = silentFunction;
 
   // Adicionar método para restaurar (se necessário para debug)
   if (typeof window !== 'undefined') {

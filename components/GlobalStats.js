@@ -43,8 +43,8 @@ const GlobalStats = ({ showInDailyMode = true }) => {
 
     fetchGlobalStats();
 
-    // Atualizar a cada 30 segundos
-    const interval = setInterval(fetchGlobalStats, 30000);
+    // Atualizar a cada 5 minutos (reduzido de 30s)
+    const interval = setInterval(fetchGlobalStats, 5 * 60 * 1000);
 
     return () => clearInterval(interval);
   }, []);

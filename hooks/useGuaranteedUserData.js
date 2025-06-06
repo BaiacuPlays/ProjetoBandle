@@ -18,27 +18,18 @@ export const useGuaranteedUserData = () => {
     }
 
     const currentUserId = localStorage.getItem('ludomusic_user_id');
-    
+
     // VERIFICAÇÃO CRÍTICA: Usuário logado DEVE ter dados
     const hasValidData = !!(
-      profile && 
-      userId && 
+      profile &&
+      userId &&
       currentUserId &&
       profile.id === currentUserId &&
       profile.username &&
       profile.stats
     );
 
-    console.log('🔍 [GUARANTEED] Verificação de integridade:', {
-      isAuthenticated,
-      hasProfile: !!profile,
-      hasUserId: !!userId,
-      hasCurrentUserId: !!currentUserId,
-      idsMatch: profile?.id === currentUserId,
-      hasUsername: !!profile?.username,
-      hasStats: !!profile?.stats,
-      hasValidData
-    });
+    // Verificação silenciosa
 
     setIsDataGuaranteed(hasValidData);
     setLastCheck(new Date().toISOString());
@@ -49,11 +40,8 @@ export const useGuaranteedUserData = () => {
   // Função para forçar criação de dados de emergência
   const forceEmergencyData = useCallback(async () => {
     if (!isAuthenticated) {
-      console.warn('⚠️ [GUARANTEED] Usuário não autenticado, não é possível criar dados de emergência');
       return null;
     }
-
-    console.log('🆘 [GUARANTEED] FORÇANDO criação de dados de emergência');
 
     try {
       // Tentar usar API de emergência
@@ -67,13 +55,12 @@ export const useGuaranteedUserData = () => {
       if (response.ok) {
         const data = await response.json();
         if (data.success && data.profile) {
-          console.log('✅ [GUARANTEED] Dados de emergência obtidos da API');
           setEmergencyProfile(data.profile);
           return data.profile;
         }
       }
     } catch (error) {
-      console.warn('⚠️ [GUARANTEED] Erro na API de emergência:', error);
+      // Erro silencioso
     }
 
     // Fallback: Criar perfil local de emergência
@@ -104,13 +91,12 @@ export const useGuaranteedUserData = () => {
       _createdAt: new Date().toISOString()
     };
 
-    // Salvar localmente
+    // Salvar localmente SILENCIOSAMENTE
     try {
       localStorage.setItem(`ludomusic_profile_${currentUserId}`, JSON.stringify(localEmergencyProfile));
       localStorage.setItem(`ludomusic_emergency_profile_${currentUserId}`, JSON.stringify(localEmergencyProfile));
-      console.log('💾 [GUARANTEED] Perfil de emergência local criado e salvo');
     } catch (error) {
-      console.warn('⚠️ [GUARANTEED] Erro ao salvar perfil de emergência local:', error);
+      // Erro silencioso
     }
 
     setEmergencyProfile(localEmergencyProfile);
@@ -123,24 +109,18 @@ export const useGuaranteedUserData = () => {
       return null;
     }
 
-    console.log('🛡️ [GUARANTEED] Garantindo dados do usuário...');
-
-    // Verificar se já tem dados válidos
+    // Verificar se já tem dados válidos SILENCIOSAMENTE
     if (checkUserDataIntegrity()) {
-      console.log('✅ [GUARANTEED] Dados já estão íntegros');
       return profile;
     }
 
-    // Se não tem dados válidos, forçar criação
-    console.log('⚠️ [GUARANTEED] Dados ausentes ou inválidos, forçando criação...');
+    // Se não tem dados válidos, forçar criação SILENCIOSAMENTE
     const emergencyData = await forceEmergencyData();
-    
+
     if (emergencyData) {
-      console.log('✅ [GUARANTEED] Dados de emergência criados com sucesso');
       return emergencyData;
     }
 
-    console.error('❌ [GUARANTEED] FALHA CRÍTICA: Não foi possível garantir dados do usuário');
     return null;
   }, [isAuthenticated, profile, checkUserDataIntegrity, forceEmergencyData]);
 
@@ -157,23 +137,17 @@ export const useGuaranteedUserData = () => {
       checkUserDataIntegrity();
     }, 1000);
 
-    // Verificação periódica a cada 30 segundos
+    // Verificação periódica a cada 2 minutos (reduzido de 30s)
     const periodicCheck = setInterval(() => {
       const hasValidData = checkUserDataIntegrity();
-      
+
       if (!hasValidData) {
-        console.warn('🚨 [GUARANTEED] USUÁRIO LOGADO SEM DADOS DETECTADO!');
-        console.warn('🚨 [GUARANTEED] Iniciando correção automática...');
-        
+        // Correção automática SILENCIOSA
         guaranteeUserData().then(result => {
-          if (result) {
-            console.log('✅ [GUARANTEED] Correção automática bem-sucedida');
-          } else {
-            console.error('❌ [GUARANTEED] Correção automática falhou');
-          }
+          // Resultado silencioso
         });
       }
-    }, 30000); // 30 segundos
+    }, 2 * 60 * 1000); // 2 minutos
 
     return () => {
       clearTimeout(initialCheck);
@@ -193,20 +167,20 @@ export const useGuaranteedUserData = () => {
     isDataGuaranteed,
     emergencyProfile,
     lastCheck,
-    
+
     // Funções
     checkUserDataIntegrity,
     forceEmergencyData,
     guaranteeUserData,
-    
+
     // Dados efetivos (profile normal ou emergência)
     effectiveProfile: profile || emergencyProfile,
     hasAnyData: !!(profile || emergencyProfile),
-    
+
     // Status
     isEmergencyMode: !!emergencyProfile && !profile,
     needsDataCreation: isAuthenticated && !profile && !emergencyProfile,
-    
+
     // Debugging
     debugInfo: {
       isAuthenticated,

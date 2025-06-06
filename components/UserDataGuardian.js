@@ -36,22 +36,16 @@ const UserDataGuardian = ({ children, showDebugInfo = false }) => {
     // Aguardar um pouco para o sistema carregar
     const checkTimer = setTimeout(() => {
       if (isAuthenticated && !hasAnyData && !isLoading) {
-        console.error('🚨 [GUARDIAN] ALERTA CRÍTICO: USUÁRIO LOGADO SEM DADOS!');
-        console.error('🚨 [GUARDIAN] Ativando protocolo de emergência...');
-        
         setLastAction('Detectado usuário sem dados - ativando emergência');
         setActionCount(prev => prev + 1);
-        
+
         guaranteeUserData().then(result => {
           if (result) {
-            console.log('✅ [GUARDIAN] Protocolo de emergência bem-sucedido');
             setLastAction('Dados de emergência criados com sucesso');
           } else {
-            console.error('❌ [GUARDIAN] Protocolo de emergência falhou');
             setLastAction('FALHA no protocolo de emergência');
           }
         }).catch(error => {
-          console.error('❌ [GUARDIAN] Erro no protocolo de emergência:', error);
           setLastAction(`Erro no protocolo: ${error.message}`);
         });
       }
@@ -68,50 +62,28 @@ const UserDataGuardian = ({ children, showDebugInfo = false }) => {
 
     const aggressiveCheck = setInterval(() => {
       const currentUserId = localStorage.getItem('ludomusic_user_id');
-      
+
       if (isAuthenticated && currentUserId && !hasAnyData) {
-        console.warn('⚠️ [GUARDIAN] Verificação periódica: usuário sem dados');
         setLastAction('Verificação periódica detectou problema');
         setActionCount(prev => prev + 1);
-        
+
         guaranteeUserData().catch(error => {
-          console.error('❌ [GUARDIAN] Erro na verificação periódica:', error);
+          // Erro silencioso
         });
       }
-    }, 15000); // A cada 15 segundos
+    }, 2 * 60 * 1000); // A cada 2 minutos (reduzido de 15s)
 
     return () => clearInterval(aggressiveCheck);
   }, [isAuthenticated, hasAnyData, guaranteeUserData, isGuardianActive]);
 
-  // Log de status para debugging
-  useEffect(() => {
-    if (showDebugInfo && isAuthenticated) {
-      console.log('🛡️ [GUARDIAN] Status:', {
-        isAuthenticated,
-        hasProfile: !!profile,
-        hasUserId: !!userId,
-        hasEmergencyProfile: !!emergencyProfile,
-        hasAnyData,
-        isDataGuaranteed,
-        isEmergencyMode,
-        needsDataCreation,
-        isLoading,
-        lastAction,
-        actionCount
-      });
-    }
-  }, [
-    isAuthenticated, profile, userId, emergencyProfile, hasAnyData,
-    isDataGuaranteed, isEmergencyMode, needsDataCreation, isLoading,
-    lastAction, actionCount, showDebugInfo
-  ]);
+  // Log de status SILENCIOSO (removido para performance)
 
   // Renderizar children normalmente
   // O Guardian trabalha em background
   return (
     <>
       {children}
-      
+
       {/* Debug Info (apenas em desenvolvimento) */}
       {showDebugInfo && isAuthenticated && (
         <div style={{

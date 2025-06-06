@@ -14,7 +14,7 @@ const HydrationErrorSuppressor = () => {
         elements.forEach(el => {
           el.removeAttribute('bis_skin_checked');
         });
-        console.log('🧹 Atributos bis_skin_checked removidos:', elements.length);
+        // Log removido para performance
       };
 
       // Executar imediatamente
@@ -27,8 +27,8 @@ const HydrationErrorSuppressor = () => {
       if (process.env.NODE_ENV !== 'production') {
         const originalError = console.error;
         console.error = function(msg) {
-          if (msg && typeof msg === 'string' && 
-              (msg.includes('Warning: Extra attributes from the server') || 
+          if (msg && typeof msg === 'string' &&
+              (msg.includes('Warning: Extra attributes from the server') ||
                msg.includes('bis_skin_checked'))) {
             return;
           }

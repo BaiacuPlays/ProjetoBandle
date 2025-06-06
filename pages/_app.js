@@ -14,11 +14,12 @@ import ProfileErrorHandler from '../components/ProfileErrorHandler';
 import { useEffect } from 'react';
 import HydrationErrorSuppressor from '../components/HydrationErrorSuppressor';
 import Script from 'next/script';
+import performanceFix from '../utils/performance-fix';
 
 export default function MyApp({ Component, pageProps }) {
   // Carregar configurações do localStorage ao iniciar a aplicação
   useEffect(() => {
-    console.log('App inicializado');
+    // Log removido para performance
 
     if (typeof window !== 'undefined') {
       try {
@@ -34,7 +35,7 @@ export default function MyApp({ Component, pageProps }) {
           }
         }
       } catch (error) {
-        console.warn('Erro ao carregar configurações:', error);
+        // Erro silencioso para performance
       }
     }
   }, []);
@@ -49,14 +50,14 @@ export default function MyApp({ Component, pageProps }) {
         elements.forEach(el => {
           el.removeAttribute('bis_skin_checked');
         });
-        console.log('🧹 Atributos bis_skin_checked removidos:', elements.length);
+        // Log removido para performance
       }, 0);
-      
+
       // Suprimir erros de AdBlock
       const originalError = console.error;
       console.error = function(msg) {
         if (msg && typeof msg === 'string' && (
-          msg.includes('pagead2.googlesyndication.com') || 
+          msg.includes('pagead2.googlesyndication.com') ||
           msg.includes('ERR_BLOCKED_BY_CLIENT') ||
           msg.includes('adsbygoogle') ||
           msg.includes('Failed to load resource')
@@ -78,8 +79,8 @@ export default function MyApp({ Component, pageProps }) {
             (function() {
               const originalError = console.error;
               console.error = function(msg) {
-                if (msg && typeof msg === 'string' && 
-                    (msg.includes('Warning: Extra attributes from the server') || 
+                if (msg && typeof msg === 'string' &&
+                    (msg.includes('Warning: Extra attributes from the server') ||
                      msg.includes('bis_skin_checked'))) {
                   return;
                 }
@@ -89,7 +90,7 @@ export default function MyApp({ Component, pageProps }) {
           `}
         </Script>
       )}
-      
+
       <LanguageProvider>
         <AuthProvider>
           <UserProfileProvider>
