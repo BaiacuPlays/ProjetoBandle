@@ -3964,18 +3964,6 @@
     "console": "Nintendo"
   },
   {
-    "id": 332,
-    "title": "Enter Samus",
-    "artist": "Hirokazu Tanaka",
-    "composer": "Hirokazu Tanaka",
-    "game": "Metroid",
-    "context": "Audio - Metroid",
-    "audioUrl": "https://pub-4d254faec6ec408ab584ea82049c2f79.r2.dev/metroid/2 - Enter  Samus.mp3",
-    "year": 1986,
-    "genre": "Game Soundtrack",
-    "console": "Nintendo"
-  },
-  {
     "id": 333,
     "title": "Brinstar",
     "artist": "Hirokazu Tanaka",
@@ -3989,7 +3977,7 @@
   },
   {
     "id": 334,
-    "title": "Subwoofer Lullaby418",
+    "title": "Subwoofer Lullaby",
     "artist": "C418",
     "composer": "C418",
     "game": "Minecraft",

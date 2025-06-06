@@ -4,7 +4,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useModalScrollLock } from '../hooks/useModalScrollLock';
 import { achievements, rarityColors, getAchievement, getNearAchievements } from '../data/achievements'; // Removed getAchievementStats as it wasn't used
 import { badges, titles, getBadge, getTitle, getAvailableTitles } from '../data/badges';
-import { FaTimes, FaEdit, FaTrophy, FaGamepad, FaClock, FaFire, FaStar, FaChartLine, FaCog, FaDownload, FaUpload, FaTrash, FaMedal, FaSignOutAlt } from 'react-icons/fa';
+import { FaTimes, FaEdit, FaTrophy, FaGamepad, FaClock, FaFire, FaStar, FaChartLine, FaCog, FaDownload, FaUpload, FaTrash, FaMedal, FaSignOutAlt, FaSync } from 'react-icons/fa';
 import ProfileTutorial from './ProfileTutorial';
 import SimplePhotoUpload from './SimplePhotoUpload';
 import LoginModal from './LoginModal';
@@ -28,6 +28,9 @@ const UserProfile = ({ isOpen, onClose }) => {
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
   const [showActivateModal, setShowActivateModal] = useState(false);
+  const [isUpdatingStats, setIsUpdatingStats] = useState(false);
+  const [statsUpdateMessage, setStatsUpdateMessage] = useState('');
+  const [statsUpdateSuccess, setStatsUpdateSuccess] = useState(false);
 
   // Hook de autenticação
   const { isAuthenticated, logout } = useAuth();
@@ -300,6 +303,138 @@ const UserProfile = ({ isOpen, onClose }) => {
       } catch (error) {
         alert('Não foi possível atualizar a foto. Tente novamente.');
       }
+    }
+  };
+
+  const handleForceStatsUpdate = async () => {
+    console.log('🔄 [FORCE-UPDATE] Iniciando atualização forçada');
+    console.log('🔄 [FORCE-UPDATE] UserId:', userId);
+    console.log('🔄 [FORCE-UPDATE] Profile:', profile ? 'PRESENTE' : 'AUSENTE');
+    console.log('🔄 [FORCE-UPDATE] Profile.id:', profile?.id);
+    console.log('🔄 [FORCE-UPDATE] Profile.username:', profile?.username);
+
+    if (!userId && !profile?.id) {
+      console.error('❌ [FORCE-UPDATE] UserId não encontrado');
+      setStatsUpdateMessage('Erro: Usuário não identificado');
+      setStatsUpdateSuccess(false);
+      return;
+    }
+
+    setIsUpdatingStats(true);
+    setStatsUpdateMessage('');
+    setStatsUpdateSuccess(false);
+
+    try {
+      console.log('📤 [FORCE-UPDATE] Enviando requisição para API');
+
+      // Preparar dados para envio
+      const requestData = {
+        userId: userId || profile?.id
+      };
+
+      // Adicionar token de autenticação se disponível
+      const sessionToken = localStorage.getItem('ludomusic_session_token');
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+
+      if (sessionToken) {
+        headers['Authorization'] = `Bearer ${sessionToken}`;
+      }
+
+      console.log('📤 [FORCE-UPDATE] Dados da requisição:', requestData);
+
+      const response = await fetch('/api/force-stats-update', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(requestData)
+      });
+
+      console.log('📥 [FORCE-UPDATE] Resposta recebida:', response.status, response.statusText);
+
+      const result = await response.json();
+      console.log('📊 [FORCE-UPDATE] Resultado da API:', result);
+
+      if (response.ok && result.success) {
+        console.log('✅ [FORCE-UPDATE] Sucesso!');
+        setStatsUpdateMessage('Estatísticas atualizadas com sucesso! Recarregue a página para ver as mudanças.');
+        setStatsUpdateSuccess(true);
+
+        // Recarregar o perfil automaticamente após 2 segundos
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      } else {
+        console.error('❌ [FORCE-UPDATE] Erro na API:', result);
+        setStatsUpdateMessage(result.error || 'Erro ao atualizar estatísticas');
+        setStatsUpdateSuccess(false);
+      }
+    } catch (error) {
+      console.error('Erro ao forçar atualização de estatísticas:', error);
+      setStatsUpdateMessage('Erro de rede ao atualizar estatísticas');
+      setStatsUpdateSuccess(false);
+    } finally {
+      setIsUpdatingStats(false);
+    }
+  };
+
+  const handleMigrateToBulletproof = async () => {
+    console.log('🚀 [MIGRATE] Iniciando migração para sistema à prova de balas');
+
+    if (!userId && !profile?.id) {
+      console.error('❌ [MIGRATE] UserId não encontrado');
+      setStatsUpdateMessage('Erro: Usuário não identificado');
+      setStatsUpdateSuccess(false);
+      return;
+    }
+
+    setIsUpdatingStats(true);
+    setStatsUpdateMessage('');
+    setStatsUpdateSuccess(false);
+
+    try {
+      console.log('📤 [MIGRATE] Enviando requisição para API de migração');
+
+      // Adicionar token de autenticação
+      const sessionToken = localStorage.getItem('ludomusic_session_token');
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+
+      if (sessionToken) {
+        headers['Authorization'] = `Bearer ${sessionToken}`;
+      }
+
+      const response = await fetch('/api/migrate-to-bulletproof', {
+        method: 'POST',
+        headers
+      });
+
+      console.log('📥 [MIGRATE] Resposta recebida:', response.status, response.statusText);
+
+      const result = await response.json();
+      console.log('📊 [MIGRATE] Resultado da migração:', result);
+
+      if (response.ok && result.success) {
+        console.log('✅ [MIGRATE] Migração concluída!');
+        setStatsUpdateMessage(`Migração concluída! ${result.message} Recarregando página...`);
+        setStatsUpdateSuccess(true);
+
+        // Recarregar a página após 3 segundos
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
+      } else {
+        console.error('❌ [MIGRATE] Erro na migração:', result);
+        setStatsUpdateMessage(result.error || 'Erro na migração');
+        setStatsUpdateSuccess(false);
+      }
+    } catch (error) {
+      console.error('❌ [MIGRATE] Erro de rede na migração:', error);
+      setStatsUpdateMessage('Erro de rede na migração');
+      setStatsUpdateSuccess(false);
+    } finally {
+      setIsUpdatingStats(false);
     }
   };
 
@@ -818,6 +953,47 @@ const UserProfile = ({ isOpen, onClose }) => {
                           <span>Conquistas desbloqueadas:</span>
                           <span>{unlockedAchievements.length}/{Object.keys(achievements).length}</span>
                         </div>
+                      </div>
+
+                      {/* Sistema de Estatísticas À Prova de Balas */}
+                      <div className={styles.statsUpdateSection}>
+                        <h6>🛡️ Sistema de Estatísticas À Prova de Balas</h6>
+                        <p className={styles.statsUpdateDescription}>
+                          Novo sistema que GARANTE que suas estatísticas nunca se percam!
+                          Salva sempre na Vercel KV, tem backup automático e repara problemas automaticamente.
+                        </p>
+
+                        <div className={styles.buttonGroup}>
+                          <button
+                            onClick={handleMigrateToBulletproof}
+                            disabled={isUpdatingStats}
+                            className={styles.migrateButton}
+                          >
+                            {isUpdatingStats ? (
+                              <>
+                                <div className={styles.spinner}></div>
+                                Migrando...
+                              </>
+                            ) : (
+                              <>
+                                🚀 Migrar para Sistema À Prova de Balas
+                              </>
+                            )}
+                          </button>
+
+                          <button
+                            onClick={() => window.open('/test-bulletproof', '_blank')}
+                            className={styles.testButton}
+                          >
+                            🧪 Testar Sistema
+                          </button>
+                        </div>
+
+                        {statsUpdateMessage && (
+                          <div className={`${styles.updateMessage} ${statsUpdateSuccess ? styles.success : styles.error}`}>
+                            {statsUpdateMessage}
+                          </div>
+                        )}
                       </div>
                     </div>
 

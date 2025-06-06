@@ -39,7 +39,7 @@ export const UserProfileProvider = ({ children }) => {
   const [isClient, setIsClient] = useState(false);
   const [userId, setUserId] = useState(null);
 
-  // SISTEMA ULTRA-ROBUSTO: GARANTIR que usuários logados SEMPRE tenham dados
+  // SISTEMA ULTRA-ROBUSTO: GARANTIR que usuários logados SEMPRE tenham dados (SILENCIOSO)
   const getUserId = () => {
     if (typeof window === 'undefined') return null;
 
@@ -47,7 +47,6 @@ export const UserProfileProvider = ({ children }) => {
     if (isAuthenticated) {
       const authId = getAuthenticatedUserId();
       if (authId) {
-        console.log('✅ [USER-ID] ID obtido via autenticação:', authId);
         return authId;
       }
     }
@@ -58,11 +57,10 @@ export const UserProfileProvider = ({ children }) => {
       const sessionToken = localStorage.getItem('ludomusic_session_token');
 
       if (savedUserId && sessionToken) {
-        console.log('🔄 [USER-ID] ID obtido via fallback localStorage:', savedUserId);
         return savedUserId;
       }
     } catch (error) {
-      console.warn('⚠️ [USER-ID] Erro ao acessar localStorage:', error);
+      // Erro silencioso
     }
 
     // PRIORIDADE 3: Tentar obter dos cookies
@@ -76,15 +74,13 @@ export const UserProfileProvider = ({ children }) => {
         const parsedData = JSON.parse(userDataValue);
         if (parsedData.username) {
           const cookieUserId = `auth_${parsedData.username}`;
-          console.log('🍪 [USER-ID] ID obtido via cookies:', cookieUserId);
           return cookieUserId;
         }
       }
     } catch (error) {
-      console.warn('⚠️ [USER-ID] Erro ao acessar cookies:', error);
+      // Erro silencioso
     }
 
-    console.log('❌ [USER-ID] Nenhum ID encontrado');
     return null;
   };
 
@@ -268,16 +264,37 @@ export const UserProfileProvider = ({ children }) => {
       // Verificar integridade das estatísticas SILENCIOSAMENTE
       const statsCheck = verifyStatsIntegrity(profile.stats);
       if (!statsCheck.isValid) {
-        const repairedStats = repairStats(profile.stats, statsCheck.issues);
-        const updatedProfile = { ...profile, stats: repairedStats };
+        // Verificar se é um problema grave que requer atualização forçada
+        const hasGraveIssues = statsCheck.issues.some(issue =>
+          issue.includes('totalGames zerado') ||
+          issue.includes('wins e losses zerados') ||
+          issue.includes('winRate incorreta')
+        );
 
-        setProfile(updatedProfile);
-        saveProfileToLocalStorage(userId, updatedProfile);
+        if (hasGraveIssues) {
+          // Executar atualização forçada automaticamente
+          try {
+            await autoForceStatsUpdate(userId);
+          } catch (error) {
+            // Se falhar, usar reparo local
+            const repairedStats = repairStats(profile.stats, statsCheck.issues);
+            const updatedProfile = { ...profile, stats: repairedStats };
+            setProfile(updatedProfile);
+            saveProfileToLocalStorage(userId, updatedProfile);
+          }
+        } else {
+          // Para problemas menores, usar reparo local
+          const repairedStats = repairStats(profile.stats, statsCheck.issues);
+          const updatedProfile = { ...profile, stats: repairedStats };
 
-        try {
-          await saveProfileToServerWithRetry(updatedProfile, userId);
-        } catch (error) {
-          // Erro silencioso
+          setProfile(updatedProfile);
+          saveProfileToLocalStorage(userId, updatedProfile);
+
+          try {
+            await saveProfileToServerWithRetry(updatedProfile, userId);
+          } catch (error) {
+            // Erro silencioso
+          }
         }
       }
 
@@ -576,107 +593,45 @@ export const UserProfileProvider = ({ children }) => {
     };
   };
 
-  // SISTEMA DE MONITORAMENTO CRÍTICO: Usuários logados SEMPRE devem ter dados
+  // SISTEMA SIMPLIFICADO: Carregar perfil apenas uma vez
   useEffect(() => {
     setIsClient(true);
 
-    // VERIFICAÇÃO CRÍTICA: Se usuário está autenticado, DEVE ter dados (SILENCIOSO)
-    if (isAuthenticated) {
+    // Carregar perfil apenas se autenticado e não temos perfil ainda
+    if (isAuthenticated && !profile && !isLoading) {
       const userIdToLoad = getUserId();
       if (userIdToLoad) {
-        // Usar sistema de garantia SILENCIOSAMENTE
-        ensureUserDataExists(userIdToLoad).then(guaranteedProfile => {
-          if (guaranteedProfile) {
-            setProfile(guaranteedProfile);
-            setUserId(userIdToLoad);
-            setIsLoading(false);
-          } else {
-            // Sistema de emergência SILENCIOSO
-            const emergencyProfile = createEmergencyProfile(userIdToLoad, getAuthenticatedUser());
-            setProfile(emergencyProfile);
-            setUserId(userIdToLoad);
-            setIsLoading(false);
-          }
-        }).catch(error => {
-          // PROTOCOLO DE EMERGÊNCIA FINAL SILENCIOSO
-          try {
-            const emergencyProfile = createEmergencyProfile(userIdToLoad, getAuthenticatedUser());
-            setProfile(emergencyProfile);
-            setUserId(userIdToLoad);
-            setIsLoading(false);
-
-            // Salvar em todos os locais possíveis SILENCIOSAMENTE
-            localStorage.setItem(`ludomusic_profile_${userIdToLoad}`, JSON.stringify(emergencyProfile));
-            localStorage.setItem(`ludomusic_emergency_profile_${userIdToLoad}`, JSON.stringify(emergencyProfile));
-            sessionStorage.setItem(`ludomusic_session_profile_${userIdToLoad}`, JSON.stringify(emergencyProfile));
-          } catch (finalError) {
-            // PERFIL MÍNIMO ABSOLUTO SILENCIOSO
-            const minimalProfile = {
-              id: userIdToLoad,
-              username: getAuthenticatedUser()?.username || 'Usuário',
-              displayName: getAuthenticatedUser()?.displayName || '',
-              level: 1,
-              xp: 0,
-              stats: {
-                totalGames: 0,
-                wins: 0,
-                losses: 0,
-                winRate: 0,
-                currentStreak: 0,
-                bestStreak: 0,
-                modeStats: {}
-              },
-              achievements: [],
-              gameHistory: [],
-              _isMinimalProfile: true,
-              _createdAt: new Date().toISOString()
-            };
-
-            setProfile(minimalProfile);
-            setUserId(userIdToLoad);
-            setIsLoading(false);
-          }
-        });
-      }
-    }
-
-    // Verificar se já temos um userId no localStorage (fallback)
-    const storedUserId = localStorage.getItem('ludomusic_user_id');
-    if (storedUserId && isAuthenticated && !userId) {
-      // Carregar perfil do localStorage usando o sistema de persistência
-      const localProfile = loadProfileFromLocalStorage(storedUserId);
-
-      if (localProfile) {
-        // Verificar integridade do perfil SILENCIOSAMENTE
-        if (!verifyProfileIntegrity(localProfile)) {
-          const repairedProfile = repairProfile(localProfile, storedUserId);
-          if (repairedProfile) {
-            setProfile(repairedProfile);
-            setUserId(storedUserId);
-            saveProfileToLocalStorage(storedUserId, repairedProfile);
-          }
-        } else {
+        // Tentar carregar do localStorage primeiro
+        const localProfile = loadProfileFromLocalStorage(userIdToLoad);
+        if (localProfile) {
           setProfile(localProfile);
-          setUserId(storedUserId);
+          setUserId(userIdToLoad);
+          setIsLoading(false);
+        } else {
+          // Criar perfil básico se não existir
+          const basicProfile = createEmergencyProfile(userIdToLoad, getAuthenticatedUser());
+          setProfile(basicProfile);
+          setUserId(userIdToLoad);
+          setIsLoading(false);
+          // Salvar para próximas vezes
+          saveProfileToLocalStorage(userIdToLoad, basicProfile);
         }
+      } else {
+        setIsLoading(false);
       }
+    } else if (!isAuthenticated) {
+      setProfile(null);
+      setUserId(null);
+      setIsLoading(false);
     }
+  }, [isAuthenticated]); // Apenas quando autenticação muda
 
-    // Configurar verificação periódica de integridade SILENCIOSA
-    const intervalId = setInterval(() => {
-      if (profile && userId) {
-        // Verificar e sincronizar perfil a cada 60 segundos (reduzido frequência)
-        if (!verifyProfileIntegrity(profile)) {
-          const repairedProfile = repairProfile(profile, userId);
-          if (repairedProfile) {
-            setProfile(repairedProfile);
-            saveProfileToLocalStorage(userId, repairedProfile);
-          }
-        }
-      }
-    }, 60000); // 60 segundos (reduzido de 30s)
+  // useEffect separado para verificação periódica - DESABILITADO TEMPORARIAMENTE
+  useEffect(() => {
+    // DESABILITADO - PODE ESTAR CAUSANDO TRAVAMENTO
+    return;
 
-    return () => clearInterval(intervalId);
+    // Código desabilitado...
   }, [isAuthenticated, profile, userId]);
 
   // Sincronização automática quando a aba ganha foco (usuário volta de outro dispositivo)
@@ -707,94 +662,28 @@ export const UserProfileProvider = ({ children }) => {
     return cleanup;
   }, [userId]);
 
-  // Aguardar autenticação e então carregar perfil
+  // Aguardar autenticação e então carregar perfil - DESABILITADO TEMPORARIAMENTE
   useEffect(() => {
-    if (!authLoading && isClient) {
-      const id = getUserId();
+    // DESABILITADO - PODE ESTAR CAUSANDO TRAVAMENTO
+    return;
 
-      // Só carregar se o userId mudou ou se não temos perfil ainda
-      if (id && id !== 'null' && id !== 'undefined' && id !== userId) {
-        console.log('🔄 [PROFILE] UserID mudou de', userId, 'para', id);
-        setUserId(id);
+    // Código desabilitado...
+  }, [authLoading, isAuthenticated, isClient]);
 
-        // Primeiro tentar carregar do localStorage para exibição imediata
-        const localProfileKey = `ludomusic_profile_${id}`;
-        const localProfileStr = localStorage.getItem(localProfileKey);
-
-        if (localProfileStr) {
-          try {
-            const localProfile = JSON.parse(localProfileStr);
-            console.log('📋 [PROFILE] Carregando perfil do localStorage primeiro:', localProfile.username);
-            setProfile(localProfile);
-          } catch (error) {
-            console.error('❌ [PROFILE] Erro ao carregar perfil do localStorage:', error);
-          }
-        }
-
-        // Chamar loadProfile para sincronizar com o servidor
-        loadProfileInternal(id);
-      } else if (!id || id === 'null' || id === 'undefined') {
-        setIsLoading(false);
-      }
-    }
-  }, [authLoading, isAuthenticated, isClient]); // REMOVIDO userId da dependência para evitar loop
-
-  // Atualizar perfil quando usuário faz login
+  // Atualizar perfil quando usuário faz login - DESABILITADO TEMPORARIAMENTE
   useEffect(() => {
-    if (isAuthenticated && profile && userId) {
-      const authenticatedUser = getAuthenticatedUser();
+    // DESABILITADO - PODE ESTAR CAUSANDO TRAVAMENTO
+    return;
 
-      if (authenticatedUser && (
-        profile.username !== authenticatedUser.username ||
-        profile.displayName !== authenticatedUser.displayName
-      )) {
-        const updatedProfile = {
-          ...profile,
-          username: authenticatedUser.username,
-          displayName: authenticatedUser.displayName,
-          lastUpdated: new Date().toISOString()
-        };
-
-        setProfile(updatedProfile);
-
-        // Salvar na Vercel KV
-        saveProfileToServer(updatedProfile).catch(error => {
-          console.warn('Erro ao sincronizar dados de login:', error);
-        });
-      }
-    }
+    // Código desabilitado...
   }, [isAuthenticated, profile, userId]);
 
-  // Sincronização automática quando a página é carregada ou atualizada
+  // Sincronização automática quando a página é carregada ou atualizada - DESABILITADO TEMPORARIAMENTE
   useEffect(() => {
-    if (isAuthenticated && userId) {
-      console.log('🔄 Página carregada/atualizada - sincronizando perfil');
+    // DESABILITADO - PODE ESTAR CAUSANDO TRAVAMENTO
+    return;
 
-      // Primeiro tentar carregar do localStorage usando o sistema de persistência
-      const localProfile = loadProfileFromLocalStorage(userId);
-
-      if (localProfile) {
-        // Verificar integridade do perfil
-        if (!verifyProfileIntegrity(localProfile)) {
-          console.log('🔧 Perfil corrompido, tentando reparar...');
-          const repairedProfile = repairProfile(localProfile, userId);
-          if (repairedProfile) {
-            console.log('📋 Perfil reparado aplicado ao estado');
-            setProfile(repairedProfile);
-            setIsLoading(false);
-            // Salvar o perfil reparado
-            saveProfileToLocalStorage(userId, repairedProfile);
-          }
-        } else {
-          console.log('📋 Perfil íntegro encontrado no localStorage, aplicando ao estado');
-          setProfile(localProfile);
-          setIsLoading(false);
-        }
-      }
-
-      // Depois sincronizar com o servidor
-      loadProfileInternal(userId);
-    }
+    // Código desabilitado...
   }, [isAuthenticated, userId]);
 
   const loadProfileInternal = async (targetUserId) => {
@@ -946,6 +835,7 @@ export const UserProfileProvider = ({ children }) => {
         // SALVAR NOVO PERFIL NA VERCEL KV E NO LOCALSTORAGE
         try {
           await saveProfileToServer(finalProfile);
+          const localProfileKey = `ludomusic_profile_${userIdToUse}`;
           localStorage.setItem(localProfileKey, JSON.stringify(finalProfile));
           console.log('✅ [PROFILE] Novo perfil salvo na Vercel KV e localStorage:', finalProfile.username);
         } catch (error) {
@@ -2224,6 +2114,36 @@ export const UserProfileProvider = ({ children }) => {
     return updatedProfile;
   };
 
+  // Função para atualização forçada automática de estatísticas
+  const autoForceStatsUpdate = async (userId) => {
+    try {
+      console.log('🔄 [AUTO-UPDATE] Executando atualização automática de estatísticas');
+
+      const response = await fetch('/api/force-stats-update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId })
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('✅ [AUTO-UPDATE] Estatísticas atualizadas automaticamente');
+
+        // Recarregar perfil após atualização
+        await loadProfileInternal(userId);
+        return true;
+      } else {
+        console.warn('⚠️ [AUTO-UPDATE] Falha na atualização automática');
+        return false;
+      }
+    } catch (error) {
+      console.error('❌ [AUTO-UPDATE] Erro na atualização automática:', error);
+      return false;
+    }
+  };
+
   // Função para alterar título atual
   const setCurrentTitle = async (titleId) => {
     if (!profile || !userId) return;
@@ -2334,7 +2254,8 @@ export const UserProfileProvider = ({ children }) => {
     getXPForNextLevel,
     markTutorialAsSeen,
     setCurrentTitle,
-    updateAvatar
+    updateAvatar,
+    autoForceStatsUpdate
   };
 
   return (

@@ -495,6 +495,158 @@
   font-weight: 600;
 }
 
+/* Seção de atualização de estatísticas */
+.statsUpdateSection {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: #181c22;
+  border-radius: 0.7rem;
+  border: 2px solid #23272f;
+  transition: all 0.3s ease;
+}
+
+.statsUpdateSection:hover {
+  border-color: #1DB954;
+  box-shadow: 0 0 0 2px rgba(29, 185, 84, 0.2);
+}
+
+.statsUpdateSection h6 {
+  margin: 0 0 1rem 0;
+  color: #1DB954;
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.statsUpdateDescription {
+  color: #b0b0b0;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.forceUpdateButton {
+  background: linear-gradient(45deg, #1DB954, #1ed760);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 200px;
+  justify-content: center;
+}
+
+.forceUpdateButton:hover:not(:disabled) {
+  transform: scale(1.02);
+  box-shadow: 0 4px 15px rgba(29, 185, 84, 0.3);
+}
+
+.forceUpdateButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.updateMessage {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.updateMessage.success {
+  background: rgba(29, 185, 84, 0.2);
+  color: #1DB954;
+  border: 1px solid rgba(29, 185, 84, 0.3);
+}
+
+.updateMessage.error {
+  background: rgba(255, 68, 68, 0.2);
+  color: #ff4444;
+  border: 1px solid rgba(255, 68, 68, 0.3);
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.migrateButton {
+  background: linear-gradient(45deg, #1DB954, #1ed760);
+  color: white;
+  border: none;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 250px;
+  justify-content: center;
+  flex: 1;
+}
+
+.migrateButton:hover:not(:disabled) {
+  transform: scale(1.02);
+  box-shadow: 0 6px 20px rgba(29, 185, 84, 0.4);
+  background: linear-gradient(45deg, #1ed760, #1DB954);
+}
+
+.migrateButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.testButton {
+  background: #181c22;
+  color: #1DB954;
+  border: 2px solid #1DB954;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 150px;
+  justify-content: center;
+}
+
+.testButton:hover {
+  background: rgba(29, 185, 84, 0.1);
+  transform: scale(1.02);
+}
+
 /* Aba de conquistas */
 .achievementsSummary {
   margin-bottom: 30px;
@@ -737,31 +889,31 @@
   .profileContent {
     padding: 20px;
   }
-  
+
   .profileBasicInfo {
     flex-direction: column;
     align-items: center;
     text-align: center;
   }
-  
+
   .statsGrid {
     grid-template-columns: 1fr;
   }
-  
+
   .modeInfo {
     flex-direction: column;
     gap: 10px;
   }
-  
+
   .achievementGrid {
     grid-template-columns: 1fr;
   }
-  
+
   .gameItem {
     flex-direction: column;
     text-align: center;
   }
-  
+
   .tab {
     padding: 12px 8px;
     font-size: 0.9rem;
