@@ -124,8 +124,11 @@ export const useGuaranteedUserData = () => {
     return null;
   }, [isAuthenticated, profile, checkUserDataIntegrity, forceEmergencyData]);
 
-  // Monitoramento contínuo
+  // Monitoramento contínuo - DESABILITADO TEMPORARIAMENTE
   useEffect(() => {
+    // DESABILITADO - PODE ESTAR CAUSANDO TRAVAMENTO
+    return;
+
     if (!isAuthenticated) {
       setIsDataGuaranteed(false);
       setEmergencyProfile(null);

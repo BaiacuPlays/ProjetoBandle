@@ -122,8 +122,8 @@ class Logger {
 // Instância global
 const logger = new Logger();
 
-// Substituir console global em produção (MAIS RIGOROSO)
-if (logger.isProduction || logger.isVercel) {
+// DESABILITADO TEMPORARIAMENTE - CAUSANDO TRAVAMENTO
+if (false && (logger.isProduction || logger.isVercel)) {
   // Salvar referências originais
   const originalConsole = {
     log: console.log,

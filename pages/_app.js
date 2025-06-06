@@ -14,7 +14,7 @@ import ProfileErrorHandler from '../components/ProfileErrorHandler';
 import { useEffect } from 'react';
 import HydrationErrorSuppressor from '../components/HydrationErrorSuppressor';
 import Script from 'next/script';
-import performanceFix from '../utils/performance-fix';
+// // import performanceFix from '../utils/performance-fix'; // DESABILITADO - CAUSANDO TRAVAMENTO // Desabilitado temporariamente
 
 export default function MyApp({ Component, pageProps }) {
   // Carregar configurações do localStorage ao iniciar a aplicação

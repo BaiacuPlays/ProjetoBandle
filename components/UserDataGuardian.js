@@ -27,8 +27,11 @@ const UserDataGuardian = ({ children, showDebugInfo = false }) => {
     setIsGuardianActive(isAuthenticated);
   }, [isAuthenticated]);
 
-  // Monitoramento crítico: Detectar usuário logado sem dados
+  // Monitoramento crítico: DESABILITADO TEMPORARIAMENTE
   useEffect(() => {
+    // DESABILITADO - PODE ESTAR CAUSANDO TRAVAMENTO
+    return;
+
     if (!isAuthenticated || !isGuardianActive) {
       return;
     }

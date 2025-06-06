@@ -988,8 +988,11 @@ export const UserProfileProvider = ({ children }) => {
     }
   };
 
-  // MONITORAMENTO CRÍTICO: Verificar se usuário logado tem dados
+  // MONITORAMENTO CRÍTICO: DESABILITADO TEMPORARIAMENTE
   useEffect(() => {
+    // DESABILITADO - PODE ESTAR CAUSANDO TRAVAMENTO
+    return;
+
     if (!isAuthenticated) return;
 
     const criticalMonitoring = setInterval(() => {
@@ -1029,8 +1032,11 @@ export const UserProfileProvider = ({ children }) => {
     return () => clearInterval(criticalMonitoring);
   }, [isAuthenticated, profile, userId]);
 
-  // SISTEMA DE MONITORAMENTO CRÍTICO: Verificar se usuário logado tem dados (SILENCIOSO)
+  // SISTEMA DE MONITORAMENTO CRÍTICO: DESABILITADO TEMPORARIAMENTE
   useEffect(() => {
+    // DESABILITADO - PODE ESTAR CAUSANDO TRAVAMENTO
+    return;
+
     if (!isAuthenticated) return;
 
     // Verificação crítica a cada 30 segundos (reduzido de 10s)
