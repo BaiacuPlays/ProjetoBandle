@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 Teste de Persistência de Login</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            color: #4a5568;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #4299e1;
+        }
+
+        .test-section.info { background: #ebf8ff; border-color: #4299e1; }
+        .test-section.success { background: #f0fff4; border-color: #48bb78; }
+        .test-section.warning { background: #fffbeb; border-color: #ed8936; }
+        .test-section.error { background: #fed7d7; border-color: #f56565; }
+
+        button {
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #3182ce;
+            transform: translateY(-2px);
+        }
+
+        .reset-btn {
+            background: #e53e3e !important;
+        }
+
+        .reset-btn:hover {
+            background: #c53030 !important;
+        }
+
+        #log {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            margin-top: 20px;
+        }
+
+        .stats-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #718096;
+            text-transform: uppercase;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #48bb78, #38a169);
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste de Persistência de Estatísticas durante Login</h1>
+        <p>Este teste verifica se as estatísticas do usuário são mantidas corretamente durante o processo de login/logout/relogin.</p>
+
+        <div class="test-section info">
+            <h3>📊 Controles de Teste</h3>
+            <button onclick="runFullTest()">🚀 Executar Teste Completo</button>
+            <button onclick="testPhase1()">📋 Fase 1: Preparar Dados</button>
+            <button onclick="testPhase2()">🔑 Fase 2: Simular Login</button>
+            <button onclick="testPhase3()">🎮 Fase 3: Atualizar Stats</button>
+            <button onclick="testPhase4()">🚪 Fase 4: Simular Logout</button>
+            <button onclick="testPhase5()">🔄 Fase 5: Simular Relogin</button>
+            <button onclick="checkCurrentState()">🔍 Verificar Estado Atual</button>
+            <button onclick="clearAllData()" class="reset-btn">🧹 Limpar Tudo</button>
+        </div>
+
+        <div class="test-section">
+            <h3>📈 Estado Atual das Estatísticas</h3>
+            <div id="statsDisplay" class="stats-display">
+                <!-- Stats serão inseridas aqui -->
+            </div>
+            <div class="progress-bar">
+                <div id="progressBar" class="progress-fill" style="width: 0%"></div>
+            </div>
+            <p id="progressText">Aguardando início do teste...</p>
+        </div>
+
+        <div class="test-section">
+            <h3>📝 Log de Testes</h3>
+            <div id="log"></div>
+        </div>
+    </div>
+
+    <script>
+        // Dados de teste
+        const testUser = {
+            username: 'test_stats_user',
+            displayName: 'Test Stats User'
+        };
+
+        const initialStats = {
+            totalGames: 25,
+            wins: 18,
+            losses: 7,
+            winRate: 72,
+            currentStreak: 5,
+            bestStreak: 12,
+            totalPlayTime: 7200,
+            perfectGames: 8,
+            averageAttempts: 2.8,
+            fastestWin: 35
+        };
+
+        let currentPhase = 0;
+        const totalPhases = 6;
+
+        // Função para log
+        function log(message, type = 'info') {
+            const logElement = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const colors = {
+                info: '#4299e1',
+                success: '#48bb78',
+                warning: '#ed8936',
+                error: '#f56565'
+            };
+
+            logElement.innerHTML += `<span style="color: ${colors[type]}">[${timestamp}] ${message}</span>\n`;
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+
+        // Atualizar display de estatísticas
+        function updateStatsDisplay() {
+            const userId = `auth_${testUser.username}`;
+            const profileKey = `ludomusic_profile_${userId}`;
+            const profile = localStorage.getItem(profileKey);
+
+            const statsDisplay = document.getElementById('statsDisplay');
+
+            if (profile) {
+                try {
+                    const parsedProfile = JSON.parse(profile);
+                    const stats = parsedProfile.stats;
+
+                    statsDisplay.innerHTML = `
+                        <div class="stat-card">
+                            <div class="stat-value">${stats.totalGames}</div>
+                            <div class="stat-label">Total de Jogos</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${stats.wins}</div>
+                            <div class="stat-label">Vitórias</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${stats.winRate.toFixed(1)}%</div>
+                            <div class="stat-label">Taxa de Vitória</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${stats.currentStreak}</div>
+                            <div class="stat-label">Sequência Atual</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${parsedProfile.level}</div>
+                            <div class="stat-label">Nível</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${parsedProfile.xp}</div>
+                            <div class="stat-label">XP</div>
+                        </div>
+                    `;
+                } catch (error) {
+                    statsDisplay.innerHTML = '<div class="stat-card"><div class="stat-value">❌</div><div class="stat-label">Erro ao carregar</div></div>';
+                }
+            } else {
+                statsDisplay.innerHTML = '<div class="stat-card"><div class="stat-value">-</div><div class="stat-label">Nenhum perfil encontrado</div></div>';
+            }
+        }
+
+        // Atualizar barra de progresso
+        function updateProgress(phase, message) {
+            currentPhase = phase;
+            const percentage = (phase / totalPhases) * 100;
+            document.getElementById('progressBar').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = `Fase ${phase}/${totalPhases}: ${message}`;
+        }
+
+        // Fase 1: Preparar dados de teste
+        function testPhase1() {
+            log('📋 Fase 1: Preparando dados de teste...', 'info');
+            updateProgress(1, 'Preparando dados de teste');
+
+            const userId = `auth_${testUser.username}`;
+            const profileKey = `ludomusic_profile_${userId}`;
+
+            const testProfile = {
+                id: userId,
+                username: testUser.username,
+                displayName: testUser.displayName,
+                level: 8,
+                xp: 2400,
+                achievements: ['first_win', 'streak_5', 'perfectionist'],
+                stats: initialStats,
+                gameHistory: [
+                    {
+                        id: 'game_1',
+                        date: new Date().toISOString(),
+                        mode: 'daily',
+                        won: true,
+                        attempts: 2,
+                        playTime: 120,
+                        xpGained: 80
+                    }
+                ],
+                franchiseStats: {
+                    'Test Game': { gamesPlayed: 5, wins: 4, winRate: 80 }
+                },
+                badges: ['early_bird', 'perfectionist'],
+                createdAt: new Date().toISOString(),
+                lastUpdated: new Date().toISOString(),
+                lastLogin: new Date().toISOString(),
+                version: '1.0'
+            };
+
+            localStorage.setItem(profileKey, JSON.stringify(testProfile));
+            log('✅ Perfil de teste criado com estatísticas', 'success');
+            log(`📊 Stats iniciais: ${initialStats.totalGames} jogos, ${initialStats.wins} vitórias`, 'info');
+
+            updateStatsDisplay();
+        }
+
+        // Fase 2: Simular login
+        function testPhase2() {
+            log('🔑 Fase 2: Simulando processo de login...', 'info');
+            updateProgress(2, 'Simulando login');
+
+            const sessionToken = 'test_session_' + Date.now();
+            const userData = {
+                username: testUser.username,
+                displayName: testUser.displayName,
+                email: null,
+                createdAt: new Date().toISOString(),
+                lastLoginAt: new Date().toISOString()
+            };
+
+            localStorage.setItem('ludomusic_session_token', sessionToken);
+            localStorage.setItem('ludomusic_user_data', JSON.stringify(userData));
+            log('✅ Dados de autenticação salvos', 'success');
+
+            // Verificar se o perfil ainda existe
+            const userId = `auth_${testUser.username}`;
+            const profileKey = `ludomusic_profile_${userId}`;
+            const profile = localStorage.getItem(profileKey);
+
+            if (profile) {
+                const parsedProfile = JSON.parse(profile);
+                log('✅ Perfil mantido após login', 'success');
+                log(`📊 Stats após login: ${parsedProfile.stats.totalGames} jogos, ${parsedProfile.stats.wins} vitórias`, 'info');
+
+                if (parsedProfile.stats.totalGames === initialStats.totalGames) {
+                    log('✅ Estatísticas mantidas corretamente', 'success');
+                } else {
+                    log('❌ Estatísticas alteradas durante o login!', 'error');
+                }
+            } else {
+                log('❌ Perfil perdido durante o login!', 'error');
+            }
+
+            updateStatsDisplay();
+        }
+
+        // Fase 3: Atualizar estatísticas
+        function testPhase3() {
+            log('🎮 Fase 3: Simulando atualização de estatísticas...', 'info');
+            updateProgress(3, 'Atualizando estatísticas');
+
+            const userId = `auth_${testUser.username}`;
+            const profileKey = `ludomusic_profile_${userId}`;
+            const currentProfile = JSON.parse(localStorage.getItem(profileKey));
+
+            if (currentProfile) {
+                // Simular um jogo ganho
+                currentProfile.stats.totalGames += 1;
+                currentProfile.stats.wins += 1;
+                currentProfile.stats.winRate = (currentProfile.stats.wins / currentProfile.stats.totalGames) * 100;
+                currentProfile.stats.currentStreak += 1;
+                currentProfile.xp += 80;
+                currentProfile.lastUpdated = new Date().toISOString();
+
+                // Adicionar ao histórico
+                currentProfile.gameHistory.unshift({
+                    id: 'game_new',
+                    date: new Date().toISOString(),
+                    mode: 'daily',
+                    won: true,
+                    attempts: 3,
+                    playTime: 90,
+                    xpGained: 80
+                });
+
+                localStorage.setItem(profileKey, JSON.stringify(currentProfile));
+                log('✅ Estatísticas atualizadas', 'success');
+                log(`📊 Novas stats: ${currentProfile.stats.totalGames} jogos, ${currentProfile.stats.wins} vitórias`, 'info');
+            } else {
+                log('❌ Perfil não encontrado para atualização', 'error');
+            }
+
+            updateStatsDisplay();
+        }
+
+        // Fase 4: Simular logout
+        function testPhase4() {
+            log('🚪 Fase 4: Simulando logout...', 'info');
+            updateProgress(4, 'Simulando logout');
+
+            localStorage.removeItem('ludomusic_session_token');
+            localStorage.removeItem('ludomusic_user_data');
+            log('✅ Dados de autenticação removidos', 'success');
+
+            // Verificar se o perfil ainda existe
+            const userId = `auth_${testUser.username}`;
+            const profileKey = `ludomusic_profile_${userId}`;
+            const profile = localStorage.getItem(profileKey);
+
+            if (profile) {
+                const parsedProfile = JSON.parse(profile);
+                log('✅ Perfil mantido após logout', 'success');
+                log(`📊 Stats após logout: ${parsedProfile.stats.totalGames} jogos, ${parsedProfile.stats.wins} vitórias`, 'info');
+            } else {
+                log('❌ Perfil perdido durante o logout!', 'error');
+            }
+
+            updateStatsDisplay();
+        }
+
+        // Fase 5: Simular relogin
+        function testPhase5() {
+            log('🔄 Fase 5: Simulando relogin...', 'info');
+            updateProgress(5, 'Simulando relogin');
+
+            const newSessionToken = 'test_session_relogin_' + Date.now();
+            const userData = {
+                username: testUser.username,
+                displayName: testUser.displayName,
+                email: null,
+                createdAt: new Date().toISOString(),
+                lastLoginAt: new Date().toISOString()
+            };
+
+            localStorage.setItem('ludomusic_session_token', newSessionToken);
+            localStorage.setItem('ludomusic_user_data', JSON.stringify(userData));
+            log('✅ Relogin simulado', 'success');
+
+            // Verificar se o perfil e estatísticas foram mantidos
+            const userId = `auth_${testUser.username}`;
+            const profileKey = `ludomusic_profile_${userId}`;
+            const profile = localStorage.getItem(profileKey);
+
+            if (profile) {
+                const parsedProfile = JSON.parse(profile);
+                log('✅ Perfil recuperado após relogin', 'success');
+                log(`📊 Stats após relogin: ${parsedProfile.stats.totalGames} jogos, ${parsedProfile.stats.wins} vitórias`, 'info');
+
+                if (parsedProfile.stats.totalGames === initialStats.totalGames + 1) {
+                    log('✅ Atualizações de estatísticas mantidas', 'success');
+                } else {
+                    log('❌ Atualizações de estatísticas perdidas!', 'error');
+                }
+            } else {
+                log('❌ Perfil não encontrado após relogin!', 'error');
+            }
+
+            updateStatsDisplay();
+        }
+
+        // Verificar estado atual
+        function checkCurrentState() {
+            log('🔍 Verificando estado atual...', 'info');
+            updateProgress(6, 'Verificando integridade');
+
+            const userId = `auth_${testUser.username}`;
+            const profileKey = `ludomusic_profile_${userId}`;
+            const sessionToken = localStorage.getItem('ludomusic_session_token');
+            const userData = localStorage.getItem('ludomusic_user_data');
+            const profile = localStorage.getItem(profileKey);
+
+            log(`🔑 Token de sessão: ${sessionToken ? 'Presente' : 'Ausente'}`, sessionToken ? 'success' : 'warning');
+            log(`👤 Dados do usuário: ${userData ? 'Presente' : 'Ausente'}`, userData ? 'success' : 'warning');
+            log(`📊 Perfil: ${profile ? 'Presente' : 'Ausente'}`, profile ? 'success' : 'error');
+
+            if (profile) {
+                try {
+                    const parsedProfile = JSON.parse(profile);
+                    const integrityCheck = verifyStatsIntegrity(parsedProfile.stats);
+
+                    if (integrityCheck.isValid) {
+                        log('✅ Integridade das estatísticas confirmada', 'success');
+                    } else {
+                        log('❌ Problemas de integridade encontrados:', 'error');
+                        integrityCheck.issues.forEach(issue => {
+                            log(`  - ${issue}`, 'error');
+                        });
+                    }
+
+                    if (parsedProfile.gameHistory && parsedProfile.gameHistory.length > 0) {
+                        log(`✅ Histórico mantido: ${parsedProfile.gameHistory.length} jogos`, 'success');
+                    } else {
+                        log('❌ Histórico de jogos perdido!', 'error');
+                    }
+                } catch (error) {
+                    log('❌ Erro ao analisar perfil: ' + error.message, 'error');
+                }
+            }
+
+            updateStatsDisplay();
+        }
+
+        // Verificar integridade das estatísticas
+        function verifyStatsIntegrity(stats) {
+            const issues = [];
+
+            const requiredFields = ['totalGames', 'wins', 'losses', 'winRate'];
+            for (const field of requiredFields) {
+                if (typeof stats[field] !== 'number') {
+                    issues.push(`Campo ${field} ausente ou inválido`);
+                }
+            }
+
+            if (stats.totalGames !== (stats.wins + stats.losses)) {
+                issues.push('Total de jogos não confere com wins + losses');
+            }
+
+            if (stats.totalGames > 0) {
+                const calculatedWinRate = (stats.wins / stats.totalGames) * 100;
+                if (Math.abs(stats.winRate - calculatedWinRate) > 0.1) {
+                    issues.push('Taxa de vitória inconsistente');
+                }
+            }
+
+            requiredFields.forEach(field => {
+                if (stats[field] < 0) {
+                    issues.push(`Campo ${field} com valor negativo`);
+                }
+            });
+
+            return {
+                isValid: issues.length === 0,
+                issues
+            };
+        }
+
+        // Executar teste completo
+        async function runFullTest() {
+            log('🚀 Iniciando teste completo de persistência...', 'info');
+
+            // Limpar dados anteriores
+            clearAllData();
+
+            // Executar todas as fases com delay
+            const phases = [testPhase1, testPhase2, testPhase3, testPhase4, testPhase5, checkCurrentState];
+
+            for (let i = 0; i < phases.length; i++) {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                phases[i]();
+            }
+
+            log('🎉 Teste completo finalizado!', 'success');
+        }
+
+        // Limpar todos os dados
+        function clearAllData() {
+            log('🧹 Limpando todos os dados de teste...', 'warning');
+
+            const userId = `auth_${testUser.username}`;
+            const profileKey = `ludomusic_profile_${userId}`;
+
+            localStorage.removeItem(profileKey);
+            localStorage.removeItem('ludomusic_session_token');
+            localStorage.removeItem('ludomusic_user_data');
+
+            updateProgress(0, 'Dados limpos');
+            updateStatsDisplay();
+
+            log('✅ Todos os dados de teste foram removidos', 'success');
+        }
+
+        // Inicializar página
+        document.addEventListener('DOMContentLoaded', function() {
+            log('🌐 Página de teste carregada', 'info');
+            updateStatsDisplay();
+        });
+    </script>
+</body>
+</html>

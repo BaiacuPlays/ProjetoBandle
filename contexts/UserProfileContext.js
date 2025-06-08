@@ -662,29 +662,93 @@ export const UserProfileProvider = ({ children }) => {
     return cleanup;
   }, [userId]);
 
-  // Aguardar autenticação e então carregar perfil - DESABILITADO TEMPORARIAMENTE
+  // Aguardar autenticação e então carregar perfil
   useEffect(() => {
-    // DESABILITADO - PODE ESTAR CAUSANDO TRAVAMENTO
-    return;
+    // Só executar no cliente e quando a autenticação estiver pronta
+    if (!isClient || authLoading) return;
 
-    // Código desabilitado...
-  }, [authLoading, isAuthenticated, isClient]);
+    // Se usuário está autenticado mas não temos perfil, carregar
+    if (isAuthenticated && !profile && !isLoading) {
+      const userIdToLoad = getUserId();
+      if (userIdToLoad && userIdToLoad !== 'null' && userIdToLoad !== 'undefined') {
+        console.log('🔄 [PROFILE] Carregando perfil após autenticação para:', userIdToLoad);
+        setUserId(userIdToLoad);
+        loadProfileInternal(userIdToLoad);
+      }
+    }
 
-  // Atualizar perfil quando usuário faz login - DESABILITADO TEMPORARIAMENTE
+    // Se usuário não está autenticado, limpar perfil (mas apenas se for logout real)
+    if (!isAuthenticated && profile && !authLoading) {
+      // 🔧 CORREÇÃO: Verificar se é logout real ou falha temporária de autenticação
+      const sessionToken = localStorage.getItem('ludomusic_session_token');
+
+      // Só limpar se não há token de sessão (logout real)
+      if (!sessionToken) {
+        console.log('🧹 [PROFILE] Limpando perfil após logout confirmado');
+        setProfile(null);
+        setUserId(null);
+      } else {
+        console.log('⚠️ [PROFILE] Falha temporária de autenticação detectada - mantendo dados');
+      }
+    }
+  }, [authLoading, isAuthenticated, isClient, profile, isLoading]);
+
+  // Atualizar perfil quando usuário faz login
   useEffect(() => {
-    // DESABILITADO - PODE ESTAR CAUSANDO TRAVAMENTO
-    return;
+    // Só executar se estiver autenticado e temos userId
+    if (!isAuthenticated || !isClient) return;
 
-    // Código desabilitado...
-  }, [isAuthenticated, profile, userId]);
+    const currentUserId = getUserId();
 
-  // Sincronização automática quando a página é carregada ou atualizada - DESABILITADO TEMPORARIAMENTE
+    // Se mudou o userId (troca de usuário) ou não temos perfil
+    if (currentUserId && (currentUserId !== userId || !profile)) {
+      console.log('🔄 [PROFILE] Detectada mudança de usuário ou perfil ausente:', currentUserId);
+      setUserId(currentUserId);
+      loadProfileInternal(currentUserId);
+    }
+  }, [isAuthenticated, userId, profile, isClient]);
+
+  // Sincronização automática quando a página é carregada ou atualizada
   useEffect(() => {
-    // DESABILITADO - PODE ESTAR CAUSANDO TRAVAMENTO
-    return;
+    // Só executar se estiver autenticado e no cliente
+    if (!isAuthenticated || !isClient) return;
 
-    // Código desabilitado...
-  }, [isAuthenticated, userId]);
+    const currentUserId = getUserId();
+    if (currentUserId && currentUserId !== userId) {
+      console.log('🔄 [PROFILE] Sincronizando userId:', currentUserId);
+      setUserId(currentUserId);
+    }
+  }, [isAuthenticated, userId, isClient]);
+
+  // Listener para evento de login - carregar perfil imediatamente
+  useEffect(() => {
+    if (!isClient) return;
+
+    const handleUserLogin = (event) => {
+      const { user } = event.detail;
+      if (user && user.username) {
+        const newUserId = `auth_${user.username}`;
+        console.log('🔑 [PROFILE] Evento de login detectado, carregando perfil para:', newUserId);
+
+        // 🔧 CORREÇÃO CRÍTICA: NÃO limpar perfil durante login para evitar perda de dados
+        // Apenas atualizar userId e carregar dados
+        setUserId(newUserId);
+        setIsLoading(true);
+
+        // Carregar perfil imediatamente SEM limpar dados existentes
+        setTimeout(() => {
+          loadProfileInternal(newUserId);
+        }, 100); // Pequeno delay para garantir que o estado foi atualizado
+      }
+    };
+
+    // Adicionar listener para evento de login
+    window.addEventListener('userLoggedIn', handleUserLogin);
+
+    return () => {
+      window.removeEventListener('userLoggedIn', handleUserLogin);
+    };
+  }, [isClient]);
 
   const loadProfileInternal = async (targetUserId) => {
     // Usar o userId passado como parâmetro ou o do estado
@@ -729,37 +793,38 @@ export const UserProfileProvider = ({ children }) => {
         console.log('❌ [DEBUG] Erro ao carregar da Vercel KV:', error);
       }
 
-      // Decidir qual perfil usar (servidor ou local)
+      // 🔧 CORREÇÃO: Decidir qual perfil usar baseado na data de atualização
       let finalProfile = null;
 
-      if (serverProfile) {
-        // USAR PERFIL DA VERCEL KV
-        console.log('✅ [PROFILE] Usando perfil da Vercel KV:', serverProfile.username);
-        const authenticatedUser = getAuthenticatedUser();
+      if (serverProfile && localProfile) {
+        // Comparar timestamps para usar o mais recente
+        const serverTime = new Date(serverProfile.lastUpdated || serverProfile.createdAt || 0).getTime();
+        const localTime = new Date(localProfile.lastUpdated || localProfile.createdAt || 0).getTime();
+
+        if (localTime > serverTime) {
+          console.log('📋 [PROFILE] Perfil local é mais recente, usando local e sincronizando com servidor');
+          finalProfile = localProfile;
+
+          // Sincronizar perfil local mais recente com o servidor
+          try {
+            await saveProfileToServer(localProfile);
+            console.log('🔄 Perfil local mais recente sincronizado com servidor');
+          } catch (error) {
+            console.warn('⚠️ Erro ao sincronizar perfil local com servidor:', error);
+          }
+        } else {
+          console.log('☁️ [PROFILE] Perfil do servidor é mais recente, usando servidor');
+          finalProfile = serverProfile;
+
+          // Salvar perfil do servidor no localStorage
+          saveProfileToLocalStorage(userIdToUse, serverProfile);
+        }
+      } else if (serverProfile) {
+        // Apenas perfil do servidor disponível
+        console.log('☁️ [PROFILE] Usando perfil da Vercel KV:', serverProfile.username);
         finalProfile = serverProfile;
 
-        // Atualizar dados de autenticação se necessário
-        if (authenticatedUser && (
-          serverProfile.username !== authenticatedUser.username ||
-          serverProfile.displayName !== authenticatedUser.displayName
-        )) {
-          finalProfile = {
-            ...serverProfile,
-            username: authenticatedUser.username,
-            displayName: authenticatedUser.displayName,
-            lastUpdated: new Date().toISOString()
-          };
-
-          // Salvar de volta na Vercel KV
-          try {
-            await saveProfileToServer(finalProfile);
-            console.log('🔄 Dados de autenticação atualizados na Vercel KV');
-          } catch (error) {
-            console.warn('Erro ao atualizar dados de autenticação:', error);
-          }
-        }
-
-        // Salvar no localStorage usando o sistema de persistência com múltiplos backups
+        // Salvar no localStorage
         saveProfileToLocalStorage(userIdToUse, finalProfile);
       } else if (localProfile) {
         // Se não conseguiu carregar do servidor mas tem perfil local, usar o local
@@ -878,18 +943,16 @@ export const UserProfileProvider = ({ children }) => {
     }
   };
 
-  // MONITORAMENTO CRÍTICO: DESABILITADO TEMPORARIAMENTE
+  // MONITORAMENTO CRÍTICO: Sistema de recuperação de dados perdidos
   useEffect(() => {
-    // DESABILITADO - PODE ESTAR CAUSANDO TRAVAMENTO
-    return;
-
-    if (!isAuthenticated) return;
+    // Só executar se estiver autenticado e no cliente
+    if (!isAuthenticated || !isClient) return;
 
     const criticalMonitoring = setInterval(() => {
       const currentUserId = getUserId();
 
       // VERIFICAÇÃO CRÍTICA: Usuário logado DEVE ter dados
-      if (currentUserId && !profile) {
+      if (currentUserId && !profile && !isLoading) {
         console.log('🚨 [CRITICAL] Usuário logado sem dados detectado! Corrigindo...');
 
         // Forçar carregamento de dados
@@ -905,7 +968,7 @@ export const UserProfileProvider = ({ children }) => {
       }
 
       // Verificar se userId mudou (troca de usuário)
-      if (currentUserId && currentUserId !== userId) {
+      if (currentUserId && currentUserId !== userId && !isLoading) {
         console.log('🔄 [CRITICAL] Mudança de usuário detectada:', userId, '->', currentUserId);
         setUserId(currentUserId);
 
@@ -917,24 +980,22 @@ export const UserProfileProvider = ({ children }) => {
           }
         });
       }
-    }, 10000); // Verificar a cada 10 segundos
+    }, 15000); // Verificar a cada 15 segundos (reduzido a frequência)
 
     return () => clearInterval(criticalMonitoring);
-  }, [isAuthenticated, profile, userId]);
+  }, [isAuthenticated, profile, userId, isLoading, isClient]);
 
-  // SISTEMA DE MONITORAMENTO CRÍTICO: DESABILITADO TEMPORARIAMENTE
+  // SISTEMA DE MONITORAMENTO DE INTEGRIDADE
   useEffect(() => {
-    // DESABILITADO - PODE ESTAR CAUSANDO TRAVAMENTO
-    return;
+    // Só executar se estiver autenticado e no cliente
+    if (!isAuthenticated || !isClient) return;
 
-    if (!isAuthenticated) return;
-
-    // Verificação crítica a cada 30 segundos (reduzido de 10s)
-    const criticalMonitoring = setInterval(() => {
+    // Verificação silenciosa a cada 60 segundos
+    const silentMonitoring = setInterval(() => {
       const currentUserId = getUserId();
 
       if (currentUserId && isAuthenticated) {
-        // VERIFICAÇÃO CRÍTICA: Usuário logado SEM dados (SEM LOGS)
+        // VERIFICAÇÃO SILENCIOSA: Usuário logado SEM dados
         if (!profile || !userId || userId !== currentUserId) {
           // Forçar carregamento de dados SILENCIOSAMENTE
           ensureUserDataExists(currentUserId).then(guaranteedProfile => {
@@ -947,20 +1008,20 @@ export const UserProfileProvider = ({ children }) => {
           });
         }
       }
-    }, 30000); // 30 segundos (reduzido de 10s)
+    }, 60000); // 60 segundos
 
-    // Verificação de integridade a cada 10 minutos (reduzido de 5min)
+    // Verificação de integridade a cada 15 minutos
     const integrityInterval = setInterval(() => {
       if (profile && userId) {
         performPeriodicIntegrityCheck();
       }
-    }, 10 * 60 * 1000); // 10 minutos
+    }, 15 * 60 * 1000); // 15 minutos
 
     return () => {
-      clearInterval(criticalMonitoring);
+      clearInterval(silentMonitoring);
       clearInterval(integrityInterval);
     };
-  }, [isAuthenticated, profile, userId]);
+  }, [isAuthenticated, profile, userId, isClient]);
 
   // Função para garantir estrutura válida do perfil
   const ensureProfileStructure = (profileData) => {
