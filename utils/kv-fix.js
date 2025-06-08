@@ -44,7 +44,7 @@ export function checkKVConfiguration() {
     config: {
       ...config,
       // Mascarar valores sensíveis
-      KV_REST_API_TOKEN: config.KV_REST_API_TOKEN ? 
+      KV_REST_API_TOKEN: config.KV_REST_API_TOKEN ?
         config.KV_REST_API_TOKEN.substring(0, 10) + '...' : null
     },
     issues,
@@ -57,52 +57,68 @@ export function checkKVConfiguration() {
  */
 export async function createSafeKVInstance() {
   try {
-    // Em produção, sempre tentar usar KV
-    if (process.env.NODE_ENV === 'production') {
-      const { kv } = await import('@vercel/kv');
+    // 🔧 CORREÇÃO: Em desenvolvimento, usar fallback por padrão para evitar problemas de conectividade
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🏠 [SafeKV] Modo desenvolvimento - usando fallback local por padrão');
+      return {
+        instance: null,
+        isWorking: false,
+        error: 'Modo desenvolvimento - usando fallback local'
+      };
+    }
 
-      // Testar conexão básica
-      const testKey = `test:${Date.now()}`;
-      await kv.set(testKey, { test: true }, { ex: 10 });
-      await kv.del(testKey);
+    // Verificar configuração apenas em produção
+    const configCheck = checkKVConfiguration();
+    if (!configCheck.isValid) {
+      console.log('📋 [SafeKV] KV não configurado - usando fallback');
+      return {
+        instance: null,
+        isWorking: false,
+        error: 'KV não configurado'
+      };
+    }
 
-      console.log('✅ KV funcionando em produção');
+    // Tentar importar e usar KV apenas em produção
+    const { kv } = await import('@vercel/kv');
+
+    // Testar conexão básica com timeout mais curto
+    const testKey = `test:${Date.now()}`;
+    const testValue = { test: true, timestamp: Date.now() };
+
+    // Usar Promise.race para timeout
+    const testPromise = Promise.race([
+      (async () => {
+        await kv.set(testKey, testValue, { ex: 10 });
+        const retrieved = await kv.get(testKey);
+        await kv.del(testKey);
+        return retrieved;
+      })(),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Timeout na conexão KV')), 3000)
+      )
+    ]);
+
+    const result = await testPromise;
+
+    if (result && result.test === true) {
+      console.log('✅ [SafeKV] KV funcionando corretamente');
       return {
         instance: kv,
         isWorking: true,
         error: null
       };
+    } else {
+      throw new Error('Teste de integridade KV falhou');
     }
 
-    // Em desenvolvimento, verificar se as variáveis estão definidas
-    const configCheck = checkKVConfiguration();
-    if (!configCheck.isValid) {
-      console.warn('⚠️ Variáveis KV não configuradas, usando fallback');
-      return {
-        instance: null,
-        isWorking: false,
-        error: 'Variáveis KV não configuradas'
-      };
-    }
-
-    const { kv } = await import('@vercel/kv');
-
-    // Testar conexão básica
-    const testKey = `test:${Date.now()}`;
-    await kv.set(testKey, { test: true }, { ex: 10 });
-    await kv.del(testKey);
-
-    return {
-      instance: kv,
-      isWorking: true,
-      error: null
-    };
   } catch (error) {
-    console.warn('⚠️ KV não disponível, usando fallback:', error.message);
+    const errorMsg = error.message || 'Erro desconhecido';
+    console.warn(`⚠️ [SafeKV] KV não disponível (${errorMsg}), usando fallback`);
+
     return {
       instance: null,
       isWorking: false,
-      error: error.message
+      error: errorMsg
     };
   }
 }
@@ -121,13 +137,22 @@ export class SafeKV {
   async initialize() {
     if (this.isInitialized) return;
 
-    const kvResult = await createSafeKVInstance();
-    this.kvInstance = kvResult.instance;
-    this.isWorking = kvResult.isWorking;
-    this.isInitialized = true;
+    try {
+      const kvResult = await createSafeKVInstance();
+      this.kvInstance = kvResult.instance;
+      this.isWorking = kvResult.isWorking;
+      this.isInitialized = true;
 
-    if (!this.isWorking && this.isDevelopment) {
-      console.warn('⚠️ KV não está funcionando, usando fallback em memória');
+      if (!this.isWorking && this.isDevelopment) {
+        console.warn('⚠️ KV não está funcionando, usando fallback em memória');
+      } else if (this.isWorking) {
+        console.log('✅ SafeKV inicializado com sucesso');
+      }
+    } catch (error) {
+      console.error('❌ Erro ao inicializar SafeKV:', error);
+      this.kvInstance = null;
+      this.isWorking = false;
+      this.isInitialized = true;
     }
   }
 
@@ -232,7 +257,7 @@ export const safeKV = new SafeKV();
 export async function generateKVDiagnosticReport() {
   const configCheck = checkKVConfiguration();
   const kvTest = await createSafeKVInstance();
-  
+
   return {
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV,

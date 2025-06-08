@@ -1,5 +1,15 @@
 // API para diagnosticar problemas com Vercel KV
 export default async function handler(req, res) {
+  const { method } = req;
+
+  // Se for uma operação específica (GET, POST, DELETE), processar separadamente
+  if (method === 'GET' && req.query.action) {
+    return await handleSpecificOperation(req, res);
+  }
+
+  if (method === 'POST' || method === 'DELETE') {
+    return await handleSpecificOperation(req, res);
+  }
   // Verificar se estamos em desenvolvimento
   const isDevelopment = process.env.NODE_ENV === 'development';
 
@@ -25,21 +35,21 @@ export default async function handler(req, res) {
       KV_URL: process.env.KV_URL ? 'DEFINIDA' : 'NÃO DEFINIDA',
       KV_REST_API_READ_ONLY_TOKEN: process.env.KV_REST_API_READ_ONLY_TOKEN ? 'DEFINIDA' : 'NÃO DEFINIDA',
     },
-    
+
     // Verificar se as variáveis têm valores válidos
     validation: {
       hasKVConfig: !!(
         (process.env.KV_REST_API_URL || process.env.KV_URL) &&
         process.env.KV_REST_API_TOKEN
       ),
-      kvUrlFormat: process.env.KV_REST_API_URL ? 
-        (process.env.KV_REST_API_URL.startsWith('https://') ? 'VÁLIDO' : 'INVÁLIDO') : 
+      kvUrlFormat: process.env.KV_REST_API_URL ?
+        (process.env.KV_REST_API_URL.startsWith('https://') ? 'VÁLIDO' : 'INVÁLIDO') :
         'NÃO DEFINIDA',
-      tokenLength: process.env.KV_REST_API_TOKEN ? 
+      tokenLength: process.env.KV_REST_API_TOKEN ?
         process.env.KV_REST_API_TOKEN.length : 0
     }
   };
-  
+
   // Tentar importar e testar o KV
   let kvTestResult = null;
   try {
@@ -85,32 +95,112 @@ export default async function handler(req, res) {
       errorType: error.constructor.name
     };
   }
-  
+
   // Verificar se estamos no Vercel
   const isVercel = !!(process.env.VERCEL || process.env.VERCEL_ENV);
-  
+
   const response = {
     ...debugInfo,
     isVercel,
     vercelEnv: process.env.VERCEL_ENV || 'local',
     kvTest: kvTestResult,
-    
+
     // Recomendações baseadas no diagnóstico
     recommendations: []
   };
-  
+
   // Adicionar recomendações
   if (!debugInfo.validation.hasKVConfig) {
     response.recommendations.push('Configurar variáveis KV_REST_API_URL e KV_REST_API_TOKEN no Vercel');
   }
-  
+
   if (!isVercel && isDevelopment) {
     response.recommendations.push('Em desenvolvimento local, certifique-se de que o arquivo .env.local existe e contém as variáveis KV');
   }
-  
+
   if (kvTestResult && !kvTestResult.success) {
     response.recommendations.push('Verificar se as credenciais KV estão corretas no painel do Vercel');
   }
-  
+
   return res.status(200).json(response);
+}
+
+// Função para lidar com operações específicas do KV
+async function handleSpecificOperation(req, res) {
+  const { method } = req;
+  const { action, key } = method === 'GET' ? req.query : req.body;
+
+  if (!key) {
+    return res.status(400).json({
+      success: false,
+      error: 'Parâmetro "key" é obrigatório'
+    });
+  }
+
+  try {
+    console.log(`🔧 [DEBUG-KV] Operação ${action || method} para chave: ${key}`);
+
+    // Importar KV
+    const { kv } = await import('@vercel/kv');
+
+    if (method === 'GET' && action === 'get') {
+      // Operação de leitura
+      console.log(`📖 Lendo chave: ${key}`);
+      const data = await kv.get(key);
+      console.log(`✅ Dados lidos:`, data);
+
+      return res.status(200).json({
+        success: true,
+        action: 'get',
+        key,
+        data,
+        exists: data !== null
+      });
+
+    } else if (method === 'POST' && req.body.action === 'set') {
+      // Operação de escrita
+      const { value } = req.body;
+      console.log(`📝 Escrevendo chave: ${key}`, value);
+
+      await kv.set(key, value);
+      console.log(`✅ Chave escrita com sucesso`);
+
+      return res.status(200).json({
+        success: true,
+        action: 'set',
+        key,
+        value
+      });
+
+    } else if (method === 'DELETE') {
+      // Operação de deleção
+      console.log(`🗑️ Deletando chave: ${key}`);
+
+      await kv.del(key);
+      console.log(`✅ Chave deletada com sucesso`);
+
+      return res.status(200).json({
+        success: true,
+        action: 'delete',
+        key
+      });
+
+    } else {
+      return res.status(400).json({
+        success: false,
+        error: `Operação não suportada: ${action || method}`
+      });
+    }
+
+  } catch (error) {
+    console.error(`❌ [DEBUG-KV] Erro na operação ${action || method}:`, error);
+
+    return res.status(500).json({
+      success: false,
+      action: action || method,
+      key,
+      error: error.message,
+      errorType: error.constructor.name
+    });
+  }
 }

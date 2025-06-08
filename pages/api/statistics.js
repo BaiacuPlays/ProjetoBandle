@@ -7,6 +7,40 @@ const localStats = new Map();
 // Verificar se estamos em ambiente de desenvolvimento
 const isDevelopment = process.env.NODE_ENV === 'development';
 
+// Função auxiliar para operações KV com fallback
+async function safeKVOperation(operation, key, value = null) {
+  try {
+    // Garantir que o SafeKV está inicializado
+    await safeKV.initialize();
+
+    switch (operation) {
+      case 'get':
+        return await safeKV.get(key);
+      case 'set':
+        return await safeKV.set(key, value);
+      default:
+        throw new Error(`Operação não suportada: ${operation}`);
+    }
+  } catch (error) {
+    console.warn(`⚠️ [STATS] Erro na operação ${operation} para ${key}:`, error.message);
+
+    // Fallback para armazenamento local em desenvolvimento
+    if (isDevelopment) {
+      switch (operation) {
+        case 'get':
+          return localStats.get(key) || null;
+        case 'set':
+          localStats.set(key, value);
+          return true;
+        default:
+          return null;
+      }
+    }
+
+    throw error;
+  }
+}
+
 export default async function handler(req, res) {
   const { method } = req;
   const { userid } = req.query;
@@ -26,12 +60,12 @@ export default async function handler(req, res) {
   };
 
   if (method === 'GET') {
-    // Buscar estatísticas do usuário usando SafeKV
+    // Buscar estatísticas do usuário usando SafeKV com fallback
     try {
-      const stats = await safeKV.get(statsKey);
+      const stats = await safeKVOperation('get', statsKey);
       return res.status(200).json(stats || defaultStats);
     } catch (error) {
-      console.error('Erro ao buscar estatísticas:', error);
+      console.error('❌ [STATS] Erro ao buscar estatísticas:', error);
       return res.status(200).json(defaultStats);
     }
   }
@@ -44,32 +78,32 @@ export default async function handler(req, res) {
     }
 
     try {
-      // Buscar estatísticas atuais usando SafeKV
-      let stats = await safeKV.get(statsKey);
+      // Buscar estatísticas atuais usando SafeKV com fallback
+      let stats = await safeKVOperation('get', statsKey);
 
       if (!stats) {
         stats = { ...defaultStats };
       }
 
-    stats.totalGames++;
-    if (won) {
-      stats.wins++;
-      const idx = Math.min(Math.max(attempts - 1, 0), 5);
-      stats.attemptDistribution[idx]++;
-    } else {
-      stats.losses++;
-    }
-    stats.winPercentage = stats.totalGames > 0 ? Math.round((stats.wins / stats.totalGames) * 100) : 0;
-    if (stats.wins > 0) {
-      let totalAttempts = 0;
-      stats.attemptDistribution.forEach((count, index) => {
-        totalAttempts += count * (index + 1);
-      });
-      stats.averageAttempts = Math.round((totalAttempts / stats.wins) * 10) / 10;
-    }
+      stats.totalGames++;
+      if (won) {
+        stats.wins++;
+        const idx = Math.min(Math.max(attempts - 1, 0), 5);
+        stats.attemptDistribution[idx]++;
+      } else {
+        stats.losses++;
+      }
+      stats.winPercentage = stats.totalGames > 0 ? Math.round((stats.wins / stats.totalGames) * 100) : 0;
+      if (stats.wins > 0) {
+        let totalAttempts = 0;
+        stats.attemptDistribution.forEach((count, index) => {
+          totalAttempts += count * (index + 1);
+        });
+        stats.averageAttempts = Math.round((totalAttempts / stats.wins) * 10) / 10;
+      }
 
-      // Salvar estatísticas usando SafeKV
-      await safeKV.set(statsKey, stats);
+      // Salvar estatísticas usando SafeKV com fallback
+      await safeKVOperation('set', statsKey, stats);
 
       // Atualizar estatísticas globais
       await updateGlobalStats(won, attempts);
@@ -77,7 +111,7 @@ export default async function handler(req, res) {
       return res.status(200).json(stats);
 
     } catch (error) {
-      console.error('Erro ao processar estatísticas:', error);
+      console.error('❌ [STATS] Erro ao processar estatísticas:', error);
       return res.status(500).json({ error: 'Erro interno do servidor' });
     }
   }
@@ -100,8 +134,8 @@ async function updateGlobalStats(won, attempts) {
     const currentDay = getCurrentDay();
     const dailyStatsKey = `stats:daily:${currentDay}`;
 
-    // Buscar estatísticas diárias atuais usando SafeKV
-    let dailyStats = await safeKV.get(dailyStatsKey) || {
+    // Buscar estatísticas diárias atuais usando SafeKV com fallback
+    let dailyStats = await safeKVOperation('get', dailyStatsKey) || {
       totalGames: 0,
       totalWins: 0,
       totalLosses: 0,
@@ -132,8 +166,8 @@ async function updateGlobalStats(won, attempts) {
       ? Math.round((dailyStats.totalAttempts / dailyStats.totalGames) * 10) / 10
       : 0;
 
-    // Salvar estatísticas diárias atualizadas usando SafeKV
-    await safeKV.set(dailyStatsKey, dailyStats);
+    // Salvar estatísticas diárias atualizadas usando SafeKV com fallback
+    await safeKVOperation('set', dailyStatsKey, dailyStats);
 
     console.log('Estatísticas diárias atualizadas:', {
       date: currentDay,
