@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { getGlobalStatistics } from '../config/api';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useModalScrollLock } from '../hooks/useModalScrollLock';
+import { useUserProfile } from '../contexts/UserProfileContext';
+import { useAuth } from '../contexts/AuthContext';
 import ShareButton from './ShareButton';
 import ActionButtons from './ActionButtons';
 import styles from '../styles/Statistics.module.css';
@@ -16,6 +18,8 @@ function generateUUID() {
 
 const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false, isMultiplayerMode = false, currentSong = null }) => {
   const { t, isClient } = useLanguage();
+  const { profile, isLoading: profileLoading } = useUserProfile();
+  const { isAuthenticated } = useAuth();
 
   // Bloquear/desbloquear scroll da página
   useModalScrollLock(isOpen);
@@ -167,39 +171,92 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
     }
   };
 
+  // Carregar estatísticas do perfil do usuário (se autenticado)
+  const loadProfileStatistics = () => {
+    if (!isAuthenticated || !profile) return;
+
+    try {
+      // Usar estatísticas do perfil para modo diário
+      if (!isInfiniteMode && profile.stats) {
+        setStats({
+          totalGames: profile.stats.totalGames || 0,
+          wins: profile.stats.wins || 0,
+          losses: profile.stats.losses || 0,
+          attemptDistribution: profile.stats.attemptDistribution || [0, 0, 0, 0, 0, 0],
+          winPercentage: profile.stats.winRate || 0,
+          averageAttempts: profile.stats.averageAttempts || 0
+        });
+      }
+
+      // Usar estatísticas do perfil para modo infinito
+      if (isInfiniteMode && profile.stats?.modeStats?.infinite) {
+        const infiniteData = profile.stats.modeStats.infinite;
+        setInfiniteStats({
+          bestRecord: infiniteData.bestStreak || 0,
+          currentStreak: infiniteData.currentStreak || 0,
+          totalSongsCompleted: infiniteData.totalSongsCompleted || 0,
+          totalGamesPlayed: infiniteData.games || 0
+        });
+      }
+    } catch (error) {
+      console.error('Erro ao carregar estatísticas do perfil:', error);
+    }
+  };
+
   // Efeito para carregar estatísticas ao abrir o modal
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      if (isInfiniteMode) {
-        loadInfiniteStatistics();
+    if (typeof window !== 'undefined' && isOpen) {
+      if (isAuthenticated && profile) {
+        // Se usuário está autenticado, usar estatísticas do perfil
+        loadProfileStatistics();
       } else {
-        loadStatistics();
+        // Fallback para sistema antigo (usuários anônimos)
+        if (isInfiniteMode) {
+          loadInfiniteStatistics();
+        } else {
+          loadStatistics();
+        }
       }
     }
-  }, [isOpen, isInfiniteMode]);
+  }, [isOpen, isInfiniteMode, isAuthenticated, profile]);
 
   // Efeito para salvar resultado do jogo atual ao abrir o modal (modo diário)
   useEffect(() => {
     if (isOpen && gameResult && !isInfiniteMode) {
-      saveGameResult(gameResult).then(() => loadStatistics());
+      if (isAuthenticated && profile) {
+        // Para usuários autenticados, as estatísticas já são salvas pelo UserProfileContext
+        // Apenas recarregar as estatísticas do perfil
+        loadProfileStatistics();
+      } else {
+        // Para usuários anônimos, usar sistema antigo
+        saveGameResult(gameResult).then(() => loadStatistics());
+      }
     }
-  }, [isOpen, gameResult, isInfiniteMode]);
+  }, [isOpen, gameResult, isInfiniteMode, isAuthenticated, profile]);
 
-  // Estatísticas globais (opcional, se quiser manter)
+  // Estatísticas globais (apenas para exibição geral, não sobrescrever dados do usuário)
+  const [globalStats, setGlobalStats] = useState({
+    totalGames: 0,
+    averageAttempts: 3
+  });
+
   useEffect(() => {
     async function fetchGlobalStats() {
-      const globalStats = await getGlobalStatistics();
-      setStats((prevStats) => ({
-        ...prevStats,
-        totalGames: globalStats.totalGames,
-        wins: globalStats.wins,
-        losses: globalStats.losses,
-        winPercentage: ((globalStats.wins / globalStats.totalGames) * 100).toFixed(2)
-      }));
+      try {
+        const stats = await getGlobalStatistics();
+        setGlobalStats({
+          totalGames: stats.totalGames || 0,
+          averageAttempts: stats.averageAttempts || 3
+        });
+      } catch (error) {
+        console.error('Erro ao buscar estatísticas globais:', error);
+      }
     }
 
-    fetchGlobalStats();
-  }, []);
+    if (!isInfiniteMode && !isMultiplayerMode) {
+      fetchGlobalStats();
+    }
+  }, [isInfiniteMode, isMultiplayerMode]);
 
   const getAttemptPercentage = (attemptIndex) => {
     if (stats.totalGames === 0) return 0;
@@ -230,15 +287,40 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
 
         <div className={styles.content}>
           {/* Estatísticas Globais Simplificadas - APENAS no modo diário */}
-          {stats && !isInfiniteMode && !isMultiplayerMode && (
+          {!isInfiniteMode && !isMultiplayerMode && (
             <div className={styles.simpleStatsSection}>
               <div className={styles.simpleStatsMessage}>
                 {isClient
                   ? t('global_stats_message')
-                    .replace('{totalPlayers}', stats.totalGames || 0)
-                    .replace('{averageAttempts}', Math.round(stats.averageAttempts || 3))
-                  : `${stats.totalGames || 0} pessoas já adivinharam hoje / ${Math.round(stats.averageAttempts || 3)} tentativas médias`
+                    .replace('{totalPlayers}', globalStats.totalGames || 0)
+                    .replace('{averageAttempts}', Math.round(globalStats.averageAttempts || 3))
+                  : `${globalStats.totalGames || 0} pessoas já adivinharam hoje / ${Math.round(globalStats.averageAttempts || 3)} tentativas médias`
                 }
+              </div>
+            </div>
+          )}
+
+          {/* Estatísticas Pessoais do Usuário - APENAS para usuários autenticados */}
+          {isAuthenticated && profile && !isInfiniteMode && !isMultiplayerMode && (
+            <div className={styles.personalStatsSection}>
+              <h3>Suas Estatísticas</h3>
+              <div className={styles.personalStatsGrid}>
+                <div className={styles.personalStatItem}>
+                  <span className={styles.personalStatNumber}>{stats.totalGames}</span>
+                  <span className={styles.personalStatLabel}>Jogos Totais</span>
+                </div>
+                <div className={styles.personalStatItem}>
+                  <span className={styles.personalStatNumber}>{stats.wins}</span>
+                  <span className={styles.personalStatLabel}>Vitórias</span>
+                </div>
+                <div className={styles.personalStatItem}>
+                  <span className={styles.personalStatNumber}>{Math.round(stats.winPercentage)}%</span>
+                  <span className={styles.personalStatLabel}>Taxa de Vitória</span>
+                </div>
+                <div className={styles.personalStatItem}>
+                  <span className={styles.personalStatNumber}>{stats.averageAttempts.toFixed(1)}</span>
+                  <span className={styles.personalStatLabel}>Média de Tentativas</span>
+                </div>
               </div>
             </div>
           )}

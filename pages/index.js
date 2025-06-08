@@ -143,6 +143,9 @@ export default function Home() {
   const [isSkipLoading, setIsSkipLoading] = useState(false);
   const [audioLoadTimeout, setAudioLoadTimeout] = useState(null);
   const [playPromiseRef, setPlayPromiseRef] = useState(null);
+  const [audioLoadError, setAudioLoadError] = useState(false);
+  const [audioLoadRetries, setAudioLoadRetries] = useState(0);
+  const [connectionError, setConnectionError] = useState(false);
 
   // Estados de monetização
   const [showInterstitialAd, setShowInterstitialAd] = useState(false);
@@ -270,6 +273,11 @@ export default function Home() {
     setIsPlayLoading(false);
     setPendingPlay(false);
     setIsPlayButtonDisabled(false);
+
+    // Resetar estados de erro de carregamento
+    setAudioLoadError(false);
+    setAudioLoadRetries(0);
+    setConnectionError(false);
 
     // Resetar áudio
     if (audioRef.current) {
@@ -2029,13 +2037,20 @@ export default function Home() {
     if (currentSong?.audioUrl) {
       // Reseta o estado de erro quando uma nova música é carregada
       setAudioError(false);
+      setAudioLoadError(false);
+      setAudioLoadRetries(0);
+      setConnectionError(false);
 
       // Limpar mensagens de erro de áudio específicas
       if (message && (
         message.includes('Erro ao carregar o áudio') ||
         message.includes('Erro ao reproduzir o áudio') ||
         message.includes('Formato de áudio não suportado') ||
-        message.includes('Erro de rede')
+        message.includes('Erro de rede') ||
+        message.includes('Áudio ainda carregando') ||
+        message.includes('Áudio corrompido') ||
+        message.includes('Carregamento de áudio foi interrompido') ||
+        message.includes('Erro desconhecido ao carregar áudio')
       )) {
         setMessage('');
       }
@@ -2625,10 +2640,27 @@ export default function Home() {
                     }, 1000); // Reduzido de 3000 para 1000ms
 
                     try {
-                      // Se áudio não carregou ainda, aguardar carregamento
+                      // Se áudio não carregou ainda, mostrar mensagem e aguardar carregamento
                       if (!audioDuration && currentSong?.audioUrl) {
+                        setMessage('Áudio ainda carregando, aguarde...');
+                        setTimeout(() => {
+                          if (message === 'Áudio ainda carregando, aguarde...') {
+                            setMessage('');
+                          }
+                        }, 2000);
                         setPendingPlay(true);
                         audioRef.current.load();
+                        return;
+                      }
+
+                      // Fallback para método tradicional - verificar se áudio está pronto
+                      if (!audioRef.current || !audioRef.current.duration) {
+                        setMessage('Áudio ainda carregando, aguarde...');
+                        setTimeout(() => {
+                          if (message === 'Áudio ainda carregando, aguarde...') {
+                            setMessage('');
+                          }
+                        }, 2000);
                         return;
                       }
 
@@ -2730,20 +2762,38 @@ export default function Home() {
                     setAudioLoadTimeout(null);
                   }
 
-                  // Mensagem de erro baseada no código
+                  // Tratamento de erro mais robusto
                   const errorCode = e.target.error?.code;
+
                   if (errorCode === 4) {
-                    setMessage('Formato de áudio não suportado.');
+                    setMessage('Formato de áudio não suportado');
                   } else if (errorCode === 2) {
-                    setMessage('Erro de rede ao carregar áudio.');
+                    setMessage('Erro de rede ao carregar áudio');
+                  } else if (errorCode === 3) {
+                    setMessage('Áudio corrompido ou incompleto');
+                  } else if (errorCode === 1) {
+                    setMessage('Carregamento de áudio foi interrompido');
                   } else {
-                    setMessage('Erro ao carregar o áudio.');
+                    setMessage('Erro desconhecido ao carregar áudio');
+                  }
+
+                  // Marcar erro para tentar novamente
+                  setAudioLoadError(true);
+                  setAudioLoadRetries(prev => prev + 1);
+
+                  // Se muitos erros, marcar como erro de conexão
+                  if (audioLoadRetries >= 3) {
+                    setConnectionError(true);
                   }
                 }}
                 onCanPlay={() => {
+                  // Áudio pronto para tocar
                   setAudioError(false);
                   setIsPlayLoading(false);
                   setIsPlayButtonDisabled(false);
+                  setAudioLoadError(false);
+                  setConnectionError(false);
+                  setAudioLoadRetries(0);
 
                   // Limpar timeout se existir
                   if (audioLoadTimeout) {
@@ -2757,7 +2807,11 @@ export default function Home() {
                     message.includes('Erro ao reproduzir o áudio') ||
                     message.includes('Formato de áudio não suportado') ||
                     message.includes('Erro de rede') ||
-                    message.includes('Clique em qualquer lugar')
+                    message.includes('Clique em qualquer lugar') ||
+                    message.includes('Áudio ainda carregando') ||
+                    message.includes('Áudio corrompido') ||
+                    message.includes('Carregamento de áudio foi interrompido') ||
+                    message.includes('Erro desconhecido ao carregar áudio')
                   )) {
                     setMessage('');
                   }
@@ -2787,6 +2841,51 @@ export default function Home() {
                 }} />
             </div>
 
+            {/* Indicadores de estado de carregamento/erro */}
+            {audioLoadError && (
+              <div style={{
+                background: 'linear-gradient(135deg, rgba(244, 67, 54, 0.15), rgba(229, 57, 53, 0.15))',
+                border: '2px solid #f44336',
+                borderRadius: '8px',
+                padding: '12px',
+                margin: '10px 0',
+                textAlign: 'center',
+                backdropFilter: 'blur(10px)'
+              }}>
+                <div style={{ color: '#f44336', fontWeight: 'bold', marginBottom: '5px' }}>
+                  ⚠️ Erro ao carregar áudio
+                </div>
+                <div style={{ fontSize: '0.9rem', opacity: 0.8 }}>
+                  {connectionError
+                    ? 'Verifique sua conexão e recarregue a página'
+                    : `Tentando novamente... (${audioLoadRetries}/3)`
+                  }
+                </div>
+                {connectionError && (
+                  <button
+                    onClick={() => {
+                      setAudioLoadError(false);
+                      setAudioLoadRetries(0);
+                      setConnectionError(false);
+                      if (audioRef.current) {
+                        audioRef.current.load();
+                      }
+                    }}
+                    style={{
+                      marginTop: '8px',
+                      padding: '6px 12px',
+                      background: '#f44336',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '4px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Tentar Novamente
+                  </button>
+                )}
+              </div>
+            )}
 
           </div>
 

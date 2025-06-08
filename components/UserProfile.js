@@ -7,6 +7,7 @@ import { badges, titles, getBadge, getTitle, getAvailableTitles } from '../data/
 import { FaTimes, FaEdit, FaTrophy, FaGamepad, FaClock, FaFire, FaStar, FaChartLine, FaCog, FaDownload, FaUpload, FaTrash, FaMedal, FaSignOutAlt, FaSync } from 'react-icons/fa';
 import ProfileTutorial from './ProfileTutorial';
 import SimplePhotoUpload from './SimplePhotoUpload';
+import DirectAvatarUpload from './DirectAvatarUpload';
 import LoginModal from './LoginModal';
 import ActivateBenefitsModal from './ActivateBenefitsModal';
 import { useAuth } from '../contexts/AuthContext';
@@ -499,6 +500,9 @@ const UserProfile = ({ isOpen, onClose }) => {
                     onPhotoChange={handlePhotoChange}
                     size="xlarge"
                   />
+                  <div style={{ position: 'absolute', bottom: '0', right: '0', zIndex: 10 }}>
+                    <DirectAvatarUpload />
+                  </div>
                   <div className={styles.levelBadge}>
                     Nível {Math.floor(Math.sqrt((profile.xp || 0) / 300)) + 1}
                   </div>

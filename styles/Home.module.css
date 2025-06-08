@@ -962,24 +962,60 @@
 
   /* 📱 MELHORAR SUGESTÕES EM MOBILE */
   .suggestionsListModern {
-    position: fixed; /* Mudar para fixed para evitar cortes */
-    left: 1rem;
-    right: 1rem;
-    width: auto; /* Auto width para se ajustar às margens */
-    max-height: 250px; /* Aumentar altura máxima */
-    margin-top: 0.5rem; /* Reduzir margem superior */
-    z-index: 1000; /* Aumentar z-index */
+    position: absolute; /* Voltar para absolute para posicionamento correto */
+    left: 0;
+    right: 0;
+    width: 100%; /* Largura total do container pai */
+    max-height: 200px; /* Altura máxima controlada */
+    top: 100%; /* Posicionar logo abaixo do input */
+    margin-top: 0.2rem; /* Pequeno espaço entre input e sugestões */
+    z-index: 1000; /* Z-index alto para ficar acima de outros elementos */
     box-shadow: 0 8px 32px rgba(0,0,0,0.5); /* Sombra mais forte */
+    border-radius: 0.7rem; /* Bordas arredondadas consistentes */
   }
 
   .suggestionItemModern {
     padding: 1rem; /* Aumentar padding para touch */
     font-size: 1rem; /* Tamanho de fonte adequado para mobile */
-    border-bottom: 1px solid #333; /* Separador visual */
+    border-bottom: 1px solid rgba(29, 185, 84, 0.2); /* Separador visual mais sutil */
+    min-height: 48px; /* Altura mínima para touch targets */
+    display: flex;
+    align-items: center;
   }
 
   .suggestionItemModern:last-child {
     border-bottom: none;
+  }
+
+  .suggestionItemModern:first-child {
+    border-top-left-radius: 0.7rem;
+    border-top-right-radius: 0.7rem;
+  }
+
+  .suggestionItemModern:last-child {
+    border-bottom-left-radius: 0.7rem;
+    border-bottom-right-radius: 0.7rem;
+  }
+}
+
+/* 📱 TELAS MUITO PEQUENAS - Ajustes adicionais */
+@media (max-width: 480px) {
+  .suggestionsListModern {
+    max-height: 180px; /* Altura reduzida para telas pequenas */
+    font-size: 0.9rem; /* Fonte menor */
+  }
+
+  .suggestionItemModern {
+    padding: 0.8rem; /* Padding reduzido */
+    font-size: 0.9rem; /* Fonte menor */
+    min-height: 44px; /* Altura mínima reduzida */
+  }
+}
+
+/* 📱 TELAS MUITO ALTAS - Permitir mais sugestões */
+@media (min-height: 800px) and (max-width: 600px) {
+  .suggestionsListModern {
+    max-height: 300px; /* Mais espaço em telas altas */
   }
 }
 
