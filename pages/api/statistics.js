@@ -22,7 +22,10 @@ async function safeKVOperation(operation, key, value = null) {
         throw new Error(`Operação não suportada: ${operation}`);
     }
   } catch (error) {
-    console.warn(`⚠️ [STATS] Erro na operação ${operation} para ${key}:`, error.message);
+    // Silenciar logs em produção para evitar spam no console
+    if (isDevelopment) {
+      console.warn(`⚠️ [STATS] Erro na operação ${operation} para ${key}:`, error.message);
+    }
 
     // Fallback para armazenamento local em desenvolvimento
     if (isDevelopment) {
@@ -65,7 +68,10 @@ export default async function handler(req, res) {
       const stats = await safeKVOperation('get', statsKey);
       return res.status(200).json(stats || defaultStats);
     } catch (error) {
-      console.error('❌ [STATS] Erro ao buscar estatísticas:', error);
+      // Silenciar logs em produção
+      if (isDevelopment) {
+        console.error('❌ [STATS] Erro ao buscar estatísticas:', error);
+      }
       return res.status(200).json(defaultStats);
     }
   }
@@ -111,7 +117,10 @@ export default async function handler(req, res) {
       return res.status(200).json(stats);
 
     } catch (error) {
-      console.error('❌ [STATS] Erro ao processar estatísticas:', error);
+      // Silenciar logs em produção
+      if (isDevelopment) {
+        console.error('❌ [STATS] Erro ao processar estatísticas:', error);
+      }
       return res.status(500).json({ error: 'Erro interno do servidor' });
     }
   }
@@ -169,15 +178,21 @@ async function updateGlobalStats(won, attempts) {
     // Salvar estatísticas diárias atualizadas usando SafeKV com fallback
     await safeKVOperation('set', dailyStatsKey, dailyStats);
 
-    console.log('Estatísticas diárias atualizadas:', {
-      date: currentDay,
-      totalGames: dailyStats.totalGames,
-      averageAttempts: dailyStats.averageAttempts,
-      won,
-      attempts
-    });
+    // Log apenas em desenvolvimento
+    if (isDevelopment) {
+      console.log('Estatísticas diárias atualizadas:', {
+        date: currentDay,
+        totalGames: dailyStats.totalGames,
+        averageAttempts: dailyStats.averageAttempts,
+        won,
+        attempts
+      });
+    }
 
   } catch (error) {
-    console.error('Erro ao atualizar estatísticas diárias:', error);
+    // Silenciar logs em produção
+    if (isDevelopment) {
+      console.error('Erro ao atualizar estatísticas diárias:', error);
+    }
   }
 }

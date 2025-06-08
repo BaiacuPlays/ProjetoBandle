@@ -59,7 +59,10 @@ export async function createSafeKVInstance() {
   try {
     // 🔧 CORREÇÃO: Em desenvolvimento, usar fallback por padrão para evitar problemas de conectividade
     if (process.env.NODE_ENV === 'development') {
-      console.log('🏠 [SafeKV] Modo desenvolvimento - usando fallback local por padrão');
+      // Log apenas em desenvolvimento
+      if (process.env.NODE_ENV === 'development') {
+        console.log('🏠 [SafeKV] Modo desenvolvimento - usando fallback local por padrão');
+      }
       return {
         instance: null,
         isWorking: false,
@@ -70,7 +73,10 @@ export async function createSafeKVInstance() {
     // Verificar configuração apenas em produção
     const configCheck = checkKVConfiguration();
     if (!configCheck.isValid) {
-      console.log('📋 [SafeKV] KV não configurado - usando fallback');
+      // Log apenas em desenvolvimento
+      if (process.env.NODE_ENV === 'development') {
+        console.log('📋 [SafeKV] KV não configurado - usando fallback');
+      }
       return {
         instance: null,
         isWorking: false,
@@ -101,7 +107,10 @@ export async function createSafeKVInstance() {
     const result = await testPromise;
 
     if (result && result.test === true) {
-      console.log('✅ [SafeKV] KV funcionando corretamente');
+      // Log apenas em desenvolvimento
+      if (process.env.NODE_ENV === 'development') {
+        console.log('✅ [SafeKV] KV funcionando corretamente');
+      }
       return {
         instance: kv,
         isWorking: true,
@@ -113,7 +122,10 @@ export async function createSafeKVInstance() {
 
   } catch (error) {
     const errorMsg = error.message || 'Erro desconhecido';
-    console.warn(`⚠️ [SafeKV] KV não disponível (${errorMsg}), usando fallback`);
+    // Log apenas em desenvolvimento
+    if (process.env.NODE_ENV === 'development') {
+      console.warn(`⚠️ [SafeKV] KV não disponível (${errorMsg}), usando fallback`);
+    }
 
     return {
       instance: null,
@@ -145,11 +157,13 @@ export class SafeKV {
 
       if (!this.isWorking && this.isDevelopment) {
         console.warn('⚠️ KV não está funcionando, usando fallback em memória');
-      } else if (this.isWorking) {
+      } else if (this.isWorking && this.isDevelopment) {
         console.log('✅ SafeKV inicializado com sucesso');
       }
     } catch (error) {
-      console.error('❌ Erro ao inicializar SafeKV:', error);
+      if (this.isDevelopment) {
+        console.error('❌ Erro ao inicializar SafeKV:', error);
+      }
       this.kvInstance = null;
       this.isWorking = false;
       this.isInitialized = true;
@@ -162,16 +176,22 @@ export class SafeKV {
     if (this.isWorking && this.kvInstance) {
       try {
         const result = await this.kvInstance.get(key);
-        console.log(`🔍 SafeKV GET ${key}:`, result ? 'ENCONTRADO' : 'NÃO ENCONTRADO');
+        if (this.isDevelopment) {
+          console.log(`🔍 SafeKV GET ${key}:`, result ? 'ENCONTRADO' : 'NÃO ENCONTRADO');
+        }
         return result;
       } catch (error) {
-        console.warn(`⚠️ Erro ao buscar ${key} no KV, usando fallback:`, error.message);
+        if (this.isDevelopment) {
+          console.warn(`⚠️ Erro ao buscar ${key} no KV, usando fallback:`, error.message);
+        }
       }
     }
 
     // Fallback para armazenamento em memória
     const fallbackResult = this.fallbackStorage.get(key) || null;
-    console.log(`🔄 SafeKV GET ${key} (fallback):`, fallbackResult ? 'ENCONTRADO' : 'NÃO ENCONTRADO');
+    if (this.isDevelopment) {
+      console.log(`🔄 SafeKV GET ${key} (fallback):`, fallbackResult ? 'ENCONTRADO' : 'NÃO ENCONTRADO');
+    }
     return fallbackResult;
   }
 
@@ -181,18 +201,24 @@ export class SafeKV {
     if (this.isWorking && this.kvInstance) {
       try {
         await this.kvInstance.set(key, value, options);
-        console.log(`💾 SafeKV SET ${key}: SALVO NO KV`);
+        if (this.isDevelopment) {
+          console.log(`💾 SafeKV SET ${key}: SALVO NO KV`);
+        }
         // Também salvar no fallback para consistência
         this.fallbackStorage.set(key, value);
         return true;
       } catch (error) {
-        console.warn(`⚠️ Erro ao salvar ${key} no KV, usando fallback:`, error.message);
+        if (this.isDevelopment) {
+          console.warn(`⚠️ Erro ao salvar ${key} no KV, usando fallback:`, error.message);
+        }
       }
     }
 
     // Fallback para armazenamento em memória
     this.fallbackStorage.set(key, value);
-    console.log(`🔄 SafeKV SET ${key}: SALVO NO FALLBACK`);
+    if (this.isDevelopment) {
+      console.log(`🔄 SafeKV SET ${key}: SALVO NO FALLBACK`);
+    }
     return true;
   }
 
