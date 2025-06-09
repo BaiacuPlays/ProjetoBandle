@@ -94,8 +94,18 @@ export async function createSafeKVInstance() {
       };
     }
 
-    // Tentar importar e usar KV apenas se as variáveis estão disponíveis
-    const { kv } = await import('@vercel/kv');
+    // Tentar importar KV com try/catch para capturar erros de importação
+    let kv;
+    try {
+      const kvModule = await import('@vercel/kv');
+      kv = kvModule.kv;
+    } catch (importError) {
+      return {
+        instance: null,
+        isWorking: false,
+        error: 'Erro ao importar @vercel/kv'
+      };
+    }
 
     // Testar conexão básica com timeout mais curto
     const testKey = `test:${Date.now()}`;

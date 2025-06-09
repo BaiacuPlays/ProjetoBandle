@@ -178,13 +178,25 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
     try {
       // Usar estatísticas do perfil para modo diário
       if (!isInfiniteMode && profile.stats) {
+        const profileStats = profile.stats;
+
+        // Calcular média de tentativas corretamente
+        let averageAttempts = 0;
+        if (profileStats.attemptDistribution && profileStats.wins > 0) {
+          let totalAttempts = 0;
+          profileStats.attemptDistribution.forEach((count, index) => {
+            totalAttempts += count * (index + 1);
+          });
+          averageAttempts = totalAttempts / profileStats.wins;
+        }
+
         setStats({
-          totalGames: profile.stats.totalGames || 0,
-          wins: profile.stats.wins || 0,
-          losses: profile.stats.losses || 0,
-          attemptDistribution: profile.stats.attemptDistribution || [0, 0, 0, 0, 0, 0],
-          winPercentage: profile.stats.winRate || 0,
-          averageAttempts: profile.stats.averageAttempts || 0
+          totalGames: profileStats.totalGames || 0,
+          wins: profileStats.wins || 0,
+          losses: profileStats.losses || 0,
+          attemptDistribution: profileStats.attemptDistribution || [0, 0, 0, 0, 0, 0],
+          winPercentage: profileStats.winRate || 0,
+          averageAttempts: averageAttempts || 0
         });
       }
 

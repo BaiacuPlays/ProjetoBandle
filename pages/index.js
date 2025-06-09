@@ -825,19 +825,23 @@ export default function Home() {
     loadMusicOfTheDay();
   }, []); // Remover dependência do isClient
 
-  // Timer OTIMIZADO - DESABILITADO TEMPORARIAMENTE PARA DEBUG
+  // Timer funcionando corretamente
   useEffect(() => {
     if (timer === null) return;
 
-    // DESABILITADO - PODE ESTAR CAUSANDO TRAVAMENTO
-    // const interval = setInterval(() => {
-    //   setTimer(prev => {
-    //     if (prev > 1000) return prev - 1000;
-    //     window.location.reload();
-    //     return 0;
-    //   });
-    // }, 1000);
-    // return () => clearInterval(interval);
+    const interval = setInterval(() => {
+      setTimer(prev => {
+        if (prev > 1000) {
+          return prev - 1000;
+        } else {
+          // Timer chegou a zero, recarregar página
+          window.location.reload();
+          return 0;
+        }
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, [timer]);
 
   // Atualiza duração do áudio ao carregar

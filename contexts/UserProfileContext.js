@@ -281,18 +281,35 @@ export const UserProfileProvider = ({ children }) => {
 
       // Atualizar estatísticas
       const currentStats = profile.stats || {};
+
+      // Atualizar distribuição de tentativas se foi vitória
+      const currentAttemptDistribution = currentStats.attemptDistribution || [0, 0, 0, 0, 0, 0];
+      if (won && attempts >= 1 && attempts <= 6) {
+        currentAttemptDistribution[attempts - 1]++;
+      }
+
       const newStats = {
         ...currentStats,
         totalGames: (currentStats.totalGames || 0) + 1,
         wins: won ? (currentStats.wins || 0) + 1 : (currentStats.wins || 0),
         losses: !won ? (currentStats.losses || 0) + 1 : (currentStats.losses || 0),
         totalPlayTime: (currentStats.totalPlayTime || 0) + playTime,
-        xp: (currentStats.xp || 0) + xpGained
+        xp: (currentStats.xp || 0) + xpGained,
+        attemptDistribution: currentAttemptDistribution
       };
 
       // Calcular winRate
       if (newStats.totalGames > 0) {
         newStats.winRate = Math.round((newStats.wins / newStats.totalGames) * 100);
+      }
+
+      // Calcular média de tentativas
+      if (newStats.wins > 0 && newStats.attemptDistribution) {
+        let totalAttempts = 0;
+        newStats.attemptDistribution.forEach((count, index) => {
+          totalAttempts += count * (index + 1);
+        });
+        newStats.averageAttempts = Math.round((totalAttempts / newStats.wins) * 10) / 10;
       }
 
       // Calcular nível baseado no XP
@@ -310,6 +327,51 @@ export const UserProfileProvider = ({ children }) => {
 
       const savedProfile = await saveProfile(updatedProfile);
       setProfile(savedProfile);
+
+      // Verificar conquistas desbloqueadas
+      try {
+        const { getUnlockedAchievements } = await import('../data/achievements');
+        const currentAchievements = savedProfile.achievements || [];
+        const allUnlockedAchievements = getUnlockedAchievements(newStats, savedProfile);
+
+        // Verificar se há novas conquistas
+        const newAchievements = allUnlockedAchievements.filter(
+          achievementId => !currentAchievements.includes(achievementId)
+        );
+
+        if (newAchievements.length > 0) {
+          console.log('🏆 Novas conquistas desbloqueadas:', newAchievements);
+
+          // Atualizar perfil com novas conquistas
+          const profileWithAchievements = {
+            ...savedProfile,
+            achievements: [...currentAchievements, ...newAchievements],
+            lastUpdated: new Date().toISOString()
+          };
+
+          const finalProfile = await saveProfile(profileWithAchievements);
+          setProfile(finalProfile);
+        }
+      } catch (error) {
+        console.warn('Erro ao verificar conquistas:', error);
+      }
+
+      // Atualizar estatísticas globais também
+      if (mode === 'daily') {
+        try {
+          await fetch('/api/statistics', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userid: userId,
+              won: won,
+              attempts: attempts
+            })
+          });
+        } catch (error) {
+          console.warn('Erro ao atualizar estatísticas globais:', error);
+        }
+      }
 
       console.log(`🎮 Jogo concluído: ${won ? 'Vitória' : 'Derrota'} | XP ganho: +${xpGained} | XP total: ${totalXP}`);
 
