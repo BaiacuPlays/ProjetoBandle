@@ -18,8 +18,8 @@ export const NotificationProvider = ({ children }) => {
   const [invitations, setInvitations] = useState([]);
 
   // Usar o sistema de autenticação adequado
-  const { isAuthenticated, getAuthenticatedUserId } = useAuth();
-  const currentUserId = isAuthenticated ? getAuthenticatedUserId() : null;
+  const { isAuthenticated, userId } = useAuth();
+  const currentUserId = isAuthenticated ? userId : null;
 
   useEffect(() => {
     if (currentUserId && isAuthenticated) {
@@ -280,7 +280,7 @@ export const NotificationProvider = ({ children }) => {
 
   // Marcar notificação como lida
   const markAsRead = (notificationId) => {
-    const updated = notifications.map(n => 
+    const updated = notifications.map(n =>
       n.id === notificationId ? { ...n, read: true } : n
     );
     setNotifications(updated);
@@ -437,7 +437,7 @@ export const NotificationProvider = ({ children }) => {
   // Aceitar convite de multiplayer
   const acceptMultiplayerInvite = (inviteId, roomCode) => {
     // Marcar convite como aceito
-    const updated = invitations.map(i => 
+    const updated = invitations.map(i =>
       i.id === inviteId ? { ...i, status: 'accepted' } : i
     );
     setInvitations(updated);
@@ -451,7 +451,7 @@ export const NotificationProvider = ({ children }) => {
 
   // Recusar convite de multiplayer
   const declineMultiplayerInvite = (inviteId) => {
-    const updated = invitations.map(i => 
+    const updated = invitations.map(i =>
       i.id === inviteId ? { ...i, status: 'declined' } : i
     );
     setInvitations(updated);

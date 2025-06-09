@@ -9,7 +9,6 @@ import { SimpleFriendsProvider } from '../contexts/SimpleFriendsContext';
 import { FriendsProvider } from '../contexts/FriendsContext';
 import { NotificationProvider } from '../contexts/NotificationContext';
 import ToastNotification from '../components/ToastNotification';
-import ProfileErrorHandler from '../components/ProfileErrorHandler';
 
 import { useEffect } from 'react';
 import HydrationErrorSuppressor from '../components/HydrationErrorSuppressor';
@@ -98,7 +97,6 @@ export default function MyApp({ Component, pageProps }) {
               <FriendsProvider>
                 <SimpleFriendsProvider>
                   <HydrationErrorSuppressor />
-                  <ProfileErrorHandler />
                   <Component {...pageProps} />
                   <ToastNotification />
                 </SimpleFriendsProvider>

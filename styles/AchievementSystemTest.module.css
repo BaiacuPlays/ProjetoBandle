@@ -1,0 +1,377 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: #0a0a0a;
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.header h2 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(45deg, #F59E0B, #EAB308);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header p {
+  color: #b0b0b0;
+  font-size: 1.1rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 4rem;
+}
+
+.loading h2 {
+  color: #F59E0B;
+  font-size: 2rem;
+}
+
+/* Stats Section */
+.statsSection {
+  margin-bottom: 3rem;
+}
+
+.statsSection h3 {
+  color: #F59E0B;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.statCard {
+  background: #181c22;
+  border: 2px solid #23272f;
+  border-radius: 0.7rem;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.statCard:hover {
+  border-color: #F59E0B;
+  transform: translateY(-2px);
+}
+
+.statValue {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #F59E0B;
+  margin-bottom: 0.5rem;
+}
+
+.statLabel {
+  font-size: 0.9rem;
+  color: #b0b0b0;
+}
+
+/* Controls Section */
+.controlsSection {
+  margin-bottom: 3rem;
+}
+
+.controlsSection h3 {
+  color: #F59E0B;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.buttonGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.testButton {
+  background: #181c22;
+  color: #ffffff;
+  border: 2px solid #23272f;
+  padding: 1rem 1.5rem;
+  border-radius: 0.7rem;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.testButton:hover:not(:disabled) {
+  border-color: #F59E0B;
+  background: rgba(245, 158, 11, 0.1);
+  transform: translateY(-2px);
+}
+
+.testButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.primaryButton {
+  background: linear-gradient(45deg, #F59E0B, #EAB308);
+  border-color: #F59E0B;
+  color: #000;
+}
+
+.primaryButton:hover:not(:disabled) {
+  background: linear-gradient(45deg, #EAB308, #F59E0B);
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+}
+
+/* Achievements Section */
+.achievementsSection {
+  margin-bottom: 3rem;
+}
+
+.achievementsSection h3 {
+  color: #F59E0B;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.achievementsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.achievementItem {
+  background: #181c22;
+  border: 2px solid #23272f;
+  border-radius: 0.7rem;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.achievementItem:hover {
+  border-color: #F59E0B;
+  transform: translateY(-2px);
+}
+
+.achievementItem.unlocked {
+  border-color: #10B981;
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.achievementIcon {
+  font-size: 2rem;
+  min-width: 3rem;
+  text-align: center;
+}
+
+.achievementInfo {
+  flex: 1;
+}
+
+.achievementTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 0.25rem;
+}
+
+.achievementDesc {
+  font-size: 0.9rem;
+  color: #b0b0b0;
+  margin-bottom: 0.75rem;
+}
+
+.achievementProgress {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.progressBar {
+  flex: 1;
+  height: 8px;
+  background: #23272f;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(45deg, #F59E0B, #EAB308);
+  transition: width 0.3s ease;
+}
+
+.progressText {
+  font-size: 0.8rem;
+  color: #F59E0B;
+  font-weight: 600;
+  min-width: 3rem;
+  text-align: right;
+}
+
+.achievementStatus {
+  font-size: 1.5rem;
+  min-width: 2rem;
+  text-align: center;
+}
+
+.achievementStatus.unlocked {
+  color: #10B981;
+}
+
+/* Results Section */
+.resultsSection {
+  margin-bottom: 2rem;
+}
+
+.resultsSection h3 {
+  color: #F59E0B;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.noResults {
+  text-align: center;
+  color: #b0b0b0;
+  font-style: italic;
+  padding: 2rem;
+  background: #181c22;
+  border-radius: 0.7rem;
+  border: 2px dashed #23272f;
+}
+
+.resultsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.resultItem {
+  background: #181c22;
+  border: 2px solid #23272f;
+  border-radius: 0.7rem;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.resultItem.success {
+  border-color: #10B981;
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.resultItem.error {
+  border-color: #ff4444;
+  background: rgba(255, 68, 68, 0.05);
+}
+
+.resultHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.resultIcon {
+  font-size: 1.2rem;
+}
+
+.resultTest {
+  font-weight: 600;
+  color: #ffffff;
+  flex: 1;
+}
+
+.resultTime {
+  font-size: 0.8rem;
+  color: #b0b0b0;
+}
+
+.resultMessage {
+  color: #e0e0e0;
+  margin-bottom: 0.5rem;
+}
+
+.resultData {
+  background: #0a0a0a;
+  border: 1px solid #23272f;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.resultData pre {
+  color: #b0b0b0;
+  font-size: 0.8rem;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  .header h2 {
+    font-size: 2rem;
+  }
+  
+  .statsGrid,
+  .buttonGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .achievementItem {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .achievementProgress {
+    width: 100%;
+  }
+  
+  .resultHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .resultTime {
+    align-self: flex-end;
+  }
+}
+
+/* Animações */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.resultItem,
+.achievementItem {
+  animation: slideIn 0.3s ease-out;
+}

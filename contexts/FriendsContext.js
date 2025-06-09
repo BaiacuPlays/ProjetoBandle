@@ -23,8 +23,8 @@ export const FriendsProvider = ({ children }) => {
 
   // ID do usuário atual (apenas se autenticado) - memoizado para performance
   const currentUserId = useMemo(() => {
-    return isAuthenticated && user ? `auth_${user.username}` : null;
-  }, [isAuthenticated, user]);
+    return isAuthenticated && user?.username ? `auth_${user.username}` : null;
+  }, [isAuthenticated, user?.username]); // Usar user?.username em vez de user
 
   // SISTEMA OTIMIZADO: Carregar dados instantaneamente quando usuário está autenticado
   useEffect(() => {

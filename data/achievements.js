@@ -251,11 +251,11 @@ export const achievements = {
   },
   daily_player: {
     id: 'daily_player',
-    title: 'Dedicação Diária',
-    description: 'Jogue por 7 dias consecutivos',
+    title: 'Jogador Diário',
+    description: 'Complete o jogo diário por 3 dias consecutivos',
     icon: '📅',
     rarity: 'uncommon',
-    xpReward: 400
+    xpReward: 300
   },
 
   // Conquistas especiais de performance
@@ -339,11 +339,11 @@ export const achievements = {
   },
   daily_dedication: {
     id: 'daily_dedication',
-    title: 'Dedicação Diária',
-    description: 'Jogue por 7 dias consecutivos',
-    icon: '📅',
+    title: 'Dedicação Total',
+    description: 'Jogue por 7 dias consecutivos (qualquer modo)',
+    icon: '🔥',
     rarity: 'rare',
-    xpReward: 400
+    xpReward: 500
   }
 };
 
@@ -500,17 +500,79 @@ export const calculateAchievementProgress = (achievementId, userStats, profile =
       }
       return 0;
     case 'daily_dedication':
-      // Verificar dias consecutivos no localStorage
-      try {
-        if (typeof window !== 'undefined') {
-          const consecutiveDaysData = localStorage.getItem('ludomusic_consecutive_days');
-          if (consecutiveDaysData) {
-            const data = JSON.parse(consecutiveDaysData);
-            return data.consecutiveDays >= 7 ? 100 : Math.min(100, (data.consecutiveDays / 7) * 100);
+      // Verificar dias consecutivos (agora usando dados do perfil)
+      if (profile?.consecutiveData?.consecutiveDays) {
+        return profile.consecutiveData.consecutiveDays >= 7 ? 100 : Math.min(100, (profile.consecutiveData.consecutiveDays / 7) * 100);
+      }
+      return 0;
+
+    case 'daily_player':
+      // Verificar jogos diários consecutivos
+      if (profile?.gameHistory) {
+        const dailyGames = profile.gameHistory.filter(game => game.mode === 'daily' && game.won);
+        const last3Days = [];
+        const today = new Date();
+
+        for (let i = 0; i < 3; i++) {
+          const date = new Date(today);
+          date.setDate(date.getDate() - i);
+          const dateStr = date.toISOString().split('T')[0];
+
+          const hasGameOnDate = dailyGames.some(game =>
+            game.date && game.date.split('T')[0] === dateStr
+          );
+
+          if (hasGameOnDate) {
+            last3Days.push(dateStr);
+          } else {
+            break; // Quebrou a sequência
           }
         }
-      } catch (error) {
-        // Silent error handling
+
+        return last3Days.length >= 3 ? 100 : Math.min(100, (last3Days.length / 3) * 100);
+      }
+      return 0;
+
+    // Conquistas de modo infinito
+    case 'infinite_starter':
+      return Math.min(100, ((userStats.modeStats?.infinite?.totalSongsCompleted || 0) / 5) * 100);
+    case 'infinite_warrior':
+      return Math.min(100, ((userStats.modeStats?.infinite?.totalSongsCompleted || 0) / 25) * 100);
+    case 'infinite_legend':
+      return Math.min(100, ((userStats.modeStats?.infinite?.totalSongsCompleted || 0) / 100) * 100);
+
+    // Conquistas de multiplayer
+    case 'social_player':
+      return (userStats.modeStats?.multiplayer?.games || 0) >= 1 ? 100 : 0;
+    case 'room_creator':
+      return Math.min(100, ((userStats.modeStats?.multiplayer?.roomsCreated || 0) / 5) * 100);
+    case 'multiplayer_champion':
+      return Math.min(100, ((userStats.modeStats?.multiplayer?.wins || 0) / 10) * 100);
+    case 'multiplayer_dominator':
+      return Math.min(100, ((userStats.modeStats?.multiplayer?.wins || 0) / 10) * 100);
+
+    // Conquistas de tempo especiais
+    case 'night_owl':
+      // Verificar se há jogos noturnos no histórico
+      if (profile?.gameHistory) {
+        const nightGame = profile.gameHistory.find(game => {
+          if (!game.date) return false;
+          const hour = new Date(game.date).getHours();
+          return hour >= 0 && hour < 6;
+        });
+        return nightGame ? 100 : 0;
+      }
+      return 0;
+
+    case 'early_bird':
+      // Verificar se há jogos matutinos no histórico
+      if (profile?.gameHistory) {
+        const morningGame = profile.gameHistory.find(game => {
+          if (!game.date) return false;
+          const hour = new Date(game.date).getHours();
+          return hour >= 5 && hour < 8;
+        });
+        return morningGame ? 100 : 0;
       }
       return 0;
 

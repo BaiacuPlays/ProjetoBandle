@@ -14,7 +14,7 @@ export const useSimpleFriends = () => {
 
 export const SimpleFriendsProvider = ({ children }) => {
   const { isAuthenticated, user, renewToken, isLoading: authLoading } = useAuth();
-  
+
   const [friends, setFriends] = useState([]);
   const [requests, setRequests] = useState([]);
   const [sentRequests, setSentRequests] = useState([]);
@@ -353,7 +353,7 @@ export const SimpleFriendsProvider = ({ children }) => {
       setSentRequests([]);
       clearFriendsCache();
     }
-  }, [isAuthenticated, user, authLoading]);
+  }, [isAuthenticated, user?.username, authLoading]); // Usar user?.username em vez de user
 
   // Polling para verificar novas solicitações (a cada 60 segundos)
   useEffect(() => {

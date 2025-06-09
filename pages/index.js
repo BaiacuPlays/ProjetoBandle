@@ -432,57 +432,7 @@ export default function Home() {
   // switchToDailyMode será declarado após os estados
 
   // 📅 FUNÇÃO PARA RASTREAR DIAS CONSECUTIVOS
-  const updateConsecutiveDays = (today) => {
-    try {
-      // Carregar dados de dias consecutivos do localStorage
-      const consecutiveDaysData = localStorage.getItem('ludomusic_consecutive_days');
-      let data = { lastPlayDate: null, consecutiveDays: 0 };
-
-      if (consecutiveDaysData) {
-        data = JSON.parse(consecutiveDaysData);
-      }
-
-      // Se é o primeiro dia ou não há data anterior
-      if (!data.lastPlayDate) {
-        data.lastPlayDate = today;
-        data.consecutiveDays = 1;
-        console.log('📅 Primeiro dia de jogo registrado');
-      } else {
-        // Calcular diferença de dias
-        const lastDate = new Date(data.lastPlayDate);
-        const currentDate = new Date(today);
-        const diffTime = currentDate - lastDate;
-        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
-        if (diffDays === 1) {
-          // Dia consecutivo
-          data.consecutiveDays += 1;
-          data.lastPlayDate = today;
-          console.log('📅 Dia consecutivo registrado:', data.consecutiveDays);
-
-          // Verificar conquista "Dedicação Diária" (7 dias consecutivos)
-          if (data.consecutiveDays >= 7) {
-            console.log('📅 Conquista Dedicação Diária desbloqueada! Dias consecutivos:', data.consecutiveDays);
-          }
-        } else if (diffDays === 0) {
-          // Mesmo dia, não fazer nada
-          console.log('📅 Mesmo dia, não atualizar contador');
-          return;
-        } else {
-          // Quebrou a sequência
-          console.log('📅 Sequência quebrada. Reiniciando contador. Dias perdidos:', diffDays);
-          data.consecutiveDays = 1;
-          data.lastPlayDate = today;
-        }
-      }
-
-      // Salvar dados atualizados
-      localStorage.setItem('ludomusic_consecutive_days', JSON.stringify(data));
-
-    } catch (error) {
-      console.warn('Erro ao atualizar dias consecutivos:', error);
-    }
-  };
+  // Removida - agora é tratada pelo servidor via updateGameStats
 
   // Carregar estatísticas do modo infinito ao montar
   useEffect(() => {
@@ -1472,7 +1422,7 @@ export default function Home() {
 
             // 📅 RASTREAR DIAS CONSECUTIVOS para conquista "Dedicação Diária"
             const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-            updateConsecutiveDays(today);
+            // updateConsecutiveDays será tratado pelo servidor via updateGameStats
 
             updateGameStats({
               won: true,
@@ -1556,7 +1506,7 @@ export default function Home() {
 
         // 📅 RASTREAR DIAS CONSECUTIVOS para conquista "Dedicação Diária"
         const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-        updateConsecutiveDays(today);
+        // updateConsecutiveDays será tratado pelo servidor via updateGameStats
 
         updateGameStats({
           won: false,
@@ -1674,7 +1624,7 @@ export default function Home() {
 
               // 📅 RASTREAR DIAS CONSECUTIVOS para conquista "Dedicação Diária"
               const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-              updateConsecutiveDays(today);
+              // updateConsecutiveDays será tratado pelo servidor via updateGameStats
 
               updateGameStats({
                 won: false,
