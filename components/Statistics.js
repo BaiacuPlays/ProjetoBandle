@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { getGlobalStatistics } from '../config/api';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useModalScrollLock } from '../hooks/useModalScrollLock';
-import { useUserProfile } from '../contexts/UserProfileContext';
+import { useProfile } from '../contexts/ProfileContext';
 import { useAuth } from '../contexts/AuthContext';
 import ShareButton from './ShareButton';
 import ActionButtons from './ActionButtons';
@@ -18,7 +18,7 @@ function generateUUID() {
 
 const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false, isMultiplayerMode = false, currentSong = null }) => {
   const { t, isClient } = useLanguage();
-  const { profile, isLoading: profileLoading } = useUserProfile();
+  const { profile, isLoading: profileLoading } = useProfile() || {};
   const { isAuthenticated } = useAuth();
 
   // Bloquear/desbloquear scroll da página
@@ -330,7 +330,7 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
                   <span className={styles.personalStatLabel}>Taxa de Vitória</span>
                 </div>
                 <div className={styles.personalStatItem}>
-                  <span className={styles.personalStatNumber}>{stats.averageAttempts.toFixed(1)}</span>
+                  <span className={styles.personalStatNumber}>{(stats.averageAttempts || 0).toFixed(1)}</span>
                   <span className={styles.personalStatLabel}>Média de Tentativas</span>
                 </div>
               </div>

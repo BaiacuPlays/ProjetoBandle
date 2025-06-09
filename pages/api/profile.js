@@ -1,107 +1,108 @@
-import { verifyAuthentication } from '../../utils/auth';
 import { kv } from '@vercel/kv';
 
 export default async function handler(req, res) {
-  console.log('🔍 [PROFILE API] Método:', req.method);
-  console.log('🔍 [PROFILE API] Headers:', {
-    authorization: req.headers.authorization ? 'PRESENTE' : 'AUSENTE',
-    'content-type': req.headers['content-type']
-  });
-
-  // Verificar autenticação
-  const authResult = await verifyAuthentication(req);
-  console.log('🔍 [PROFILE API] Auth result:', authResult);
-
-  if (!authResult.authenticated) {
-    console.log('❌ [PROFILE API] Falha na autenticação:', authResult.error);
-    return res.status(401).json({ error: authResult.error });
-  }
-
-  console.log('✅ [PROFILE API] Usuário autenticado:', authResult.userId);
-
-  const userId = authResult.userId;
-
-  if (req.method === 'GET') {
-    try {
-      const { userId: targetUserId } = req.query;
-      const profileUserId = targetUserId || userId;
-      const profileKey = `profile:${profileUserId}`;
-
-      console.log('🔍 Buscando perfil:', profileKey);
-
-      // Buscar perfil no Vercel KV
-      const profile = await kv.get(profileKey);
-
-      if (!profile) {
-        console.log('❌ Perfil não encontrado:', profileKey);
-        return res.status(404).json({ error: 'Perfil não encontrado' });
+  try {
+    if (req.method === 'GET') {
+      // Buscar perfil
+      const { userId } = req.query;
+      
+      if (!userId) {
+        return res.status(400).json({ error: 'userId é obrigatório' });
       }
 
-      console.log('✅ Perfil encontrado:', profile.username);
-      return res.status(200).json({
-        success: true,
-        profile
-      });
-
-    } catch (error) {
-      console.error('❌ Erro ao buscar perfil:', error);
-      return res.status(500).json({ error: 'Erro interno do servidor' });
-    }
-  }
-
-  if (req.method === 'POST') {
-    try {
-      if (!req.body || !req.body.profile) {
-        return res.status(400).json({ error: 'Dados do perfil não fornecidos' });
+      try {
+        const profile = await kv.get(`profile:${userId}`);
+        
+        if (profile) {
+          return res.status(200).json({ 
+            success: true, 
+            profile: profile 
+          });
+        } else {
+          return res.status(404).json({ 
+            success: false, 
+            message: 'Perfil não encontrado' 
+          });
+        }
+      } catch (error) {
+        console.error('Erro ao buscar perfil no KV:', error);
+        return res.status(500).json({ 
+          error: 'Erro interno do servidor',
+          details: error.message 
+        });
       }
 
-      const profileData = req.body.profile;
-      const profileKey = `profile:${userId}`;
+    } else if (req.method === 'POST') {
+      // Salvar perfil
+      const { userId, profile } = req.body;
+      
+      if (!userId || !profile) {
+        return res.status(400).json({ 
+          error: 'userId e profile são obrigatórios' 
+        });
+      }
 
-      // Garantir que o ID do perfil corresponde ao usuário autenticado
-      profileData.id = userId;
-      profileData.lastUpdated = new Date().toISOString();
+      try {
+        // Adicionar timestamp de salvamento
+        const profileToSave = {
+          ...profile,
+          id: userId,
+          savedAt: new Date().toISOString()
+        };
 
-      console.log('💾 Salvando perfil:', profileKey, profileData.username);
+        await kv.set(`profile:${userId}`, profileToSave);
+        
+        console.log(`✅ Perfil salvo para usuário ${userId}`);
+        
+        return res.status(200).json({ 
+          success: true, 
+          message: 'Perfil salvo com sucesso',
+          profile: profileToSave
+        });
+        
+      } catch (error) {
+        console.error('Erro ao salvar perfil no KV:', error);
+        return res.status(500).json({ 
+          error: 'Erro interno do servidor',
+          details: error.message 
+        });
+      }
 
-      // Salvar no Vercel KV
-      await kv.set(profileKey, profileData);
+    } else if (req.method === 'DELETE') {
+      // Deletar perfil
+      const { userId } = req.query;
+      
+      if (!userId) {
+        return res.status(400).json({ error: 'userId é obrigatório' });
+      }
 
-      console.log('✅ Perfil salvo com sucesso:', profileData.username);
+      try {
+        await kv.del(`profile:${userId}`);
+        
+        console.log(`🗑️ Perfil deletado para usuário ${userId}`);
+        
+        return res.status(200).json({ 
+          success: true, 
+          message: 'Perfil deletado com sucesso' 
+        });
+        
+      } catch (error) {
+        console.error('Erro ao deletar perfil no KV:', error);
+        return res.status(500).json({ 
+          error: 'Erro interno do servidor',
+          details: error.message 
+        });
+      }
 
-      return res.status(200).json({
-        success: true,
-        message: 'Perfil salvo com sucesso',
-        profile: profileData
-      });
-
-    } catch (error) {
-      console.error('❌ Erro ao salvar perfil:', error);
-      return res.status(500).json({ error: 'Erro interno do servidor' });
+    } else {
+      return res.status(405).json({ error: 'Método não permitido' });
     }
+
+  } catch (error) {
+    console.error('Erro geral na API de perfil:', error);
+    return res.status(500).json({ 
+      error: 'Erro interno do servidor',
+      details: error.message 
+    });
   }
-
-  if (req.method === 'DELETE') {
-    try {
-      const profileKey = `profile:${userId}`;
-
-      console.log('🗑️ Deletando perfil:', profileKey);
-
-      // Deletar do Vercel KV
-      await kv.del(profileKey);
-
-      console.log('✅ Perfil deletado com sucesso');
-
-      return res.status(200).json({
-        success: true,
-        message: 'Perfil deletado com sucesso'
-      });
-
-    } catch (error) {
-      console.error('❌ Erro ao deletar perfil:', error);
-      return res.status(500).json({ error: 'Erro interno do servidor' });
-    }
-  }
-
-  return res.status(405).json({ error: 'Método não permitido' });
 }

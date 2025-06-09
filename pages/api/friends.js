@@ -9,6 +9,9 @@ const hasKVConfig = !!(process.env.KV_REST_API_URL && process.env.KV_REST_API_TO
 // Storage local para desenvolvimento
 const localFriends = new Map();
 
+// Exportar para uso em outras APIs
+export { localFriends };
+
 export default async function handler(req, res) {
   const { method } = req;
 
@@ -27,7 +30,13 @@ export default async function handler(req, res) {
       let friends = [];
 
       if (isDevelopment && !hasKVConfig) {
-        friends = localFriends.get(friendsKey) || [];
+        // Usar storage global compartilhado
+        if (!global.sharedFriendsStorage) {
+          global.sharedFriendsStorage = new Map();
+        }
+        friends = global.sharedFriendsStorage.get(friendsKey) || [];
+        console.log(`🔍 [FRIENDS] Buscando amigos para ${friendsKey}: ${friends.length} encontrados`);
+        console.log(`🔍 [FRIENDS] Storage global tem ${global.sharedFriendsStorage.size} chaves:`, Array.from(global.sharedFriendsStorage.keys()));
       } else {
         friends = await kv.get(friendsKey) || [];
       }

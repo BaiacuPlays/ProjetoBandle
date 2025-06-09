@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useUserProfile } from '../contexts/UserProfileContext';
+import { useProfile } from '../contexts/ProfileContext';
 import { FaCamera, FaSpinner } from 'react-icons/fa';
 
 /**
@@ -8,7 +8,7 @@ import { FaCamera, FaSpinner } from 'react-icons/fa';
  * Suporta upload de arquivos e colar da área de transferência
  */
 const DirectAvatarUpload = () => {
-  const { profile, updateAvatar } = useUserProfile();
+  const { profile, updateProfile } = useProfile() || {};
   const [isUploading, setIsUploading] = useState(false);
 
   // Função para processar qualquer tipo de arquivo/blob de imagem

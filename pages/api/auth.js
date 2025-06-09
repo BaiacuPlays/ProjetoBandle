@@ -105,15 +105,22 @@ const verifyPassword = async (password, hashedPassword) => {
 export default async function handler(req, res) {
   const { method } = req;
 
+  console.log(`🔐 [AUTH] ${method} request received`);
+  console.log(`🔐 [AUTH] Body:`, req.body);
+
   try {
     if (method === 'POST') {
       const { action, username, password, email, anonymousUserId } = req.body;
+      console.log(`🔐 [AUTH] Action: ${action}, Username: ${username}`);
 
       if (action === 'register') {
         // Registrar novo usuário
+        console.log(`🔐 [AUTH] Iniciando registro para: ${username}`);
         try {
           validateUserData(username, password, email);
+          console.log(`🔐 [AUTH] Validação passou para: ${username}`);
         } catch (error) {
+          console.log(`🔐 [AUTH] Erro de validação: ${error.message}`);
           return res.status(400).json({ error: error.message });
         }
 
@@ -121,7 +128,7 @@ export default async function handler(req, res) {
         const { referralCode } = req.body;
 
         const userKey = `user:${username.toLowerCase()}`;
-        
+
         // Verificar se usuário já existe
         let existingUser = null;
         if (isDevelopment && !hasKVConfig) {
@@ -221,7 +228,7 @@ export default async function handler(req, res) {
         }
 
         const userKey = `user:${username.toLowerCase()}`;
-        
+
         // Buscar usuário
         let userData = null;
         if (isDevelopment && !hasKVConfig) {

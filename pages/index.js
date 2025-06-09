@@ -22,7 +22,7 @@ import BrowserCompatibilityWarning from '../components/BrowserCompatibilityWarni
 import BugReportModal from '../components/BugReportModal';
 
 import { useLanguage } from '../contexts/LanguageContext';
-import { useUserProfile } from '../contexts/UserProfileContext';
+import { useProfile } from '../contexts/ProfileContext';
 import { useAuth } from '../contexts/AuthContext';
 import { fetchTimezone } from '../config/api';
 import { browserCompatibility } from '../utils/browserCompatibility';
@@ -53,12 +53,12 @@ export default function Home() {
   // Hook do perfil com verificação de segurança
   let updateGameStats = () => {};
   try {
-    const userProfile = useUserProfile();
-    if (userProfile?.updateGameStats) {
-      updateGameStats = userProfile.updateGameStats;
+    const profileContext = useProfile();
+    if (profileContext?.updateGameStats) {
+      updateGameStats = profileContext.updateGameStats;
     }
   } catch (error) {
-    // UserProfile context not available - silent fallback
+    // Profile context not available - silent fallback
   }
 
   // Hooks

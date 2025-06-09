@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useAuth } from './AuthContext';
 import { AuthCookies } from '../utils/cookies';
 import { getOptimizedConfig } from '../utils/performanceOptimizer';
 
@@ -16,10 +15,83 @@ export const useNotifications = () => {
 export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
   const [invitations, setInvitations] = useState([]);
+  const [authState, setAuthState] = useState({
+    isAuthenticated: false,
+    userId: null,
+    currentUserId: null
+  });
 
-  // Usar o sistema de autenticação adequado
-  const { isAuthenticated, userId } = useAuth();
-  const currentUserId = isAuthenticated ? userId : null;
+  // Usar o sistema de autenticação de forma segura apenas no cliente
+  useEffect(() => {
+    // Só executar no cliente
+    if (typeof window === 'undefined') return;
+
+    // Função para obter dados de autenticação sem usar useAuth
+    const getAuthData = () => {
+      try {
+        // Tentar obter token do localStorage
+        const sessionToken = localStorage.getItem('ludomusic_session_token');
+        if (!sessionToken) {
+          return {
+            isAuthenticated: false,
+            userId: null,
+            currentUserId: null
+          };
+        }
+
+        // Verificar se o token é válido fazendo uma chamada para a API
+        fetch(`/api/auth?sessionToken=${sessionToken}`)
+          .then(response => response.json())
+          .then(data => {
+            if (data.success && data.user) {
+              const userId = `auth_${data.user.username}`;
+              setAuthState({
+                isAuthenticated: true,
+                userId: userId,
+                currentUserId: userId
+              });
+            } else {
+              setAuthState({
+                isAuthenticated: false,
+                userId: null,
+                currentUserId: null
+              });
+            }
+          })
+          .catch(error => {
+            console.warn('Erro ao verificar autenticação:', error);
+            setAuthState({
+              isAuthenticated: false,
+              userId: null,
+              currentUserId: null
+            });
+          });
+
+      } catch (error) {
+        console.warn('Erro ao obter dados de autenticação:', error);
+        setAuthState({
+          isAuthenticated: false,
+          userId: null,
+          currentUserId: null
+        });
+      }
+    };
+
+    // Executar verificação inicial
+    getAuthData();
+
+    // Listener para mudanças no token
+    const handleTokenChange = () => {
+      getAuthData();
+    };
+
+    window.addEventListener('ludomusic-token-changed', handleTokenChange);
+    return () => {
+      window.removeEventListener('ludomusic-token-changed', handleTokenChange);
+    };
+  }, []);
+
+  const { isAuthenticated, userId, currentUserId } = authState;
 
   useEffect(() => {
     if (currentUserId && isAuthenticated) {

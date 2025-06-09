@@ -3,12 +3,12 @@
  */
 
 import { useState, useEffect } from 'react';
-import { useUserProfile } from '../contexts/UserProfileContext';
+import { useProfile } from '../contexts/ProfileContext';
 import { achievements, calculateAchievementProgress, getAchievementStats } from '../data/achievements';
 import styles from '../styles/AchievementSystemTest.module.css';
 
 const AchievementSystemTest = () => {
-  const { profile, updateStats } = useUserProfile();
+  const { profile, updateStats } = useProfile() || {};
   const [testResults, setTestResults] = useState([]);
   const [isRunningTests, setIsRunningTests] = useState(false);
   const [achievementProgress, setAchievementProgress] = useState({});

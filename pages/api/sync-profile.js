@@ -1,63 +1,93 @@
-import { kv } from '@vercel/kv';
+// API para sincronização de perfis com Cloudflare R2
+import { steamStorage } from '../../utils/cloud-storage';
+import { validateProfile, migrateProfile } from '../../utils/steam-like-profile';
+import { verifyAuthentication } from '../../utils/auth';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({ error: 'Método não permitido' });
   }
 
   try {
-    const { username, localData } = req.body;
-
-    if (!username || !localData) {
-      return res.status(400).json({ error: 'Username e localData são obrigatórios' });
+    // Verificar autenticação
+    const authResult = await verifyAuthentication(req);
+    if (!authResult.isValid) {
+      return res.status(401).json({ error: 'Não autorizado' });
     }
 
-    console.log('🔄 SYNC-PROFILE: Sincronizando dados para', username);
-    console.log('📦 Dados locais recebidos:', localData);
+    const { userId, profile } = req.body;
 
-    // Buscar perfil atual no servidor
-    const currentProfile = await kv.get(`user:${username}`);
-    console.log('📋 Perfil atual no servidor:', currentProfile);
-
-    if (!currentProfile) {
-      return res.status(404).json({ error: 'Usuário não encontrado no servidor' });
+    if (!userId || !profile) {
+      return res.status(400).json({ error: 'userId e profile são obrigatórios' });
     }
 
-    // Preparar dados atualizados
-    const updatedProfile = {
-      ...currentProfile,
-      xp: localData.xp || currentProfile.xp || 0,
-      level: localData.level || currentProfile.level || 1,
-      achievements: localData.achievements || currentProfile.achievements || [],
-      stats: {
-        ...currentProfile.stats,
-        ...localData.stats,
-        xp: localData.xp || currentProfile.stats?.xp || 0,
-        level: localData.level || currentProfile.stats?.level || 1
-      },
-      lastSyncAt: new Date().toISOString()
+    // Verificar se o usuário pode sincronizar este perfil
+    if (authResult.userId !== userId) {
+      return res.status(403).json({ error: 'Não autorizado a sincronizar este perfil' });
+    }
+
+    console.log(`🔄 Sincronizando perfil para usuário: ${userId}`);
+
+    // Validar estrutura do perfil
+    const validation = validateProfile(profile);
+    let profileToSync = profile;
+
+    if (!validation.isValid) {
+      console.warn('⚠️ Perfil com problemas, tentando migrar:', validation.errors);
+
+      // Tentar migrar perfil problemático
+      const migratedProfile = migrateProfile(profile, userId, authResult.username);
+      const newValidation = validateProfile(migratedProfile);
+
+      if (!newValidation.isValid) {
+        return res.status(400).json({
+          error: 'Perfil inválido e não pôde ser migrado',
+          details: newValidation.errors
+        });
+      }
+
+      // Usar perfil migrado
+      profileToSync = migratedProfile;
+    }
+
+    // Adicionar metadados de sincronização
+    profileToSync = {
+      ...profileToSync,
+      lastSyncAt: new Date().toISOString(),
+      syncedBy: authResult.username,
+      syncVersion: 2
     };
 
-    console.log('💾 Salvando perfil atualizado:', updatedProfile);
+    // Salvar no sistema de armazenamento
+    const saveResults = await steamStorage.saveProfile(userId, profileToSync);
 
-    // Salvar no servidor
-    await kv.set(`user:${username}`, updatedProfile);
+    // Verificar se pelo menos uma forma de salvamento funcionou
+    const success = saveResults.localStorage || saveResults.cloudflare;
 
-    // Verificar se foi salvo corretamente
-    const verifyProfile = await kv.get(`user:${username}`);
-    console.log('✅ Verificação pós-salvamento:', verifyProfile);
+    if (success) {
+      console.log(`✅ Perfil sincronizado com sucesso para ${userId}`);
 
-    return res.status(200).json({
-      success: true,
-      message: 'Dados sincronizados com sucesso',
-      profile: updatedProfile
-    });
+      return res.status(200).json({
+        success: true,
+        message: 'Perfil sincronizado com sucesso',
+        syncResults: saveResults,
+        profile: profileToSync
+      });
+    } else {
+      console.error(`❌ Falha na sincronização para ${userId}`);
+
+      return res.status(500).json({
+        error: 'Falha ao sincronizar perfil',
+        syncResults: saveResults
+      });
+    }
 
   } catch (error) {
-    console.error('❌ Erro na sincronização:', error);
-    return res.status(500).json({ 
+    console.error('❌ Erro na API de sincronização:', error);
+
+    return res.status(500).json({
       error: 'Erro interno do servidor',
-      details: error.message 
+      message: error.message
     });
   }
 }

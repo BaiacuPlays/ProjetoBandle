@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useFriends } from '../contexts/FriendsContext';
 import { useNotifications } from '../contexts/NotificationContext';
-import { useUserProfile } from '../contexts/UserProfileContext';
+import { useProfile } from '../contexts/ProfileContext';
 import { useModalScrollLock } from '../hooks/useModalScrollLock';
 import { FaTimes, FaUserPlus, FaSearch, FaUsers, FaUserFriends, FaPaperPlane, FaCheck, FaTimes as FaReject, FaTrash, FaGamepad, FaShare, FaEye } from 'react-icons/fa';
 import SimpleUserAvatar from './SimpleUserAvatar';
@@ -31,7 +31,7 @@ const FriendsManager = ({ isOpen, onClose, onViewProfile }) => {
 
 
   const { sendMultiplayerInvite } = useNotifications();
-  const { profile } = useUserProfile();
+  const { profile } = useProfile() || {};
 
   // Gerar código de amigo fixo baseado no perfil
   const getFriendCode = () => {

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'; // Import useEffect
-import { useUserProfile } from '../contexts/UserProfileContext';
+import { useProfile } from '../contexts/ProfileContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useModalScrollLock } from '../hooks/useModalScrollLock';
-import { achievements, rarityColors, getAchievement, getNearAchievements } from '../data/achievements'; // Removed getAchievementStats as it wasn't used
+import { achievements, rarityColors, getAchievement, getNearAchievements, getUnlockedAchievements } from '../data/achievements'; // Removed getAchievementStats as it wasn't used
 import { badges, titles, getBadge, getTitle, getAvailableTitles } from '../data/badges';
 import { FaTimes, FaEdit, FaTrophy, FaGamepad, FaClock, FaFire, FaStar, FaChartLine, FaCog, FaDownload, FaUpload, FaTrash, FaMedal, FaSignOutAlt, FaSync } from 'react-icons/fa';
 import ProfileTutorial from './ProfileTutorial';
 import SimplePhotoUpload from './SimplePhotoUpload';
-import DirectAvatarUpload from './DirectAvatarUpload';
+
 import LoginModal from './LoginModal';
 import ActivateBenefitsModal from './ActivateBenefitsModal';
 import { useAuth } from '../contexts/AuthContext';
@@ -34,26 +34,20 @@ const UserProfile = ({ isOpen, onClose }) => {
   const [statsUpdateSuccess, setStatsUpdateSuccess] = useState(false);
 
   // Hook de autenticação
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, userId, username } = useAuth();
 
   // Hook do perfil com verificação de segurança
-  // Destructure directly to avoid unnecessary intermediate variables and potential null issues
   const {
     profile,
     updateProfile,
-    isLoading, // isLoading comes directly from the hook
-    resetProfile,
-    deleteAccount,
-    exportProfile,
-    importProfile,
+    updateStats,
     updatePreferences,
-    markTutorialAsSeen,
-    setCurrentTitle,
-    updateAvatar,
-    userId, // Adicionar userId do contexto
-    getXPForLevel,
-    getXPForNextLevel
-  } = useUserProfile() || {}; // Add || {} to safely destructure if context is null/undefined
+    isLoading,
+    error,
+    reloadProfile,
+    saveProfile,
+    checkAndUnlockAchievements
+  } = useProfile() || {}; // Add || {} to safely destructure if context is null/undefined
 
   // Verificar se deve mostrar tutorial quando modal abre (independente de autenticação)
   useEffect(() => {
@@ -85,15 +79,6 @@ const UserProfile = ({ isOpen, onClose }) => {
 
     // Marcar tutorial como visto no localStorage
     localStorage.setItem('ludomusic_profile_tutorial_seen', 'true');
-
-    // Se há perfil e função disponível, marcar também no perfil
-    if (markTutorialAsSeen) {
-      try {
-        await markTutorialAsSeen();
-      } catch (error) {
-        // Silent error handling
-      }
-    }
 
     // Após fechar o tutorial, o componente irá automaticamente mostrar o login
   };
@@ -218,34 +203,27 @@ const UserProfile = ({ isOpen, onClose }) => {
   };
 
   const handleExportProfile = () => {
-    if (exportProfile) {
-      const profileData = exportProfile();
-      if (profileData) {
-        const dataStr = JSON.stringify(profileData, null, 2);
-        const dataBlob = new Blob([dataStr], { type: 'application/json' });
-        const url = URL.createObjectURL(dataBlob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `ludomusic_profile_${new Date().toISOString().split('T')[0]}.json`;
-        link.click();
-        URL.revokeObjectURL(url);
-      }
+    if (profile) {
+      const dataStr = JSON.stringify(profile, null, 2);
+      const dataBlob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(dataBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `ludomusic_profile_${new Date().toISOString().split('T')[0]}.json`;
+      link.click();
+      URL.revokeObjectURL(url);
     }
   };
 
   const handleImportProfile = (event) => {
     const file = event.target.files[0];
-    if (file && importProfile) {
+    if (file && updateProfile) {
       const reader = new FileReader();
       reader.onload = (e) => {
         try {
           const profileData = JSON.parse(e.target.result);
-          const success = importProfile(profileData);
-          if (success) {
-            alert('Perfil importado com sucesso!');
-          } else {
-            alert('Erro ao importar perfil. Verifique se o arquivo é válido.');
-          }
+          updateProfile(profileData);
+          alert('Perfil importado com sucesso!');
         } catch (error) {
           alert('Erro ao ler arquivo. Verifique se é um arquivo JSON válido.');
         }
@@ -257,38 +235,59 @@ const UserProfile = ({ isOpen, onClose }) => {
   };
 
   const handleResetProfile = async () => {
-    if (resetProfile) {
-      const success = await resetProfile();
-      setShowConfirmReset(false);
+    if (updateProfile) {
+      // Resetar para perfil padrão
+      const defaultProfile = {
+        displayName: username,
+        bio: '',
+        profilePhoto: '🎮',
+        level: 1,
+        xp: 0,
+        stats: {
+          totalGames: 0,
+          wins: 0,
+          winRate: 0,
+          currentStreak: 0,
+          bestStreak: 0,
+          averageAttempts: 0,
+          perfectGames: 0,
+          modeStats: {
+            daily: { gamesPlayed: 0, wins: 0, currentStreak: 0, bestStreak: 0, lastPlayedDate: null, hasPlayedToday: false },
+            infinite: { gamesPlayed: 0, wins: 0, bestScore: 0, averageScore: 0 },
+            multiplayer: { gamesPlayed: 0, wins: 0, roomsCreated: 0, roomsJoined: 0 }
+          }
+        },
+        achievements: [],
+        badges: [],
+        gameHistory: []
+      };
 
-      if (success) {
-        alert('Perfil resetado com sucesso!');
-      } else {
-        alert('Erro ao resetar perfil. Tente novamente.');
-      }
+      await updateProfile(defaultProfile);
+      setShowConfirmReset(false);
+      alert('Perfil resetado com sucesso!');
     }
   };
 
   const handleDeleteAccount = async () => {
-    if (deleteAccount && logout) {
-      const success = await deleteAccount();
-      setShowConfirmDelete(false);
+    try {
+      const response = await fetch('/api/delete-account', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, username })
+      });
 
-      if (success) {
-        // Fazer logout para limpar todos os estados de autenticação
+      if (response.ok) {
         await logout();
-
         alert('Conta deletada com sucesso! Você será redirecionado para a página inicial.');
-
-        // Fechar modal
         onClose();
-
-        // Recarregar a página para garantir que todos os estados sejam limpos
         window.location.reload();
       } else {
         alert('Erro ao deletar conta. Tente novamente.');
       }
+    } catch (error) {
+      alert('Erro ao deletar conta. Tente novamente.');
     }
+    setShowConfirmDelete(false);
   };
 
   const handlePreferenceChange = (key, value) => {
@@ -298,9 +297,9 @@ const UserProfile = ({ isOpen, onClose }) => {
   };
 
   const handlePhotoChange = async (photoData) => {
-    if (updateAvatar) {
+    if (updateProfile) {
       try {
-        await updateAvatar(photoData);
+        await updateProfile({ profilePhoto: photoData });
       } catch (error) {
         alert('Não foi possível atualizar a foto. Tente novamente.');
       }
@@ -308,14 +307,7 @@ const UserProfile = ({ isOpen, onClose }) => {
   };
 
   const handleForceStatsUpdate = async () => {
-    console.log('🔄 [FORCE-UPDATE] Iniciando atualização forçada');
-    console.log('🔄 [FORCE-UPDATE] UserId:', userId);
-    console.log('🔄 [FORCE-UPDATE] Profile:', profile ? 'PRESENTE' : 'AUSENTE');
-    console.log('🔄 [FORCE-UPDATE] Profile.id:', profile?.id);
-    console.log('🔄 [FORCE-UPDATE] Profile.username:', profile?.username);
-
-    if (!userId && !profile?.id) {
-      console.error('❌ [FORCE-UPDATE] UserId não encontrado');
+    if (!userId) {
       setStatsUpdateMessage('Erro: Usuário não identificado');
       setStatsUpdateSuccess(false);
       return;
@@ -326,53 +318,12 @@ const UserProfile = ({ isOpen, onClose }) => {
     setStatsUpdateSuccess(false);
 
     try {
-      console.log('📤 [FORCE-UPDATE] Enviando requisição para API');
-
-      // Preparar dados para envio
-      const requestData = {
-        userId: userId || profile?.id
-      };
-
-      // Adicionar token de autenticação se disponível
-      const sessionToken = localStorage.getItem('ludomusic_session_token');
-      const headers = {
-        'Content-Type': 'application/json',
-      };
-
-      if (sessionToken) {
-        headers['Authorization'] = `Bearer ${sessionToken}`;
-      }
-
-      console.log('📤 [FORCE-UPDATE] Dados da requisição:', requestData);
-
-      const response = await fetch('/api/force-stats-update', {
-        method: 'POST',
-        headers,
-        body: JSON.stringify(requestData)
-      });
-
-      console.log('📥 [FORCE-UPDATE] Resposta recebida:', response.status, response.statusText);
-
-      const result = await response.json();
-      console.log('📊 [FORCE-UPDATE] Resultado da API:', result);
-
-      if (response.ok && result.success) {
-        console.log('✅ [FORCE-UPDATE] Sucesso!');
-        setStatsUpdateMessage('Estatísticas atualizadas com sucesso! Recarregue a página para ver as mudanças.');
-        setStatsUpdateSuccess(true);
-
-        // Recarregar o perfil automaticamente após 2 segundos
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
-      } else {
-        console.error('❌ [FORCE-UPDATE] Erro na API:', result);
-        setStatsUpdateMessage(result.error || 'Erro ao atualizar estatísticas');
-        setStatsUpdateSuccess(false);
-      }
+      await reloadProfile();
+      setStatsUpdateMessage('Perfil recarregado com sucesso!');
+      setStatsUpdateSuccess(true);
     } catch (error) {
-      console.error('Erro ao forçar atualização de estatísticas:', error);
-      setStatsUpdateMessage('Erro de rede ao atualizar estatísticas');
+      console.error('Erro ao recarregar perfil:', error);
+      setStatsUpdateMessage('Erro ao recarregar perfil');
       setStatsUpdateSuccess(false);
     } finally {
       setIsUpdatingStats(false);
@@ -397,11 +348,11 @@ const UserProfile = ({ isOpen, onClose }) => {
   };
 
   const getCurrentLevelXP = (currentLevel) => {
-    return getXPForLevel ? getXPForLevel(currentLevel) : Math.pow(currentLevel - 1, 2) * 100;
+    return Math.pow(currentLevel - 1, 2) * 300;
   };
 
   const getNextLevelXP = (currentLevel) => {
-    return getXPForNextLevel ? getXPForNextLevel(currentLevel) : Math.pow(currentLevel, 2) * 100;
+    return Math.pow(currentLevel, 2) * 300;
   };
 
   const getLevelProgress = () => {
@@ -415,6 +366,31 @@ const UserProfile = ({ isOpen, onClose }) => {
 
     return Math.max(0, Math.min(100, progress));
   };
+
+  // Sincronizar conquistas automaticamente
+  useEffect(() => {
+    if (profile && profile.stats && updateProfile) {
+      // Verificar se há conquistas que deveriam estar desbloqueadas mas não estão no perfil
+      const shouldBeUnlocked = getUnlockedAchievements(profile.stats, profile);
+      const currentAchievements = profile.achievements || [];
+      const missingAchievements = shouldBeUnlocked.filter(id => !currentAchievements.includes(id));
+
+      if (missingAchievements.length > 0) {
+        console.log('🔄 Sincronizando conquistas faltantes:', missingAchievements);
+        console.log('🔄 Conquistas que deveriam estar desbloqueadas:', shouldBeUnlocked);
+        console.log('🔄 Conquistas atuais no perfil:', currentAchievements);
+
+        // Atualizar diretamente o perfil com as conquistas corretas
+        updateProfile({
+          achievements: shouldBeUnlocked
+        }).then(() => {
+          console.log('✅ Conquistas sincronizadas com sucesso!');
+        }).catch(error => {
+          console.error('❌ Erro ao sincronizar conquistas:', error);
+        });
+      }
+    }
+  }, [profile, updateProfile]);
 
   // Only calculate if profile exists
   const unlockedAchievements = profile?.achievements ? profile.achievements.map(id => getAchievement(id)).filter(Boolean) : [];
@@ -438,16 +414,10 @@ const UserProfile = ({ isOpen, onClose }) => {
               <div className={styles.profileBasicInfo}>
                 <div className={styles.avatarSection}>
                   <SimplePhotoUpload
-                    currentPhoto={profile.avatar}
+                    currentPhoto={profile.profilePhoto || profile.avatar || '🎮'}
                     onPhotoChange={handlePhotoChange}
                     size="xlarge"
                   />
-                  <div style={{ position: 'absolute', bottom: '0', right: '0', zIndex: 10 }}>
-                    <DirectAvatarUpload />
-                  </div>
-                  <div className={styles.levelBadge}>
-                    Nível {Math.floor(Math.sqrt((profile.xp || 0) / 300)) + 1}
-                  </div>
                 </div>
 
                 <div className={styles.userInfo}>
@@ -491,6 +461,9 @@ const UserProfile = ({ isOpen, onClose }) => {
                       <p className={styles.joinDate}>
                         Jogando desde {formatDate(profile.createdAt)}
                       </p>
+                      <div className={styles.levelBadge}>
+                        Nível {Math.floor(Math.sqrt((profile.xp || 0) / 300)) + 1}
+                      </div>
                     </>
                   )}
                 </div>
@@ -611,13 +584,18 @@ const UserProfile = ({ isOpen, onClose }) => {
                         <h4>Franquias Favoritas</h4>
                         <div className={styles.franchiseList}>
                           {Object.entries(profile.franchiseStats)
-                            .sort((a, b) => b[1].winRate - a[1].winRate)
+                            .map(([franchise, stats]) => {
+                              // Calcular winRate se não existir
+                              const winRate = stats.winRate || (stats.games > 0 ? (stats.wins / stats.games) * 100 : 0);
+                              return { franchise, stats: { ...stats, winRate } };
+                            })
+                            .sort((a, b) => b.stats.winRate - a.stats.winRate)
                             .slice(0, 5)
-                            .map(([franchise, stats]) => (
+                            .map(({ franchise, stats }) => (
                               <div key={franchise} className={styles.franchiseItem}>
                                 <span className={styles.franchiseName}>{franchise}</span>
                                 <span className={styles.franchiseWinRate}>
-                                  {stats.winRate.toFixed(1)}% ({stats.wins}/{stats.gamesPlayed})
+                                  {(stats.winRate || 0).toFixed(1)}% ({stats.wins || 0}/{stats.games || 0})
                                 </span>
                               </div>
                             ))}

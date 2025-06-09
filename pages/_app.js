@@ -3,12 +3,14 @@ import '../styles/settings.css';
 import '../styles/global-scrollbar.css';
 import '../styles/global.css';
 import { LanguageProvider } from '../contexts/LanguageContext';
-import { UserProfileProvider } from '../contexts/UserProfileContext';
 import { AuthProvider } from '../contexts/AuthContext';
+import { ProfileProvider } from '../contexts/ProfileContext';
+
 import { SimpleFriendsProvider } from '../contexts/SimpleFriendsContext';
 import { FriendsProvider } from '../contexts/FriendsContext';
 import { NotificationProvider } from '../contexts/NotificationContext';
 import ToastNotification from '../components/ToastNotification';
+import SimpleSteamStatus from '../components/SimpleSteamStatus';
 
 import { useEffect } from 'react';
 import HydrationErrorSuppressor from '../components/HydrationErrorSuppressor';
@@ -92,17 +94,18 @@ export default function MyApp({ Component, pageProps }) {
 
       <LanguageProvider>
         <AuthProvider>
-          <UserProfileProvider>
+          <ProfileProvider>
             <NotificationProvider>
               <FriendsProvider>
                 <SimpleFriendsProvider>
                   <HydrationErrorSuppressor />
                   <Component {...pageProps} />
                   <ToastNotification />
+                  <SimpleSteamStatus />
                 </SimpleFriendsProvider>
               </FriendsProvider>
             </NotificationProvider>
-          </UserProfileProvider>
+          </ProfileProvider>
         </AuthProvider>
       </LanguageProvider>
     </>

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useUserProfile } from '../contexts/UserProfileContext';
+import { useProfile } from '../contexts/ProfileContext';
 import { useAuth } from '../contexts/AuthContext';
 import styles from '../styles/StatsDiagnostic.module.css';
 
 const StatsDiagnostic = ({ isOpen, onClose }) => {
-  const { profile, userId } = useUserProfile();
-  const { isAuthenticated } = useAuth();
+  const { profile } = useProfile() || {};
+  const { isAuthenticated, userId } = useAuth();
   const [diagnosticResult, setDiagnosticResult] = useState(null);
   const [isRunning, setIsRunning] = useState(false);
   const [repairResult, setRepairResult] = useState(null);
@@ -70,7 +70,7 @@ const StatsDiagnostic = ({ isOpen, onClose }) => {
       if (response.ok) {
         const result = await response.json();
         setRepairResult(result);
-        
+
         if (result.success) {
           alert('Estatísticas reparadas com sucesso! Recarregue a página para ver as mudanças.');
         } else {
@@ -112,7 +112,7 @@ const StatsDiagnostic = ({ isOpen, onClose }) => {
           </div>
 
           <div className={styles.actions}>
-            <button 
+            <button
               className={styles.diagnosticButton}
               onClick={runDiagnostic}
               disabled={isRunning || !isAuthenticated}
@@ -121,7 +121,7 @@ const StatsDiagnostic = ({ isOpen, onClose }) => {
             </button>
 
             {diagnosticResult && !diagnosticResult.profileIntegrity.isValid && (
-              <button 
+              <button
                 className={styles.repairButton}
                 onClick={runRepair}
                 disabled={isRunning}
@@ -134,7 +134,7 @@ const StatsDiagnostic = ({ isOpen, onClose }) => {
           {diagnosticResult && (
             <div className={styles.results}>
               <h3>Resultado do Diagnóstico</h3>
-              
+
               <div className={styles.resultSection}>
                 <h4>Integridade do Perfil</h4>
                 <div className={`${styles.status} ${diagnosticResult.profileIntegrity.isValid ? styles.success : styles.error}`}>
@@ -191,12 +191,12 @@ const StatsDiagnostic = ({ isOpen, onClose }) => {
           {repairResult && (
             <div className={styles.repairResults}>
               <h3>Resultado do Reparo</h3>
-              
+
               <div className={styles.resultSection}>
                 <div className={`${styles.status} ${repairResult.success ? styles.success : styles.error}`}>
                   {repairResult.success ? '✅ Reparo Bem-sucedido' : '❌ Reparo Falhou'}
                 </div>
-                
+
                 <div className={styles.repairInfo}>
                   <p><strong>Problemas Encontrados:</strong> {repairResult.issuesFound.length}</p>
                   <p><strong>Problemas Corrigidos:</strong> {repairResult.issuesFixed}</p>

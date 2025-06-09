@@ -1,0 +1,83 @@
+{
+  "timestamp": "2025-06-09T14:43:46.075Z",
+  "environment": "unknown",
+  "results": [
+    {
+      "phase": "files",
+      "success": true,
+      "description": "Verificação de arquivos críticos",
+      "details": [
+        {
+          "file": "pages/api/profile.js",
+          "exists": true,
+          "size": 3229
+        },
+        {
+          "file": "pages/api/statistics.js",
+          "exists": true,
+          "size": 6226
+        },
+        {
+          "file": "pages/api/debug-kv.js",
+          "exists": true,
+          "size": 11348
+        },
+        {
+          "file": "pages/api/test-profile-system.js",
+          "exists": true,
+          "size": 8764
+        },
+        {
+          "file": "pages/api/backup-profile.js",
+          "exists": true,
+          "size": 8221
+        },
+        {
+          "file": "contexts/UserProfileContext.js",
+          "exists": true,
+          "size": 15552
+        },
+        {
+          "file": "utils/profile-backup.js",
+          "exists": true,
+          "size": 9424
+        },
+        {
+          "file": "utils/kv-config.js",
+          "exists": true,
+          "size": 3422
+        },
+        {
+          "file": "public/diagnostic-tool.html",
+          "exists": true,
+          "size": 16875
+        }
+      ]
+    },
+    {
+      "phase": "environment",
+      "success": false,
+      "description": "Verificação de variáveis de ambiente",
+      "details": {
+        "hasKVConfig": false
+      }
+    },
+    {
+      "phase": "dependencies",
+      "success": true,
+      "description": "Verificação de dependências",
+      "details": "Dependências verificadas"
+    },
+    {
+      "phase": "build",
+      "success": false,
+      "description": "Teste de build",
+      "error": "Command failed: npm run build\n ⚠ Compiled with warnings\n\n./pages/api/backup-profile.js\nAttempted import error: 'verifyAuth' is not exported from '../../utils/auth' (imported as 'verifyAuth').\n\nImport trace for requested module:\n./pages/api/backup-profile.js\n\n./pages/api/backup-profile.js\nAttempted import error: 'verifyAuth' is not exported from '../../utils/auth' (imported as 'verifyAuth').\n\nImport trace for requested module:\n./pages/api/backup-profile.js\n\nError: ENOENT: no such file or directory, open 'C:\\Users\\andrei.bonatto\\ProjetoBandle\\.next\\server\\pages\\_error.js.nft.json'\n    at async open (node:internal/fs/promises:633:25)\n    at async Object.readFile (node:internal/fs/promises:1237:14)\n    at async C:\\Users\\andrei.bonatto\\ProjetoBandle\\node_modules\\next\\dist\\build\\collect-build-traces.js:429:50\n    at async Promise.all (index 1)\n    at async C:\\Users\\andrei.bonatto\\ProjetoBandle\\node_modules\\next\\dist\\build\\collect-build-traces.js:410:13\n    at async Span.traceAsyncFn (C:\\Users\\andrei.bonatto\\ProjetoBandle\\node_modules\\next\\dist\\trace\\trace.js:154:20)\n    at async collectBuildTraces (C:\\Users\\andrei.bonatto\\ProjetoBandle\\node_modules\\next\\dist\\build\\collect-build-traces.js:164:5)\n    at async C:\\Users\\andrei.bonatto\\ProjetoBandle\\node_modules\\next\\dist\\build\\index.js:2130:13\n    at async Span.traceAsyncFn (C:\\Users\\andrei.bonatto\\ProjetoBandle\\node_modules\\next\\dist\\trace\\trace.js:154:20)\n    at async build (C:\\Users\\andrei.bonatto\\ProjetoBandle\\node_modules\\next\\dist\\build\\index.js:364:9) {\n  errno: -4058,\n  code: 'ENOENT',\n  syscall: 'open',\n  path: 'C:\\\\Users\\\\andrei.bonatto\\\\ProjetoBandle\\\\.next\\\\server\\\\pages\\\\_error.js.nft.json'\n}\n"
+    }
+  ],
+  "summary": {
+    "totalTests": 4,
+    "passed": 2,
+    "failed": 2
+  }
+}

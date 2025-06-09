@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
-import { useUserProfile } from '../contexts/UserProfileContext';
+import { useProfile } from '../contexts/ProfileContext';
 import { FaShare, FaBug, FaHeart, FaCopy, FaYoutube, FaTwitter, FaFacebook, FaCheck } from 'react-icons/fa';
 
 import styles from '../styles/ActionButtons.module.css';
 
 const ActionButtons = ({ gameResult, currentSong, isInfiniteMode = false, infiniteStats = null }) => {
   const { t, isClient } = useLanguage();
-  const { updateSocialStats } = useUserProfile();
+  const { updateProfile } = useProfile() || {};
   const [showShareMenu, setShowShareMenu] = useState(false);
 
   const [copied, setCopied] = useState(false);
@@ -59,10 +59,10 @@ const ActionButtons = ({ gameResult, currentSong, isInfiniteMode = false, infini
     const text = generateShareText();
     const shareUrl = 'https://ludomusic.xyz';
 
-    // Atualizar estatísticas sociais do perfil
-    if (updateSocialStats) {
+    // Atualizar estatísticas sociais do perfil (simplificado)
+    if (updateProfile) {
       try {
-        updateSocialStats('share_game');
+        // Podemos implementar tracking de compartilhamentos depois se necessário
       } catch (error) {
         // Silent error handling
       }

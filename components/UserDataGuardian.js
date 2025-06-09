@@ -1,22 +1,17 @@
 // Componente Guardian que GARANTE que usuários logados sempre tenham dados
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { useUserProfile } from '../contexts/UserProfileContext';
-import useGuaranteedUserData from '../hooks/useGuaranteedUserData';
+import { useProfile } from '../contexts/ProfileContext';
 
 const UserDataGuardian = ({ children, showDebugInfo = false }) => {
-  const { isAuthenticated } = useAuth();
-  const { profile, userId, isLoading } = useUserProfile();
-  const {
-    isDataGuaranteed,
-    emergencyProfile,
-    guaranteeUserData,
-    effectiveProfile,
-    hasAnyData,
-    isEmergencyMode,
-    needsDataCreation,
-    debugInfo
-  } = useGuaranteedUserData();
+  const { isAuthenticated, userId } = useAuth();
+  const { profile, isLoading } = useProfile() || {};
+  // Simplificar - remover dependências de hooks que não existem mais
+  const isDataGuaranteed = !!profile;
+  const effectiveProfile = profile;
+  const hasAnyData = !!profile;
+  const isEmergencyMode = false;
+  const needsDataCreation = !profile && isAuthenticated;
 
   const [isGuardianActive, setIsGuardianActive] = useState(false);
   const [lastAction, setLastAction] = useState(null);

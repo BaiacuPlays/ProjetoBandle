@@ -405,9 +405,9 @@ export const calculateAchievementProgress = (achievementId, userStats, profile =
 
     // Conquistas de tempo
     case 'hour_played':
-      return Math.min(100, (userStats.totalPlayTime / 3600) * 100);
+      return Math.min(100, ((userStats.totalPlayTime || 0) / 3600) * 100);
     case 'ten_hours_played':
-      return Math.min(100, (userStats.totalPlayTime / 36000) * 100);
+      return Math.min(100, ((userStats.totalPlayTime || 0) / 36000) * 100);
     case 'marathon_player':
       // Verificar se há dados de sessão longa (5 horas)
       if (userStats.longestSession && userStats.longestSession >= 18000) { // 5 horas em segundos
@@ -470,9 +470,9 @@ export const calculateAchievementProgress = (achievementId, userStats, profile =
 
     // Conquistas sociais
     case 'social_butterfly':
-      return Math.min(100, (profile?.socialStats?.gamesShared / 10) * 100);
+      return Math.min(100, ((profile?.socialStats?.gamesShared || 0) / 10) * 100);
     case 'influencer':
-      return Math.min(100, (profile?.socialStats?.friendsReferred / 5) * 100);
+      return Math.min(100, ((profile?.socialStats?.friendsReferred || 0) / 5) * 100);
 
     // Conquistas de colecionador
     case 'collector':
@@ -588,7 +588,8 @@ export const getNearAchievements = (userStats, userAchievements, profile = null)
   Object.values(achievements).forEach(achievement => {
     if (!userAchievements.includes(achievement.id)) {
       const progress = calculateAchievementProgress(achievement.id, userStats, profile);
-      if (progress >= 25) { // 25% ou mais de progresso
+      // Só mostrar como "próxima" se não estiver 100% completa
+      if (progress >= 25 && progress < 100) {
         nearAchievements.push({
           ...achievement,
           progress

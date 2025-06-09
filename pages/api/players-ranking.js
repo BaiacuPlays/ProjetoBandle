@@ -13,14 +13,14 @@ const generateFriendCode = (username) => {
     a = ((a << 5) - a) + b.charCodeAt(0);
     return a & a;
   }, 0);
-  
+
   const code = Math.abs(hash).toString(36).toUpperCase().substr(0, 6);
   return `PLAYER${code.padEnd(6, '0')}`;
 };
 
-// Função para calcular nível baseado no XP
+// Função para calcular nível baseado no XP - SISTEMA REBALANCEADO
 const calculateLevel = (xp) => {
-  return Math.floor((xp || 0) / 1000) + 1;
+  return Math.floor(Math.sqrt((xp || 0) / 300)) + 1;
 };
 
 // Função para sanitizar dados
@@ -36,7 +36,7 @@ export default async function handler(req, res) {
 
   try {
     const { sortBy = 'xp', limit = 50, search = '' } = req.query;
-    
+
     // Verificar autenticação (opcional para ranking público)
     let currentUserId = null;
     try {
@@ -55,7 +55,7 @@ export default async function handler(req, res) {
       for (const [key, userData] of localUsers.entries()) {
         if (key.startsWith('user:')) {
           const userAuthId = `auth_${userData.username}`;
-          
+
           // Buscar perfil do usuário
           let userProfile = null;
           try {
@@ -76,13 +76,13 @@ export default async function handler(req, res) {
             xp: userProfile?.xp || 0,
             title: userProfile?.currentTitle || null,
             friendCode: generateFriendCode(userData.username),
-            
+
             // Estatísticas
             stats: {
               totalGames: userProfile?.stats?.totalGames || 0,
               totalWins: userProfile?.stats?.totalWins || 0,
-              winRate: userProfile?.stats?.totalGames > 0 
-                ? Math.round((userProfile?.stats?.totalWins / userProfile?.stats?.totalGames) * 100) 
+              winRate: userProfile?.stats?.totalGames > 0
+                ? Math.round((userProfile?.stats?.totalWins / userProfile?.stats?.totalGames) * 100)
                 : 0,
               bestStreak: userProfile?.stats?.bestStreak || 0,
               currentStreak: userProfile?.stats?.currentStreak || 0,
@@ -106,12 +106,12 @@ export default async function handler(req, res) {
       // Buscar no Vercel KV (produção)
       try {
         const userKeys = await kv.keys('user:*');
-        
+
         for (const key of userKeys) {
           const userData = await kv.get(key);
           if (userData) {
             const userAuthId = `auth_${userData.username}`;
-            
+
             // Buscar perfil do usuário
             let userProfile = null;
             try {
@@ -132,13 +132,13 @@ export default async function handler(req, res) {
               xp: userProfile?.xp || 0,
               title: userProfile?.currentTitle || null,
               friendCode: generateFriendCode(userData.username),
-              
+
               // Estatísticas
               stats: {
                 totalGames: userProfile?.stats?.totalGames || 0,
                 totalWins: userProfile?.stats?.totalWins || 0,
-                winRate: userProfile?.stats?.totalGames > 0 
-                  ? Math.round((userProfile?.stats?.totalWins / userProfile?.stats?.totalGames) * 100) 
+                winRate: userProfile?.stats?.totalGames > 0
+                  ? Math.round((userProfile?.stats?.totalWins / userProfile?.stats?.totalGames) * 100)
                   : 0,
                 bestStreak: userProfile?.stats?.bestStreak || 0,
                 currentStreak: userProfile?.stats?.currentStreak || 0,
@@ -167,7 +167,7 @@ export default async function handler(req, res) {
     // Filtrar por busca se fornecida
     if (search) {
       const searchTerm = search.toLowerCase().trim();
-      players = players.filter(player => 
+      players = players.filter(player =>
         player.username.toLowerCase().includes(searchTerm) ||
         player.displayName.toLowerCase().includes(searchTerm) ||
         player.friendCode.toLowerCase().includes(searchTerm)

@@ -1,7 +1,7 @@
 // Modal de Login/Registro
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { useUserProfile } from '../contexts/UserProfileContext';
+import { useProfile } from '../contexts/ProfileContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import ForgotPasswordModal from './ForgotPasswordModal';
 import styles from '../styles/LoginModal.module.css';
@@ -9,9 +9,9 @@ import { FaUser, FaLock, FaEye, FaEyeSlash, FaTimes } from 'react-icons/fa';
 
 const LoginModal = ({ isOpen, onClose, onSuccess }) => {
   const { register, login } = useAuth();
-  const { profile } = useUserProfile();
+  const { profile } = useProfile() || {};
   const { t } = useLanguage();
-  
+
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -91,7 +91,7 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
   // Função para submeter formulário
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
 
     setIsLoading(true);
@@ -99,7 +99,7 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
 
     try {
       let result;
-      
+
       if (isLoginMode) {
         result = await login(formData.username, formData.password, rememberMe);
       } else {
@@ -112,7 +112,7 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
         // Sucesso - fechar modal e notificar
         onSuccess && onSuccess(result.user);
         onClose();
-        
+
         // Resetar formulário
         setFormData({
           username: '',
@@ -151,7 +151,7 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
           <h2 className={styles.title}>
             {isLoginMode ? 'Entrar na Conta' : 'Criar Conta'}
           </h2>
-          <button 
+          <button
             className={styles.closeButton}
             onClick={onClose}
             type="button"

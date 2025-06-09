@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSimpleFriends } from '../contexts/SimpleFriendsContext';
 // import { useNotifications } from '../contexts/NotificationContext';
-import { useUserProfile } from '../contexts/UserProfileContext';
+import { useProfile } from '../contexts/ProfileContext';
 import { useModalScrollLock } from '../hooks/useModalScrollLock';
 import { FaTimes, FaUsers, FaGamepad, FaPaperPlane, FaCheck } from 'react-icons/fa';
 import SimpleUserAvatar from './SimpleUserAvatar';

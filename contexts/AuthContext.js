@@ -19,7 +19,8 @@ export const AuthProvider = ({ children }) => {
   console.log('🔐 AuthProvider: Estado atual:', {
     user: user?.username,
     isAuthenticated,
-    isLoading
+    isLoading,
+    timestamp: new Date().toISOString()
   });
 
   // SOLUÇÃO SIMPLES - verificar autenticação
@@ -68,9 +69,20 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    console.log('🔄 AuthProvider useEffect executado');
+
     // Só executar no cliente
     if (typeof window !== 'undefined') {
+      console.log('🌐 Executando no cliente - chamando checkAuth');
+
+      // Executar imediatamente
       checkAuth();
+
+      // Também executar com um pequeno delay para garantir
+      setTimeout(() => {
+        console.log('🕐 Timeout: Executando checkAuth novamente');
+        checkAuth();
+      }, 100);
 
       // Listener para mudanças no localStorage
       const handleStorageChange = (e) => {
@@ -94,6 +106,7 @@ export const AuthProvider = ({ children }) => {
         window.removeEventListener('ludomusic-token-changed', handleCustomStorageChange);
       };
     } else {
+      console.log('🖥️ Executando no servidor - definindo isLoading como false');
       setIsLoading(false);
     }
   }, []);
@@ -142,6 +155,52 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Função de registro
+  const register = async (username, password, email, anonymousUserId) => {
+    console.log('📝 Tentando registrar usuário:', username);
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'register',
+          username,
+          password,
+          email,
+          anonymousUserId
+        })
+      });
+
+      const data = await response.json();
+      console.log('📝 Resposta do registro:', data);
+
+      if (response.ok && data.success && data.sessionToken) {
+        // Salvar token
+        localStorage.setItem('ludomusic_session_token', data.sessionToken);
+
+        // Atualizar estado
+        setUser(data.user);
+        setIsAuthenticated(true);
+
+        // Disparar evento para outros contextos
+        window.dispatchEvent(new Event('ludomusic-token-changed'));
+
+        console.log('✅ Registro realizado com sucesso:', data.user.username);
+        return { success: true, user: data.user, message: data.message };
+      } else {
+        console.log('❌ Registro falhou:', data.error);
+        return { success: false, error: data.error };
+      }
+    } catch (error) {
+      console.error('❌ Erro no registro:', error);
+      return { success: false, error: error.message };
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Função de logout
   const logout = async () => {
     console.log('🚪 Fazendo logout...');
@@ -162,10 +221,12 @@ export const AuthProvider = ({ children }) => {
 
   const value = {
     user,
+    username: user?.username, // Adicionar username como propriedade separada
     userId: user ? `auth_${user.username}` : null, // Adicionar userId como propriedade
     isLoading,
     isAuthenticated,
     login,
+    register,
     logout,
     checkSession: checkAuth, // Expor função para recarregar
     getAuthenticatedUserId: () => user ? `auth_${user.username}` : null

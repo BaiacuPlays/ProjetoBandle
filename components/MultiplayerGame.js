@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useMultiplayerContext } from '../contexts/MultiplayerContext';
-import { useUserProfile } from '../contexts/UserProfileContext';
+import { useProfile } from '../contexts/ProfileContext';
 import { songs } from '../data/songs';
 import styles from '../styles/Multiplayer.module.css';
 import gameStyles from '../styles/Home.module.css';
@@ -18,7 +18,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
 
   const { t, isClient } = useLanguage();
   const { state, actions } = useMultiplayerContext();
-  const { updateSocialStats } = useUserProfile();
+  const { updateProfile } = useProfile() || {};
   const {
     playerNickname: nickname,
     lobbyData,

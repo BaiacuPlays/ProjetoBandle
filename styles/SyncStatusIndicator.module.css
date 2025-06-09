@@ -1,0 +1,190 @@
+/* Estilos para o indicador de sincronização tipo Steam */
+
+.syncIndicator {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.statusBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.statusBadge:hover {
+  background: rgba(0, 0, 0, 0.9);
+  transform: translateY(-1px);
+}
+
+.statusIcon {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.statusText {
+  color: white;
+  white-space: nowrap;
+}
+
+.lastSync {
+  font-size: 10px;
+  color: #9CA3AF;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 2px 8px;
+  border-radius: 10px;
+  backdrop-filter: blur(5px);
+}
+
+.syncButton {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: #3B82F6;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.syncButton:hover:not(:disabled) {
+  background: #2563EB;
+  transform: translateY(-1px);
+}
+
+.syncButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .syncIndicator {
+    top: 10px;
+    right: 10px;
+  }
+  
+  .statusBadge {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+  
+  .statusIcon {
+    font-size: 12px;
+  }
+  
+  .lastSync {
+    font-size: 9px;
+  }
+  
+  .syncButton {
+    font-size: 9px;
+    padding: 3px 6px;
+  }
+}
+
+/* Estados específicos */
+.statusBadge[data-status="synced"] {
+  border-color: #10B981;
+}
+
+.statusBadge[data-status="pending"] {
+  border-color: #F59E0B;
+  animation: pulse 2s infinite;
+}
+
+.statusBadge[data-status="syncing"] {
+  border-color: #3B82F6;
+  animation: pulse 1s infinite;
+}
+
+.statusBadge[data-status="error"] {
+  border-color: #EF4444;
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-2px);
+  }
+  75% {
+    transform: translateX(2px);
+  }
+}
+
+/* Tooltip personalizado */
+.statusBadge[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: -30px;
+  right: 0;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  white-space: nowrap;
+  z-index: 1001;
+  pointer-events: none;
+}
+
+/* Modo escuro/claro */
+@media (prefers-color-scheme: light) {
+  .statusBadge {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: #E5E7EB;
+  }
+  
+  .statusText {
+    color: #1F2937;
+  }
+  
+  .lastSync {
+    background: rgba(255, 255, 255, 0.8);
+    color: #6B7280;
+  }
+}

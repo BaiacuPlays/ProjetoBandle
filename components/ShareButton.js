@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
-import { useUserProfile } from '../contexts/UserProfileContext';
+import { useProfile } from '../contexts/ProfileContext';
 import { FaShare, FaTwitter, FaFacebook, FaCopy, FaCheck } from 'react-icons/fa';
 import styles from '../styles/ShareButton.module.css';
 
 const ShareButton = ({ gameResult, currentSong, isInfiniteMode = false, infiniteStats = null }) => {
   const { t, isClient } = useLanguage();
-  const { updateSocialStats } = useUserProfile();
+  const { updateProfile } = useProfile() || {};
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [copied, setCopied] = useState(false);
 

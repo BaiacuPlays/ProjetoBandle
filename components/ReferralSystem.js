@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useFriends } from '../contexts/FriendsContext';
-import { useUserProfile } from '../contexts/UserProfileContext';
+import { useProfile } from '../contexts/ProfileContext';
 import { useModalScrollLock } from '../hooks/useModalScrollLock';
 import { FaTimes, FaShare, FaCopy, FaEnvelope, FaWhatsapp, FaTelegram, FaTwitter, FaFacebook, FaCheck } from 'react-icons/fa';
 import styles from '../styles/ReferralSystem.module.css';
@@ -9,8 +9,8 @@ const ReferralSystem = ({ isOpen, onClose }) => {
   // Bloquear/desbloquear scroll da página
   useModalScrollLock(isOpen);
   const { getReferralLink, referFriend } = useFriends();
-  const { profile } = useUserProfile();
-  
+  const { profile } = useProfile() || {};
+
   const [emailInput, setEmailInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [copied, setCopied] = useState(false);

@@ -10,6 +10,10 @@ const hasKVConfig = (process.env.KV_REST_API_URL || process.env.KV_URL) && proce
 
 // Storage local para desenvolvimento
 const localFriendRequests = new Map();
+const localFriends = new Map(); // Storage local para amigos
+
+// Exportar para uso em outras APIs
+export { localFriends, localFriendRequests };
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -57,7 +61,7 @@ export default async function handler(req, res) {
           new Date(request.timestamp).getTime() > sevenDaysAgo
         );
 
-        return res.status(200).json(validSentRequests);
+        return res.status(200).json({ requests: validSentRequests });
       } else {
         // Buscar solicitações recebidas (comportamento padrão)
         const requestsKey = `friend_requests:${currentUserId}`;
@@ -78,7 +82,7 @@ export default async function handler(req, res) {
           new Date(request.timestamp).getTime() > sevenDaysAgo
         );
 
-        return res.status(200).json(validRequests);
+        return res.status(200).json({ requests: validRequests });
       }
 
     } else if (method === 'POST') {
@@ -119,7 +123,7 @@ export default async function handler(req, res) {
       // Buscar dados do usuário atual para incluir na solicitação
       let currentUserProfile = null;
       const currentProfileKey = `profile:${currentUserId}`;
-      
+
       if (isDevelopment && !hasKVConfig) {
         currentUserProfile = localProfiles.get(currentProfileKey);
       } else {
@@ -151,12 +155,29 @@ export default async function handler(req, res) {
         toRequests = await kv.get(toRequestsKey) || [];
       }
 
+      // Debug: Log das solicitações antes da limpeza
+      console.log(`🔍 [DEBUG] Solicitações antes da limpeza para ${sanitizedToUserId}:`, toRequests.length);
+      toRequests.forEach((req, index) => {
+        console.log(`  ${index + 1}. De: ${req.fromUserId} | Status: ${req.status} | ID: ${req.id}`);
+      });
+
+      // Limpar solicitações antigas (accepted/rejected) primeiro
+      const originalLength = toRequests.length;
+      toRequests = toRequests.filter(req =>
+        !(req.fromUserId === currentUserId && (req.status === 'accepted' || req.status === 'rejected'))
+      );
+
+      if (originalLength !== toRequests.length) {
+        console.log(`🧹 [DEBUG] Removidas ${originalLength - toRequests.length} solicitações antigas`);
+      }
+
       // Verificar se já existe solicitação pendente
-      const existingRequest = toRequests.find(req => 
+      const existingRequest = toRequests.find(req =>
         req.fromUserId === currentUserId && req.status === 'pending'
       );
 
       if (existingRequest) {
+        console.log(`❌ [DEBUG] Solicitação pendente encontrada:`, existingRequest);
         return res.status(409).json({ error: 'Solicitação já enviada para este usuário' });
       }
 
@@ -239,9 +260,9 @@ export default async function handler(req, res) {
       const request = requests[requestIndex];
 
       if (action === 'accept') {
-        // Marcar como aceita
-        requests[requestIndex].status = 'accepted';
-        
+        // Remover a solicitação da lista (não apenas marcar como aceita)
+        requests.splice(requestIndex, 1);
+
         // Adicionar aos amigos de ambos os usuários
         const friendsKey1 = `friends:${currentUserId}`;
         const friendsKey2 = `friends:${request.fromUserId}`;
@@ -249,7 +270,11 @@ export default async function handler(req, res) {
         // Amigos do usuário atual
         let friends1 = [];
         if (isDevelopment && !hasKVConfig) {
-          friends1 = localFriendRequests.get(friendsKey1) || [];
+          // Usar storage global compartilhado
+          if (!global.sharedFriendsStorage) {
+            global.sharedFriendsStorage = new Map();
+          }
+          friends1 = global.sharedFriendsStorage.get(friendsKey1) || [];
         } else {
           friends1 = await kv.get(friendsKey1) || [];
         }
@@ -271,7 +296,11 @@ export default async function handler(req, res) {
         // Amigos do remetente
         let friends2 = [];
         if (isDevelopment && !hasKVConfig) {
-          friends2 = localFriendRequests.get(friendsKey2) || [];
+          // Usar storage global compartilhado
+          if (!global.sharedFriendsStorage) {
+            global.sharedFriendsStorage = new Map();
+          }
+          friends2 = global.sharedFriendsStorage.get(friendsKey2) || [];
         } else {
           friends2 = await kv.get(friendsKey2) || [];
         }
@@ -292,12 +321,18 @@ export default async function handler(req, res) {
 
         // Salvar listas de amigos
         if (isDevelopment && !hasKVConfig) {
-          localFriendRequests.set(friendsKey1, friends1);
-          localFriendRequests.set(friendsKey2, friends2);
+          // Usar storage global compartilhado
+          if (!global.sharedFriendsStorage) {
+            global.sharedFriendsStorage = new Map();
+          }
+          global.sharedFriendsStorage.set(friendsKey1, friends1);
+          global.sharedFriendsStorage.set(friendsKey2, friends2);
         } else {
           await kv.set(friendsKey1, friends1);
           await kv.set(friendsKey2, friends2);
         }
+
+        console.log(`✅ Amigos adicionados: ${friends1.length} para ${currentUserId}, ${friends2.length} para ${request.fromUserId}`);
 
         // NOVO: Remover a solicitação da lista de "enviadas" do remetente
         const fromSentKey = `sent_requests:${request.fromUserId}`;
@@ -323,8 +358,8 @@ export default async function handler(req, res) {
         // Não criar notificação de aceite - o aceite já remove a notificação original
 
       } else if (action === 'reject') {
-        // Marcar como rejeitada
-        requests[requestIndex].status = 'rejected';
+        // Remover a solicitação da lista (não apenas marcar como rejeitada)
+        requests.splice(requestIndex, 1);
 
         // NOVO: Remover a solicitação da lista de "enviadas" do remetente também quando rejeitada
         const fromSentKey = `sent_requests:${request.fromUserId}`;

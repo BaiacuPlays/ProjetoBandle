@@ -294,22 +294,22 @@ export const checkBadgeUnlocked = (badgeId, profile) => {
       return profile.level >= requirement.value;
 
     case 'perfectGames':
-      return profile.stats.perfectGames >= requirement.value;
+      return profile.stats?.perfectGames >= requirement.value;
 
     case 'fastestWin':
-      return profile.stats.fastestWin && profile.stats.fastestWin <= requirement.value;
+      return profile.stats?.fastestWin && profile.stats.fastestWin <= requirement.value;
 
     case 'bestStreak':
-      return profile.stats.bestStreak >= requirement.value;
+      return profile.stats?.bestStreak >= requirement.value;
 
     case 'totalPlayTime':
-      return profile.stats.totalPlayTime >= requirement.value;
+      return profile.stats?.totalPlayTime >= requirement.value;
 
     case 'gamesShared':
-      return profile.socialStats.gamesShared >= requirement.value;
+      return profile.socialStats?.gamesShared >= requirement.value;
 
     case 'friendsReferred':
-      return profile.socialStats.friendsReferred >= requirement.value;
+      return profile.socialStats?.friendsReferred >= requirement.value;
 
     case 'franchisesPlayed':
       return Object.keys(profile.franchiseStats || {}).length >= requirement.value;
@@ -331,7 +331,7 @@ export const getUnlockedBadges = (profile) => {
   if (!profile) return [];
 
   const unlockedBadges = [];
-  
+
   Object.values(badges).forEach(badge => {
     if (checkBadgeUnlocked(badge.id, profile)) {
       unlockedBadges.push(badge.id);
