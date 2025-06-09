@@ -73,7 +73,7 @@ export async function createSafeKVInstance() {
     // Verificar configuração apenas em produção
     const configCheck = checkKVConfiguration();
     if (!configCheck.isValid) {
-      // Log apenas em desenvolvimento
+      // Silenciar log em produção para evitar spam no console
       if (process.env.NODE_ENV === 'development') {
         console.log('📋 [SafeKV] KV não configurado - usando fallback');
       }
@@ -84,7 +84,17 @@ export async function createSafeKVInstance() {
       };
     }
 
-    // Tentar importar e usar KV apenas em produção
+    // Verificar novamente se as variáveis estão realmente disponíveis antes de importar
+    const hasKVVars = (process.env.KV_REST_API_URL || process.env.KV_URL) && process.env.KV_REST_API_TOKEN;
+    if (!hasKVVars) {
+      return {
+        instance: null,
+        isWorking: false,
+        error: 'Variáveis KV não encontradas'
+      };
+    }
+
+    // Tentar importar e usar KV apenas se as variáveis estão disponíveis
     const { kv } = await import('@vercel/kv');
 
     // Testar conexão básica com timeout mais curto
@@ -122,8 +132,12 @@ export async function createSafeKVInstance() {
 
   } catch (error) {
     const errorMsg = error.message || 'Erro desconhecido';
-    // Log apenas em desenvolvimento
-    if (process.env.NODE_ENV === 'development') {
+
+    // Silenciar erros específicos de variáveis de ambiente em produção
+    const shouldLog = process.env.NODE_ENV === 'development' ||
+                     !errorMsg.includes('Missing required environment variable');
+
+    if (shouldLog) {
       console.warn(`⚠️ [SafeKV] KV não disponível (${errorMsg}), usando fallback`);
     }
 

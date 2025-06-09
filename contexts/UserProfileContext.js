@@ -260,11 +260,72 @@ export const UserProfileProvider = ({ children }) => {
     }
   };
 
+  // Função para atualizar estatísticas de jogo e calcular XP
+  const updateGameStats = async (gameData) => {
+    if (!profile) return;
+
+    try {
+      const { won, attempts, mode, playTime = 0 } = gameData;
+
+      // Calcular XP baseado no resultado
+      let xpGained = 0;
+      if (won) {
+        // XP por vitória baseado no número de tentativas (menos tentativas = mais XP)
+        const baseXP = 50;
+        const attemptBonus = Math.max(0, (7 - attempts) * 10); // Bônus por acertar rápido
+        xpGained = baseXP + attemptBonus;
+      } else {
+        // XP por participação mesmo perdendo
+        xpGained = 10;
+      }
+
+      // Atualizar estatísticas
+      const currentStats = profile.stats || {};
+      const newStats = {
+        ...currentStats,
+        totalGames: (currentStats.totalGames || 0) + 1,
+        wins: won ? (currentStats.wins || 0) + 1 : (currentStats.wins || 0),
+        losses: !won ? (currentStats.losses || 0) + 1 : (currentStats.losses || 0),
+        totalPlayTime: (currentStats.totalPlayTime || 0) + playTime,
+        xp: (currentStats.xp || 0) + xpGained
+      };
+
+      // Calcular winRate
+      if (newStats.totalGames > 0) {
+        newStats.winRate = Math.round((newStats.wins / newStats.totalGames) * 100);
+      }
+
+      // Calcular nível baseado no XP
+      const totalXP = (profile.xp || 0) + xpGained;
+      const newLevel = Math.floor(Math.sqrt(totalXP / 300)) + 1;
+
+      // Atualizar perfil
+      const updatedProfile = {
+        ...profile,
+        xp: totalXP,
+        level: newLevel,
+        stats: newStats,
+        lastUpdated: new Date().toISOString()
+      };
+
+      const savedProfile = await saveProfile(updatedProfile);
+      setProfile(savedProfile);
+
+      console.log(`🎮 Jogo concluído: ${won ? 'Vitória' : 'Derrota'} | XP ganho: +${xpGained} | XP total: ${totalXP}`);
+
+      return savedProfile;
+    } catch (error) {
+      console.error('❌ Erro ao atualizar estatísticas do jogo:', error);
+      throw error;
+    }
+  };
+
   const value = {
     profile,
     isLoading,
     updateProfile,
     updateStats,
+    updateGameStats,
     resetProfile,
     userId
   };
