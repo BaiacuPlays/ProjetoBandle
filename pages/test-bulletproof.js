@@ -4,7 +4,6 @@
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import BulletproofStatsTest from '../components/BulletproofStatsTest';
 import AchievementSystemTest from '../components/AchievementSystemTest';
 import styles from '../styles/TestPage.module.css';
 
@@ -54,7 +53,7 @@ const TestBulletproofPage = () => {
         </div>
       </div>
 
-      {showTest && <BulletproofStatsTest />}
+      {showTest && <AchievementSystemTest />}
     </div>
   );
 };

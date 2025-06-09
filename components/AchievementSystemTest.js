@@ -3,12 +3,12 @@
  */
 
 import { useState, useEffect } from 'react';
-import { useBulletproofStats } from '../hooks/useBulletproofStats';
+import { useUserProfile } from '../contexts/UserProfileContext';
 import { achievements, calculateAchievementProgress, getAchievementStats } from '../data/achievements';
 import styles from '../styles/AchievementSystemTest.module.css';
 
 const AchievementSystemTest = () => {
-  const { profile, updateGameStats, isReady } = useBulletproofStats();
+  const { profile, updateStats } = useUserProfile();
   const [testResults, setTestResults] = useState([]);
   const [isRunningTests, setIsRunningTests] = useState(false);
   const [achievementProgress, setAchievementProgress] = useState({});
@@ -43,7 +43,7 @@ const AchievementSystemTest = () => {
   const simulateGame = async (gameType) => {
     try {
       let gameData;
-      
+
       switch (gameType) {
         case 'first_game':
           gameData = {
@@ -54,7 +54,7 @@ const AchievementSystemTest = () => {
             song: { title: 'Teste', game: 'Jogo Teste' }
           };
           break;
-          
+
         case 'perfect_game':
           gameData = {
             won: true,
@@ -64,7 +64,7 @@ const AchievementSystemTest = () => {
             song: { title: 'Perfeito', game: 'Jogo Teste' }
           };
           break;
-          
+
         case 'speed_game':
           gameData = {
             won: true,
@@ -74,7 +74,7 @@ const AchievementSystemTest = () => {
             song: { title: 'Rápido', game: 'Jogo Teste' }
           };
           break;
-          
+
         case 'infinite_game':
           gameData = {
             won: true,
@@ -85,7 +85,7 @@ const AchievementSystemTest = () => {
             song: { title: 'Infinito', game: 'Jogo Teste' }
           };
           break;
-          
+
         case 'multiplayer_game':
           gameData = {
             won: true,
@@ -96,7 +96,7 @@ const AchievementSystemTest = () => {
             song: { title: 'Multi', game: 'Jogo Teste' }
           };
           break;
-          
+
         case 'night_game':
           // Simular jogo noturno
           const nightDate = new Date();
@@ -110,7 +110,7 @@ const AchievementSystemTest = () => {
             gameDate: nightDate.toISOString()
           };
           break;
-          
+
         default:
           gameData = {
             won: true,
@@ -121,8 +121,8 @@ const AchievementSystemTest = () => {
           };
       }
 
-      const result = await updateGameStats(gameData);
-      
+      const result = await updateStats(gameData);
+
       addTestResult(
         `Simular ${gameType}`,
         true,
@@ -133,9 +133,9 @@ const AchievementSystemTest = () => {
           totalAchievements: result.achievements?.length || 0
         }
       );
-      
+
       return result;
-      
+
     } catch (error) {
       addTestResult(
         `Simular ${gameType}`,
@@ -149,14 +149,14 @@ const AchievementSystemTest = () => {
   const testAchievementProgress = () => {
     try {
       const stats = getAchievementStats(profile.achievements || []);
-      
+
       addTestResult(
         'Progresso de Conquistas',
         true,
         `${stats.unlocked}/${stats.total} conquistas (${stats.completionPercentage.toFixed(1)}%)`,
         stats
       );
-      
+
     } catch (error) {
       addTestResult(
         'Progresso de Conquistas',
@@ -172,17 +172,17 @@ const AchievementSystemTest = () => {
       if (!achievement) {
         throw new Error('Conquista não encontrada');
       }
-      
+
       const progress = calculateAchievementProgress(achievementId, profile.stats, profile);
       const isUnlocked = profile.achievements?.includes(achievementId) || false;
-      
+
       addTestResult(
         `Teste: ${achievement.title}`,
         true,
         `Progresso: ${progress.toFixed(1)}% | ${isUnlocked ? 'Desbloqueada' : 'Bloqueada'}`,
         { progress, isUnlocked, achievement }
       );
-      
+
     } catch (error) {
       addTestResult(
         `Teste: ${achievementId}`,
@@ -195,31 +195,31 @@ const AchievementSystemTest = () => {
   const runAllTests = async () => {
     setIsRunningTests(true);
     setTestResults([]);
-    
+
     try {
       // Teste 1: Progresso atual
       testAchievementProgress();
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       // Teste 2: Simular jogo básico
       await simulateGame('first_game');
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       // Teste 3: Simular jogo perfeito
       await simulateGame('perfect_game');
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       // Teste 4: Simular jogo rápido
       await simulateGame('speed_game');
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       // Teste 5: Testar conquistas específicas
       testSpecificAchievement('first_game');
       testSpecificAchievement('perfect_first');
       testSpecificAchievement('speed_demon');
-      
+
       addTestResult('Todos os Testes', true, 'Todos os testes de conquistas concluídos!');
-      
+
     } catch (error) {
       addTestResult('Todos os Testes', false, `Falha nos testes: ${error.message}`);
     } finally {
@@ -231,7 +231,7 @@ const AchievementSystemTest = () => {
     return new Date(dateString).toLocaleString('pt-BR');
   };
 
-  if (!isReady) {
+  if (!profile) {
     return (
       <div className={styles.container}>
         <div className={styles.loading}>
@@ -296,7 +296,7 @@ const AchievementSystemTest = () => {
             🦉 Jogo Noturno
           </button>
         </div>
-        
+
         <div className={styles.buttonGrid}>
           <button onClick={testAchievementProgress} disabled={isRunningTests} className={styles.testButton}>
             📈 Verificar Progresso
@@ -315,8 +315,8 @@ const AchievementSystemTest = () => {
             .sort((a, b) => b.progress - a.progress)
             .slice(0, 10)
             .map(({ achievement, progress, unlocked }) => (
-              <div 
-                key={achievement.id} 
+              <div
+                key={achievement.id}
                 className={`${styles.achievementItem} ${unlocked ? styles.unlocked : ''}`}
                 onClick={() => testSpecificAchievement(achievement.id)}
               >
@@ -326,8 +326,8 @@ const AchievementSystemTest = () => {
                   <div className={styles.achievementDesc}>{achievement.description}</div>
                   <div className={styles.achievementProgress}>
                     <div className={styles.progressBar}>
-                      <div 
-                        className={styles.progressFill} 
+                      <div
+                        className={styles.progressFill}
                         style={{ width: `${Math.min(100, progress)}%` }}
                       />
                     </div>
@@ -350,7 +350,7 @@ const AchievementSystemTest = () => {
         ) : (
           <div className={styles.resultsList}>
             {testResults.map(result => (
-              <div 
+              <div
                 key={result.id}
                 className={`${styles.resultItem} ${result.success ? styles.success : styles.error}`}
               >

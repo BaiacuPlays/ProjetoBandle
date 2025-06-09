@@ -379,65 +379,7 @@ const UserProfile = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleMigrateToBulletproof = async () => {
-    console.log('🚀 [MIGRATE] Iniciando migração para sistema à prova de balas');
 
-    if (!userId && !profile?.id) {
-      console.error('❌ [MIGRATE] UserId não encontrado');
-      setStatsUpdateMessage('Erro: Usuário não identificado');
-      setStatsUpdateSuccess(false);
-      return;
-    }
-
-    setIsUpdatingStats(true);
-    setStatsUpdateMessage('');
-    setStatsUpdateSuccess(false);
-
-    try {
-      console.log('📤 [MIGRATE] Enviando requisição para API de migração');
-
-      // Adicionar token de autenticação
-      const sessionToken = localStorage.getItem('ludomusic_session_token');
-      const headers = {
-        'Content-Type': 'application/json',
-      };
-
-      if (sessionToken) {
-        headers['Authorization'] = `Bearer ${sessionToken}`;
-      }
-
-      const response = await fetch('/api/migrate-to-bulletproof', {
-        method: 'POST',
-        headers
-      });
-
-      console.log('📥 [MIGRATE] Resposta recebida:', response.status, response.statusText);
-
-      const result = await response.json();
-      console.log('📊 [MIGRATE] Resultado da migração:', result);
-
-      if (response.ok && result.success) {
-        console.log('✅ [MIGRATE] Migração concluída!');
-        setStatsUpdateMessage(`Migração concluída! ${result.message} Recarregando página...`);
-        setStatsUpdateSuccess(true);
-
-        // Recarregar a página após 3 segundos
-        setTimeout(() => {
-          window.location.reload();
-        }, 3000);
-      } else {
-        console.error('❌ [MIGRATE] Erro na migração:', result);
-        setStatsUpdateMessage(result.error || 'Erro na migração');
-        setStatsUpdateSuccess(false);
-      }
-    } catch (error) {
-      console.error('❌ [MIGRATE] Erro de rede na migração:', error);
-      setStatsUpdateMessage('Erro de rede na migração');
-      setStatsUpdateSuccess(false);
-    } finally {
-      setIsUpdatingStats(false);
-    }
-  };
 
   const formatTime = (seconds) => {
     const hours = Math.floor(seconds / 3600);
@@ -959,46 +901,7 @@ const UserProfile = ({ isOpen, onClose }) => {
                         </div>
                       </div>
 
-                      {/* Sistema de Estatísticas À Prova de Balas */}
-                      <div className={styles.statsUpdateSection}>
-                        <h6>🛡️ Sistema de Estatísticas À Prova de Balas</h6>
-                        <p className={styles.statsUpdateDescription}>
-                          Novo sistema que GARANTE que suas estatísticas nunca se percam!
-                          Salva sempre na Vercel KV, tem backup automático e repara problemas automaticamente.
-                        </p>
 
-                        <div className={styles.buttonGroup}>
-                          <button
-                            onClick={handleMigrateToBulletproof}
-                            disabled={isUpdatingStats}
-                            className={styles.migrateButton}
-                          >
-                            {isUpdatingStats ? (
-                              <>
-                                <div className={styles.spinner}></div>
-                                Migrando...
-                              </>
-                            ) : (
-                              <>
-                                🚀 Migrar para Sistema À Prova de Balas
-                              </>
-                            )}
-                          </button>
-
-                          <button
-                            onClick={() => window.open('/test-bulletproof', '_blank')}
-                            className={styles.testButton}
-                          >
-                            🧪 Testar Sistema
-                          </button>
-                        </div>
-
-                        {statsUpdateMessage && (
-                          <div className={`${styles.updateMessage} ${statsUpdateSuccess ? styles.success : styles.error}`}>
-                            {statsUpdateMessage}
-                          </div>
-                        )}
-                      </div>
                     </div>
 
                     {/* Benefícios de Doação */}
