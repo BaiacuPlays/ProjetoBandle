@@ -22,6 +22,10 @@ export default function AdminPage() {
   const [sortOrder, setSortOrder] = useState('desc');
   const [searchTerm, setSearchTerm] = useState('');
 
+  // Estados para conquistas
+  const [selectedUser, setSelectedUser] = useState('');
+  const [selectedAchievement, setSelectedAchievement] = useState('');
+
   // Função para autenticar admin
   const authenticateAdmin = async () => {
     if (!adminKey) {
@@ -438,7 +442,12 @@ export default function AdminPage() {
   };
 
   // Função para definir música do dia
-  const setDailySongAdmin = async (songId) => {
+  const setDailySongAdmin = async (songTitle) => {
+    if (!songTitle) {
+      alert('Por favor, selecione uma música');
+      return;
+    }
+
     try {
       const response = await fetch('/api/admin/set-daily-song', {
         method: 'POST',
@@ -446,13 +455,13 @@ export default function AdminPage() {
           'Content-Type': 'application/json',
           'x-admin-key': adminKey
         },
-        body: JSON.stringify({ songId })
+        body: JSON.stringify({ songTitle })
       });
 
       const data = await response.json();
       if (data.success) {
         await fetchDailySong();
-        alert('Música do dia definida com sucesso!');
+        alert(`Música do dia definida com sucesso!\n\n"${data.song.title}" por ${data.song.artist}\nJogo: ${data.song.game}`);
       } else {
         alert('Erro ao definir música do dia: ' + data.error);
       }
@@ -727,16 +736,35 @@ export default function AdminPage() {
               <div className={styles.songSelector}>
                 <h3>Escolher Nova Música do Dia</h3>
                 <select
-                  onChange={(e) => setDailySongAdmin(e.target.value)}
+                  onChange={(e) => {
+                    if (e.target.value) {
+                      const selectedSong = songs.find(s => s.title === e.target.value);
+                      if (selectedSong && confirm(`Definir "${selectedSong.title}" por ${selectedSong.artist} como música do dia?`)) {
+                        setDailySongAdmin(e.target.value);
+                      }
+                      e.target.value = ''; // Reset select
+                    }
+                  }}
                   className={styles.select}
+                  defaultValue=""
                 >
                   <option value="">Selecione uma música...</option>
                   {songs.map((song, index) => (
-                    <option key={index} value={song.id || index}>
+                    <option key={index} value={song.title}>
                       {song.title} - {song.artist} ({song.game})
                     </option>
                   ))}
                 </select>
+                <p style={{ fontSize: '12px', color: '#666', marginTop: '10px' }}>
+                  Total de {songs.length} músicas disponíveis
+                </p>
+                <button
+                  onClick={fetchDailySong}
+                  className={styles.smallButton}
+                  style={{ marginTop: '10px' }}
+                >
+                  🔄 Atualizar Música Atual
+                </button>
               </div>
             </div>
           </div>
@@ -781,7 +809,12 @@ export default function AdminPage() {
             <div className={styles.achievementSection}>
               <div className={styles.giveAchievement}>
                 <h3>Conceder Conquista/Badge</h3>
-                <select className={styles.select}>
+                <select
+                  id="userSelect"
+                  className={styles.select}
+                  onChange={(e) => setSelectedUser(e.target.value)}
+                  value={selectedUser}
+                >
                   <option value="">Selecione um usuário...</option>
                   {profiles.map((profile) => (
                     <option key={profile.id} value={profile.id}>
@@ -789,17 +822,46 @@ export default function AdminPage() {
                     </option>
                   ))}
                 </select>
-                <select className={styles.select}>
+                <select
+                  id="achievementSelect"
+                  className={styles.select}
+                  onChange={(e) => setSelectedAchievement(e.target.value)}
+                  value={selectedAchievement}
+                >
                   <option value="">Selecione uma conquista...</option>
                   <option value="first_game">🎮 Primeiro Jogo</option>
                   <option value="first_win">🏆 Primeira Vitória</option>
-                  <option value="veteran">🎖️ Veterano</option>
-                  <option value="streak_master">🔥 Mestre das Sequências</option>
-                  <option value="perfect_player">💎 Jogador Perfeito</option>
+                  <option value="perfect_game">💎 Jogo Perfeito</option>
+                  <option value="streak_5">🔥 Sequência de 5</option>
+                  <option value="streak_10">🔥🔥 Sequência de 10</option>
+                  <option value="veteran">🎖️ Veterano (50 jogos)</option>
+                  <option value="master">� Mestre (100 jogos)</option>
+                  <option value="legend">⭐ Lenda (200 jogos)</option>
                   <option value="supporter">💝 Apoiador</option>
                   <option value="vip">👑 VIP</option>
+                  <option value="early_bird">� Madrugador</option>
+                  <option value="night_owl">🦉 Coruja Noturna</option>
+                  <option value="speed_demon">⚡ Demônio da Velocidade</option>
+                  <option value="perfectionist">� Perfeccionista</option>
+                  <option value="social_butterfly">🦋 Borboleta Social</option>
+                  <option value="multiplayer_master">🎮 Mestre Multiplayer</option>
                 </select>
-                <button className={styles.button}>Conceder</button>
+                <button
+                  className={styles.button}
+                  onClick={() => {
+                    if (selectedUser && selectedAchievement) {
+                      giveAchievement(selectedUser, selectedAchievement);
+                    } else {
+                      alert('Por favor, selecione um usuário e uma conquista');
+                    }
+                  }}
+                  disabled={!selectedUser || !selectedAchievement}
+                >
+                  Conceder Conquista
+                </button>
+                <p style={{ fontSize: '12px', color: '#666', marginTop: '10px' }}>
+                  Selecione um usuário e uma conquista para conceder
+                </p>
               </div>
             </div>
           </div>
