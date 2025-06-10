@@ -6,7 +6,7 @@ import { FaEnvelope, FaUser, FaTimes, FaArrowLeft } from 'react-icons/fa';
 
 const ForgotPasswordModal = ({ isOpen, onClose, onBack }) => {
   const { t } = useLanguage();
-  
+
   const [formData, setFormData] = useState({
     emailOrUsername: ''
   });
@@ -54,21 +54,30 @@ const ForgotPasswordModal = ({ isOpen, onClose, onBack }) => {
   // Função para submeter formulário
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!validateForm()) return;
+
+    console.log('🔑 [FORGOT-PASSWORD] Iniciando submit do formulário');
+    console.log('🔑 [FORGOT-PASSWORD] Dados do formulário:', formData);
+
+    if (!validateForm()) {
+      console.log('🔑 [FORGOT-PASSWORD] Validação falhou');
+      return;
+    }
 
     setIsLoading(true);
     setError('');
 
     try {
       const input = formData.emailOrUsername.trim();
-      
+
       // Determinar se é email ou username
       const isEmail = input.includes('@');
       const requestData = {
         action: 'request',
         [isEmail ? 'email' : 'username']: input
       };
+
+      console.log('🔑 [FORGOT-PASSWORD] Dados da requisição:', requestData);
+      console.log('🔑 [FORGOT-PASSWORD] URL:', '/api/password-reset');
 
       const response = await fetch('/api/password-reset', {
         method: 'POST',
@@ -78,15 +87,22 @@ const ForgotPasswordModal = ({ isOpen, onClose, onBack }) => {
         body: JSON.stringify(requestData)
       });
 
+      console.log('🔑 [FORGOT-PASSWORD] Status da resposta:', response.status);
+      console.log('🔑 [FORGOT-PASSWORD] Headers da resposta:', response.headers);
+
       const data = await response.json();
+      console.log('🔑 [FORGOT-PASSWORD] Dados da resposta:', data);
 
       if (data.success) {
+        console.log('🔑 [FORGOT-PASSWORD] Sucesso! Mostrando tela de confirmação');
         setSuccess(true);
         setFormData({ emailOrUsername: '' });
       } else {
+        console.log('🔑 [FORGOT-PASSWORD] Erro na resposta:', data.error);
         setError(data.error || 'Erro ao solicitar reset de senha');
       }
     } catch (error) {
+      console.error('🔑 [FORGOT-PASSWORD] Erro na requisição:', error);
       setError('Erro de conexão. Tente novamente.');
     } finally {
       setIsLoading(false);
@@ -116,7 +132,7 @@ const ForgotPasswordModal = ({ isOpen, onClose, onBack }) => {
         <div className={styles.header}>
           <div className={styles.headerLeft}>
             {onBack && (
-              <button 
+              <button
                 className={styles.backButton}
                 onClick={handleBackToLogin}
                 type="button"
@@ -128,7 +144,7 @@ const ForgotPasswordModal = ({ isOpen, onClose, onBack }) => {
               Esqueci a Senha
             </h2>
           </div>
-          <button 
+          <button
             className={styles.closeButton}
             onClick={handleClose}
             type="button"
@@ -208,11 +224,11 @@ const ForgotPasswordModal = ({ isOpen, onClose, onBack }) => {
             <div className={styles.successIcon}>
               <FaEnvelope />
             </div>
-            
+
             <h3 className={styles.successTitle}>
               Email Enviado!
             </h3>
-            
+
             <div className={styles.successDescription}>
               <p>Se o email/usuário existir em nossa base de dados, você receberá um link para redefinir sua senha.</p>
               <p>Verifique sua caixa de entrada e também a pasta de spam.</p>
@@ -226,7 +242,7 @@ const ForgotPasswordModal = ({ isOpen, onClose, onBack }) => {
               >
                 Voltar ao Login
               </button>
-              
+
               <button
                 type="button"
                 className={styles.resendButton}
