@@ -275,11 +275,24 @@ export default function AdminPage() {
   // Função para buscar todas as músicas
   const fetchSongs = async () => {
     try {
+      console.log('🎵 Buscando lista de músicas...');
       const response = await fetch('/data/music.json');
+      console.log('🎵 Response status:', response.status);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
       const data = await response.json();
-      setSongs(data.songs || []);
+      console.log('🎵 Dados recebidos:', data);
+
+      const songsArray = data.songs || data || [];
+      setSongs(songsArray);
+      console.log(`✅ ${songsArray.length} músicas carregadas`);
     } catch (err) {
-      console.error('Erro ao buscar músicas:', err);
+      console.error('❌ Erro ao buscar músicas:', err);
+      // Fallback para lista vazia
+      setSongs([]);
     }
   };
 

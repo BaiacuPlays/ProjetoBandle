@@ -1,4 +1,13 @@
-import { kv } from '@vercel/kv';
+// Importação segura do KV
+let kv = null;
+try {
+  if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+    const kvModule = await import('@vercel/kv');
+    kv = kvModule.kv;
+  }
+} catch (error) {
+  console.warn('⚠️ KV não disponível:', error.message);
+}
 
 export default async function handler(req, res) {
   // Verificar se é uma requisição GET
