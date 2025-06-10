@@ -1,11 +1,13 @@
 // Componente para mostrar status do sistema e permitir limpeza de cache
 import React, { useState, useEffect } from 'react';
-import { FaSync, FaTrash, FaCheckCircle, FaExclamationTriangle, FaTimes } from 'react-icons/fa';
+import { FaSync, FaTrash, FaCheckCircle, FaExclamationTriangle, FaTimes, FaUser } from 'react-icons/fa';
+import SessionDiagnostic from './SessionDiagnostic';
 
 const SystemStatus = ({ onClose }) => {
   const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [showSessionDiagnostic, setShowSessionDiagnostic] = useState(false);
 
   const fetchStatus = async () => {
     try {
@@ -14,7 +16,7 @@ const SystemStatus = ({ onClose }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'status' })
       });
-      
+
       const data = await response.json();
       if (data.success) {
         setStatus(data.status);
@@ -27,14 +29,14 @@ const SystemStatus = ({ onClose }) => {
   const clearCache = async () => {
     setLoading(true);
     setMessage('');
-    
+
     try {
       const response = await fetch('/api/debug/clear-cache', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'clear-cache' })
       });
-      
+
       const data = await response.json();
       if (data.success) {
         setMessage('✅ Cache limpo com sucesso!');
@@ -53,14 +55,14 @@ const SystemStatus = ({ onClose }) => {
   const runDiagnostic = async () => {
     setLoading(true);
     setMessage('');
-    
+
     try {
       const response = await fetch('/api/debug/clear-cache', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'full-diagnostic' })
       });
-      
+
       const data = await response.json();
       if (data.success) {
         setMessage('✅ Diagnóstico completo realizado!');
@@ -107,7 +109,7 @@ const SystemStatus = ({ onClose }) => {
             <FaTimes />
           </button>
         </div>
-        
+
         <div style={styles.content}>
           <div style={styles.statusGrid}>
             <div style={styles.statusItem}>
@@ -116,28 +118,28 @@ const SystemStatus = ({ onClose }) => {
                 {status.isDevelopment ? 'Desenvolvimento' : 'Produção'}
               </span>
             </div>
-            
+
             <div style={styles.statusItem}>
               <span>KV Configurado:</span>
               <span style={status.hasKVConfig ? styles.success : styles.error}>
                 {status.hasKVConfig ? 'Sim' : 'Não'}
               </span>
             </div>
-            
+
             <div style={styles.statusItem}>
               <span>Usando KV:</span>
               <span style={status.shouldUseKV ? styles.success : styles.warning}>
                 {status.shouldUseKV ? 'Sim' : 'Fallback Local'}
               </span>
             </div>
-            
+
             <div style={styles.statusItem}>
               <span>Cache Local:</span>
               <span style={styles.info}>
                 {status.cacheSize} itens
               </span>
             </div>
-            
+
             <div style={styles.statusItem}>
               <span>Rate Limiter:</span>
               <span style={styles.info}>
@@ -153,28 +155,36 @@ const SystemStatus = ({ onClose }) => {
           )}
 
           <div style={styles.actions}>
-            <button 
-              onClick={clearCache} 
+            <button
+              onClick={clearCache}
               disabled={loading}
               style={styles.button}
             >
               <FaTrash /> {loading ? 'Limpando...' : 'Limpar Cache'}
             </button>
-            
-            <button 
-              onClick={runDiagnostic} 
+
+            <button
+              onClick={runDiagnostic}
               disabled={loading}
               style={styles.button}
             >
               <FaSync /> {loading ? 'Executando...' : 'Diagnóstico Completo'}
             </button>
-            
-            <button 
-              onClick={fetchStatus} 
+
+            <button
+              onClick={fetchStatus}
               disabled={loading}
               style={styles.button}
             >
               <FaCheckCircle /> Atualizar Status
+            </button>
+
+            <button
+              onClick={() => setShowSessionDiagnostic(true)}
+              disabled={loading}
+              style={{...styles.button, backgroundColor: '#2196F3'}}
+            >
+              <FaUser /> Diagnóstico de Sessão
             </button>
           </div>
 
@@ -188,6 +198,11 @@ const SystemStatus = ({ onClose }) => {
             </ul>
           </div>
         </div>
+
+        {/* Modal de Diagnóstico de Sessão */}
+        {showSessionDiagnostic && (
+          <SessionDiagnostic onClose={() => setShowSessionDiagnostic(false)} />
+        )}
       </div>
     </div>
   );
