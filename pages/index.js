@@ -187,8 +187,8 @@ export default function Home() {
 
   // Função para gerar um tempo determinístico dentro da duração da música com base no dia
   const getDeterministicStartTime = (duration, day) => {
-    // Deixa uma margem de 10 segundos no final da música
-    const maxStart = Math.max(0, duration - 10);
+    // Deixa uma margem de 15 segundos no final da música para garantir que nunca toque os últimos 15 segundos
+    const maxStart = Math.max(0, duration - 15);
 
     // Usa função determinística para gerar tempo de início
     const deterministicRandom = getDeterministicRandom(day, 1);
@@ -412,9 +412,9 @@ export default function Home() {
       setInfiniteBestRecord(finalBestRecord);
     }
 
-    // Reseta a sequência atual mas mantém as músicas usadas
-    setInfiniteStreak(0); // Atualiza o estado local também
-    saveInfiniteStats(0, finalBestRecord, infiniteUsedSongs);
+    // CORREÇÃO: Manter a sequência atual para mostrar no modal de estatísticas
+    // Só resetar quando começar um novo jogo
+    saveInfiniteStats(infiniteStreak, finalBestRecord, infiniteUsedSongs);
 
     // Mostra estatísticas diretamente
     setTimeout(() => {
@@ -424,6 +424,7 @@ export default function Home() {
 
   const resetInfiniteMode = () => {
     setInfiniteGameOver(false); // Fechar o modal primeiro
+    // CORREÇÃO: Resetar a sequência aqui quando começar um novo jogo
     setInfiniteStreak(0);
     setInfiniteUsedSongs([]);
     saveInfiniteStats(0, infiniteBestRecord, []);
@@ -847,10 +848,10 @@ export default function Home() {
 
       const duration = audio.duration || 0;
 
-      // Verificar se a duração é válida
-      if (!duration || isNaN(duration) || duration < 10) {
+      // Verificar se a duração é válida (mínimo 30 segundos para garantir 15s de reprodução + 15s de margem)
+      if (!duration || isNaN(duration) || duration < 30) {
         setAudioError(true);
-        setMessage('Arquivo de áudio inválido ou muito curto.');
+        setMessage('Arquivo de áudio inválido ou muito curto (mínimo 30 segundos).');
         // Resetar estados de loading em caso de erro
         setIsPlayLoading(false);
         setPendingPlay(false);
@@ -873,18 +874,18 @@ export default function Home() {
 
       try {
         if (isInfiniteMode) {
-          // No modo infinito, gera um tempo aleatório
-          startTimeToUse = Math.random() * Math.max(0, duration - 10);
+          // No modo infinito, gera um tempo aleatório garantindo que nunca toque os últimos 15 segundos
+          startTimeToUse = Math.random() * Math.max(0, duration - 15);
         } else if (currentDay !== null) {
           // No modo normal, usa o sistema determinístico baseado no dia (sem localStorage)
           startTimeToUse = getDeterministicStartTime(duration, currentDay);
         } else {
-          // Fallback para tempo aleatório
-          startTimeToUse = Math.random() * Math.max(0, duration - 10);
+          // Fallback para tempo aleatório garantindo que nunca toque os últimos 15 segundos
+          startTimeToUse = Math.random() * Math.max(0, duration - 15);
         }
 
-        // Garantir que o startTime é válido
-        startTimeToUse = Math.max(0, Math.min(startTimeToUse, duration - 10));
+        // Garantir que o startTime é válido e nunca permita tocar os últimos 15 segundos
+        startTimeToUse = Math.max(0, Math.min(startTimeToUse, duration - 15));
 
         setStartTime(startTimeToUse);
 
@@ -894,8 +895,8 @@ export default function Home() {
           setAudioProgress(0);
         }
       } catch (error) {
-        // Fallback seguro
-        const fallbackTime = Math.random() * Math.max(0, duration - 10);
+        // Fallback seguro garantindo que nunca toque os últimos 15 segundos
+        const fallbackTime = Math.random() * Math.max(0, duration - 15);
         setStartTime(fallbackTime);
         if (audio === audioRef.current && !isNaN(fallbackTime)) {
           audio.currentTime = fallbackTime;
@@ -3069,10 +3070,18 @@ export default function Home() {
         {/* Modal de estatísticas */}
         <Statistics
           isOpen={showStatistics}
-          onClose={() => setShowStatistics(false)}
+          onClose={() => {
+            setShowStatistics(false);
+            // CORREÇÃO: Resetar a sequência apenas quando fechar o modal de estatísticas no modo infinito
+            if (isInfiniteMode && infiniteGameOver) {
+              setInfiniteStreak(0);
+              saveInfiniteStats(0, infiniteBestRecord, infiniteUsedSongs);
+            }
+          }}
           gameResult={gameResult}
           isInfiniteMode={isInfiniteMode}
           currentSong={currentSong}
+          infiniteCurrentStreak={isInfiniteMode ? infiniteStreak : null}
         />
 
         {/* Tutorial de boas-vindas */}

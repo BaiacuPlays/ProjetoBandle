@@ -16,7 +16,7 @@ function generateUUID() {
   });
 }
 
-const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false, isMultiplayerMode = false, currentSong = null }) => {
+const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false, isMultiplayerMode = false, currentSong = null, infiniteCurrentStreak = null }) => {
   const { t, isClient } = useLanguage();
   const { profile, isLoading: profileLoading } = useProfile() || {};
   const { isAuthenticated } = useAuth();
@@ -161,7 +161,9 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
         const parsedStats = JSON.parse(savedStats);
         setInfiniteStats({
           bestRecord: parsedStats.bestRecord || 0,
-          currentStreak: parsedStats.currentStreak || 0,
+          // CORREÇÃO: Usar a prop infiniteCurrentStreak se disponível (quando o jogo acabou de terminar)
+          // caso contrário usar o valor salvo no localStorage
+          currentStreak: infiniteCurrentStreak !== null ? infiniteCurrentStreak : (parsedStats.currentStreak || 0),
           totalSongsCompleted: parsedStats.usedSongs ? parsedStats.usedSongs.length : 0,
           totalGamesPlayed: parsedStats.totalGamesPlayed || 0
         });
@@ -243,7 +245,7 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
         }
       }
     }
-  }, [isOpen, isInfiniteMode, isAuthenticated, profile]);
+  }, [isOpen, isInfiniteMode, isAuthenticated, profile, infiniteCurrentStreak]);
 
   // Efeito para salvar resultado do jogo atual ao abrir o modal (modo diário)
   useEffect(() => {

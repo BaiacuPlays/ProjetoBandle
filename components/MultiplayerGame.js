@@ -174,8 +174,8 @@ const MultiplayerGame = ({ onBackToLobby }) => {
 
         const duration = audio.duration || 0;
 
-        // Verificar se a duração é válida
-        if (!duration || isNaN(duration) || duration < 10) {
+        // Verificar se a duração é válida (mínimo 30 segundos para garantir 15s de reprodução + 15s de margem)
+        if (!duration || isNaN(duration) || duration < 30) {
           setAudioLoadError(true);
 
           return;
