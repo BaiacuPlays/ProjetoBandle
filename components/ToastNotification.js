@@ -30,8 +30,14 @@ const ToastNotification = () => {
 
     // Função global para abrir modal de doação
     window.openDonationModal = () => {
-      // Disparar evento customizado para abrir modal de doação
-      window.dispatchEvent(new CustomEvent('openDonationModal'));
+      try {
+        // Disparar evento customizado para abrir modal de doação
+        if (typeof window !== 'undefined' && window.dispatchEvent) {
+          window.dispatchEvent(new CustomEvent('openDonationModal'));
+        }
+      } catch (error) {
+        console.warn('⚠️ Erro ao abrir modal de doação:', error);
+      }
     };
 
     return () => {
@@ -67,7 +73,7 @@ const ToastNotification = () => {
         >
           <span className={styles.icon}>{getToastIcon(toast.type)}</span>
           <span className={styles.message}>{toast.message}</span>
-          <button 
+          <button
             className={styles.closeButton}
             onClick={(e) => {
               e.stopPropagation();

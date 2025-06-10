@@ -71,7 +71,15 @@ const AdBanner = ({
           <p>🎵 Apoie o LudoMusic</p>
           <button
             className={styles.donateButton}
-            onClick={() => window.dispatchEvent(new CustomEvent('openDonationModal'))}
+            onClick={() => {
+              try {
+                if (typeof window !== 'undefined' && window.dispatchEvent) {
+                  window.dispatchEvent(new CustomEvent('openDonationModal'));
+                }
+              } catch (error) {
+                console.warn('⚠️ Erro ao abrir modal de doação:', error);
+              }
+            }}
           >
             💝 Fazer uma Doação
           </button>

@@ -538,8 +538,14 @@ export const AuthProvider = ({ children }) => {
         // Iniciar heartbeat
         sm.startHeartbeat(checkAuth);
 
-        // Disparar evento para outros contextos
-        window.dispatchEvent(new Event('ludomusic-token-changed'));
+        // Disparar evento para outros contextos - com verificação de segurança
+        if (typeof window !== 'undefined' && window.dispatchEvent) {
+          try {
+            window.dispatchEvent(new Event('ludomusic-token-changed'));
+          } catch (eventError) {
+            console.warn('⚠️ Erro ao disparar evento de login:', eventError);
+          }
+        }
 
         console.log('✅ Login realizado com sucesso:', data.user.username);
         return { success: true, user: data.user };
@@ -588,8 +594,14 @@ export const AuthProvider = ({ children }) => {
         // Iniciar heartbeat
         sm.startHeartbeat(checkAuth);
 
-        // Disparar evento para outros contextos
-        window.dispatchEvent(new Event('ludomusic-token-changed'));
+        // Disparar evento para outros contextos - com verificação de segurança
+        if (typeof window !== 'undefined' && window.dispatchEvent) {
+          try {
+            window.dispatchEvent(new Event('ludomusic-token-changed'));
+          } catch (eventError) {
+            console.warn('⚠️ Erro ao disparar evento de registro:', eventError);
+          }
+        }
 
         console.log('✅ Registro realizado com sucesso:', data.user.username);
         return { success: true, user: data.user, message: data.message };
@@ -607,21 +619,43 @@ export const AuthProvider = ({ children }) => {
 
   // Função de logout
   const logout = async () => {
-    console.log('🚪 Fazendo logout...');
+    try {
+      console.log('🚪 Fazendo logout...');
 
-    // Limpar sessão completamente com SessionManager
-    const sm = getSessionManager();
-    sm.clearSession();
+      // Limpar sessão completamente com SessionManager
+      const sm = getSessionManager();
+      sm.clearSession();
 
-    // Limpar estado
-    setUser(null);
-    setIsAuthenticated(false);
+      // Limpar estado
+      setUser(null);
+      setIsAuthenticated(false);
 
-    // Disparar evento
-    window.dispatchEvent(new Event('ludomusic-token-changed'));
+      // Disparar evento - com verificação de segurança
+      if (typeof window !== 'undefined' && window.dispatchEvent) {
+        try {
+          window.dispatchEvent(new Event('ludomusic-token-changed'));
+        } catch (eventError) {
+          console.warn('⚠️ Erro ao disparar evento de logout:', eventError);
+          // Não falhar o logout por causa do evento
+        }
+      }
 
-    console.log('✅ Logout realizado');
-    return { success: true };
+      console.log('✅ Logout realizado');
+      return { success: true };
+    } catch (error) {
+      console.error('❌ Erro durante logout:', error);
+
+      // Mesmo com erro, tentar limpar o estado básico
+      try {
+        setUser(null);
+        setIsAuthenticated(false);
+      } catch (stateError) {
+        console.error('❌ Erro ao limpar estado:', stateError);
+      }
+
+      // Retornar erro mas não falhar completamente
+      return { success: false, error: error.message };
+    }
   };
 
   const value = {

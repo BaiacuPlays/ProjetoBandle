@@ -928,10 +928,30 @@ const UserProfile = ({ isOpen, onClose }) => {
                           onClick={async () => {
                             if (confirm('Tem certeza que deseja sair da sua conta?')) {
                               try {
-                                await logout();
-                                onClose(); // Fechar modal após logout
+                                console.log('🚪 Iniciando logout do UserProfile...');
+
+                                // Verificar se a função logout existe
+                                if (typeof logout !== 'function') {
+                                  console.error('❌ Função logout não está disponível');
+                                  alert('Erro: Função de logout não disponível. Recarregue a página.');
+                                  return;
+                                }
+
+                                // Executar logout
+                                const result = await logout();
+                                console.log('✅ Logout executado:', result);
+
+                                // Fechar modal após logout bem-sucedido
+                                onClose();
+
+                                // Opcional: recarregar página para garantir limpeza completa
+                                setTimeout(() => {
+                                  window.location.reload();
+                                }, 100);
+
                               } catch (error) {
-                                alert('Erro ao fazer logout. Tente novamente.');
+                                console.error('❌ Erro no logout:', error);
+                                alert(`Erro ao fazer logout: ${error.message || 'Erro desconhecido'}. Tente novamente.`);
                               }
                             }
                           }}
