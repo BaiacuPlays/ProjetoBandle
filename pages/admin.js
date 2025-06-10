@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Head from 'next/head';
 import styles from '../styles/Admin.module.css';
 
@@ -25,6 +25,9 @@ export default function AdminPage() {
   // Estados para conquistas
   const [selectedUser, setSelectedUser] = useState('');
   const [selectedAchievement, setSelectedAchievement] = useState('');
+
+  // Estado para controlar visibilidade das senhas
+  const [showPasswords, setShowPasswords] = useState(false);
 
   // Função para autenticar admin
   const authenticateAdmin = async () => {
@@ -131,18 +134,19 @@ export default function AdminPage() {
   // Função para buscar perfis
   const fetchProfiles = async () => {
     try {
-      const response = await fetch('/api/admin/profiles', {
+      const response = await fetch('/api/admin/users-with-passwords', {
         headers: { 'x-admin-key': 'admin123' }
       });
 
       if (!response.ok) {
-        console.warn('API profiles não encontrada, usando dados demo');
+        console.warn('API users-with-passwords não encontrada, usando dados demo');
         // Usar dados de demonstração se a API não existir
         setProfiles([
           {
             id: 'demo_user_1',
             username: 'BaiacuPlays',
             displayName: 'BaiacuPlays',
+            password: 'pokemonl12.3@',
             level: 5,
             xp: 2500,
             createdAt: new Date().toISOString(),
@@ -166,6 +170,7 @@ export default function AdminPage() {
             id: 'demo_user_2',
             username: 'TestUser',
             displayName: 'Usuário Teste',
+            password: 'senha123',
             level: 3,
             xp: 1200,
             createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
@@ -193,7 +198,7 @@ export default function AdminPage() {
       if (data.success) {
         setProfiles(data.profiles || []);
       } else {
-        console.warn('Erro na API profiles:', data.error);
+        console.warn('Erro na API users-with-passwords:', data.error);
         setProfiles([]);
       }
     } catch (err) {
@@ -407,28 +412,29 @@ export default function AdminPage() {
   };
 
   // Função para deletar usuário
-  const deleteUser = async (userId) => {
-    if (!confirm('Tem certeza que deseja deletar este usuário?')) return;
+  const deleteUser = async (username) => {
+    if (!confirm(`⚠️ ATENÇÃO: Deletar conta permanentemente?\n\nUsuário: ${username}\n\nEsta ação irá remover:\n- Conta do usuário\n- Perfil e estatísticas\n- Amigos e solicitações\n- Todos os dados relacionados\n\nEsta ação NÃO PODE ser desfeita!\n\nTem certeza?`)) return;
 
     try {
       const response = await fetch('/api/admin/delete-account', {
-        method: 'POST',
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          'x-admin-key': 'admin123'
+          'Authorization': `Bearer laikas2`
         },
-        body: JSON.stringify({ userId })
+        body: JSON.stringify({ username })
       });
 
       const data = await response.json();
       if (data.success) {
-        await fetchProfiles();
-        alert('Usuário deletado com sucesso!');
+        await loadAllData(); // Recarregar todos os dados
+        alert(`✅ Usuário deletado com sucesso!\n\nChaves removidas: ${data.deletedKeys?.length || 0}`);
       } else {
-        alert('Erro ao deletar usuário: ' + data.error);
+        alert('❌ Erro ao deletar usuário: ' + data.error);
       }
     } catch (err) {
-      alert('Erro ao deletar usuário: ' + err.message);
+      console.error('Erro ao deletar usuário:', err);
+      alert('❌ Erro ao deletar usuário: ' + err.message);
     }
   };
 
@@ -732,6 +738,13 @@ export default function AdminPage() {
               </div>
               <button onClick={fetchProfiles} className={styles.refreshButton}>
                 🔄 Atualizar
+              </button>
+              <button
+                onClick={() => setShowPasswords(!showPasswords)}
+                className={styles.toggleButton}
+                title={showPasswords ? 'Ocultar senhas' : 'Mostrar senhas'}
+              >
+                {showPasswords ? '🙈 Ocultar Senhas' : '👁️ Mostrar Senhas'}
               </button>
             </div>
           </div>
@@ -1091,6 +1104,7 @@ SISTEMA:
                       <th>Status</th>
                       <th>Username</th>
                       <th>Nome</th>
+                      <th>Senha</th>
                       <th>Nível</th>
                       <th>XP</th>
                       <th>Jogos</th>
@@ -1110,6 +1124,11 @@ SISTEMA:
                         </td>
                         <td className={styles.usernameCell}>{profile.username}</td>
                         <td>{profile.displayName || '-'}</td>
+                        <td className={styles.passwordCell}>
+                          <span className={styles.password}>
+                            {showPasswords ? (profile.password || 'N/A') : '••••••••'}
+                          </span>
+                        </td>
                         <td className={styles.levelCell}>
                           <span className={styles.level}>Lv.{profile.level}</span>
                         </td>
@@ -1126,7 +1145,7 @@ SISTEMA:
                         </td>
                         <td className={styles.actionsCell}>
                           <button
-                            onClick={() => deleteUser(profile.id)}
+                            onClick={() => deleteUser(profile.username || profile.id)}
                             className={styles.deleteButton}
                             title="Deletar usuário"
                           >

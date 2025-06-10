@@ -252,6 +252,25 @@
   background: #c82333;
 }
 
+.toggleButton {
+  background: #6f42c1;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.toggleButton:hover {
+  background: #5a2d91;
+}
+
 /* Lista de contas */
 .accountsList {
   background: white;
@@ -1059,6 +1078,28 @@
 
 .usernameCell {
   font-weight: 600;
+  color: #333;
+}
+
+.passwordCell {
+  font-family: 'Courier New', monospace;
+  background: #f8f9fa;
+  border-radius: 4px;
+  padding: 4px 8px;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.password {
+  font-size: 12px;
+  color: #666;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.password:hover {
   color: #333;
 }
 

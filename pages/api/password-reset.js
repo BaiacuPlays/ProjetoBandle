@@ -36,12 +36,20 @@ const sendResetEmail = async (email, username, resetToken) => {
     console.log(`Para: ${email}`);
     console.log(`Token: ${resetToken}`);
     console.log(`Link: ${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/reset-password?token=${resetToken}`);
+    console.log('⚠️ RESEND_API_KEY não configurada - usando modo simulação');
     return true;
   }
 
+  console.log(`📧 Enviando email de reset via Resend para: ${email}`);
+
   try {
     const resetUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/reset-password?token=${resetToken}`;
-    
+
+    console.log(`📧 Configurações do email:`);
+    console.log(`   FROM_EMAIL: ${process.env.FROM_EMAIL || 'noreply@ludomusic.xyz'}`);
+    console.log(`   RESEND_API_KEY: ${process.env.RESEND_API_KEY ? 'Configurada' : 'NÃO CONFIGURADA'}`);
+    console.log(`   Reset URL: ${resetUrl}`);
+
     await resend.emails.send({
       from: process.env.FROM_EMAIL || 'noreply@ludomusic.xyz',
       to: email,
@@ -49,33 +57,33 @@ const sendResetEmail = async (email, username, resetToken) => {
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #4ade80;">Redefinir Senha - LudoMusic</h2>
-          
+
           <p>Olá <strong>${username}</strong>,</p>
-          
+
           <p>Você solicitou a redefinição da sua senha. Clique no botão abaixo para criar uma nova senha:</p>
-          
+
           <div style="text-align: center; margin: 30px 0;">
-            <a href="${resetUrl}" 
-               style="background: linear-gradient(45deg, #4ade80, #22c55e); 
-                      color: white; 
-                      padding: 15px 30px; 
-                      text-decoration: none; 
-                      border-radius: 10px; 
+            <a href="${resetUrl}"
+               style="background: linear-gradient(45deg, #4ade80, #22c55e);
+                      color: white;
+                      padding: 15px 30px;
+                      text-decoration: none;
+                      border-radius: 10px;
                       font-weight: bold;
                       display: inline-block;">
               Redefinir Senha
             </a>
           </div>
-          
+
           <p>Ou copie e cole este link no seu navegador:</p>
           <p style="background: #f5f5f5; padding: 10px; border-radius: 5px; word-break: break-all;">
             ${resetUrl}
           </p>
-          
+
           <p><strong>Este link expira em 1 hora.</strong></p>
-          
+
           <p>Se você não solicitou esta redefinição, ignore este email.</p>
-          
+
           <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
           <p style="color: #888; font-size: 12px;">
             Este email foi enviado automaticamente. Não responda a este email.
@@ -84,9 +92,14 @@ const sendResetEmail = async (email, username, resetToken) => {
       `
     });
 
+    console.log(`✅ Email de reset enviado com sucesso para: ${email}`);
     return true;
   } catch (error) {
-    console.error('Erro ao enviar email:', error);
+    console.error('❌ Erro ao enviar email de reset:', error);
+    console.error('❌ Detalhes do erro:', error.message);
+    if (error.response) {
+      console.error('❌ Resposta da API:', error.response);
+    }
     return false;
   }
 };
@@ -108,28 +121,47 @@ export default async function handler(req, res) {
         let userKey = null;
 
         // Buscar usuário por email ou username
+        console.log(`🔍 Iniciando busca por usuário:`);
+        console.log(`   Email: ${email || 'não fornecido'}`);
+        console.log(`   Username: ${username || 'não fornecido'}`);
+        console.log(`   Ambiente: ${isDevelopment ? 'desenvolvimento' : 'produção'}`);
+        console.log(`   KV Config: ${hasKVConfig ? 'disponível' : 'não disponível'}`);
+
         if (isDevelopment && !hasKVConfig) {
           // Buscar em armazenamento local
+          console.log(`🔍 Buscando em armazenamento local...`);
+          console.log(`   Total de usuários locais: ${localUsers.size}`);
+
           for (const [key, user] of localUsers.entries()) {
+            console.log(`   Verificando usuário: ${key} - ${user.username} (${user.email})`);
             if ((email && user.email === email) || (username && user.username === username.toLowerCase())) {
               userData = user;
               userKey = key;
+              console.log(`✅ Usuário encontrado localmente: ${key}`);
               break;
             }
           }
         } else {
           // Buscar no Vercel KV
+          console.log(`🔍 Buscando no Vercel KV...`);
+
           if (username) {
             userKey = `user:${username.toLowerCase()}`;
+            console.log(`   Buscando por username: ${userKey}`);
             userData = await kv.get(userKey);
+            console.log(`   Resultado: ${userData ? 'encontrado' : 'não encontrado'}`);
           } else if (email) {
             // Buscar por email (implementação simplificada)
+            console.log(`   Buscando por email: ${email}`);
             const keys = await kv.keys('user:*');
+            console.log(`   Total de chaves encontradas: ${keys.length}`);
+
             for (const key of keys) {
               const user = await kv.get(key);
               if (user && user.email === email) {
                 userData = user;
                 userKey = key;
+                console.log(`✅ Usuário encontrado por email: ${key}`);
                 break;
               }
             }
@@ -137,12 +169,15 @@ export default async function handler(req, res) {
         }
 
         if (!userData) {
+          console.log(`⚠️ Usuário não encontrado para: ${username || email}`);
           // Por segurança, sempre retornar sucesso mesmo se usuário não existir
           return res.status(200).json({
             success: true,
             message: 'Se o email/usuário existir, você receberá um link de redefinição.'
           });
         }
+
+        console.log(`✅ Usuário encontrado: ${userData.username} (${userData.email})`);
 
         if (!userData.email) {
           return res.status(400).json({
