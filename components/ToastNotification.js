@@ -23,10 +23,7 @@ const ToastNotification = () => {
       }, duration);
     };
 
-    // Função global para mostrar level up
-    window.showLevelUpToast = (level) => {
-      window.showToast(`🎉 Parabéns! Você subiu para o nível ${level}!`, 'success', 5000);
-    };
+    // Função removida - agora é gerenciada pelo AchievementNotification.js
 
     // Função global para abrir modal de doação
     window.openDonationModal = () => {
@@ -42,8 +39,8 @@ const ToastNotification = () => {
 
     return () => {
       delete window.showToast;
-      delete window.showLevelUpToast;
       delete window.openDonationModal;
+      // showLevelUpToast não é mais gerenciado aqui
     };
   }, []);
 

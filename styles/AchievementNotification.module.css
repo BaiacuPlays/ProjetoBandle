@@ -1,28 +1,34 @@
-/* Container das notificações */
+/* Container das notificações - SEMPRE VISÍVEL */
 .notificationContainer {
   position: fixed;
-  top: 20px;
+  top: 50%;
   right: 20px;
-  z-index: 10000;
+  transform: translateY(-50%);
+  z-index: 99999; /* Z-index muito alto para ficar acima de tudo */
   display: flex;
   flex-direction: column;
   gap: 15px;
   pointer-events: none;
+  max-height: 80vh; /* Limitar altura para não sair da tela */
+  overflow: visible; /* Permitir que notificações sejam visíveis */
 }
 
-/* Notificação base */
+/* Notificação base - MELHORADA */
 .notification {
   background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
   border-radius: 15px;
   padding: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  border: 2px solid;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(29, 185, 84, 0.3);
+  border: 3px solid;
   min-width: 350px;
   max-width: 400px;
   position: relative;
   pointer-events: auto;
-  animation: slideInRight 0.5s ease-out, fadeOut 0.5s ease-in 4.5s forwards;
+  animation: slideInRightBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55),
+             fadeOutSlide 0.5s ease-in 5.5s forwards; /* Aumentado tempo de exibição */
   overflow: hidden;
+  backdrop-filter: blur(10px);
+  transform: translateZ(0); /* Força aceleração de hardware */
 }
 
 .notification::before {
@@ -31,31 +37,47 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #1db954, #1ed760);
-  animation: progressBar 5s linear forwards;
+  height: 4px;
+  background: linear-gradient(90deg, #1db954, #1ed760, #1db954);
+  background-size: 200% 100%;
+  animation: progressBar 6s linear forwards, shimmerBar 2s ease-in-out infinite;
 }
 
-/* Animações */
-@keyframes slideInRight {
-  from {
-    transform: translateX(100%);
+/* Renomeado para evitar conflito */
+@keyframes shimmerBar {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+
+
+/* Animações MELHORADAS */
+@keyframes slideInRightBounce {
+  0% {
+    transform: translateX(120%) scale(0.8);
     opacity: 0;
   }
-  to {
-    transform: translateX(0);
+  60% {
+    transform: translateX(-10%) scale(1.05);
+    opacity: 1;
+  }
+  80% {
+    transform: translateX(5%) scale(0.98);
+  }
+  100% {
+    transform: translateX(0) scale(1);
     opacity: 1;
   }
 }
 
-@keyframes fadeOut {
-  from {
+@keyframes fadeOutSlide {
+  0% {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(0) scale(1);
   }
-  to {
+  100% {
     opacity: 0;
-    transform: translateX(100%);
+    transform: translateX(120%) scale(0.9);
   }
 }
 
@@ -66,6 +88,32 @@
   to {
     width: 0%;
   }
+}
+
+/* Animação de pulso para o ícone */
+@keyframes iconPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Animação de brilho */
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(29, 185, 84, 0.3);
+  }
+  50% {
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7), 0 0 30px rgba(29, 185, 84, 0.6);
+  }
+}
+
+/* Animação shimmer para ícone */
+@keyframes shimmerIcon {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 /* Botão de fechar */
@@ -88,9 +136,12 @@
   color: white;
 }
 
-/* Notificação de conquista */
+/* Notificação de conquista - MELHORADA */
 .achievement {
   border-color: #1db954;
+  animation: slideInRightBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55),
+             glow 2s ease-in-out infinite,
+             fadeOutSlide 0.5s ease-in 5.5s forwards;
 }
 
 .achievementContent {
@@ -105,12 +156,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(45deg, #1db954, #1ed760);
+  width: 65px;
+  height: 65px;
+  background: linear-gradient(45deg, #1db954, #1ed760, #1db954);
+  background-size: 200% 200%;
   border-radius: 50%;
   flex-shrink: 0;
-  animation: bounce 0.6s ease-out;
+  animation: bounce 0.6s ease-out, iconPulse 2s ease-in-out infinite, shimmerIcon 3s ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(29, 185, 84, 0.5);
 }
 
 .achievementIcon svg {
@@ -257,17 +310,20 @@
   }
 }
 
-/* Responsividade */
+/* Responsividade MELHORADA */
 @media (max-width: 768px) {
   .notificationContainer {
-    top: 10px;
+    top: 50%;
     right: 10px;
     left: 10px;
+    transform: translateY(-50%);
+    max-width: calc(100vw - 20px);
   }
 
   .notification {
     min-width: auto;
     max-width: none;
+    margin: 0 auto;
   }
 
   .achievementContent,
@@ -277,8 +333,8 @@
 
   .achievementIcon,
   .levelUpIcon {
-    width: 50px;
-    height: 50px;
+    width: 55px;
+    height: 55px;
   }
 
   .achievementIcon svg,
@@ -288,5 +344,26 @@
 
   .emoji {
     font-size: 1.5rem;
+  }
+}
+
+/* Para telas muito pequenas */
+@media (max-width: 480px) {
+  .notificationContainer {
+    top: 20px;
+    right: 10px;
+    left: 10px;
+    transform: none;
+  }
+
+  .notification {
+    padding: 15px;
+    border-radius: 12px;
+  }
+
+  .achievementIcon,
+  .levelUpIcon {
+    width: 50px;
+    height: 50px;
   }
 }

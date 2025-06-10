@@ -4,6 +4,12 @@ import { Resend } from 'resend';
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export default async function handler(req, res) {
+  // Verificar autenticação admin
+  const adminKey = req.headers['x-admin-key'];
+  if (adminKey !== 'admin123') {
+    return res.status(401).json({ error: 'Acesso negado' });
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -61,11 +67,11 @@ export default async function handler(req, res) {
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <h2 style="color: #10b981;">✅ Doação Aprovada!</h2>
-            
+
             <p>Olá!</p>
-            
+
             <p>Sua doação via PIX no valor de <strong>R$ ${donation.amount}</strong> foi verificada e aprovada!</p>
-            
+
             <div style="background: #d1fae5; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #10b981;">
               <h3 style="margin-top: 0; color: #065f46;">🎁 Código de Ativação</h3>
               <div style="background: white; padding: 15px; border-radius: 5px; text-align: center; margin: 10px 0;">
@@ -75,16 +81,16 @@ export default async function handler(req, res) {
                 <strong>Como usar:</strong> Faça login no LudoMusic, vá em Perfil → Configurações → Ativar Benefícios e digite este código.
               </p>
             </div>
-            
+
             <div style="background: #f3f4f6; padding: 20px; border-radius: 8px;">
               <h3 style="margin-top: 0; color: #1f2937;">🎁 Seus Benefícios</h3>
               <div style="white-space: pre-line; line-height: 1.6;">${benefitsList}</div>
             </div>
-            
+
             <p>Muito obrigado pelo seu apoio ao LudoMusic! Sua contribuição ajuda a manter o projeto funcionando e crescendo. 🎵</p>
-            
+
             <p>Se tiver alguma dúvida sobre como ativar os benefícios, responda este email.</p>
-            
+
             <hr style="margin: 30px 0; border: none; border-top: 1px solid #e5e7eb;">
             <p style="font-size: 12px; color: #6b7280;">
               Este código é válido por 30 dias. Para suporte, responda este email ou entre em contato em andreibonatto8@gmail.com
@@ -97,8 +103,8 @@ export default async function handler(req, res) {
       // Não falhar a aprovação por causa do email
     }
 
-    res.status(200).json({ 
-      success: true, 
+    res.status(200).json({
+      success: true,
       activationCode,
       message: 'Doação aprovada com sucesso'
     });

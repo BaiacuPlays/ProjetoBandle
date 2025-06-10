@@ -4,6 +4,12 @@ import { Resend } from 'resend';
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export default async function handler(req, res) {
+  // Verificar autenticação admin
+  const adminKey = req.headers['x-admin-key'];
+  if (adminKey !== 'admin123') {
+    return res.status(401).json({ error: 'Acesso negado' });
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -55,11 +61,11 @@ export default async function handler(req, res) {
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <h2 style="color: #dc2626;">❌ Doação Não Confirmada</h2>
-            
+
             <p>Olá!</p>
-            
+
             <p>Infelizmente, não conseguimos confirmar o recebimento da sua doação PIX no valor de <strong>R$ ${donation.amount}</strong>.</p>
-            
+
             <div style="background: #fee2e2; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #dc2626;">
               <h3 style="margin-top: 0; color: #991b1b;">📋 Detalhes</h3>
               <p><strong>Valor:</strong> R$ ${donation.amount}</p>
@@ -67,7 +73,7 @@ export default async function handler(req, res) {
               <p><strong>ID:</strong> ${donation.id}</p>
               ${reason ? `<p><strong>Motivo:</strong> ${reason}</p>` : ''}
             </div>
-            
+
             <div style="background: #f3f4f6; padding: 20px; border-radius: 8px;">
               <h3 style="margin-top: 0; color: #1f2937;">🤔 O que pode ter acontecido?</h3>
               <ul style="margin: 0; padding-left: 20px;">
@@ -77,7 +83,7 @@ export default async function handler(req, res) {
                 <li>O pagamento pode ter sido feito após o prazo de verificação</li>
               </ul>
             </div>
-            
+
             <div style="background: #dbeafe; padding: 20px; border-radius: 8px; margin: 20px 0;">
               <h3 style="margin-top: 0; color: #1e40af;">💡 Quer tentar novamente?</h3>
               <p>Se você realmente fez o pagamento PIX, entre em contato conosco respondendo este email com:</p>
@@ -88,9 +94,9 @@ export default async function handler(req, res) {
               </ul>
               <p style="margin-bottom: 0;">Ou você pode fazer uma nova doação através do site.</p>
             </div>
-            
+
             <p>Lamentamos qualquer inconveniente e agradecemos sua intenção de apoiar o LudoMusic! 🎵</p>
-            
+
             <hr style="margin: 30px 0; border: none; border-top: 1px solid #e5e7eb;">
             <p style="font-size: 12px; color: #6b7280;">
               Para suporte, responda este email ou entre em contato em andreibonatto8@gmail.com
@@ -103,8 +109,8 @@ export default async function handler(req, res) {
       // Não falhar a rejeição por causa do email
     }
 
-    res.status(200).json({ 
-      success: true, 
+    res.status(200).json({
+      success: true,
       message: 'Doação rejeitada com sucesso'
     });
 
