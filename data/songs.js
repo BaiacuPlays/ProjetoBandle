@@ -7,7 +7,7 @@ const normalizePath = (path) => {
 };
 
 // Adiciona informações específicas do jogo para cada música
-export const songs = musicData.map((song, index) => ({
+export const songs = (musicData.songs || musicData).map((song, index) => ({
   ...song,
   id: song.id || index + 1,
   // Normalizar título removendo espaços extras
