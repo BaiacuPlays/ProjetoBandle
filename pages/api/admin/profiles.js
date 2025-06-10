@@ -34,6 +34,39 @@ export default async function handler(req, res) {
       console.log('📊 [ADMIN] Usando dados mock (ambiente local)');
       const mockProfiles = [
         {
+          id: 'user_baiacuplays',
+          username: 'BaiacuPlays',
+          displayName: 'BaiacuPlays',
+          level: 8,
+          xp: 5200,
+          createdAt: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString(),
+          lastLogin: new Date().toISOString(),
+          stats: {
+            totalGames: 67,
+            wins: 52,
+            losses: 15,
+            winRate: 77.6,
+            currentStreak: 8,
+            bestStreak: 15,
+            perfectGames: 18,
+            averageAttempts: 2.8,
+            totalPlayTime: 4200
+          },
+          socialStats: {
+            multiplayerGamesPlayed: 12,
+            multiplayerWins: 9,
+            friendsAdded: 5,
+            gamesShared: 23,
+            socialInteractions: 45
+          },
+          achievements: 24,
+          badges: 15,
+          gameHistory: 67,
+          isActive: true,
+          daysSinceCreation: 45,
+          daysSinceLastLogin: 0
+        },
+        {
           id: 'user_123456',
           username: 'TestUser1',
           displayName: 'Usuário de Teste 1',
@@ -124,12 +157,12 @@ export default async function handler(req, res) {
 
     // Buscar todos os perfis
     const profiles = [];
-    
+
     // Processar em lotes para evitar timeout
     const batchSize = 10;
     for (let i = 0; i < profileKeys.length; i += batchSize) {
       const batch = profileKeys.slice(i, i + batchSize);
-      
+
       const batchProfiles = await Promise.all(
         batch.map(async (key) => {
           try {
