@@ -38,7 +38,7 @@ export default function AdminPage() {
 
     try {
       // Verificar se a chave é válida (admin123)
-      if (adminKey === 'admin123') {
+      if (adminKey === 'laikas2') {
         setAuthenticated(true);
         // Carregar dados demo imediatamente para mostrar algo
         loadDemoData();
