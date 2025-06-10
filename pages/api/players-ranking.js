@@ -75,6 +75,7 @@ export default async function handler(req, res) {
             level: calculateLevel(userProfile?.xp || 0),
             xp: userProfile?.xp || 0,
             title: userProfile?.currentTitle || null,
+            selectedBadge: userProfile?.selectedBadge || null,
             friendCode: generateFriendCode(userData.username),
 
             // Estatísticas
@@ -131,6 +132,7 @@ export default async function handler(req, res) {
               level: calculateLevel(userProfile?.xp || 0),
               xp: userProfile?.xp || 0,
               title: userProfile?.currentTitle || null,
+              selectedBadge: userProfile?.selectedBadge || null,
               friendCode: generateFriendCode(userData.username),
 
               // Estatísticas

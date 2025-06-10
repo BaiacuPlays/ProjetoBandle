@@ -10,6 +10,7 @@ import SimplePhotoUpload from './SimplePhotoUpload';
 
 import LoginModal from './LoginModal';
 import ActivateBenefitsModal from './ActivateBenefitsModal';
+import BadgeSelector from './BadgeSelector';
 import { useAuth } from '../contexts/AuthContext';
 import styles from '../styles/UserProfile.module.css';
 
@@ -699,6 +700,9 @@ const UserProfile = ({ isOpen, onClose }) => {
                         </div>
                       </div>
                     )}
+
+                    {/* Seletor de Badge para Exibição */}
+                    <BadgeSelector profile={profile} />
 
                     {/* Badges Desbloqueados */}
                     <div className={styles.badgesSection}>

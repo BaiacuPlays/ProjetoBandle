@@ -1,0 +1,251 @@
+.badgeSelector {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.header h4 {
+  margin: 0 0 5px 0;
+  color: #4ecdc4;
+  font-size: 1.1rem;
+}
+
+.header p {
+  margin: 0 0 15px 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+}
+
+.currentBadge {
+  margin-bottom: 15px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+}
+
+.selectedBadgeDisplay {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.badgePreview {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.badgePreview .badgeIcon {
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+}
+
+.badgeInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.badgeTitle {
+  font-weight: bold;
+  color: white;
+  margin-bottom: 2px;
+}
+
+.badgeDescription {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.noBadgeSelected {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+  padding: 20px;
+}
+
+.removeButton {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.removeButton:hover {
+  background: rgba(239, 68, 68, 0.3);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.removeButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.selectButton {
+  width: 100%;
+  background: linear-gradient(135deg, #4ecdc4, #44a08d);
+  border: none;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.selectButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(78, 205, 196, 0.3);
+}
+
+.selectButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.badgesList {
+  margin-top: 15px;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.badgeOption {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.badgeOption:last-child {
+  border-bottom: none;
+}
+
+.badgeOption:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.badgeOption.selected {
+  background: rgba(78, 205, 196, 0.1);
+  border-left: 3px solid #4ecdc4;
+}
+
+.badgeOption .badgeIcon {
+  font-size: 20px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.badgeDetails {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.badgeDetails .badgeTitle {
+  font-weight: bold;
+  color: white;
+}
+
+.badgeDetails .badgeDescription {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.badgeRarity {
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  width: fit-content;
+  margin-top: 2px;
+}
+
+.badgeRarity.common {
+  background: rgba(156, 163, 175, 0.2);
+  color: #9ca3af;
+}
+
+.badgeRarity.uncommon {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+}
+
+.badgeRarity.rare {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+}
+
+.badgeRarity.epic {
+  background: rgba(139, 92, 246, 0.2);
+  color: #8b5cf6;
+}
+
+.badgeRarity.legendary {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+}
+
+.badgeRarity.special {
+  background: rgba(255, 107, 107, 0.2);
+  color: #ff6b6b;
+}
+
+.selectedIndicator {
+  color: #4ecdc4;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.noBadges {
+  text-align: center;
+  padding: 30px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.noBadges p {
+  margin: 8px 0;
+}
+
+/* Scrollbar customizada */
+.badgesList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.badgesList::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.badgesList::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.badgesList::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}

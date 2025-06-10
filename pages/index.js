@@ -17,6 +17,8 @@ import PlayersRanking from '../components/PlayersRanking';
 import NotificationCenter from '../components/NotificationCenter';
 import GlobalStats from '../components/GlobalStats';
 import AchievementNotification from '../components/AchievementNotification';
+import SuccessFeedback from '../components/SuccessFeedback';
+import SimpleSuccessFeedback from '../components/SimpleSuccessFeedback';
 
 import BrowserCompatibilityWarning from '../components/BrowserCompatibilityWarning';
 import BugReportModal from '../components/BugReportModal';
@@ -41,6 +43,9 @@ import {
 // Componentes de monetização
 import DonationButton from '../components/DonationButton';
 import { HeaderAd, BetweenGamesAd, SimpleInterstitialAd } from '../components/AdBanner';
+
+// Utilitários de feedback
+import { playSuccessSound, playPerfectSound, playFirstTrySound } from '../utils/soundEffects';
 
 const MAX_ATTEMPTS = 6;
 
@@ -168,6 +173,14 @@ export default function Home() {
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [showPlayersRanking, setShowPlayersRanking] = useState(false);
 
+  // Estados do feedback de sucesso
+  const [showSuccessFeedback, setShowSuccessFeedback] = useState(false);
+  const [successFeedbackType, setSuccessFeedbackType] = useState('success');
+  const [successFeedbackData, setSuccessFeedbackData] = useState({});
+
+  // Estados do feedback simplificado (infinito)
+  const [showSimpleFeedback, setShowSimpleFeedback] = useState(false);
+
 
 
   // Tempos máximos de reprodução por tentativa
@@ -290,6 +303,42 @@ export default function Home() {
       } catch (error) {
         // Silent error handling
       }
+    }
+  };
+
+  // Função para ativar feedback de sucesso (modo diário)
+  const triggerSuccessFeedback = (attempts, song) => {
+    // Determinar tipo de feedback baseado no número de tentativas
+    let feedbackType = 'success';
+    if (attempts === 1) {
+      feedbackType = 'firstTry';
+      playFirstTrySound();
+    } else if (attempts <= 2) {
+      feedbackType = 'perfect';
+      playPerfectSound();
+    } else {
+      feedbackType = 'success';
+      playSuccessSound();
+    }
+
+    // Configurar dados do feedback
+    setSuccessFeedbackType(feedbackType);
+    setSuccessFeedbackData({
+      attempts,
+      songTitle: song?.title || '',
+      gameTitle: song?.game || ''
+    });
+
+    // Mostrar feedback
+    setShowSuccessFeedback(true);
+  };
+
+  // Função para ativar feedback simplificado (modo infinito)
+  const triggerSimpleFeedback = (attempts) => {
+    // Só mostrar se for primeira tentativa
+    if (attempts === 1) {
+      playFirstTrySound();
+      setShowSimpleFeedback(true);
     }
   };
 
@@ -1447,6 +1496,15 @@ export default function Home() {
     if (guessResult.type === 'success') {
       setMessage(t('congratulations'));
       result = { type: 'success', value: selectedGuess, subtype: guessResult.subtype };
+
+      // 🎉 ATIVAR FEEDBACK BASEADO NO MODO
+      if (isInfiniteMode) {
+        // Modo infinito: feedback simplificado apenas para primeira tentativa
+        triggerSimpleFeedback(newAttempts);
+      } else {
+        // Modo diário: feedback completo
+        triggerSuccessFeedback(newAttempts, currentSong);
+      }
 
       if (isInfiniteMode) {
         // No modo infinito, mostra botão para próxima música
@@ -2885,8 +2943,8 @@ export default function Home() {
 
           </div>
 
-          {/* Estatísticas Globais apenas no modo diário */}
-          {!isInfiniteMode && <GlobalStats showInDailyMode={true} />}
+          {/* Estatísticas Globais apenas no modo diário - OCULTAR durante feedback de sucesso */}
+          {!isInfiniteMode && !showSuccessFeedback && <GlobalStats showInDailyMode={true} />}
 
           <div className={styles.attemptsRow}>
             {[...Array(MAX_ATTEMPTS)].map((_, idx) => {
@@ -3147,6 +3205,23 @@ export default function Home() {
 
         {/* Sistema de notificações */}
         <AchievementNotification />
+
+        {/* Feedback de sucesso completo (modo diário) */}
+        <SuccessFeedback
+          isVisible={showSuccessFeedback}
+          onComplete={() => setShowSuccessFeedback(false)}
+          type={successFeedbackType}
+          attempts={successFeedbackData.attempts}
+          songTitle={successFeedbackData.songTitle}
+          gameTitle={successFeedbackData.gameTitle}
+        />
+
+        {/* Feedback simplificado (modo infinito) */}
+        <SimpleSuccessFeedback
+          isVisible={showSimpleFeedback}
+          onComplete={() => setShowSimpleFeedback(false)}
+          message="🎯 PRIMEIRA TENTATIVA!"
+        />
 
         {/* Aviso de compatibilidade do navegador */}
         <BrowserCompatibilityWarning />

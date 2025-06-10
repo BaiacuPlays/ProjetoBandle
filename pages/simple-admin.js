@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
+import UserBadge from '../components/UserBadge';
 
 export default function SimpleAdmin() {
   const [password, setPassword] = useState('');
@@ -330,11 +331,11 @@ export default function SimpleAdmin() {
                   }}
                 >
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>
-                      {user.displayName}
+                    <div style={{ fontWeight: 'bold', marginBottom: '5px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span>{user.displayName}</span>
+                      <UserBadge badgeId={user.selectedBadge} size="small" />
                       {user.isCurrentUser && (
                         <span style={{
-                          marginLeft: '10px',
                           padding: '2px 8px',
                           backgroundColor: '#4CAF50',
                           borderRadius: '10px',

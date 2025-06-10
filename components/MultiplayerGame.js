@@ -8,11 +8,15 @@ import gameStyles from '../styles/Home.module.css';
 import { FaPlay, FaPause, FaVolumeUp, FaFastForward } from 'react-icons/fa';
 import { browserCompatibility } from '../utils/browserCompatibility';
 import BrowserCompatibilityWarning from './BrowserCompatibilityWarning';
+import SimpleSuccessFeedback from './SimpleSuccessFeedback';
 // Imports temporariamente desabilitados para SSR
 // import { audioCache } from '../utils/audioCache';
 // import { useAudioPreloader } from '../hooks/useAudioPreloader';
 // import { useAudioProxy } from '../utils/audioProxy';
 import { useSimpleAudioProxy } from '../utils/simpleAudioProxy';
+
+// Utilitários de feedback
+import { playSuccessSound, playPerfectSound, playFirstTrySound } from '../utils/soundEffects';
 
 const MultiplayerGame = ({ onBackToLobby }) => {
 
@@ -82,6 +86,9 @@ const MultiplayerGame = ({ onBackToLobby }) => {
   const [audioLoadRetries, setAudioLoadRetries] = useState(0);
   const [connectionError, setConnectionError] = useState(false);
   const [activeHint, setActiveHint] = useState(0); // CORREÇÃO: Estado para navegar entre dicas
+
+  // Estados do feedback simplificado
+  const [showSimpleFeedback, setShowSimpleFeedback] = useState(false);
 
   const audioRef = useRef(null);
   const inputRef = useRef(null);
@@ -428,6 +435,15 @@ const MultiplayerGame = ({ onBackToLobby }) => {
     }
   }, [gameFinished]);
 
+  // Função para ativar feedback simplificado (multiplayer)
+  const triggerSimpleFeedback = (attempts) => {
+    // Só mostrar se for primeira tentativa
+    if (attempts === 1) {
+      playFirstTrySound();
+      setShowSimpleFeedback(true);
+    }
+  };
+
   // Normalizar string para comparação - IGUAL AO JOGO NORMAL
   const normalize = str => str
     .normalize('NFD')
@@ -560,6 +576,8 @@ const MultiplayerGame = ({ onBackToLobby }) => {
           actions.setError(result.message || 'Alguém já havia acertado primeiro!');
           setTimeout(() => actions.setError(''), 4000);
         } else {
+          // 🎉 ATIVAR FEEDBACK SIMPLIFICADO (só primeira tentativa)
+          triggerSimpleFeedback(myAttempts + 1);
           actions.setError('');
         }
       } else if (result.gameCorrect) {
@@ -1771,6 +1789,13 @@ const MultiplayerGame = ({ onBackToLobby }) => {
           )}
         </div>
       </div>
+
+      {/* Feedback simplificado (multiplayer) */}
+      <SimpleSuccessFeedback
+        isVisible={showSimpleFeedback}
+        onComplete={() => setShowSimpleFeedback(false)}
+        message="🎯 PRIMEIRA TENTATIVA!"
+      />
 
       {/* Aviso de compatibilidade do navegador */}
       <BrowserCompatibilityWarning />

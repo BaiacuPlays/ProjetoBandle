@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { FaTimes, FaSearch, FaTrophy, FaGamepad, FaFire, FaMedal, FaUser, FaCrown, FaStar } from 'react-icons/fa';
 import { useModalScrollLock } from '../hooks/useModalScrollLock';
 import SimpleUserAvatar from './SimpleUserAvatar';
+import UserBadge from './UserBadge';
 import styles from '../styles/PlayersRanking.module.css';
 
 const PlayersRanking = ({ isOpen, onClose, onViewProfile }) => {
@@ -200,6 +201,7 @@ const PlayersRanking = ({ isOpen, onClose, onViewProfile }) => {
                     <div className={styles.playerDetails}>
                       <div className={styles.playerName}>
                         {player.displayName}
+                        <UserBadge badgeId={player.selectedBadge} size="small" />
                         {player.isCurrentUser && <span className={styles.youBadge}>Você</span>}
                       </div>
                       <div className={styles.playerUsername}>@{player.username}</div>

@@ -68,6 +68,7 @@ const createDefaultProfile = (userId, username) => ({
   // Conquistas e badges
   achievements: [],
   badges: [],
+  selectedBadge: null, // Badge selecionada para exibição
 
   // Histórico de jogos
   gameHistory: [],
@@ -461,10 +462,17 @@ export const ProfileProvider = ({ children }) => {
 
     // Atualizar XP e recalcular nível
     const currentXP = profile.xp || 0;
+    const currentLevel = profile.level || 1;
     const newXP = currentXP + xpGained;
     const newLevel = Math.floor(Math.sqrt(newXP / 300)) + 1;
 
-    console.log(`🎯 XP Ganho: +${xpGained} | Total: ${newXP} | Nível: ${newLevel}`);
+    console.log(`🎯 XP Ganho: +${xpGained} | Total: ${newXP} | Nível: ${currentLevel} → ${newLevel}`);
+
+    // 🎉 VERIFICAR SE HOUVE LEVEL UP
+    const leveledUp = newLevel > currentLevel;
+    if (leveledUp) {
+      console.log(`🎉 LEVEL UP! Nível ${currentLevel} → ${newLevel}`);
+    }
 
     // Atualizar estatísticas de franquia
     const newFranchiseStats = { ...profile.franchiseStats };
@@ -509,6 +517,14 @@ export const ProfileProvider = ({ children }) => {
     });
 
     if (success) {
+      // 🎉 MOSTRAR NOTIFICAÇÃO DE LEVEL UP
+      if (leveledUp && window.showLevelUpToast) {
+        console.log(`🎉 Chamando showLevelUpToast para nível ${newLevel}`);
+        setTimeout(() => {
+          window.showLevelUpToast(newLevel);
+        }, 500); // Pequeno delay para garantir que a UI foi atualizada
+      }
+
       // Verificar conquistas e badges após atualizar estatísticas
       setTimeout(async () => {
         await checkAndUnlockAchievements(gameData);

@@ -161,7 +161,8 @@ export default async function handler(req, res) {
 
       publicProfile.title = (cleanTitle && cleanTitle !== 'Usuário' && cleanTitle.trim() !== '') ? cleanTitle : null;
       publicProfile.bio = (cleanBio && cleanBio !== 'Usuário' && cleanBio.trim() !== '') ? cleanBio : null;
-      
+      publicProfile.selectedBadge = profileData.selectedBadge || null;
+
       // Estatísticas públicas (se existirem)
       console.log('🔍 DEBUG - profileData completo:', JSON.stringify(profileData, null, 2));
       console.log('🔍 DEBUG - profileData.stats:', profileData.stats);
@@ -247,7 +248,7 @@ export default async function handler(req, res) {
       // Se são amigos, mostrar informações adicionais
       if (isFriend && profileData) {
         publicProfile.friendsSince = friends.find(f => f.id === targetUserId)?.addedAt;
-        
+
         // Estatísticas mais detalhadas para amigos
         if (profileData.stats) {
           publicProfile.stats.gamesThisWeek = profileData.stats.gamesThisWeek || 0;

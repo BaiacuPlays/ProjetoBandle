@@ -5,6 +5,7 @@ import { useProfile } from '../contexts/ProfileContext';
 import { useModalScrollLock } from '../hooks/useModalScrollLock';
 import { FaTimes, FaUsers, FaGamepad, FaPaperPlane, FaCheck } from 'react-icons/fa';
 import SimpleUserAvatar from './SimpleUserAvatar';
+import UserBadge from './UserBadge';
 import styles from '../styles/MultiplayerInviteModal.module.css';
 
 const MultiplayerInviteModal = ({ isOpen, onClose, roomCode, onCreateRoom }) => {
@@ -175,7 +176,10 @@ const MultiplayerInviteModal = ({ isOpen, onClose, roomCode, onCreateRoom }) => 
                             className={styles.online}
                           />
                           <div className={styles.friendDetails}>
-                            <span className={styles.friendName}>{friend.displayName}</span>
+                            <span className={styles.friendName}>
+                              {friend.displayName}
+                              <UserBadge badgeId={friend.selectedBadge} size="small" />
+                            </span>
                             <span className={styles.friendUsername}>@{friend.username}</span>
                             <span className={styles.friendLevel}>Nível {friend.level}</span>
                           </div>

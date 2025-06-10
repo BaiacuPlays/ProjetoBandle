@@ -7,6 +7,7 @@ import { useModalScrollLock } from '../hooks/useModalScrollLock';
 import { getAchievement } from '../data/achievements';
 import { getBadge } from '../data/badges';
 import { FaTimes, FaUserPlus, FaGamepad, FaTrophy, FaMedal, FaStar, FaMusic, FaClock, FaFire } from 'react-icons/fa';
+import UserBadge from './UserBadge';
 import styles from '../styles/PublicProfileModal.module.css';
 
 const PublicProfileModal = ({ isOpen, onClose, userId, username, friendData }) => {
@@ -141,7 +142,7 @@ const PublicProfileModal = ({ isOpen, onClose, userId, username, friendData }) =
         displayName: profile.displayName,
         avatar: profile.avatar
       });
-      
+
       // Recarregar perfil para atualizar status de amizade
       loadProfile();
     } catch (error) {
@@ -250,7 +251,10 @@ const PublicProfileModal = ({ isOpen, onClose, userId, username, friendData }) =
 
                 <div className={styles.profileInfo}>
                   <div className={styles.nameSection}>
-                    <h3 className={styles.displayName}>{profile.displayName}</h3>
+                    <h3 className={styles.displayName}>
+                      {profile.displayName}
+                      <UserBadge badgeId={profile.selectedBadge} size="medium" />
+                    </h3>
                     <p className={styles.username}>@{profile.username}</p>
                   </div>
 

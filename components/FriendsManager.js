@@ -5,6 +5,7 @@ import { useProfile } from '../contexts/ProfileContext';
 import { useModalScrollLock } from '../hooks/useModalScrollLock';
 import { FaTimes, FaUserPlus, FaSearch, FaUsers, FaUserFriends, FaPaperPlane, FaCheck, FaTimes as FaReject, FaTrash, FaGamepad, FaShare, FaEye } from 'react-icons/fa';
 import SimpleUserAvatar from './SimpleUserAvatar';
+import UserBadge from './UserBadge';
 import MultiplayerInviteModal from './MultiplayerInviteModal';
 
 import ReferralSystem from './ReferralSystem';
@@ -232,7 +233,10 @@ const FriendsManager = ({ isOpen, onClose, onViewProfile }) => {
                         size="medium"
                       />
                       <div className={styles.friendDetails}>
-                        <span className={styles.friendName}>{friend.displayName}</span>
+                        <span className={styles.friendName}>
+                          {friend.displayName}
+                          <UserBadge badgeId={friend.selectedBadge} size="small" />
+                        </span>
                         <span className={styles.friendUsername}>@{friend.username}</span>
                         <span className={styles.friendLevel}>Nível {friend.level}</span>
                       </div>

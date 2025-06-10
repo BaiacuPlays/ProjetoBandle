@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Sistema de Badges Exibíveis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: white;
+            padding: 20px;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .test-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .user-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            backdrop-filter: blur(10px);
+            cursor: help;
+            transition: all 0.2s ease;
+            margin-left: 6px;
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+        }
+        
+        .user-badge:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        
+        .user-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 10px 0;
+        }
+        
+        .badge-selector {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .badge-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            margin: 5px 0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .badge-option:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .badge-option.selected {
+            background: rgba(78, 205, 196, 0.1);
+            border-color: #4ecdc4;
+        }
+        
+        .badge-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            font-size: 14px;
+        }
+        
+        h1, h2, h3 {
+            color: #4ecdc4;
+        }
+        
+        .success {
+            color: #4CAF50;
+        }
+        
+        .info {
+            color: #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎖️ Teste - Sistema de Badges Exibíveis</h1>
+        
+        <div class="test-section">
+            <h2>✅ Funcionalidades Implementadas</h2>
+            <ul>
+                <li class="success">✓ Componente UserBadge criado</li>
+                <li class="success">✓ Componente BadgeSelector criado</li>
+                <li class="success">✓ Campo selectedBadge adicionado ao perfil</li>
+                <li class="success">✓ Badges exibidas em PlayersRanking</li>
+                <li class="success">✓ Badges exibidas em PublicProfileModal</li>
+                <li class="success">✓ Badges exibidas em FriendsManager</li>
+                <li class="success">✓ Badges exibidas em MultiplayerInviteModal</li>
+                <li class="success">✓ Badges exibidas em SimpleFriendsModal</li>
+                <li class="success">✓ Badges exibidas no painel de admin</li>
+                <li class="success">✓ API players-ranking atualizada</li>
+                <li class="success">✓ API public-profile atualizada</li>
+            </ul>
+        </div>
+        
+        <div class="test-section">
+            <h2>🎯 Como Funciona</h2>
+            <p><strong>1. Seleção de Badge:</strong> No perfil do usuário, na aba "Badges", há um seletor onde o usuário pode escolher uma badge desbloqueada para exibir.</p>
+            <p><strong>2. Exibição:</strong> A badge selecionada aparece ao lado do nome do usuário em todos os locais onde o perfil é visível.</p>
+            <p><strong>3. Hover:</strong> Ao passar o mouse sobre a badge, é possível ver o nome e descrição da badge.</p>
+        </div>
+        
+        <div class="test-section">
+            <h2>🎮 Exemplo Visual</h2>
+            
+            <h3>Nome com Badge:</h3>
+            <div class="user-name">
+                <span>BaiacuPlays</span>
+                <div class="user-badge" style="color: #F59E0B;" title="Lenda Viva&#10;Alcançou o nível 50">🏆</div>
+            </div>
+            
+            <div class="user-name">
+                <span>JogadorExemplo</span>
+                <div class="user-badge" style="color: #8B5CF6;" title="Especialista&#10;Alcançou o nível 30">🎯</div>
+            </div>
+            
+            <div class="user-name">
+                <span>NovatoFeliz</span>
+                <div class="user-badge" style="color: #10B981;" title="Novato&#10;Alcançou o nível 5">🌱</div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>⚙️ Seletor de Badge (Simulação)</h2>
+            <div class="badge-selector">
+                <h4>Escolha uma badge para exibir:</h4>
+                
+                <div class="badge-option selected">
+                    <div class="badge-icon" style="color: #F59E0B;">🏆</div>
+                    <div>
+                        <div><strong>Lenda Viva</strong></div>
+                        <div style="font-size: 0.9em; color: rgba(255,255,255,0.7);">Alcançou o nível 50</div>
+                    </div>
+                </div>
+                
+                <div class="badge-option">
+                    <div class="badge-icon" style="color: #8B5CF6;">🎯</div>
+                    <div>
+                        <div><strong>Especialista</strong></div>
+                        <div style="font-size: 0.9em; color: rgba(255,255,255,0.7);">Alcançou o nível 30</div>
+                    </div>
+                </div>
+                
+                <div class="badge-option">
+                    <div class="badge-icon" style="color: #EF4444;">⚡</div>
+                    <div>
+                        <div><strong>Raio Veloz</strong></div>
+                        <div style="font-size: 0.9em; color: rgba(255,255,255,0.7);">Acertou em menos de 5 segundos</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>📋 Próximos Passos</h2>
+            <ol>
+                <li class="info">Testar o sistema no ambiente de desenvolvimento</li>
+                <li class="info">Verificar se as badges aparecem corretamente nos rankings</li>
+                <li class="info">Testar a seleção de badges no perfil</li>
+                <li class="info">Verificar se as badges persistem após recarregar a página</li>
+                <li class="info">Testar em diferentes componentes (amigos, multiplayer, etc.)</li>
+            </ol>
+        </div>
+        
+        <div class="test-section">
+            <h2>🔧 Arquivos Modificados</h2>
+            <ul>
+                <li><code>contexts/ProfileContext.js</code> - Adicionado campo selectedBadge</li>
+                <li><code>components/UserBadge.js</code> - Novo componente</li>
+                <li><code>components/BadgeSelector.js</code> - Novo componente</li>
+                <li><code>components/UserProfile.js</code> - Adicionado seletor de badge</li>
+                <li><code>components/PlayersRanking.js</code> - Exibe badge ao lado do nome</li>
+                <li><code>components/PublicProfileModal.js</code> - Exibe badge ao lado do nome</li>
+                <li><code>components/FriendsManager.js</code> - Exibe badge ao lado do nome</li>
+                <li><code>components/MultiplayerInviteModal.js</code> - Exibe badge ao lado do nome</li>
+                <li><code>components/SimpleFriendsModal.js</code> - Exibe badge ao lado do nome</li>
+                <li><code>pages/simple-admin.js</code> - Exibe badge ao lado do nome</li>
+                <li><code>pages/api/players-ranking.js</code> - Inclui selectedBadge nos dados</li>
+                <li><code>pages/api/public-profile.js</code> - Inclui selectedBadge nos dados</li>
+                <li><code>styles/UserBadge.module.css</code> - Estilos do componente</li>
+                <li><code>styles/BadgeSelector.module.css</code> - Estilos do seletor</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

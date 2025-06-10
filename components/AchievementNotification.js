@@ -227,6 +227,13 @@ const AchievementNotification = () => {
     };
   }, [notifications.length]);
 
+  // Garantir visibilidade sempre que há notificações
+  useEffect(() => {
+    if (notifications.length > 0) {
+      setIsVisible(true);
+    }
+  }, [notifications.length]);
+
   useEffect(() => {
     // Contador para garantir IDs únicos
     let notificationCounter = 0;
@@ -243,6 +250,9 @@ const AchievementNotification = () => {
       };
 
       console.log('🏆 Mostrando notificação de conquista:', achievement.title, 'ID:', uniqueId);
+
+      // Garantir visibilidade
+      setIsVisible(true);
 
       // Tocar som de conquista
       playAchievementSound();
@@ -269,6 +279,9 @@ const AchievementNotification = () => {
 
       console.log('⭐ Mostrando notificação de level up:', newLevel, 'ID:', uniqueId);
 
+      // Garantir visibilidade
+      setIsVisible(true);
+
       // Tocar som de level up com debug
       console.log('🔊 DEBUG: Chamando playLevelUpSound...');
       playLevelUpSound();
@@ -281,10 +294,21 @@ const AchievementNotification = () => {
       }, 5000);
     };
 
+    // Função de teste para level up (apenas em desenvolvimento)
+    if (process.env.NODE_ENV === 'development') {
+      window.testLevelUp = (level = 2) => {
+        console.log('🧪 TESTE: Simulando level up para nível', level);
+        window.showLevelUpToast(level);
+      };
+    }
+
     // Cleanup
     return () => {
       delete window.showAchievementToast;
       delete window.showLevelUpToast;
+      if (process.env.NODE_ENV === 'development') {
+        delete window.testLevelUp;
+      }
     };
   }, []);
 

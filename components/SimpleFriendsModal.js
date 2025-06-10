@@ -5,6 +5,7 @@ import { useFriends } from '../contexts/FriendsContext';
 import { FaTimes, FaUsers, FaUserPlus, FaSearch, FaCheck, FaTimes as FaReject, FaTrash, FaShare, FaEye } from 'react-icons/fa';
 import ReferralSystem from './ReferralSystem';
 import SimpleUserAvatar from './SimpleUserAvatar';
+import UserBadge from './UserBadge';
 import styles from '../styles/SimpleFriendsModal.module.css';
 
 const SimpleFriendsModal = ({ isOpen, onClose, onViewProfile }) => {
@@ -176,7 +177,10 @@ const SimpleFriendsModal = ({ isOpen, onClose, onViewProfile }) => {
                         size="medium"
                       />
                       <div className={styles.friendDetails}>
-                        <span className={styles.name}>{friend.displayName}</span>
+                        <span className={styles.name}>
+                          {friend.displayName}
+                          <UserBadge badgeId={friend.selectedBadge} size="small" />
+                        </span>
                         <span className={styles.username}>@{friend.username}</span>
                       </div>
                     </div>

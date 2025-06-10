@@ -1,0 +1,68 @@
+.userBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  backdrop-filter: blur(10px);
+  cursor: help;
+  transition: all 0.2s ease;
+  margin-left: 6px;
+  flex-shrink: 0;
+}
+
+.userBadge:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.badgeIcon {
+  font-size: inherit;
+  line-height: 1;
+}
+
+/* Tamanhos */
+.small {
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+}
+
+.medium {
+  width: 24px;
+  height: 24px;
+  font-size: 14px;
+}
+
+.large {
+  width: 28px;
+  height: 28px;
+  font-size: 16px;
+}
+
+/* Variações de raridade */
+.userBadge[style*="#F59E0B"] {
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
+}
+
+.userBadge[style*="#8B5CF6"] {
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.3);
+}
+
+.userBadge[style*="#EF4444"] {
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
+}
+
+.userBadge[style*="#1DB954"] {
+  box-shadow: 0 0 8px rgba(29, 185, 84, 0.3);
+}
+
+.userBadge[style*="#ff6b6b"] {
+  box-shadow: 0 0 8px rgba(255, 107, 107, 0.3);
+}
+
+.userBadge[style*="#ffd700"] {
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
+}
