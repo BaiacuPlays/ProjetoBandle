@@ -24,17 +24,25 @@ class SessionManager {
   // Salvar sessão com redundância
   saveSession(token, userData) {
     try {
+      // Verificar se estamos no cliente
+      if (typeof window === 'undefined') {
+        console.warn('⚠️ SessionManager: Tentativa de salvar sessão no servidor');
+        return false;
+      }
+
       // Salvar no localStorage
       localStorage.setItem(this.SESSION_KEY, token);
       localStorage.setItem(this.USER_KEY, JSON.stringify(userData));
       localStorage.setItem(this.LAST_CHECK_KEY, Date.now().toString());
 
-      // Salvar em cookies como backup (30 dias)
-      const expires = new Date();
-      expires.setDate(expires.getDate() + 30);
+      // Salvar em cookies como backup (30 dias) - apenas se document estiver disponível
+      if (typeof document !== 'undefined') {
+        const expires = new Date();
+        expires.setDate(expires.getDate() + 30);
 
-      document.cookie = `${this.SESSION_KEY}=${token}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`;
-      document.cookie = `${this.USER_KEY}=${encodeURIComponent(JSON.stringify(userData))}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`;
+        document.cookie = `${this.SESSION_KEY}=${token}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`;
+        document.cookie = `${this.USER_KEY}=${encodeURIComponent(JSON.stringify(userData))}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`;
+      }
 
       console.log('💾 Sessão salva com redundância (localStorage + cookies)');
       return true;
@@ -47,16 +55,23 @@ class SessionManager {
   // Recuperar token de sessão
   getSessionToken() {
     try {
+      // Verificar se estamos no cliente
+      if (typeof window === 'undefined') {
+        return null;
+      }
+
       // Tentar localStorage primeiro
       let token = localStorage.getItem(this.SESSION_KEY);
       if (token) return token;
 
-      // Fallback para cookies
-      token = this.getCookie(this.SESSION_KEY);
-      if (token) {
-        // Restaurar no localStorage
-        localStorage.setItem(this.SESSION_KEY, token);
-        return token;
+      // Fallback para cookies - apenas se document estiver disponível
+      if (typeof document !== 'undefined') {
+        token = this.getCookie(this.SESSION_KEY);
+        if (token) {
+          // Restaurar no localStorage
+          localStorage.setItem(this.SESSION_KEY, token);
+          return token;
+        }
       }
 
       return null;
@@ -69,19 +84,26 @@ class SessionManager {
   // Recuperar dados do usuário
   getUserData() {
     try {
+      // Verificar se estamos no cliente
+      if (typeof window === 'undefined') {
+        return null;
+      }
+
       // Tentar localStorage primeiro
       let userData = localStorage.getItem(this.USER_KEY);
       if (userData) {
         return JSON.parse(userData);
       }
 
-      // Fallback para cookies
-      userData = this.getCookie(this.USER_KEY);
-      if (userData) {
-        const decoded = JSON.parse(decodeURIComponent(userData));
-        // Restaurar no localStorage
-        localStorage.setItem(this.USER_KEY, JSON.stringify(decoded));
-        return decoded;
+      // Fallback para cookies - apenas se document estiver disponível
+      if (typeof document !== 'undefined') {
+        userData = this.getCookie(this.USER_KEY);
+        if (userData) {
+          const decoded = JSON.parse(decodeURIComponent(userData));
+          // Restaurar no localStorage
+          localStorage.setItem(this.USER_KEY, JSON.stringify(decoded));
+          return decoded;
+        }
       }
 
       return null;
@@ -94,14 +116,21 @@ class SessionManager {
   // Limpar sessão completamente
   clearSession() {
     try {
+      // Verificar se estamos no cliente
+      if (typeof window === 'undefined') {
+        return;
+      }
+
       // Limpar localStorage
       localStorage.removeItem(this.SESSION_KEY);
       localStorage.removeItem(this.USER_KEY);
       localStorage.removeItem(this.LAST_CHECK_KEY);
 
-      // Limpar cookies
-      document.cookie = `${this.SESSION_KEY}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-      document.cookie = `${this.USER_KEY}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+      // Limpar cookies - apenas se document estiver disponível
+      if (typeof document !== 'undefined') {
+        document.cookie = `${this.SESSION_KEY}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+        document.cookie = `${this.USER_KEY}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+      }
 
       // Parar heartbeat
       this.stopHeartbeat();
@@ -114,10 +143,20 @@ class SessionManager {
 
   // Utilitário para ler cookies
   getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-    return null;
+    try {
+      // Verificar se document está disponível
+      if (typeof document === 'undefined') {
+        return null;
+      }
+
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+      return null;
+    } catch (error) {
+      console.error('❌ Erro ao ler cookie:', error);
+      return null;
+    }
   }
 
   // Iniciar heartbeat para manter sessão ativa
@@ -166,7 +205,31 @@ class SessionManager {
   }
 }
 
-const sessionManager = new SessionManager();
+// Instância global do SessionManager (apenas no cliente)
+let sessionManager = null;
+
+// Função para obter ou criar SessionManager
+const getSessionManager = () => {
+  if (typeof window === 'undefined') {
+    // No servidor, retornar um mock
+    return {
+      saveSession: () => false,
+      getSessionToken: () => null,
+      getUserData: () => null,
+      clearSession: () => {},
+      shouldSkipCheck: () => false,
+      updateLastCheck: () => {},
+      startHeartbeat: () => {},
+      stopHeartbeat: () => {},
+      SESSION_KEY: 'ludomusic_session_token'
+    };
+  }
+
+  if (!sessionManager) {
+    sessionManager = new SessionManager();
+  }
+  return sessionManager;
+};
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -200,7 +263,9 @@ export const AuthProvider = ({ children }) => {
       return;
     }
 
-    if (!force && sessionManager.shouldSkipCheck()) {
+    const sm = getSessionManager();
+
+    if (!force && sm.shouldSkipCheck()) {
       if (process.env.NODE_ENV === 'development') {
         console.log('🔍 Verificação muito recente, ignorando...');
       }
@@ -209,7 +274,7 @@ export const AuthProvider = ({ children }) => {
 
     setCheckInProgress(true);
     setLastCheckTime(now);
-    sessionManager.updateLastCheck();
+    sm.updateLastCheck();
 
     if (process.env.NODE_ENV === 'development') {
       console.log('🔍 Verificando autenticação com SessionManager...');
@@ -217,7 +282,7 @@ export const AuthProvider = ({ children }) => {
 
     try {
       // Usar SessionManager para recuperar token
-      const token = sessionManager.getSessionToken();
+      const token = sm.getSessionToken();
 
       if (process.env.NODE_ENV === 'development') {
         console.log('🔍 Token encontrado:', token ? 'SIM' : 'NÃO');
@@ -230,12 +295,12 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
         setIsAuthenticated(false);
         setIsLoading(false);
-        sessionManager.stopHeartbeat();
+        sm.stopHeartbeat();
         return;
       }
 
       // Verificar se temos dados do usuário em cache
-      const cachedUserData = sessionManager.getUserData();
+      const cachedUserData = sm.getUserData();
       if (cachedUserData && !force) {
         // Usar dados em cache para resposta rápida
         setUser(cachedUserData);
@@ -247,8 +312,8 @@ export const AuthProvider = ({ children }) => {
         }
 
         // Iniciar heartbeat se não estiver rodando
-        if (!sessionManager.heartbeatTimer) {
-          sessionManager.startHeartbeat(checkAuth);
+        if (!sm.heartbeatTimer) {
+          sm.startHeartbeat(checkAuth);
         }
 
         // Verificar no servidor em background (sem bloquear UI)
@@ -298,11 +363,12 @@ export const AuthProvider = ({ children }) => {
         setIsLoading(false);
 
         // Salvar dados atualizados
-        sessionManager.saveSession(token, data.user);
+        const sm = getSessionManager();
+        sm.saveSession(token, data.user);
 
         // Iniciar heartbeat se não estiver rodando
-        if (!sessionManager.heartbeatTimer) {
-          sessionManager.startHeartbeat(checkAuth);
+        if (!sm.heartbeatTimer) {
+          sm.startHeartbeat(checkAuth);
         }
 
         if (process.env.NODE_ENV === 'development') {
@@ -346,7 +412,8 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setIsAuthenticated(false);
     setIsLoading(false);
-    sessionManager.clearSession();
+    const sm = getSessionManager();
+    sm.clearSession();
   };
 
   useEffect(() => {
@@ -401,7 +468,8 @@ export const AuthProvider = ({ children }) => {
 
       // Listener para detectar mudanças no localStorage de outras abas
       const handleStorageSync = (e) => {
-        if (e.key === sessionManager.SESSION_KEY) {
+        const sm = getSessionManager();
+        if (e.key === sm.SESSION_KEY) {
           if (e.newValue && !isAuthenticated) {
             // Token foi adicionado em outra aba - sincronizar
             if (process.env.NODE_ENV === 'development') {
@@ -428,7 +496,8 @@ export const AuthProvider = ({ children }) => {
         window.removeEventListener('storage', handleStorageSync);
         window.removeEventListener('ludomusic-token-changed', handleCustomStorageChange);
         document.removeEventListener('visibilitychange', handleVisibilityChange);
-        sessionManager.stopHeartbeat();
+        const sm = getSessionManager();
+        sm.stopHeartbeat();
       };
     } else {
       if (process.env.NODE_ENV === 'development') {
@@ -459,14 +528,15 @@ export const AuthProvider = ({ children }) => {
 
       if (response.ok && data.success && data.sessionToken) {
         // Salvar sessão com SessionManager
-        sessionManager.saveSession(data.sessionToken, data.user);
+        const sm = getSessionManager();
+        sm.saveSession(data.sessionToken, data.user);
 
         // Atualizar estado
         setUser(data.user);
         setIsAuthenticated(true);
 
         // Iniciar heartbeat
-        sessionManager.startHeartbeat(checkAuth);
+        sm.startHeartbeat(checkAuth);
 
         // Disparar evento para outros contextos
         window.dispatchEvent(new Event('ludomusic-token-changed'));
@@ -507,12 +577,16 @@ export const AuthProvider = ({ children }) => {
       console.log('📝 Resposta do registro:', data);
 
       if (response.ok && data.success && data.sessionToken) {
-        // Salvar token
-        localStorage.setItem('ludomusic_session_token', data.sessionToken);
+        // Salvar sessão com SessionManager
+        const sm = getSessionManager();
+        sm.saveSession(data.sessionToken, data.user);
 
         // Atualizar estado
         setUser(data.user);
         setIsAuthenticated(true);
+
+        // Iniciar heartbeat
+        sm.startHeartbeat(checkAuth);
 
         // Disparar evento para outros contextos
         window.dispatchEvent(new Event('ludomusic-token-changed'));
@@ -536,7 +610,8 @@ export const AuthProvider = ({ children }) => {
     console.log('🚪 Fazendo logout...');
 
     // Limpar sessão completamente com SessionManager
-    sessionManager.clearSession();
+    const sm = getSessionManager();
+    sm.clearSession();
 
     // Limpar estado
     setUser(null);
