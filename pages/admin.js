@@ -796,7 +796,7 @@ export default function AdminPage() {
                   <p><strong>Email:</strong> {donation.email}</p>
                   <p><strong>Status:</strong> {donation.status}</p>
                   <p><strong>Data:</strong> {new Date(donation.createdAt).toLocaleDateString()}</p>
-                  {donation.status === 'pending' && (
+                  {(donation.status === 'pending' || donation.status === 'pending_verification') && (
                     <div className={styles.donationActions}>
                       <button
                         onClick={() => approveDonation(donation.id)}
