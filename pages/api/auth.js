@@ -1,7 +1,17 @@
 // API para autenticação de usuários
-import { kv } from '@vercel/kv';
 import bcrypt from 'bcryptjs';
 import { localUsers, localSessions } from '../../utils/storage';
+
+// Importação segura do KV
+let kv = null;
+try {
+  if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+    const kvModule = await import('@vercel/kv');
+    kv = kvModule.kv;
+  }
+} catch (error) {
+  console.warn('⚠️ KV não disponível, usando fallback local:', error.message);
+}
 
 // Tornar disponível globalmente para outros módulos
 global.localSessions = localSessions;

@@ -16,16 +16,46 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  console.log('🔐 AuthProvider: Estado atual:', {
-    user: user?.username,
-    isAuthenticated,
-    isLoading,
-    timestamp: new Date().toISOString()
-  });
+  // Log apenas em desenvolvimento para evitar spam no console
+  if (process.env.NODE_ENV === 'development') {
+    console.log('🔐 AuthProvider: Estado atual:', {
+      user: user?.username,
+      isAuthenticated,
+      isLoading,
+      timestamp: new Date().toISOString()
+    });
+  }
 
-  // SOLUÇÃO SIMPLES - verificar autenticação
-  const checkAuth = async () => {
-    console.log('🔍 Verificando autenticação...');
+  // Sistema de cache para evitar verificações desnecessárias
+  const [lastCheckTime, setLastCheckTime] = useState(0);
+  const [checkInProgress, setCheckInProgress] = useState(false);
+  const CHECK_INTERVAL = 30000; // 30 segundos
+
+  // SOLUÇÃO ROBUSTA - verificar autenticação com cache e rate limiting
+  const checkAuth = async (force = false) => {
+    const now = Date.now();
+
+    // Evitar verificações muito frequentes
+    if (!force && checkInProgress) {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('🔍 Verificação já em andamento, ignorando...');
+      }
+      return;
+    }
+
+    if (!force && now - lastCheckTime < CHECK_INTERVAL) {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('🔍 Verificação muito recente, ignorando...');
+      }
+      return;
+    }
+
+    setCheckInProgress(true);
+    setLastCheckTime(now);
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🔍 Verificando autenticação...');
+    }
 
     try {
       // Tentar todas as chaves possíveis
@@ -33,80 +63,131 @@ export const AuthProvider = ({ children }) => {
                    localStorage.getItem('sessionToken') ||
                    localStorage.getItem('session_token');
 
-      console.log('🔍 Token encontrado:', token ? 'SIM' : 'NÃO');
+      if (process.env.NODE_ENV === 'development') {
+        console.log('🔍 Token encontrado:', token ? 'SIM' : 'NÃO');
+      }
 
       if (!token) {
-        console.log('❌ Sem token - usuário não autenticado');
+        if (process.env.NODE_ENV === 'development') {
+          console.log('❌ Sem token - usuário não autenticado');
+        }
         setUser(null);
         setIsAuthenticated(false);
         setIsLoading(false);
         return;
       }
 
-      console.log('🔍 Fazendo chamada para API...');
-      const response = await fetch(`/api/auth?sessionToken=${token}`);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('🔍 Fazendo chamada para API...');
+      }
+
+      // Timeout para evitar requisições que ficam pendentes
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 segundos
+
+      const response = await fetch(`/api/auth?sessionToken=${token}`, {
+        signal: controller.signal
+      });
+
+      clearTimeout(timeoutId);
       const data = await response.json();
 
-      console.log('🔍 Resposta da API:', data);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('🔍 Resposta da API:', data);
+      }
 
       if (response.ok && data.success && data.user) {
         setUser(data.user);
         setIsAuthenticated(true);
-        console.log('✅ SUCESSO! Usuário autenticado:', data.user.username);
+        if (process.env.NODE_ENV === 'development') {
+          console.log('✅ SUCESSO! Usuário autenticado:', data.user.username);
+        }
       } else {
-        console.log('❌ API retornou erro ou dados inválidos');
+        if (process.env.NODE_ENV === 'development') {
+          console.log('❌ API retornou erro ou dados inválidos');
+        }
         setUser(null);
         setIsAuthenticated(false);
+
+        // Se token é inválido, remover do localStorage
+        if (response.status === 401) {
+          localStorage.removeItem('ludomusic_session_token');
+          localStorage.removeItem('sessionToken');
+          localStorage.removeItem('session_token');
+        }
       }
     } catch (error) {
-      console.error('❌ Erro na verificação:', error);
+      if (error.name === 'AbortError') {
+        console.warn('⚠️ Timeout na verificação de autenticação');
+      } else {
+        console.error('❌ Erro na verificação:', error);
+      }
       setUser(null);
       setIsAuthenticated(false);
     } finally {
       setIsLoading(false);
-      console.log('🔍 Verificação concluída');
+      setCheckInProgress(false);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('🔍 Verificação concluída');
+      }
     }
   };
 
   useEffect(() => {
-    console.log('🔄 AuthProvider useEffect executado');
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🔄 AuthProvider useEffect executado');
+    }
 
     // Só executar no cliente
     if (typeof window !== 'undefined') {
-      console.log('🌐 Executando no cliente - chamando checkAuth');
+      if (process.env.NODE_ENV === 'development') {
+        console.log('🌐 Executando no cliente - chamando checkAuth');
+      }
 
-      // Executar imediatamente
-      checkAuth();
-
-      // Também executar com um pequeno delay para garantir
-      setTimeout(() => {
-        console.log('🕐 Timeout: Executando checkAuth novamente');
-        checkAuth();
-      }, 100);
+      // Executar imediatamente com força para primeira verificação
+      checkAuth(true);
 
       // Listener para mudanças no localStorage
       const handleStorageChange = (e) => {
         if (e.key === 'ludomusic_session_token') {
-          console.log('🔄 Token mudou no localStorage - recarregando auth...');
-          checkAuth();
+          if (process.env.NODE_ENV === 'development') {
+            console.log('🔄 Token mudou no localStorage - recarregando auth...');
+          }
+          checkAuth(true); // Forçar verificação quando token muda
         }
       };
 
       // Listener customizado para mudanças feitas na mesma aba
       const handleCustomStorageChange = () => {
-        console.log('🔄 Token mudou (custom) - recarregando auth...');
-        checkAuth();
+        if (process.env.NODE_ENV === 'development') {
+          console.log('🔄 Token mudou (custom) - recarregando auth...');
+        }
+        checkAuth(true); // Forçar verificação quando token muda
+      };
+
+      // Listener para quando a aba fica visível novamente
+      const handleVisibilityChange = () => {
+        if (!document.hidden) {
+          if (process.env.NODE_ENV === 'development') {
+            console.log('👁️ Aba ficou visível - verificando auth...');
+          }
+          checkAuth(); // Verificação normal (com rate limiting)
+        }
       };
 
       window.addEventListener('storage', handleStorageChange);
       window.addEventListener('ludomusic-token-changed', handleCustomStorageChange);
+      document.addEventListener('visibilitychange', handleVisibilityChange);
 
       return () => {
         window.removeEventListener('storage', handleStorageChange);
         window.removeEventListener('ludomusic-token-changed', handleCustomStorageChange);
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
       };
     } else {
-      console.log('🖥️ Executando no servidor - definindo isLoading como false');
+      if (process.env.NODE_ENV === 'development') {
+        console.log('🖥️ Executando no servidor - definindo isLoading como false');
+      }
       setIsLoading(false);
     }
   }, []);
