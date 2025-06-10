@@ -146,6 +146,8 @@ export default function Home() {
   const [audioLoadError, setAudioLoadError] = useState(false);
   const [audioLoadRetries, setAudioLoadRetries] = useState(0);
   const [connectionError, setConnectionError] = useState(false);
+  const [isAudioLoading, setIsAudioLoading] = useState(false);
+  const [audioLoadingMessage, setAudioLoadingMessage] = useState('');
 
   // Estados de monetização
   const [showInterstitialAd, setShowInterstitialAd] = useState(false);
@@ -864,6 +866,13 @@ export default function Home() {
 
     setAudioDuration(duration);
 
+    // Limpar estados de loading quando metadata carrega
+    setIsAudioLoading(false);
+    setAudioLoadingMessage('');
+    setAudioLoadError(false);
+    setConnectionError(false);
+    setAudioLoadRetries(0);
+
     let startTimeToUse;
 
     try {
@@ -1002,27 +1011,47 @@ export default function Home() {
     };
 
     const handleAudioError = (e) => {
-      // Só mostrar erro se for um erro real de carregamento
+      // Tratamento de erro mais robusto (igual ao multiplayer)
       const errorCode = e?.target?.error?.code;
+
+      setIsAudioLoading(false);
+      setAudioLoadingMessage('');
+
       if (errorCode === 4) {
         setAudioError(true);
-        setMessage('Formato de áudio não suportado.');
+        setMessage('Formato de áudio não suportado');
       } else if (errorCode === 2) {
         setAudioError(true);
-        setMessage('Erro de rede ao carregar áudio.');
+        setMessage('Erro de rede ao carregar áudio');
       } else if (errorCode === 3) {
         setAudioError(true);
-        setMessage('Áudio corrompido ou incompleto.');
+        setMessage('Áudio corrompido ou incompleto');
+      } else if (errorCode === 1) {
+        setAudioError(true);
+        setMessage('Carregamento de áudio foi interrompido');
       } else {
-        // Para outros erros, apenas log sem mostrar mensagem
-        console.warn('Erro de áudio (silenciado):', e?.target?.error);
+        setAudioError(true);
+        setMessage('Erro desconhecido ao carregar áudio');
       }
+
+      // Marcar erro para tentar novamente
+      setAudioLoadError(true);
+    };
+
+    // Handler para quando áudio está pronto para tocar (igual ao multiplayer)
+    const handleCanPlay = () => {
+      setIsAudioLoading(false);
+      setAudioLoadingMessage('');
+      setAudioLoadError(false);
+      setConnectionError(false);
+      setAudioLoadRetries(0);
     };
 
     audio.addEventListener('timeupdate', updateProgress);
     audio.addEventListener('play', updatePlay);
     audio.addEventListener('pause', updatePlay);
     audio.addEventListener('loadedmetadata', handleLoadedMetadata);
+    audio.addEventListener('canplay', handleCanPlay);
     audio.addEventListener('error', handleAudioError);
 
     return () => {
@@ -1030,6 +1059,7 @@ export default function Home() {
       audio.removeEventListener('play', updatePlay);
       audio.removeEventListener('pause', updatePlay);
       audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      audio.removeEventListener('canplay', handleCanPlay);
       audio.removeEventListener('error', handleAudioError);
 
     };
@@ -2009,18 +2039,32 @@ export default function Home() {
         setMessage('');
       }
 
-      // No modo infinito, força o recarregamento do áudio com um pequeno delay
-      // APENAS quando a URL da música muda, não quando o modo muda
-      if (isInfiniteMode && audioRef.current) {
-        setIsPlaying(false); // Reset play state only in infinite mode
-        setTimeout(() => {
-          if (audioRef.current) {
-            audioRef.current.load();
-          }
-        }, 100);
+      // Sistema otimizado de carregamento de áudio (igual ao multiplayer)
+      const audio = audioRef.current;
+      if (audio && currentSong?.audioUrl) {
+        try {
+          audio.pause();
+          setIsPlaying(false);
+          setAudioProgress(0);
+          setIsAudioLoading(true);
+          setAudioLoadingMessage('Carregando música...');
+
+          // Debounce reduzido para melhor responsividade (igual ao multiplayer)
+          const loadTimeout = setTimeout(() => {
+            if (audio === audioRef.current && currentSong?.audioUrl) {
+              audio.load();
+            }
+          }, 100); // Reduzido de 300 para 100ms
+
+          return () => clearTimeout(loadTimeout);
+        } catch (error) {
+          // Silent error handling
+          setIsAudioLoading(false);
+          setAudioLoadingMessage('');
+        }
       }
     }
-  }, [currentSong?.audioUrl]); // Removido isInfiniteMode das dependências
+  }, [currentSong?.audioUrl]);
 
   // Funções para lidar com o tutorial
   const handleCloseTutorial = () => {
@@ -2575,6 +2619,10 @@ export default function Home() {
                   isLoading={isPlayLoading}
                   disabled={audioError || (!audioDuration && !currentSong?.audioUrl) || isPlayButtonDisabled || isPlayLoading}
                   className={styles.audioPlayBtnCustom}
+                  instantFeedback={true}
+                  scaleOnClick={true}
+                  showSpinner={true}
+                  debounceMs={50}
                   onClick={debounce(async () => {
                     if (!currentSong?.audioUrl || isPlayButtonDisabled || audioError) {
                       return;
@@ -2640,10 +2688,13 @@ export default function Home() {
                         }
 
                         if (audioRef.current.paused) {
-                          // Tentar reprodução instantânea se áudio está pronto
+                          // Usar método instantâneo se áudio está pronto (igual ao multiplayer)
                           if (audioRef.current.readyState >= 2) {
                             await browserCompatibility.playAudioInstant(audioRef.current);
                           } else {
+                            // Se não está pronto, mostrar loading
+                            setIsAudioLoading(true);
+                            setAudioLoadingMessage('Carregando música...');
                             await browserCompatibility.playAudio(audioRef.current);
                           }
                         }
@@ -2794,6 +2845,26 @@ export default function Home() {
                   // Áudio totalmente carregado
                 }} />
             </div>
+
+            {/* Indicador de carregamento de áudio (igual ao multiplayer) */}
+            {isAudioLoading && audioLoadingMessage && (
+              <div style={{
+                background: 'linear-gradient(135deg, rgba(29, 185, 84, 0.15), rgba(30, 215, 96, 0.15))',
+                border: '2px solid #1db954',
+                borderRadius: '8px',
+                padding: '12px',
+                margin: '10px 0',
+                textAlign: 'center',
+                backdropFilter: 'blur(10px)'
+              }}>
+                <div style={{ color: '#1db954', fontWeight: 'bold', marginBottom: '5px' }}>
+                  🎵 {audioLoadingMessage}
+                </div>
+                <div style={{ fontSize: '0.9rem', opacity: 0.8 }}>
+                  Aguarde um momento...
+                </div>
+              </div>
+            )}
 
             {/* Indicadores de estado de carregamento/erro */}
             {audioLoadError && (
