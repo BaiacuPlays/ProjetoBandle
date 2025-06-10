@@ -49,10 +49,11 @@ const createDefaultProfile = (userId, username) => ({
         hasPlayedToday: false
       },
       infinite: {
-        gamesPlayed: 0,
+        games: 0,
         wins: 0,
-        bestScore: 0,
-        averageScore: 0
+        bestStreak: 0,
+        currentStreak: 0,
+        totalSongsCompleted: 0
       },
       multiplayer: {
         gamesPlayed: 0,
@@ -156,7 +157,21 @@ export const ProfileProvider = ({ children }) => {
       if (response.ok) {
         const data = await response.json();
         if (data.profile) {
-          setProfile(data.profile);
+          // Garantir que as estatísticas estejam inicializadas
+          const profile = data.profile;
+          if (!profile.stats?.modeStats?.infinite) {
+            if (!profile.stats) profile.stats = {};
+            if (!profile.stats.modeStats) profile.stats.modeStats = {};
+            profile.stats.modeStats.infinite = {
+              games: 0,
+              wins: 0,
+              bestStreak: 0,
+              currentStreak: 0,
+              totalSongsCompleted: 0
+            };
+            console.log('📊 Inicializando estatísticas do modo infinito no perfil carregado');
+          }
+          setProfile(profile);
           console.log('✅ Perfil carregado do servidor');
           return;
         }
@@ -365,6 +380,54 @@ export const ProfileProvider = ({ children }) => {
       // Reset streak em caso de derrota no modo diário
       if (mode === 'daily') {
         newStats.currentStreak = 0;
+      }
+    }
+
+    // Atualizar estatísticas por modo
+    if (!newStats.modeStats) {
+      newStats.modeStats = {
+        daily: { games: 0, wins: 0, currentStreak: 0, bestStreak: 0, lastPlayedDate: null, hasPlayedToday: false },
+        infinite: { games: 0, wins: 0, bestStreak: 0, currentStreak: 0, totalSongsCompleted: 0 },
+        multiplayer: { games: 0, wins: 0, roomsCreated: 0, roomsJoined: 0 }
+      };
+    }
+
+    // Atualizar estatísticas específicas do modo
+    if (mode === 'daily') {
+      newStats.modeStats.daily.games = (newStats.modeStats.daily.games || 0) + 1;
+      if (won) {
+        newStats.modeStats.daily.wins = (newStats.modeStats.daily.wins || 0) + 1;
+        newStats.modeStats.daily.currentStreak = (newStats.modeStats.daily.currentStreak || 0) + 1;
+        newStats.modeStats.daily.bestStreak = Math.max(newStats.modeStats.daily.bestStreak || 0, newStats.modeStats.daily.currentStreak);
+      } else {
+        newStats.modeStats.daily.currentStreak = 0;
+      }
+      newStats.modeStats.daily.lastPlayedDate = new Date().toISOString();
+      newStats.modeStats.daily.hasPlayedToday = true;
+    } else if (mode === 'infinite') {
+      console.log('📊 Atualizando estatísticas do modo infinito:', { won, streak, songsCompleted });
+      newStats.modeStats.infinite.games = (newStats.modeStats.infinite.games || 0) + 1;
+      if (won) {
+        newStats.modeStats.infinite.wins = (newStats.modeStats.infinite.wins || 0) + 1;
+        // Para modo infinito, usar o streak passado como parâmetro
+        if (streak) {
+          newStats.modeStats.infinite.currentStreak = streak;
+          newStats.modeStats.infinite.bestStreak = Math.max(newStats.modeStats.infinite.bestStreak || 0, streak);
+          console.log('📊 Novo streak no modo infinito:', streak, 'Melhor:', newStats.modeStats.infinite.bestStreak);
+        }
+        if (songsCompleted) {
+          newStats.modeStats.infinite.totalSongsCompleted = (newStats.modeStats.infinite.totalSongsCompleted || 0) + songsCompleted;
+        }
+      } else {
+        // Quando perde no modo infinito, resetar streak atual
+        newStats.modeStats.infinite.currentStreak = 0;
+        console.log('📊 Resetando streak atual do modo infinito');
+      }
+      console.log('📊 Estatísticas do modo infinito atualizadas:', newStats.modeStats.infinite);
+    } else if (mode === 'multiplayer') {
+      newStats.modeStats.multiplayer.games = (newStats.modeStats.multiplayer.games || 0) + 1;
+      if (won) {
+        newStats.modeStats.multiplayer.wins = (newStats.modeStats.multiplayer.wins || 0) + 1;
       }
     }
 

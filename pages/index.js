@@ -870,12 +870,15 @@ export default function Home() {
 
       setAudioDuration(duration);
 
-      // Limpar estados de loading quando metadata carrega
+      // Limpar TODOS os estados de loading quando metadata carrega
       setIsAudioLoading(false);
       setAudioLoadingMessage('');
       setAudioLoadError(false);
       setConnectionError(false);
       setAudioLoadRetries(0);
+      // CORREÇÃO: Limpar também o estado do botão de play
+      setIsPlayLoading(false);
+      setIsPlayButtonDisabled(false);
 
       let startTimeToUse;
 
@@ -927,12 +930,13 @@ export default function Home() {
       // Limpa o estado de erro quando o áudio carrega com sucesso
       setAudioError(false);
 
-      // Limpar qualquer mensagem de erro de áudio
+      // Limpar qualquer mensagem de erro de áudio ou carregamento
       if (message && (
         message.includes('Erro ao carregar o áudio') ||
         message.includes('Erro ao reproduzir o áudio') ||
         message.includes('Formato de áudio não suportado') ||
-        message.includes('Erro de rede')
+        message.includes('Erro de rede') ||
+        message.includes('Áudio ainda carregando, aguarde...')
       )) {
         setMessage('');
       }
@@ -994,12 +998,20 @@ export default function Home() {
     const handleCanPlay = () => {
       if (!audio || audio !== audioRef.current) return; // Verificação de segurança
 
-      // Limpar estados de loading quando áudio está pronto
+      // Limpar TODOS os estados de loading quando áudio está pronto para tocar
       setIsAudioLoading(false);
       setAudioLoadingMessage('');
       setAudioLoadError(false);
       setConnectionError(false);
       setAudioLoadRetries(0);
+      // CORREÇÃO: Garantir que o botão de play seja habilitado quando áudio está pronto
+      setIsPlayLoading(false);
+      setIsPlayButtonDisabled(false);
+
+      // Limpar mensagem de carregamento quando áudio está pronto
+      if (message && message.includes('Áudio ainda carregando, aguarde...')) {
+        setMessage('');
+      }
     };
 
     // Remover listeners existentes primeiro (igual ao multiplayer)
@@ -2663,12 +2675,12 @@ export default function Home() {
                 <MemoizedPlayButton
                   isPlaying={isPlaying}
                   isLoading={isPlayLoading}
-                  disabled={audioError || (!audioDuration && !currentSong?.audioUrl) || isPlayButtonDisabled || isPlayLoading}
+                  disabled={audioError || (!audioDuration && !currentSong?.audioUrl) || isPlayButtonDisabled}
                   className={styles.audioPlayBtnCustom}
                   instantFeedback={true}
                   scaleOnClick={true}
                   showSpinner={true}
-                  debounceMs={50}
+                  debounceMs={25} // Reduzido para melhor responsividade
                   onClick={debounce(async () => {
                     if (!currentSong?.audioUrl || isPlayButtonDisabled || audioError) {
                       return;
@@ -2681,20 +2693,25 @@ export default function Home() {
                     // Definir loading imediatamente para feedback visual
                     setIsPlayLoading(true);
 
-                    // Timeout de segurança reduzido para melhor UX
+                    // Timeout de segurança mais curto para melhor responsividade
                     const safetyTimeout = setTimeout(() => {
                       setIsPlayLoading(false);
                       setIsPlayButtonDisabled(false);
-                    }, 1000); // Reduzido de 3000 para 1000ms
+                    }, 500); // Reduzido para 500ms para melhor UX
 
                     try {
                       // Se áudio não carregou ainda, mostrar mensagem e aguardar carregamento
                       if (!audioDuration && currentSong?.audioUrl) {
                         setMessage('Áudio ainda carregando, aguarde...');
+                        // Usar uma referência mais robusta para limpar a mensagem
+                        const loadingMessage = 'Áudio ainda carregando, aguarde...';
                         setTimeout(() => {
-                          if (message === 'Áudio ainda carregando, aguarde...') {
-                            setMessage('');
-                          }
+                          setMessage(prevMessage => {
+                            if (prevMessage === loadingMessage) {
+                              return '';
+                            }
+                            return prevMessage;
+                          });
                         }, 2000);
                         setPendingPlay(true);
                         audioRef.current.load();
@@ -2704,10 +2721,15 @@ export default function Home() {
                       // Fallback para método tradicional - verificar se áudio está pronto
                       if (!audioRef.current || !audioRef.current.duration) {
                         setMessage('Áudio ainda carregando, aguarde...');
+                        // Usar uma referência mais robusta para limpar a mensagem
+                        const loadingMessage = 'Áudio ainda carregando, aguarde...';
                         setTimeout(() => {
-                          if (message === 'Áudio ainda carregando, aguarde...') {
-                            setMessage('');
-                          }
+                          setMessage(prevMessage => {
+                            if (prevMessage === loadingMessage) {
+                              return '';
+                            }
+                            return prevMessage;
+                          });
                         }, 2000);
                         return;
                       }
@@ -2737,18 +2759,27 @@ export default function Home() {
                           // Usar método instantâneo se áudio está pronto (igual ao multiplayer)
                           if (audioRef.current.readyState >= 2) {
                             await browserCompatibility.playAudioInstant(audioRef.current);
+                            // CORREÇÃO: Limpar loading imediatamente após reprodução instantânea
+                            setIsPlayLoading(false);
+                            setIsPlayButtonDisabled(false);
                           } else {
                             // Se não está pronto, mostrar loading
                             setIsAudioLoading(true);
                             setAudioLoadingMessage('Carregando música...');
                             await browserCompatibility.playAudio(audioRef.current);
+                            // CORREÇÃO: Limpar loading após reprodução normal
+                            setIsPlayLoading(false);
+                            setIsPlayButtonDisabled(false);
                           }
                         }
                       }
 
+                      // CORREÇÃO: Garantir que todos os estados sejam limpos após sucesso
                       clearTimeout(safetyTimeout);
                       setIsPlayLoading(false);
                       setIsPlayButtonDisabled(false);
+                      setIsAudioLoading(false);
+                      setAudioLoadingMessage('');
 
                     } catch (error) {
                       clearTimeout(safetyTimeout);
@@ -2777,7 +2808,7 @@ export default function Home() {
                         console.warn('Erro de reprodução (silenciado):', error);
                       }
                     }
-                  }, 50, 'play_button')} // Reduzido de 150 para 50ms
+                  }, 25, 'play_button')} // Reduzido para 25ms para melhor responsividade
                 />
                 <MemoizedVolumeControl
                   volume={volume}

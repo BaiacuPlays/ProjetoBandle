@@ -201,14 +201,27 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
       }
 
       // Usar estatísticas do perfil para modo infinito
-      if (isInfiniteMode && profile.stats?.modeStats?.infinite) {
-        const infiniteData = profile.stats.modeStats.infinite;
-        setInfiniteStats({
-          bestRecord: infiniteData.bestStreak || 0,
-          currentStreak: infiniteData.currentStreak || 0,
-          totalSongsCompleted: infiniteData.totalSongsCompleted || 0,
-          totalGamesPlayed: infiniteData.games || 0
-        });
+      if (isInfiniteMode) {
+        const infiniteData = profile.stats?.modeStats?.infinite;
+        console.log('📊 Carregando estatísticas do modo infinito do perfil:', infiniteData);
+
+        // Se não existem dados do modo infinito, inicializar com zeros
+        if (!infiniteData) {
+          console.log('📊 Inicializando estatísticas do modo infinito com valores padrão');
+          setInfiniteStats({
+            bestRecord: 0,
+            currentStreak: 0,
+            totalSongsCompleted: 0,
+            totalGamesPlayed: 0
+          });
+        } else {
+          setInfiniteStats({
+            bestRecord: infiniteData.bestStreak || 0,
+            currentStreak: infiniteData.currentStreak || 0,
+            totalSongsCompleted: infiniteData.totalSongsCompleted || 0,
+            totalGamesPlayed: infiniteData.games || 0
+          });
+        }
       }
     } catch (error) {
       console.error('Erro ao carregar estatísticas do perfil:', error);
@@ -220,9 +233,11 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
     if (typeof window !== 'undefined' && isOpen) {
       if (isAuthenticated && profile) {
         // Se usuário está autenticado, usar estatísticas do perfil
+        console.log('📊 Carregando estatísticas do perfil para usuário autenticado');
         loadProfileStatistics();
       } else {
         // Fallback para sistema antigo (usuários anônimos)
+        console.log('📊 Carregando estatísticas para usuário anônimo');
         if (isInfiniteMode) {
           loadInfiniteStatistics();
         } else {

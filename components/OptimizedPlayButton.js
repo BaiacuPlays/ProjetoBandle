@@ -37,11 +37,11 @@ const OptimizedPlayButton = memo(({
   size = 20,
   style = {},
   ariaLabel,
-  // Configurações de comportamento
+  // Configurações de comportamento ultra-responsivo
   instantFeedback = true,
   scaleOnClick = true,
   showSpinner = true,
-  debounceMs = 50,
+  debounceMs = 25, // Reduzido para melhor responsividade
   ...props
 }) => {
   const [isClicked, setIsClicked] = useState(false);
@@ -49,7 +49,7 @@ const OptimizedPlayButton = memo(({
   const buttonRef = useRef(null);
   const clickTimeoutRef = useRef(null);
   const debounceTimeoutRef = useRef(null);
-  
+
   // Limpar timeouts ao desmontar
   useEffect(() => {
     return () => {
@@ -61,43 +61,43 @@ const OptimizedPlayButton = memo(({
       }
     };
   }, []);
-  
+
   // Determinar ícone a ser exibido
   const getIcon = useCallback(() => {
     if (isLoading && showSpinner) {
       return <OptimizedSpinner />;
     }
-    
+
     if (isLoading && !showSpinner) {
       return COMPONENT_CONFIG.PLAY_BUTTON.LOADING_ICON;
     }
-    
+
     return isPlaying ? <FaPause size={size} /> : <FaPlay size={size} />;
   }, [isPlaying, isLoading, showSpinner, size]);
-  
+
   // Handler de clique otimizado
   const handleClick = useCallback(async (e) => {
     if (disabled || isLoading) return;
-    
+
     // Prevenir múltiplos cliques
     if (debounceTimeoutRef.current) {
       clearTimeout(debounceTimeoutRef.current);
     }
-    
+
     // Feedback visual instantâneo
     if (instantFeedback && scaleOnClick) {
       setIsClicked(true);
-      
+
       // Resetar feedback após animação
       if (clickTimeoutRef.current) {
         clearTimeout(clickTimeoutRef.current);
       }
-      
+
       clickTimeoutRef.current = setTimeout(() => {
         setIsClicked(false);
       }, COMPONENT_CONFIG.PLAY_BUTTON.AUTO_ENABLE_TIMEOUT);
     }
-    
+
     // Debounce do clique
     debounceTimeoutRef.current = setTimeout(async () => {
       try {
@@ -112,24 +112,24 @@ const OptimizedPlayButton = memo(({
       }
     }, debounceMs);
   }, [disabled, isLoading, onClick, instantFeedback, scaleOnClick, debounceMs]);
-  
+
   // Handlers de hover para melhor UX
   const handleMouseEnter = useCallback(() => {
     if (!disabled && !isLoading) {
       setIsHovered(true);
     }
   }, [disabled, isLoading]);
-  
+
   const handleMouseLeave = useCallback(() => {
     setIsHovered(false);
   }, []);
-  
+
   // Estilos dinâmicos
   const dynamicStyles = {
     transition: 'all 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
     transform: `scale(${
-      isClicked && scaleOnClick 
-        ? COMPONENT_CONFIG.PLAY_BUTTON.SCALE_FACTOR 
+      isClicked && scaleOnClick
+        ? COMPONENT_CONFIG.PLAY_BUTTON.SCALE_FACTOR
         : isHovered ? 1.05 : 1
     })`,
     opacity: disabled ? 0.6 : 1,
@@ -145,15 +145,15 @@ const OptimizedPlayButton = memo(({
     position: 'relative',
     ...style
   };
-  
+
   // Aria label dinâmico
   const getAriaLabel = useCallback(() => {
     if (ariaLabel) return ariaLabel;
-    
+
     if (isLoading) return 'Carregando áudio...';
     return isPlaying ? 'Pausar áudio' : 'Reproduzir áudio';
   }, [ariaLabel, isLoading, isPlaying]);
-  
+
   return (
     <button
       ref={buttonRef}
@@ -171,7 +171,7 @@ const OptimizedPlayButton = memo(({
       {...props}
     >
       {getIcon()}
-      
+
       {/* Indicador de loading adicional se necessário */}
       {isLoading && !showSpinner && (
         <div

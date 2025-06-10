@@ -11,9 +11,9 @@ class BrowserCompatibility {
     return {
       preload: 'metadata',
       crossOrigin: null, // Removido para evitar problemas de CORS
-      timeout: 1500, // Timeout reduzido para melhor UX
-      playTimeout: 500, // Timeout de play muito reduzido
-      loadDelay: 25, // Delay mínimo reduzido
+      timeout: 1000, // Timeout ainda mais reduzido para melhor UX
+      playTimeout: 300, // Timeout de play ultra-reduzido
+      loadDelay: 10, // Delay mínimo ainda menor
       maxRetries: 1 // Apenas 1 retry
     };
   }
@@ -74,7 +74,7 @@ class BrowserCompatibility {
   // Método para reprodução instantânea (sem timeout)
   async playAudioInstant(audio) {
     try {
-      // Se o áudio está pronto, reproduzir imediatamente
+      // Se o áudio está pronto, reproduzir imediatamente sem timeout
       if (audio.readyState >= 2) {
         const playPromise = audio.play();
         if (playPromise !== undefined) {
@@ -83,8 +83,19 @@ class BrowserCompatibility {
         return Promise.resolve();
       }
 
-      // Se não está pronto, usar método normal com timeout reduzido
-      return this.playAudio(audio);
+      // Se não está pronto, usar método normal com timeout ultra-reduzido
+      return new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          if (audio.paused && audio.readyState < 2) {
+            reject(new Error('Timeout ao reproduzir áudio'));
+          } else {
+            resolve();
+          }
+        }, 200); // Timeout ultra-reduzido para reprodução instantânea
+
+        const cleanup = () => clearTimeout(timeout);
+        this.attemptPlay(audio, cleanup, resolve, reject);
+      });
     } catch (error) {
       this.handlePlayError(error, (err) => { throw err; });
     }

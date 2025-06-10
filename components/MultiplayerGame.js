@@ -181,10 +181,12 @@ const MultiplayerGame = ({ onBackToLobby }) => {
           return;
         }
 
-        // Áudio carregado com sucesso
+        // Áudio carregado com sucesso - limpar TODOS os estados de loading
         setAudioLoadError(false);
         setAudioLoadRetries(0);
         setConnectionError(false);
+        // CORREÇÃO: Garantir que botão de play seja habilitado
+        setIsPlayButtonDisabled(false);
 
         const startTimeToUse = getDeterministicStartTime(duration, songToUse.id);
         setStartTime(startTimeToUse);
@@ -877,9 +879,9 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                           return;
                         }
 
-                        // Desabilitar botão temporariamente (tempo reduzido)
+                        // Desabilitar botão temporariamente (tempo ainda mais reduzido)
                         setIsPlayButtonDisabled(true);
-                        setTimeout(() => setIsPlayButtonDisabled(false), 200); // Reduzido de 500 para 200ms
+                        setTimeout(() => setIsPlayButtonDisabled(false), 100); // Reduzido para 100ms para melhor UX
 
                         try {
                           const currentTime = audioRef.current.currentTime - startTime;
@@ -899,8 +901,12 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                               // Usar método instantâneo se áudio está pronto
                               if (audioRef.current.readyState >= 2) {
                                 await browserCompatibility.playAudioInstant(audioRef.current);
+                                // CORREÇÃO: Limpar loading após reprodução instantânea
+                                setIsPlayButtonDisabled(false);
                               } else {
                                 await browserCompatibility.playAudio(audioRef.current);
+                                // CORREÇÃO: Limpar loading após reprodução normal
+                                setIsPlayButtonDisabled(false);
                               }
                             }
                           }
@@ -991,10 +997,12 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                       setAudioLoadError(true);
                     }}
                     onCanPlay={() => {
-                      // Áudio pronto para tocar
+                      // Áudio pronto para tocar - limpar TODOS os estados de loading
                       setAudioLoadError(false);
                       setConnectionError(false);
                       setAudioLoadRetries(0);
+                      // CORREÇÃO: Garantir que botão de play seja habilitado
+                      setIsPlayButtonDisabled(false);
                     }}
                     onLoadStart={() => {
                       // Começou a carregar

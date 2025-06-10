@@ -23,7 +23,7 @@ export const MemoizedPlayButton = memo(({
       instantFeedback={true}
       scaleOnClick={true}
       showSpinner={true}
-      debounceMs={50}
+      debounceMs={25} // Reduzido para melhor responsividade
       {...props}
     />
   );
@@ -32,11 +32,11 @@ export const MemoizedPlayButton = memo(({
 MemoizedPlayButton.displayName = 'MemoizedPlayButton';
 
 // Componente de controle de volume memoizado
-export const MemoizedVolumeControl = memo(({ 
-  volume, 
-  onChange, 
+export const MemoizedVolumeControl = memo(({
+  volume,
+  onChange,
   disabled,
-  className 
+  className
 }) => {
   return (
     <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -58,12 +58,12 @@ export const MemoizedVolumeControl = memo(({
 MemoizedVolumeControl.displayName = 'MemoizedVolumeControl';
 
 // Componente de progresso de áudio memoizado
-export const MemoizedAudioProgress = memo(({ 
-  progress, 
-  duration, 
-  onChange, 
+export const MemoizedAudioProgress = memo(({
+  progress,
+  duration,
+  onChange,
   disabled,
-  className 
+  className
 }) => {
   const timeDisplay = useMemo(() => {
     const currentTime = Math.min(duration, progress);
@@ -92,17 +92,17 @@ export const MemoizedAudioProgress = memo(({
 MemoizedAudioProgress.displayName = 'MemoizedAudioProgress';
 
 // Componente de tentativas memoizado
-export const MemoizedAttempts = memo(({ 
-  attempts, 
-  maxAttempts, 
-  history, 
+export const MemoizedAttempts = memo(({
+  attempts,
+  maxAttempts,
+  history,
   onAttemptClick,
-  styles 
+  styles
 }) => {
   const attemptButtons = useMemo(() => {
     return [...Array(maxAttempts)].map((_, idx) => {
       let statusClass = styles.attemptInactive;
-      
+
       if (history[idx]) {
         if (history[idx].type === 'success') {
           statusClass = styles.attemptSuccess;
@@ -171,12 +171,12 @@ export const MemoizedHistory = memo(({ history, styles }) => {
 MemoizedHistory.displayName = 'MemoizedHistory';
 
 // Componente de sugestões memoizado
-export const MemoizedSuggestions = memo(({ 
-  suggestions, 
-  onSuggestionClick, 
+export const MemoizedSuggestions = memo(({
+  suggestions,
+  onSuggestionClick,
   showEasterEgg,
   onEasterEggClick,
-  styles 
+  styles
 }) => {
   const suggestionItems = useMemo(() => {
     const items = suggestions.map((suggestion, suggestionIndex) => (
@@ -219,7 +219,7 @@ MemoizedSuggestions.displayName = 'MemoizedSuggestions';
 // Componente de timer memoizado
 export const MemoizedTimer = memo(({ timer, formatTimer, styles }) => {
   const formattedTime = useMemo(() => formatTimer(timer), [timer, formatTimer]);
-  
+
   return (
     <div className={styles.timerBox}>
       Novo jogo em: <span className={styles.timer}>{formattedTime}</span>
