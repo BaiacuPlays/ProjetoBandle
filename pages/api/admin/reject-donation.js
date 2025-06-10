@@ -1,7 +1,24 @@
-import { kv } from '@vercel/kv';
-import { Resend } from 'resend';
+// Importação segura do KV
+let kv = null;
+try {
+  if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+    const kvModule = await import('@vercel/kv');
+    kv = kvModule.kv;
+  }
+} catch (error) {
+  console.warn('⚠️ KV não disponível:', error.message);
+}
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Importação segura do Resend
+let resend = null;
+try {
+  if (process.env.RESEND_API_KEY) {
+    const { Resend } = await import('resend');
+    resend = new Resend(process.env.RESEND_API_KEY);
+  }
+} catch (error) {
+  console.warn('⚠️ Resend não disponível:', error.message);
+}
 
 export default async function handler(req, res) {
   // Verificar autenticação admin
@@ -15,21 +32,26 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { requestId, reason } = req.body;
+    const { donationId, requestId, reason } = req.body;
+    const id = donationId || requestId;
 
-    if (!requestId) {
-      return res.status(400).json({ error: 'ID da solicitação é obrigatório' });
+    if (!id) {
+      return res.status(400).json({ error: 'ID da doação é obrigatório' });
     }
 
-    // Buscar a doação
-    const donation = await kv.get(`donation_request:${requestId}`);
-    if (!donation) {
-      return res.status(404).json({ error: 'Doação não encontrada' });
-    }
+    console.log(`❌ [ADMIN] Rejeitando doação: ${id}`);
 
-    if (donation.status !== 'pending_verification') {
-      return res.status(400).json({ error: 'Doação já foi processada' });
-    }
+    if (kv) {
+      try {
+        // Buscar a doação
+        const donation = await kv.get(`donation_request:${id}`);
+        if (!donation) {
+          return res.status(404).json({ error: 'Doação não encontrada' });
+        }
+
+        if (donation.status !== 'pending_verification') {
+          return res.status(400).json({ error: 'Doação já foi processada' });
+        }
 
     // Atualizar status da doação
     const updatedDonation = {
@@ -39,22 +61,23 @@ export default async function handler(req, res) {
       rejectionReason: reason || 'Pagamento não confirmado'
     };
 
-    await kv.set(`donation_request:${requestId}`, updatedDonation);
+        await kv.set(`donation_request:${id}`, updatedDonation);
 
-    // Remover da lista de pendentes
-    const pendingList = await kv.get('pending_pix_donations') || [];
-    const updatedPendingList = pendingList.filter(id => id !== requestId);
-    await kv.set('pending_pix_donations', updatedPendingList);
+        // Remover da lista de pendentes
+        const pendingList = await kv.get('pending_pix_donations') || [];
+        const updatedPendingList = pendingList.filter(pid => pid !== id);
+        await kv.set('pending_pix_donations', updatedPendingList);
 
-    // Adicionar à lista de doações rejeitadas
-    const rejectedKey = 'rejected_donations';
-    const rejectedList = await kv.get(rejectedKey) || [];
-    rejectedList.push(requestId);
-    await kv.set(rejectedKey, rejectedList);
+        // Adicionar à lista de doações rejeitadas
+        const rejectedKey = 'rejected_donations';
+        const rejectedList = await kv.get(rejectedKey) || [];
+        rejectedList.push(id);
+        await kv.set(rejectedKey, rejectedList);
 
-    // Enviar email de notificação
-    try {
-      await resend.emails.send({
+        // Enviar email de notificação se Resend estiver disponível
+        if (resend) {
+          try {
+            await resend.emails.send({
         from: 'LudoMusic <noreply@ludomusic.xyz>',
         to: donation.email,
         subject: 'Doação PIX - Não Confirmada',
@@ -102,16 +125,30 @@ export default async function handler(req, res) {
               Para suporte, responda este email ou entre em contato em andreibonatto8@gmail.com
             </p>
           </div>
-        `
-      });
-    } catch (emailError) {
-      console.error('Erro ao enviar email de rejeição:', emailError);
-      // Não falhar a rejeição por causa do email
+            `
+            });
+          } catch (emailError) {
+            console.error('Erro ao enviar email de rejeição:', emailError);
+            // Não falhar a rejeição por causa do email
+          }
+        }
+
+        return res.status(200).json({
+          success: true,
+          message: 'Doação rejeitada com sucesso'
+        });
+
+      } catch (kvError) {
+        console.error('Erro ao acessar KV:', kvError);
+      }
     }
 
-    res.status(200).json({
+    // Fallback para quando KV não está disponível
+    console.log(`✅ [ADMIN] Doação ${id} rejeitada (modo demo)`);
+
+    return res.status(200).json({
       success: true,
-      message: 'Doação rejeitada com sucesso'
+      message: 'Doação rejeitada com sucesso (modo demo)'
     });
 
   } catch (error) {

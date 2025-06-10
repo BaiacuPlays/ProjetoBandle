@@ -1,4 +1,5 @@
-[
+{
+  "songs": [
   {
     "id": 0,
     "title": "Beach Buds",
@@ -7576,4 +7577,5 @@
     "genre": "Adventure Game Soundtrack",
     "console": "GameCube"
   }
-]
+  ]
+}

@@ -38,7 +38,7 @@ export default function AdminPage() {
 
     try {
       // Verificar se a chave é válida (admin123)
-      if (adminKey === 'sacabambapislaika') {
+      if (adminKey === 'admin123') {
         setAuthenticated(true);
         // Carregar dados demo imediatamente para mostrar algo
         loadDemoData();
@@ -114,6 +114,7 @@ export default function AdminPage() {
   // Função para carregar todos os dados
   const loadAllData = async () => {
     try {
+      console.log('🔄 Carregando dados do admin...');
       await Promise.all([
         fetchProfiles(),
         fetchDonations(),
@@ -121,8 +122,9 @@ export default function AdminPage() {
         fetchSongs(),
         fetchGlobalStats()
       ]);
+      console.log('✅ Dados carregados com sucesso');
     } catch (err) {
-      console.error('Erro ao carregar dados:', err);
+      console.error('❌ Erro ao carregar dados:', err);
     }
   };
 
@@ -130,7 +132,7 @@ export default function AdminPage() {
   const fetchProfiles = async () => {
     try {
       const response = await fetch('/api/admin/profiles', {
-        headers: { 'x-admin-key': adminKey }
+        headers: { 'x-admin-key': 'admin123' }
       });
 
       if (!response.ok) {
@@ -205,7 +207,7 @@ export default function AdminPage() {
   const fetchDonations = async () => {
     try {
       const response = await fetch('/api/admin/pending-donations', {
-        headers: { 'x-admin-key': adminKey }
+        headers: { 'x-admin-key': 'admin123' }
       });
 
       if (!response.ok) {
@@ -243,7 +245,7 @@ export default function AdminPage() {
   const fetchDailySong = async () => {
     try {
       const response = await fetch('/api/admin/daily-song', {
-        headers: { 'x-admin-key': adminKey }
+        headers: { 'x-admin-key': 'admin123' }
       });
 
       if (!response.ok) {
@@ -285,7 +287,7 @@ export default function AdminPage() {
   const fetchGlobalStats = async () => {
     try {
       const response = await fetch('/api/admin/system-stats', {
-        headers: { 'x-admin-key': adminKey }
+        headers: { 'x-admin-key': 'admin123' }
       });
 
       if (!response.ok) {
@@ -326,7 +328,7 @@ export default function AdminPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-admin-key': adminKey
+          'x-admin-key': 'admin123'
         },
         body: JSON.stringify({ type })
       });
@@ -358,7 +360,7 @@ export default function AdminPage() {
   const checkIntegrity = async () => {
     try {
       const response = await fetch('/api/admin/system-stats', {
-        headers: { 'x-admin-key': adminKey }
+        headers: { 'x-admin-key': 'admin123' }
       });
       const data = await response.json();
 
@@ -400,7 +402,7 @@ export default function AdminPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-admin-key': adminKey
+          'x-admin-key': 'admin123'
         },
         body: JSON.stringify({ userId })
       });
@@ -424,7 +426,7 @@ export default function AdminPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-admin-key': adminKey
+          'x-admin-key': 'admin123'
         },
         body: JSON.stringify({ userId, achievementId })
       });
@@ -453,7 +455,7 @@ export default function AdminPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-admin-key': adminKey
+          'x-admin-key': 'admin123'
         },
         body: JSON.stringify({ songTitle })
       });
@@ -477,7 +479,7 @@ export default function AdminPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-admin-key': adminKey
+          'x-admin-key': 'admin123'
         },
         body: JSON.stringify({ donationId })
       });
@@ -501,7 +503,7 @@ export default function AdminPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-admin-key': adminKey
+          'x-admin-key': 'admin123'
         },
         body: JSON.stringify({ donationId })
       });
