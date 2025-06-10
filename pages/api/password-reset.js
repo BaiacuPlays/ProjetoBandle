@@ -1,11 +1,18 @@
 // API para reset de senha via email
-import { safeKV } from '../../utils/kv-fix';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import { Resend } from 'resend';
 
-// Alias para compatibilidade
-const kv = safeKV;
+// Importação segura do KV
+let kv = null;
+try {
+  if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+    const kvModule = await import('@vercel/kv');
+    kv = kvModule.kv;
+  }
+} catch (error) {
+  // KV não disponível
+}
 
 // Usar o SafeKV que já tem fallback persistente
 // Removendo Maps locais que são reinicializados a cada requisição
@@ -14,12 +21,17 @@ const kv = safeKV;
 const isDevelopment = process.env.NODE_ENV === 'development';
 const hasKVConfig = (process.env.KV_REST_API_URL || process.env.KV_URL) && process.env.KV_REST_API_TOKEN;
 
-// Inicializar Resend com chave fixa que sabemos que funciona
-const RESEND_API_KEY = 're_UM6pASbt_N2XY2oWUC3RSnvbxerAaX4wS';
+// Inicializar Resend com chave do ambiente
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
 let resend = null;
-console.log(`🔧 [INIT] Inicializando Resend com chave fixa`);
-resend = new Resend(RESEND_API_KEY);
-console.log(`🔧 [INIT] Resend inicializado:`, resend ? 'SIM' : 'NÃO');
+
+if (RESEND_API_KEY) {
+  console.log(`🔧 [INIT] Inicializando Resend com chave do ambiente`);
+  resend = new Resend(RESEND_API_KEY);
+  console.log(`🔧 [INIT] Resend inicializado:`, resend ? 'SIM' : 'NÃO');
+} else {
+  console.warn(`⚠️ [INIT] RESEND_API_KEY não configurada`);
+}
 
 // Função para gerar token seguro
 const generateResetToken = () => {

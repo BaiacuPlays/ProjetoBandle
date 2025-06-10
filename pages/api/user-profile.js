@@ -20,7 +20,7 @@ export default async function handler(req, res) {
       }
 
       let targetUserId = userId;
-      
+
       // Se foi fornecido username, converter para userId
       if (username && !userId) {
         targetUserId = `auth_${username}`;
@@ -67,7 +67,7 @@ export default async function handler(req, res) {
         username: userProfile.username || (userData ? userData.username : 'Usuário'),
         displayName: userProfile.displayName || (userData ? userData.displayName : 'Jogador'),
         bio: userProfile.bio || '',
-        avatar: userProfile.avatar || '👤',
+        avatar: userProfile.profilePhoto || userProfile.avatar || '👤',
         level: userProfile.level || 1,
         xp: userProfile.xp || 0,
         totalGames: userProfile.totalGames || 0,
@@ -112,10 +112,10 @@ export default async function handler(req, res) {
 
           return [];
         })(),
-        
+
         // Badges públicos
         badges: userProfile.badges || [],
-        
+
         // Informações de relacionamento (se autenticado)
         relationship: isAuthenticated ? {
           isFriend: false, // Será calculado se necessário
@@ -137,7 +137,7 @@ export default async function handler(req, res) {
           // Verificar se são amigos
           const friendsKey = `friends:${authResult.userId}`;
           let friends = [];
-          
+
           if (isDevelopment && !hasKVConfig) {
             const { localFriendRequests } = require('./friend-requests');
             friends = localFriendRequests.get(friendsKey) || [];
@@ -151,10 +151,10 @@ export default async function handler(req, res) {
           // Verificar solicitações pendentes
           const requestsKey = `friend_requests:${authResult.userId}`;
           const sentRequestsKey = `sent_requests:${authResult.userId}`;
-          
+
           let receivedRequests = [];
           let sentRequests = [];
-          
+
           if (isDevelopment && !hasKVConfig) {
             const { localFriendRequests } = require('./friend-requests');
             receivedRequests = localFriendRequests.get(requestsKey) || [];
@@ -166,7 +166,7 @@ export default async function handler(req, res) {
 
           const hasReceivedRequest = receivedRequests.some(req => req.fromUserId === targetUserId && req.status === 'pending');
           const hasSentRequest = sentRequests.some(req => req.toUserId === targetUserId && req.status === 'pending');
-          
+
           publicProfile.relationship.hasPendingRequest = hasReceivedRequest || hasSentRequest;
           publicProfile.relationship.requestType = hasReceivedRequest ? 'received' : (hasSentRequest ? 'sent' : null);
         } catch (error) {

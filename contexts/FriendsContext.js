@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuth } from './AuthContext';
 import { FriendsCookies, AuthCookies } from '../utils/cookies';
-import { getOptimizedConfig } from '../utils/performanceOptimizer';
 
 const FriendsContext = createContext();
 
@@ -281,10 +280,7 @@ export const FriendsProvider = ({ children }) => {
         }
       }
 
-      console.log('🔍 [DEBUG] Token encontrado:', sessionToken ? 'SIM' : 'NÃO');
-
       if (!sessionToken) {
-        console.log('❌ [DEBUG] Token não encontrado em nenhuma fonte');
         throw new Error('Token de sessão não encontrado. Faça login novamente.');
       }
 
@@ -349,10 +345,7 @@ export const FriendsProvider = ({ children }) => {
         }
       }
 
-      console.log('🔍 [DEBUG] Token encontrado:', sessionToken ? 'SIM' : 'NÃO');
-
       if (!sessionToken) {
-        console.log('❌ [DEBUG] Token não encontrado em nenhuma fonte');
         throw new Error('Token de sessão não encontrado. Faça login novamente.');
       }
 
@@ -772,11 +765,10 @@ export const FriendsProvider = ({ children }) => {
     // Verificação inicial imediata
     checkForNewFriendRequests();
 
-    // Polling ULTRA-OTIMIZADO com configuração automática
-    const optimizedConfig = getOptimizedConfig();
+    // Polling para verificar novas solicitações
     const interval = setInterval(() => {
       checkForNewFriendRequests();
-    }, optimizedConfig.polling.friends); // Otimizado automaticamente
+    }, 60000); // 60 segundos
 
     // Verificar quando a janela ganha foco (usuário volta para a aba)
     const handleFocus = () => {

@@ -77,7 +77,7 @@ const AdBanner = ({
                   window.dispatchEvent(new CustomEvent('openDonationModal'));
                 }
               } catch (error) {
-                console.warn('⚠️ Erro ao abrir modal de doação:', error);
+                // Erro suprimido para produção
               }
             }}
           >

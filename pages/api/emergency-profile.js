@@ -1,5 +1,14 @@
 // API de EMERGÊNCIA - SEMPRE retorna dados para usuários autenticados
-import { safeKV } from '../../utils/kv-fix';
+// Importação segura do KV
+let kv = null;
+try {
+  if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+    const kvModule = await import('@vercel/kv');
+    kv = kvModule.kv;
+  }
+} catch (error) {
+  // KV não disponível
+}
 import { verifyAuthentication } from '../../utils/auth';
 
 export default async function handler(req, res) {
@@ -21,11 +30,11 @@ export default async function handler(req, res) {
     let profile = null;
     try {
       const profileKey = `user:${userId}`;
-      profile = await safeKV.get(profileKey);
-      
+      profile = await kv.get(profileKey);
+
       if (profile) {
         console.log('✅ [EMERGENCY] Perfil encontrado no KV');
-        
+
         // Verificar integridade básica
         if (profile.id && profile.username && profile.stats) {
           return res.status(200).json({
@@ -45,10 +54,10 @@ export default async function handler(req, res) {
     // ESTRATÉGIA 2: Criar perfil de emergência GARANTIDO
     if (!profile) {
       console.log('🆘 [EMERGENCY] Criando perfil de emergência');
-      
+
       // Obter dados básicos do usuário autenticado
       const username = authResult.username || `Jogador_${userId.slice(-6)}`;
-      
+
       profile = {
         id: userId,
         username: username,
@@ -75,26 +84,26 @@ export default async function handler(req, res) {
           xp: 0,
           level: 1,
           modeStats: {
-            daily: { 
-              games: 0, 
-              wins: 0, 
-              bestStreak: 0, 
-              averageAttempts: 0, 
-              perfectGames: 0 
+            daily: {
+              games: 0,
+              wins: 0,
+              bestStreak: 0,
+              averageAttempts: 0,
+              perfectGames: 0
             },
-            infinite: { 
-              games: 0, 
-              wins: 0, 
-              bestStreak: 0, 
-              totalSongsCompleted: 0, 
-              longestSession: 0 
+            infinite: {
+              games: 0,
+              wins: 0,
+              bestStreak: 0,
+              totalSongsCompleted: 0,
+              longestSession: 0
             },
-            multiplayer: { 
-              games: 0, 
-              wins: 0, 
-              roomsCreated: 0, 
-              totalPoints: 0, 
-              bestRoundScore: 0 
+            multiplayer: {
+              games: 0,
+              wins: 0,
+              roomsCreated: 0,
+              totalPoints: 0,
+              bestRoundScore: 0
             }
           }
         },
@@ -131,14 +140,14 @@ export default async function handler(req, res) {
     // Salvar perfil de emergência no KV (sem bloquear resposta)
     try {
       const profileKey = `user:${userId}`;
-      await safeKV.set(profileKey, profile);
+      await kv.set(profileKey, profile);
       console.log('💾 [EMERGENCY] Perfil de emergência salvo no KV');
     } catch (error) {
       console.warn('⚠️ [EMERGENCY] Erro ao salvar no KV (não crítico):', error);
     }
 
     console.log('✅ [EMERGENCY] Perfil de emergência criado com sucesso');
-    
+
     return res.status(200).json({
       success: true,
       profile,
@@ -148,7 +157,7 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error('❌ [EMERGENCY] Erro crítico na API de emergência:', error);
-    
+
     // ÚLTIMO RECURSO: Retornar perfil mínimo absoluto
     const minimalProfile = {
       id: 'emergency_user',
@@ -237,7 +246,7 @@ function repairProfile(profile, userId) {
   repaired.franchiseStats = repaired.franchiseStats || {};
   repaired.badges = Array.isArray(repaired.badges) ? repaired.badges : [];
   repaired.titles = Array.isArray(repaired.titles) ? repaired.titles : [];
-  
+
   if (!repaired.preferences || typeof repaired.preferences !== 'object') {
     repaired.preferences = {
       theme: 'dark',
@@ -273,16 +282,16 @@ function ensureProfileIntegrity(profile, userId) {
 
   // Verificar e corrigir campos críticos
   const ensured = { ...profile };
-  
+
   ensured.id = ensured.id || userId;
   ensured.username = ensured.username || `Jogador_${userId.slice(-6)}`;
   ensured.level = Math.max(1, ensured.level || 1);
   ensured.xp = Math.max(0, ensured.xp || 0);
-  
+
   // Sincronizar XP e level
   const calculatedLevel = Math.floor(Math.sqrt(ensured.xp / 300)) + 1;
   ensured.level = calculatedLevel;
-  
+
   if (ensured.stats) {
     ensured.stats.xp = ensured.xp;
     ensured.stats.level = ensured.level;

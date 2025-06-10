@@ -20,6 +20,7 @@ const createDefaultProfile = (userId, username) => ({
   displayName: username,
   bio: '',
   profilePhoto: '🎮',
+  avatar: '🎮', // Compatibilidade com sistema antigo
   level: 1,
   xp: 0,
   createdAt: new Date().toISOString(),

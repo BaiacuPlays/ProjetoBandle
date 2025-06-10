@@ -36,36 +36,7 @@ export default function SimpleAdmin() {
     setLoading(false);
   };
 
-  const clearAllLocalData = async () => {
-    if (!confirm('⚠️ ATENÇÃO: Isso vai deletar TODOS os dados locais de desenvolvimento. Continuar?')) {
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const response = await fetch('/api/admin/clear-all-local', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${password}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      const result = await response.json();
-
-      if (response.ok && result.success) {
-        setMessage(`✅ Todos os dados locais foram limpos! (${result.totalCleared} itens removidos)`);
-        setTimeout(() => {
-          loadUsers();
-        }, 500);
-      } else {
-        setMessage(`❌ Erro ao limpar dados: ${result.error || 'Erro desconhecido'}`);
-      }
-    } catch (error) {
-      setMessage(`❌ Erro: ${error.message}`);
-    }
-    setLoading(false);
-  };
+  // Função removida - não necessária em produção
 
   const debugStorage = async () => {
     setLoading(true);
@@ -74,7 +45,6 @@ export default function SimpleAdmin() {
       const result = await response.json();
 
       if (response.ok && result.success) {
-        console.log('🔍 DEBUG - Storage Local:', result.storage);
         setMessage(`🔍 Local: ${result.storage.users.count} usuários, ${result.storage.profiles.count} perfis, ${result.storage.sessions.count} sessões.`);
       } else {
         setMessage(`❌ Erro no debug local: ${result.error || 'Erro desconhecido'}`);
@@ -154,10 +124,10 @@ export default function SimpleAdmin() {
         <Head>
           <title>Admin Simples - LudoMusic</title>
         </Head>
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'center', 
-          alignItems: 'center', 
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
           minHeight: '100vh',
           backgroundColor: '#1a1a1a',
           color: 'white',
@@ -204,9 +174,9 @@ export default function SimpleAdmin() {
               Entrar
             </button>
             {message && (
-              <div style={{ 
-                marginTop: '10px', 
-                color: message.includes('incorreta') ? '#ff4444' : '#44ff44' 
+              <div style={{
+                marginTop: '10px',
+                color: message.includes('incorreta') ? '#ff4444' : '#44ff44'
               }}>
                 {message}
               </div>
@@ -233,9 +203,9 @@ export default function SimpleAdmin() {
         fontFamily: 'Arial, sans-serif'
       }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
             alignItems: 'center',
             marginBottom: '20px',
             padding: '20px',
@@ -388,7 +358,7 @@ export default function SimpleAdmin() {
                         #{user.rank}
                       </div>
                     </div>
-                    
+
                     {!user.isCurrentUser && (
                       <button
                         onClick={() => deleteUser(user.username)}

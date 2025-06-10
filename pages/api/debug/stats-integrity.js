@@ -1,6 +1,16 @@
 // API para diagnóstico de integridade das estatísticas
-import { safeKV } from '../../../utils/kv-fix';
 import { verifyAuthentication } from '../../../utils/auth';
+
+// Importação segura do KV
+let kv = null;
+try {
+  if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+    const kvModule = await import('@vercel/kv');
+    kv = kvModule.kv;
+  }
+} catch (error) {
+  // KV não disponível
+}
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -17,9 +27,13 @@ export default async function handler(req, res) {
     const userId = authResult.userId;
     console.log('🔍 [STATS-DEBUG] Iniciando diagnóstico para userId:', userId);
 
+    if (!kv) {
+      return res.status(500).json({ error: 'KV não disponível' });
+    }
+
     // Buscar perfil do usuário
     const profileKey = `user:${userId}`;
-    const userProfile = await safeKV.get(profileKey);
+    const userProfile = await kv.get(profileKey);
 
     if (!userProfile) {
       return res.status(404).json({ error: 'Perfil não encontrado' });
@@ -27,11 +41,11 @@ export default async function handler(req, res) {
 
     // Buscar estatísticas diárias
     const dailyStatsKey = `stats:daily:${userId}`;
-    const dailyStats = await safeKV.get(dailyStatsKey);
+    const dailyStats = await kv.get(dailyStatsKey);
 
     // Verificar integridade do perfil
     const profileIntegrity = verifyProfileIntegrity(userProfile);
-    
+
     // Verificar integridade das estatísticas
     const statsIntegrity = userProfile.stats ? verifyStatsIntegrity(userProfile.stats) : { isValid: false, issues: ['Stats não encontradas'] };
 
@@ -69,9 +83,9 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error('❌ [STATS-DEBUG] Erro no diagnóstico:', error);
-    return res.status(500).json({ 
+    return res.status(500).json({
       error: 'Erro interno do servidor',
-      details: error.message 
+      details: error.message
     });
   }
 }
@@ -79,7 +93,7 @@ export default async function handler(req, res) {
 // Função para verificar integridade do perfil
 function verifyProfileIntegrity(profile) {
   const issues = [];
-  
+
   if (!profile) {
     return { isValid: false, issues: ['Perfil não existe'] };
   }
@@ -118,7 +132,7 @@ function verifyProfileIntegrity(profile) {
 // Função para verificar integridade das estatísticas
 function verifyStatsIntegrity(stats) {
   const issues = [];
-  
+
   // Verificar se campos obrigatórios existem
   const requiredFields = ['totalGames', 'wins', 'losses', 'winRate', 'currentStreak', 'bestStreak'];
   requiredFields.forEach(field => {

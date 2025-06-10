@@ -44,8 +44,7 @@ export default async function handler(req, res) {
         console.log(`✅ Jogo diário removido do armazenamento local`);
       }
     } else {
-      const { safeKV } = require('../../../utils/kv-fix');
-      await safeKV.del(dailyGameKey);
+      await kv.del(dailyGameKey);
       console.log(`✅ Jogo diário removido do KV`);
     }
 

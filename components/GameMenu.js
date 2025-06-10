@@ -5,14 +5,12 @@ import {
   faCog,
   faBug,
   faPaperPlane,
-  faUsers,
-  faServer
+  faUsers
 } from '@fortawesome/free-solid-svg-icons';
 import styles from '../styles/GameMenu.module.css';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useModalScrollLock } from '../hooks/useModalScrollLock';
 import { useRouter } from 'next/router';
-import SystemStatus from './SystemStatus';
 
 const GameMenu = ({ isOpen, onClose }) => {
   const { t, language, changeLanguage, isClient } = useLanguage();
@@ -26,7 +24,7 @@ const GameMenu = ({ isOpen, onClose }) => {
     settings: false
   });
 
-  const [showSystemStatus, setShowSystemStatus] = useState(false);
+
 
   const toggleSection = (section) => {
     setExpandedSections(prev => ({
@@ -295,20 +293,7 @@ const GameMenu = ({ isOpen, onClose }) => {
           )}
         </div>
 
-        {/* Status do Sistema */}
-        <div className={styles.menuSection}>
-          <button
-            className={styles.menuSectionHeader}
-            onClick={() => {
-              setShowSystemStatus(true);
-              onClose(); // Fechar menu
-            }}
-            style={{ justifyContent: 'center' }}
-          >
-            <FontAwesomeIcon icon={faServer} className={styles.menuIcon} />
-            <span>Status do Sistema</span>
-          </button>
-        </div>
+
 
         {/* Relatório de Bug */}
         <div className={styles.menuSection}>
@@ -339,10 +324,7 @@ const GameMenu = ({ isOpen, onClose }) => {
           </button>
         </div>
 
-        {/* Modal de Status do Sistema */}
-        {showSystemStatus && (
-          <SystemStatus onClose={() => setShowSystemStatus(false)} />
-        )}
+
 
       </div>
     </div>

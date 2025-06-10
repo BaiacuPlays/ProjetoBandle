@@ -258,7 +258,6 @@ export const kvDel = async (key, options = {}, fallbackStorage = null) => {
 // Funções utilitárias para gerenciar o sistema
 export const clearLocalCache = () => {
   localCache.clear();
-  console.log('🧹 Cache local limpo');
 };
 
 export const getKVStatus = () => {

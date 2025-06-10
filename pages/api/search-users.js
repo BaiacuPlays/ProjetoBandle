@@ -12,7 +12,7 @@ const generateFriendCode = (username) => {
     a = ((a << 5) - a) + b.charCodeAt(0);
     return a & a;
   }, 0);
-  
+
   const code = Math.abs(hash).toString(36).toUpperCase().substr(0, 6);
   return `PLAYER${code.padEnd(6, '0')}`;
 };
@@ -37,11 +37,11 @@ export default async function handler(req, res) {
       for (const [key, userData] of localUsers.entries()) {
         if (key.startsWith('user:')) {
           const friendCode = generateFriendCode(userData.username);
-          
+
           // Buscar por username ou código de amigo
-          if (userData.username.toLowerCase() === searchTerm || 
+          if (userData.username.toLowerCase() === searchTerm ||
               friendCode.toLowerCase() === searchTerm) {
-            
+
             // Não retornar o próprio usuário
             const userAuthId = `auth_${userData.username}`;
             if (userAuthId !== currentUserId) {
@@ -80,16 +80,16 @@ export default async function handler(req, res) {
       // Buscar no Vercel KV (produção)
       try {
         const userKeys = await kv.keys('user:*');
-        
+
         for (const key of userKeys) {
           const userData = await kv.get(key);
           if (userData) {
             const friendCode = generateFriendCode(userData.username);
-            
+
             // Buscar por username ou código de amigo
-            if (userData.username.toLowerCase() === searchTerm || 
+            if (userData.username.toLowerCase() === searchTerm ||
                 friendCode.toLowerCase() === searchTerm) {
-              
+
               // Não retornar o próprio usuário
               const userAuthId = `auth_${userData.username}`;
               if (userAuthId !== currentUserId) {
@@ -107,7 +107,7 @@ export default async function handler(req, res) {
                   id: userAuthId,
                   username: userData.username,
                   displayName: userData.displayName,
-                  avatar: userProfile?.avatar || userData.avatar || '👤', // Tentar avatar do perfil, depois do userData, depois padrão
+                  avatar: userProfile?.profilePhoto || userProfile?.avatar || userData.avatar || '👤', // Tentar profilePhoto, depois avatar do perfil, depois do userData, depois padrão
                   level: userProfile?.level || 1, // Nível do perfil ou padrão
                   friendCode: friendCode
                 };

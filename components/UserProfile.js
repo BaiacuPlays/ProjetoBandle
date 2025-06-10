@@ -63,9 +63,7 @@ const UserProfile = ({ isOpen, onClose }) => {
 
   // Inicializar formulário de edição quando há perfil
   useEffect(() => {
-    console.log('🔍 [USERPROFILE] Estado atual:', { profile: !!profile, userId, isLoading, isAuthenticated });
     if (profile && userId) {
-      console.log('✅ [USERPROFILE] Perfil recebido:', profile.username);
       setEditForm({
         displayName: profile.displayName || '',
         bio: profile.bio || ''
@@ -299,7 +297,11 @@ const UserProfile = ({ isOpen, onClose }) => {
   const handlePhotoChange = async (photoData) => {
     if (updateProfile) {
       try {
-        await updateProfile({ profilePhoto: photoData });
+        // Salvar tanto como profilePhoto quanto como avatar para compatibilidade
+        await updateProfile({
+          profilePhoto: photoData,
+          avatar: photoData
+        });
       } catch (error) {
         alert('Não foi possível atualizar a foto. Tente novamente.');
       }
@@ -369,26 +371,23 @@ const UserProfile = ({ isOpen, onClose }) => {
 
   // Sincronizar conquistas automaticamente
   useEffect(() => {
-    if (profile && profile.stats && updateProfile) {
-      // Verificar se há conquistas que deveriam estar desbloqueadas mas não estão no perfil
-      const shouldBeUnlocked = getUnlockedAchievements(profile.stats, profile);
-      const currentAchievements = profile.achievements || [];
-      const missingAchievements = shouldBeUnlocked.filter(id => !currentAchievements.includes(id));
+    // Verificar se todos os dados necessários estão disponíveis
+    if (!profile || !profile.stats || !updateProfile) {
+      return;
+    }
 
-      if (missingAchievements.length > 0) {
-        console.log('🔄 Sincronizando conquistas faltantes:', missingAchievements);
-        console.log('🔄 Conquistas que deveriam estar desbloqueadas:', shouldBeUnlocked);
-        console.log('🔄 Conquistas atuais no perfil:', currentAchievements);
+    // Verificar se há conquistas que deveriam estar desbloqueadas mas não estão no perfil
+    const shouldBeUnlocked = getUnlockedAchievements(profile.stats, profile);
+    const currentAchievements = profile.achievements || [];
+    const missingAchievements = shouldBeUnlocked.filter(id => !currentAchievements.includes(id));
 
-        // Atualizar diretamente o perfil com as conquistas corretas
-        updateProfile({
-          achievements: shouldBeUnlocked
-        }).then(() => {
-          console.log('✅ Conquistas sincronizadas com sucesso!');
-        }).catch(error => {
-          console.error('❌ Erro ao sincronizar conquistas:', error);
-        });
-      }
+    if (missingAchievements.length > 0) {
+      // Atualizar diretamente o perfil com as conquistas corretas
+      updateProfile({
+        achievements: shouldBeUnlocked
+      }).catch(error => {
+        // Erro silencioso em produção
+      });
     }
   }, [profile, updateProfile]);
 

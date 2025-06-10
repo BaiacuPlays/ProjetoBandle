@@ -1,5 +1,14 @@
 // API para estatísticas do modo diário (por userid)
-import { safeKV } from '../../utils/kv-fix';
+// Importação segura do KV
+let kv = null;
+try {
+  if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+    const kvModule = await import('@vercel/kv');
+    kv = kvModule.kv;
+  }
+} catch (error) {
+  // KV não disponível
+}
 
 // Fallback para desenvolvimento local - armazenamento em memória
 const localStats = new Map();
@@ -10,14 +19,15 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 // Função auxiliar para operações KV com fallback
 async function safeKVOperation(operation, key, value = null) {
   try {
-    // Garantir que o SafeKV está inicializado
-    await safeKV.initialize();
+    if (!kv) {
+      throw new Error('KV não disponível');
+    }
 
     switch (operation) {
       case 'get':
-        return await safeKV.get(key);
+        return await kv.get(key);
       case 'set':
-        return await safeKV.set(key, value);
+        return await kv.set(key, value);
       default:
         throw new Error(`Operação não suportada: ${operation}`);
     }

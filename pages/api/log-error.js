@@ -18,12 +18,11 @@ export default async function handler(req, res) {
       serverTimestamp: new Date().toISOString()
     };
 
-    // Apenas log no console para Vercel (logs são capturados automaticamente)
-    console.error('Client Error Report:', JSON.stringify(logEntry, null, 2));
+    // Log de erro removido para produção - Vercel captura automaticamente
 
     res.status(200).json({ success: true, id: logEntry.id });
   } catch (error) {
-    console.error('Error logging error:', error);
+    // Log de erro removido para produção
     res.status(500).json({ error: 'Failed to log error' });
   }
 }

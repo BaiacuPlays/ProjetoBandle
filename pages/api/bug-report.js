@@ -1,9 +1,42 @@
+// Importar sistema de segurança e webhook
+import {
+  getClientIP,
+  isIPBlocked,
+  blockIP,
+  checkRateLimit,
+  isSpamContent,
+  isValidEmail,
+  sanitizeInput
+} from '../../utils/security';
+import { sendSecureDiscordReport } from '../../utils/discord-webhook';
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
+    const clientIP = getClientIP(req);
+
+    // Verificar se IP está bloqueado
+    if (await isIPBlocked(clientIP)) {
+      console.warn(`🚫 IP bloqueado tentou enviar relatório: ${clientIP}`);
+      return res.status(429).json({
+        error: 'Acesso negado por atividade suspeita',
+        code: 'IP_BLOCKED'
+      });
+    }
+
+    // Verificar rate limiting (máximo 3 relatórios por minuto)
+    if (!await checkRateLimit(clientIP, 'bug-report', 3, 60000)) {
+      console.warn(`⚠️ Rate limit excedido para IP: ${clientIP}`);
+      await blockIP(clientIP, 'Rate limit excedido em bug-report');
+      return res.status(429).json({
+        error: 'Muitas tentativas. Tente novamente mais tarde.',
+        code: 'RATE_LIMIT_EXCEEDED'
+      });
+    }
+
     const { description, email, category, systemInfo, type } = req.body;
 
     // Validações básicas
@@ -15,15 +48,43 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Categoria é obrigatória' });
     }
 
-    // Preparar dados do relatório
+    // Sanitizar e verificar se é spam
+    const cleanDescription = sanitizeInput(description, 1000);
+    if (isSpamContent(cleanDescription)) {
+      console.warn(`🚫 Conteúdo spam detectado de IP ${clientIP}: ${cleanDescription.substring(0, 100)}`);
+      await blockIP(clientIP, 'Conteúdo spam detectado');
+      return res.status(400).json({
+        error: 'Conteúdo inválido detectado',
+        code: 'SPAM_DETECTED'
+      });
+    }
+
+    // Validar categoria
+    const validCategories = ['bug', 'suggestion', 'audio', 'ui', 'other'];
+    if (!validCategories.includes(category)) {
+      return res.status(400).json({ error: 'Categoria inválida' });
+    }
+
+    // Validar email se fornecido
+    if (email && email.trim() && !isValidEmail(email)) {
+      return res.status(400).json({ error: 'Email inválido' });
+    }
+
+    // Preparar dados do relatório com informações de segurança
     const reportData = {
       id: `bug_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
       timestamp: new Date().toISOString(),
-      description: description.trim(),
-      email: email?.trim() || 'Não informado',
+      description: cleanDescription,
+      email: email ? sanitizeInput(email, 100) : 'Não informado',
       category,
       systemInfo: systemInfo || {},
-      type: type || 'user_report'
+      type: type || 'user_report',
+      security: {
+        clientIP: clientIP,
+        userAgent: req.headers['user-agent'] || 'Unknown',
+        referer: req.headers['referer'] || 'Unknown',
+        timestamp: Date.now()
+      }
     };
 
     // Mapear categorias para emojis
@@ -103,47 +164,31 @@ export default async function handler(req, res) {
       });
     }
 
-    // Enviar para Discord se webhook estiver configurado
-    const discordWebhookUrl = process.env.DISCORD_WEBHOOK_URL;
-    
-    if (discordWebhookUrl) {
-      try {
-        const discordPayload = {
-          username: 'LudoMusic Bug Reporter',
-          avatar_url: 'https://ludomusic.xyz/favicon.ico',
-          embeds: [embed]
-        };
-
-        const discordResponse = await fetch(discordWebhookUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(discordPayload)
-        });
-
-        if (!discordResponse.ok) {
-          console.error('Erro ao enviar para Discord:', await discordResponse.text());
-        } else {
-          console.log('✅ Relatório enviado para Discord com sucesso');
-        }
-      } catch (error) {
-        console.error('Erro ao enviar para Discord:', error);
-      }
+    // Tentar enviar para Discord usando sistema seguro
+    let discordSent = false;
+    try {
+      discordSent = await sendSecureDiscordReport(reportData, req);
+    } catch (error) {
+      console.error('Erro ao enviar para Discord:', error);
     }
 
-    // Log local para backup
-    console.log('📝 Novo relatório de bug:', {
+    // Log local para backup (sempre salvar)
+    console.log('📝 Relatório de bug processado:', {
       id: reportData.id,
-      category,
-      email: email || 'Não informado',
-      timestamp: reportData.timestamp
+      category: reportData.category,
+      ip: clientIP,
+      timestamp: reportData.timestamp,
+      description: reportData.description.substring(0, 100) + '...',
+      discordSent: discordSent,
+      email: reportData.email !== 'Não informado' ? 'Fornecido' : 'Não fornecido'
     });
 
-    res.status(200).json({ 
-      success: true, 
+    res.status(200).json({
+      success: true,
       id: reportData.id,
-      message: 'Relatório enviado com sucesso!' 
+      message: 'Relatório enviado com sucesso!',
+      discordSent: discordSent,
+      timestamp: reportData.timestamp
     });
 
   } catch (error) {

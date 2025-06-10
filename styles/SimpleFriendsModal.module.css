@@ -730,6 +730,114 @@
   box-shadow: 0 6px 20px rgba(29, 185, 84, 0.4);
 }
 
+/* Seção de solicitações enviadas */
+.sentSection {
+  margin-top: 30px;
+  padding-top: 25px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sentSection h3 {
+  color: #fff;
+  margin: 0 0 20px 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #ff9800, #f57c00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 20px rgba(255, 152, 0, 0.3);
+}
+
+.sentList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.sentItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px;
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.05), rgba(245, 124, 0, 0.02));
+  border-radius: 16px;
+  border: 1px solid rgba(255, 152, 0, 0.2);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  position: relative;
+  overflow: hidden;
+}
+
+.sentItem::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 152, 0, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.sentItem:hover::before {
+  left: 100%;
+}
+
+.sentItem:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 152, 0, 0.4);
+  box-shadow: 0 8px 25px rgba(255, 152, 0, 0.2);
+}
+
+.sentDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.status {
+  color: rgba(255, 152, 0, 0.8);
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 4px 8px;
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.1), rgba(255, 152, 0, 0.05));
+  border-radius: 8px;
+  border: 1px solid rgba(255, 152, 0, 0.3);
+  backdrop-filter: blur(5px);
+  display: inline-block;
+  width: fit-content;
+}
+
+.sentActions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.cancelButton {
+  background: linear-gradient(135deg, rgba(244, 67, 54, 0.8), rgba(229, 57, 53, 0.8));
+  border: none;
+  color: white;
+  padding: 10px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cancelButton:hover {
+  background: linear-gradient(135deg, rgba(244, 67, 54, 1), rgba(229, 57, 53, 1));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(244, 67, 54, 0.4);
+}
+
 /* Responsividade */
 @media (max-width: 768px) {
   .overlay {
@@ -797,9 +905,18 @@
   .rejectButton,
   .removeButton,
   .viewProfileButton,
-  .addButton {
+  .addButton,
+  .cancelButton {
     padding: 8px 12px;
     font-size: 0.85rem;
+  }
+
+  .sentItem {
+    padding: 15px;
+  }
+
+  .sentActions {
+    gap: 6px;
   }
 
   .linkPreview {

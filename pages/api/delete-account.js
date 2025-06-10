@@ -2,7 +2,17 @@
 import { verifyAuthentication } from '../../utils/auth';
 import { localUsers, localProfiles, localSessions } from '../../utils/storage';
 import { isDevelopment, hasKVConfig, kvGet, kvSet, kvDel } from '../../utils/kv-config';
-import { safeKV } from '../../utils/kv-fix';
+
+// Importação segura do KV
+let kv = null;
+try {
+  if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+    const kvModule = await import('@vercel/kv');
+    kv = kvModule.kv;
+  }
+} catch (error) {
+  // KV não disponível
+}
 
 // Função para invalidar todas as sessões de um usuário (copiada de auth.js)
 const invalidateUserSessions = async (username) => {
@@ -14,7 +24,7 @@ const invalidateUserSessions = async (username) => {
     if (isDevelopment && !hasKVConfig) {
       userSessions = localSessions.get(userSessionsKey) || [];
     } else {
-      userSessions = await safeKV.get(userSessionsKey) || [];
+      userSessions = await kv.get(userSessionsKey) || [];
     }
 
     console.log(`🔒 [DELETE] Invalidando ${userSessions.length} sessões para usuário: ${username}`);
@@ -26,7 +36,7 @@ const invalidateUserSessions = async (username) => {
       if (isDevelopment && !hasKVConfig) {
         localSessions.delete(sessionKey);
       } else {
-        await safeKV.del(sessionKey);
+        await kv.del(sessionKey);
       }
     }
 
@@ -34,7 +44,7 @@ const invalidateUserSessions = async (username) => {
     if (isDevelopment && !hasKVConfig) {
       localSessions.delete(userSessionsKey);
     } else {
-      await safeKV.del(userSessionsKey);
+      await kv.del(userSessionsKey);
     }
 
     console.log(`✅ [DELETE] Sessões invalidadas para usuário: ${username}`);
@@ -80,7 +90,7 @@ export default async function handler(req, res) {
 
     if (isDevelopment && !hasKVConfig) {
       // Em desenvolvimento local, usar storage local
-      console.log(`🗑️ [DEV] Deletando conta ${username} do storage local...`);
+
 
       // Deletar do storage local
       const userKey = `user:${username.toLowerCase()}`; // Chave correta do usuário
@@ -89,13 +99,13 @@ export default async function handler(req, res) {
       if (localUsers.has(userKey)) {
         localUsers.delete(userKey);
         deletedKeys.push(userKey);
-        console.log(`✅ [DEV] Usuário removido: ${userKey}`);
+
       }
 
       if (localProfiles.has(profileKey)) {
         localProfiles.delete(profileKey);
         deletedKeys.push(profileKey);
-        console.log(`✅ [DEV] Perfil removido: ${profileKey}`);
+
       }
 
       // Limpar sessões
@@ -132,10 +142,10 @@ export default async function handler(req, res) {
       for (const key of keysToDelete) {
         try {
           // Verificar se a chave existe antes de deletar
-          const exists = await safeKV.get(key);
+          const exists = await kv.get(key);
           console.log(`🔍 [PROD] Verificando chave ${key}: ${exists ? 'EXISTE' : 'NÃO EXISTE'}`);
 
-          const deleted = await safeKV.del(key);
+          const deleted = await kv.del(key);
           if (deleted > 0) {
             deletedKeys.push(key);
             console.log(`✅ [PROD] Chave deletada: ${key}`);
@@ -150,12 +160,12 @@ export default async function handler(req, res) {
 
       // Buscar e remover dados diários (daily_*)
       try {
-        const dailyKeys = await safeKV.keys(`daily_*`);
+        const dailyKeys = await kv.keys(`daily_*`);
         for (const dailyKey of dailyKeys) {
           try {
-            const dailyData = await safeKV.get(dailyKey);
+            const dailyData = await kv.get(dailyKey);
             if (dailyData && dailyData.username === username) {
-              await safeKV.del(dailyKey);
+              await kv.del(dailyKey);
               deletedKeys.push(dailyKey);
               console.log(`✅ [PROD] Dados diários deletados: ${dailyKey}`);
             }
@@ -171,12 +181,12 @@ export default async function handler(req, res) {
 
       // Limpar referências em listas de amigos de outros usuários
       try {
-        const allFriendKeys = await safeKV.keys('friends:*');
+        const allFriendKeys = await kv.keys('friends:*');
         let friendsCleanedCount = 0;
 
         for (const friendKey of allFriendKeys) {
           try {
-            const friendsList = await safeKV.get(friendKey);
+            const friendsList = await kv.get(friendKey);
             if (friendsList && Array.isArray(friendsList)) {
               const originalLength = friendsList.length;
               const filteredList = friendsList.filter(friend =>
@@ -184,7 +194,7 @@ export default async function handler(req, res) {
               );
 
               if (filteredList.length !== originalLength) {
-                await safeKV.set(friendKey, filteredList);
+                await kv.set(friendKey, filteredList);
                 friendsCleanedCount++;
                 console.log(`✅ [PROD] Referências removidas de ${friendKey}`);
               }
@@ -194,7 +204,7 @@ export default async function handler(req, res) {
             errors.push(`Erro ao limpar ${friendKey}: ${error.message}`);
           }
         }
-        
+
         if (friendsCleanedCount > 0) {
           cleanupActions.push(`Referências removidas de ${friendsCleanedCount} listas de amigos`);
         }
@@ -205,13 +215,13 @@ export default async function handler(req, res) {
 
       // Limpar solicitações de amizade pendentes
       try {
-        const allRequestKeys = await safeKV.keys('friend_requests:*');
-        const allSentRequestKeys = await safeKV.keys('sent_requests:*');
+        const allRequestKeys = await kv.keys('friend_requests:*');
+        const allSentRequestKeys = await kv.keys('sent_requests:*');
         let requestsCleanedCount = 0;
 
         for (const requestKey of [...allRequestKeys, ...allSentRequestKeys]) {
           try {
-            const requests = await safeKV.get(requestKey);
+            const requests = await kv.get(requestKey);
             if (requests && Array.isArray(requests)) {
               const originalLength = requests.length;
               const filteredRequests = requests.filter(req =>
@@ -222,7 +232,7 @@ export default async function handler(req, res) {
               );
 
               if (filteredRequests.length !== originalLength) {
-                await safeKV.set(requestKey, filteredRequests);
+                await kv.set(requestKey, filteredRequests);
                 requestsCleanedCount++;
                 console.log(`✅ [PROD] Solicitações removidas de ${requestKey}`);
               }
@@ -232,7 +242,7 @@ export default async function handler(req, res) {
             errors.push(`Erro ao limpar ${requestKey}: ${error.message}`);
           }
         }
-        
+
         if (requestsCleanedCount > 0) {
           cleanupActions.push(`Solicitações removidas de ${requestsCleanedCount} listas`);
         }
@@ -243,12 +253,12 @@ export default async function handler(req, res) {
 
       // Limpar notificações que mencionam este usuário
       try {
-        const allNotificationKeys = await safeKV.keys('notifications:*');
+        const allNotificationKeys = await kv.keys('notifications:*');
         let notificationsCleanedCount = 0;
 
         for (const notifKey of allNotificationKeys) {
           try {
-            const notifications = await safeKV.get(notifKey);
+            const notifications = await kv.get(notifKey);
             if (notifications && Array.isArray(notifications)) {
               const originalLength = notifications.length;
               const filteredNotifications = notifications.filter(notif =>
@@ -258,7 +268,7 @@ export default async function handler(req, res) {
               );
 
               if (filteredNotifications.length !== originalLength) {
-                await safeKV.set(notifKey, filteredNotifications);
+                await kv.set(notifKey, filteredNotifications);
                 notificationsCleanedCount++;
                 console.log(`✅ [PROD] Notificações limpas de ${notifKey}`);
               }
@@ -268,7 +278,7 @@ export default async function handler(req, res) {
             errors.push(`Erro ao limpar ${notifKey}: ${error.message}`);
           }
         }
-        
+
         if (notificationsCleanedCount > 0) {
           cleanupActions.push(`Notificações limpas de ${notificationsCleanedCount} usuários`);
         }
@@ -294,9 +304,9 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error('❌ [DELETE ACCOUNT] Erro geral na remoção da conta:', error);
-    return res.status(500).json({ 
+    return res.status(500).json({
       error: 'Erro interno do servidor',
-      details: error.message 
+      details: error.message
     });
   }
 }

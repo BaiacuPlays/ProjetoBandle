@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { AuthCookies } from '../utils/cookies';
-import { getOptimizedConfig } from '../utils/performanceOptimizer';
 
 const NotificationContext = createContext();
 
@@ -186,11 +185,10 @@ export const NotificationProvider = ({ children }) => {
     loadServerInvites();
     loadServerNotifications();
 
-    const optimizedConfig = getOptimizedConfig();
     const interval = setInterval(() => {
       loadServerInvites();
       loadServerNotifications();
-    }, optimizedConfig.polling.notifications); // Otimizado automaticamente
+    }, 30000); // 30 segundos
     return () => clearInterval(interval);
   }, [currentUserId, isAuthenticated]);
 

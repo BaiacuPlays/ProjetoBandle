@@ -106,9 +106,9 @@ export const PERFORMANCE_CONFIG = {
   REDUCE_ANIMATIONS_ON_SLOW: true,
   REDUCE_CACHE_ON_LOW_MEMORY: true,
 
-  // Monitoramento
-  PERFORMANCE_MONITORING: true,
-  LOG_SLOW_OPERATIONS: true,
+  // Monitoramento - desabilitado em produção
+  PERFORMANCE_MONITORING: process.env.NODE_ENV === 'development',
+  LOG_SLOW_OPERATIONS: process.env.NODE_ENV === 'development',
   SLOW_OPERATION_THRESHOLD: 1000 // ms
 };
 

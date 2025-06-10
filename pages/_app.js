@@ -10,7 +10,6 @@ import { SimpleFriendsProvider } from '../contexts/SimpleFriendsContext';
 import { FriendsProvider } from '../contexts/FriendsContext';
 import { NotificationProvider } from '../contexts/NotificationContext';
 import ToastNotification from '../components/ToastNotification';
-import SimpleSteamStatus from '../components/SimpleSteamStatus';
 
 import { useEffect } from 'react';
 import HydrationErrorSuppressor from '../components/HydrationErrorSuppressor';
@@ -101,7 +100,6 @@ export default function MyApp({ Component, pageProps }) {
                   <HydrationErrorSuppressor />
                   <Component {...pageProps} />
                   <ToastNotification />
-                  <SimpleSteamStatus />
                 </SimpleFriendsProvider>
               </FriendsProvider>
             </NotificationProvider>

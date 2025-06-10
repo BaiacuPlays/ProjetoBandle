@@ -1,5 +1,14 @@
 // API para gerenciar multiplayer
-import { safeKV } from '../../utils/kv-fix';
+// Importação segura do KV
+let kv = null;
+try {
+  if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+    const kvModule = await import('@vercel/kv');
+    kv = kvModule.kv;
+  }
+} catch (error) {
+  // KV não disponível
+}
 import { localUsers, localProfiles } from '../../utils/storage';
 import { verifyAuthentication, sanitizeInput } from '../../utils/auth';
 import { createNotification } from './notifications';

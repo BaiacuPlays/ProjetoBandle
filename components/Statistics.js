@@ -233,11 +233,9 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
     if (typeof window !== 'undefined' && isOpen) {
       if (isAuthenticated && profile) {
         // Se usuário está autenticado, usar estatísticas do perfil
-        console.log('📊 Carregando estatísticas do perfil para usuário autenticado');
         loadProfileStatistics();
       } else {
         // Fallback para sistema antigo (usuários anônimos)
-        console.log('📊 Carregando estatísticas para usuário anônimo');
         if (isInfiniteMode) {
           loadInfiniteStatistics();
         } else {
@@ -276,7 +274,7 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
           averageAttempts: stats.averageAttempts || 3
         });
       } catch (error) {
-        console.error('Erro ao buscar estatísticas globais:', error);
+        // Silent error handling
       }
     }
 

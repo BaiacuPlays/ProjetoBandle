@@ -1,5 +1,14 @@
 // API unificada para sistema de amigos - SIMPLES E CONFIÁVEL
-import { safeKV } from '../../utils/kv-fix';
+// Importação segura do KV
+let kv = null;
+try {
+  if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+    const kvModule = await import('@vercel/kv');
+    kv = kvModule.kv;
+  }
+} catch (error) {
+  // KV não disponível
+}
 import { verifyAuthentication } from '../../utils/auth';
 
 // Configuração de ambiente
@@ -24,7 +33,7 @@ const getData = async (key) => {
   if (isDevelopment && !hasKVConfig) {
     return localStorage.friends.get(key) || localStorage.requests.get(key) || localStorage.users.get(key);
   }
-  return await safeKV.get(key);
+  return await kv.get(key);
 };
 
 // Função para salvar dados no KV ou storage local
@@ -38,7 +47,7 @@ const setData = async (key, value) => {
       localStorage.users.set(key, value);
     }
   } else {
-    await safeKV.set(key, value);
+    await kv.set(key, value);
   }
 };
 
@@ -62,21 +71,21 @@ export default async function handler(req, res) {
         // Buscar lista de amigos
         const friendsKey = `friends:${currentUserId}`;
         const friends = await getData(friendsKey) || [];
-        
+
         return res.status(200).json({ friends });
 
       } else if (action === 'requests') {
         // Buscar solicitações recebidas
         const requestsKey = `requests:${currentUserId}`;
         const requests = await getData(requestsKey) || [];
-        
+
         return res.status(200).json({ requests });
 
       } else if (action === 'sent') {
         // Buscar solicitações enviadas
         const sentKey = `sent:${currentUserId}`;
         const sent = await getData(sentKey) || [];
-        
+
         return res.status(200).json({ sent });
 
       } else if (action === 'search') {
@@ -123,7 +132,7 @@ export default async function handler(req, res) {
       if (action === 'send_request') {
         // Enviar solicitação de amizade
         const { toUserId, toUser } = data;
-        
+
         if (!toUserId || !toUser) {
           return res.status(400).json({ error: 'Dados da solicitação incompletos' });
         }
@@ -136,7 +145,7 @@ export default async function handler(req, res) {
         // Verificar se já são amigos
         const friendsKey = `friends:${currentUserId}`;
         const friends = await getData(friendsKey) || [];
-        
+
         if (friends.some(friend => friend.id === toUserId)) {
           return res.status(400).json({ error: 'Este usuário já é seu amigo' });
         }
@@ -144,9 +153,27 @@ export default async function handler(req, res) {
         // Verificar se já existe solicitação pendente
         const requestsKey = `requests:${toUserId}`;
         const requests = await getData(requestsKey) || [];
-        
+
         if (requests.some(req => req.fromUserId === currentUserId)) {
           return res.status(400).json({ error: 'Solicitação já enviada' });
+        }
+
+        // Buscar perfil do usuário atual para obter avatar
+        let currentUserProfile = null;
+        try {
+          const currentProfileKey = `profile:${currentUserId}`;
+          currentUserProfile = await getData(currentProfileKey);
+        } catch (error) {
+          console.warn('Erro ao buscar perfil do usuário atual:', error);
+        }
+
+        // Buscar perfil do usuário destinatário para obter avatar
+        let toUserProfile = null;
+        try {
+          const toProfileKey = `profile:${toUserId}`;
+          toUserProfile = await getData(toProfileKey);
+        } catch (error) {
+          console.warn('Erro ao buscar perfil do usuário destinatário:', error);
         }
 
         // Criar solicitação
@@ -157,12 +184,12 @@ export default async function handler(req, res) {
           fromUser: {
             username: currentUsername,
             displayName: sanitize(currentUsername),
-            avatar: '👤'
+            avatar: currentUserProfile?.profilePhoto || currentUserProfile?.avatar || '👤'
           },
           toUser: {
             username: sanitize(toUser.username),
             displayName: sanitize(toUser.displayName),
-            avatar: '👤'
+            avatar: toUserProfile?.profilePhoto || toUserProfile?.avatar || toUser.avatar || '👤'
           },
           timestamp: new Date().toISOString(),
           status: 'pending'
@@ -183,7 +210,7 @@ export default async function handler(req, res) {
       } else if (action === 'accept_request') {
         // Aceitar solicitação de amizade
         const { requestId } = data;
-        
+
         if (!requestId) {
           return res.status(400).json({ error: 'ID da solicitação é obrigatório' });
         }
@@ -191,7 +218,7 @@ export default async function handler(req, res) {
         // Buscar solicitação
         const requestsKey = `requests:${currentUserId}`;
         const requests = await getData(requestsKey) || [];
-        
+
         const requestIndex = requests.findIndex(req => req.id === requestId);
         if (requestIndex === -1) {
           return res.status(404).json({ error: 'Solicitação não encontrada' });
@@ -202,7 +229,7 @@ export default async function handler(req, res) {
         // Adicionar aos amigos de ambos os usuários
         const myFriendsKey = `friends:${currentUserId}`;
         const theirFriendsKey = `friends:${request.fromUserId}`;
-        
+
         const myFriends = await getData(myFriendsKey) || [];
         const theirFriends = await getData(theirFriendsKey) || [];
 
@@ -246,7 +273,7 @@ export default async function handler(req, res) {
       } else if (action === 'reject_request') {
         // Rejeitar solicitação de amizade
         const { requestId } = data;
-        
+
         if (!requestId) {
           return res.status(400).json({ error: 'ID da solicitação é obrigatório' });
         }
@@ -254,7 +281,7 @@ export default async function handler(req, res) {
         // Remover solicitação
         const requestsKey = `requests:${currentUserId}`;
         const requests = await getData(requestsKey) || [];
-        
+
         const requestIndex = requests.findIndex(req => req.id === requestId);
         if (requestIndex === -1) {
           return res.status(404).json({ error: 'Solicitação não encontrada' });
@@ -275,6 +302,41 @@ export default async function handler(req, res) {
 
         return res.status(200).json({ success: true });
 
+      } else if (action === 'cancel_request') {
+        // Cancelar solicitação enviada
+        const { requestId } = data;
+
+        if (!requestId) {
+          return res.status(400).json({ error: 'ID da solicitação é obrigatório' });
+        }
+
+        // Buscar solicitação enviada
+        const sentKey = `sent:${currentUserId}`;
+        const sentRequests = await getData(sentKey) || [];
+
+        const requestIndex = sentRequests.findIndex(req => req.id === requestId);
+        if (requestIndex === -1) {
+          return res.status(404).json({ error: 'Solicitação não encontrada' });
+        }
+
+        const request = sentRequests[requestIndex];
+
+        // Remover da lista de enviadas
+        sentRequests.splice(requestIndex, 1);
+        await setData(sentKey, sentRequests);
+
+        // Remover da lista de recebidas do destinatário
+        const toRequestsKey = `requests:${request.toUserId}`;
+        const toRequests = await getData(toRequestsKey) || [];
+        const toRequestIndex = toRequests.findIndex(req => req.id === requestId);
+
+        if (toRequestIndex !== -1) {
+          toRequests.splice(toRequestIndex, 1);
+          await setData(toRequestsKey, toRequests);
+        }
+
+        return res.status(200).json({ success: true });
+
       } else {
         return res.status(400).json({ error: 'Ação não reconhecida' });
       }
@@ -285,7 +347,7 @@ export default async function handler(req, res) {
       if (action === 'remove_friend') {
         // Remover amigo
         const { friendId } = data;
-        
+
         if (!friendId) {
           return res.status(400).json({ error: 'ID do amigo é obrigatório' });
         }
@@ -294,7 +356,7 @@ export default async function handler(req, res) {
         const myFriendsKey = `friends:${currentUserId}`;
         const myFriends = await getData(myFriendsKey) || [];
         const myIndex = myFriends.findIndex(friend => friend.id === friendId);
-        
+
         if (myIndex !== -1) {
           myFriends.splice(myIndex, 1);
           await setData(myFriendsKey, myFriends);
@@ -304,7 +366,7 @@ export default async function handler(req, res) {
         const theirFriendsKey = `friends:${friendId}`;
         const theirFriends = await getData(theirFriendsKey) || [];
         const theirIndex = theirFriends.findIndex(friend => friend.id === currentUserId);
-        
+
         if (theirIndex !== -1) {
           theirFriends.splice(theirIndex, 1);
           await setData(theirFriendsKey, theirFriends);
@@ -322,7 +384,7 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error('Erro na API de amigos:', error);
-    return res.status(500).json({ 
+    return res.status(500).json({
       error: 'Erro interno do servidor',
       details: isDevelopment ? error.message : undefined
     });

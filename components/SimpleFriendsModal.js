@@ -17,7 +17,8 @@ const SimpleFriendsModal = ({ isOpen, onClose, onViewProfile }) => {
     sendFriendRequest,
     acceptFriendRequest,
     rejectFriendRequest,
-    removeFriend
+    removeFriend,
+    cancelSentRequest
   } = useSimpleFriends();
 
   // Sistema de convites por link
@@ -101,6 +102,18 @@ const SimpleFriendsModal = ({ isOpen, onClose, onViewProfile }) => {
   const handleViewProfile = (friend) => {
     if (onViewProfile) {
       onViewProfile(friend.id, friend.username);
+    }
+  };
+
+  // Cancelar solicitação enviada
+  const handleCancelRequest = async (requestId, userName) => {
+    if (confirm(`Tem certeza que deseja cancelar a solicitação para ${userName}?`)) {
+      try {
+        await cancelSentRequest(requestId);
+        alert('Solicitação cancelada!');
+      } catch (error) {
+        alert(`Erro: ${error.message}`);
+      }
     }
   };
 
@@ -291,6 +304,15 @@ const SimpleFriendsModal = ({ isOpen, onClose, onViewProfile }) => {
                         <div className={styles.sentDetails}>
                           <span className={styles.name}>{request.toUser.displayName}</span>
                           <span className={styles.status}>Pendente</span>
+                        </div>
+                        <div className={styles.sentActions}>
+                          <button
+                            className={styles.cancelButton}
+                            onClick={() => handleCancelRequest(request.id, request.toUser.displayName)}
+                            title="Cancelar solicitação"
+                          >
+                            <FaTimes />
+                          </button>
                         </div>
                       </div>
                     ))}

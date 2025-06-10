@@ -27,7 +27,6 @@ import { useAuth } from '../contexts/AuthContext';
 import { fetchTimezone } from '../config/api';
 import { browserCompatibility } from '../utils/browserCompatibility';
 import { useServiceWorker } from '../hooks/useServiceWorker';
-import { optimizedDebounce, optimizedThrottle } from '../utils/performanceOptimizer';
 // Imports dinâmicos para evitar problemas de SSR
 // import { audioCache } from '../utils/audioCache';
 // import { useAudioPreloader } from '../hooks/useAudioPreloader';
@@ -51,15 +50,8 @@ export default function Home() {
   const { isAuthenticated } = useAuth();
 
   // Hook do perfil com verificação de segurança
-  let updateGameStats = () => {};
-  try {
-    const profileContext = useProfile();
-    if (profileContext?.updateGameStats) {
-      updateGameStats = profileContext.updateGameStats;
-    }
-  } catch (error) {
-    // Profile context not available - silent fallback
-  }
+  const profileContext = useProfile();
+  const updateGameStats = profileContext?.updateGameStats || (() => {});
 
   // Hooks
   useServiceWorker(); // Registrar service worker sem usar a variável
@@ -67,9 +59,7 @@ export default function Home() {
   // Verificação básica das músicas (sem logs detalhados)
   useEffect(() => {
     if (!songs || songs.length === 0) {
-      console.error('❌ Erro: Lista de músicas não carregada');
-    } else {
-      console.log('✅ Músicas carregadas:', songs.length);
+      // Lista de músicas não carregada - erro silencioso
     }
   }, []);
 
@@ -84,17 +74,27 @@ export default function Home() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       // Cache simplificado sem imports dinâmicos
-      console.log('Sistema de cache simplificado carregado');
     }
   }, []);
 
-  // Funções de performance ULTRA-OTIMIZADAS
+  // Funções de performance simples
   const debounce = useCallback((func, delay) => {
-    return optimizedDebounce(func, delay);
+    let timeoutId;
+    return (...args) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func.apply(null, args), delay);
+    };
   }, []);
 
   const throttle = useCallback((func, delay) => {
-    return optimizedThrottle(func, delay);
+    let lastCall = 0;
+    return (...args) => {
+      const now = Date.now();
+      if (now - lastCall >= delay) {
+        lastCall = now;
+        return func.apply(null, args);
+      }
+    };
   }, []);
 
   // Hooks removidos para melhor performance
@@ -239,7 +239,6 @@ export default function Home() {
   const getRandomInfiniteSong = (usedSongs = infiniteUsedSongs) => {
     // Verificar se as músicas processadas pelo proxy estão disponíveis
     if (!songsToUse || songsToUse.length === 0) {
-      console.warn('⏳ Aguardando músicas processadas pelo proxy para modo infinito...');
       return null;
     }
 
@@ -450,8 +449,6 @@ export default function Home() {
 
       // Salvar no localStorage para persistir entre recarregamentos
       localStorage.setItem('ludomusic_session_start', now.toString());
-
-      console.log('🏃 Sessão iniciada para conquista Maratonista');
     }
 
     // 👑 CARREGAR DERROTAS CONSECUTIVAS do localStorage
@@ -461,11 +458,10 @@ export default function Home() {
         const losses = parseInt(savedLosses, 10);
         if (!isNaN(losses)) {
           setConsecutiveLosses(losses);
-          console.log('👑 Derrotas consecutivas carregadas:', losses);
         }
       }
     } catch (error) {
-      console.warn('Erro ao carregar derrotas consecutivas:', error);
+      // Silent error handling
     }
   }, []);
 
@@ -480,8 +476,6 @@ export default function Home() {
 
       // Se jogou por 5 horas ou mais, desbloquear conquista
       if (sessionHours >= 5) {
-        console.log('🏃 Conquista Maratonista desbloqueada! Sessão de', sessionHours.toFixed(2), 'horas');
-
         // Simular um jogo para ativar o sistema de conquistas
         try {
           updateGameStats({
@@ -493,7 +487,7 @@ export default function Home() {
             sessionDuration: sessionDuration
           });
         } catch (error) {
-          console.warn('Erro ao registrar conquista maratonista:', error);
+          // Silent error handling
         }
       }
     };
@@ -550,22 +544,18 @@ export default function Home() {
 
     // Se recebeu 401, tentar renovar token uma vez
     if (response.status === 401) {
-      console.log('🔄 Token expirado, tentando renovar...');
       try {
         const { renewToken } = useAuth();
         const renewResult = await renewToken();
 
         if (renewResult?.success) {
-          console.log('✅ Token renovado com sucesso');
           // Atualizar token e tentar novamente
           sessionToken = localStorage.getItem('ludomusic_session_token');
           requestOptions.headers['Authorization'] = `Bearer ${sessionToken}`;
           response = await fetch(url, requestOptions);
-        } else {
-          console.log('❌ Falha na renovação do token');
         }
       } catch (renewError) {
-        console.log('❌ Erro ao renovar token:', renewError);
+        // Silent error handling
       }
     }
 
@@ -596,7 +586,7 @@ export default function Home() {
         // 🔒 SEGURANÇA CRÍTICA: Verificar se há dados de jogo anônimo no localStorage
         const anonymousGameState = localStorage.getItem(`ludomusic_game_state_day_${dayOfYear}`);
 
-        console.log('🔍 Verificação do jogo diário temporariamente desabilitada para debug');
+
 
         // TEMPORARIAMENTE DESABILITADO PARA DEBUG - SIMULAR SUCESSO
         const response = { ok: true, status: 200 };
@@ -642,7 +632,6 @@ export default function Home() {
           // Usuário PODE jogar hoje no servidor
           // 🔒 VERIFICAÇÃO CRÍTICA: Se há dados anônimos no localStorage, LIMPAR
           if (anonymousGameState) {
-            console.log('🧹 LIMPEZA: Removendo dados de jogo anônimo ao fazer login');
 
             // Limpar todos os dados de jogo do localStorage para evitar conflitos
             localStorage.removeItem(`ludomusic_game_state_day_${dayOfYear}`);
@@ -765,7 +754,7 @@ export default function Home() {
 
       // Verificar se song existe antes de usar
       if (!song) {
-        console.error('❌ Música não encontrada para o dia:', dayOfYear);
+        // Música não encontrada - erro silencioso
         setIsLoading(false);
         return;
       }

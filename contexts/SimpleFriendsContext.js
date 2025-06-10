@@ -306,6 +306,28 @@ export const SimpleFriendsProvider = ({ children }) => {
     }
   };
 
+  // Cancelar solicitação enviada
+  const cancelSentRequest = async (requestId) => {
+    if (!requestId) {
+      throw new Error('ID da solicitação é obrigatório');
+    }
+
+    try {
+      await apiRequest('/api/simple-friends', {
+        method: 'POST',
+        body: JSON.stringify({
+          action: 'cancel_request',
+          data: { requestId }
+        })
+      });
+
+      // Recarregar dados
+      await loadFriendsData();
+    } catch (error) {
+      throw error;
+    }
+  };
+
   // Carregar dados quando usuário faz login
   useEffect(() => {
     // Aguardar o AuthContext terminar de carregar antes de tomar qualquer ação
@@ -376,6 +398,7 @@ export const SimpleFriendsProvider = ({ children }) => {
     acceptFriendRequest,
     rejectFriendRequest,
     removeFriend,
+    cancelSentRequest,
     loadFriendsData
   };
 

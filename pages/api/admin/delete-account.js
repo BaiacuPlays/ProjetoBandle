@@ -65,7 +65,7 @@ export default async function handler(req, res) {
       let deletedKeys = [];
       let cleanupActions = [];
 
-      console.log(`🗑️ Removendo conta local: ${targetUsername}`);
+
 
       // Chaves para remover do armazenamento local
       const keysToDelete = [

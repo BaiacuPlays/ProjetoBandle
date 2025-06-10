@@ -62,7 +62,7 @@ export default async function handler(req, res) {
           // Combinar dados básicos com dados do perfil
           const enrichedFriend = {
             ...friend,
-            avatar: friendProfile?.avatar || friend.avatar || '👤',
+            avatar: friendProfile?.profilePhoto || friendProfile?.avatar || friend.avatar || '👤',
             bio: friendProfile?.bio || friend.bio || '',
             level: friendProfile?.level || friend.level || 1,
             xp: friendProfile?.xp || 0,
@@ -75,7 +75,7 @@ export default async function handler(req, res) {
           // Usar dados básicos se não conseguir buscar o perfil
           enrichedFriends.push({
             ...friend,
-            avatar: friend.avatar || '👤',
+            avatar: friend.profilePhoto || friend.avatar || '👤',
             level: friend.level || 1,
             status: 'offline'
           });

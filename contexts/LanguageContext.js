@@ -24,7 +24,7 @@ export function LanguageProvider({ children }) {
                        navigator.browserLanguage ||
                        'pt-BR';
 
-    console.log('🌍 Idioma do navegador detectado:', browserLang);
+
 
     // Mapear códigos de idioma do navegador para os suportados
     const langCode = browserLang.toLowerCase();

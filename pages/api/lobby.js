@@ -1,5 +1,14 @@
 import songs from '../../data/music.json';
-import { safeKV } from '../../utils/kv-fix';
+// Importação segura do KV
+let kv = null;
+try {
+  if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+    const kvModule = await import('@vercel/kv');
+    kv = kvModule.kv;
+  }
+} catch (error) {
+  // KV não disponível
+}
 
 // Fallback para desenvolvimento local - armazenamento em memória
 const localLobbies = new Map();
@@ -17,7 +26,7 @@ async function getLobby(roomCode) {
   }
 
   try {
-    return await safeKV.get(key);
+    return await kv.get(key);
   } catch (error) {
     console.error('Erro ao acessar KV:', error);
     return null;
@@ -33,7 +42,7 @@ async function setLobby(roomCode, data) {
   }
 
   try {
-    await safeKV.set(key, data);
+    await kv.set(key, data);
   } catch (error) {
     console.error('Erro ao salvar no KV:', error);
   }
@@ -48,7 +57,7 @@ async function deleteLobby(roomCode) {
   }
 
   try {
-    await safeKV.del(key);
+    await kv.del(key);
   } catch (error) {
     console.error('Erro ao deletar do KV:', error);
   }
@@ -114,10 +123,22 @@ export const config = {
 }
 
 export default async function handler(req, res) {
-  // 🚨 CORS SIMPLIFICADO PARA RESOLVER PROBLEMAS
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  // CORS seguro - apenas origens permitidas
+  const allowedOrigins = [
+    'http://localhost:3000',
+    'https://ludomusic.xyz',
+    'https://www.ludomusic.xyz',
+    'https://projeto-bandle.vercel.app'
+  ];
+
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Content-Type', 'application/json');
 
   if (req.method === 'OPTIONS') {
