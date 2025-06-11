@@ -42,7 +42,7 @@ export class GameFeelEffects {
         const shakeIntensity = intensity * (1 - progress);
         const x = (Math.random() - 0.5) * shakeIntensity;
         const y = (Math.random() - 0.5) * shakeIntensity;
-        
+
         element.style.transform = `${originalTransform} translate(${x}px, ${y}px)`;
         requestAnimationFrame(shake);
       } else {
@@ -102,7 +102,7 @@ export class GameFeelEffects {
     const rect = element.getBoundingClientRect();
     const ripple = document.createElement('div');
     const size = Math.max(rect.width, rect.height);
-    
+
     ripple.style.cssText = `
       position: absolute;
       left: ${x - rect.left - size/2}px;
@@ -165,13 +165,17 @@ export class GameFeelEffects {
     if (!this.isEnabled()) return;
 
     const originalTransform = element.style.transform;
+    const originalTransition = element.style.transition;
+    const originalOpacity = element.style.opacity;
+
     element.style.transition = `transform ${duration}ms ease, opacity ${duration}ms ease`;
     element.style.transform = `${originalTransform} translateY(-${distance}px)`;
     element.style.opacity = '0.7';
 
     setTimeout(() => {
       element.style.transform = originalTransform;
-      element.style.opacity = '1';
+      element.style.opacity = originalOpacity || '1';
+      element.style.transition = originalTransition;
     }, duration);
   }
 
@@ -193,13 +197,32 @@ export class GameFeelEffects {
   colorFlash(element, color = '#1DB954', duration = 200) {
     if (!this.isEnabled()) return;
 
+    // CORREÇÃO: Melhor tratamento para elementos sem background adequado
+    const computedStyle = window.getComputedStyle(element);
     const originalBackground = element.style.backgroundColor;
-    element.style.transition = `background-color ${duration}ms ease`;
-    element.style.backgroundColor = color;
+    const originalBoxShadow = element.style.boxShadow;
+    const originalTransition = element.style.transition;
+    const hasBackground = originalBackground || computedStyle.backgroundColor !== 'rgba(0, 0, 0, 0)';
 
-    setTimeout(() => {
-      element.style.backgroundColor = originalBackground;
-    }, duration);
+    // Se o elemento não tem background visível, usar box-shadow em vez de background
+    if (!hasBackground) {
+      element.style.transition = `box-shadow ${duration}ms ease`;
+      element.style.boxShadow = `${originalBoxShadow ? originalBoxShadow + ', ' : ''}inset 0 0 0 2px ${color}`;
+
+      setTimeout(() => {
+        element.style.boxShadow = originalBoxShadow;
+        element.style.transition = originalTransition;
+      }, duration);
+    } else {
+      // Comportamento original para elementos com background
+      element.style.transition = `background-color ${duration}ms ease`;
+      element.style.backgroundColor = color;
+
+      setTimeout(() => {
+        element.style.backgroundColor = originalBackground;
+        element.style.transition = originalTransition;
+      }, duration);
+    }
   }
 
   // 🔧 UTILITY METHODS
@@ -271,19 +294,19 @@ export class GameFeelEffects {
 export const gameFeelEffects = new GameFeelEffects();
 
 // Funções de conveniência
-export const screenShake = (element, intensity, duration) => 
+export const screenShake = (element, intensity, duration) =>
   gameFeelEffects.screenShake(element, intensity, duration);
-export const particleBurst = (x, y, color, count) => 
+export const particleBurst = (x, y, color, count) =>
   gameFeelEffects.createParticleBurst(x, y, color, count);
-export const rippleEffect = (element, x, y, color) => 
+export const rippleEffect = (element, x, y, color) =>
   gameFeelEffects.createRipple(element, x, y, color);
-export const glowEffect = (element, color, duration) => 
+export const glowEffect = (element, color, duration) =>
   gameFeelEffects.addGlowEffect(element, color, duration);
-export const pulseEffect = (element, scale, duration) => 
+export const pulseEffect = (element, scale, duration) =>
   gameFeelEffects.pulseEffect(element, scale, duration);
-export const floatUpEffect = (element, distance, duration) => 
+export const floatUpEffect = (element, distance, duration) =>
   gameFeelEffects.floatUpEffect(element, distance, duration);
-export const bounceEffect = (element, intensity, duration) => 
+export const bounceEffect = (element, intensity, duration) =>
   gameFeelEffects.bounceEffect(element, intensity, duration);
-export const colorFlash = (element, color, duration) => 
+export const colorFlash = (element, color, duration) =>
   gameFeelEffects.colorFlash(element, color, duration);

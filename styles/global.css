@@ -9,3 +9,109 @@
 [data-bis_skin_checked] {
   /* Não adicionar estilos, apenas garantir que o atributo seja reconhecido pelo React */
 }
+
+/* FORÇA ABSOLUTA PARA DROPDOWNS DE SUGESTÕES - CORREÇÃO DEFINITIVA */
+[class*="suggestions"],
+[class*="Suggestions"],
+div[class*="suggestions"],
+ul[class*="suggestions"],
+.suggestionsListModern,
+.suggestionsContainer {
+  background: #23272f !important;
+  background-color: #23272f !important;
+  backdrop-filter: none !important;
+  opacity: 1 !important;
+  z-index: 2147483647 !important;
+  position: absolute !important;
+  isolation: isolate !important;
+  transform: translateZ(0) !important;
+  border: 2px solid #1DB954 !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.8) !important;
+}
+
+/* FORÇA ABSOLUTA PARA ITENS DE SUGESTÕES */
+[class*="suggestion"] li,
+[class*="suggestion"] div,
+.suggestionItemModern,
+.suggestionItem {
+  color: #fff !important;
+  background: transparent !important;
+}
+
+[class*="suggestion"] li:hover,
+[class*="suggestion"] div:hover,
+.suggestionItemModern:hover,
+.suggestionItem:hover {
+  background: #1DB954 !important;
+  color: #222 !important;
+}
+
+/* SCROLLBAR CUSTOMIZADA PARA DROPDOWNS */
+[class*="suggestions"]::-webkit-scrollbar,
+[class*="Suggestions"]::-webkit-scrollbar,
+.suggestionsListModern::-webkit-scrollbar,
+.suggestionsContainer::-webkit-scrollbar {
+  width: 8px !important;
+}
+
+[class*="suggestions"]::-webkit-scrollbar-track,
+[class*="Suggestions"]::-webkit-scrollbar-track,
+.suggestionsListModern::-webkit-scrollbar-track,
+.suggestionsContainer::-webkit-scrollbar-track {
+  background: #23272f !important;
+  border-radius: 4px;
+}
+
+[class*="suggestions"]::-webkit-scrollbar-thumb,
+[class*="Suggestions"]::-webkit-scrollbar-thumb,
+.suggestionsListModern::-webkit-scrollbar-thumb,
+.suggestionsContainer::-webkit-scrollbar-thumb {
+  background: #1DB954 !important;
+  border-radius: 4px;
+  border: 1px solid #23272f;
+}
+
+[class*="suggestions"]::-webkit-scrollbar-thumb:hover,
+[class*="Suggestions"]::-webkit-scrollbar-thumb:hover,
+.suggestionsListModern::-webkit-scrollbar-thumb:hover,
+.suggestionsContainer::-webkit-scrollbar-thumb:hover {
+  background: #1ed760 !important;
+}
+
+/* FORÇA OVERFLOW VISÍVEL PARA CONTAINERS QUE PODEM CONTER DROPDOWNS */
+.container,
+[class*="gameArea"],
+[class*="guessForm"],
+[class*="form"],
+form {
+  overflow: visible !important;
+}
+
+/* FORÇA POSICIONAMENTO CORRETO PARA DROPDOWNS */
+[class*="suggestions"],
+[class*="Suggestions"],
+.suggestionsListModern,
+.suggestionsContainer {
+  top: 100% !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  min-height: 50px !important;
+  max-height: 200px !important; /* Reduzido para evitar empurrar footer */
+  /* CORREÇÃO DEFINITIVA: Evitar que dropdown empurre conteúdo */
+  position: absolute !important;
+  contain: layout style !important;
+  will-change: auto !important;
+}
+
+/* FORÇA VISIBILIDADE ABSOLUTA PARA SUGESTÕES */
+div[class*="suggestions"]:not(:empty),
+ul[class*="suggestions"]:not(:empty),
+.suggestionsListModern:not(:empty),
+.suggestionsContainer:not(:empty) {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+

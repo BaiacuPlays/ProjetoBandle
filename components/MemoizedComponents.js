@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 import { FaVolumeUp, FaFastForward } from 'react-icons/fa';
 import OptimizedPlayButton from './OptimizedPlayButton';
 

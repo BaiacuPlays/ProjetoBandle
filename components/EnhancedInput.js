@@ -3,7 +3,7 @@ import React, { useRef, useCallback, useState, useEffect } from 'react';
 import { useGameFeel } from '../hooks/useGameFeel';
 import styles from '../styles/EnhancedInput.module.css';
 
-const EnhancedInput = ({
+const EnhancedInput = React.forwardRef(({
   value,
   onChange,
   onFocus,
@@ -21,8 +21,11 @@ const EnhancedInput = ({
   style = {},
   autoComplete = 'off',
   ...props
-}) => {
+}, ref) => {
   const inputRef = useRef(null);
+
+  // Usar useImperativeHandle para expor métodos se necessário
+  React.useImperativeHandle(ref, () => inputRef.current);
   const gameFeel = useGameFeel();
   const [isFocused, setIsFocused] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
@@ -30,16 +33,16 @@ const EnhancedInput = ({
   // Handler para mudança de valor
   const handleChange = useCallback((e) => {
     const newValue = e.target.value;
-    
+
     // Feedback de digitação
     if (newValue !== value) {
       gameFeel.onTyping();
       setIsTyping(true);
-      
+
       // Parar indicador de digitação após um tempo
       setTimeout(() => setIsTyping(false), 200);
     }
-    
+
     if (onChange) onChange(e);
   }, [value, onChange, gameFeel]);
 
@@ -54,7 +57,10 @@ const EnhancedInput = ({
   const handleBlur = useCallback((e) => {
     setIsFocused(false);
     gameFeel.onBlur(inputRef.current);
-    if (onBlur) onBlur(e);
+    // Delay para não interferir com sugestões
+    setTimeout(() => {
+      if (onBlur) onBlur(e);
+    }, 100);
   }, [gameFeel, onBlur]);
 
   // Handler para teclas
@@ -63,7 +69,7 @@ const EnhancedInput = ({
     if (e.key === 'Enter') {
       gameFeel.onClick(inputRef.current, e);
     }
-    
+
     if (onKeyDown) onKeyDown(e);
   }, [gameFeel, onKeyDown]);
 
@@ -104,6 +110,8 @@ const EnhancedInput = ({
     showSuggestions && suggestions.length > 0 && styles.withSuggestions
   ].filter(Boolean).join(' ');
 
+
+
   return (
     <div className={containerClasses} style={style}>
       <div className={styles.inputWrapper}>
@@ -120,14 +128,14 @@ const EnhancedInput = ({
           autoComplete={autoComplete}
           {...props}
         />
-        
+
         {/* Indicador de carregamento */}
         {loading && (
           <div className={styles.loadingIndicator}>
             <div className={styles.spinner}></div>
           </div>
         )}
-        
+
         {/* Indicador de digitação */}
         {isTyping && !loading && (
           <div className={styles.typingIndicator}>
@@ -136,88 +144,84 @@ const EnhancedInput = ({
             <div className={styles.typingDot}></div>
           </div>
         )}
-        
+
         {/* Overlay para efeitos visuais */}
         <div className={styles.inputOverlay}></div>
       </div>
-      
+
       {/* Lista de sugestões */}
       {showSuggestions && suggestions.length > 0 && (
-        <div className={styles.suggestionsContainer}>
-          <div className={styles.suggestionsList}>
-            {suggestions.map((suggestion, index) => (
-              <div
-                key={index}
-                className={styles.suggestionItem}
-                onClick={(e) => handleSuggestionClick(suggestion, e)}
-                onMouseEnter={(e) => gameFeel.onHover(e.target)}
-              >
-                {typeof suggestion === 'string' ? suggestion : suggestion.title || suggestion.name}
-              </div>
-            ))}
-          </div>
-        </div>
+        <ul className={styles.suggestionsList}>
+          {suggestions.map((suggestion, index) => (
+            <li
+              key={index}
+              className={styles.suggestionItem}
+              onClick={(e) => handleSuggestionClick(suggestion, e)}
+              onMouseEnter={(e) => gameFeel.onHover(e.target)}
+            >
+              {typeof suggestion === 'string' ? suggestion : suggestion.displayText || suggestion.title || suggestion.name}
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );
-};
+});
 
-// Componente específico para busca de músicas
-export const MusicSearchInput = ({
+EnhancedInput.displayName = 'EnhancedInput';
+
+// Componente específico para busca de músicas - VERSÃO SUPER SIMPLES
+export const MusicSearchInput = React.forwardRef(({
   songs = [],
   onSongSelect,
-  filterFunction,
   maxSuggestions = 10,
   ...props
-}) => {
-  const [filteredSongs, setFilteredSongs] = useState([]);
+}, ref) => {
+  const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
-  // Filtrar músicas baseado no valor
+  // Filtrar quando o valor muda
   useEffect(() => {
     if (props.value && props.value.length > 0) {
-      let filtered = songs;
-      
-      if (filterFunction) {
-        filtered = filterFunction(songs, props.value);
-      } else {
-        // Filtro padrão
-        const searchTerm = props.value.toLowerCase();
-        filtered = songs.filter(song => 
-          song.title?.toLowerCase().includes(searchTerm) ||
-          song.game?.toLowerCase().includes(searchTerm) ||
-          song.artist?.toLowerCase().includes(searchTerm)
-        );
-      }
-      
-      setFilteredSongs(filtered.slice(0, maxSuggestions));
+      const searchTerm = props.value.toLowerCase();
+
+      const filtered = songs.filter(song =>
+        song.title?.toLowerCase().includes(searchTerm) ||
+        song.game?.toLowerCase().includes(searchTerm) ||
+        song.artist?.toLowerCase().includes(searchTerm)
+      ).slice(0, maxSuggestions);
+
+      setSuggestions(filtered);
       setShowSuggestions(filtered.length > 0);
     } else {
-      setFilteredSongs([]);
+      setSuggestions([]);
       setShowSuggestions(false);
     }
-  }, [props.value, songs, filterFunction, maxSuggestions]);
+  }, [props.value, songs, maxSuggestions]);
 
-  const handleSongSelect = useCallback((song) => {
+  const handleSongSelect = (song) => {
     setShowSuggestions(false);
     if (onSongSelect) onSongSelect(song);
-  }, [onSongSelect]);
-
-  const handleBlur = useCallback((e) => {
-    // Delay para permitir clique em sugestão
-    setTimeout(() => setShowSuggestions(false), 200);
-    if (props.onBlur) props.onBlur(e);
-  }, [props.onBlur]);
+  };
 
   return (
     <EnhancedInput
       {...props}
+      ref={ref}
       showSuggestions={showSuggestions}
-      suggestions={filteredSongs}
+      suggestions={suggestions.map(song => ({
+        ...song,
+        displayText: `${song.game} - ${song.title}`
+      }))}
       onSuggestionClick={handleSongSelect}
-      onBlur={handleBlur}
+      onBlur={() => {
+        setTimeout(() => setShowSuggestions(false), 200);
+        if (props.onBlur) props.onBlur();
+      }}
     />
   );
-};
+});
+
+MusicSearchInput.displayName = 'MusicSearchInput';
 
 export default EnhancedInput;

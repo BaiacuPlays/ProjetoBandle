@@ -10,6 +10,7 @@
   color: white;
   position: relative;
   box-sizing: border-box;
+  overflow: visible !important; /* Permitir que dropdowns apareçam fora do container */
 
   /* Suporte a safe areas para iOS */
   padding-top: max(2rem, env(safe-area-inset-top));
@@ -642,6 +643,7 @@
   flex-direction: column;
   align-items: center;
   position: relative;
+  overflow: visible !important; /* Permitir que sugestões apareçam fora do container */
 }
 
 .clipList {
@@ -748,6 +750,13 @@
   align-items: stretch;
   position: relative;
   margin-bottom: 1.5rem;
+  z-index: 1;
+  isolation: isolate;
+  transform: translateZ(0);
+  overflow: visible !important; /* Permitir que sugestões apareçam fora do formulário */
+  min-height: 120px; /* Altura mínima para evitar que o botão pule */
+  max-height: 120px; /* CORREÇÃO: Altura máxima fixa para evitar expansão */
+  contain: layout !important; /* Evitar que dropdown empurre conteúdo */
 }
 
 /* 📱 RESPONSIVIDADE PARA FORMULÁRIOS */
@@ -767,6 +776,8 @@
   margin-bottom: 0.7rem;
   width: 100%;
   transition: border 0.2s;
+  position: relative;
+  z-index: 2;
 }
 
 /* 📱 RESPONSIVIDADE PARA INPUTS */
@@ -802,6 +813,12 @@
   transition: all 0.3s ease;
   width: 100%;
   margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 10;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* 📱 RESPONSIVIDADE PARA BOTÕES */
@@ -825,31 +842,103 @@
   cursor: not-allowed;
 }
 
+.guessButtonModern:hover:not(:disabled) {
+  background: #1ed760;
+  transform: translateY(-1px);
+}
+
+.guessButtonModern:active:not(:disabled) {
+  transform: translateY(0);
+}
+
 .suggestionsListModern {
-  position: absolute;
-  background: #23272f;
-  border: 1px solid #1DB954;
-  border-radius: 0.5rem;
-  margin-top: 2.6rem;
+  position: absolute !important;
+  background: #23272f !important;
+  background-color: #23272f !important;
+  border: 2px solid #1DB954 !important;
+  border-radius: 0.7rem;
+  margin-top: 0.2rem;
   width: 100%;
-  max-height: 200px;
-  overflow-y: auto;
-  z-index: 100;
+  max-height: 200px !important;
+  height: auto !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  z-index: 2147483647 !important; /* Valor máximo de z-index */
   list-style: none;
   padding: 0;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.8) !important;
+  backdrop-filter: none !important;
+  top: calc(100% + 2px) !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: auto !important;
+  isolation: isolate !important;
+  will-change: transform !important;
+  transform: translateZ(0) !important;
+  /* Scrollbar customizada */
+  scrollbar-width: thin !important;
+  scrollbar-color: #1DB954 #23272f !important;
+  /* Forçar opacidade total */
+  opacity: 1 !important;
+  /* CORREÇÃO: Evitar que empurre o conteúdo */
+  pointer-events: auto !important;
+  contain: layout style !important;
+}
+
+/* Scrollbar para Webkit (Chrome, Safari, Edge) */
+.suggestionsListModern::-webkit-scrollbar {
+  width: 8px !important;
+}
+
+.suggestionsListModern::-webkit-scrollbar-track {
+  background: #23272f !important;
+  border-radius: 4px;
+}
+
+.suggestionsListModern::-webkit-scrollbar-thumb {
+  background: #1DB954 !important;
+  border-radius: 4px;
+  border: 1px solid #23272f;
+}
+
+.suggestionsListModern::-webkit-scrollbar-thumb:hover {
+  background: #1ed760 !important;
 }
 
 .suggestionItemModern {
   padding: 0.75rem 1rem;
   cursor: pointer;
-  color: #fff;
+  color: #fff !important;
   transition: background 0.2s;
+  background: transparent;
+  border: none;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
 }
 
 .suggestionItemModern:hover {
-  background: #1DB954;
-  color: #222;
+  background: #1DB954 !important;
+  color: #222 !important;
+}
+
+/* FORÇA ABSOLUTA PARA BACKGROUND DO DROPDOWN */
+.suggestionsListModern {
+  background: #23272f !important;
+  background-color: #23272f !important;
+  backdrop-filter: none !important;
+  opacity: 1 !important;
+}
+
+/* FORÇA ABSOLUTA PARA ITENS DO DROPDOWN */
+.suggestionItemModern {
+  color: #fff !important;
+  background: transparent !important;
+}
+
+.suggestionItemModern:hover {
+  background: #1DB954 !important;
+  color: #222 !important;
 }
 
 .messageModern {
@@ -962,16 +1051,27 @@
 
   /* 📱 MELHORAR SUGESTÕES EM MOBILE */
   .suggestionsListModern {
-    position: absolute; /* Voltar para absolute para posicionamento correto */
-    left: 0;
-    right: 0;
-    width: 100%; /* Largura total do container pai */
-    max-height: 200px; /* Altura máxima controlada */
-    top: 100%; /* Posicionar logo abaixo do input */
-    margin-top: 0.2rem; /* Pequeno espaço entre input e sugestões */
-    z-index: 1000; /* Z-index alto para ficar acima de outros elementos */
-    box-shadow: 0 8px 32px rgba(0,0,0,0.5); /* Sombra mais forte */
-    border-radius: 0.7rem; /* Bordas arredondadas consistentes */
+    z-index: 2147483647 !important; /* Z-index máximo para ficar acima de anúncios */
+    background: #23272f !important; /* Garantir background sólido */
+    border: 2px solid #1DB954 !important; /* Garantir borda visível */
+    /* Scrollbar customizada para mobile */
+    scrollbar-width: thin !important;
+    scrollbar-color: #1DB954 #23272f !important;
+  }
+
+  /* Scrollbar para mobile - Webkit */
+  .suggestionsListModern::-webkit-scrollbar {
+    width: 6px !important;
+  }
+
+  .suggestionsListModern::-webkit-scrollbar-track {
+    background: #23272f !important;
+    border-radius: 3px;
+  }
+
+  .suggestionsListModern::-webkit-scrollbar-thumb {
+    background: #1DB954 !important;
+    border-radius: 3px;
   }
 
   .suggestionItemModern {
@@ -1001,21 +1101,32 @@
 /* 📱 TELAS MUITO PEQUENAS - Ajustes adicionais */
 @media (max-width: 480px) {
   .suggestionsListModern {
-    max-height: 180px; /* Altura reduzida para telas pequenas */
-    font-size: 0.9rem; /* Fonte menor */
+    max-height: 180px !important; /* Altura reduzida para telas pequenas */
+    font-size: 0.9rem !important; /* Fonte menor */
+    z-index: 2147483647 !important; /* Garantir z-index máximo */
+    background: #23272f !important; /* Garantir background */
+    border: 2px solid #1DB954 !important; /* Garantir borda */
   }
 
   .suggestionItemModern {
-    padding: 0.8rem; /* Padding reduzido */
-    font-size: 0.9rem; /* Fonte menor */
-    min-height: 44px; /* Altura mínima reduzida */
+    padding: 0.8rem !important; /* Padding reduzido */
+    font-size: 0.9rem !important; /* Fonte menor */
+    min-height: 44px !important; /* Altura mínima reduzida */
+    background: transparent !important; /* Background transparente por padrão */
+    color: #fff !important; /* Texto branco */
+    border: none !important; /* Sem borda */
+    display: flex !important; /* Flex para alinhamento */
+    align-items: center !important; /* Centralizar verticalmente */
   }
 }
 
 /* 📱 TELAS MUITO ALTAS - Permitir mais sugestões */
 @media (min-height: 800px) and (max-width: 600px) {
   .suggestionsListModern {
-    max-height: 300px; /* Mais espaço em telas altas */
+    max-height: 300px !important; /* Mais espaço em telas altas */
+    z-index: 2147483647 !important; /* Garantir z-index máximo */
+    background: #23272f !important; /* Garantir background */
+    border: 2px solid #1DB954 !important; /* Garantir borda */
   }
 }
 
@@ -2671,12 +2782,21 @@
   background: none !important;
   color: inherit !important;
   border: none !important;
-  border-radius: 12px !important; /* Forçar border-radius arredondado */
+  border-radius: 6px !important; /* CORREÇÃO: Border-radius menor para não cortar elementos */
   font-size: inherit !important;
   font-weight: inherit !important;
   padding: inherit !important;
   cursor: inherit !important;
   transition: inherit !important;
+  /* CORREÇÃO: Garantir que efeitos visuais sejam aplicados corretamente */
+  position: relative;
+  overflow: visible !important; /* CORREÇÃO: Permitir que elementos internos sejam visíveis */
+  /* CORREÇÃO: Garantir alinhamento correto do conteúdo */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  /* CORREÇÃO: Desabilitar qualquer glow ou box-shadow que possa aparecer */
+  box-shadow: none !important;
 }
 
 /* Desabilitar overlay problemático no botão de skip */
@@ -2692,6 +2812,92 @@
   background: none !important;
   color: inherit !important;
   cursor: inherit !important;
+}
+
+/* CORREÇÃO: Desabilitar qualquer efeito de glow/box-shadow no hover e focus */
+.skipButton:hover,
+.skipButton:focus,
+.skipButton:focus-visible,
+.skipButton:active {
+  box-shadow: none !important;
+  outline: none !important;
+  /* CORREÇÃO: Garantir que não haja transform ou outros efeitos visuais problemáticos */
+  transform: none !important;
+}
+
+/* CORREÇÃO: Desabilitar especificamente qualquer glow verde que possa aparecer */
+.skipButton,
+.skipButton *,
+.skipButton::before,
+.skipButton::after {
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+/* CORREÇÃO: Desabilitar outline global que pode estar causando o glow */
+.skipButton:focus,
+.skipButton:focus-visible,
+.skipButton:focus-within {
+  outline: none !important;
+  outline-offset: 0 !important;
+  border: none !important;
+}
+
+/* CORREÇÃO: Garantir que não haja herança de estilos problemáticos */
+.skipButton {
+  all: unset !important;
+  /* Reaplica apenas os estilos essenciais */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  margin-left: 8px !important;
+  padding: 14px 26px !important;
+  border-radius: 6px !important;
+  background: linear-gradient(135deg, #6c757d, #868e96) !important;
+  color: white !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* CORREÇÃO: Proteger ícones dentro do botão de skip de efeitos visuais problemáticos */
+.skipButton svg {
+  pointer-events: none; /* Evitar que o ícone seja o target do clique */
+  position: relative;
+  z-index: 1;
+}
+
+/* CORREÇÃO: Remover pseudo-elemento que pode estar causando problemas visuais */
+.skipButton::before {
+  display: none !important;
+}
+
+/* CORREÇÃO: Garantir que não haja pseudo-elementos problemáticos */
+.skipButton::after {
+  display: none !important;
+}
+
+
+
+/* CORREÇÃO: Garantir que o conteúdo do botão permaneça centralizado */
+.skipButton .buttonContent,
+.skipButton > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px; /* CORREÇÃO: Gap ligeiramente maior para melhor espaçamento */
+  position: relative;
+  z-index: 1;
+  padding: 2px 4px; /* CORREÇÃO: Padding para afastar elementos das bordas */
+}
+
+/* CORREÇÃO: Garantir que ícones dentro do botão de skip tenham espaçamento adequado */
+.skipButton svg,
+.skipButton .icon {
+  margin-left: 6px; /* CORREÇÃO: Margem específica para ícones */
+  flex-shrink: 0; /* Evitar que o ícone seja comprimido */
 }
 
 .nextSongButton,
@@ -2710,14 +2916,7 @@
   margin: 1rem 0;
 }
 
-.guessFormModern {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
-}
+/* Definição duplicada removida - já existe na linha 746 */
 
 /* Responsividade para componentes aprimorados */
 @media (max-width: 768px) {

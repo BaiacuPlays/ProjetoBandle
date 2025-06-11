@@ -1,38 +1,38 @@
 // 🎮 Hook para integrar todos os efeitos de game feel
 import { useCallback, useRef } from 'react';
-import { 
-  playHoverSound, 
-  playClickSound, 
-  playErrorSound, 
-  playTypingSound, 
-  playSkipSound, 
+import {
+  playHoverSound,
+  playClickSound,
+  playErrorSound,
+  playTypingSound,
+  playSkipSound,
   playLoadingSound,
   playNotificationSound,
   playSuccessSound,
   playPerfectSound,
   playFirstTrySound
 } from '../utils/soundEffects';
-import { 
-  hapticLight, 
-  hapticMedium, 
-  hapticStrong, 
-  hapticError, 
-  hapticSuccess, 
-  hapticPerfect, 
+import {
+  hapticLight,
+  hapticMedium,
+  hapticStrong,
+  hapticError,
+  hapticSuccess,
+  hapticPerfect,
   hapticFirstTry,
   hapticNotification,
   hapticLoading,
   hapticSkip
 } from '../utils/hapticFeedback';
-import { 
-  screenShake, 
-  particleBurst, 
-  rippleEffect, 
-  glowEffect, 
-  pulseEffect, 
-  floatUpEffect, 
-  bounceEffect, 
-  colorFlash 
+import {
+  screenShake,
+  particleBurst,
+  rippleEffect,
+  glowEffect,
+  pulseEffect,
+  floatUpEffect,
+  bounceEffect,
+  colorFlash
 } from '../utils/gameFeelEffects';
 
 export const useGameFeel = () => {
@@ -62,7 +62,7 @@ export const useGameFeel = () => {
   const onClick = useCallback((element, event) => {
     playClickSound();
     hapticMedium();
-    
+
     if (element && event) {
       const rect = element.getBoundingClientRect();
       const x = event.clientX;
@@ -76,7 +76,7 @@ export const useGameFeel = () => {
   const onError = useCallback((element) => {
     playErrorSound();
     hapticError();
-    
+
     if (element) {
       screenShake(element, 3, 300);
       colorFlash(element, '#e74c3c', 200);
@@ -97,7 +97,7 @@ export const useGameFeel = () => {
       const rect = element.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
-      
+
       particleBurst(centerX, centerY, '#27ae60', 12);
       glowEffect(element, '#27ae60', 1000);
       floatUpEffect(element, 10, 400);
@@ -113,12 +113,12 @@ export const useGameFeel = () => {
       const rect = element.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
-      
+
       // Múltiplas explosões de partículas
       setTimeout(() => particleBurst(centerX, centerY, '#FFD700', 15), 0);
       setTimeout(() => particleBurst(centerX, centerY, '#1DB954', 12), 200);
       setTimeout(() => particleBurst(centerX, centerY, '#FF6B6B', 10), 400);
-      
+
       glowEffect(element, '#FFD700', 1500);
       screenShake(document.body, 2, 200);
     }
@@ -135,10 +135,10 @@ export const useGameFeel = () => {
   const onSkip = useCallback((element) => {
     playSkipSound();
     hapticSkip();
-    
+
     if (element) {
-      colorFlash(element, '#ff9800', 300);
-      floatUpEffect(element, 15, 300);
+      // CORREÇÃO: Apenas efeito de pulse muito sutil, sem qualquer glow ou efeito visual
+      pulseEffect(element, 1.02, 150);
     }
   }, []);
 
@@ -146,7 +146,7 @@ export const useGameFeel = () => {
   const onLoading = useCallback((element) => {
     playLoadingSound();
     hapticLoading();
-    
+
     if (element) {
       pulseEffect(element, 1.1, 500);
     }
@@ -156,7 +156,7 @@ export const useGameFeel = () => {
   const onNotification = useCallback((element) => {
     playNotificationSound();
     hapticNotification();
-    
+
     if (element) {
       bounceEffect(element, 0.15, 400);
       glowEffect(element, '#1DB954', 800);
@@ -167,12 +167,12 @@ export const useGameFeel = () => {
   const onGameMatch = useCallback((element) => {
     playClickSound();
     hapticMedium();
-    
+
     if (element) {
       const rect = element.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
-      
+
       particleBurst(centerX, centerY, '#ffd700', 8);
       glowEffect(element, '#ffd700', 600);
     }
@@ -182,12 +182,12 @@ export const useGameFeel = () => {
   const onFranchiseMatch = useCallback((element) => {
     playClickSound();
     hapticMedium();
-    
+
     if (element) {
       const rect = element.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
-      
+
       particleBurst(centerX, centerY, '#ff9800', 6);
       glowEffect(element, '#ff9800', 500);
     }
@@ -196,7 +196,7 @@ export const useGameFeel = () => {
   // 🎯 FEEDBACK PARA FOCUS EM INPUT
   const onFocus = useCallback((element) => {
     hapticLight();
-    
+
     if (element) {
       glowEffect(element, '#1DB954', 300);
     }
@@ -213,19 +213,19 @@ export const useGameFeel = () => {
   const onAchievement = useCallback((element) => {
     playPerfectSound();
     hapticPerfect();
-    
+
     if (element) {
       const rect = element.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
-      
+
       // Explosão especial para achievements
       for (let i = 0; i < 3; i++) {
         setTimeout(() => {
           particleBurst(centerX, centerY, '#FFD700', 20);
         }, i * 150);
       }
-      
+
       screenShake(document.body, 4, 500);
       glowEffect(element, '#FFD700', 2000);
     }
@@ -245,11 +245,11 @@ export const useGameFeel = () => {
     onFocus,
     onBlur,
     onAchievement,
-    
+
     // Eventos específicos do jogo
     onGameMatch,
     onFranchiseMatch,
-    
+
     // Efeitos diretos (para uso manual)
     effects: {
       screenShake,

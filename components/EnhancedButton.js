@@ -3,7 +3,7 @@ import React, { useRef, useCallback } from 'react';
 import { useGameFeel } from '../hooks/useGameFeel';
 import styles from '../styles/EnhancedButton.module.css';
 
-const EnhancedButton = ({
+const EnhancedButton = React.forwardRef(({
   children,
   onClick,
   onHover,
@@ -16,9 +16,12 @@ const EnhancedButton = ({
   style = {},
   type = 'button',
   ...props
-}) => {
+}, ref) => {
   const buttonRef = useRef(null);
   const gameFeel = useGameFeel();
+
+  // Usar useImperativeHandle para expor métodos se necessário
+  React.useImperativeHandle(ref, () => buttonRef.current);
 
   // Handler para hover
   const handleMouseEnter = useCallback((e) => {
@@ -43,6 +46,7 @@ const EnhancedButton = ({
       return;
     }
 
+    // CORREÇÃO: Sempre usar buttonRef.current para garantir que o efeito seja aplicado ao botão correto
     gameFeel.onClick(buttonRef.current, e);
     if (onClick) onClick(e);
   }, [disabled, loading, gameFeel, onClick]);
@@ -99,7 +103,9 @@ const EnhancedButton = ({
       )}
     </button>
   );
-};
+});
+
+EnhancedButton.displayName = 'EnhancedButton';
 
 // Variantes específicas para facilitar o uso
 export const PrimaryButton = (props) => (
@@ -178,25 +184,29 @@ export const AttemptButton = ({
 };
 
 // Botão de input aprimorado
-export const InputButton = ({
+export const InputButton = React.forwardRef(({
   children,
   isSubmitting = false,
   isShaking = false,
   onClick,
   ...props
-}) => {
-  const buttonRef = useRef(null);
+}, ref) => {
   const gameFeel = useGameFeel();
 
   const handleClick = useCallback((e) => {
     if (isSubmitting) {
-      gameFeel.onError(buttonRef.current);
+      if (ref?.current) {
+        gameFeel.onError(ref.current);
+      }
       return;
     }
 
-    gameFeel.onClick(buttonRef.current, e);
+    // CORREÇÃO: Garantir que o efeito seja aplicado ao botão correto
+    if (ref?.current) {
+      gameFeel.onClick(ref.current, e);
+    }
     if (onClick) onClick(e);
-  }, [isSubmitting, gameFeel, onClick]);
+  }, [isSubmitting, gameFeel, onClick, ref]);
 
   const buttonClasses = [
     styles.inputButton,
@@ -206,7 +216,7 @@ export const InputButton = ({
 
   return (
     <EnhancedButton
-      ref={buttonRef}
+      ref={ref}
       className={buttonClasses}
       onClick={handleClick}
       disabled={isSubmitting}
@@ -216,6 +226,8 @@ export const InputButton = ({
       {children}
     </EnhancedButton>
   );
-};
+});
+
+InputButton.displayName = 'InputButton';
 
 export default EnhancedButton;

@@ -26,6 +26,10 @@ export default function AdminPage() {
   const [selectedUser, setSelectedUser] = useState('');
   const [selectedAchievement, setSelectedAchievement] = useState('');
 
+  // Estados para badges
+  const [selectedBadge, setSelectedBadge] = useState('');
+  const [xpBonus, setXpBonus] = useState(0);
+
   // Estado para controlar visibilidade das senhas
   const [showPasswords, setShowPasswords] = useState(false);
 
@@ -462,6 +466,37 @@ export default function AdminPage() {
     }
   };
 
+  // Função para dar badge
+  const giveBadge = async (userId, badgeId, xpBonus = 0) => {
+    try {
+      const response = await fetch('/api/admin/give-achievement', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-key': 'admin123'
+        },
+        body: JSON.stringify({ userId, badgeId, xpBonus })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        await fetchProfiles();
+        const user = profiles.find(p => p.id === userId);
+        const userName = user ? user.username : 'Usuário';
+        alert(`Badge concedida com sucesso para ${userName}!${xpBonus > 0 ? `\n+${xpBonus} XP bônus adicionado!` : ''}`);
+
+        // Limpar seleções
+        setSelectedUser('');
+        setSelectedBadge('');
+        setXpBonus(0);
+      } else {
+        alert('Erro ao conceder badge: ' + data.error);
+      }
+    } catch (err) {
+      alert('Erro ao conceder badge: ' + err.message);
+    }
+  };
+
   // Função para definir música do dia
   const setDailySongAdmin = async (songTitle) => {
     if (!songTitle) {
@@ -715,6 +750,12 @@ export default function AdminPage() {
               🏆 Conquistas
             </button>
             <button
+              className={`${styles.tabButton} ${activeTab === 'badges' ? styles.active : ''}`}
+              onClick={() => setActiveTab('badges')}
+            >
+              🎖️ Badges
+            </button>
+            <button
               className={`${styles.tabButton} ${activeTab === 'system' ? styles.active : ''}`}
               onClick={() => setActiveTab('system')}
             >
@@ -889,6 +930,102 @@ export default function AdminPage() {
                 </button>
                 <p style={{ fontSize: '12px', color: '#666', marginTop: '10px' }}>
                   Selecione um usuário e uma conquista para conceder
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'badges' && (
+          <div className={styles.section}>
+            <h2>🎖️ Gerenciamento de Badges</h2>
+            <div className={styles.badgeSection}>
+              <div className={styles.giveBadge}>
+                <h3>Conceder Badge</h3>
+                <select
+                  id="userSelectBadge"
+                  className={styles.select}
+                  onChange={(e) => setSelectedUser(e.target.value)}
+                  value={selectedUser}
+                >
+                  <option value="">Selecione um usuário...</option>
+                  {profiles.map((profile) => (
+                    <option key={profile.id} value={profile.id}>
+                      {profile.username} ({profile.displayName})
+                    </option>
+                  ))}
+                </select>
+                <select
+                  id="badgeSelect"
+                  className={styles.select}
+                  onChange={(e) => setSelectedBadge(e.target.value)}
+                  value={selectedBadge}
+                >
+                  <option value="">Selecione uma badge...</option>
+                  <optgroup label="Badges de Nível">
+                    <option value="level_rookie">🌱 Novato (Nível 5)</option>
+                    <option value="level_veteran">⚔️ Veterano (Nível 15)</option>
+                    <option value="level_expert">🎯 Especialista (Nível 30)</option>
+                    <option value="level_master">👑 Mestre (Nível 50)</option>
+                    <option value="level_legend">⭐ Lenda (Nível 75)</option>
+                    <option value="level_god">🌟 Deus (Nível 100)</option>
+                  </optgroup>
+                  <optgroup label="Badges de Conquistas">
+                    <option value="first_win">🏆 Primeira Vitória</option>
+                    <option value="perfect_streak">💎 Sequência Perfeita</option>
+                    <option value="speed_demon">⚡ Demônio da Velocidade</option>
+                    <option value="perfectionist">🎯 Perfeccionista</option>
+                    <option value="comeback_king">👑 Rei do Comeback</option>
+                    <option value="marathon_runner">🏃 Maratonista</option>
+                  </optgroup>
+                  <optgroup label="Badges Especiais">
+                    <option value="supporter_temp">💝 Apoiador (Temporário)</option>
+                    <option value="supporter_permanent">💝 Apoiador (Permanente)</option>
+                    <option value="premium_supporter">⭐ Apoiador Premium</option>
+                    <option value="vip_member">👑 Membro VIP</option>
+                    <option value="beta_tester">🧪 Beta Tester</option>
+                    <option value="early_adopter">🚀 Early Adopter</option>
+                  </optgroup>
+                  <optgroup label="Badges de Tempo">
+                    <option value="early_bird">🌅 Madrugador</option>
+                    <option value="night_owl">🦉 Coruja Noturna</option>
+                    <option value="weekend_warrior">⚔️ Guerreiro de Fim de Semana</option>
+                    <option value="daily_player">📅 Jogador Diário</option>
+                  </optgroup>
+                  <optgroup label="Badges Sociais">
+                    <option value="social_butterfly">🦋 Borboleta Social</option>
+                    <option value="friend_maker">🤝 Fazedor de Amigos</option>
+                    <option value="multiplayer_master">🎮 Mestre Multiplayer</option>
+                  </optgroup>
+                </select>
+                <div className={styles.xpBonus}>
+                  <label htmlFor="xpBonus">XP Bônus (opcional):</label>
+                  <input
+                    type="number"
+                    id="xpBonus"
+                    min="0"
+                    max="10000"
+                    step="100"
+                    placeholder="0"
+                    className={styles.input}
+                    onChange={(e) => setXpBonus(parseInt(e.target.value) || 0)}
+                  />
+                </div>
+                <button
+                  className={styles.button}
+                  onClick={() => {
+                    if (selectedUser && selectedBadge) {
+                      giveBadge(selectedUser, selectedBadge, xpBonus);
+                    } else {
+                      alert('Por favor, selecione um usuário e uma badge');
+                    }
+                  }}
+                  disabled={!selectedUser || !selectedBadge}
+                >
+                  Conceder Badge
+                </button>
+                <p style={{ fontSize: '12px', color: '#666', marginTop: '10px' }}>
+                  Selecione um usuário e uma badge para conceder. XP bônus é opcional.
                 </p>
               </div>
             </div>

@@ -220,15 +220,15 @@ body.modal-open *:not(.tutorialModal):not(.profileModal):not(.menuContainer):not
   -ms-overflow-style: none !important;
 }
 
-/* FORÇAR OVERFLOW HIDDEN EM TODOS OS ELEMENTOS EXCETO MODAIS */
+/* FORÇAR OVERFLOW HIDDEN APENAS NO BODY E HTML QUANDO MODAL ABERTO */
 body.modal-open,
-body.modal-open *:not(.tutorialModal):not(.profileModal):not(.menuContainer):not(.modal):not(.friendsModal):not(.inviteModal):not(.errorModal):not(.avatarModal):not(.referralModal),
-html.modal-open,
-html.modal-open *:not(.tutorialModal):not(.profileModal):not(.menuContainer):not(.modal):not(.friendsModal):not(.inviteModal):not(.errorModal):not(.avatarModal):not(.referralModal) {
+html.modal-open {
   overflow: hidden !important;
   overflow-x: hidden !important;
   overflow-y: hidden !important;
 }
+
+
 
 /* EXCEÇÕES ESPECÍFICAS PARA ELEMENTOS DO MODAL QUE PRECISAM DE SCROLL */
 body.modal-open .tutorialModal,
@@ -780,10 +780,10 @@ body.dark #point-counter {
 .dropdown-content {
   display: none;
   position: absolute;
-  background-color: #2a2a2a;
+  background-color: #2a2a2a !important;
   min-width: 160px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  z-index: 1;
+  z-index: 1000 !important;
   border-radius: 12px;
   padding: 10px;
   width: 100%;
@@ -792,19 +792,32 @@ body.dark #point-counter {
   max-height: 300px;
   overflow-y: scroll;
   overflow-x: hidden;
-  position: relative;
 }
 
-/* Remove scrollbar for Chrome, Safari and Opera */
+/* Scrollbar customizada para dropdown-content */
 .dropdown-content::-webkit-scrollbar {
-  width: 0;
-  background: transparent;
+  width: 8px;
 }
 
-/* Remove scrollbar for IE, Edge and Firefox */
+.dropdown-content::-webkit-scrollbar-track {
+  background: #2a2a2a;
+  border-radius: 4px;
+}
+
+.dropdown-content::-webkit-scrollbar-thumb {
+  background: #1DB954;
+  border-radius: 4px;
+  border: 1px solid #2a2a2a;
+}
+
+.dropdown-content::-webkit-scrollbar-thumb:hover {
+  background: #1ed760;
+}
+
+/* Firefox scrollbar */
 .dropdown-content {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  scrollbar-width: thin;
+  scrollbar-color: #1DB954 #2a2a2a;
 }
 
 .dropdown-content.show {
@@ -900,26 +913,29 @@ body.purple .scroll-indicator.bottom {
 }
 
 .dropdown-item {
-  background-color: transparent;
-  color: #fff;
+  background-color: transparent !important;
+  color: #fff !important;
   padding: 10px 16px;
   border: none;
   text-decoration: none;
-  display: block;
+  display: block !important;
   cursor: pointer;
   border-radius: 8px;
   transition: all 0.3s ease;
   width: 100%;
-  text-align: center;
+  text-align: left;
   margin: 4px 0;
   font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  min-height: 40px;
+  line-height: 1.4;
 }
 
 .dropdown-item:hover {
-  background-color: #3a3a3a;
+  background-color: #1DB954 !important;
+  color: #222 !important;
   transform: translateY(-2px);
 }
 

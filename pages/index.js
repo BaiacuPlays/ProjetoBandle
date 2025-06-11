@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Head from 'next/head';
 import Script from 'next/script';
-import AdSuppressor from '../components/AdSuppressor';
+
 import { songs } from '../data/songs';
 import styles from '../styles/Home.module.css';
 import { FaFastForward, FaQuestionCircle, FaBars, FaUser, FaUsers, FaTrophy } from 'react-icons/fa';
@@ -37,12 +37,12 @@ import { simpleAudioProxy } from '../utils/simpleAudioProxy';
 // Hooks removidos para melhor performance
 import {
   MemoizedPlayButton,
-  MemoizedVolumeControl
+  MemoizedVolumeControl,
+  MemoizedSuggestions
 } from '../components/MemoizedComponents';
 
 // Componentes de monetização
 import DonationButton from '../components/DonationButton';
-import { HeaderAd, BetweenGamesAd, SimpleInterstitialAd } from '../components/AdBanner';
 
 // Utilitários de feedback
 import { playSuccessSound, playPerfectSound, playFirstTrySound } from '../utils/soundEffects';
@@ -162,9 +162,7 @@ export default function Home() {
   const [isAudioLoading, setIsAudioLoading] = useState(false);
   const [audioLoadingMessage, setAudioLoadingMessage] = useState('');
 
-  // Estados de monetização
-  const [showInterstitialAd, setShowInterstitialAd] = useState(false);
-  const [gamesPlayedCount, setGamesPlayedCount] = useState(0);
+  // Estados de monetização removidos
 
   // Estados do modo infinito
   const [isInfiniteMode, setIsInfiniteMode] = useState(false);
@@ -188,6 +186,9 @@ export default function Home() {
 
   // Estados do feedback simplificado (infinito)
   const [showSimpleFeedback, setShowSimpleFeedback] = useState(false);
+
+  // Estado para debug do dropdown
+  const [showSelectFromListError, setShowSelectFromListError] = useState(false);
 
 
 
@@ -754,13 +755,7 @@ export default function Home() {
     return () => clearTimeout(timeoutId);
   }, [isAuthenticated]); // Executar quando autenticação mudar
 
-  // Controle de anúncios intersticiais
-  useEffect(() => {
-    // Mostrar anúncio intersticial a cada 5 jogos
-    if (gamesPlayedCount > 0 && gamesPlayedCount % 5 === 0) {
-      setShowInterstitialAd(true);
-    }
-  }, [gamesPlayedCount]);
+  // Controle de anúncios removido
 
   // Verificar se é a primeira visita do usuário
   useEffect(() => {
@@ -1247,7 +1242,6 @@ export default function Home() {
   };
 
   // Guess
-  const [showSelectFromListError, setShowSelectFromListError] = useState(false);
 
   const handleGuess = (e) => {
     e.preventDefault();
@@ -1925,6 +1919,25 @@ export default function Home() {
     }
   };
 
+  const handleInputFocus = () => {
+    // Mostrar sugestões se já tem texto
+    if (guess.trim()) {
+      filterSuggestions(guess);
+    } else {
+      // Mostrar algumas sugestões aleatórias
+      const randomSuggestions = songsToUse.slice(0, 6);
+      setFilteredSuggestions(randomSuggestions);
+      setShowSuggestions(true);
+    }
+  };
+
+  const handleInputBlur = () => {
+    // Delay para permitir clique em sugestão
+    setTimeout(() => {
+      setShowSuggestions(false);
+    }, 200);
+  };
+
   const handleSuggestionClick = (suggestion) => {
     // Para músicas com nomes genéricos, usar formato "Jogo - Título"
     // Para músicas únicas, usar apenas o título
@@ -2586,7 +2599,7 @@ export default function Home() {
       </Head>
 
 
-      <AdSuppressor />
+
       <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <div className={styles.darkBg} style={{ flex: 1, display: 'flex', flexDirection: 'column' }} data-bis_skin_checked="1">
         <div className={styles.topBar}>
@@ -3057,7 +3070,9 @@ export default function Home() {
               showOverlay={false} // Desabilitar overlay problemático
               onClick={(e) => {
                 if (!isSkipLoading && !gameOver && !audioError && attempts < MAX_ATTEMPTS) {
-                  gameFeel.onSkip(e.target);
+                  // CORREÇÃO: Garantir que o efeito seja aplicado ao botão, não ao ícone
+                  const buttonElement = e.currentTarget; // currentTarget sempre é o botão
+                  gameFeel.onSkip(buttonElement);
                   handleSkip();
                 }
               }}
@@ -3073,52 +3088,40 @@ export default function Home() {
             </EnhancedButton>
           </div>
           <form onSubmit={handleGuess} className={styles.guessFormModern} autoComplete="off">
-            <MusicSearchInput
-              ref={inputRef}
-              value={guess}
-              onChange={handleInputChange}
-              placeholder={isClient ? t('song_input_placeholder') : 'Digite o nome da música...'}
-              disabled={gameOver || audioError}
-              error={showSelectFromListError}
-              songs={songsToUse}
-              onSongSelect={(song) => {
-                const songText = `${song.game} - ${song.title}`;
-                setGuess(songText);
-                setShowSuggestions(false);
-                gameFeel.onClick(); // Feedback para seleção
-              }}
-              maxSuggestions={10}
-              filterFunction={(songs, searchTerm) => {
-                const normalizedSearch = searchTerm.toLowerCase();
-
-                // Easter egg
-                if (searchTerm.trim() === '?') {
-                  return [{
-                    id: 'easter-egg',
-                    game: '???',
-                    title: '???',
-                    onClick: triggerSacabambapis
-                  }];
-                }
-
-                return songs.filter(song =>
-                  song.title?.toLowerCase().includes(normalizedSearch) ||
-                  song.game?.toLowerCase().includes(normalizedSearch) ||
-                  song.artist?.toLowerCase().includes(normalizedSearch) ||
-                  `${song.game} - ${song.title}`.toLowerCase().includes(normalizedSearch)
-                ).slice(0, 10);
-              }}
-            />
+            <div className={styles.inputContainer}>
+              <EnhancedInput
+                ref={inputRef}
+                value={guess}
+                onChange={handleInputChange}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
+                placeholder={isClient ? t('song_input_placeholder') : 'Digite o nome da música...'}
+                disabled={gameOver || audioError}
+                error={showSelectFromListError}
+                className={styles.guessInputModern}
+              />
+              {showSuggestions && filteredSuggestions.length > 0 && (
+                <MemoizedSuggestions
+                  suggestions={filteredSuggestions}
+                  onSuggestionClick={handleSuggestionClick}
+                  showEasterEgg={guess.trim() === '?'}
+                  onEasterEggClick={triggerSacabambapis}
+                  styles={styles}
+                />
+              )}
+            </div>
 
             <InputButton
               type="submit"
               disabled={gameOver || audioError || !guess.trim()}
               isShaking={isShaking}
               onClick={(e) => {
+                // CORREÇÃO: Usar currentTarget para garantir que o efeito seja aplicado ao botão
+                const buttonElement = e.currentTarget;
                 if (!gameOver && !audioError && guess.trim()) {
-                  gameFeel.onClick(e.target, e);
+                  gameFeel.onClick(buttonElement, e);
                 } else {
-                  gameFeel.onError(e.target);
+                  gameFeel.onError(buttonElement);
                 }
               }}
             >
@@ -3165,7 +3168,8 @@ export default function Home() {
                 variant="primary"
                 size="large"
                 onClick={(e) => {
-                  gameFeel.onSuccess(e.target);
+                  // CORREÇÃO: Usar currentTarget para garantir que o efeito seja aplicado ao botão
+                  gameFeel.onSuccess(e.currentTarget);
                   nextInfiniteSong();
                 }}
                 className={styles.nextSongButton}
@@ -3183,7 +3187,8 @@ export default function Home() {
                 variant="success"
                 size="large"
                 onClick={(e) => {
-                  gameFeel.onNotification(e.target);
+                  // CORREÇÃO: Usar currentTarget para garantir que o efeito seja aplicado ao botão
+                  gameFeel.onNotification(e.currentTarget);
                   resetInfiniteMode();
                 }}
                 className={styles.playAgainButton}
@@ -3286,18 +3291,11 @@ export default function Home() {
           }}
         />
 
-        {/* Componentes de monetização */}
-        <SimpleInterstitialAd
-          isOpen={showInterstitialAd}
-          onClose={() => setShowInterstitialAd(false)}
-        />
+        {/* Componentes de monetização removidos */}
 
         </div>
 
-        {/* Anúncios */}
-        <HeaderAd />
-
-        <BetweenGamesAd />
+        {/* Anúncios removidos */}
         <Footer />
 
         {/* Sistema de notificações */}
@@ -3332,41 +3330,7 @@ export default function Home() {
 
       </div>
 
-      {/* Detector de bloqueador de anúncios */}
-      <Script
-        src="/ads.js"
-        strategy="beforeInteractive"
-        id="adblock-detector"
-      />
-
-      {/* Google AdSense - carregado condicionalmente */}
-      <Script
-        id="adsense-script"
-        strategy="lazyOnload"
-        dangerouslySetInnerHTML={{
-          __html: `
-            try {
-              if (window.canRunAds === true) {
-                // AdBlock não detectado, carregar AdSense
-                (function() {
-                  const script = document.createElement('script');
-                  script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1007836460713451';
-                  script.async = true;
-                  script.crossOrigin = 'anonymous';
-                  script.onerror = function() {
-                    console.log('📢 AdSense bloqueado pelo navegador - isso é normal com bloqueadores de anúncios');
-                  };
-                  document.head.appendChild(script);
-                })();
-              } else {
-                console.log('📢 Bloqueador de anúncios detectado');
-              }
-            } catch (e) {
-              // Silenciar erros
-            }
-          `
-        }}
-      />
+      {/* Scripts de anúncios removidos */}
 
       {/* Google Analytics */}
       <Script
