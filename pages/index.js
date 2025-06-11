@@ -1278,6 +1278,8 @@ export default function Home() {
       setShowSelectFromListError(true); // só mostra após submit
       setIsShaking(true);
       setTimeout(() => setIsShaking(false), 500);
+      // CORREÇÃO: Limpar erro automaticamente após 3 segundos
+      setTimeout(() => setShowSelectFromListError(false), 3000);
       // Feedback de erro para música não encontrada
       if (inputRef.current) {
         gameFeel.onError(inputRef.current);
@@ -1908,6 +1910,11 @@ export default function Home() {
     setGuess(value);
     filterSuggestions(value);
 
+    // CORREÇÃO: Limpar erro de seleção quando usuário começar a digitar
+    if (showSelectFromListError && value !== previousValue) {
+      setShowSelectFromListError(false);
+    }
+
     // Feedback de digitação apenas quando há mudança real no valor
     if (value !== previousValue && value.length > previousValue.length) {
       gameFeel.onTyping();
@@ -1920,6 +1927,11 @@ export default function Home() {
   };
 
   const handleInputFocus = () => {
+    // CORREÇÃO: Limpar erro quando usuário foca no campo
+    if (showSelectFromListError) {
+      setShowSelectFromListError(false);
+    }
+
     // Mostrar sugestões se já tem texto
     if (guess.trim()) {
       filterSuggestions(guess);
@@ -1939,6 +1951,11 @@ export default function Home() {
   };
 
   const handleSuggestionClick = (suggestion) => {
+    // CORREÇÃO: Limpar erro quando usuário seleciona uma sugestão válida
+    if (showSelectFromListError) {
+      setShowSelectFromListError(false);
+    }
+
     // Para músicas com nomes genéricos, usar formato "Jogo - Título"
     // Para músicas únicas, usar apenas o título
     const isGenericTitle = (title) => {
@@ -2200,6 +2217,8 @@ export default function Home() {
       setAudioLoadError(false);
       setAudioLoadRetries(0);
       setConnectionError(false);
+      // CORREÇÃO: Limpar erro de seleção quando nova música carrega
+      setShowSelectFromListError(false);
 
       // Limpar mensagens de erro de áudio específicas
       if (message && (
@@ -3232,11 +3251,8 @@ export default function Home() {
           isOpen={showStatistics}
           onClose={() => {
             setShowStatistics(false);
-            // CORREÇÃO: Resetar a sequência apenas quando fechar o modal de estatísticas no modo infinito
-            if (isInfiniteMode && infiniteGameOver) {
-              setInfiniteStreak(0);
-              saveInfiniteStats(0, infiniteBestRecord, infiniteUsedSongs);
-            }
+            // CORREÇÃO: Não resetar a sequência aqui - deixar para quando começar um novo jogo
+            // O modal deve mostrar a sequência atual corretamente
           }}
           gameResult={gameResult}
           isInfiniteMode={isInfiniteMode}

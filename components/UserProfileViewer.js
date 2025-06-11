@@ -289,7 +289,7 @@ const UserProfileViewer = ({ isOpen, userId, username, onClose }) => {
               )}
               <div className={styles.level}>
                 <span className={styles.levelBadge}>
-                  Nível {Math.floor((profile.xp || profile.stats?.xp || 0) / 1000) + 1}
+                  Nível {Math.floor(Math.sqrt((profile.xp || profile.stats?.xp || 0) / 300)) + 1}
                 </span>
                 <div className={styles.xpBar}>
                   <div

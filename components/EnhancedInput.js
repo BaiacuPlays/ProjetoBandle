@@ -79,10 +79,17 @@ const EnhancedInput = React.forwardRef(({
     if (onSuggestionClick) onSuggestionClick(suggestion);
   }, [gameFeel, onSuggestionClick]);
 
-  // Efeito para erro
+  // Efeito para erro - CORREÇÃO: Só executar efeito quando erro é ativado, não quando é limpo
   useEffect(() => {
     if (error && inputRef.current) {
-      gameFeel.onError(inputRef.current);
+      // Só executar efeito sonoro/visual se o erro foi ativado (não quando é limpo)
+      const timeoutId = setTimeout(() => {
+        if (error && inputRef.current) {
+          gameFeel.onError(inputRef.current);
+        }
+      }, 50); // Pequeno delay para evitar execução desnecessária
+
+      return () => clearTimeout(timeoutId);
     }
   }, [error, gameFeel]);
 

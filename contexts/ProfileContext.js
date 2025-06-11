@@ -404,6 +404,59 @@ export const ProfileProvider = ({ children }) => {
       }
       newStats.modeStats.daily.lastPlayedDate = new Date().toISOString();
       newStats.modeStats.daily.hasPlayedToday = true;
+
+      // 📅 SISTEMA DE DIAS CONSECUTIVOS para conquista "Daily Dedication"
+      const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+      const currentConsecutiveData = profile.consecutiveData || {
+        consecutiveDays: 0,
+        lastPlayDate: null,
+        longestStreak: 0
+      };
+
+      const lastPlayDate = currentConsecutiveData.lastPlayDate;
+
+      if (lastPlayDate) {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+        if (lastPlayDate === yesterdayStr) {
+          // Jogou ontem, continuar sequência
+          currentConsecutiveData.consecutiveDays += 1;
+        } else if (lastPlayDate !== today) {
+          // Quebrou a sequência, resetar
+          currentConsecutiveData.consecutiveDays = 1;
+        }
+        // Se lastPlayDate === today, não fazer nada (já jogou hoje)
+      } else {
+        // Primeiro jogo, iniciar sequência
+        currentConsecutiveData.consecutiveDays = 1;
+      }
+
+      // Atualizar data do último jogo
+      currentConsecutiveData.lastPlayDate = today;
+
+      // Atualizar maior sequência
+      currentConsecutiveData.longestStreak = Math.max(
+        currentConsecutiveData.longestStreak || 0,
+        currentConsecutiveData.consecutiveDays
+      );
+
+      // Salvar dados de dias consecutivos no perfil
+      profile.consecutiveData = currentConsecutiveData;
+
+      // 🔥 SISTEMA DE RETORNO APÓS 30 DIAS para conquista "Phoenix Rising"
+      const lastGameDate = profile.lastGameDate;
+      if (lastGameDate) {
+        const daysSinceLastGame = Math.floor((Date.now() - new Date(lastGameDate).getTime()) / (1000 * 60 * 60 * 24));
+        if (daysSinceLastGame >= 30) {
+          newStats.returnedAfter30Days = true;
+          console.log('🔥 Phoenix Rising: Usuário retornou após', daysSinceLastGame, 'dias');
+        }
+      }
+
+      // Atualizar data do último jogo
+      profile.lastGameDate = new Date().toISOString();
     } else if (mode === 'infinite') {
       console.log('📊 Atualizando estatísticas do modo infinito:', { won, streak, songsCompleted });
       newStats.modeStats.infinite.games = (newStats.modeStats.infinite.games || 0) + 1;
@@ -425,7 +478,7 @@ export const ProfileProvider = ({ children }) => {
       }
       console.log('📊 Estatísticas do modo infinito atualizadas:', newStats.modeStats.infinite);
     } else if (mode === 'multiplayer') {
-      newStats.modeStats.multiplayer.games = (newStats.modeStats.multiplayer.games || 0) + 1;
+      newStats.modeStats.multiplayer.gamesPlayed = (newStats.modeStats.multiplayer.gamesPlayed || 0) + 1;
       if (won) {
         newStats.modeStats.multiplayer.wins = (newStats.modeStats.multiplayer.wins || 0) + 1;
       }
@@ -438,6 +491,24 @@ export const ProfileProvider = ({ children }) => {
     if (playTime) {
       newStats.totalPlayTime = (newStats.totalPlayTime || 0) + playTime;
       newStats.longestSession = Math.max(newStats.longestSession || 0, playTime);
+
+      // 🏃 CONQUISTAS DE VELOCIDADE
+      if (won) {
+        // Speed Demon: Acertar em 3 segundos ou menos
+        if (playTime <= 3) {
+          newStats.fastestGuess = Math.min(newStats.fastestGuess || 999, playTime);
+        }
+
+        // Lightning Fast: Acertar rápido (menos de 5 segundos)
+        if (playTime <= 5) {
+          newStats.fastGuesses = (newStats.fastGuesses || 0) + 1;
+        }
+      }
+
+      // Patient Listener: Ouvir música completa (mais de 25 segundos)
+      if (playTime >= 25) {
+        newStats.fullListenCount = (newStats.fullListenCount || 0) + 1;
+      }
     }
 
     // 🎯 CALCULAR E ADICIONAR XP
@@ -470,6 +541,154 @@ export const ProfileProvider = ({ children }) => {
     const leveledUp = newLevel > currentLevel;
     if (leveledUp) {
       console.log(`🎉 LEVEL UP! Nível ${currentLevel} → ${newLevel}`);
+    }
+
+    // 🎮 COLETAR ESTATÍSTICAS ESPECÍFICAS PARA CONQUISTAS
+    if (song && won) {
+      // 🎵 CONQUISTAS DE COMPOSITOR/ARTISTA
+      const songTitle = song.title?.toLowerCase() || '';
+      const gameTitle = song.game?.toLowerCase() || '';
+
+      // Toby Fox (Undertale, Deltarune)
+      if (gameTitle.includes('undertale') || gameTitle.includes('deltarune')) {
+        newStats.tobyFoxSongs = (newStats.tobyFoxSongs || 0) + 1;
+      }
+
+      // David Wise (Donkey Kong Country)
+      if (gameTitle.includes('donkey kong country') || gameTitle.includes('dkc')) {
+        newStats.davidWiseSongs = (newStats.davidWiseSongs || 0) + 1;
+      }
+
+      // 🎮 CONQUISTAS DE GÊNERO/CATEGORIA
+      // Horror games
+      const horrorGames = ['resident evil', 'silent hill', 'dead space', 'outlast', 'amnesia', 'phasmophobia', 'five nights'];
+      if (horrorGames.some(horror => gameTitle.includes(horror))) {
+        newStats.horrorGamesCorrect = (newStats.horrorGamesCorrect || 0) + 1;
+      }
+
+      // Indie games
+      const indieGames = ['celeste', 'hollow knight', 'cuphead', 'ori and', 'shovel knight', 'katana zero', 'pizza tower', 'a hat in time'];
+      if (indieGames.some(indie => gameTitle.includes(indie))) {
+        newStats.indieGamesCorrect = (newStats.indieGamesCorrect || 0) + 1;
+      }
+
+      // RPG games
+      const rpgGames = ['final fantasy', 'chrono trigger', 'persona', 'dragon quest', 'tales of', 'xenoblade', 'fire emblem'];
+      if (rpgGames.some(rpg => gameTitle.includes(rpg))) {
+        newStats.rpgGamesCorrect = (newStats.rpgGamesCorrect || 0) + 1;
+      }
+
+      // Nintendo games
+      const nintendoGames = ['mario', 'zelda', 'pokemon', 'metroid', 'kirby', 'donkey kong', 'star fox', 'f-zero'];
+      if (nintendoGames.some(nintendo => gameTitle.includes(nintendo))) {
+        newStats.nintendoGamesCorrect = (newStats.nintendoGamesCorrect || 0) + 1;
+      }
+
+      // PlayStation games
+      const playstationGames = ['god of war', 'uncharted', 'last of us', 'horizon', 'bloodborne', 'gran turismo'];
+      if (playstationGames.some(ps => gameTitle.includes(ps))) {
+        newStats.playstationGamesCorrect = (newStats.playstationGamesCorrect || 0) + 1;
+      }
+
+      // Retro 90s games
+      const retro90sGames = ['sonic', 'street fighter', 'mega man', 'castlevania', 'contra', 'double dragon'];
+      if (retro90sGames.some(retro => gameTitle.includes(retro))) {
+        newStats.retro90sCorrect = (newStats.retro90sCorrect || 0) + 1;
+      }
+
+      // 🔤 CONQUISTAS DE PADRÕES
+      // Alphabet Collector: Músicas que começam com letras específicas
+      const firstLetter = songTitle.charAt(0);
+      if (firstLetter.match(/[a-z]/)) {
+        if (!newStats.alphabetLetters) newStats.alphabetLetters = 0;
+        newStats.alphabetLetters += 1;
+      }
+
+      // Number Hunter: Músicas com números no título
+      if (songTitle.match(/\d/)) {
+        newStats.numberedSongs = (newStats.numberedSongs || 0) + 1;
+      }
+
+      // 🎯 CONQUISTAS DE DESCOBERTA
+      // Contar gêneros únicos descobertos (baseado no jogo)
+      const genres = new Set(newStats.genresDiscovered || []);
+      if (horrorGames.some(horror => gameTitle.includes(horror))) genres.add('horror');
+      if (indieGames.some(indie => gameTitle.includes(indie))) genres.add('indie');
+      if (rpgGames.some(rpg => gameTitle.includes(rpg))) genres.add('rpg');
+      if (nintendoGames.some(nintendo => gameTitle.includes(nintendo))) genres.add('nintendo');
+      if (playstationGames.some(ps => gameTitle.includes(ps))) genres.add('playstation');
+      newStats.genresDiscovered = genres.size;
+
+      // Contar décadas descobertas (estimativa baseada no jogo)
+      const decades = new Set(newStats.decadesDiscovered || []);
+      if (retro90sGames.some(retro => gameTitle.includes(retro))) decades.add('90s');
+      if (gameTitle.includes('mario') || gameTitle.includes('zelda')) decades.add('80s');
+      if (indieGames.some(indie => gameTitle.includes(indie))) decades.add('2010s');
+      newStats.decadesDiscovered = decades.size;
+
+      // 🏆 CONQUISTAS ESPECIAIS
+      // Music Savant: Músicas únicas corretas
+      if (!newStats.uniqueSongsCorrect) newStats.uniqueSongsCorrect = 0;
+      newStats.uniqueSongsCorrect += 1;
+
+      // Century Club: Total de acertos
+      if (!newStats.totalCorrect) newStats.totalCorrect = 0;
+      newStats.totalCorrect += 1;
+    }
+
+    // 🕐 CONQUISTAS DE TIMING
+    const currentHour = new Date().getHours();
+
+    // Midnight Gamer: Jogar entre 0h-6h (qualquer resultado)
+    if (currentHour >= 0 && currentHour < 6) {
+      newStats.midnightGames = (newStats.midnightGames || 0) + 1;
+    }
+
+    // Early Bird: Jogar entre 5h-8h (qualquer resultado)
+    if (currentHour >= 5 && currentHour < 8) {
+      newStats.earlyBirdGames = (newStats.earlyBirdGames || 0) + 1;
+    }
+
+    // Night Owl: Jogar entre 22h-4h (qualquer resultado)
+    if (currentHour >= 22 || currentHour < 4) {
+      newStats.nightOwlGames = (newStats.nightOwlGames || 0) + 1;
+    }
+
+    // 🏆 CONQUISTAS DE PERSISTÊNCIA
+    // Never Give Up: Continuar jogando após 10 derrotas consecutivas
+    if (consecutiveLosses >= 10 && won) {
+      newStats.continuedAfter10Losses = true;
+    }
+
+    // Weekend Warrior: Jogar nos fins de semana
+    const currentDay = new Date().getDay(); // 0 = domingo, 6 = sábado
+    if ((currentDay === 0 || currentDay === 6) && won) {
+      newStats.consecutiveWeekends = (newStats.consecutiveWeekends || 0) + 1;
+    }
+
+    // 🎮 CONQUISTAS DE CONSOLE/PLATAFORMA
+    if (song && won) {
+      const gameTitle = song.game?.toLowerCase() || '';
+      const consoles = new Set(newStats.consolesDiscovered || []);
+
+      // Detectar consoles baseado nos jogos
+      if (gameTitle.includes('mario') || gameTitle.includes('zelda') || gameTitle.includes('pokemon')) {
+        consoles.add('nintendo');
+      }
+      if (gameTitle.includes('god of war') || gameTitle.includes('uncharted') || gameTitle.includes('last of us')) {
+        consoles.add('playstation');
+      }
+      if (gameTitle.includes('halo') || gameTitle.includes('gears of war') || gameTitle.includes('forza')) {
+        consoles.add('xbox');
+      }
+      if (gameTitle.includes('half-life') || gameTitle.includes('counter-strike') || gameTitle.includes('portal')) {
+        consoles.add('pc');
+      }
+      if (gameTitle.includes('sonic') || gameTitle.includes('streets of rage')) {
+        consoles.add('sega');
+      }
+
+      newStats.consolesDiscovered = consoles.size;
     }
 
     // Atualizar estatísticas de franquia
@@ -559,6 +778,24 @@ export const ProfileProvider = ({ children }) => {
         }
         break;
 
+      case 'room_created':
+        // 🏆 CONQUISTA PARTY STARTER: Criar salas multiplayer
+        const newStats = { ...profile.stats };
+        if (!newStats.modeStats) {
+          newStats.modeStats = {
+            daily: { games: 0, wins: 0, currentStreak: 0, bestStreak: 0, lastPlayedDate: null, hasPlayedToday: false },
+            infinite: { games: 0, wins: 0, bestStreak: 0, currentStreak: 0, totalSongsCompleted: 0 },
+            multiplayer: { gamesPlayed: 0, wins: 0, roomsCreated: 0, roomsJoined: 0 }
+          };
+        }
+        newStats.modeStats.multiplayer.roomsCreated = (newStats.modeStats.multiplayer.roomsCreated || 0) + 1;
+
+        // Atualizar perfil com nova estatística
+        await updateProfile({ stats: newStats });
+
+        xpGained = 10; // +10 XP por criar sala
+        break;
+
       case 'friend_added':
         newSocialStats.friendsAdded = (newSocialStats.friendsAdded || 0) + 1;
         xpGained = 10; // +10 XP por adicionar amigo
@@ -582,6 +819,12 @@ export const ProfileProvider = ({ children }) => {
       case 'helpful_action':
         newSocialStats.helpfulActions = (newSocialStats.helpfulActions || 0) + 1;
         xpGained = 5; // +5 XP por ação útil
+        break;
+
+      case 'friend_referred':
+        // 🏆 CONQUISTA INFLUENCER: Referir amigos
+        newSocialStats.friendsReferred = (newSocialStats.friendsReferred || 0) + 1;
+        xpGained = 50; // +50 XP por referir amigo
         break;
 
       default:

@@ -74,14 +74,16 @@ export const useGameFeel = () => {
 
   // 🎯 FEEDBACK PARA ERRO
   const onError = useCallback((element) => {
-    playErrorSound();
-    hapticError();
+    debounce(() => {
+      playErrorSound();
+      hapticError();
 
-    if (element) {
-      screenShake(element, 3, 300);
-      colorFlash(element, '#e74c3c', 200);
-    }
-  }, []);
+      if (element) {
+        screenShake(element, 3, 300);
+        colorFlash(element, '#e74c3c', 200);
+      }
+    }, 300); // Debounce de 300ms para evitar spam de erro
+  }, [debounce]);
 
   // 🎯 FEEDBACK PARA SUCESSO
   const onSuccess = useCallback((element, attempt = 1) => {

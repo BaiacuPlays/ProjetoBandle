@@ -517,8 +517,15 @@ const MultiplayerGame = ({ onBackToLobby }) => {
 
   const handleInputChange = (e) => {
     const value = e.target.value;
+    const previousValue = guess;
+
     setGuess(value);
     filterSuggestions(value);
+
+    // CORREÇÃO: Limpar erro quando usuário começar a digitar
+    if (value !== previousValue && actions.error) {
+      actions.setError('');
+    }
   };
 
   const handleInputFocus = () => {

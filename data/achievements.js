@@ -613,12 +613,6 @@ export const calculateAchievementProgress = (achievementId, userStats, profile =
         stats => stats.wins >= 10
       );
       return franchiseWith10 ? 100 : 0;
-    case 'franchise_expert':
-      if (!profile?.franchiseStats) return 0;
-      const expertFranchise = Object.values(profile.franchiseStats).find(
-        stats => stats.gamesPlayed >= 20 && stats.winRate >= 90
-      );
-      return expertFranchise ? 100 : 0;
 
 
 
@@ -632,9 +626,7 @@ export const calculateAchievementProgress = (achievementId, userStats, profile =
     case 'level_50':
       return profile?.level >= 50 ? 100 : Math.min(100, (profile?.level / 50) * 100);
 
-    // Conquistas sociais
-    case 'influencer':
-      return Math.min(100, ((profile?.socialStats?.friendsReferred || 0) / 5) * 100);
+
 
     // Conquistas de colecionador
     case 'collector':
@@ -669,74 +661,36 @@ export const calculateAchievementProgress = (achievementId, userStats, profile =
       return 0;
 
     case 'daily_player':
-      // Verificar jogos diários consecutivos
-      if (profile?.gameHistory) {
-        const dailyGames = profile.gameHistory.filter(game => game.mode === 'daily' && game.won);
-        const last3Days = [];
-        const today = new Date();
-
-        for (let i = 0; i < 3; i++) {
-          const date = new Date(today);
-          date.setDate(date.getDate() - i);
-          const dateStr = date.toISOString().split('T')[0];
-
-          const hasGameOnDate = dailyGames.some(game =>
-            game.date && game.date.split('T')[0] === dateStr
-          );
-
-          if (hasGameOnDate) {
-            last3Days.push(dateStr);
-          } else {
-            break; // Quebrou a sequência
-          }
-        }
-
-        return last3Days.length >= 3 ? 100 : Math.min(100, (last3Days.length / 3) * 100);
+      // Verificar jogos diários consecutivos - CORREÇÃO: usar dados de dias consecutivos
+      if (profile?.consecutiveData?.consecutiveDays) {
+        return profile.consecutiveData.consecutiveDays >= 3 ? 100 : Math.min(100, (profile.consecutiveData.consecutiveDays / 3) * 100);
       }
       return 0;
 
-    // Conquistas de modo infinito
+    // Conquistas de modo infinito - CORREÇÃO: usar wins ao invés de totalSongsCompleted
     case 'infinite_starter':
-      return Math.min(100, ((userStats.modeStats?.infinite?.totalSongsCompleted || 0) / 5) * 100);
+      return Math.min(100, ((userStats.modeStats?.infinite?.wins || 0) / 5) * 100);
     case 'infinite_warrior':
-      return Math.min(100, ((userStats.modeStats?.infinite?.totalSongsCompleted || 0) / 25) * 100);
+      return Math.min(100, ((userStats.modeStats?.infinite?.wins || 0) / 25) * 100);
     case 'infinite_legend':
-      return Math.min(100, ((userStats.modeStats?.infinite?.totalSongsCompleted || 0) / 100) * 100);
+      return Math.min(100, ((userStats.modeStats?.infinite?.wins || 0) / 100) * 100);
 
-    // Conquistas de multiplayer
+    // Conquistas de multiplayer - CORREÇÃO: usar gamesPlayed ao invés de games
     case 'social_player':
-      return (userStats.modeStats?.multiplayer?.games || 0) >= 1 ? 100 : 0;
+      return (userStats.modeStats?.multiplayer?.gamesPlayed || 0) >= 1 ? 100 : 0;
     case 'room_creator':
       return Math.min(100, ((userStats.modeStats?.multiplayer?.roomsCreated || 0) / 5) * 100);
     case 'multiplayer_champion':
       return Math.min(100, ((userStats.modeStats?.multiplayer?.wins || 0) / 10) * 100);
     case 'multiplayer_dominator':
-      return Math.min(100, ((userStats.modeStats?.multiplayer?.wins || 0) / 10) * 100);
+      return Math.min(100, ((userStats.modeStats?.multiplayer?.wins || 0) / 25) * 100);
 
-    // Conquistas de tempo especiais
+    // Conquistas de tempo especiais - CORREÇÃO: usar estatística coletada
     case 'night_owl':
-      // Verificar se há jogos noturnos no histórico
-      if (profile?.gameHistory) {
-        const nightGame = profile.gameHistory.find(game => {
-          if (!game.date) return false;
-          const hour = new Date(game.date).getHours();
-          return hour >= 0 && hour < 6;
-        });
-        return nightGame ? 100 : 0;
-      }
-      return 0;
+      return (userStats.nightOwlGames && userStats.nightOwlGames >= 1) ? 100 : 0;
 
     case 'early_bird':
-      // Verificar se há jogos matutinos no histórico
-      if (profile?.gameHistory) {
-        const morningGame = profile.gameHistory.find(game => {
-          if (!game.date) return false;
-          const hour = new Date(game.date).getHours();
-          return hour >= 5 && hour < 8;
-        });
-        return morningGame ? 100 : 0;
-      }
-      return 0;
+      return (userStats.earlyBirdGames && userStats.earlyBirdGames >= 1) ? 100 : 0;
 
     // Novas conquistas específicas de jogos/franquias
     case 'indie_lover':
@@ -750,7 +704,7 @@ export const calculateAchievementProgress = (achievementId, userStats, profile =
     case 'rpg_master':
       return Math.min(100, ((userStats.rpgGamesCorrect || 0) / 12) * 100);
 
-    // Conquistas de velocidade e tempo
+    // Conquistas de velocidade e tempo - CORREÇÃO: verificar se já acertou rápido pelo menos uma vez
     case 'speed_demon':
       return (userStats.fastestGuess && userStats.fastestGuess <= 3) ? 100 : 0;
     case 'lightning_fast':
@@ -762,9 +716,9 @@ export const calculateAchievementProgress = (achievementId, userStats, profile =
     case 'nightmare_conqueror':
       return Math.min(100, ((userStats.horrorGamesCorrect || 0) / 5) * 100);
 
-    // Conquistas sociais e multiplayer avançadas
+    // Conquistas sociais e multiplayer avançadas - CORREÇÃO: usar modeStats.multiplayer.roomsCreated
     case 'party_starter':
-      return Math.min(100, ((userStats.roomsCreated || 0) / 10) * 100);
+      return Math.min(100, ((userStats.modeStats?.multiplayer?.roomsCreated || 0) / 10) * 100);
 
     // Conquistas de descoberta
     case 'genre_explorer':
@@ -802,13 +756,31 @@ export const calculateAchievementProgress = (achievementId, userStats, profile =
     case 'number_hunter':
       return Math.min(100, ((userStats.numberedSongs || 0) / 5) * 100);
 
-    // Conquistas de timing
+    // Conquistas de timing - CORREÇÃO: verificar se há pelo menos 1 jogo à meia-noite
     case 'midnight_gamer':
       return (userStats.midnightGames && userStats.midnightGames >= 1) ? 100 : 0;
+    case 'early_bird':
+      return (userStats.earlyBirdGames && userStats.earlyBirdGames >= 1) ? 100 : 0;
 
     // Conquistas de sequência especial
     case 'century_club':
       return Math.min(100, ((userStats.totalCorrect || 0) / 100) * 100);
+
+    // Conquistas de franquia
+    case 'franchise_expert':
+      // Verificar se tem 90% de acerto em alguma franquia com mín. 20 jogos
+      if (profile?.franchiseStats) {
+        const franchises = Object.values(profile.franchiseStats);
+        const expertFranchise = franchises.find(franchise =>
+          franchise.games >= 20 && franchise.winRate >= 90
+        );
+        return expertFranchise ? 100 : 0;
+      }
+      return 0;
+
+    // Conquistas sociais
+    case 'influencer':
+      return Math.min(100, ((profile?.socialStats?.friendsReferred || 0) / 5) * 100);
 
     default:
       return 0;

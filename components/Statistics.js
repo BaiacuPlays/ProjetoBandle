@@ -159,6 +159,9 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
       const savedStats = localStorage.getItem('ludomusic_infinite_stats');
       if (savedStats) {
         const parsedStats = JSON.parse(savedStats);
+        console.log('📊 Dados do localStorage:', parsedStats);
+        console.log('📊 infiniteCurrentStreak prop na loadInfiniteStatistics:', infiniteCurrentStreak);
+
         setInfiniteStats({
           bestRecord: parsedStats.bestRecord || 0,
           // CORREÇÃO: Usar a prop infiniteCurrentStreak se disponível (quando o jogo acabou de terminar)
@@ -167,9 +170,24 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
           totalSongsCompleted: parsedStats.usedSongs ? parsedStats.usedSongs.length : 0,
           totalGamesPlayed: parsedStats.totalGamesPlayed || 0
         });
+      } else {
+        // Se não há dados salvos, usar infiniteCurrentStreak se disponível
+        setInfiniteStats({
+          bestRecord: 0,
+          currentStreak: infiniteCurrentStreak !== null ? infiniteCurrentStreak : 0,
+          totalSongsCompleted: 0,
+          totalGamesPlayed: 0
+        });
       }
     } catch (error) {
-      // erro ao carregar estatísticas do modo infinito
+      console.error('📊 Erro ao carregar estatísticas do modo infinito:', error);
+      // Em caso de erro, usar infiniteCurrentStreak se disponível
+      setInfiniteStats({
+        bestRecord: 0,
+        currentStreak: infiniteCurrentStreak !== null ? infiniteCurrentStreak : 0,
+        totalSongsCompleted: 0,
+        totalGamesPlayed: 0
+      });
     }
   };
 
@@ -206,20 +224,23 @@ const Statistics = ({ isOpen, onClose, gameResult = null, isInfiniteMode = false
       if (isInfiniteMode) {
         const infiniteData = profile.stats?.modeStats?.infinite;
         console.log('📊 Carregando estatísticas do modo infinito do perfil:', infiniteData);
+        console.log('📊 infiniteCurrentStreak prop:', infiniteCurrentStreak);
 
         // Se não existem dados do modo infinito, inicializar com zeros
         if (!infiniteData) {
           console.log('📊 Inicializando estatísticas do modo infinito com valores padrão');
           setInfiniteStats({
             bestRecord: 0,
-            currentStreak: 0,
+            // CORREÇÃO: Usar infiniteCurrentStreak se disponível, senão 0
+            currentStreak: infiniteCurrentStreak !== null ? infiniteCurrentStreak : 0,
             totalSongsCompleted: 0,
             totalGamesPlayed: 0
           });
         } else {
           setInfiniteStats({
             bestRecord: infiniteData.bestStreak || 0,
-            currentStreak: infiniteData.currentStreak || 0,
+            // CORREÇÃO: Priorizar infiniteCurrentStreak se disponível
+            currentStreak: infiniteCurrentStreak !== null ? infiniteCurrentStreak : (infiniteData.currentStreak || 0),
             totalSongsCompleted: infiniteData.totalSongsCompleted || 0,
             totalGamesPlayed: infiniteData.games || 0
           });
