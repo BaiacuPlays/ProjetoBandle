@@ -1189,22 +1189,14 @@
   opacity: 1;
 }
 
+/* Estilo antigo do skipBtn - DESABILITADO para evitar conflitos */
 .skipBtn {
-  background: #1DB954;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  font-size: 1.1rem;
-  font-weight: bold;
-  padding: 0.4rem 1.1rem;
-  margin-left: 0.7rem;
-  cursor: pointer;
-  transition: background 0.2s;
+  /* Removido para evitar conflitos com EnhancedButton */
+  display: none !important;
 }
 .skipBtn:disabled {
-  background: #444;
-  color: #aaa;
-  cursor: not-allowed;
+  /* Removido para evitar conflitos com EnhancedButton */
+  display: none !important;
 }
 
 .historyBox {
@@ -1467,10 +1459,7 @@
     margin: 0 2px;
   }
 
-  .skipBtn {
-    font-size: 1rem;
-    padding: 0.3rem 0.8rem;
-  }
+  /* .skipBtn removido - usando EnhancedButton agora */
 }
 
 @media (max-width: 600px) {
@@ -1532,11 +1521,7 @@
     margin: 0 1px;
   }
 
-  .skipBtn {
-    font-size: 0.9rem;
-    padding: 0.25rem 0.6rem;
-    margin-left: 0.4rem;
-  }
+  /* .skipBtn removido - usando EnhancedButton agora */
 }
 
 /* 📱 RESPONSIVIDADE PARA TELAS MUITO PEQUENAS */
@@ -1586,11 +1571,7 @@
     margin: 0;
   }
 
-  .skipBtn {
-    font-size: 0.8rem;
-    padding: 0.2rem 0.5rem;
-    margin-left: 0.3rem;
-  }
+  /* .skipBtn removido - usando EnhancedButton agora */
 
   .attemptsRow {
     gap: 0.2rem;
@@ -2678,4 +2659,88 @@
 .audioPlayBtnCustom:active {
   transform: scale(0.96);
   transition: transform 0.1s;
+}
+
+/* 🎮 ESTILOS PARA COMPONENTES APRIMORADOS COM GAME FEEL */
+
+/* Border-radius consistente será aplicado via componentes */
+
+.skipButton {
+  margin-left: 8px;
+  /* Resetar estilos conflitantes do skipBtn antigo */
+  background: none !important;
+  color: inherit !important;
+  border: none !important;
+  border-radius: 12px !important; /* Forçar border-radius arredondado */
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  padding: inherit !important;
+  cursor: inherit !important;
+  transition: inherit !important;
+}
+
+/* Desabilitar overlay problemático no botão de skip */
+.skipButton .overlay {
+  display: none !important;
+}
+
+.skipButton:hover .overlay {
+  display: none !important;
+}
+
+.skipButton:disabled {
+  background: none !important;
+  color: inherit !important;
+  cursor: inherit !important;
+}
+
+.nextSongButton,
+.playAgainButton {
+  width: 100%;
+  max-width: 300px;
+}
+
+/* Integração com componentes aprimorados */
+.attemptsRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+}
+
+.guessFormModern {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Responsividade para componentes aprimorados */
+@media (max-width: 768px) {
+  .skipButton {
+    margin-left: 4px;
+    margin-top: 4px;
+  }
+
+  .attemptsRow {
+    gap: 2px;
+  }
+}
+
+/* 🚫 DESABILITAR ANIMAÇÕES SE NECESSÁRIO */
+body.no-animations .skipButton,
+body.no-animations .nextSongButton,
+body.no-animations .playAgainButton {
+  transition: none !important;
+  animation: none !important;
+}
+
+body.no-animations .skipButton:hover,
+body.no-animations .nextSongButton:hover,
+body.no-animations .playAgainButton:hover {
+  transform: none !important;
 }

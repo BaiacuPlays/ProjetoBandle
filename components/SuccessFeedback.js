@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import styles from '../styles/SuccessFeedback.module.css';
 
 const SuccessFeedback = ({
@@ -13,7 +13,36 @@ const SuccessFeedback = ({
   const [showText, setShowText] = useState(false);
   const [particles, setParticles] = useState([]);
 
+  // Usar refs para timeouts para garantir limpeza adequada
+  const textTimeoutRef = useRef(null);
+  const cleanupTimeoutRef = useRef(null);
+
+  // Função de limpeza memoizada para evitar re-criações desnecessárias
+  const handleComplete = useCallback(() => {
+    setShowConfetti(false);
+    setShowText(false);
+    setParticles([]);
+    if (onComplete) {
+      onComplete();
+    }
+  }, [onComplete]);
+
+  // Função para limpar todos os timeouts
+  const clearAllTimeouts = useCallback(() => {
+    if (textTimeoutRef.current) {
+      clearTimeout(textTimeoutRef.current);
+      textTimeoutRef.current = null;
+    }
+    if (cleanupTimeoutRef.current) {
+      clearTimeout(cleanupTimeoutRef.current);
+      cleanupTimeoutRef.current = null;
+    }
+  }, []);
+
   useEffect(() => {
+    // Limpar timeouts anteriores
+    clearAllTimeouts();
+
     if (isVisible) {
       // Iniciar animações em sequência
       setShowConfetti(true);
@@ -22,26 +51,27 @@ const SuccessFeedback = ({
       generateParticles();
 
       // Mostrar texto após pequeno delay
-      setTimeout(() => {
+      textTimeoutRef.current = setTimeout(() => {
         setShowText(true);
       }, 100);
 
-      // Limpar após animação completa - REDUZIDO PARA 2 SEGUNDOS
-      const cleanup = setTimeout(() => {
-        setShowConfetti(false);
-        setShowText(false);
-        setParticles([]);
-        if (onComplete) onComplete();
+      // Limpar após animação completa - 2 SEGUNDOS
+      cleanupTimeoutRef.current = setTimeout(() => {
+        handleComplete();
       }, 2000);
 
-      return () => clearTimeout(cleanup);
     } else {
       // Reset quando não visível
       setShowConfetti(false);
       setShowText(false);
       setParticles([]);
     }
-  }, [isVisible, onComplete]);
+
+    // Cleanup function
+    return () => {
+      clearAllTimeouts();
+    };
+  }, [isVisible, handleComplete, clearAllTimeouts]);
 
   const generateParticles = () => {
     const newParticles = [];
@@ -99,9 +129,19 @@ const SuccessFeedback = ({
   if (!isVisible) return null;
 
   return (
-    <div className={styles.overlay}>
+    <div className={styles.overlay} onClick={handleComplete}>
       {/* Efeito de fundo */}
       <div className={`${styles.background} ${styles[type]}`} />
+
+      {/* Botão de fechar */}
+      <button
+        className={styles.closeButton}
+        onClick={handleComplete}
+        aria-label="Fechar"
+        title="Clique para fechar"
+      >
+        ×
+      </button>
 
       {/* Partículas de confete */}
       {showConfetti && (
@@ -126,7 +166,10 @@ const SuccessFeedback = ({
 
       {/* Texto principal */}
       {showText && (
-        <div className={`${styles.messageContainer} ${styles[type]}`}>
+        <div
+          className={`${styles.messageContainer} ${styles[type]}`}
+          onClick={(e) => e.stopPropagation()} // Evitar fechar ao clicar no conteúdo
+        >
           <div className={styles.emoji}>{message.emoji}</div>
           <h1 className={styles.title}>{message.title}</h1>
           <p className={styles.subtitle}>{message.subtitle}</p>
@@ -141,14 +184,7 @@ const SuccessFeedback = ({
             </div>
           )}
 
-          {/* Pontos ganhos */}
-          {attempts && (
-            <div className={styles.pointsInfo}>
-              <span className={styles.points}>
-                +{Math.max(0, 6 - attempts + 1)} pontos!
-              </span>
-            </div>
-          )}
+
         </div>
       )}
 

@@ -1,0 +1,346 @@
+/* 🎮 Estilos para botões aprimorados com game feel */
+
+.enhancedButton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 12px !important; /* Forçar border-radius arredondado */
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  user-select: none;
+  outline: none;
+  background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+  color: var(--text-color);
+  box-shadow:
+    0 4px 12px var(--shadow-color),
+    0 0 0 1px var(--border-color);
+}
+
+.enhancedButton:focus-visible {
+  box-shadow:
+    0 4px 12px var(--shadow-color),
+    0 0 0 2px var(--focus-color);
+}
+
+.enhancedButton:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+/* 🎨 VARIANTES DE COR */
+
+.primary {
+  --bg-start: #1DB954;
+  --bg-end: #1ed760;
+  --text-color: white;
+  --shadow-color: rgba(29, 185, 84, 0.3);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --focus-color: rgba(29, 185, 84, 0.5);
+}
+
+.secondary {
+  --bg-start: #6c757d;
+  --bg-end: #868e96;
+  --text-color: white;
+  --shadow-color: rgba(108, 117, 125, 0.3);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --focus-color: rgba(108, 117, 125, 0.5);
+}
+
+.success {
+  --bg-start: #27ae60;
+  --bg-end: #2ecc71;
+  --text-color: white;
+  --shadow-color: rgba(39, 174, 96, 0.3);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --focus-color: rgba(39, 174, 96, 0.5);
+}
+
+.error {
+  --bg-start: #e74c3c;
+  --bg-end: #c0392b;
+  --text-color: white;
+  --shadow-color: rgba(231, 76, 60, 0.3);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --focus-color: rgba(231, 76, 60, 0.5);
+}
+
+.warning {
+  --bg-start: #f39c12;
+  --bg-end: #e67e22;
+  --text-color: white;
+  --shadow-color: rgba(243, 156, 18, 0.3);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --focus-color: rgba(243, 156, 18, 0.5);
+}
+
+/* 📏 TAMANHOS */
+
+.small {
+  padding: 8px 16px;
+  font-size: 0.875rem;
+  min-height: 36px;
+}
+
+.medium {
+  padding: 12px 24px;
+  font-size: 1rem;
+  min-height: 44px;
+}
+
+.large {
+  padding: 16px 32px;
+  font-size: 1.125rem;
+  min-height: 52px;
+}
+
+/* 🚫 ESTADO DESABILITADO */
+
+.disabled {
+  --bg-start: #6c757d;
+  --bg-end: #6c757d;
+  --text-color: #adb5bd;
+  --shadow-color: rgba(108, 117, 125, 0.1);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.disabled:hover,
+.disabled:active {
+  transform: none;
+}
+
+/* ⏳ ESTADO DE CARREGAMENTO */
+
+.loading {
+  cursor: wait;
+  /* Prevenir animações conflitantes durante loading */
+  pointer-events: auto;
+}
+
+.loading:hover {
+  transform: none !important;
+}
+
+.loading:active {
+  transform: none !important;
+}
+
+.loadingSpinner {
+  position: absolute;
+  left: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.buttonContent {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.loading .buttonContent {
+  margin-left: 24px;
+}
+
+/* ✨ OVERLAY PARA EFEITOS */
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+  pointer-events: none;
+}
+
+.enhancedButton:hover .overlay {
+  transform: translateX(100%);
+}
+
+/* Correção específica para botão de skip */
+.enhancedButton:hover:not(.loading) .overlay {
+  transform: translateX(100%);
+}
+
+.enhancedButton.loading .overlay {
+  display: none;
+}
+
+/* Desabilitar overlay para botões secundários que podem ter problemas visuais */
+.enhancedButton.secondary .overlay {
+  opacity: 0.3; /* Reduzir opacidade em vez de remover completamente */
+}
+
+.enhancedButton.secondary:hover .overlay {
+  opacity: 0.5;
+}
+
+/* 🎯 BOTÕES DE TENTATIVA */
+
+.attemptButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 0 2px;
+}
+
+.attemptButton.default {
+  background: #6c757d;
+  color: white;
+}
+
+.attemptButton.success {
+  background: #27ae60;
+  color: white;
+  box-shadow: 0 0 15px rgba(39, 174, 96, 0.4);
+}
+
+.attemptButton.game {
+  background: #ffd700;
+  color: #333;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+.attemptButton.franchise {
+  background: #ff9800;
+  color: white;
+  box-shadow: 0 0 15px rgba(255, 152, 0, 0.4);
+}
+
+.attemptButton.fail {
+  background: #e74c3c;
+  color: white;
+}
+
+.attemptButton.disabled {
+  background: #495057;
+  color: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.attemptButton.active {
+  transform: scale(1.1);
+  z-index: 2;
+}
+
+.attemptButton:hover:not(.disabled) {
+  transform: scale(1.05);
+}
+
+/* 📝 BOTÃO DE INPUT */
+
+.inputButton {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.submitting {
+  opacity: 0.7;
+}
+
+.shaking {
+  animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+/* 📱 RESPONSIVIDADE */
+
+@media (max-width: 768px) {
+  .enhancedButton {
+    min-height: 48px; /* Melhor para touch */
+  }
+
+  .small {
+    min-height: 40px;
+  }
+
+  .medium {
+    min-height: 48px;
+  }
+
+  .large {
+    min-height: 56px;
+  }
+
+  .attemptButton {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* 🎨 TEMAS */
+
+body.dark .enhancedButton {
+  --border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.light .enhancedButton {
+  --border-color: rgba(0, 0, 0, 0.1);
+}
+
+body.light .secondary {
+  --bg-start: #e9ecef;
+  --bg-end: #f8f9fa;
+  --text-color: #495057;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* 🚫 DESABILITAR ANIMAÇÕES SE NECESSÁRIO */
+
+body.no-animations .enhancedButton,
+body.no-animations .attemptButton {
+  transition: none !important;
+  animation: none !important;
+}
+
+body.no-animations .enhancedButton:hover,
+body.no-animations .attemptButton:hover {
+  transform: none !important;
+}
+
+body.no-animations .overlay {
+  display: none;
+}
+
+body.no-animations .spinner {
+  animation: none !important;
+}

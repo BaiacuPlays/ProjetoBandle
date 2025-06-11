@@ -6,11 +6,45 @@
   width: 100vw;
   height: 100vh;
   z-index: 99999;
-  pointer-events: none;
+  pointer-events: auto; /* Permitir cliques para fechar */
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  cursor: pointer; /* Indicar que é clicável */
+}
+
+/* Botão de fechar */
+.closeButton {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.closeButton:active {
+  transform: scale(0.95);
 }
 
 /* Efeito de fundo sutil */
@@ -32,6 +66,8 @@
   z-index: 2;
   animation: messageAppear 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  cursor: default; /* Não mostrar cursor pointer no conteúdo */
+  pointer-events: auto; /* Permitir interação com o conteúdo */
 }
 
 /* Emoji principal */
@@ -120,7 +156,7 @@
   .emoji {
     font-size: 2.5rem;
   }
-  
+
   .title {
     font-size: 1.5rem;
   }
@@ -130,7 +166,7 @@
   .emoji {
     font-size: 2rem;
   }
-  
+
   .title {
     font-size: 1.2rem;
   }

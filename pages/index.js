@@ -47,6 +47,11 @@ import { HeaderAd, BetweenGamesAd, SimpleInterstitialAd } from '../components/Ad
 // Utilitários de feedback
 import { playSuccessSound, playPerfectSound, playFirstTrySound } from '../utils/soundEffects';
 
+// 🎮 Novos componentes aprimorados com game feel
+import { useGameFeel } from '../hooks/useGameFeel';
+import EnhancedButton, { AttemptButton, InputButton } from '../components/EnhancedButton';
+import EnhancedInput, { MusicSearchInput } from '../components/EnhancedInput';
+
 const MAX_ATTEMPTS = 6;
 
 
@@ -57,6 +62,9 @@ export default function Home() {
   // Hook do perfil com verificação de segurança
   const profileContext = useProfile();
   const updateGameStats = profileContext?.updateGameStats || (() => {});
+
+  // 🎮 Hook para efeitos de game feel
+  const gameFeel = useGameFeel();
 
   // Hooks
   useServiceWorker(); // Registrar service worker sem usar a variável
@@ -313,12 +321,24 @@ export default function Home() {
     if (attempts === 1) {
       feedbackType = 'firstTry';
       playFirstTrySound();
+      // Feedback visual especial para primeira tentativa
+      if (inputRef.current) {
+        gameFeel.onPerfect(inputRef.current);
+      }
     } else if (attempts <= 2) {
       feedbackType = 'perfect';
       playPerfectSound();
+      // Feedback visual para acerto perfeito
+      if (inputRef.current) {
+        gameFeel.onSuccess(inputRef.current, attempts);
+      }
     } else {
       feedbackType = 'success';
       playSuccessSound();
+      // Feedback visual para sucesso normal
+      if (inputRef.current) {
+        gameFeel.onSuccess(inputRef.current, attempts);
+      }
     }
 
     // Configurar dados do feedback
@@ -333,12 +353,33 @@ export default function Home() {
     setShowSuccessFeedback(true);
   };
 
+  // Função para lidar com o fim do feedback de sucesso
+  const handleSuccessFeedbackComplete = () => {
+    setShowSuccessFeedback(false);
+
+    // Abrir modal de estatísticas após o feedback terminar (apenas no modo diário)
+    if (!isInfiniteMode && gameOver) {
+      setTimeout(() => {
+        setShowStatistics(true);
+      }, 300); // Pequeno delay para transição suave
+    }
+  };
+
   // Função para ativar feedback simplificado (modo infinito)
   const triggerSimpleFeedback = (attempts) => {
     // Só mostrar se for primeira tentativa
     if (attempts === 1) {
       playFirstTrySound();
       setShowSimpleFeedback(true);
+      // Feedback visual especial para primeira tentativa no modo infinito
+      if (inputRef.current) {
+        gameFeel.onPerfect(inputRef.current);
+      }
+    } else {
+      // Feedback visual para outros acertos no modo infinito
+      if (inputRef.current) {
+        gameFeel.onSuccess(inputRef.current, attempts);
+      }
     }
   };
 
@@ -1216,6 +1257,10 @@ export default function Home() {
     if (!guess.trim()) {
       setIsShaking(true);
       setTimeout(() => setIsShaking(false), 500); // Remove shake after animation ends
+      // Feedback de erro para campo vazio
+      if (inputRef.current) {
+        gameFeel.onError(inputRef.current);
+      }
       return;
     }
 
@@ -1239,6 +1284,10 @@ export default function Home() {
       setShowSelectFromListError(true); // só mostra após submit
       setIsShaking(true);
       setTimeout(() => setIsShaking(false), 500);
+      // Feedback de erro para música não encontrada
+      if (inputRef.current) {
+        gameFeel.onError(inputRef.current);
+      }
       return;
     }
 
@@ -1586,7 +1635,7 @@ export default function Home() {
 
         // Incrementar contador de jogos para anúncios
         setGamesPlayedCount(prev => prev + 1);
-        setTimeout(() => setShowStatistics(true), 800);
+        // Estatísticas serão abertas após o feedback de sucesso terminar
       }
     } else if (newAttempts >= MAX_ATTEMPTS) {
 
@@ -1783,7 +1832,7 @@ export default function Home() {
 
           // Incrementar contador de jogos para anúncios
           setGamesPlayedCount(prev => prev + 1);
-          setTimeout(() => setShowStatistics(true), 800);
+          // Estatísticas serão abertas após o feedback de sucesso terminar (se houver)
         }
       }
     } finally {
@@ -1860,8 +1909,16 @@ export default function Home() {
 
   const handleInputChange = (e) => {
     const value = e.target.value;
+    const previousValue = guess;
+
     setGuess(value);
     filterSuggestions(value);
+
+    // Feedback de digitação apenas quando há mudança real no valor
+    if (value !== previousValue && value.length > previousValue.length) {
+      gameFeel.onTyping();
+    }
+
     // Força mostrar sugestões se for '?'
     if (value.trim() === '?') {
       setShowSuggestions(true);
@@ -2948,100 +3005,130 @@ export default function Home() {
 
           <div className={styles.attemptsRow}>
             {[...Array(MAX_ATTEMPTS)].map((_, idx) => {
-              let statusClass = styles.attemptInactive;
+              let status = 'default';
+              let tooltip = '';
+
               if (history[idx]) {
                 if (history[idx].type === 'success') {
-                  // Verde - Acertou a música
-                  statusClass = styles.attemptSuccess;
+                  status = 'success';
+                  tooltip = `Tentativa ${idx + 1}: ✅ ${history[idx].value}`;
                 } else if (history[idx].type === 'fail') {
-                  // Usar o subtype para determinar a cor
                   if (history[idx].subtype === 'same_game') {
-                    // Amarelo - Mesmo jogo, música diferente
-                    statusClass = styles.attemptGame;
+                    status = 'game';
+                    tooltip = `Tentativa ${idx + 1}: 🎮 ${history[idx].value} (jogo correto)`;
                   } else if (history[idx].subtype === 'same_franchise') {
-                    // Laranja - Mesma franquia, jogo diferente (vamos usar uma nova classe)
-                    statusClass = styles.attemptFranchise;
+                    status = 'franchise';
+                    tooltip = `Tentativa ${idx + 1}: 🔶 ${history[idx].value} (franquia correta)`;
                   } else {
-                    // Vermelho - Completamente errado
-                    statusClass = styles.attemptFail;
+                    status = 'fail';
+                    tooltip = `Tentativa ${idx + 1}: ❌ ${history[idx].value}`;
                   }
                 } else if (history[idx].type === 'skipped') {
-                  // Vermelho - Pulou
-                  statusClass = styles.attemptFail;
+                  status = 'fail';
+                  tooltip = `Tentativa ${idx + 1}: ⏭️ Pulou`;
                 }
+              } else if (idx > attempts) {
+                status = 'disabled';
+                tooltip = '';
+              } else {
+                tooltip = `Clique para ver a dica da tentativa ${idx + 1}`;
               }
+
               return (
-                <button
+                <AttemptButton
                   key={idx}
-                  type="button"
-                  className={styles.attemptButton + ' ' + statusClass}
-                  disabled={idx > attempts}
-                  onClick={() => idx <= attempts && setActiveHint(idx)}
-                  tabIndex={idx > attempts ? -1 : 0}
-                >
-                  {idx + 1}
-                </button>
+                  attempt={idx + 1}
+                  status={status}
+                  active={activeHint === idx}
+                  onClick={() => {
+                    if (idx <= attempts) {
+                      setActiveHint(idx);
+                      gameFeel.onHover(); // Feedback adicional
+                    }
+                  }}
+                  tooltip={tooltip}
+                />
               );
             })}
-            <button
-              type="button"
-              className={styles.attemptButton + ' ' + styles.attemptInactive}
-              onClick={handleSkip}
+
+            <EnhancedButton
+              variant="secondary"
+              size="medium"
+              showOverlay={false} // Desabilitar overlay problemático
+              onClick={(e) => {
+                if (!isSkipLoading && !gameOver && !audioError && attempts < MAX_ATTEMPTS) {
+                  gameFeel.onSkip(e.target);
+                  handleSkip();
+                }
+              }}
               disabled={gameOver || audioError || attempts >= MAX_ATTEMPTS || isSkipLoading}
+              loading={isSkipLoading}
+              className={styles.skipButton}
+              style={{
+                // Forçar reset de transform quando loading
+                transform: isSkipLoading ? 'none' : undefined
+              }}
             >
-              {isSkipLoading ? (isClient ? t('loading') : 'Carregando...') : (isClient ? t('skip') : 'Skip')} <FaFastForward style={{ marginLeft: 4, fontSize: '1em', verticalAlign: 'middle' }} />
-            </button>
+              {isClient ? t('skip') : 'Skip'} <FaFastForward style={{ marginLeft: 4, fontSize: '1em', verticalAlign: 'middle' }} />
+            </EnhancedButton>
           </div>
           <form onSubmit={handleGuess} className={styles.guessFormModern} autoComplete="off">
-            <input
+            <MusicSearchInput
               ref={inputRef}
-              type="text"
               value={guess}
               onChange={handleInputChange}
               placeholder={isClient ? t('song_input_placeholder') : 'Digite o nome da música...'}
               disabled={gameOver || audioError}
-              className={styles.guessInputModern}
-              onBlur={() => setTimeout(() => setShowSuggestions(false), 200)} />
-            <button
+              error={showSelectFromListError}
+              songs={songsToUse}
+              onSongSelect={(song) => {
+                const songText = `${song.game} - ${song.title}`;
+                setGuess(songText);
+                setShowSuggestions(false);
+                gameFeel.onClick(); // Feedback para seleção
+              }}
+              maxSuggestions={10}
+              filterFunction={(songs, searchTerm) => {
+                const normalizedSearch = searchTerm.toLowerCase();
+
+                // Easter egg
+                if (searchTerm.trim() === '?') {
+                  return [{
+                    id: 'easter-egg',
+                    game: '???',
+                    title: '???',
+                    onClick: triggerSacabambapis
+                  }];
+                }
+
+                return songs.filter(song =>
+                  song.title?.toLowerCase().includes(normalizedSearch) ||
+                  song.game?.toLowerCase().includes(normalizedSearch) ||
+                  song.artist?.toLowerCase().includes(normalizedSearch) ||
+                  `${song.game} - ${song.title}`.toLowerCase().includes(normalizedSearch)
+                ).slice(0, 10);
+              }}
+            />
+
+            <InputButton
               type="submit"
               disabled={gameOver || audioError || !guess.trim()}
-              className={`${styles.guessButtonModern} ${isShaking ? styles.shake : ''}`}
+              isShaking={isShaking}
+              onClick={(e) => {
+                if (!gameOver && !audioError && guess.trim()) {
+                  gameFeel.onClick(e.target, e);
+                } else {
+                  gameFeel.onError(e.target);
+                }
+              }}
             >
               {isClient ? t('guess') : 'Adivinhar'}
-            </button>
+            </InputButton>
+
             {showSelectFromListError && (
               <div className={styles.messageModern + ' ' + styles.error}>
                 {t('select_from_list')}
               </div>
-            )}
-            {showSuggestions && (filteredSuggestions.length > 0 || guess.trim() === '?') && (
-              <ul className={styles.suggestionsListModern}>
-                {filteredSuggestions.map((suggestion, suggestionIndex) => (
-                  <li
-                    key={`suggestion-${suggestion.id}-${suggestionIndex}`}
-                    className={styles.suggestionItemModern}
-                    onMouseDown={() => handleSuggestionClick(suggestion)}
-                  >
-                    {suggestion.game} - {suggestion.title}
-                  </li>
-                ))}
-                {/* Easter egg só aparece se o campo for exatamente '?' */}
-                {guess.trim() === '?' && (
-                  <li
-                    className={styles.suggestionItemModern}
-                    onMouseDown={triggerSacabambapis}
-                    style={{
-                      fontStyle: 'italic',
-                      opacity: 0.7,
-                      borderTop: '1px solid rgba(29, 185, 84, 0.3)',
-                      marginTop: '0.5rem',
-                      paddingTop: '0.75rem'
-                    }}
-                  >
-                    ??? - ???
-                  </li>
-                )}
-              </ul>
             )}
           </form>
           <div className={styles.historyBox}>
@@ -3074,25 +3161,35 @@ export default function Home() {
           {/* Botão Próxima Música no modo infinito */}
           {isInfiniteMode && showNextSongButton && (
             <div className={styles.nextSongContainer}>
-              <button
+              <EnhancedButton
+                variant="primary"
+                size="large"
+                onClick={(e) => {
+                  gameFeel.onSuccess(e.target);
+                  nextInfiniteSong();
+                }}
                 className={styles.nextSongButton}
-                onClick={nextInfiniteSong}
               >
                 {isClient ? t('next_song') : 'Próxima Música'}
                 <FaFastForward style={{ marginLeft: 8, fontSize: '1em' }} />
-              </button>
+              </EnhancedButton>
             </div>
           )}
 
           {/* Botão Jogar Novamente quando modo infinito termina */}
           {isInfiniteMode && infiniteGameOver && !showNextSongButton && (
             <div className={styles.nextSongContainer}>
-              <button
+              <EnhancedButton
+                variant="success"
+                size="large"
+                onClick={(e) => {
+                  gameFeel.onNotification(e.target);
+                  resetInfiniteMode();
+                }}
                 className={styles.playAgainButton}
-                onClick={resetInfiniteMode}
               >
                 🎮 {isClient ? t('play_again_infinite') : 'Jogar Novamente'}
-              </button>
+              </EnhancedButton>
             </div>
           )}
 
@@ -3209,7 +3306,7 @@ export default function Home() {
         {/* Feedback de sucesso completo (modo diário) */}
         <SuccessFeedback
           isVisible={showSuccessFeedback}
-          onComplete={() => setShowSuccessFeedback(false)}
+          onComplete={handleSuccessFeedbackComplete}
           type={successFeedbackType}
           attempts={successFeedbackData.attempts}
           songTitle={successFeedbackData.songTitle}

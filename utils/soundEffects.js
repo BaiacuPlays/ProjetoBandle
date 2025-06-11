@@ -172,6 +172,115 @@ export class SoundEffects {
     }
   }
 
+  // 🎵 NOVOS EFEITOS SONOROS PARA GAME FEEL
+
+  // Som de hover nos botões
+  playHoverSound() {
+    if (!this.isSoundEnabled() || !this.audioContext) return;
+    this.playTone(800, 0.05, this.volume * 0.3, 'sine');
+  }
+
+  // Som de click nos botões
+  playClickSound() {
+    if (!this.isSoundEnabled() || !this.audioContext) return;
+    this.playTone(1000, 0.08, this.volume * 0.4, 'triangle');
+  }
+
+  // Som de erro/falha
+  playErrorSound() {
+    if (!this.isSoundEnabled() || !this.audioContext) return;
+    this.playChord([200, 150, 100], 0.3, this.volume * 0.5, 'sawtooth');
+  }
+
+  // Som de digitação
+  playTypingSound() {
+    if (!this.isSoundEnabled() || !this.audioContext) return;
+    this.playTone(600 + Math.random() * 200, 0.03, this.volume * 0.2, 'square');
+  }
+
+  // Som de skip
+  playSkipSound() {
+    if (!this.isSoundEnabled() || !this.audioContext) return;
+    this.playSlide(400, 200, 0.4, this.volume * 0.4);
+  }
+
+  // Som de carregamento
+  playLoadingSound() {
+    if (!this.isSoundEnabled() || !this.audioContext) return;
+    this.playArpeggio([440, 554, 659, 880], 0.1, this.volume * 0.3);
+  }
+
+  // Som de notificação
+  playNotificationSound() {
+    if (!this.isSoundEnabled() || !this.audioContext) return;
+    this.playChord([523.25, 659.25], 0.2, this.volume * 0.4, 'triangle');
+  }
+
+  // 🔧 FUNÇÕES AUXILIARES PARA CRIAR SONS
+
+  // Tocar um tom simples
+  playTone(frequency, duration, volume = this.volume, type = 'sine') {
+    try {
+      const oscillator = this.audioContext.createOscillator();
+      const gainNode = this.audioContext.createGain();
+
+      oscillator.connect(gainNode);
+      gainNode.connect(this.audioContext.destination);
+
+      oscillator.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
+      oscillator.type = type;
+
+      gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
+      gainNode.gain.linearRampToValueAtTime(volume, this.audioContext.currentTime + 0.01);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
+
+      oscillator.start(this.audioContext.currentTime);
+      oscillator.stop(this.audioContext.currentTime + duration);
+    } catch (error) {
+      console.warn('Erro ao tocar tom:', error);
+    }
+  }
+
+  // Tocar um acorde
+  playChord(frequencies, duration, volume = this.volume, type = 'sine') {
+    frequencies.forEach(freq => {
+      this.playTone(freq, duration, volume * 0.7, type);
+    });
+  }
+
+  // Tocar um slide de frequência
+  playSlide(startFreq, endFreq, duration, volume = this.volume) {
+    try {
+      const oscillator = this.audioContext.createOscillator();
+      const gainNode = this.audioContext.createGain();
+
+      oscillator.connect(gainNode);
+      gainNode.connect(this.audioContext.destination);
+
+      oscillator.frequency.setValueAtTime(startFreq, this.audioContext.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(endFreq, this.audioContext.currentTime + duration);
+      oscillator.type = 'triangle';
+
+      gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
+      gainNode.gain.linearRampToValueAtTime(volume, this.audioContext.currentTime + 0.01);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
+
+      oscillator.start(this.audioContext.currentTime);
+      oscillator.stop(this.audioContext.currentTime + duration);
+    } catch (error) {
+      console.warn('Erro ao tocar slide:', error);
+    }
+  }
+
+  // Tocar um arpejo
+  playArpeggio(frequencies, noteDuration, volume = this.volume) {
+    frequencies.forEach((freq, index) => {
+      setTimeout(() => {
+        this.playTone(freq, noteDuration, volume, 'triangle');
+      }, index * noteDuration * 500);
+    });
+  }
+
   // Atualizar volume
   setVolume(newVolume) {
     this.volume = Math.max(0, Math.min(1, newVolume));
@@ -186,7 +295,16 @@ export class SoundEffects {
 // Instância global
 export const soundEffects = new SoundEffects();
 
-// Funções de conveniência
+// Funções de conveniência existentes
 export const playSuccessSound = () => soundEffects.playSuccessSound();
 export const playPerfectSound = () => soundEffects.playPerfectSound();
 export const playFirstTrySound = () => soundEffects.playFirstTrySound();
+
+// Novas funções de conveniência para game feel
+export const playHoverSound = () => soundEffects.playHoverSound();
+export const playClickSound = () => soundEffects.playClickSound();
+export const playErrorSound = () => soundEffects.playErrorSound();
+export const playTypingSound = () => soundEffects.playTypingSound();
+export const playSkipSound = () => soundEffects.playSkipSound();
+export const playLoadingSound = () => soundEffects.playLoadingSound();
+export const playNotificationSound = () => soundEffects.playNotificationSound();
