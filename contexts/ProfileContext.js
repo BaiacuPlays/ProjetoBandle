@@ -535,6 +535,92 @@ export const ProfileProvider = ({ children }) => {
     return success;
   };
 
+  // Função para atualizar estatísticas sociais
+  const updateSocialStats = async (action, data = {}) => {
+    if (!profile) return false;
+
+    const newSocialStats = { ...profile.socialStats };
+    let xpGained = 0;
+
+    switch (action) {
+      case 'share_game':
+        newSocialStats.gamesShared = (newSocialStats.gamesShared || 0) + 1;
+        xpGained = 5; // +5 XP por compartilhar
+        break;
+
+      case 'multiplayer_game':
+        newSocialStats.multiplayerGamesPlayed = (newSocialStats.multiplayerGamesPlayed || 0) + 1;
+
+        // XP baseado no número de rodadas
+        const baseXP = Math.floor((data.totalRounds || 10) * 2); // 2 XP por rodada
+        xpGained = baseXP;
+
+        if (data.won) {
+          newSocialStats.multiplayerWins = (newSocialStats.multiplayerWins || 0) + 1;
+          xpGained += Math.floor(baseXP * 0.5); // +50% XP bônus para vencedor
+        }
+        break;
+
+      case 'friend_added':
+        newSocialStats.friendsAdded = (newSocialStats.friendsAdded || 0) + 1;
+        xpGained = 10; // +10 XP por adicionar amigo
+        break;
+
+      case 'invite_sent':
+        newSocialStats.invitesSent = (newSocialStats.invitesSent || 0) + 1;
+        xpGained = 2; // +2 XP por convite enviado
+        break;
+
+      case 'invite_accepted':
+        newSocialStats.invitesAccepted = (newSocialStats.invitesAccepted || 0) + 1;
+        xpGained = 15; // +15 XP por convite aceito
+        break;
+
+      case 'social_interaction':
+        newSocialStats.socialInteractions = (newSocialStats.socialInteractions || 0) + 1;
+        xpGained = 1; // +1 XP por interação social
+        break;
+
+      case 'helpful_action':
+        newSocialStats.helpfulActions = (newSocialStats.helpfulActions || 0) + 1;
+        xpGained = 5; // +5 XP por ação útil
+        break;
+
+      default:
+        console.warn('Ação social desconhecida:', action);
+        return false;
+    }
+
+    // Atualizar XP e nível
+    const currentXP = profile.xp || 0;
+    const currentLevel = profile.level || 1;
+    const newXP = currentXP + xpGained;
+    const newLevel = Math.floor(Math.sqrt(newXP / 300)) + 1;
+
+    console.log(`🤝 Ação social: ${action} | XP: +${xpGained} | Total: ${newXP}`);
+
+    // Verificar level up
+    const leveledUp = newLevel > currentLevel;
+    if (leveledUp) {
+      console.log(`🎉 LEVEL UP social! Nível ${currentLevel} → ${newLevel}`);
+    }
+
+    // Atualizar perfil
+    const success = await updateProfile({
+      xp: newXP,
+      level: newLevel,
+      socialStats: newSocialStats
+    });
+
+    if (success && leveledUp && window.showLevelUpToast) {
+      setTimeout(() => {
+        window.showLevelUpToast(newLevel);
+      }, 500);
+    }
+
+    return success;
+  };
+
   // Função para recarregar dados
   const reloadProfile = async () => {
     if (isAuthenticated && userId) {
@@ -550,6 +636,7 @@ export const ProfileProvider = ({ children }) => {
     updateStats,
     updatePreferences,
     updateGameStats,
+    updateSocialStats,
     checkAndUnlockAchievements,
     checkAndUnlockBadges,
     reloadProfile,

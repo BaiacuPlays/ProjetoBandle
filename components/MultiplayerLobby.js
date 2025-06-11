@@ -90,11 +90,25 @@ const MultiplayerLobby = ({ onGameStart }) => {
   const handleStartGame = async () => {
     if (isLoading) return;
 
+    console.log('[LOBBY] Tentando iniciar jogo com', selectedRounds, 'rodadas');
+
     try {
-      await actions.startGame(selectedRounds);
-      onGameStart();
+      const result = await actions.startGame(selectedRounds);
+      console.log('[LOBBY] Resultado do startGame:', result);
+
+      if (result && result.success !== false) {
+        console.log('[LOBBY] Jogo iniciado com sucesso, chamando onGameStart');
+        onGameStart();
+      } else {
+        console.error('[LOBBY] Falha ao iniciar jogo:', result);
+        // O erro já foi definido no contexto
+      }
     } catch (err) {
-      // Erro já foi tratado no contexto
+      console.error('[LOBBY] Erro capturado ao iniciar jogo:', err);
+      // Erro já foi tratado no contexto, mas vamos garantir que uma mensagem seja mostrada
+      if (!error) {
+        actions.setError('Erro inesperado ao iniciar jogo. Tente novamente.');
+      }
     }
   };
 

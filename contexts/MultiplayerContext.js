@@ -240,12 +240,20 @@ export function MultiplayerProvider({ children }) {
 
     // Iniciar jogo
     startGame: async (totalRounds = 10) => {
-      if (!state.roomCode) return;
+      console.log('[MULTIPLAYER] Iniciando jogo...', { roomCode: state.roomCode, totalRounds });
+
+      if (!state.roomCode) {
+        console.error('[MULTIPLAYER] Erro: roomCode não encontrado');
+        dispatch({ type: ACTIONS.SET_ERROR, payload: 'Código da sala não encontrado' });
+        return;
+      }
 
       dispatch({ type: ACTIONS.SET_LOADING, payload: true });
       dispatch({ type: ACTIONS.SET_ERROR, payload: '' });
 
       try {
+        console.log('[MULTIPLAYER] Enviando requisição para iniciar jogo...');
+
         const response = await apiRequest('/api/lobby', {
           method: 'PATCH',
           body: JSON.stringify({
@@ -255,18 +263,30 @@ export function MultiplayerProvider({ children }) {
           })
         });
 
+        console.log('[MULTIPLAYER] Resposta recebida:', response.status);
+
         if (response.ok) {
           const data = await response.json();
+          console.log('[MULTIPLAYER] Jogo iniciado com sucesso:', data);
+
+          // Verificar se os dados essenciais estão presentes
+          if (!data || !data.success) {
+            throw new Error('Resposta inválida do servidor');
+          }
+
           dispatch({ type: ACTIONS.SET_LOBBY_DATA, payload: data });
           dispatch({ type: ACTIONS.SET_CURRENT_SCREEN, payload: 'game' });
           return data;
         } else {
-          const errorData = await response.json();
+          const errorData = await response.json().catch(() => ({ error: 'Erro desconhecido' }));
+          console.error('[MULTIPLAYER] Erro na resposta:', errorData);
           dispatch({ type: ACTIONS.SET_ERROR, payload: errorData.error || 'Erro ao iniciar jogo' });
-          throw new Error(errorData.error);
+          throw new Error(errorData.error || 'Erro ao iniciar jogo');
         }
       } catch (err) {
-        dispatch({ type: ACTIONS.SET_ERROR, payload: 'Erro de conexão' });
+        console.error('[MULTIPLAYER] Erro ao iniciar jogo:', err);
+        const errorMessage = err.message || 'Erro de conexão';
+        dispatch({ type: ACTIONS.SET_ERROR, payload: errorMessage });
         throw err;
       } finally {
         dispatch({ type: ACTIONS.SET_LOADING, payload: false });

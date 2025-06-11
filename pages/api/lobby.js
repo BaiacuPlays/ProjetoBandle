@@ -1,5 +1,13 @@
 import musicData from '../../data/music.json';
 const songs = musicData.songs || musicData;
+
+// Debug: Verificar se as músicas foram carregadas corretamente
+console.log(`[LOBBY] 🎵 Músicas carregadas: ${songs?.length || 0}`);
+if (!songs || songs.length === 0) {
+  console.error('[LOBBY] ❌ ERRO CRÍTICO: Nenhuma música foi carregada do arquivo music.json!');
+} else {
+  console.log(`[LOBBY] 🎶 Primeira música: ${songs[0]?.title || 'INDEFINIDA'}`);
+}
 // Importação segura do KV
 let kv = null;
 try {
@@ -75,9 +83,22 @@ function generateRoomCode() {
 
 // Função para selecionar músicas aleatórias para o jogo
 function selectGameSongs(roomCode, totalRounds = 10) {
+  console.log(`[LOBBY] Selecionando músicas para sala ${roomCode}`);
+  console.log(`[LOBBY] Total de músicas disponíveis: ${songs.length}`);
+  console.log(`[LOBBY] Rodadas solicitadas: ${totalRounds}`);
+
+  if (!songs || songs.length === 0) {
+    console.error('[LOBBY] ERRO: Nenhuma música disponível!');
+    return [];
+  }
+
   // Embaralhar as músicas e selecionar as primeiras
   const shuffledSongs = shuffle([...songs]);
   const selectedSongs = shuffledSongs.slice(0, totalRounds);
+
+  console.log(`[LOBBY] Músicas selecionadas: ${selectedSongs.length}`);
+  console.log(`[LOBBY] Primeira música: ${selectedSongs[0]?.title || 'NENHUMA'}`);
+
   return selectedSongs;
 }
 
@@ -242,16 +263,26 @@ export default async function handler(req, res) {
       }
 
       if (action === 'start') {
+        console.log(`[LOBBY] Iniciando jogo na sala ${roomCode}`);
+        console.log(`[LOBBY] Jogadores na sala: ${lobby.players?.length || 0}`);
+
         if (!lobby.players || lobby.players.length < 2) {
+          console.log('[LOBBY] ERRO: Mínimo 2 jogadores necessários');
           return res.status(400).json({ error: 'Mínimo 2 jogadores para iniciar.' });
         }
 
         // Obter número de rodadas (padrão: 10)
         const totalRounds = req.body.totalRounds || 10;
+        console.log(`[LOBBY] Rodadas configuradas: ${totalRounds}`);
 
         // Inicializar o jogo
         lobby.gameStarted = true;
         const selectedSongs = selectGameSongs(roomCode, totalRounds);
+
+        if (!selectedSongs || selectedSongs.length === 0) {
+          console.error('[LOBBY] ERRO CRÍTICO: Nenhuma música foi selecionada!');
+          return res.status(500).json({ error: 'Erro ao selecionar músicas para o jogo.' });
+        }
 
         // Inicializar pontuações
         const scores = {};
@@ -274,8 +305,20 @@ export default async function handler(req, res) {
           guesses: {}
         };
 
-        await setLobby(roomCode, lobby);
-        return res.status(200).json({ success: true });
+        console.log(`[LOBBY] GameState criado:`);
+        console.log(`[LOBBY] - Rodada atual: ${lobby.gameState.currentRound}`);
+        console.log(`[LOBBY] - Total de rodadas: ${lobby.gameState.totalRounds}`);
+        console.log(`[LOBBY] - Músicas no jogo: ${lobby.gameState.songs.length}`);
+        console.log(`[LOBBY] - Música atual: ${lobby.gameState.currentSong?.title || 'NENHUMA'}`);
+
+        try {
+          await setLobby(roomCode, lobby);
+          console.log(`[LOBBY] Jogo iniciado com sucesso na sala ${roomCode}`);
+          return res.status(200).json({ success: true });
+        } catch (error) {
+          console.error(`[LOBBY] Erro ao salvar lobby: ${error.message}`);
+          return res.status(500).json({ error: 'Erro ao iniciar jogo.' });
+        }
       }
 
       if (action === 'leave_game') {

@@ -22,7 +22,7 @@ const MultiplayerGame = ({ onBackToLobby }) => {
 
   const { t, isClient } = useLanguage();
   const { state, actions } = useMultiplayerContext();
-  const { updateProfile } = useProfile() || {};
+  const { updateProfile, updateSocialStats } = useProfile() || {};
   const {
     playerNickname: nickname,
     lobbyData,
