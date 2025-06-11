@@ -208,79 +208,7 @@ export const badges = {
   }
 };
 
-// Títulos que podem ser exibidos no perfil
-export const titles = {
-  // Títulos de nível
-  rookie: {
-    id: 'rookie',
-    title: 'Novato',
-    badgeRequired: 'level_rookie'
-  },
-  veteran: {
-    id: 'veteran',
-    title: 'Veterano',
-    badgeRequired: 'level_veteran'
-  },
-  expert: {
-    id: 'expert',
-    title: 'Especialista',
-    badgeRequired: 'level_expert'
-  },
-  master: {
-    id: 'master',
-    title: 'Mestre Musical',
-    badgeRequired: 'level_master'
-  },
-  legend: {
-    id: 'legend',
-    title: 'Lenda Viva',
-    badgeRequired: 'level_legend'
-  },
 
-  // Títulos especiais
-  perfectionist: {
-    id: 'perfectionist',
-    title: 'O Perfeccionista',
-    badgeRequired: 'perfectionist'
-  },
-  speed_demon: {
-    id: 'speed_demon',
-    title: 'Raio Veloz',
-    badgeRequired: 'speed_demon'
-  },
-  streak_master: {
-    id: 'streak_master',
-    title: 'Mestre das Sequências',
-    badgeRequired: 'streak_master'
-  },
-  completionist: {
-    id: 'completionist',
-    title: 'O Completista',
-    badgeRequired: 'completionist'
-  },
-  early_adopter: {
-    id: 'early_adopter',
-    title: 'Pioneiro',
-    badgeRequired: 'early_adopter'
-  },
-
-  // Títulos de doação
-  supporter: {
-    id: 'supporter',
-    title: 'Apoiador',
-    badgeRequired: 'supporter_permanent'
-  },
-  premium_supporter: {
-    id: 'premium_supporter',
-    title: 'Apoiador Premium',
-    badgeRequired: 'premium_supporter'
-  },
-  vip_supporter: {
-    id: 'vip_supporter',
-    title: 'VIP',
-    badgeRequired: 'vip_supporter'
-  }
-};
 
 // Função para verificar se um badge foi desbloqueado
 export const checkBadgeUnlocked = (badgeId, profile) => {
@@ -341,30 +269,11 @@ export const getUnlockedBadges = (profile) => {
   return unlockedBadges;
 };
 
-// Função para obter títulos disponíveis
-export const getAvailableTitles = (profile) => {
-  if (!profile) return [];
 
-  const unlockedBadges = getUnlockedBadges(profile);
-  const availableTitles = [];
-
-  Object.values(titles).forEach(title => {
-    if (unlockedBadges.includes(title.badgeRequired)) {
-      availableTitles.push(title);
-    }
-  });
-
-  return availableTitles;
-};
 
 // Função para obter badge por ID
 export const getBadge = (badgeId) => {
   return badges[badgeId] || null;
 };
 
-// Função para obter título por ID
-export const getTitle = (titleId) => {
-  return titles[titleId] || null;
-};
-
-export default { badges, titles, checkBadgeUnlocked, getUnlockedBadges, getAvailableTitles, getBadge, getTitle };
+export default { badges, checkBadgeUnlocked, getUnlockedBadges, getBadge };

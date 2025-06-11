@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'; // Import useEffect
+import React, { useState, useEffect, useMemo } from 'react'; // Import useEffect and useMemo
 import { useProfile } from '../contexts/ProfileContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useModalScrollLock } from '../hooks/useModalScrollLock';
 import { achievements, rarityColors, getAchievement, getNearAchievements, getUnlockedAchievements } from '../data/achievements'; // Removed getAchievementStats as it wasn't used
-import { badges, titles, getBadge, getTitle, getAvailableTitles } from '../data/badges';
+import { badges, getBadge } from '../data/badges';
 import { FaTimes, FaEdit, FaTrophy, FaGamepad, FaClock, FaFire, FaStar, FaChartLine, FaCog, FaDownload, FaUpload, FaTrash, FaMedal, FaSignOutAlt, FaSync } from 'react-icons/fa';
 import ProfileTutorial from './ProfileTutorial';
 import SimplePhotoUpload from './SimplePhotoUpload';
@@ -71,6 +71,39 @@ const UserProfile = ({ isOpen, onClose }) => {
       });
     }
   }, [profile, userId, isLoading, isAuthenticated]);
+
+  // Sincronizar conquistas automaticamente
+  useEffect(() => {
+    // Verificar se todos os dados necessários estão disponíveis
+    if (!profile || !profile.stats || !updateProfile) {
+      return;
+    }
+
+    // Verificar se há conquistas que deveriam estar desbloqueadas mas não estão no perfil
+    const shouldBeUnlocked = getUnlockedAchievements(profile.stats, profile);
+    const currentAchievements = profile.achievements || [];
+    const missingAchievements = shouldBeUnlocked.filter(id => !currentAchievements.includes(id));
+
+    if (missingAchievements.length > 0) {
+      // Atualizar diretamente o perfil com as conquistas corretas
+      updateProfile({
+        achievements: shouldBeUnlocked
+      }).catch(error => {
+        // Erro silencioso em produção
+      });
+    }
+  }, [profile, updateProfile]);
+
+  // Memoizar cálculos para evitar problemas com hooks condicionais
+  const unlockedAchievements = useMemo(() => {
+    if (!profile?.achievements) return [];
+    return profile.achievements.map(id => getAchievement(id)).filter(Boolean);
+  }, [profile?.achievements]);
+
+  const nearAchievements = useMemo(() => {
+    if (!profile?.stats) return [];
+    return getNearAchievements(profile.stats, profile.achievements || [], profile);
+  }, [profile?.stats, profile?.achievements, profile]);
 
   // Definir função handleCloseTutorial antes de usar
   const handleCloseTutorial = async () => {
@@ -335,6 +368,8 @@ const UserProfile = ({ isOpen, onClose }) => {
 
 
 
+
+
   const formatTime = (seconds) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
@@ -370,31 +405,7 @@ const UserProfile = ({ isOpen, onClose }) => {
     return Math.max(0, Math.min(100, progress));
   };
 
-  // Sincronizar conquistas automaticamente
-  useEffect(() => {
-    // Verificar se todos os dados necessários estão disponíveis
-    if (!profile || !profile.stats || !updateProfile) {
-      return;
-    }
 
-    // Verificar se há conquistas que deveriam estar desbloqueadas mas não estão no perfil
-    const shouldBeUnlocked = getUnlockedAchievements(profile.stats, profile);
-    const currentAchievements = profile.achievements || [];
-    const missingAchievements = shouldBeUnlocked.filter(id => !currentAchievements.includes(id));
-
-    if (missingAchievements.length > 0) {
-      // Atualizar diretamente o perfil com as conquistas corretas
-      updateProfile({
-        achievements: shouldBeUnlocked
-      }).catch(error => {
-        // Erro silencioso em produção
-      });
-    }
-  }, [profile, updateProfile]);
-
-  // Only calculate if profile exists
-  const unlockedAchievements = profile?.achievements ? profile.achievements.map(id => getAchievement(id)).filter(Boolean) : [];
-  const nearAchievements = profile?.stats ? getNearAchievements(profile.stats, profile.achievements || [], profile) : [];
 
   return (
     <>
@@ -662,44 +673,7 @@ const UserProfile = ({ isOpen, onClose }) => {
 
                 {activeTab === 'badges' && (
                   <div className={styles.badgesTab}>
-                    <h4>Badges e Títulos</h4>
-
-                    {/* Título Atual */}
-                    {profile?.currentTitle && (
-                      <div className={styles.currentTitleSection}>
-                        <h5>Título Atual</h5>
-                        <div className={styles.currentTitle}>
-                          <span className={styles.titleIcon}>👑</span>
-                          <span className={styles.titleText}>
-                            {getTitle(profile.currentTitle)?.title || 'Título Desconhecido'}
-                          </span>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Títulos Disponíveis */}
-                    {profile && (
-                      <div className={styles.titlesSection}>
-                        <h5>Títulos Disponíveis</h5>
-                        <div className={styles.titlesGrid}>
-                          <div
-                            className={`${styles.titleOption} ${!profile.currentTitle ? styles.selected : ''}`}
-                            onClick={() => setCurrentTitle && setCurrentTitle(null)}
-                          >
-                            <span className={styles.titleOptionText}>Sem Título</span>
-                          </div>
-                          {getAvailableTitles(profile).map(title => (
-                            <div
-                              key={title.id}
-                              className={`${styles.titleOption} ${profile.currentTitle === title.id ? styles.selected : ''}`}
-                              onClick={() => setCurrentTitle && setCurrentTitle(title.id)}
-                            >
-                              <span className={styles.titleOptionText}>{title.title}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
+                    <h4>Badges</h4>
 
                     {/* Seletor de Badge para Exibição */}
                     <BadgeSelector profile={profile} />

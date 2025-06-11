@@ -113,14 +113,6 @@ export const achievements = {
   },
 
   // Conquistas especiais
-  speed_demon: {
-    id: 'speed_demon',
-    title: 'Demônio da Velocidade',
-    description: 'Acerte uma música em menos de 5 segundos (tempo real)',
-    icon: '💨',
-    rarity: 'epic',
-    xpReward: 500
-  },
   franchise_master: {
     id: 'franchise_master',
     title: 'Especialista',
@@ -137,14 +129,7 @@ export const achievements = {
     rarity: 'uncommon',
     xpReward: 150
   },
-  early_bird: {
-    id: 'early_bird',
-    title: 'Madrugador',
-    description: 'Jogue entre 05:00 e 08:00',
-    icon: '🐦',
-    rarity: 'uncommon',
-    xpReward: 150
-  },
+
 
   // Conquistas de modo infinito
   infinite_starter: {
@@ -259,22 +244,6 @@ export const achievements = {
   },
 
   // Conquistas especiais de performance
-  lightning_fast: {
-    id: 'lightning_fast',
-    title: 'Raio Veloz',
-    description: 'Acerte uma música em menos de 3 segundos (tempo real)',
-    icon: '⚡',
-    rarity: 'epic',
-    xpReward: 750
-  },
-  perfectionist: {
-    id: 'perfectionist',
-    title: 'Perfeccionista',
-    description: 'Acerte 25 músicas na primeira tentativa',
-    icon: '💯',
-    rarity: 'epic',
-    xpReward: 1200
-  },
   franchise_expert: {
     id: 'franchise_expert',
     title: 'Especialista em Franquia',
@@ -285,14 +254,6 @@ export const achievements = {
   },
 
   // Conquistas sociais
-  social_butterfly: {
-    id: 'social_butterfly',
-    title: 'Borboleta Social',
-    description: 'Compartilhe 10 resultados',
-    icon: '🦋',
-    rarity: 'uncommon',
-    xpReward: 250
-  },
   influencer: {
     id: 'influencer',
     title: 'Influenciador',
@@ -344,6 +305,230 @@ export const achievements = {
     icon: '🔥',
     rarity: 'rare',
     xpReward: 500
+  },
+
+  // Conquistas específicas de jogos/franquias
+  indie_lover: {
+    id: 'indie_lover',
+    title: 'Amante dos Indies',
+    description: 'Acerte 15 músicas de jogos indie',
+    icon: '🎨',
+    rarity: 'uncommon',
+    xpReward: 400
+  },
+  retro_gamer: {
+    id: 'retro_gamer',
+    title: 'Gamer Retrô',
+    description: 'Acerte músicas de jogos dos anos 90',
+    icon: '📼',
+    rarity: 'uncommon',
+    xpReward: 350
+  },
+  nintendo_fan: {
+    id: 'nintendo_fan',
+    title: 'Fã da Nintendo',
+    description: 'Acerte 10 músicas de jogos Nintendo',
+    icon: '🍄',
+    rarity: 'uncommon',
+    xpReward: 300
+  },
+  playstation_veteran: {
+    id: 'playstation_veteran',
+    title: 'Veterano PlayStation',
+    description: 'Acerte 10 músicas de jogos PlayStation',
+    icon: '🎮',
+    rarity: 'uncommon',
+    xpReward: 300
+  },
+  rpg_master: {
+    id: 'rpg_master',
+    title: 'Mestre dos RPGs',
+    description: 'Acerte 12 músicas de RPGs',
+    icon: '⚔️',
+    rarity: 'rare',
+    xpReward: 500
+  },
+
+  // Conquistas de velocidade e tempo
+  speed_demon: {
+    id: 'speed_demon',
+    title: 'Demônio da Velocidade',
+    description: 'Acerte uma música em menos de 3 segundos',
+    icon: '⚡',
+    rarity: 'rare',
+    xpReward: 600
+  },
+  lightning_fast: {
+    id: 'lightning_fast',
+    title: 'Rápido como um Raio',
+    description: 'Acerte 5 músicas em menos de 5 segundos cada',
+    icon: '🌩️',
+    rarity: 'epic',
+    xpReward: 800
+  },
+  patient_listener: {
+    id: 'patient_listener',
+    title: 'Ouvinte Paciente',
+    description: 'Ouça uma música completa antes de responder',
+    icon: '🧘',
+    rarity: 'uncommon',
+    xpReward: 250
+  },
+
+  // Conquistas de dificuldade
+  nightmare_conqueror: {
+    id: 'nightmare_conqueror',
+    title: 'Conquistador dos Pesadelos',
+    description: 'Acerte músicas de jogos de terror',
+    icon: '👻',
+    rarity: 'rare',
+    xpReward: 450
+  },
+
+  // Conquistas sociais e multiplayer avançadas
+  party_starter: {
+    id: 'party_starter',
+    title: 'Animador da Festa',
+    description: 'Crie 10 salas multiplayer',
+    icon: '🎉',
+    rarity: 'rare',
+    xpReward: 500
+  },
+
+  // Conquistas de descoberta
+  genre_explorer: {
+    id: 'genre_explorer',
+    title: 'Explorador de Gêneros',
+    description: 'Acerte músicas de 10 gêneros diferentes',
+    icon: '🗺️',
+    rarity: 'rare',
+    xpReward: 550
+  },
+  decade_traveler: {
+    id: 'decade_traveler',
+    title: 'Viajante das Décadas',
+    description: 'Acerte músicas de 4 décadas diferentes',
+    icon: '⏰',
+    rarity: 'rare',
+    xpReward: 500
+  },
+
+  // Conquistas de persistência
+  phoenix_rising: {
+    id: 'phoenix_rising',
+    title: 'Fênix Renascida',
+    description: 'Volte a jogar após 30 dias de ausência',
+    icon: '🔥',
+    rarity: 'uncommon',
+    xpReward: 400
+  },
+  never_give_up: {
+    id: 'never_give_up',
+    title: 'Nunca Desista',
+    description: 'Continue jogando após 10 derrotas seguidas',
+    icon: '💪',
+    rarity: 'rare',
+    xpReward: 500
+  },
+  weekend_warrior: {
+    id: 'weekend_warrior',
+    title: 'Guerreiro de Fim de Semana',
+    description: 'Jogue por 3 fins de semana consecutivos',
+    icon: '🏖️',
+    rarity: 'uncommon',
+    xpReward: 350
+  },
+
+  // Conquistas especiais e únicas
+  perfectionist: {
+    id: 'perfectionist',
+    title: 'Perfeccionista',
+    description: 'Mantenha 100% de acerto em 10 jogos',
+    icon: '💯',
+    rarity: 'legendary',
+    xpReward: 1500
+  },
+  music_savant: {
+    id: 'music_savant',
+    title: 'Prodígio Musical',
+    description: 'Acerte 100 músicas diferentes',
+    icon: '🧠',
+    rarity: 'epic',
+    xpReward: 1200
+  },
+
+  // Conquistas de compositor/artista específico
+  toby_fox_fan: {
+    id: 'toby_fox_fan',
+    title: 'Fã do Toby Fox',
+    description: 'Acerte 8 músicas do Toby Fox',
+    icon: '🐕',
+    rarity: 'rare',
+    xpReward: 500
+  },
+  david_wise_admirer: {
+    id: 'david_wise_admirer',
+    title: 'Admirador do David Wise',
+    description: 'Acerte 6 músicas do David Wise',
+    icon: '🐒',
+    rarity: 'rare',
+    xpReward: 450
+  },
+
+  // Conquistas de console específico
+  multi_platform_master: {
+    id: 'multi_platform_master',
+    title: 'Mestre Multi-Plataforma',
+    description: 'Acerte músicas de 5 consoles diferentes',
+    icon: '🎯',
+    rarity: 'epic',
+    xpReward: 800
+  },
+
+  // Conquistas de padrões específicos
+  alphabet_collector: {
+    id: 'alphabet_collector',
+    title: 'Colecionador do Alfabeto',
+    description: 'Acerte músicas que começam com A, B, C, D e E',
+    icon: '🔤',
+    rarity: 'uncommon',
+    xpReward: 300
+  },
+  number_hunter: {
+    id: 'number_hunter',
+    title: 'Caçador de Números',
+    description: 'Acerte músicas com números no título',
+    icon: '🔢',
+    rarity: 'uncommon',
+    xpReward: 250
+  },
+
+  // Conquistas de timing
+  midnight_gamer: {
+    id: 'midnight_gamer',
+    title: 'Gamer da Meia-Noite',
+    description: 'Jogue entre 00:00 e 06:00',
+    icon: '🌙',
+    rarity: 'uncommon',
+    xpReward: 300
+  },
+  early_bird: {
+    id: 'early_bird',
+    title: 'Madrugador',
+    description: 'Jogue entre 05:00 e 08:00',
+    icon: '🐦',
+    rarity: 'uncommon',
+    xpReward: 300
+  },
+
+  // Conquistas de sequência especial
+  century_club: {
+    id: 'century_club',
+    title: 'Clube do Século',
+    description: 'Acerte sua 100ª música',
+    icon: '💯',
+    rarity: 'epic',
+    xpReward: 1000
   }
 };
 
@@ -397,8 +582,7 @@ export const calculateAchievementProgress = (achievementId, userStats, profile =
       return userStats.perfectGames >= 1 ? 100 : 0;
     case 'perfect_master':
       return Math.min(100, (userStats.perfectGames / 10) * 100);
-    case 'perfectionist':
-      return Math.min(100, (userStats.perfectGames / 25) * 100);
+
     case 'high_accuracy':
       if (userStats.totalGames < 20) return 0;
       return userStats.winRate >= 80 ? 100 : Math.min(100, (userStats.winRate / 80) * 100);
@@ -423,10 +607,6 @@ export const calculateAchievementProgress = (achievementId, userStats, profile =
       return 0;
 
     // Conquistas especiais
-    case 'speed_demon':
-      return userStats.fastestWin && userStats.fastestWin <= 5 ? 100 : 0;
-    case 'lightning_fast':
-      return userStats.fastestWin && userStats.fastestWin <= 3 ? 100 : 0;
     case 'franchise_master':
       if (!profile?.franchiseStats) return 0;
       const franchiseWith10 = Object.values(profile.franchiseStats).find(
@@ -440,23 +620,7 @@ export const calculateAchievementProgress = (achievementId, userStats, profile =
       );
       return expertFranchise ? 100 : 0;
 
-    // Conquistas de modo infinito
-    case 'infinite_starter':
-      return Math.min(100, (userStats.modeStats?.infinite?.totalSongsCompleted / 5) * 100);
-    case 'infinite_warrior':
-      return Math.min(100, (userStats.modeStats?.infinite?.totalSongsCompleted / 25) * 100);
-    case 'infinite_legend':
-      return Math.min(100, (userStats.modeStats?.infinite?.totalSongsCompleted / 100) * 100);
 
-    // Conquistas de multiplayer
-    case 'social_player':
-      return userStats.modeStats?.multiplayer?.games >= 1 ? 100 : 0;
-    case 'room_creator':
-      return Math.min(100, (userStats.modeStats?.multiplayer?.roomsCreated / 5) * 100);
-    case 'multiplayer_champion':
-      return Math.min(100, (userStats.modeStats?.multiplayer?.wins / 10) * 100);
-    case 'multiplayer_dominator':
-      return Math.min(100, ((profile?.socialStats?.multiplayerWins || 0) / 10) * 100);
 
     // Conquistas de nível
     case 'level_5':
@@ -469,8 +633,6 @@ export const calculateAchievementProgress = (achievementId, userStats, profile =
       return profile?.level >= 50 ? 100 : Math.min(100, (profile?.level / 50) * 100);
 
     // Conquistas sociais
-    case 'social_butterfly':
-      return Math.min(100, ((profile?.socialStats?.gamesShared || 0) / 10) * 100);
     case 'influencer':
       return Math.min(100, ((profile?.socialStats?.friendsReferred || 0) / 5) * 100);
 
@@ -575,6 +737,78 @@ export const calculateAchievementProgress = (achievementId, userStats, profile =
         return morningGame ? 100 : 0;
       }
       return 0;
+
+    // Novas conquistas específicas de jogos/franquias
+    case 'indie_lover':
+      return Math.min(100, ((userStats.indieGamesCorrect || 0) / 15) * 100);
+    case 'retro_gamer':
+      return Math.min(100, ((userStats.retro90sCorrect || 0) / 8) * 100);
+    case 'nintendo_fan':
+      return Math.min(100, ((userStats.nintendoGamesCorrect || 0) / 10) * 100);
+    case 'playstation_veteran':
+      return Math.min(100, ((userStats.playstationGamesCorrect || 0) / 10) * 100);
+    case 'rpg_master':
+      return Math.min(100, ((userStats.rpgGamesCorrect || 0) / 12) * 100);
+
+    // Conquistas de velocidade e tempo
+    case 'speed_demon':
+      return (userStats.fastestGuess && userStats.fastestGuess <= 3) ? 100 : 0;
+    case 'lightning_fast':
+      return Math.min(100, ((userStats.fastGuesses || 0) / 5) * 100);
+    case 'patient_listener':
+      return (userStats.fullListenCount && userStats.fullListenCount >= 1) ? 100 : 0;
+
+    // Conquistas de dificuldade
+    case 'nightmare_conqueror':
+      return Math.min(100, ((userStats.horrorGamesCorrect || 0) / 5) * 100);
+
+    // Conquistas sociais e multiplayer avançadas
+    case 'party_starter':
+      return Math.min(100, ((userStats.roomsCreated || 0) / 10) * 100);
+
+    // Conquistas de descoberta
+    case 'genre_explorer':
+      return Math.min(100, ((userStats.genresDiscovered || 0) / 10) * 100);
+    case 'decade_traveler':
+      return Math.min(100, ((userStats.decadesDiscovered || 0) / 4) * 100);
+
+    // Conquistas de persistência
+    case 'phoenix_rising':
+      return (userStats.returnedAfter30Days) ? 100 : 0;
+    case 'never_give_up':
+      return (userStats.continuedAfter10Losses) ? 100 : 0;
+    case 'weekend_warrior':
+      return Math.min(100, ((userStats.consecutiveWeekends || 0) / 3) * 100);
+
+    // Conquistas especiais e únicas
+    case 'perfectionist':
+      return Math.min(100, ((userStats.perfectGames || 0) / 10) * 100);
+    case 'music_savant':
+      return Math.min(100, ((userStats.uniqueSongsCorrect || 0) / 100) * 100);
+
+    // Conquistas de compositor/artista específico
+    case 'toby_fox_fan':
+      return Math.min(100, ((userStats.tobyFoxSongs || 0) / 8) * 100);
+    case 'david_wise_admirer':
+      return Math.min(100, ((userStats.davidWiseSongs || 0) / 6) * 100);
+
+    // Conquistas de console específico
+    case 'multi_platform_master':
+      return Math.min(100, ((userStats.consolesDiscovered || 0) / 5) * 100);
+
+    // Conquistas de padrões específicos
+    case 'alphabet_collector':
+      return Math.min(100, ((userStats.alphabetLetters || 0) / 5) * 100);
+    case 'number_hunter':
+      return Math.min(100, ((userStats.numberedSongs || 0) / 5) * 100);
+
+    // Conquistas de timing
+    case 'midnight_gamer':
+      return (userStats.midnightGames && userStats.midnightGames >= 1) ? 100 : 0;
+
+    // Conquistas de sequência especial
+    case 'century_club':
+      return Math.min(100, ((userStats.totalCorrect || 0) / 100) * 100);
 
     default:
       return 0;

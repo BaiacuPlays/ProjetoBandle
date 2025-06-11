@@ -95,9 +95,7 @@ const createDefaultProfile = (userId, username) => ({
     allowFriendRequests: true
   },
 
-  // Títulos e customização
-  titles: [],
-  currentTitle: null,
+
 
   // Benefícios de doação
   donationBenefits: {

@@ -1731,3 +1731,85 @@
 .profileModal::-webkit-scrollbar-thumb:hover {
   background: rgba(29, 185, 84, 0.7);
 }
+
+/* Estilos específicos para títulos */
+.titleRarity {
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-left: 8px;
+  display: inline-block;
+}
+
+.titleRarity.common {
+  background: rgba(156, 163, 175, 0.3);
+  color: #9CA3AF;
+}
+
+.titleRarity.uncommon {
+  background: rgba(16, 185, 129, 0.3);
+  color: #10B981;
+}
+
+.titleRarity.rare {
+  background: rgba(59, 130, 246, 0.3);
+  color: #3B82F6;
+}
+
+.titleRarity.epic {
+  background: rgba(139, 92, 246, 0.3);
+  color: #8B5CF6;
+}
+
+.titleRarity.legendary {
+  background: rgba(245, 158, 11, 0.3);
+  color: #F59E0B;
+}
+
+.titleSource {
+  font-size: 0.8rem;
+  margin-left: 4px;
+  opacity: 0.7;
+}
+
+.titleOption {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.titleOption:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.titleOption.selected {
+  background: rgba(29, 185, 84, 0.2);
+  border-color: #1DB954;
+  box-shadow: 0 0 10px rgba(29, 185, 84, 0.3);
+}
+
+.titleOptionText {
+  font-weight: 600;
+  font-size: 0.9rem;
+  line-height: 1.2;
+}
+
+.noTitles {
+  color: #888;
+  text-align: center;
+  padding: 40px 20px;
+  font-style: italic;
+  line-height: 1.5;
+}

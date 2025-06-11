@@ -258,12 +258,7 @@ const PublicProfileModal = ({ isOpen, onClose, userId, username, friendData }) =
                     <p className={styles.username}>@{profile.username}</p>
                   </div>
 
-                  {profile.title && (
-                    <div className={styles.titleBadge}>
-                      <FaTrophy className={styles.titleIcon} />
-                      {profile.title}
-                    </div>
-                  )}
+
 
                   <div className={styles.levelInfo}>
                     <div className={styles.levelText}>
