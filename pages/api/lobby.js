@@ -1,4 +1,5 @@
-import songs from '../../data/music.json';
+import musicData from '../../data/music.json';
+const songs = musicData.songs || musicData;
 // Importação segura do KV
 let kv = null;
 try {
@@ -45,6 +46,7 @@ async function setLobby(roomCode, data) {
     await kv.set(key, data);
   } catch (error) {
     console.error('Erro ao salvar no KV:', error);
+    throw error; // Re-throw para que o erro seja capturado acima
   }
 }
 
@@ -162,9 +164,14 @@ export default async function handler(req, res) {
 
       let roomCode;
       let existingLobby;
+      let attempts = 0;
       do {
         roomCode = generateRoomCode();
         existingLobby = await getLobby(roomCode);
+        attempts++;
+        if (attempts > 10) {
+          return res.status(500).json({ error: 'Erro ao gerar código da sala.' });
+        }
       } while (existingLobby);
 
       const lobby = {
@@ -178,8 +185,12 @@ export default async function handler(req, res) {
         currentSong: null
       };
 
-      await setLobby(roomCode, lobby);
-      return res.status(200).json({ roomCode });
+      try {
+        await setLobby(roomCode, lobby);
+        return res.status(200).json({ roomCode });
+      } catch (error) {
+        return res.status(500).json({ error: 'Erro ao criar sala.' });
+      }
     }
 
     if (req.method === 'PUT') {

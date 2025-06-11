@@ -52,10 +52,13 @@ const MultiplayerLobby = ({ onGameStart }) => {
     }
 
     try {
-      await actions.createRoom(formData.nickname.trim());
+      const result = await actions.createRoom(formData.nickname.trim());
+      console.log('Room creation result:', result);
       setMode('waiting');
       actions.setError(''); // Limpar qualquer erro anterior
     } catch (err) {
+      console.error('Error in handleCreateRoom:', err);
+      console.error('Error stack:', err.stack);
       // Erro já foi tratado no contexto
       setTimeout(() => actions.setError(''), 5000);
     }

@@ -13,7 +13,7 @@ const MultiplayerInviteModal = ({ isOpen, onClose, roomCode, onCreateRoom }) => 
   useModalScrollLock(isOpen);
   const { friends } = useSimpleFriends();
   // const { sendMultiplayerInvite } = useNotifications();
-  const { profile } = useUserProfile();
+  const { profile } = useProfile();
 
   const [selectedFriends, setSelectedFriends] = useState([]);
   const [isCreatingRoom, setIsCreatingRoom] = useState(false);

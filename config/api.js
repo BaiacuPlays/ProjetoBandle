@@ -246,7 +246,8 @@ export const apiRequest = async (endpoint, options = {}) => {
           const totalRounds = body.totalRounds || 10;
 
           // Importar músicas dinamicamente
-          const { songs } = await import('../data/songs.js');
+          const musicModule = await import('../data/music.json');
+          const songs = musicModule.default.songs || musicModule.default;
 
           // Selecionar músicas aleatórias baseado no número de rodadas
           const shuffledSongs = [...songs].sort(() => Math.random() - 0.5);
@@ -297,7 +298,8 @@ export const apiRequest = async (endpoint, options = {}) => {
           }
 
           // Importar músicas para validação
-          const { songs } = await import('../data/songs.js');
+          const musicModule = await import('../data/music.json');
+          const songs = musicModule.default.songs || musicModule.default;
 
           const gameState = lobby.gameState;
           const currentSongIndex = (gameState.currentRound || 1) - 1;

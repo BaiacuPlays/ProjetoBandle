@@ -165,14 +165,26 @@ export function MultiplayerProvider({ children }) {
 
         if (response.ok) {
           const data = await response.json();
+
+          // Verificar se a resposta tem o formato esperado
+          if (!data.roomCode) {
+            dispatch({ type: ACTIONS.SET_ERROR, payload: 'Resposta inválida do servidor' });
+            throw new Error('Resposta inválida do servidor');
+          }
+
           dispatch({ type: ACTIONS.SET_ROOM_CODE, payload: data.roomCode });
           dispatch({ type: ACTIONS.SET_PLAYER_NICKNAME, payload: playerNickname });
           dispatch({ type: ACTIONS.SET_CONNECTED, payload: true });
 
-          const lobbyResponse = await apiRequest(`/api/lobby?roomCode=${data.roomCode}`);
-          if (lobbyResponse.ok) {
-            const lobbyData = await lobbyResponse.json();
-            dispatch({ type: ACTIONS.SET_LOBBY_DATA, payload: lobbyData });
+          // Buscar dados da sala criada
+          try {
+            const lobbyResponse = await apiRequest(`/api/lobby?roomCode=${data.roomCode}`);
+            if (lobbyResponse.ok) {
+              const lobbyData = await lobbyResponse.json();
+              dispatch({ type: ACTIONS.SET_LOBBY_DATA, payload: lobbyData });
+            }
+          } catch (lobbyError) {
+            // Não falhar a criação da sala por causa disso
           }
 
           return data;
@@ -182,6 +194,12 @@ export function MultiplayerProvider({ children }) {
           throw new Error(errorData.error);
         }
       } catch (err) {
+        console.error('Detailed error in createRoom:', {
+          message: err.message,
+          stack: err.stack,
+          name: err.name,
+          cause: err.cause
+        });
         dispatch({ type: ACTIONS.SET_ERROR, payload: 'Erro de conexão' });
         throw err;
       } finally {
