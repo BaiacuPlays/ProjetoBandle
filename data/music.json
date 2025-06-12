@@ -3797,18 +3797,6 @@
     "console": "Nintendo 64"
   },
   {
-    "id": 318,
-    "title": "Mega Man X Title Screen",
-    "artist": "Setsuo Yamamoto",
-    "composer": "Setsuo Yamamoto",
-    "game": "Mega Man X",
-    "context": "Audio - Mega Man X",
-    "audioUrl": "https://pub-4d254faec6ec408ab584ea82049c2f79.r2.dev/mega-man/mega-man-x/Title Screen.mp3",
-    "year": 1993,
-    "genre": "Game Soundtrack",
-    "console": "SNES"
-  },
-  {
     "id": 319,
     "title": "Intro Stage",
     "artist": "Setsuo Yamamoto",
