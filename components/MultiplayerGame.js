@@ -9,6 +9,7 @@ import { FaPlay, FaPause, FaVolumeUp, FaFastForward } from 'react-icons/fa';
 import { browserCompatibility } from '../utils/browserCompatibility';
 import BrowserCompatibilityWarning from './BrowserCompatibilityWarning';
 import SimpleSuccessFeedback from './SimpleSuccessFeedback';
+import { MemoizedSuggestions } from './MemoizedComponents';
 // Imports temporariamente desabilitados para SSR
 // import { audioCache } from '../utils/audioCache';
 // import { useAudioPreloader } from '../hooks/useAudioPreloader';
@@ -1209,78 +1210,57 @@ const MultiplayerGame = ({ onBackToLobby }) => {
                     {isSubmitting ? 'Enviando...' : (isClient ? t('guess') : 'Adivinhar')}
                   </button>
                   {showSuggestions && filteredSuggestions.length > 0 && (
-                    <ul className={gameStyles.suggestionsListModern} style={{
-                      maxHeight: '200px',
-                      overflowY: 'auto',
-                      scrollbarWidth: 'thin'
-                    }}>
-                      {filteredSuggestions.map((suggestion, suggestionIndex) => (
-                        <li
-                          key={`mp-suggestion-${suggestion.id}-${suggestionIndex}`}
-                          className={gameStyles.suggestionItemModern}
-                          onMouseDown={() => handleSuggestionClick(suggestion)}
-                        >
-                          {suggestion.game} - {suggestion.title}
-                        </li>
-                      ))}
-                      <li
-                        className={gameStyles.suggestionItemModern}
-                        onMouseDown={() => {
-                          // Função para ativar o easter egg do sacabambapis
-                          const triggerSacabambapis = () => {
-                            // Criar elemento para mostrar o efeito
-                            const easterEggDiv = document.createElement('div');
-                            easterEggDiv.style.cssText = `
-                              position: fixed;
-                              top: 0;
-                              left: 0;
-                              width: 100vw;
-                              height: 100vh;
-                              background: rgba(0, 0, 0, 0.9);
-                              display: flex;
-                              justify-content: center;
-                              align-items: center;
-                              z-index: 9999;
-                              animation: sacabambapisAppear 2s ease-out;
-                            `;
+                    <MemoizedSuggestions
+                      suggestions={filteredSuggestions}
+                      onSuggestionClick={handleSuggestionClick}
+                      showEasterEgg={true}
+                      onEasterEggClick={() => {
+                        // Função para ativar o easter egg do sacabambapis
+                        const triggerSacabambapis = () => {
+                          // Criar elemento para mostrar o efeito
+                          const easterEggDiv = document.createElement('div');
+                          easterEggDiv.style.cssText = `
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            width: 100vw;
+                            height: 100vh;
+                            background: rgba(0, 0, 0, 0.9);
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            z-index: 9999;
+                            animation: sacabambapisAppear 2s ease-out;
+                          `;
 
-                            const img = document.createElement('img');
-                            img.src = '/sacabambapis.png';
-                            img.alt = 'Sacabambapis';
-                            img.style.cssText = `
-                              max-width: 80vw;
-                              max-height: 80vh;
-                              object-fit: contain;
-                              animation: sacabambapisZoom 2s ease-out;
-                              filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5));
-                            `;
+                          const img = document.createElement('img');
+                          img.src = '/sacabambapis.png';
+                          img.alt = 'Sacabambapis';
+                          img.style.cssText = `
+                            max-width: 80vw;
+                            max-height: 80vh;
+                            object-fit: contain;
+                            animation: sacabambapisZoom 2s ease-out;
+                            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5));
+                          `;
 
-                            easterEggDiv.appendChild(img);
-                            document.body.appendChild(easterEggDiv);
+                          easterEggDiv.appendChild(img);
+                          document.body.appendChild(easterEggDiv);
 
-                            // Tocar som do vine boom
-                            const vineAudio = new Audio('/vine.mp3');
-                            vineAudio.volume = 0.7;
-                            vineAudio.play().catch(() => {});
+                          // Tocar som do vine boom
+                          const vineAudio = new Audio('/vine.mp3');
+                          vineAudio.volume = 0.7;
+                          vineAudio.play().catch(() => {});
 
-                            // Remover após 2 segundos
-                            setTimeout(() => {
-                              document.body.removeChild(easterEggDiv);
-                            }, 2000);
-                          };
-                          triggerSacabambapis();
-                        }}
-                        style={{
-                          fontStyle: 'italic',
-                          opacity: 0.7,
-                          borderTop: '1px solid rgba(29, 185, 84, 0.3)',
-                          marginTop: '0.5rem',
-                          paddingTop: '0.75rem'
-                        }}
-                      >
-                        ??? - ???
-                      </li>
-                    </ul>
+                          // Remover após 2 segundos
+                          setTimeout(() => {
+                            document.body.removeChild(easterEggDiv);
+                          }, 2000);
+                        };
+                        triggerSacabambapis();
+                      }}
+                      styles={gameStyles}
+                    />
                   )}
                 </form>
               )}
