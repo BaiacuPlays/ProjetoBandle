@@ -1,0 +1,182 @@
+.announcementContainer {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: 90%;
+  max-width: 600px;
+  pointer-events: none;
+}
+
+.announcement {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  border-left: 4px solid #3498db;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  margin-bottom: 12px;
+  animation: slideInDown 0.5s ease-out;
+  pointer-events: auto;
+  transition: all 0.3s ease;
+}
+
+.announcement:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.announcementContent {
+  padding: 16px 20px;
+}
+
+.announcementHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.announcementIcon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.announcementTitle {
+  font-weight: 600;
+  font-size: 16px;
+  color: #2c3e50;
+  flex: 1;
+}
+
+.dismissButton {
+  background: none;
+  border: none;
+  color: #7f8c8d;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.dismissButton:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: #e74c3c;
+}
+
+.announcementMessage {
+  color: #34495e;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+  padding-left: 32px;
+}
+
+.announcementFooter {
+  display: flex;
+  justify-content: flex-end;
+  padding-left: 32px;
+}
+
+.announcementDate {
+  font-size: 12px;
+  color: #7f8c8d;
+  font-style: italic;
+}
+
+/* Tipos de anúncios */
+.info {
+  border-left-color: #3498db;
+  background: rgba(52, 152, 219, 0.05);
+}
+
+.success {
+  border-left-color: #27ae60;
+  background: rgba(39, 174, 96, 0.05);
+}
+
+.warning {
+  border-left-color: #f39c12;
+  background: rgba(243, 156, 18, 0.05);
+}
+
+.error {
+  border-left-color: #e74c3c;
+  background: rgba(231, 76, 60, 0.05);
+}
+
+.promotion {
+  border-left-color: #9b59b6;
+  background: rgba(155, 89, 182, 0.05);
+}
+
+/* Animações */
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .announcementContainer {
+    width: 95%;
+    top: 10px;
+  }
+  
+  .announcement {
+    margin-bottom: 8px;
+  }
+  
+  .announcementContent {
+    padding: 12px 16px;
+  }
+  
+  .announcementTitle {
+    font-size: 14px;
+  }
+  
+  .announcementMessage {
+    font-size: 13px;
+    padding-left: 28px;
+  }
+  
+  .announcementFooter {
+    padding-left: 28px;
+  }
+  
+  .announcementIcon {
+    font-size: 18px;
+  }
+}
+
+/* Tema escuro */
+@media (prefers-color-scheme: dark) {
+  .announcement {
+    background: rgba(44, 62, 80, 0.95);
+    color: #ecf0f1;
+  }
+  
+  .announcementTitle {
+    color: #ecf0f1;
+  }
+  
+  .announcementMessage {
+    color: #bdc3c7;
+  }
+  
+  .dismissButton {
+    color: #95a5a6;
+  }
+  
+  .dismissButton:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #e74c3c;
+  }
+}

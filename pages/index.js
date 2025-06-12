@@ -19,6 +19,7 @@ import GlobalStats from '../components/GlobalStats';
 import AchievementNotification from '../components/AchievementNotification';
 import SuccessFeedback from '../components/SuccessFeedback';
 import SimpleSuccessFeedback from '../components/SimpleSuccessFeedback';
+import CustomAnnouncement from '../components/CustomAnnouncement';
 
 import BrowserCompatibilityWarning from '../components/BrowserCompatibilityWarning';
 import BugReportModal from '../components/BugReportModal';
@@ -3316,6 +3317,9 @@ export default function Home() {
 
         {/* Sistema de notificações */}
         <AchievementNotification />
+
+        {/* Anúncios customizados do admin */}
+        <CustomAnnouncement />
 
         {/* Feedback de sucesso completo (modo diário) */}
         <SuccessFeedback

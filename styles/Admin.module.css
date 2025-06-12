@@ -1465,3 +1465,1053 @@
     gap: 5px;
   }
 }
+
+/* Estilos específicos para anúncios */
+.announcementForm {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.announcementForm h3 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.formGroup label {
+  font-weight: 500;
+  color: #555;
+  font-size: 14px;
+}
+
+.input,
+.select,
+.textarea {
+  padding: 10px 12px;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+  font-family: inherit;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  outline: none;
+  border-color: #1DB954;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.colorInput {
+  padding: 4px;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  width: 60px;
+  height: 40px;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.colorInput:focus {
+  outline: none;
+  border-color: #1DB954;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #555;
+}
+
+.checkboxLabel input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.formActions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.button {
+  background: #1DB954;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background: #1ed760;
+}
+
+.button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.cancelButton {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cancelButton:hover {
+  background: #5a6268;
+}
+
+.clearButton {
+  background: #ffc107;
+  color: #212529;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.clearButton:hover {
+  background: #e0a800;
+}
+
+.announcementsList {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+}
+
+.announcementsList h3 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.noAnnouncements {
+  text-align: center;
+  color: #666;
+  padding: 40px 20px;
+  font-style: italic;
+}
+
+.announcementsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.announcementCard {
+  border: 1px solid #e1e5e9;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.announcementCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.announcementHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.announcementIcon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.announcementHeader h4 {
+  margin: 0;
+  color: #333;
+  font-size: 16px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.statusBadge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.statusBadge.active {
+  background: #d4edda;
+  color: #155724;
+}
+
+.statusBadge.inactive {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.announcementContent {
+  margin-bottom: 16px;
+}
+
+.announcementContent p {
+  margin: 0 0 12px 0;
+  color: #555;
+  line-height: 1.5;
+}
+
+.announcementMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: #666;
+}
+
+.announcementActions {
+  display: flex;
+  gap: 8px;
+}
+
+.editButton {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.editButton:hover {
+  background: #0056b3;
+}
+
+/* Estilos para gerenciamento de músicas */
+.musicForm {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.musicList {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+}
+
+.musicGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.musicCard {
+  border: 1px solid #e1e5e9;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.musicCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.musicHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.musicHeader h4 {
+  margin: 0;
+  color: #333;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.musicContent p {
+  margin: 4px 0;
+  color: #555;
+  font-size: 14px;
+}
+
+.musicStats {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #666;
+}
+
+.musicActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.playButton {
+  background: #1DB954;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.playButton:hover {
+  background: #1ed760;
+}
+
+.noMusic {
+  text-align: center;
+  color: #666;
+  padding: 40px 20px;
+  font-style: italic;
+}
+
+/* Estilos para analytics */
+.analyticsCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.analyticsCard {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.3s ease;
+}
+
+.analyticsCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.cardIcon {
+  font-size: 32px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  border-radius: 12px;
+}
+
+.cardContent h3 {
+  margin: 0 0 8px 0;
+  color: #333;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.cardStats {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mainStat {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1DB954;
+}
+
+.subStat {
+  font-size: 12px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cardMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #666;
+}
+
+.analyticsSection {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.analyticsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.analyticsPanel h3 {
+  margin: 0 0 16px 0;
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.songsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.songItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.songRank {
+  font-weight: 700;
+  color: #1DB954;
+  min-width: 30px;
+}
+
+.songInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.songInfo strong {
+  color: #333;
+  font-size: 14px;
+}
+
+.songInfo span {
+  color: #666;
+  font-size: 12px;
+}
+
+.songPlays {
+  font-weight: 600;
+  color: #1DB954;
+  font-size: 14px;
+}
+
+.distributionChart {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.distributionBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.barLabel {
+  min-width: 100px;
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+}
+
+.barContainer {
+  flex: 1;
+  height: 24px;
+  background: #f0f0f0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.bar {
+  height: 100%;
+  background: linear-gradient(90deg, #1DB954, #1ed760);
+  border-radius: 12px;
+  transition: width 0.3s ease;
+}
+
+.barValue {
+  min-width: 40px;
+  text-align: right;
+  font-weight: 600;
+  color: #333;
+}
+
+.analyticsActions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.refreshButton {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.refreshButton:hover {
+  background: #0056b3;
+}
+
+.exportButton {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.exportButton:hover {
+  background: #1e7e34;
+}
+
+/* Responsividade para anúncios */
+@media (max-width: 768px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .announcementsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .formActions {
+    flex-direction: column;
+  }
+
+  .announcementHeader {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .announcementMeta {
+    font-size: 11px;
+  }
+
+  .analyticsCards {
+    grid-template-columns: 1fr;
+  }
+
+  .analyticsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .musicGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .analyticsActions {
+    flex-direction: column;
+  }
+}
+
+/* Estilos para editor de tema */
+.themeForm {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.colorInputGroup {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.colorInputGroup .colorInput {
+  width: 50px;
+  height: 40px;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.colorInputGroup .input {
+  flex: 1;
+}
+
+.colorPreview {
+  margin-top: 24px;
+}
+
+.previewContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.previewCard {
+  padding: 24px;
+  border-radius: 12px;
+  text-align: center;
+  min-width: 300px;
+  transition: all 0.3s ease;
+}
+
+.previewCard h4 {
+  margin: 0 0 8px 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.previewCard p {
+  margin: 0 0 16px 0;
+  opacity: 0.8;
+}
+
+/* Estilos para conquistas customizadas */
+.achievementForm {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.achievementsList {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+}
+
+.achievementsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.achievementCard {
+  border: 1px solid #e1e5e9;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.achievementCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.achievementHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.achievementIcon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.achievementHeader h4 {
+  margin: 0;
+  color: #333;
+  font-size: 16px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.rarityBadge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.rarityBadge.common {
+  background: #d4edda;
+  color: #155724;
+}
+
+.rarityBadge.uncommon {
+  background: #cce7ff;
+  color: #004085;
+}
+
+.rarityBadge.rare {
+  background: #e2d9f3;
+  color: #5a2d82;
+}
+
+.rarityBadge.epic {
+  background: #ffe4cc;
+  color: #8b4513;
+}
+
+.rarityBadge.legendary {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.achievementContent p {
+  margin: 0 0 12px 0;
+  color: #555;
+  line-height: 1.5;
+}
+
+.achievementMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: #666;
+}
+
+.achievementActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.noAchievements {
+  text-align: center;
+  color: #666;
+  padding: 40px 20px;
+  font-style: italic;
+}
+
+/* Estilos para moderação */
+.moderationCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.moderationCard {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.moderationForm {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.moderationList {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+}
+
+.moderationGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.moderationItem {
+  border: 1px solid #e1e5e9;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.moderationItem:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.moderationHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.moderationHeader h4 {
+  margin: 0;
+  color: #333;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.banDuration {
+  padding: 4px 8px;
+  background: #f8d7da;
+  color: #721c24;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.moderationContent p {
+  margin: 4px 0;
+  color: #555;
+  font-size: 14px;
+}
+
+.moderationActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.unbanButton {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.unbanButton:hover {
+  background: #1e7e34;
+}
+
+.dangerButton {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dangerButton:hover {
+  background: #c82333;
+}
+
+.noModerationData {
+  text-align: center;
+  color: #666;
+  padding: 40px 20px;
+  font-style: italic;
+}
+
+/* Responsividade adicional */
+@media (max-width: 768px) {
+  .colorInputGroup {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .colorInputGroup .colorInput {
+    width: 100%;
+  }
+
+  .previewCard {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .moderationCards {
+    grid-template-columns: 1fr;
+  }
+
+  .achievementsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .moderationGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Estilos para upload de áudio */
+.uploadSection {
+  background: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 16px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.uploadSection:hover {
+  border-color: #1DB954;
+  background: #f0fff4;
+}
+
+.uploadSection h4 {
+  margin: 0 0 12px 0;
+  color: #333;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.fileInput {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.fileInput:hover {
+  border-color: #1DB954;
+}
+
+.uploadProgress {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.progressBar {
+  flex: 1;
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #1DB954, #1ed760);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.urlSection {
+  background: #fff;
+  border: 1px solid #e1e5e9;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.urlSection h4 {
+  margin: 0 0 12px 0;
+  color: #333;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.audioPreview {
+  background: #f8f9fa;
+  border: 1px solid #e1e5e9;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.audioPreview h4 {
+  margin: 0 0 12px 0;
+  color: #333;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.audioPlayer {
+  width: 100%;
+  height: 40px;
+  border-radius: 8px;
+}
+
+/* Responsividade para upload */
+@media (max-width: 768px) {
+  .uploadSection {
+    padding: 16px;
+  }
+
+  .uploadProgress {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .progressBar {
+    width: 100%;
+  }
+}

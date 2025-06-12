@@ -33,6 +33,80 @@ export default function AdminPage() {
   // Estado para controlar visibilidade das senhas
   const [showPasswords, setShowPasswords] = useState(false);
 
+  // Estados para anúncios
+  const [announcements, setAnnouncements] = useState([]);
+  const [announcementForm, setAnnouncementForm] = useState({
+    title: '',
+    message: '',
+    type: 'info',
+    color: '#3498db',
+    icon: '📢',
+    startDate: '',
+    endDate: '',
+    active: true
+  });
+  const [editingAnnouncement, setEditingAnnouncement] = useState(null);
+
+  // Estados para gerenciamento de músicas
+  const [musicLibrary, setMusicLibrary] = useState([]);
+  const [musicForm, setMusicForm] = useState({
+    title: '',
+    artist: '',
+    game: '',
+    year: new Date().getFullYear(),
+    genre: '',
+    console: '',
+    audioFile: null,
+    active: true,
+    difficulty: 'medium',
+    seasonal: false,
+    seasonalType: ''
+  });
+  const [editingMusic, setEditingMusic] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
+
+  // Estados para analytics
+  const [analyticsData, setAnalyticsData] = useState({
+    users: { total: 0, active: 0, new: 0 },
+    games: { total: 0, today: 0, wins: 0 },
+    songs: { total: 0, mostPlayed: [], leastPlayed: [] },
+    performance: { avgAttempts: 0, winRate: 0 }
+  });
+
+  // Estados para editor de tema
+  const [themeSettings, setThemeSettings] = useState({
+    primaryColor: '#1DB954',
+    secondaryColor: '#191414',
+    accentColor: '#1ed760',
+    backgroundColor: '#121212',
+    textColor: '#ffffff',
+    logo: null,
+    siteName: 'LudoMusic',
+    tagline: 'Adivinhe a música dos jogos!'
+  });
+
+  // Estados para conquistas
+  const [customAchievements, setCustomAchievements] = useState([]);
+  const [achievementForm, setAchievementForm] = useState({
+    id: '',
+    title: '',
+    description: '',
+    icon: '🏆',
+    rarity: 'common',
+    xpReward: 100,
+    condition: 'games_played',
+    value: 1,
+    active: true
+  });
+  const [editingAchievement, setEditingAchievement] = useState(null);
+
+  // Estados para moderação
+  const [moderationData, setModerationData] = useState({
+    bannedUsers: [],
+    reports: [],
+    warnings: []
+  });
+
   // Função para autenticar admin
   const authenticateAdmin = async () => {
     if (!adminKey) {
@@ -127,7 +201,13 @@ export default function AdminPage() {
         fetchDonations(),
         fetchDailySong(),
         fetchSongs(),
-        fetchGlobalStats()
+        fetchGlobalStats(),
+        fetchAnnouncements(),
+        fetchMusicLibrary(),
+        fetchAnalytics(),
+        fetchThemeSettings(),
+        fetchCustomAchievements(),
+        fetchModerationData()
       ]);
       console.log('✅ Dados carregados com sucesso');
     } catch (err) {
@@ -574,6 +654,327 @@ export default function AdminPage() {
     }
   };
 
+  // Funções para gerenciar anúncios
+  const fetchAnnouncements = async () => {
+    try {
+      const response = await fetch('/api/admin/announcements', {
+        headers: { 'x-admin-key': 'admin123' }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          setAnnouncements(data.announcements || []);
+        }
+      } else {
+        console.warn('API announcements não encontrada');
+        setAnnouncements([]);
+      }
+    } catch (err) {
+      console.error('Erro ao buscar anúncios:', err);
+      setAnnouncements([]);
+    }
+  };
+
+  const createAnnouncement = async () => {
+    if (!announcementForm.title || !announcementForm.message || !announcementForm.startDate || !announcementForm.endDate) {
+      alert('Por favor, preencha todos os campos obrigatórios');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/admin/announcements', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-key': 'admin123'
+        },
+        body: JSON.stringify(announcementForm)
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        await fetchAnnouncements();
+        resetAnnouncementForm();
+        alert('Anúncio criado com sucesso!');
+      } else {
+        alert('Erro ao criar anúncio: ' + data.error);
+      }
+    } catch (err) {
+      alert('Erro ao criar anúncio: ' + err.message);
+    }
+  };
+
+  const updateAnnouncement = async () => {
+    if (!editingAnnouncement) return;
+
+    try {
+      const response = await fetch(`/api/admin/announcements?id=${editingAnnouncement.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-key': 'admin123'
+        },
+        body: JSON.stringify(announcementForm)
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        await fetchAnnouncements();
+        resetAnnouncementForm();
+        setEditingAnnouncement(null);
+        alert('Anúncio atualizado com sucesso!');
+      } else {
+        alert('Erro ao atualizar anúncio: ' + data.error);
+      }
+    } catch (err) {
+      alert('Erro ao atualizar anúncio: ' + err.message);
+    }
+  };
+
+  const deleteAnnouncement = async (announcementId) => {
+    if (!confirm('Tem certeza que deseja deletar este anúncio?')) return;
+
+    try {
+      const response = await fetch(`/api/admin/announcements?id=${announcementId}`, {
+        method: 'DELETE',
+        headers: { 'x-admin-key': 'admin123' }
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        await fetchAnnouncements();
+        alert('Anúncio deletado com sucesso!');
+      } else {
+        alert('Erro ao deletar anúncio: ' + data.error);
+      }
+    } catch (err) {
+      alert('Erro ao deletar anúncio: ' + err.message);
+    }
+  };
+
+  const editAnnouncement = (announcement) => {
+    setEditingAnnouncement(announcement);
+    setAnnouncementForm({
+      title: announcement.title,
+      message: announcement.message,
+      type: announcement.type,
+      color: announcement.color,
+      icon: announcement.icon,
+      startDate: announcement.startDate.split('T')[0] + 'T' + announcement.startDate.split('T')[1].slice(0, 5),
+      endDate: announcement.endDate.split('T')[0] + 'T' + announcement.endDate.split('T')[1].slice(0, 5),
+      active: announcement.active
+    });
+  };
+
+  const resetAnnouncementForm = () => {
+    setAnnouncementForm({
+      title: '',
+      message: '',
+      type: 'info',
+      color: '#3498db',
+      icon: '📢',
+      startDate: '',
+      endDate: '',
+      active: true
+    });
+    setEditingAnnouncement(null);
+  };
+
+  // Funções para gerenciamento de músicas
+  const fetchMusicLibrary = async () => {
+    try {
+      const response = await fetch('/api/admin/music-library', {
+        headers: { 'x-admin-key': 'admin123' }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          setMusicLibrary(data.music || []);
+        }
+      } else {
+        console.warn('API music-library não encontrada');
+        setMusicLibrary([]);
+      }
+    } catch (err) {
+      console.error('Erro ao buscar biblioteca de músicas:', err);
+      setMusicLibrary([]);
+    }
+  };
+
+  // Funções para analytics
+  const fetchAnalytics = async () => {
+    try {
+      const response = await fetch('/api/admin/analytics', {
+        headers: { 'x-admin-key': 'admin123' }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          setAnalyticsData(data.analytics || {
+            users: { total: 0, active: 0, new: 0 },
+            games: { total: 0, today: 0, wins: 0 },
+            songs: { total: 0, mostPlayed: [], leastPlayed: [] },
+            performance: { avgAttempts: 0, winRate: 0 }
+          });
+        }
+      } else {
+        console.warn('API analytics não encontrada');
+      }
+    } catch (err) {
+      console.error('Erro ao buscar analytics:', err);
+    }
+  };
+
+  // Funções para configurações de tema
+  const fetchThemeSettings = async () => {
+    try {
+      const response = await fetch('/api/admin/theme-settings', {
+        headers: { 'x-admin-key': 'admin123' }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          setThemeSettings(data.theme || {
+            primaryColor: '#1DB954',
+            secondaryColor: '#191414',
+            accentColor: '#1ed760',
+            backgroundColor: '#121212',
+            textColor: '#ffffff',
+            logo: null,
+            siteName: 'LudoMusic',
+            tagline: 'Adivinhe a música dos jogos!'
+          });
+        }
+      } else {
+        console.warn('API theme-settings não encontrada');
+      }
+    } catch (err) {
+      console.error('Erro ao buscar configurações de tema:', err);
+    }
+  };
+
+  // Funções para conquistas customizadas
+  const fetchCustomAchievements = async () => {
+    try {
+      const response = await fetch('/api/admin/custom-achievements', {
+        headers: { 'x-admin-key': 'admin123' }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          setCustomAchievements(data.achievements || []);
+        }
+      } else {
+        console.warn('API custom-achievements não encontrada');
+        setCustomAchievements([]);
+      }
+    } catch (err) {
+      console.error('Erro ao buscar conquistas customizadas:', err);
+      setCustomAchievements([]);
+    }
+  };
+
+  // Funções para moderação
+  const fetchModerationData = async () => {
+    try {
+      const response = await fetch('/api/admin/moderation', {
+        headers: { 'x-admin-key': 'admin123' }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          setModerationData(data.moderation || {
+            bannedUsers: [],
+            reports: [],
+            warnings: []
+          });
+        }
+      } else {
+        console.warn('API moderation não encontrada');
+      }
+    } catch (err) {
+      console.error('Erro ao buscar dados de moderação:', err);
+    }
+  };
+
+  // Função para upload de áudio
+  const handleAudioUpload = async (file) => {
+    if (!file) return;
+
+    // Validar tipo de arquivo
+    const allowedTypes = ['audio/mpeg', 'audio/wav', 'audio/ogg'];
+    if (!allowedTypes.includes(file.type)) {
+      alert('Formato de arquivo não suportado. Use MP3, WAV ou OGG.');
+      return;
+    }
+
+    // Validar tamanho (10MB máximo)
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    if (file.size > maxSize) {
+      alert('Arquivo muito grande. Máximo 10MB.');
+      return;
+    }
+
+    try {
+      setUploadProgress(0);
+
+      // Criar FormData para upload
+      const formData = new FormData();
+      formData.append('audio', file);
+      formData.append('filename', `${Date.now()}_${file.name}`);
+
+      // Simular progresso de upload
+      const uploadInterval = setInterval(() => {
+        setUploadProgress(prev => {
+          if (prev >= 90) {
+            clearInterval(uploadInterval);
+            return prev;
+          }
+          return prev + 10;
+        });
+      }, 200);
+
+      // Upload para Cloudflare R2 (simulado)
+      const response = await fetch('/api/admin/upload-audio', {
+        method: 'POST',
+        headers: {
+          'x-admin-key': 'admin123'
+        },
+        body: formData
+      });
+
+      clearInterval(uploadInterval);
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          setUploadProgress(100);
+          setMusicForm({...musicForm, audioFile: data.audioUrl});
+
+          setTimeout(() => {
+            setUploadProgress(0);
+            alert('Upload realizado com sucesso!');
+          }, 1000);
+        } else {
+          throw new Error(data.error || 'Erro no upload');
+        }
+      } else {
+        throw new Error('Erro na comunicação com o servidor');
+      }
+
+    } catch (error) {
+      console.error('Erro no upload:', error);
+      setUploadProgress(0);
+      alert('Erro no upload: ' + error.message);
+    }
+  };
+
   // Filtrar e ordenar perfis
   const filteredProfiles = profiles
     .filter(profile => {
@@ -738,6 +1139,30 @@ export default function AdminPage() {
               🎵 Músicas
             </button>
             <button
+              className={`${styles.tabButton} ${activeTab === 'analytics' ? styles.active : ''}`}
+              onClick={() => setActiveTab('analytics')}
+            >
+              📊 Analytics
+            </button>
+            <button
+              className={`${styles.tabButton} ${activeTab === 'theme' ? styles.active : ''}`}
+              onClick={() => setActiveTab('theme')}
+            >
+              🎨 Tema
+            </button>
+            <button
+              className={`${styles.tabButton} ${activeTab === 'custom-achievements' ? styles.active : ''}`}
+              onClick={() => setActiveTab('custom-achievements')}
+            >
+              🏆 Conquistas
+            </button>
+            <button
+              className={`${styles.tabButton} ${activeTab === 'moderation' ? styles.active : ''}`}
+              onClick={() => setActiveTab('moderation')}
+            >
+              👥 Moderação
+            </button>
+            <button
               className={`${styles.tabButton} ${activeTab === 'donations' ? styles.active : ''}`}
               onClick={() => setActiveTab('donations')}
             >
@@ -747,13 +1172,13 @@ export default function AdminPage() {
               className={`${styles.tabButton} ${activeTab === 'achievements' ? styles.active : ''}`}
               onClick={() => setActiveTab('achievements')}
             >
-              🏆 Conquistas
+              🎖️ Badges
             </button>
             <button
-              className={`${styles.tabButton} ${activeTab === 'badges' ? styles.active : ''}`}
-              onClick={() => setActiveTab('badges')}
+              className={`${styles.tabButton} ${activeTab === 'announcements' ? styles.active : ''}`}
+              onClick={() => setActiveTab('announcements')}
             >
-              🎖️ Badges
+              📢 Anúncios
             </button>
             <button
               className={`${styles.tabButton} ${activeTab === 'system' ? styles.active : ''}`}
@@ -1186,6 +1611,1162 @@ SISTEMA:
                   Modo Manutenção
                 </button>
               </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'music' && (
+          <div className={styles.section}>
+            <h2>🎵 Gerenciamento de Músicas</h2>
+
+            {/* Formulário para adicionar/editar música */}
+            <div className={styles.musicForm}>
+              <h3>{editingMusic ? 'Editar Música' : 'Adicionar Nova Música'}</h3>
+
+              <div className={styles.formGrid}>
+                <div className={styles.formGroup}>
+                  <label>Título *</label>
+                  <input
+                    type="text"
+                    value={musicForm.title}
+                    onChange={(e) => setMusicForm({...musicForm, title: e.target.value})}
+                    placeholder="Nome da música"
+                    className={styles.input}
+                    maxLength={200}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Artista *</label>
+                  <input
+                    type="text"
+                    value={musicForm.artist}
+                    onChange={(e) => setMusicForm({...musicForm, artist: e.target.value})}
+                    placeholder="Nome do artista/compositor"
+                    className={styles.input}
+                    maxLength={100}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Jogo *</label>
+                  <input
+                    type="text"
+                    value={musicForm.game}
+                    onChange={(e) => setMusicForm({...musicForm, game: e.target.value})}
+                    placeholder="Nome do jogo"
+                    className={styles.input}
+                    maxLength={100}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Ano</label>
+                  <input
+                    type="number"
+                    value={musicForm.year}
+                    onChange={(e) => setMusicForm({...musicForm, year: parseInt(e.target.value)})}
+                    placeholder="Ano de lançamento"
+                    className={styles.input}
+                    min="1970"
+                    max={new Date().getFullYear()}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Gênero</label>
+                  <input
+                    type="text"
+                    value={musicForm.genre}
+                    onChange={(e) => setMusicForm({...musicForm, genre: e.target.value})}
+                    placeholder="Gênero musical"
+                    className={styles.input}
+                    maxLength={50}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Console/Plataforma</label>
+                  <input
+                    type="text"
+                    value={musicForm.console}
+                    onChange={(e) => setMusicForm({...musicForm, console: e.target.value})}
+                    placeholder="Ex: PlayStation, Nintendo Switch"
+                    className={styles.input}
+                    maxLength={50}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Dificuldade</label>
+                  <select
+                    value={musicForm.difficulty}
+                    onChange={(e) => setMusicForm({...musicForm, difficulty: e.target.value})}
+                    className={styles.select}
+                  >
+                    <option value="easy">🟢 Fácil</option>
+                    <option value="medium">🟡 Médio</option>
+                    <option value="hard">🔴 Difícil</option>
+                    <option value="expert">⚫ Expert</option>
+                  </select>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Tipo Sazonal</label>
+                  <select
+                    value={musicForm.seasonalType}
+                    onChange={(e) => setMusicForm({...musicForm, seasonalType: e.target.value, seasonal: e.target.value !== ''})}
+                    className={styles.select}
+                  >
+                    <option value="">Nenhum</option>
+                    <option value="christmas">🎄 Natal</option>
+                    <option value="halloween">🎃 Halloween</option>
+                    <option value="valentine">💝 Dia dos Namorados</option>
+                    <option value="easter">🐰 Páscoa</option>
+                    <option value="summer">☀️ Verão</option>
+                    <option value="winter">❄️ Inverno</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Áudio da Música *</label>
+
+                {/* Opção 1: Upload de arquivo */}
+                <div className={styles.uploadSection}>
+                  <h4>📁 Upload de Arquivo</h4>
+                  <input
+                    type="file"
+                    accept="audio/*"
+                    onChange={(e) => handleAudioUpload(e.target.files[0])}
+                    className={styles.fileInput}
+                  />
+                  {uploadProgress > 0 && (
+                    <div className={styles.uploadProgress}>
+                      <div className={styles.progressBar}>
+                        <div
+                          className={styles.progressFill}
+                          style={{ width: `${uploadProgress}%` }}
+                        ></div>
+                      </div>
+                      <span>{uploadProgress}%</span>
+                    </div>
+                  )}
+                  <small>Formatos aceitos: MP3, WAV, OGG (máx. 10MB)</small>
+                </div>
+
+                {/* Opção 2: URL direta */}
+                <div className={styles.urlSection}>
+                  <h4>🔗 URL Direta</h4>
+                  <input
+                    type="url"
+                    value={musicForm.audioFile}
+                    onChange={(e) => setMusicForm({...musicForm, audioFile: e.target.value})}
+                    placeholder="https://pub-4d254faec6ec408ab584ea82049c2f79.r2.dev/musica.mp3"
+                    className={styles.input}
+                  />
+                  <small>
+                    <strong>✅ Funciona:</strong> Cloudflare R2, links diretos de MP3/WAV<br/>
+                    <strong>❌ NÃO funciona:</strong> YouTube, Spotify, links protegidos
+                  </small>
+                </div>
+
+                {/* Preview do áudio */}
+                {musicForm.audioFile && (
+                  <div className={styles.audioPreview}>
+                    <h4>🎵 Preview</h4>
+                    <audio controls className={styles.audioPlayer}>
+                      <source src={musicForm.audioFile} type="audio/mpeg" />
+                      Seu navegador não suporta o elemento de áudio.
+                    </audio>
+                  </div>
+                )}
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.checkboxLabel}>
+                  <input
+                    type="checkbox"
+                    checked={musicForm.active}
+                    onChange={(e) => setMusicForm({...musicForm, active: e.target.checked})}
+                  />
+                  Música ativa (disponível no jogo)
+                </label>
+              </div>
+
+              <div className={styles.formActions}>
+                <button
+                  onClick={() => console.log('Implementar função de salvar música')}
+                  className={styles.button}
+                  disabled={!musicForm.title || !musicForm.artist || !musicForm.game || !musicForm.audioFile}
+                >
+                  {editingMusic ? 'Atualizar Música' : 'Adicionar Música'}
+                </button>
+
+                {editingMusic && (
+                  <button
+                    onClick={() => console.log('Implementar função de cancelar edição')}
+                    className={styles.cancelButton}
+                  >
+                    Cancelar
+                  </button>
+                )}
+
+                <button
+                  onClick={() => console.log('Implementar função de limpar formulário')}
+                  className={styles.clearButton}
+                >
+                  Limpar Formulário
+                </button>
+              </div>
+            </div>
+
+            {/* Lista de músicas */}
+            <div className={styles.musicList}>
+              <h3>Biblioteca de Músicas ({musicLibrary.length})</h3>
+
+              <button onClick={fetchMusicLibrary} className={styles.refreshButton}>
+                🔄 Atualizar Lista
+              </button>
+
+              {musicLibrary.length === 0 ? (
+                <div className={styles.noMusic}>
+                  Nenhuma música encontrada na biblioteca.
+                </div>
+              ) : (
+                <div className={styles.musicGrid}>
+                  {musicLibrary.map((music) => (
+                    <div key={music.id} className={styles.musicCard}>
+                      <div className={styles.musicHeader}>
+                        <h4>{music.title}</h4>
+                        <span className={`${styles.statusBadge} ${music.active ? styles.active : styles.inactive}`}>
+                          {music.active ? '🟢 Ativa' : '🔴 Inativa'}
+                        </span>
+                      </div>
+
+                      <div className={styles.musicContent}>
+                        <p><strong>Artista:</strong> {music.artist}</p>
+                        <p><strong>Jogo:</strong> {music.game}</p>
+                        <p><strong>Ano:</strong> {music.year}</p>
+                        <p><strong>Dificuldade:</strong> {music.difficulty}</p>
+                        {music.seasonal && (
+                          <p><strong>Sazonal:</strong> {music.seasonalType}</p>
+                        )}
+                        <div className={styles.musicStats}>
+                          <span>Jogadas: {music.stats?.timesPlayed || 0}</span>
+                          <span>Acertos: {music.stats?.timesCorrect || 0}</span>
+                        </div>
+                      </div>
+
+                      <div className={styles.musicActions}>
+                        <button
+                          onClick={() => console.log('Implementar função de editar música')}
+                          className={styles.editButton}
+                          title="Editar música"
+                        >
+                          ✏️ Editar
+                        </button>
+                        <button
+                          onClick={() => console.log('Implementar função de deletar música')}
+                          className={styles.deleteButton}
+                          title="Deletar música"
+                        >
+                          🗑️ Deletar
+                        </button>
+                        <button
+                          onClick={() => window.open(music.audioUrl, '_blank')}
+                          className={styles.playButton}
+                          title="Testar áudio"
+                        >
+                          🎵 Testar
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'announcements' && (
+          <div className={styles.section}>
+            <h2>📢 Gerenciamento de Anúncios</h2>
+
+            {/* Formulário para criar/editar anúncio */}
+            <div className={styles.announcementForm}>
+              <h3>{editingAnnouncement ? 'Editar Anúncio' : 'Criar Novo Anúncio'}</h3>
+
+              <div className={styles.formGrid}>
+                <div className={styles.formGroup}>
+                  <label>Título *</label>
+                  <input
+                    type="text"
+                    value={announcementForm.title}
+                    onChange={(e) => setAnnouncementForm({...announcementForm, title: e.target.value})}
+                    placeholder="Título do anúncio"
+                    className={styles.input}
+                    maxLength={100}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Tipo</label>
+                  <select
+                    value={announcementForm.type}
+                    onChange={(e) => setAnnouncementForm({...announcementForm, type: e.target.value})}
+                    className={styles.select}
+                  >
+                    <option value="info">ℹ️ Informação</option>
+                    <option value="success">✅ Sucesso</option>
+                    <option value="warning">⚠️ Aviso</option>
+                    <option value="error">❌ Erro</option>
+                    <option value="promotion">🎉 Promoção</option>
+                  </select>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Ícone</label>
+                  <input
+                    type="text"
+                    value={announcementForm.icon}
+                    onChange={(e) => setAnnouncementForm({...announcementForm, icon: e.target.value})}
+                    placeholder="📢"
+                    className={styles.input}
+                    maxLength={10}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Cor</label>
+                  <input
+                    type="color"
+                    value={announcementForm.color}
+                    onChange={(e) => setAnnouncementForm({...announcementForm, color: e.target.value})}
+                    className={styles.colorInput}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Data de Início *</label>
+                  <input
+                    type="datetime-local"
+                    value={announcementForm.startDate}
+                    onChange={(e) => setAnnouncementForm({...announcementForm, startDate: e.target.value})}
+                    className={styles.input}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Data de Fim *</label>
+                  <input
+                    type="datetime-local"
+                    value={announcementForm.endDate}
+                    onChange={(e) => setAnnouncementForm({...announcementForm, endDate: e.target.value})}
+                    className={styles.input}
+                  />
+                </div>
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Mensagem *</label>
+                <textarea
+                  value={announcementForm.message}
+                  onChange={(e) => setAnnouncementForm({...announcementForm, message: e.target.value})}
+                  placeholder="Mensagem do anúncio"
+                  className={styles.textarea}
+                  rows={4}
+                  maxLength={500}
+                />
+                <small>{announcementForm.message.length}/500 caracteres</small>
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.checkboxLabel}>
+                  <input
+                    type="checkbox"
+                    checked={announcementForm.active}
+                    onChange={(e) => setAnnouncementForm({...announcementForm, active: e.target.checked})}
+                  />
+                  Anúncio ativo
+                </label>
+              </div>
+
+              <div className={styles.formActions}>
+                <button
+                  onClick={editingAnnouncement ? updateAnnouncement : createAnnouncement}
+                  className={styles.button}
+                  disabled={!announcementForm.title || !announcementForm.message || !announcementForm.startDate || !announcementForm.endDate}
+                >
+                  {editingAnnouncement ? 'Atualizar Anúncio' : 'Criar Anúncio'}
+                </button>
+
+                {editingAnnouncement && (
+                  <button
+                    onClick={resetAnnouncementForm}
+                    className={styles.cancelButton}
+                  >
+                    Cancelar
+                  </button>
+                )}
+
+                <button
+                  onClick={resetAnnouncementForm}
+                  className={styles.clearButton}
+                >
+                  Limpar Formulário
+                </button>
+              </div>
+            </div>
+
+            {/* Lista de anúncios existentes */}
+            <div className={styles.announcementsList}>
+              <h3>Anúncios Existentes ({announcements.length})</h3>
+
+              <button onClick={fetchAnnouncements} className={styles.refreshButton}>
+                🔄 Atualizar Lista
+              </button>
+
+              {announcements.length === 0 ? (
+                <div className={styles.noAnnouncements}>
+                  Nenhum anúncio encontrado.
+                </div>
+              ) : (
+                <div className={styles.announcementsGrid}>
+                  {announcements.map((announcement) => (
+                    <div key={announcement.id} className={styles.announcementCard}>
+                      <div className={styles.announcementHeader}>
+                        <span className={styles.announcementIcon}>{announcement.icon}</span>
+                        <h4>{announcement.title}</h4>
+                        <span className={`${styles.statusBadge} ${announcement.active ? styles.active : styles.inactive}`}>
+                          {announcement.active ? '🟢 Ativo' : '🔴 Inativo'}
+                        </span>
+                      </div>
+
+                      <div className={styles.announcementContent}>
+                        <p>{announcement.message}</p>
+                        <div className={styles.announcementMeta}>
+                          <span>Tipo: {announcement.type}</span>
+                          <span>Início: {formatDate(announcement.startDate)}</span>
+                          <span>Fim: {formatDate(announcement.endDate)}</span>
+                        </div>
+                      </div>
+
+                      <div className={styles.announcementActions}>
+                        <button
+                          onClick={() => editAnnouncement(announcement)}
+                          className={styles.editButton}
+                          title="Editar anúncio"
+                        >
+                          ✏️ Editar
+                        </button>
+                        <button
+                          onClick={() => deleteAnnouncement(announcement.id)}
+                          className={styles.deleteButton}
+                          title="Deletar anúncio"
+                        >
+                          🗑️ Deletar
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'analytics' && (
+          <div className={styles.section}>
+            <h2>📊 Analytics e Estatísticas</h2>
+
+            {/* Cards de resumo */}
+            <div className={styles.analyticsCards}>
+              <div className={styles.analyticsCard}>
+                <div className={styles.cardIcon}>👥</div>
+                <div className={styles.cardContent}>
+                  <h3>Usuários</h3>
+                  <div className={styles.cardStats}>
+                    <span className={styles.mainStat}>{analyticsData.users.total}</span>
+                    <span className={styles.subStat}>Total</span>
+                  </div>
+                  <div className={styles.cardMeta}>
+                    <span>Ativos: {analyticsData.users.active}</span>
+                    <span>Novos: {analyticsData.users.new}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className={styles.analyticsCard}>
+                <div className={styles.cardIcon}>🎮</div>
+                <div className={styles.cardContent}>
+                  <h3>Jogos</h3>
+                  <div className={styles.cardStats}>
+                    <span className={styles.mainStat}>{analyticsData.games.total}</span>
+                    <span className={styles.subStat}>Total</span>
+                  </div>
+                  <div className={styles.cardMeta}>
+                    <span>Hoje: {analyticsData.games.today}</span>
+                    <span>Vitórias: {analyticsData.games.wins}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className={styles.analyticsCard}>
+                <div className={styles.cardIcon}>🎵</div>
+                <div className={styles.cardContent}>
+                  <h3>Músicas</h3>
+                  <div className={styles.cardStats}>
+                    <span className={styles.mainStat}>{analyticsData.songs.total}</span>
+                    <span className={styles.subStat}>Total</span>
+                  </div>
+                  <div className={styles.cardMeta}>
+                    <span>Biblioteca ativa</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className={styles.analyticsCard}>
+                <div className={styles.cardIcon}>📈</div>
+                <div className={styles.cardContent}>
+                  <h3>Performance</h3>
+                  <div className={styles.cardStats}>
+                    <span className={styles.mainStat}>{analyticsData.performance.winRate}%</span>
+                    <span className={styles.subStat}>Taxa de Vitória</span>
+                  </div>
+                  <div className={styles.cardMeta}>
+                    <span>Média: {analyticsData.performance.avgAttempts} tentativas</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Músicas mais e menos tocadas */}
+            <div className={styles.analyticsSection}>
+              <div className={styles.analyticsGrid}>
+                <div className={styles.analyticsPanel}>
+                  <h3>🔥 Músicas Mais Tocadas</h3>
+                  <div className={styles.songsList}>
+                    {analyticsData.songs.mostPlayed.map((song, index) => (
+                      <div key={index} className={styles.songItem}>
+                        <span className={styles.songRank}>#{index + 1}</span>
+                        <div className={styles.songInfo}>
+                          <strong>{song.title}</strong>
+                          <span>{song.artist} - {song.game}</span>
+                        </div>
+                        <span className={styles.songPlays}>{song.plays} plays</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className={styles.analyticsPanel}>
+                  <h3>📉 Músicas Menos Tocadas</h3>
+                  <div className={styles.songsList}>
+                    {analyticsData.songs.leastPlayed.map((song, index) => (
+                      <div key={index} className={styles.songItem}>
+                        <span className={styles.songRank}>#{index + 1}</span>
+                        <div className={styles.songInfo}>
+                          <strong>{song.title}</strong>
+                          <span>{song.artist} - {song.game}</span>
+                        </div>
+                        <span className={styles.songPlays}>{song.plays} plays</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Distribuição de tentativas */}
+            <div className={styles.analyticsSection}>
+              <h3>📊 Distribuição de Tentativas</h3>
+              <div className={styles.distributionChart}>
+                {Object.entries(analyticsData.performance.distribution || {}).map(([attempts, count]) => (
+                  <div key={attempts} className={styles.distributionBar}>
+                    <span className={styles.barLabel}>{attempts}ª tentativa</span>
+                    <div className={styles.barContainer}>
+                      <div
+                        className={styles.bar}
+                        style={{
+                          width: `${Math.max(5, (count / Math.max(...Object.values(analyticsData.performance.distribution || {}))) * 100)}%`
+                        }}
+                      ></div>
+                    </div>
+                    <span className={styles.barValue}>{count}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Botão de atualização */}
+            <div className={styles.analyticsActions}>
+              <button onClick={fetchAnalytics} className={styles.refreshButton}>
+                🔄 Atualizar Analytics
+              </button>
+              <button
+                onClick={() => console.log('Implementar export de dados')}
+                className={styles.exportButton}
+              >
+                📊 Exportar Dados
+              </button>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'theme' && (
+          <div className={styles.section}>
+            <h2>🎨 Editor de Tema</h2>
+
+            {/* Configurações de cores */}
+            <div className={styles.themeForm}>
+              <h3>🎨 Configurações de Cores</h3>
+
+              <div className={styles.formGrid}>
+                <div className={styles.formGroup}>
+                  <label>Cor Primária</label>
+                  <div className={styles.colorInputGroup}>
+                    <input
+                      type="color"
+                      value={themeSettings.primaryColor}
+                      onChange={(e) => setThemeSettings({...themeSettings, primaryColor: e.target.value})}
+                      className={styles.colorInput}
+                    />
+                    <input
+                      type="text"
+                      value={themeSettings.primaryColor}
+                      onChange={(e) => setThemeSettings({...themeSettings, primaryColor: e.target.value})}
+                      className={styles.input}
+                      placeholder="#1DB954"
+                    />
+                  </div>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Cor Secundária</label>
+                  <div className={styles.colorInputGroup}>
+                    <input
+                      type="color"
+                      value={themeSettings.secondaryColor}
+                      onChange={(e) => setThemeSettings({...themeSettings, secondaryColor: e.target.value})}
+                      className={styles.colorInput}
+                    />
+                    <input
+                      type="text"
+                      value={themeSettings.secondaryColor}
+                      onChange={(e) => setThemeSettings({...themeSettings, secondaryColor: e.target.value})}
+                      className={styles.input}
+                      placeholder="#191414"
+                    />
+                  </div>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Cor de Destaque</label>
+                  <div className={styles.colorInputGroup}>
+                    <input
+                      type="color"
+                      value={themeSettings.accentColor}
+                      onChange={(e) => setThemeSettings({...themeSettings, accentColor: e.target.value})}
+                      className={styles.colorInput}
+                    />
+                    <input
+                      type="text"
+                      value={themeSettings.accentColor}
+                      onChange={(e) => setThemeSettings({...themeSettings, accentColor: e.target.value})}
+                      className={styles.input}
+                      placeholder="#1ed760"
+                    />
+                  </div>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Cor de Fundo</label>
+                  <div className={styles.colorInputGroup}>
+                    <input
+                      type="color"
+                      value={themeSettings.backgroundColor}
+                      onChange={(e) => setThemeSettings({...themeSettings, backgroundColor: e.target.value})}
+                      className={styles.colorInput}
+                    />
+                    <input
+                      type="text"
+                      value={themeSettings.backgroundColor}
+                      onChange={(e) => setThemeSettings({...themeSettings, backgroundColor: e.target.value})}
+                      className={styles.input}
+                      placeholder="#121212"
+                    />
+                  </div>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Cor do Texto</label>
+                  <div className={styles.colorInputGroup}>
+                    <input
+                      type="color"
+                      value={themeSettings.textColor}
+                      onChange={(e) => setThemeSettings({...themeSettings, textColor: e.target.value})}
+                      className={styles.colorInput}
+                    />
+                    <input
+                      type="text"
+                      value={themeSettings.textColor}
+                      onChange={(e) => setThemeSettings({...themeSettings, textColor: e.target.value})}
+                      className={styles.input}
+                      placeholder="#ffffff"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Configurações de marca */}
+              <h3>🏷️ Configurações de Marca</h3>
+
+              <div className={styles.formGrid}>
+                <div className={styles.formGroup}>
+                  <label>Nome do Site</label>
+                  <input
+                    type="text"
+                    value={themeSettings.siteName}
+                    onChange={(e) => setThemeSettings({...themeSettings, siteName: e.target.value})}
+                    placeholder="LudoMusic"
+                    className={styles.input}
+                    maxLength={100}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Tagline</label>
+                  <input
+                    type="text"
+                    value={themeSettings.tagline}
+                    onChange={(e) => setThemeSettings({...themeSettings, tagline: e.target.value})}
+                    placeholder="Adivinhe a música dos jogos!"
+                    className={styles.input}
+                    maxLength={200}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>URL do Logo</label>
+                  <input
+                    type="url"
+                    value={themeSettings.logo || ''}
+                    onChange={(e) => setThemeSettings({...themeSettings, logo: e.target.value})}
+                    placeholder="https://exemplo.com/logo.png"
+                    className={styles.input}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>URL do Favicon</label>
+                  <input
+                    type="url"
+                    value={themeSettings.favicon || ''}
+                    onChange={(e) => setThemeSettings({...themeSettings, favicon: e.target.value})}
+                    placeholder="https://exemplo.com/favicon.ico"
+                    className={styles.input}
+                  />
+                </div>
+              </div>
+
+              {/* Preview das cores */}
+              <div className={styles.colorPreview}>
+                <h3>🎨 Preview das Cores</h3>
+                <div className={styles.previewContainer}>
+                  <div
+                    className={styles.previewCard}
+                    style={{
+                      backgroundColor: themeSettings.backgroundColor,
+                      color: themeSettings.textColor,
+                      border: `2px solid ${themeSettings.primaryColor}`
+                    }}
+                  >
+                    <h4 style={{ color: themeSettings.primaryColor }}>
+                      {themeSettings.siteName}
+                    </h4>
+                    <p>{themeSettings.tagline}</p>
+                    <button
+                      style={{
+                        backgroundColor: themeSettings.primaryColor,
+                        color: themeSettings.backgroundColor,
+                        border: 'none',
+                        padding: '8px 16px',
+                        borderRadius: '4px'
+                      }}
+                    >
+                      Botão Primário
+                    </button>
+                    <button
+                      style={{
+                        backgroundColor: themeSettings.accentColor,
+                        color: themeSettings.backgroundColor,
+                        border: 'none',
+                        padding: '8px 16px',
+                        borderRadius: '4px',
+                        marginLeft: '8px'
+                      }}
+                    >
+                      Botão Destaque
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Ações */}
+              <div className={styles.formActions}>
+                <button
+                  onClick={() => console.log('Implementar função de salvar tema')}
+                  className={styles.button}
+                >
+                  💾 Salvar Configurações
+                </button>
+
+                <button
+                  onClick={() => console.log('Implementar função de aplicar tema')}
+                  className={styles.button}
+                >
+                  🎨 Aplicar Tema
+                </button>
+
+                <button
+                  onClick={() => console.log('Implementar função de resetar tema')}
+                  className={styles.clearButton}
+                >
+                  🔄 Resetar para Padrão
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'custom-achievements' && (
+          <div className={styles.section}>
+            <h2>🏆 Editor de Conquistas Customizadas</h2>
+
+            {/* Formulário para criar/editar conquista */}
+            <div className={styles.achievementForm}>
+              <h3>{editingAchievement ? 'Editar Conquista' : 'Criar Nova Conquista'}</h3>
+
+              <div className={styles.formGrid}>
+                <div className={styles.formGroup}>
+                  <label>Título *</label>
+                  <input
+                    type="text"
+                    value={achievementForm.title}
+                    onChange={(e) => setAchievementForm({...achievementForm, title: e.target.value})}
+                    placeholder="Nome da conquista"
+                    className={styles.input}
+                    maxLength={100}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Ícone</label>
+                  <input
+                    type="text"
+                    value={achievementForm.icon}
+                    onChange={(e) => setAchievementForm({...achievementForm, icon: e.target.value})}
+                    placeholder="🏆"
+                    className={styles.input}
+                    maxLength={10}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Raridade</label>
+                  <select
+                    value={achievementForm.rarity}
+                    onChange={(e) => setAchievementForm({...achievementForm, rarity: e.target.value})}
+                    className={styles.select}
+                  >
+                    <option value="common">🟢 Comum</option>
+                    <option value="uncommon">🔵 Incomum</option>
+                    <option value="rare">🟣 Raro</option>
+                    <option value="epic">🟠 Épico</option>
+                    <option value="legendary">🟡 Lendário</option>
+                  </select>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>XP Recompensa</label>
+                  <input
+                    type="number"
+                    value={achievementForm.xpReward}
+                    onChange={(e) => setAchievementForm({...achievementForm, xpReward: parseInt(e.target.value) || 100})}
+                    placeholder="100"
+                    className={styles.input}
+                    min="0"
+                    max="10000"
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Condição</label>
+                  <select
+                    value={achievementForm.condition}
+                    onChange={(e) => setAchievementForm({...achievementForm, condition: e.target.value})}
+                    className={styles.select}
+                  >
+                    <option value="games_played">Jogos Jogados</option>
+                    <option value="games_won">Jogos Vencidos</option>
+                    <option value="streak">Sequência de Vitórias</option>
+                    <option value="perfect_games">Jogos Perfeitos</option>
+                    <option value="daily_streak">Sequência Diária</option>
+                    <option value="multiplayer_wins">Vitórias Multiplayer</option>
+                    <option value="songs_guessed">Músicas Adivinhadas</option>
+                    <option value="franchises_played">Franquias Jogadas</option>
+                    <option value="fast_guesses">Palpites Rápidos</option>
+                    <option value="level_reached">Nível Alcançado</option>
+                  </select>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Valor da Condição</label>
+                  <input
+                    type="number"
+                    value={achievementForm.value}
+                    onChange={(e) => setAchievementForm({...achievementForm, value: parseInt(e.target.value) || 1})}
+                    placeholder="1"
+                    className={styles.input}
+                    min="1"
+                  />
+                </div>
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Descrição *</label>
+                <textarea
+                  value={achievementForm.description}
+                  onChange={(e) => setAchievementForm({...achievementForm, description: e.target.value})}
+                  placeholder="Descrição da conquista"
+                  className={styles.textarea}
+                  rows={3}
+                  maxLength={300}
+                />
+                <small>{achievementForm.description.length}/300 caracteres</small>
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.checkboxLabel}>
+                  <input
+                    type="checkbox"
+                    checked={achievementForm.active}
+                    onChange={(e) => setAchievementForm({...achievementForm, active: e.target.checked})}
+                  />
+                  Conquista ativa
+                </label>
+              </div>
+
+              <div className={styles.formActions}>
+                <button
+                  onClick={() => console.log('Implementar função de salvar conquista')}
+                  className={styles.button}
+                  disabled={!achievementForm.title || !achievementForm.description}
+                >
+                  {editingAchievement ? 'Atualizar Conquista' : 'Criar Conquista'}
+                </button>
+
+                {editingAchievement && (
+                  <button
+                    onClick={() => console.log('Implementar função de cancelar edição')}
+                    className={styles.cancelButton}
+                  >
+                    Cancelar
+                  </button>
+                )}
+
+                <button
+                  onClick={() => console.log('Implementar função de limpar formulário')}
+                  className={styles.clearButton}
+                >
+                  Limpar Formulário
+                </button>
+              </div>
+            </div>
+
+            {/* Lista de conquistas customizadas */}
+            <div className={styles.achievementsList}>
+              <h3>Conquistas Customizadas ({customAchievements.length})</h3>
+
+              <button onClick={fetchCustomAchievements} className={styles.refreshButton}>
+                🔄 Atualizar Lista
+              </button>
+
+              {customAchievements.length === 0 ? (
+                <div className={styles.noAchievements}>
+                  Nenhuma conquista customizada encontrada.
+                </div>
+              ) : (
+                <div className={styles.achievementsGrid}>
+                  {customAchievements.map((achievement) => (
+                    <div key={achievement.id} className={styles.achievementCard}>
+                      <div className={styles.achievementHeader}>
+                        <span className={styles.achievementIcon}>{achievement.icon}</span>
+                        <h4>{achievement.title}</h4>
+                        <span className={`${styles.rarityBadge} ${styles[achievement.rarity]}`}>
+                          {achievement.rarity}
+                        </span>
+                      </div>
+
+                      <div className={styles.achievementContent}>
+                        <p>{achievement.description}</p>
+                        <div className={styles.achievementMeta}>
+                          <span>XP: {achievement.xpReward}</span>
+                          <span>Condição: {achievement.condition} = {achievement.value}</span>
+                          <span>Status: {achievement.active ? '🟢 Ativa' : '🔴 Inativa'}</span>
+                        </div>
+                      </div>
+
+                      <div className={styles.achievementActions}>
+                        <button
+                          onClick={() => console.log('Implementar função de editar conquista')}
+                          className={styles.editButton}
+                          title="Editar conquista"
+                        >
+                          ✏️ Editar
+                        </button>
+                        <button
+                          onClick={() => console.log('Implementar função de deletar conquista')}
+                          className={styles.deleteButton}
+                          title="Deletar conquista"
+                        >
+                          🗑️ Deletar
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'moderation' && (
+          <div className={styles.section}>
+            <h2>👥 Painel de Moderação</h2>
+
+            {/* Cards de resumo */}
+            <div className={styles.moderationCards}>
+              <div className={styles.moderationCard}>
+                <div className={styles.cardIcon}>🚫</div>
+                <div className={styles.cardContent}>
+                  <h3>Usuários Banidos</h3>
+                  <div className={styles.cardStats}>
+                    <span className={styles.mainStat}>{moderationData.bannedUsers.filter(b => b.active).length}</span>
+                    <span className={styles.subStat}>Ativos</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className={styles.moderationCard}>
+                <div className={styles.cardIcon}>⚠️</div>
+                <div className={styles.cardContent}>
+                  <h3>Advertências</h3>
+                  <div className={styles.cardStats}>
+                    <span className={styles.mainStat}>{moderationData.warnings.length}</span>
+                    <span className={styles.subStat}>Total</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className={styles.moderationCard}>
+                <div className={styles.cardIcon}>📋</div>
+                <div className={styles.cardContent}>
+                  <h3>Denúncias</h3>
+                  <div className={styles.cardStats}>
+                    <span className={styles.mainStat}>{moderationData.reports.filter(r => r.status === 'pending').length}</span>
+                    <span className={styles.subStat}>Pendentes</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Formulário de banimento */}
+            <div className={styles.moderationForm}>
+              <h3>🚫 Banir Usuário</h3>
+
+              <div className={styles.formGrid}>
+                <div className={styles.formGroup}>
+                  <label>Username/ID do Usuário *</label>
+                  <input
+                    type="text"
+                    placeholder="Digite o username ou ID"
+                    className={styles.input}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Duração do Banimento</label>
+                  <select className={styles.select}>
+                    <option value="1d">1 Dia</option>
+                    <option value="7d">7 Dias</option>
+                    <option value="30d">30 Dias</option>
+                    <option value="permanent">Permanente</option>
+                  </select>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Motivo *</label>
+                  <textarea
+                    placeholder="Motivo do banimento"
+                    className={styles.textarea}
+                    rows={3}
+                  />
+                </div>
+              </div>
+
+              <div className={styles.formActions}>
+                <button
+                  onClick={() => console.log('Implementar função de banir usuário')}
+                  className={styles.dangerButton}
+                >
+                  🚫 Banir Usuário
+                </button>
+              </div>
+            </div>
+
+            {/* Lista de usuários banidos */}
+            <div className={styles.moderationList}>
+              <h3>📋 Usuários Banidos</h3>
+
+              {moderationData.bannedUsers.filter(b => b.active).length === 0 ? (
+                <div className={styles.noModerationData}>
+                  Nenhum usuário banido no momento.
+                </div>
+              ) : (
+                <div className={styles.moderationGrid}>
+                  {moderationData.bannedUsers.filter(b => b.active).map((ban) => (
+                    <div key={ban.id} className={styles.moderationItem}>
+                      <div className={styles.moderationHeader}>
+                        <h4>{ban.username}</h4>
+                        <span className={styles.banDuration}>
+                          {ban.duration === 'permanent' ? 'Permanente' : ban.duration}
+                        </span>
+                      </div>
+
+                      <div className={styles.moderationContent}>
+                        <p><strong>Motivo:</strong> {ban.reason}</p>
+                        <p><strong>Banido por:</strong> {ban.bannedBy}</p>
+                        <p><strong>Data:</strong> {formatDate(ban.bannedAt)}</p>
+                        {ban.expiresAt && (
+                          <p><strong>Expira:</strong> {formatDate(ban.expiresAt)}</p>
+                        )}
+                      </div>
+
+                      <div className={styles.moderationActions}>
+                        <button
+                          onClick={() => console.log('Implementar função de desbanir')}
+                          className={styles.unbanButton}
+                          title="Desbanir usuário"
+                        >
+                          ✅ Desbanir
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}
