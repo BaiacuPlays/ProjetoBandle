@@ -585,8 +585,8 @@ export default function Home() {
       }
     };
 
-    // Verificar a cada 5 minutos
-    const interval = setInterval(checkMarathonAchievement, 5 * 60 * 1000);
+    // Verificar a cada 30 minutos (reduzido de 5 minutos)
+    const interval = setInterval(checkMarathonAchievement, 30 * 60 * 1000);
 
     return () => clearInterval(interval);
   }, [sessionStartTime, updateGameStats]);

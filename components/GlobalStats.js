@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { cachedFetch } from '../utils/api-cache';
 import styles from '../styles/GlobalStats.module.css';
 
 const GlobalStats = ({ showInDailyMode = true }) => {
@@ -15,8 +16,8 @@ const GlobalStats = ({ showInDailyMode = true }) => {
   useEffect(() => {
     const fetchGlobalStats = async () => {
       try {
-        // Tentar buscar dados reais da API
-        const response = await fetch('/api/global-stats');
+        // Usar cache para reduzir chamadas de API
+        const response = await cachedFetch('/api/global-stats');
         if (response.ok) {
           const data = await response.json();
           setStats({
@@ -43,8 +44,8 @@ const GlobalStats = ({ showInDailyMode = true }) => {
 
     fetchGlobalStats();
 
-    // Atualizar a cada 5 minutos (reduzido de 30s)
-    const interval = setInterval(fetchGlobalStats, 5 * 60 * 1000);
+    // Atualizar a cada 30 minutos (reduzido de 5 minutos)
+    const interval = setInterval(fetchGlobalStats, 30 * 60 * 1000);
 
     return () => clearInterval(interval);
   }, []);

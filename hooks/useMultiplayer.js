@@ -9,38 +9,8 @@ export const useMultiplayer = () => {
   const [error, setError] = useState('');
   const [isConnected, setIsConnected] = useState(false);
 
-  // Polling para atualizar o estado da sala
-  useEffect(() => {
-    if (!roomCode || !isConnected) {
-      return;
-    }
-
-    const pollLobby = async () => {
-      try {
-        const data = await multiplayerApi.getLobbyData(roomCode);
-
-        if (data.roomNotFound) {
-          setIsConnected(false);
-          setError('Sala não encontrada');
-          return;
-        }
-
-        setLobbyData(data);
-      } catch (err) {
-        setError('Erro de conexão');
-      }
-    };
-
-    // Poll inicial
-    pollLobby();
-
-    // Poll a cada 2 segundos
-    const interval = setInterval(pollLobby, 2000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [roomCode, isConnected]);
+  // POLLING REMOVIDO - Já está sendo feito no MultiplayerContext
+  // Evita polling duplicado que causa excesso de Function Invocations
 
   // Criar sala
   const createRoom = useCallback(async (playerNickname) => {

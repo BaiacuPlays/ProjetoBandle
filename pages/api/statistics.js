@@ -13,11 +13,27 @@ try {
 // Fallback para desenvolvimento local - armazenamento em memória
 const localStats = new Map();
 
+// Cache em memória para reduzir chamadas KV
+const memoryCache = new Map();
+const cacheTimestamps = new Map();
+const CACHE_TTL = 2 * 60 * 1000; // 2 minutos
+
 // Verificar se estamos em ambiente de desenvolvimento
 const isDevelopment = process.env.NODE_ENV === 'development';
 
-// Função auxiliar para operações KV com fallback
+// Função auxiliar para operações KV com fallback e cache
 async function safeKVOperation(operation, key, value = null) {
+  // Para operações GET, verificar cache primeiro
+  if (operation === 'get') {
+    const cached = memoryCache.get(key);
+    const timestamp = cacheTimestamps.get(key);
+
+    if (cached && timestamp && (Date.now() - timestamp < CACHE_TTL)) {
+      console.log(`📦 Cache HIT para ${key}`);
+      return cached;
+    }
+  }
+
   try {
     if (!kv) {
       throw new Error('KV não disponível');
@@ -25,8 +41,17 @@ async function safeKVOperation(operation, key, value = null) {
 
     switch (operation) {
       case 'get':
-        return await kv.get(key);
+        const result = await kv.get(key);
+        // Salvar no cache
+        if (result) {
+          memoryCache.set(key, result);
+          cacheTimestamps.set(key, Date.now());
+        }
+        return result;
       case 'set':
+        // Invalidar cache ao fazer set
+        memoryCache.delete(key);
+        cacheTimestamps.delete(key);
         return await kv.set(key, value);
       default:
         throw new Error(`Operação não suportada: ${operation}`);

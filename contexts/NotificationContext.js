@@ -177,7 +177,7 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
-  // Polling OTIMIZADO para verificar novos convites e notificações - REDUZIDO para 30 segundos
+  // Polling OTIMIZADO para verificar novos convites e notificações - REDUZIDO para 10 MINUTOS
   useEffect(() => {
     if (!currentUserId || !isAuthenticated) return;
 
@@ -188,7 +188,7 @@ export const NotificationProvider = ({ children }) => {
     const interval = setInterval(() => {
       loadServerInvites();
       loadServerNotifications();
-    }, 30000); // 30 segundos
+    }, 10 * 60 * 1000); // 10 MINUTOS (era 30 segundos)
     return () => clearInterval(interval);
   }, [currentUserId, isAuthenticated]);
 

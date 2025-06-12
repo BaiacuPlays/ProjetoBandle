@@ -758,17 +758,17 @@ export const FriendsProvider = ({ children }) => {
     };
   }, [isAuthenticated, currentUserId, friends.length, friendRequests.length]);
 
-  // Polling ULTRA-OTIMIZADO para verificar novas solicitações - REDUZIDO para 60 segundos
+  // Polling ULTRA-OTIMIZADO para verificar novas solicitações - REDUZIDO para 5 MINUTOS
   useEffect(() => {
     if (!isAuthenticated || !currentUserId) return;
 
     // Verificação inicial imediata
     checkForNewFriendRequests();
 
-    // Polling para verificar novas solicitações
+    // Polling para verificar novas solicitações - REDUZIDO DRASTICAMENTE
     const interval = setInterval(() => {
       checkForNewFriendRequests();
-    }, 60000); // 60 segundos
+    }, 5 * 60 * 1000); // 5 MINUTOS (era 60 segundos)
 
     // Verificar quando a janela ganha foco (usuário volta para a aba)
     const handleFocus = () => {

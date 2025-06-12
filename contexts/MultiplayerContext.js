@@ -124,12 +124,12 @@ export function MultiplayerProvider({ children }) {
     // Poll inicial após um pequeno delay
     const initialTimeout = setTimeout(pollLobby, 1000);
 
-    // Polling ULTRA-OTIMIZADO para reduzir overhead
+    // Polling ULTRA-OTIMIZADO para reduzir overhead - INTERVALOS AUMENTADOS
     const getPollingInterval = () => {
       if (state.currentScreen === 'game' && state.lobbyData?.gameStarted) {
-        return 8000; // 8 segundos durante o jogo (era 5)
+        return 15000; // 15 segundos durante o jogo (era 8)
       }
-      return 15000; // 15 segundos no lobby (era 10)
+      return 30000; // 30 segundos no lobby (era 15)
     };
 
     let interval = setInterval(pollLobby, getPollingInterval());

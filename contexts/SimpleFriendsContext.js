@@ -377,13 +377,13 @@ export const SimpleFriendsProvider = ({ children }) => {
     }
   }, [isAuthenticated, user?.username, authLoading]); // Usar user?.username em vez de user
 
-  // Polling para verificar novas solicitações (a cada 60 segundos)
+  // Polling para verificar novas solicitações (a cada 10 MINUTOS)
   useEffect(() => {
     if (!isAuthenticated || authLoading) return;
 
     const interval = setInterval(() => {
       loadFriendsData();
-    }, 60000); // 60 segundos
+    }, 10 * 60 * 1000); // 10 MINUTOS (era 60 segundos)
 
     return () => clearInterval(interval);
   }, [isAuthenticated, authLoading]);
