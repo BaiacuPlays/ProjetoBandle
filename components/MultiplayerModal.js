@@ -50,7 +50,7 @@ const MultiplayerModal = ({ isOpen, onClose }) => {
           {activeTab === 'howToPlay' && (
             <div className={styles.howToPlay}>
               <h3>🎯 Como Jogar Multiplayer</h3>
-              
+
               <div className={styles.section}>
                 <h4>📝 Criando uma Sala:</h4>
                 <ul>
@@ -77,18 +77,51 @@ const MultiplayerModal = ({ isOpen, onClose }) => {
                 <ul>
                   <li>Ouça a música e tente adivinhar o nome</li>
                   <li>Você tem até 6 tentativas por rodada</li>
-                  <li>Ganha pontos quem acertar primeiro</li>
+                  <li>A cada erro, você recebe dicas progressivas</li>
+                  <li>Clique nos números das tentativas para rever dicas</li>
                   <li>Acompanhe o placar em tempo real</li>
                 </ul>
               </div>
 
               <div className={styles.section}>
-                <h4>🏆 Sistema de Pontuação:</h4>
+                <h4>💡 Sistema de Dicas Progressivas:</h4>
                 <ul>
-                  <li><strong>Música correta:</strong> 3 pontos</li>
-                  <li><strong>Jogo correto:</strong> 1 ponto</li>
-                  <li><strong>Resposta errada:</strong> 0 pontos</li>
-                  <li><strong>Desempate:</strong> Rodada extra decisiva</li>
+                  <li><strong>Tentativa 1:</strong> Apenas o áudio (trecho curto)</li>
+                  <li><strong>Tentativa 2:</strong> Duração da música completa</li>
+                  <li><strong>Tentativa 3:</strong> Ano de lançamento do jogo</li>
+                  <li><strong>Tentativa 4:</strong> Nome do artista/compositor</li>
+                  <li><strong>Tentativa 5:</strong> Console/plataforma do jogo</li>
+                  <li><strong>Tentativa 6:</strong> Nome da franquia/jogo</li>
+                </ul>
+              </div>
+
+              <div className={styles.section}>
+                <h4>🏆 Sistema de Pontuação:</h4>
+                <p style={{ marginBottom: '10px', fontSize: '0.9rem', opacity: 0.8 }}>
+                  Pontos baseados no número de dicas utilizadas:
+                </p>
+                <ul>
+                  <li><strong>6 pontos:</strong> Acertou sem usar dicas (1ª tentativa)</li>
+                  <li><strong>5 pontos:</strong> Acertou usando 1 dica (2ª tentativa)</li>
+                  <li><strong>4 pontos:</strong> Acertou usando 2 dicas (3ª tentativa)</li>
+                  <li><strong>3 pontos:</strong> Acertou usando 3 dicas (4ª tentativa)</li>
+                  <li><strong>2 pontos:</strong> Acertou usando 4 dicas (5ª tentativa)</li>
+                  <li><strong>1 ponto:</strong> Acertou usando 5 dicas (6ª tentativa)</li>
+                  <li><strong>0 pontos:</strong> Não acertou a música</li>
+                </ul>
+                <div style={{ marginTop: '10px', padding: '8px', background: 'rgba(255, 215, 0, 0.1)', border: '1px solid rgba(255, 215, 0, 0.3)', borderRadius: '6px', fontSize: '0.85rem', color: '#e0e0e0' }}>
+                  🏅 <strong style={{ color: '#ffd700' }}>Estratégia:</strong> Às vezes vale a pena usar uma dica para ter certeza da resposta!
+                </div>
+              </div>
+
+              <div className={styles.section}>
+                <h4>⚡ Mecânicas Especiais:</h4>
+                <ul>
+                  <li><strong>🔄 Navegação entre Dicas:</strong> Clique nos números das tentativas para rever dicas anteriores</li>
+                  <li><strong>⏱️ Sem Limite de Tempo:</strong> Não há pressa, pense bem antes de responder</li>
+                  <li><strong>🎵 Mesma Música:</strong> Todos os jogadores ouvem a mesma música em cada rodada</li>
+                  <li><strong>🏁 Rodadas Simultâneas:</strong> Todos jogam ao mesmo tempo, sem esperar</li>
+                  <li><strong>🤝 Desempate:</strong> Em caso de empate, há uma rodada extra de desempate</li>
                 </ul>
               </div>
 
@@ -101,13 +134,24 @@ const MultiplayerModal = ({ isOpen, onClose }) => {
                   <li>Todos os participantes ganham XP base</li>
                 </ul>
               </div>
+
+              <div className={styles.section}>
+                <h4>💡 Dicas para Multiplayer:</h4>
+                <ul>
+                  <li>🎯 <strong>Seja estratégico:</strong> Às vezes vale a pena usar uma dica para ter certeza</li>
+                  <li>🎧 <strong>Use fones de ouvido:</strong> Essencial para ouvir bem os detalhes</li>
+                  <li>🤔 <strong>Pense antes de responder:</strong> Não há limite de tempo, use isso a seu favor</li>
+                  <li>👥 <strong>Comunique-se:</strong> Use chat de voz ou texto para interagir com amigos</li>
+                  <li>🔄 <strong>Revise as dicas:</strong> Clique nos números para rever informações anteriores</li>
+                </ul>
+              </div>
             </div>
           )}
 
           {activeTab === 'settings' && (
             <div className={styles.settings}>
               <h3>⚙️ Configurações do Multiplayer</h3>
-              
+
               <div className={styles.settingGroup}>
                 <h4>🎮 Configurações de Sala (Anfitrião)</h4>
                 <div className={styles.settingItem}>

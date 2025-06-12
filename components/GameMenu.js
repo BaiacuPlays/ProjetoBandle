@@ -219,11 +219,32 @@ const GameMenu = ({ isOpen, onClose }) => {
           </button>
           {expandedSections.howToPlay && (
             <div className={styles.menuSectionContent}>
+              <p><strong>🎵 Como Jogar:</strong></p>
               <p>{isClient ? t('how_to_play_1') : '1. Clique play para ouvir um trecho da música.'}</p>
               <p>{isClient ? t('how_to_play_2') : '2. Procure pela música que você acha que o trecho pertence.'}</p>
               <p>{isClient ? t('how_to_play_3') : '3. Clique skip para passar para o próximo trecho.'}</p>
               <p>{isClient ? t('how_to_play_4') : '4. Se você errar, revelaremos um trecho adicional da música para ajudar.'}</p>
               <p>{isClient ? t('how_to_play_5') : '5. Você tem 6 tentativas no total.'}</p>
+
+              <p style={{ marginTop: '15px', color: '#e0e0e0' }}><strong style={{ color: '#1DB954' }}>💡 Sistema de Dicas:</strong></p>
+              <p style={{ fontSize: '0.9rem', color: '#c0c0c0' }}>
+                • <strong style={{ color: '#1DB954' }}>Tentativa 2:</strong> Duração da música<br/>
+                • <strong style={{ color: '#1DB954' }}>Tentativa 3:</strong> Ano de lançamento<br/>
+                • <strong style={{ color: '#1DB954' }}>Tentativa 4:</strong> Nome do artista<br/>
+                • <strong style={{ color: '#1DB954' }}>Tentativa 5:</strong> Console/plataforma<br/>
+                • <strong style={{ color: '#1DB954' }}>Tentativa 6:</strong> Nome da franquia
+              </p>
+
+              <p style={{ marginTop: '15px', color: '#e0e0e0' }}><strong style={{ color: '#1DB954' }}>🎯 Sistema de XP:</strong></p>
+              <p style={{ fontSize: '0.9rem', color: '#c0c0c0' }}>
+                • Acertar na 1ª tentativa: +100 XP<br/>
+                • Vitória normal: +50 XP<br/>
+                • Tentar mesmo perdendo: +10 XP
+              </p>
+
+              <p style={{ marginTop: '10px', fontSize: '0.85rem', color: '#b0b0b0' }}>
+                💡 Clique nos números das tentativas para rever dicas anteriores!
+              </p>
             </div>
           )}
         </div>

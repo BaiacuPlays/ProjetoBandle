@@ -2561,7 +2561,7 @@
 }
 
 .tutorialStep {
-  color: #e0e0e0;
+  color: #e0e0e0 !important;
   margin: 0.8rem 0;
   padding-left: 1.5rem;
   position: relative;
@@ -2595,7 +2595,7 @@
 }
 
 .tutorialTip {
-  color: #f0f0f0;
+  color: #f0f0f0 !important;
   margin: 0.5rem 0;
   font-size: 0.9rem;
 }
@@ -2942,4 +2942,47 @@ body.no-animations .skipButton:hover,
 body.no-animations .nextSongButton:hover,
 body.no-animations .playAgainButton:hover {
   transform: none !important;
+}
+
+/* 🎨 CORREÇÕES DE CONTRASTE PARA TUTORIAL */
+
+/* Garantir que todos os textos do tutorial tenham bom contraste */
+.tutorialModal * {
+  color: inherit;
+}
+
+.tutorialModal p,
+.tutorialModal li,
+.tutorialModal span {
+  color: #e0e0e0 !important;
+}
+
+.tutorialModal strong {
+  color: #1DB954 !important;
+}
+
+.tutorialModal h1,
+.tutorialModal h2,
+.tutorialModal h3,
+.tutorialModal h4 {
+  color: #1DB954 !important;
+}
+
+/* Garantir que elementos com background personalizado tenham texto visível */
+.tutorialModal [style*="background"] {
+  color: #e0e0e0 !important;
+}
+
+.tutorialModal [style*="background"] strong {
+  color: #1DB954 !important;
+}
+
+/* Correções específicas para elementos inline */
+.tutorialModal [style*="color: #666"] {
+  color: #b0b0b0 !important;
+}
+
+.tutorialModal [style*="opacity: 0.8"] {
+  opacity: 1 !important;
+  color: #c0c0c0 !important;
 }
