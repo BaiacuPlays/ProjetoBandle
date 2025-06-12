@@ -1180,8 +1180,8 @@ export default function AdminPage() {
               🎨 Tema
             </button>
             <button
-              className={`${styles.tabButton} ${activeTab === 'custom-achievements' ? styles.active : ''}`}
-              onClick={() => setActiveTab('custom-achievements')}
+              className={`${styles.tabButton} ${activeTab === 'achievements' ? styles.active : ''}`}
+              onClick={() => setActiveTab('achievements')}
             >
               🏆 Conquistas
             </button>
@@ -1198,8 +1198,8 @@ export default function AdminPage() {
               💰 Doações
             </button>
             <button
-              className={`${styles.tabButton} ${activeTab === 'achievements' ? styles.active : ''}`}
-              onClick={() => setActiveTab('achievements')}
+              className={`${styles.tabButton} ${activeTab === 'badges' ? styles.active : ''}`}
+              onClick={() => setActiveTab('badges')}
             >
               🎖️ Badges
             </button>
