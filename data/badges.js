@@ -260,8 +260,17 @@ export const getUnlockedBadges = (profile) => {
 
   const unlockedBadges = [];
 
+  // Primeiro, adicionar badges que estão salvos no perfil (já desbloqueados)
+  const savedBadges = profile.badges || [];
+  savedBadges.forEach(badgeId => {
+    if (badges[badgeId] && !unlockedBadges.includes(badgeId)) {
+      unlockedBadges.push(badgeId);
+    }
+  });
+
+  // Depois, verificar badges que deveriam estar desbloqueados baseado nas estatísticas atuais
   Object.values(badges).forEach(badge => {
-    if (checkBadgeUnlocked(badge.id, profile)) {
+    if (!unlockedBadges.includes(badge.id) && checkBadgeUnlocked(badge.id, profile)) {
       unlockedBadges.push(badge.id);
     }
   });
@@ -271,9 +280,79 @@ export const getUnlockedBadges = (profile) => {
 
 
 
+// Função para sincronizar badges do perfil com as estatísticas atuais
+export const syncProfileBadges = (profile) => {
+  if (!profile) return profile;
+
+  const currentBadges = profile.badges || [];
+  const shouldBeUnlocked = [];
+
+  // Verificar quais badges deveriam estar desbloqueados
+  Object.values(badges).forEach(badge => {
+    if (checkBadgeUnlocked(badge.id, profile)) {
+      shouldBeUnlocked.push(badge.id);
+    }
+  });
+
+  // Combinar badges salvos com badges que deveriam estar desbloqueados
+  const allUnlockedBadges = [...new Set([...currentBadges, ...shouldBeUnlocked])];
+
+  // Retornar perfil atualizado se houver diferenças
+  if (allUnlockedBadges.length !== currentBadges.length ||
+      !allUnlockedBadges.every(badge => currentBadges.includes(badge))) {
+    return {
+      ...profile,
+      badges: allUnlockedBadges
+    };
+  }
+
+  return profile;
+};
+
+// Função para debug de badges de um perfil
+export const debugBadges = (profile) => {
+  if (!profile) {
+    console.log('🔍 DEBUG BADGES: Perfil não fornecido');
+    return;
+  }
+
+  console.log('🔍 DEBUG BADGES para usuário:', profile.username || profile.displayName);
+  console.log('📊 Estatísticas do perfil:', {
+    level: profile.level,
+    xp: profile.xp,
+    stats: profile.stats
+  });
+
+  const savedBadges = profile.badges || [];
+  console.log('💾 Badges salvos no perfil:', savedBadges);
+
+  const shouldBeUnlocked = [];
+  Object.values(badges).forEach(badge => {
+    const isUnlocked = checkBadgeUnlocked(badge.id, profile);
+    console.log(`🎖️ ${badge.id} (${badge.title}):`, isUnlocked ? '✅ DESBLOQUEADO' : '❌ bloqueado');
+    if (isUnlocked) {
+      shouldBeUnlocked.push(badge.id);
+    }
+  });
+
+  console.log('🎯 Badges que deveriam estar desbloqueados:', shouldBeUnlocked);
+  console.log('🔄 Badges disponíveis para equipar:', getUnlockedBadges(profile));
+
+  // Verificar inconsistências
+  const missingFromSaved = shouldBeUnlocked.filter(badge => !savedBadges.includes(badge));
+  const extraInSaved = savedBadges.filter(badge => !shouldBeUnlocked.includes(badge));
+
+  if (missingFromSaved.length > 0) {
+    console.warn('⚠️ Badges que deveriam estar salvos mas não estão:', missingFromSaved);
+  }
+  if (extraInSaved.length > 0) {
+    console.warn('⚠️ Badges salvos que não deveriam estar desbloqueados:', extraInSaved);
+  }
+};
+
 // Função para obter badge por ID
 export const getBadge = (badgeId) => {
   return badges[badgeId] || null;
 };
 
-export default { badges, checkBadgeUnlocked, getUnlockedBadges, getBadge };
+export default { badges, checkBadgeUnlocked, getUnlockedBadges, getBadge, syncProfileBadges, debugBadges };

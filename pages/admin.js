@@ -577,6 +577,35 @@ export default function AdminPage() {
     }
   };
 
+  // Função para sincronizar badges de um usuário
+  const syncUserBadges = async (userId, username) => {
+    try {
+      const response = await fetch('/api/admin/sync-badges', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-key': 'admin123'
+        },
+        body: JSON.stringify({ userId, username })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        await fetchProfiles();
+        const badgesAddedText = data.badgesAdded.length > 0
+          ? `\n\nBadges adicionadas: ${data.badgesAdded.join(', ')}`
+          : '\n\nNenhuma badge nova foi adicionada.';
+
+        alert(`Badges sincronizadas com sucesso para ${data.profile.username}!` +
+              `\nTotal de badges: ${data.totalBadges}` + badgesAddedText);
+      } else {
+        alert('Erro ao sincronizar badges: ' + data.error);
+      }
+    } catch (err) {
+      alert('Erro ao sincronizar badges: ' + err.message);
+    }
+  };
+
   // Função para definir música do dia
   const setDailySongAdmin = async (songTitle) => {
     if (!songTitle) {
@@ -2862,6 +2891,13 @@ SISTEMA:
                           {formatDate(profile.createdAt)}
                         </td>
                         <td className={styles.actionsCell}>
+                          <button
+                            onClick={() => syncUserBadges(profile.id, profile.username)}
+                            className={styles.syncButton}
+                            title="Sincronizar badges do usuário"
+                          >
+                            🔄
+                          </button>
                           <button
                             onClick={() => deleteUser(profile.username || profile.id)}
                             className={styles.deleteButton}

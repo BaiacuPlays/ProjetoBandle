@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getBadge, getUnlockedBadges } from '../data/badges';
+import { getBadge, getUnlockedBadges, debugBadges } from '../data/badges';
 import { useProfile } from '../contexts/ProfileContext';
 import styles from '../styles/BadgeSelector.module.css';
 
@@ -13,7 +13,7 @@ const BadgeSelector = ({ profile }) => {
 
   const handleBadgeSelect = async (badgeId) => {
     if (isUpdating) return;
-    
+
     setIsUpdating(true);
     try {
       await updateProfile({ selectedBadge: badgeId });
@@ -27,7 +27,7 @@ const BadgeSelector = ({ profile }) => {
 
   const handleRemoveBadge = async () => {
     if (isUpdating) return;
-    
+
     setIsUpdating(true);
     try {
       await updateProfile({ selectedBadge: null });
@@ -40,6 +40,10 @@ const BadgeSelector = ({ profile }) => {
   };
 
   if (unlockedBadges.length === 0) {
+    // Debug para identificar problemas
+    console.log('🔍 BadgeSelector: Nenhuma badge disponível, executando debug...');
+    debugBadges(profile);
+
     return (
       <div className={styles.noBadges}>
         <p>Você ainda não desbloqueou nenhuma badge para exibir.</p>
@@ -60,7 +64,7 @@ const BadgeSelector = ({ profile }) => {
       <div className={styles.currentBadge}>
         {selectedBadgeData ? (
           <div className={styles.selectedBadgeDisplay}>
-            <div 
+            <div
               className={styles.badgePreview}
               style={{ color: selectedBadgeData.color }}
             >
@@ -70,7 +74,7 @@ const BadgeSelector = ({ profile }) => {
                 <span className={styles.badgeDescription}>{selectedBadgeData.description}</span>
               </div>
             </div>
-            <button 
+            <button
               className={styles.removeButton}
               onClick={handleRemoveBadge}
               disabled={isUpdating}
@@ -85,7 +89,7 @@ const BadgeSelector = ({ profile }) => {
         )}
       </div>
 
-      <button 
+      <button
         className={styles.selectButton}
         onClick={() => setIsOpen(!isOpen)}
         disabled={isUpdating}
@@ -108,7 +112,7 @@ const BadgeSelector = ({ profile }) => {
                 onClick={() => handleBadgeSelect(badgeId)}
                 style={{ borderColor: badge.color }}
               >
-                <div 
+                <div
                   className={styles.badgeIcon}
                   style={{ color: badge.color }}
                 >

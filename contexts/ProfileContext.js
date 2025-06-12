@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
 import { getUnlockedAchievements, checkAchievementUnlocked, achievements } from '../data/achievements';
-import { getUnlockedBadges, checkBadgeUnlocked, badges } from '../data/badges';
+import { getUnlockedBadges, checkBadgeUnlocked, badges, syncProfileBadges } from '../data/badges';
 
 const ProfileContext = createContext();
 
@@ -158,7 +158,7 @@ export const ProfileProvider = ({ children }) => {
         const data = await response.json();
         if (data.profile) {
           // Garantir que as estatísticas estejam inicializadas
-          const profile = data.profile;
+          let profile = data.profile;
           if (!profile.stats?.modeStats?.infinite) {
             if (!profile.stats) profile.stats = {};
             if (!profile.stats.modeStats) profile.stats.modeStats = {};
@@ -171,6 +171,16 @@ export const ProfileProvider = ({ children }) => {
             };
             console.log('📊 Inicializando estatísticas do modo infinito no perfil carregado');
           }
+
+          // Sincronizar badges com estatísticas atuais
+          const syncedProfile = syncProfileBadges(profile);
+          if (syncedProfile !== profile) {
+            console.log('🎖️ Badges sincronizadas com estatísticas atuais');
+            profile = syncedProfile;
+            // Salvar perfil atualizado
+            await saveProfile(profile);
+          }
+
           setProfile(profile);
           console.log('✅ Perfil carregado do servidor');
           return;

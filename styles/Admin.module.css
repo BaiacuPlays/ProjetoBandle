@@ -1165,6 +1165,23 @@
   transform: translateY(-1px);
 }
 
+.syncButton {
+  background: #17a2b8;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  margin-right: 5px;
+  transition: all 0.3s ease;
+}
+
+.syncButton:hover {
+  background: #138496;
+  transform: translateY(-1px);
+}
+
 .loading {
   text-align: center;
   padding: 60px 20px;
