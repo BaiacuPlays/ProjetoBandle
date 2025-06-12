@@ -8800,6 +8800,102 @@
     "year": 1993,
     "genre": "Fighting Game Soundtrack",
     "console": "Multi-platform"
+  },
+  {
+     "id": 773,
+    "title": "God Of War II - Main Titles",
+    "artist": "Gerard Marino",
+    "composer": "Gerard Marino",
+    "game": "God of War 2",
+    "context": "Audio - God of War 2",
+    "audioUrl": "https://pub-4d254faec6ec408ab584ea82049c2f79.r2.dev/GOW/GOW2/01 - God Of War II - Main Titles.mp3",
+    "year": 2007,
+    "genre": "Action Game Soundtrack",
+    "console": "PlayStation 2"
+  },
+  {
+     "id": 774,
+    "title": "The Glory Of Sparta",
+    "artist": "Gerard Marino",
+    "composer": "Gerard Marino",
+    "game": "God of War 2",
+    "context": "Audio - God of War 2",
+    "audioUrl": "https://pub-4d254faec6ec408ab584ea82049c2f79.r2.dev/GOW/GOW2/02 - The Glory Of Sparta.mp33",
+    "year": 2007,
+    "genre": "Action Game Soundtrack",
+    "console": "PlayStation 2"
+  },
+  {
+     "id": 775,
+    "title": "The Way Of The Gods",
+    "artist": "Gerard Marino",
+    "composer": "Gerard Marino",
+    "game": "God of War 2",
+    "context": "Audio - God of War 2",
+    "audioUrl": "https://pub-4d254faec6ec408ab584ea82049c2f79.r2.dev/GOW/GOW2/03 - The Way Of The Gods.mp3",
+    "year": 2007,
+    "genre": "Action Game Soundtrack",
+    "console": "PlayStation 2"
+  },
+  {
+    "id": 778,
+    "title": "Colossus Of Rhodes",
+    "artist": "Gerard Marino",
+    "composer": "Gerard Marino",
+    "game": "God of War 2",
+    "context": "Audio - God of War 2",
+    "audioUrl": "https://pub-4d254faec6ec408ab584ea82049c2f79.r2.dev/GOW/GOW2/04 - Colossus Of Rhodes.mp3",
+    "year": 2007,
+    "genre": "Action Game Soundtrack",
+    "console": "PlayStation 2"
+  },
+  {
+    "id": 779,
+    "title": "God of War 3 - Main Theme",
+    "artist": "Gerard Marino",
+    "composer": "Gerard Marino",
+    "game": "God of War 3",
+    "context": "Audio - God of War 3",
+    "audioUrl": "https://pub-4d254faec6ec408ab584ea82049c2f79.r2.dev/GOW/GOW3/01 - God of War 3.mp3",
+    "year": 2010,
+    "genre": "Action Game Soundtrack",
+    "console": "PlayStation 3"
+  },
+  {
+    "id": 779,
+    "title": "Onward Gaia",
+    "artist": "Gerard Marino",
+    "composer": "Gerard Marino",
+    "game": "God of War 3",
+    "context": "Audio - God of War 3",
+    "audioUrl": "https://pub-4d254faec6ec408ab584ea82049c2f79.r2.dev/GOW/GOW3/03 - Onward Gaia!.mp3",
+    "year": 2010,
+    "genre": "Action Game Soundtrack",
+    "console": "PlayStation 3"
+  },
+  {
+    "id": 779,
+    "title": "Call to Arms",
+    "artist": "Gerard Marino",
+    "composer": "Gerard Marino",
+    "game": "God of War 3",
+    "context": "Audio - God of War 3",
+    "audioUrl": "https://pub-4d254faec6ec408ab584ea82049c2f79.r2.dev/GOW/GOW3/02 - Call to Arms.mp3",
+    "year": 2010,
+    "genre": "Action Game Soundtrack",
+    "console": "PlayStation 3"
+  },
+  {
+    "id": 779,
+    "title": "Poseidon's Wrath",
+    "artist": "Gerard Marino",
+    "composer": "Gerard Marino",
+    "game": "God of War 3",
+    "context": "Audio - God of War 3",
+    "audioUrl": "https://pub-4d254faec6ec408ab584ea82049c2f79.r2.dev/GOW/GOW3/04 - Poseidon's Wrath.mp3",
+    "year": 2010,
+    "genre": "Action Game Soundtrack",
+    "console": "PlayStation 3"
   }
   ]
 }
