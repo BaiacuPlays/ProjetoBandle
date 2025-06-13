@@ -34,7 +34,7 @@ import { useServiceWorker } from '../hooks/useServiceWorker';
 // import { audioCache } from '../utils/audioCache';
 // import { useAudioPreloader } from '../hooks/useAudioPreloader';
 // import { useAudioProxy } from '../utils/audioProxy';
-import { simpleAudioProxy } from '../utils/simpleAudioProxy';
+import { simpleAudioProxy, useSimpleAudioProxy } from '../utils/simpleAudioProxy';
 // Hooks removidos para melhor performance
 import {
   MemoizedPlayButton,
@@ -77,8 +77,11 @@ export default function Home() {
     }
   }, []);
 
-  // Usar músicas diretamente (teste simples)
-  const songsToUse = songs || [];
+  // Hook para proxy de áudio (resolve problemas de CORS)
+  const { songs: processedSongs, isReady } = useSimpleAudioProxy(songs);
+
+  // Usar músicas processadas (com proxy se necessário)
+  const songsToUse = processedSongs || songs || [];
 
 
 
@@ -191,6 +194,10 @@ export default function Home() {
   // Estado para debug do dropdown
   const [showSelectFromListError, setShowSelectFromListError] = useState(false);
 
+  // Estado para controlar carregamento da música diária
+  const [isDailyMusicLoaded, setIsDailyMusicLoaded] = useState(false);
+  const [isDailyMusicLoading, setIsDailyMusicLoading] = useState(false);
+
 
 
   // Tempos máximos de reprodução por tentativa
@@ -227,6 +234,7 @@ export default function Home() {
 
     // Verificar se há músicas disponíveis (processadas pelo proxy)
     if (!availableSongs || availableSongs.length === 0) {
+      console.log('🎵 [DEBUG] Aguardando músicas serem processadas pelo proxy...');
       return null; // Retorna null para aguardar o proxy processar
     }
 
@@ -241,10 +249,156 @@ export default function Home() {
       return null;
     }
 
-
+    console.log(`🎵 [DEBUG] Música determinística para o dia ${day}:`, selectedSong.title, 'por', selectedSong.artist, 'de', selectedSong.game);
 
     return selectedSong;
   };
+
+  // Função centralizada para carregar música do dia
+  const loadDailyMusic = useCallback(async (forceReload = false) => {
+    // Evitar carregamentos múltiplos simultâneos
+    if (isDailyMusicLoading && !forceReload) {
+      console.log('🎵 [DEBUG] Carregamento já em andamento, ignorando...');
+      return;
+    }
+
+    // Se já carregou e não é reload forçado, ignorar
+    if (isDailyMusicLoaded && !forceReload) {
+      console.log('🎵 [DEBUG] Música diária já carregada, ignorando...');
+      return;
+    }
+
+    // Se não há músicas processadas ainda, aguardar
+    if (!songsToUse || songsToUse.length === 0) {
+      console.log('🎵 [DEBUG] Aguardando músicas serem processadas...');
+      return;
+    }
+
+    setIsDailyMusicLoading(true);
+    console.log('🎵 [DEBUG] Iniciando carregamento da música diária...');
+
+    try {
+      // Obter dados de tempo
+      let timeData;
+      try {
+        timeData = await fetchTimezone();
+      } catch (e) {
+        timeData = {
+          datetime: new Date().toISOString(),
+          fallback: true
+        };
+      }
+
+      const now = new Date(timeData.datetime);
+      const start = new Date(now.getFullYear(), 0, 0);
+      const diff = now - start + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
+      const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+      console.log(`🎵 [DEBUG] Dia do ano calculado: ${dayOfYear} (${now.toDateString()})`);
+
+      // Salvar o dia atual
+      localStorage.setItem('ludomusic_current_day', dayOfYear.toString());
+      setCurrentDay(dayOfYear);
+
+      // Verificar se usuário já jogou hoje
+      const hasPlayedToday = await checkDailyGameStatus();
+
+      // Selecionar música
+      let song;
+      if (
+        now.getFullYear() === 2025 &&
+        now.getMonth() === 4 && // Maio é mês 4 (zero-based)
+        now.getDate() === 28
+      ) {
+        song = songsToUse.find(s => s.title === 'Crowdfunding Single');
+        console.log('🎵 [DEBUG] Override especial 28/05/2025: Crowdfunding Single');
+      } else {
+        song = getDeterministicSongSimple(dayOfYear);
+      }
+
+      if (!song) {
+        console.error('❌ [DEBUG] Falha ao obter música do dia');
+        setIsLoading(false);
+        setIsDailyMusicLoading(false);
+        return;
+      }
+
+      // Processar URL através do proxy
+      const songWithProxyUrl = {
+        ...song,
+        audioUrl: song?.audioUrl ? simpleAudioProxy.getAudioUrl(song.audioUrl) : ''
+      };
+
+      console.log('🎵 [DEBUG] Música do dia carregada:', songWithProxyUrl.title);
+      setCurrentSong(songWithProxyUrl);
+      setIsDailyMusicLoaded(true);
+
+      // Carregar estado do jogo se já jogou hoje
+      if (hasPlayedToday) {
+        console.log('🎵 [DEBUG] Usuário já jogou hoje, carregando estado salvo...');
+        try {
+          const savedState = localStorage.getItem(`ludomusic_game_state_day_${dayOfYear}`);
+          if (savedState) {
+            const parsedState = JSON.parse(savedState);
+            if (parsedState.day === dayOfYear && parsedState.gameOver) {
+              setAttempts(parsedState.attempts || 6);
+              setHistory(parsedState.history || []);
+              setMessage(parsedState.message || 'Você já jogou hoje!');
+              setGameOver(true);
+              setShowHint(true);
+              setActiveHint(0);
+              setCurrentClipDuration(15);
+              setGameResult(parsedState.gameResult || { won: false, attempts: parsedState.attempts || 6 });
+            }
+          } else {
+            setGameOver(true);
+            setMessage('Você já jogou hoje! Volte amanhã para uma nova música.');
+            setShowHint(true);
+            setActiveHint(0);
+            setCurrentClipDuration(15);
+          }
+        } catch (error) {
+          setGameOver(true);
+          setMessage('Você já jogou hoje! Volte amanhã para uma nova música.');
+          setShowHint(true);
+          setActiveHint(0);
+          setCurrentClipDuration(15);
+        }
+      }
+
+      // Configurar timer para próxima meia-noite
+      const nextMidnight = new Date(now);
+      nextMidnight.setHours(24, 0, 0, 0);
+      setTimer(nextMidnight - now);
+      setIsLoading(false);
+
+    } catch (error) {
+      console.error('❌ [DEBUG] Erro ao carregar música do dia:', error);
+      setIsLoading(false);
+    } finally {
+      setIsDailyMusicLoading(false);
+    }
+  }, [songsToUse, isDailyMusicLoading, isDailyMusicLoaded]);
+
+  // Função para verificar se usuário já jogou hoje
+  const checkDailyGameStatus = useCallback(async () => {
+    try {
+      if (!currentDay) return false;
+
+      // Verificação simplificada apenas no localStorage
+      const savedState = localStorage.getItem(`ludomusic_game_state_day_${currentDay}`);
+
+      if (savedState) {
+        const parsedState = JSON.parse(savedState);
+        return parsedState.day === currentDay && parsedState.gameOver;
+      }
+
+      return false; // Pode jogar
+    } catch (error) {
+      console.log('Erro na verificação do status:', error);
+      return false; // Em caso de erro, permitir jogar
+    }
+  }, [currentDay]);
 
 
 
@@ -775,133 +929,15 @@ export default function Home() {
 
 
 
-  // Carregar música do minuto ao montar
+  // Carregar música do dia ao montar
   useEffect(() => {
-    const loadMusicOfTheDay = async () => {
-      setIsLoading(true);
+    if (songsToUse && songsToUse.length > 0 && !isDailyMusicLoaded && !isInfiniteMode) {
+      console.log('🎵 [DEBUG] Iniciando carregamento inicial da música diária...');
+      loadDailyMusic();
+    }
+  }, [songsToUse, isDailyMusicLoaded, isInfiniteMode, loadDailyMusic]);
 
-      // Chave para salvar o dia atual
-      const savedDayKey = 'ludomusic_current_day';
 
-      let timeData;
-      try {
-        timeData = await fetchTimezone();
-      } catch (e) {
-        timeData = {
-          datetime: new Date().toISOString(),
-          fallback: true
-        };
-      }
-      const now = new Date(timeData.datetime);
-      // Calcular o dia do ano
-      const start = new Date(now.getFullYear(), 0, 0);
-      const diff = now - start + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
-      const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-      // Verificar se o dia mudou desde a última visita (para futuras funcionalidades)
-
-      // Salvar o dia atual
-      localStorage.setItem(savedDayKey, dayOfYear.toString());
-      setCurrentDay(dayOfYear);
-
-      // 🔒 VERIFICAÇÃO DE JOGO DIÁRIO - Simplificada para evitar travamento
-      const checkDailyGameStatus = async () => {
-        try {
-          // Verificação simplificada apenas no localStorage
-          const savedState = localStorage.getItem(`ludomusic_game_state_day_${dayOfYear}`);
-
-          if (savedState) {
-            const parsedState = JSON.parse(savedState);
-            return parsedState.day === dayOfYear && parsedState.gameOver;
-          }
-
-          return false; // Pode jogar
-        } catch (error) {
-          console.log('Erro na verificação do status:', error);
-          return false; // Em caso de erro, permitir jogar
-        }
-      };
-
-      const hasPlayedToday = await checkDailyGameStatus();
-
-      // --- OVERRIDE ESPECIAL PARA 28/05/2025 ---
-      // Se a data for 28/05/2025, força a música 'Crowdfunding Single'
-      let song;
-      if (
-        now.getFullYear() === 2025 &&
-        now.getMonth() === 4 && // Maio é mês 4 (zero-based)
-        now.getDate() === 28
-      ) {
-        song = songsToUse.find(s => s.title === 'Crowdfunding Single');
-      } else {
-        // SISTEMA DETERMINÍSTICO: A música é sempre a mesma para o mesmo dia
-        // Gera música determinística baseada APENAS no dia (sem localStorage)
-        song = getDeterministicSongSimple(dayOfYear);
-      }
-
-      // Verificar se song existe antes de usar
-      if (!song) {
-        // Música não encontrada - erro silencioso
-        setIsLoading(false);
-        return;
-      }
-
-      // Processar URL através do proxy para resolver CORS
-      const songWithProxyUrl = {
-        ...song,
-        audioUrl: song?.audioUrl ? simpleAudioProxy.getAudioUrl(song.audioUrl) : ''
-      };
-
-      setCurrentSong(songWithProxyUrl);
-
-      // 🔒 Se usuário já jogou hoje, carregar estado final do jogo
-      if (hasPlayedToday) {
-        // Carregar estado salvo do localStorage
-        try {
-          const savedState = localStorage.getItem(`ludomusic_game_state_day_${dayOfYear}`);
-          if (savedState) {
-            const parsedState = JSON.parse(savedState);
-            if (parsedState.day === dayOfYear && parsedState.gameOver) {
-
-              // Restaurar estado final
-              setAttempts(parsedState.attempts || 6);
-              setHistory(parsedState.history || []);
-              setMessage(parsedState.message || 'Você já jogou hoje!');
-              setGameOver(true);
-              setShowHint(true); // Mostrar resposta
-              setActiveHint(0);
-              setCurrentClipDuration(15); // Permitir ouvir música completa
-              setGameResult(parsedState.gameResult || { won: false, attempts: parsedState.attempts || 6 });
-
-              // Não mostrar estatísticas automaticamente ao carregar estado salvo
-              // O modal só deve aparecer após completar um jogo, não ao entrar no site
-            }
-          } else {
-            // Se não há estado salvo mas já jogou, bloquear mesmo assim
-            setGameOver(true);
-            setMessage('Você já jogou hoje! Volte amanhã para uma nova música.');
-            setShowHint(true);
-            setActiveHint(0);
-            setCurrentClipDuration(15);
-          }
-        } catch (error) {
-          // Fallback: mostrar que já jogou
-          setGameOver(true);
-          setMessage('Você já jogou hoje! Volte amanhã para uma nova música.');
-          setShowHint(true);
-          setActiveHint(0);
-          setCurrentClipDuration(15);
-        }
-      }
-
-      // Calcular tempo até a próxima meia-noite
-      const nextMidnight = new Date(now);
-      nextMidnight.setHours(24, 0, 0, 0);
-      setTimer(nextMidnight - now);
-      setIsLoading(false);
-    };
-    loadMusicOfTheDay();
-  }, []); // Remover dependência do isClient
 
   // Timer funcionando corretamente
   useEffect(() => {
@@ -1527,6 +1563,7 @@ export default function Home() {
           }
         }
       } catch (error) {
+        console.warn('Erro na validação do jogo diário:', error);
         // Em caso de erro de rede, permitir continuar (para não bloquear usuários offline)
       }
     }
@@ -1540,16 +1577,30 @@ export default function Home() {
     const guessResult = checkGuessType(selectedGuess, currentSong);
 
     if (guessResult.type === 'success') {
-      setMessage(t('congratulations'));
-      result = { type: 'success', value: selectedGuess, subtype: guessResult.subtype };
+      try {
+        setMessage(t('congratulations'));
+        result = { type: 'success', value: selectedGuess, subtype: guessResult.subtype };
 
-      // 🎉 ATIVAR FEEDBACK BASEADO NO MODO
-      if (isInfiniteMode) {
-        // Modo infinito: feedback simplificado apenas para primeira tentativa
-        triggerSimpleFeedback(newAttempts);
-      } else {
-        // Modo diário: feedback completo
-        triggerSuccessFeedback(newAttempts, currentSong);
+        // 🎉 ATIVAR FEEDBACK BASEADO NO MODO
+        if (isInfiniteMode) {
+          // Modo infinito: feedback simplificado apenas para primeira tentativa
+          triggerSimpleFeedback(newAttempts);
+        } else {
+          // Modo diário: feedback completo
+          triggerSuccessFeedback(newAttempts, currentSong);
+        }
+      } catch (error) {
+        console.error('Erro ao processar acerto da música:', error);
+        // Reportar erro para o sistema de monitoramento
+        if (typeof window !== 'undefined' && window.gtag) {
+          window.gtag('event', 'exception', {
+            description: `Erro ao acertar música: ${error.message}`,
+            fatal: false
+          });
+        }
+        // Continuar com o processamento mesmo com erro no feedback
+        setMessage(t('congratulations'));
+        result = { type: 'success', value: selectedGuess, subtype: guessResult.subtype };
       }
 
       if (isInfiniteMode) {
@@ -2106,14 +2157,10 @@ export default function Home() {
     setInfiniteGameOver(false);
     setShowNextSongButton(false);
 
-    // Carrega a música do dia usando o currentDay já calculado
-    // Se currentDay ainda não foi definido, usa o dia local como fallback
-    const dayToUse = currentDay !== null ? currentDay : getDayOfYear();
-
-    // Gera música determinística baseada APENAS no dia (sem localStorage)
-    const dailySong = getDeterministicSongSimple(dayToUse);
-
-    setCurrentSong(dailySong);
+    // Carrega a música do dia usando a função centralizada
+    console.log('🎵 [DEBUG] Voltando para modo diário...');
+    setIsDailyMusicLoaded(false); // Resetar para permitir recarregamento
+    loadDailyMusic(true); // Forçar reload
 
     // Agora carrega o estado salvo do jogo diário (se existir)
     const loadSavedDailyGameState = () => {
@@ -2161,42 +2208,18 @@ export default function Home() {
     loadSavedDailyGameState();
   };
 
-  // useEffect que usa currentSong (movido para depois dos estados)
+  // Fallback para carregar música diária se não foi carregada ainda
   useEffect(() => {
     // Aguardar um pouco para garantir que tudo esteja inicializado
     const loadTimer = setTimeout(() => {
-      if (songsToUse && songsToUse.length > 0 && !currentSong && !isInfiniteMode) {
-
-
-
-        const dayOfYear = getDayOfYear();
-
-
-        const song = getDeterministicSongSimple(dayOfYear);
-        if (song) {
-          // Processar URL através do proxy para resolver CORS
-          const songWithProxy = {
-            ...song,
-            audioUrl: song?.audioUrl ? simpleAudioProxy.getAudioUrl(song.audioUrl) : ''
-          };
-          setCurrentSong(songWithProxy);
-          setIsLoading(false);
-          // Configurar timer para próxima meia-noite
-          const now = new Date();
-          const nextMidnight = new Date(now);
-          nextMidnight.setHours(24, 0, 0, 0);
-          const timeUntilMidnight = nextMidnight - now;
-          setTimer(timeUntilMidnight);
-        } else {
-          console.error('❌ Falha ao carregar música do dia');
-        }
-      } else {
-
+      if (songsToUse && songsToUse.length > 0 && !currentSong && !isInfiniteMode && !isDailyMusicLoaded) {
+        console.log('🎵 [DEBUG] Fallback: carregando música diária...');
+        loadDailyMusic();
       }
-    }, 100); // Aguardar 100ms para garantir que tudo esteja pronto
+    }, 500); // Aguardar mais tempo para garantir que o carregamento principal tenha chance
 
     return () => clearTimeout(loadTimer);
-  }, [songsToUse, currentSong, isInfiniteMode]);
+  }, [songsToUse, currentSong, isInfiniteMode, isDailyMusicLoaded, loadDailyMusic]);
 
   // useEffect para configurar elemento audio (movido para depois dos estados)
   useEffect(() => {
