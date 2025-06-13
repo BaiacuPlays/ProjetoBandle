@@ -1254,9 +1254,16 @@
   background-color: #31364d !important;
   color: #bbb;
 }
+.attemptButton.attemptAvailable {
+  background-color: #4a5568 !important;
+  color: #e2e8f0;
+  border: 1px solid #718096;
+}
 .attemptButton.attemptActive {
-  background-color: #1DB954 !important;
+  background-color: #5a6478 !important;
   color: #fff;
+  border: 2px solid #8892a6;
+  box-shadow: 0 0 8px rgba(136, 146, 166, 0.3);
 }
 .attemptButton.attemptFail {
   background-color: #e74c3c !important;
@@ -1265,6 +1272,7 @@
 .attemptButton.attemptSuccess {
   background-color: #27ae60 !important;
   color: #fff;
+  box-shadow: 0 0 10px rgba(39, 174, 96, 0.5);
 }
 .attemptButton.attemptGame {
   background-color: #ffd700 !important;

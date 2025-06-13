@@ -198,6 +198,9 @@ export default function Home() {
   const [isDailyMusicLoaded, setIsDailyMusicLoaded] = useState(false);
   const [isDailyMusicLoading, setIsDailyMusicLoading] = useState(false);
 
+  // Estado para contador de jogos (para anúncios - removido mas mantido para compatibilidade)
+  const [gamesPlayedCount, setGamesPlayedCount] = useState(0);
+
 
 
   // Tempos máximos de reprodução por tentativa
@@ -3065,6 +3068,7 @@ export default function Home() {
               let tooltip = '';
 
               if (history[idx]) {
+                // Se há histórico para esta tentativa, usar a cor baseada no resultado
                 if (history[idx].type === 'success') {
                   buttonClass = styles.attemptSuccess;
                   tooltip = `Tentativa ${idx + 1}: ✅ ${history[idx].value}`;
@@ -3084,9 +3088,13 @@ export default function Home() {
                   tooltip = `Tentativa ${idx + 1}: ⏭️ Pulou`;
                 }
               } else if (idx > attempts) {
+                // Tentativas futuras (ainda não disponíveis) - cinza inativo
                 buttonClass = styles.attemptInactive;
                 tooltip = '';
               } else {
+                // CORREÇÃO: Tentativas disponíveis (sem histórico ainda) - devem ficar disponíveis mas não verdes
+                // Verde só quando acerta a música (styles.attemptSuccess)
+                buttonClass = styles.attemptAvailable;
                 tooltip = `Clique para ver a dica da tentativa ${idx + 1}`;
               }
 

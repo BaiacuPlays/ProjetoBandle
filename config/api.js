@@ -797,7 +797,7 @@ export async function getGlobalStatistics() {
   // Retornar dados padrão em desenvolvimento local sem KV configurado
   if (isDevelopment && !hasKVConfig) {
     return {
-      totalGames: 8446,
+      totalGames: 3,
       wins: 0,
       losses: 0,
       averageAttempts: 3.2
@@ -809,7 +809,7 @@ export async function getGlobalStatistics() {
     const kvInstance = await initKV();
     if (!kvInstance) {
       return {
-        totalGames: 8446,
+        totalGames: 3,
         wins: 0,
         losses: 0,
         averageAttempts: 3.2

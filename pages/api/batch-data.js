@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   }
 
   const { types, userId } = req.query;
-  
+
   if (!types) {
     return res.status(400).json({ error: 'Parâmetro types é obrigatório' });
   }
@@ -28,29 +28,29 @@ export default async function handler(req, res) {
       switch (type) {
         case 'globalStats':
           return ['globalStats', await getGlobalStats()];
-        
+
         case 'profile':
           if (!userId) return ['profile', null];
           return ['profile', await getProfile(userId)];
-        
+
         case 'statistics':
           if (!userId) return ['statistics', null];
           return ['statistics', await getStatistics(userId)];
-        
+
         case 'dailySong':
           return ['dailySong', await getDailySong()];
-        
+
         case 'friends':
           if (!userId) return ['friends', null];
           return ['friends', await getFriends(userId)];
-        
+
         default:
           return [type, null];
       }
     });
 
     const results = await Promise.allSettled(promises);
-    
+
     results.forEach((promiseResult) => {
       if (promiseResult.status === 'fulfilled' && promiseResult.value) {
         const [key, value] = promiseResult.value;
@@ -83,7 +83,7 @@ async function getGlobalStats() {
 
     if (isDevelopment && !hasKVConfig) {
       return {
-        totalGames: 8446,
+        totalGames: 3,
         averageAttempts: 3.2
       };
     }
@@ -198,11 +198,11 @@ async function getDailySong() {
       const musicPath = path.join(process.cwd(), 'data', 'music.json');
       const musicFile = fs.readFileSync(musicPath, 'utf8');
       const musicData = JSON.parse(musicFile);
-      
+
       // Função determinística simples
       const songIndex = dayOfYear % musicData.songs.length;
       const currentSong = musicData.songs[songIndex];
-      
+
       return {
         song: currentSong,
         dayOfYear,
