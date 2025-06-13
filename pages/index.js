@@ -3038,49 +3038,53 @@ export default function Home() {
 
           <div className={styles.attemptsRow}>
             {[...Array(MAX_ATTEMPTS)].map((_, idx) => {
-              let status = 'default';
+              let buttonClass = styles.attemptInactive;
               let tooltip = '';
 
               if (history[idx]) {
                 if (history[idx].type === 'success') {
-                  status = 'success';
+                  buttonClass = styles.attemptSuccess;
                   tooltip = `Tentativa ${idx + 1}: ✅ ${history[idx].value}`;
                 } else if (history[idx].type === 'fail') {
                   if (history[idx].subtype === 'same_game') {
-                    status = 'game';
+                    buttonClass = styles.attemptGame;
                     tooltip = `Tentativa ${idx + 1}: 🎮 ${history[idx].value} (jogo correto)`;
                   } else if (history[idx].subtype === 'same_franchise') {
-                    status = 'franchise';
+                    buttonClass = styles.attemptFranchise;
                     tooltip = `Tentativa ${idx + 1}: 🔶 ${history[idx].value} (franquia correta)`;
                   } else {
-                    status = 'fail';
+                    buttonClass = styles.attemptFail;
                     tooltip = `Tentativa ${idx + 1}: ❌ ${history[idx].value}`;
                   }
                 } else if (history[idx].type === 'skipped') {
-                  status = 'fail';
+                  buttonClass = styles.attemptFail;
                   tooltip = `Tentativa ${idx + 1}: ⏭️ Pulou`;
                 }
               } else if (idx > attempts) {
-                status = 'disabled';
+                buttonClass = styles.attemptInactive;
                 tooltip = '';
               } else {
                 tooltip = `Clique para ver a dica da tentativa ${idx + 1}`;
               }
 
+
+
               return (
-                <AttemptButton
+                <button
                   key={idx}
-                  attempt={idx + 1}
-                  status={status}
-                  active={activeHint === idx}
+                  type="button"
+                  className={`${styles.attemptButton} ${buttonClass} ${activeHint === idx ? styles.attemptActive : ''}`}
                   onClick={() => {
                     if (idx <= attempts) {
                       setActiveHint(idx);
                       gameFeel.onHover(); // Feedback adicional
                     }
                   }}
-                  tooltip={tooltip}
-                />
+                  title={tooltip}
+                  disabled={idx > attempts}
+                >
+                  {idx + 1}
+                </button>
               );
             })}
 
